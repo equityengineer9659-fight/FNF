@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Get in touch with Food-N-Force for digital transformation of your food bank or pantry. Contact us for consultations, support, and custom solutions.">
+    <meta name="keywords" content="contact Food-N-Force, food bank consultation, nonprofit technology support">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Contact - Food-N-Force">
+    <meta property="og:description" content="Ready to transform your food pantry or food bank? Contact Food-N-Force for expert digital solutions.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/contact.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Contact - Food-N-Force">
+    
+    <title>Contact - Food-N-Force</title>
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Salesforce Lightning Design System CSS - LOAD FIRST -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    
+    <!-- Custom CSS - LOAD AFTER SLDS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation-styles.css">
+    <link rel="stylesheet" href="css/navigation-fixes.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/unified-navigation.js" as="script">
+    
+    <style>
+    body {
+        opacity: 0;
+        transition: opacity 0.5s ease-in;
+    }
+    body.loaded {
+        opacity: 1;
+    }
+    </style>
+</head>
+<body>
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation will be automatically injected here by universal-navigation.js -->
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Contact Section -->
+        <section class="section-padding slds-p-horizontal_large" aria-labelledby="contact-heading">
+            <div class="slds-container_large slds-container_center">
+                <div class="slds-text-align_center slds-m-bottom_x-large">
+                    <h2 id="contact-heading" class="slds-text-heading_large slds-m-bottom_medium">Get In Touch</h2>
+                    <p class="slds-text-body_regular slds-text-color_weak">
+                        Ready to transform your food pantry or food bank? Let's start the conversation.
+                    </p>
+                </div>
+                
+                <div class="slds-grid slds-wrap slds-gutters_large">
+                    <!-- Contact Form -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                        <div class="contact-form">
+                            <h3 class="slds-text-heading_medium slds-m-bottom_medium">Send us a message</h3>
+                            <form id="contact-form" novalidate>
+                                <div class="slds-grid slds-wrap slds-gutters">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                        <div class="slds-form-element slds-m-bottom_medium form-float-label">
+                                            <label class="slds-form-element__label" for="first-name">
+                                                First Name <span class="required" aria-label="required">*</span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <input 
+                                                    type="text" 
+                                                    id="first-name" 
+                                                    name="firstName"
+                                                    class="slds-input" 
+                                                    placeholder=" "
+                                                    required
+                                                    aria-describedby="first-name-help"
+                                                />
+                                                <div id="first-name-help" class="slds-form-element__help">
+                                                    Enter your first name
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                        <div class="slds-form-element slds-m-bottom_medium form-float-label">
+                                            <label class="slds-form-element__label" for="last-name">
+                                                Last Name <span class="required" aria-label="required">*</span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <input 
+                                                    type="text" 
+                                                    id="last-name" 
+                                                    name="lastName"
+                                                    class="slds-input" 
+                                                    placeholder=" "
+                                                    required
+                                                    aria-describedby="last-name-help"
+                                                />
+                                                <div id="last-name-help" class="slds-form-element__help">
+                                                    Enter your last name
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-form-element slds-m-bottom_medium form-float-label">
+                                    <label class="slds-form-element__label" for="email">
+                                        Email <span class="required" aria-label="required">*</span>
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input 
+                                            type="email" 
+                                            id="email" 
+                                            name="email"
+                                            class="slds-input" 
+                                            placeholder=" "
+                                            required
+                                            aria-describedby="email-help"
+                                        />
+                                        <div id="email-help" class="slds-form-element__help">
+                                            We'll use this to respond to your inquiry
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-form-element slds-m-bottom_medium form-float-label">
+                                    <label class="slds-form-element__label" for="organization">Organization</label>
+                                    <div class="slds-form-element__control">
+                                        <input 
+                                            type="text" 
+                                            id="organization" 
+                                            name="organization"
+                                            class="slds-input" 
+                                            placeholder=" "
+                                            aria-describedby="organization-help"
+                                        />
+                                        <div id="organization-help" class="slds-form-element__help">
+                                            Name of your food pantry, food bank, or organization
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-form-element slds-m-bottom_medium form-float-label">
+                                    <label class="slds-form-element__label" for="message">
+                                        Message <span class="required" aria-label="required">*</span>
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <textarea 
+                                            id="message" 
+                                            name="message"
+                                            class="slds-textarea" 
+                                            rows="4" 
+                                            placeholder=" "
+                                            required
+                                            aria-describedby="message-help"
+                                        ></textarea>
+                                        <div id="message-help" class="slds-form-element__help">
+                                            Describe your current challenges, goals, or questions
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="slds-button slds-button_brand">
+                                    Send Message
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Information -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <div class="contact-info-section">
+                            <h3 class="slds-text-heading_medium slds-m-bottom_medium">Contact Information</h3>
+                            
+                            <div class="contact-item">
+                                <span class="contact-icon" aria-hidden="true">✉️</span>
+                                <div class="contact-text">
+                                    <p class="slds-text-body_regular">
+                                        <a href="mailto:info@foodnforce.com">info@foodnforce.com</a>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <span class="contact-icon" aria-hidden="true">📅</span>
+                                <div class="contact-text">
+                                    <p class="slds-text-body_regular">
+                                        <a href="#" class="slds-text-color_brand">Schedule a Consultation</a>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <span class="contact-icon" aria-hidden="true">📍</span>
+                                <div class="contact-text">
+                                    <p class="slds-text-body_regular">
+                                        Serving Food Banks & Pantries Nationwide
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-section-divider"></div>
+                            
+                            <h4 class="slds-text-heading_small slds-m-bottom_small">Office Hours</h4>
+                            <p class="slds-text-body_regular slds-m-bottom_medium">
+                                Monday - Friday: 9:00 AM - 6:00 PM EST<br>
+                                Saturday: 10:00 AM - 2:00 PM EST<br>
+                                Sunday: Closed
+                            </p>
+                            
+                            <div class="contact-section-divider"></div>
+                            
+                            <h4 class="slds-text-heading_small slds-m-bottom_small">Response Time</h4>
+                            <p class="slds-text-body_regular">
+                                We typically respond within 24 business hours. For urgent matters, please call us directly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="custom-footer" role="contentinfo">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. Empowering food banks through technology.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Navigation script -->
+    <script src="js/unified-navigation.js"></script>
+    
+    <!-- Page load complete -->
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>

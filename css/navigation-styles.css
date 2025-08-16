@@ -1,0 +1,472 @@
+/* Food-N-Force Navigation Styles - Clean Architecture */
+
+/* ============================================
+   CRITICAL: NAVIGATION ISOLATION LAYER
+   This MUST come first to prevent SLDS interference
+   ============================================ */
+
+/* Create an isolation boundary for the navigation */
+.navbar.universal-nav {
+    /* Critical: Reset all inherited styles */
+    all: initial;
+    
+    /* Re-apply only what we need */
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    z-index: 1000;
+}
+
+/* ============================================
+   NAVIGATION BASE STYLES
+   ============================================ */
+
+.navbar.universal-nav {
+    background: rgba(22, 50, 92, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(10px)) {
+    .navbar.universal-nav {
+        background: rgba(22, 50, 92, 0.98);
+    }
+}
+
+/* Container - with isolation */
+.navbar.universal-nav .slds-container_fluid {
+    padding: 0 2rem;
+    max-width: 100%;
+    margin: 0;
+}
+
+/* Grid system - prevent SLDS interference */
+.navbar.universal-nav .slds-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.navbar.universal-nav .slds-grid_align-spread {
+    justify-content: space-between !important;
+}
+
+.navbar.universal-nav .slds-grid_align-center {
+    justify-content: center !important;
+}
+
+.navbar.universal-nav .slds-grid_vertical-align-center {
+    align-items: center !important;
+}
+
+/* Padding utilities - explicit values */
+.navbar.universal-nav .slds-p-vertical_small {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+}
+
+.navbar.universal-nav .slds-p-top_small {
+    padding-top: 0.75rem !important;
+}
+
+/* ============================================
+   BRAND LOGO STYLES - ENFORCED
+   ============================================ */
+
+/* Logo container */
+.navbar.universal-nav .brand-logo-link {
+    text-decoration: none !important;
+    display: inline-block !important;
+    transition: transform 0.3s ease;
+}
+
+.navbar.universal-nav .brand-logo-container {
+    width: 50px !important;
+    height: 50px !important;
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 50%, #006699 100%) !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.navbar.universal-nav .brand-logo-container:hover {
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.5);
+    transform: rotate(5deg);
+}
+
+.navbar.universal-nav .brand-logo-inner {
+    width: 35px !important;
+    height: 35px !important;
+    background: #16325C !important;
+    border-radius: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.navbar.universal-nav .brand-logo-text {
+    color: #ffffff !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+}
+
+/* Company name - CRITICAL STYLES */
+.navbar.universal-nav .company-name-container {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    text-align: center !important;
+}
+
+/* THE MOST IMPORTANT RULE - Company Name Text */
+.navbar.universal-nav h1.brand-logo.universal-brand-logo {
+    /* Reset any inherited styles */
+    all: unset;
+    
+    /* Apply our styles with maximum specificity */
+    display: block !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: 2.5rem !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.5px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+/* Spacer */
+.navbar.universal-nav .nav-spacer {
+    width: 50px !important;
+    display: block !important;
+}
+
+/* ============================================
+   NAVIGATION MENU - ENFORCED STYLES
+   ============================================ */
+
+.navbar.universal-nav .nav-menu-container {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    padding-top: 0.5rem !important;
+}
+
+.navbar.universal-nav .nav-menu {
+    display: flex !important;
+    gap: 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.navbar.universal-nav .slds-nav-horizontal__item {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+/* Navigation links - CRITICAL STYLES */
+.navbar.universal-nav a.nav-link.universal-nav-link {
+    /* Reset any inherited styles */
+    all: unset;
+    
+    /* Apply our styles */
+    display: block !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: 18px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    padding: 1rem 1.5rem !important;
+    text-decoration: none !important;
+    border-radius: 0 !important;
+    transition: all 0.3s ease !important;
+    border-bottom: 3px solid transparent !important;
+    position: relative !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+}
+
+/* Hover underline effect */
+.navbar.universal-nav .nav-link::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 0 !important;
+    height: 3px !important;
+    background: #00d4ff !important;
+    transition: width 0.3s ease !important;
+}
+
+.navbar.universal-nav .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.navbar.universal-nav .nav-link:hover::after {
+    width: 100% !important;
+}
+
+/* Active state */
+.navbar.universal-nav .slds-is-active .nav-link::after {
+    width: 100% !important;
+}
+
+/* Focus state */
+.navbar.universal-nav .nav-link:focus {
+    outline: 2px solid #0176d3 !important;
+    outline-offset: -2px !important;
+}
+
+/* ============================================
+   MOBILE NAVIGATION
+   ============================================ */
+
+.navbar.universal-nav .mobile-nav-toggle {
+    all: unset;
+    display: none;
+    color: #ffffff !important;
+    font-size: 1.5rem !important;
+    cursor: pointer !important;
+    padding: 0.5rem !important;
+    border-radius: 4px !important;
+    transition: all 0.3s ease !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.navbar.universal-nav .mobile-nav-toggle:hover,
+.navbar.universal-nav .mobile-nav-toggle:focus {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.navbar.universal-nav .hamburger-icon {
+    display: block !important;
+    color: #ffffff !important;
+    transition: transform 0.3s ease !important;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 70px !important;
+    }
+    
+    .navbar.universal-nav .mobile-nav-toggle {
+        display: block !important;
+    }
+    
+    .navbar.universal-nav .nav-spacer {
+        display: none !important;
+    }
+    
+    .navbar.universal-nav .company-name-container {
+        position: static !important;
+        transform: none !important;
+        flex: 1 !important;
+    }
+    
+    /* Company name on mobile */
+    .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+        font-size: 1.8rem !important;
+    }
+    
+    /* Mobile menu */
+    .navbar.universal-nav .nav-menu {
+        display: none;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        background-color: rgba(22, 50, 92, 0.95) !important;
+        flex-direction: column !important;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: all 0.3s ease-out;
+    }
+    
+    .navbar.universal-nav .nav-menu.show {
+        display: flex !important;
+        max-height: 500px;
+        opacity: 1;
+    }
+    
+    .navbar.universal-nav .slds-nav-horizontal__item {
+        width: 100% !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .navbar.universal-nav .nav-link {
+        width: 100% !important;
+        text-align: center !important;
+    }
+    
+    /* ADDITION: Ensure mobile toggle container positioning */
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-hide.slds-show_small {
+        position: relative !important;
+        z-index: 10 !important;
+    }
+}
+
+@media (min-width: 769px) {
+    body {
+        padding-top: 120px !important;
+    }
+    
+    .navbar.universal-nav .nav-menu {
+        display: flex !important;
+        position: static !important;
+        max-height: none !important;
+        opacity: 1 !important;
+        background-color: transparent !important;
+    }
+    
+    .navbar.universal-nav .mobile-nav-toggle {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   NAVIGATION LOAD ANIMATIONS
+   ============================================ */
+
+/* Initial states for navigation elements */
+.navbar.universal-nav {
+    animation: navSlideDown 0.8s ease-out;
+}
+
+@keyframes navSlideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Company name animation */
+.universal-brand-logo {
+    animation: fadeInDown 0.8s ease-out 0.3s both;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Logo animation */
+.brand-logo-container {
+    animation: zoomIn 0.6s ease-out 0.1s both;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Nav items stagger animation */
+.nav-link {
+    animation: fadeInUp 0.5s ease-out both;
+}
+
+.slds-nav-horizontal__item:nth-child(1) .nav-link { animation-delay: 0.4s; }
+.slds-nav-horizontal__item:nth-child(2) .nav-link { animation-delay: 0.5s; }
+.slds-nav-horizontal__item:nth-child(3) .nav-link { animation-delay: 0.6s; }
+.slds-nav-horizontal__item:nth-child(4) .nav-link { animation-delay: 0.7s; }
+.slds-nav-horizontal__item:nth-child(5) .nav-link { animation-delay: 0.8s; }
+.slds-nav-horizontal__item:nth-child(6) .nav-link { animation-delay: 0.9s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   ANIMATIONS (ORIGINAL)
+   ============================================ */
+
+@keyframes slideInMobile {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ============================================
+   FINAL OVERRIDE - NUCLEAR OPTION
+   Use page-specific body classes
+   ============================================ */
+
+body.services-page .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+body.resources-page .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+body.impact-page .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+    font-size: 2.5rem !important;
+}
+
+body.services-page .navbar.universal-nav a.nav-link,
+body.resources-page .navbar.universal-nav a.nav-link,
+body.impact-page .navbar.universal-nav a.nav-link {
+    font-size: 18px !important;
+}
+
+/* ============================================
+   ACCESSIBILITY - Reduced Motion Support
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar.universal-nav,
+    .universal-brand-logo,
+    .brand-logo-container,
+    .nav-link {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    
+    .navbar.universal-nav .brand-logo-container:hover,
+    .navbar.universal-nav .nav-link::after,
+    .navbar.universal-nav .hamburger-icon {
+        transition: none !important;
+    }
+}
