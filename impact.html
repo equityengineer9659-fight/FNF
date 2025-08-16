@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/navigation-styles.css">
     <link rel="stylesheet" href="css/navigation-fixes.css">
+    <link rel="stylesheet" href="css/slds-enhancements.css">
     
     <!-- Preload critical resources -->
     <link rel="preload" href="css/styles.css" as="style">
@@ -166,13 +167,14 @@
     <footer class="custom-footer" role="contentinfo">
         <div class="slds-container_large slds-container_center slds-p-around_large">
             <div class="slds-text-align_center">
-                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. Empowering food banks through technology.</p>
+                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Navigation script -->
+    <!-- JavaScript Files -->
     <script src="js/unified-navigation.js"></script>
+    <script src="js/slds-enhancements.js"></script>
     
     <!-- Page load complete - animations handled by unified-navigation.js -->
     <script>
@@ -182,6 +184,26 @@
         
         // All animations are now handled by unified-navigation.js
         // No duplicate animation code needed here
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Food-N-Force",
+        "description": "Digital solutions for food banks and pantries",
+        "url": "https://foodnforce.com",
+        "logo": "https://foodnforce.com/logo.png",
+        "sameAs": [
+            "https://linkedin.com/company/foodnforce"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-555-123-4567",
+            "contactType": "customer service"
+        }
+    }
     </script>
 </body>
 </html>
