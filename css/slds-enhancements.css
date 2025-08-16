@@ -1,0 +1,662 @@
+/* ============================================
+   SLDS-Compatible Enhancements
+   Phase 1: Quick Wins that work WITH SLDS
+   
+   MINIMAL enhancements only - no content changes
+   ============================================ */
+
+/* ============================================
+   1. FIX DARK BACKGROUNDS - CRITICAL
+   ============================================ */
+
+/* Force white backgrounds on cards */
+.slds-box,
+.focus-area-card,
+.service-card {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Ensure text is dark on white backgrounds */
+.slds-box h3,
+.focus-area-card h3,
+.service-card h3,
+.slds-text-heading_medium {
+  color: #333333 !important;
+}
+
+.slds-box p,
+.focus-area-card p,
+.service-card p,
+.slds-text-body_regular {
+  color: #666666 !important;
+}
+
+/* ============================================
+   2. RESTORE BLUE ICON BACKGROUNDS
+   ============================================ */
+
+/* Ensure ALL icons have blue gradient backgrounds */
+.icon-wrapper,
+.focus-area-icon,
+.service-icon,
+.resource-icon,
+.expertise-icon,
+.value-icon {
+  background: linear-gradient(135deg, #0176d3, #0099cc) !important;
+  border-radius: 50% !important;
+  width: 4rem !important;
+  height: 4rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 1rem !important;
+  color: #ffffff !important;
+  font-size: 1.5rem !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(1, 118, 211, 0.3) !important;
+}
+
+/* Smaller icons for focus areas */
+.focus-area-icon {
+  width: 3rem !important;
+  height: 3rem !important;
+  font-size: 1.2rem !important;
+}
+
+/* Icon rotation on hover */
+.focus-area-card:hover .icon-wrapper,
+.focus-area-card:hover .focus-area-icon,
+.service-card:hover .service-icon,
+.resource-card:hover .resource-icon,
+.expertise-card:hover .expertise-icon,
+.value-card:hover .value-icon {
+  transform: rotate(360deg) scale(1.1) !important;
+  box-shadow: 0 6px 20px rgba(1, 118, 211, 0.5) !important;
+}
+
+/* Ensure the icon-wrapper class on ALL pages has blue background */
+.icon-wrapper {
+  background: linear-gradient(135deg, #0176d3, #0099cc) !important;
+  border-radius: 50% !important;
+  width: 4rem !important;
+  height: 4rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 1rem !important;
+  color: #ffffff !important;
+  font-size: 1.5rem !important;
+}
+
+/* ============================================
+   3. MICRO-ENHANCEMENTS: Hover States & Animations
+   ============================================ */
+
+/* Enhanced hover for cards with lift effect */
+.slds-box,
+.slds-card,
+.focus-area-card,
+.service-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  cursor: pointer;
+}
+
+.slds-box:hover,
+.slds-card:hover,
+.focus-area-card:hover,
+.service-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Button enhancements */
+.slds-button {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.slds-button:hover {
+  transform: translateY(-1px);
+}
+
+.slds-button:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   4. FIX SECTION BACKGROUNDS
+   ============================================ */
+
+/* Fix section backgrounds */
+section {
+  background-color: transparent !important;
+}
+
+.section-gray {
+  background-color: #f3f3f3 !important;
+}
+
+/* ============================================
+   5. FOCUS IMPROVEMENTS
+   ============================================ */
+
+/* Better focus states using SLDS blue */
+*:focus {
+  outline: 2px solid #0176d3;
+  outline-offset: 2px;
+}
+
+.slds-button:focus,
+.slds-input:focus,
+.slds-textarea:focus,
+.slds-select:focus {
+  box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.2);
+  outline: none;
+}
+
+/* ============================================
+   6. SMOOTH TRANSITIONS
+   ============================================ */
+
+/* Navigation shadow on scroll (controlled by JS) */
+.navbar {
+  transition: box-shadow 0.3s ease;
+}
+
+.navbar.scrolled {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth section reveals */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   7. PERFORMANCE & POLISH
+   ============================================ */
+
+/* Stats counter animation prep */
+.stat-number {
+  transition: color 0.3s ease;
+  font-size: 2.5rem !important;
+  font-weight: bold !important;
+  color: #0176d3 !important;
+}
+
+.stat-number.counting {
+  color: #00d4ff !important;
+}
+
+/* Form field enhancements */
+.slds-form-element__control input,
+.slds-form-element__control textarea,
+.slds-form-element__control select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ============================================
+   8. ACCESSIBILITY: Reduced Motion Support
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .fade-in-up {
+    opacity: 1;
+    transform: none;
+  }
+  
+  .stat-number {
+    transition: none;
+  }
+}
+
+/* ============================================
+   9. MOBILE ENHANCEMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Ensure touch targets are accessible */
+  .slds-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Icon wrapper adjustments for mobile */
+  .icon-wrapper {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 1.2rem !important;
+  }
+}
+
+/* ============================================
+   10. FEATURED CONTENT SECTION - Resources Page
+   ============================================ */
+
+/* Featured content boxes */
+.featured-box {
+  background-color: #f3f3f3;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  padding: 2rem;
+  height: 100%;
+  min-height: 280px; /* Ensures minimum consistent height */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Featured content section grid */
+.featured-content-section .slds-grid {
+  align-items: stretch; /* Ensures equal height columns */
+}
+
+/* Featured list styling */
+.featured-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1; /* Allows list to expand to fill available space */
+}
+
+.featured-list-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.featured-list-item:last-child {
+  border-bottom: none;
+}
+
+/* Featured links */
+.featured-link {
+  color: #0176d3;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.featured-link:hover {
+  color: #0099cc;
+  text-decoration: underline;
+}
+
+/* Date styling */
+.featured-date {
+  color: #666666;
+  font-size: 0.875rem;
+  font-weight: normal;
+}
+
+/* Download labels */
+.download-label {
+  margin-left: 0.5rem;
+  background-color: #0176d3;
+  color: #ffffff;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ============================================
+   11. ABOUT PAGE - CONSISTENT CARD STYLING
+   ============================================ */
+
+/* Remove dark theme - use consistent white cards like other pages */
+.expertise-card,
+.value-card {
+  background-color: #ffffff !important;
+  border: 1px solid #dddddd !important;
+  border-radius: 8px !important;
+  padding: 2rem !important;
+  text-align: center !important;
+  min-height: 280px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.expertise-card:hover,
+.value-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Ensure consistent text colors */
+.expertise-card h3,
+.value-card h3 {
+  color: #333333 !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.expertise-card p,
+.value-card p {
+  color: #666666 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+}
+
+/* Icon styling remains the same */
+.expertise-icon,
+.value-icon {
+  background: linear-gradient(135deg, #0176d3, #0099cc) !important;
+  border-radius: 50% !important;
+  width: 4rem !important;
+  height: 4rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 1rem !important;
+  color: #ffffff !important;
+  font-size: 1.5rem !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(1, 118, 211, 0.3) !important;
+}
+
+/* ============================================
+   12. CONSISTENT CARD HEIGHT FIXES
+   ============================================ */
+
+/* Fix index page - ensure all focus area cards have same height with reduced size */
+.focus-area-card {
+  min-height: 220px !important;
+  max-height: 220px !important;
+  height: 220px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  padding: 1.5rem !important;
+}
+
+.focus-area-card h3 {
+  font-size: 1.1rem !important;
+  margin-bottom: 0.75rem !important;
+  line-height: 1.3 !important;
+}
+
+.focus-area-card p {
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+
+/* Smaller focus area icons */
+.focus-area-card .icon-wrapper,
+.focus-area-card .focus-area-icon {
+  width: 3rem !important;
+  height: 3rem !important;
+  font-size: 1.2rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Fix services page - ensure proper spacing and consistent heights */
+.service-card {
+  min-height: 280px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  margin-bottom: 2rem !important;
+}
+
+/* Services page grid spacing */
+.services-page .slds-grid {
+  gap: 2rem !important;
+}
+
+/* About page - ensure all value cards have same height */
+.value-card {
+  min-height: 300px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+.value-card h3 {
+  margin-bottom: 1rem !important;
+}
+
+.value-card p {
+  flex-grow: 1 !important;
+}
+
+/* ============================================
+   13. SERVICES PAGE - FORCE 3x2 GRID LAYOUT
+   ============================================ */
+
+/* Override grid for services page to force 3x2 flexbox layout */
+.services-page .slds-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  /* Disable CSS Grid completely */
+  grid-template-columns: unset !important;
+  grid-template-rows: unset !important;
+  gap: 0 !important;
+  margin: 0 -1rem !important;
+}
+
+/* Force 3 columns using flexbox */
+.services-page .slds-col,
+.services-page .slds-size_1-of-1.slds-medium-size_1-of-2.slds-large-size_1-of-3 {
+  /* Override ALL size classes to be 33.33% */
+  flex: 0 0 33.333333% !important;
+  max-width: 33.333333% !important;
+  width: 33.333333% !important;
+  padding: 1rem !important;
+}
+
+/* Ensure service cards fill their containers */
+.services-page .service-card {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 280px !important;
+  margin: 0 !important;
+}
+
+/* Remove any min-height that might force 2x3 layout */
+.services-page .service-card {
+  min-height: auto !important;
+  height: 100% !important;
+  padding: 1.5rem !important;
+}
+
+/* Make service icons smaller to fit better in 3-column layout */
+.services-page .service-icon {
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+  font-size: 1.3rem !important;
+}
+
+/* Responsive adjustments for services grid */
+@media (max-width: 1024px) {
+  .services-page .slds-col,
+  .services-page .slds-size_1-of-1.slds-medium-size_1-of-2.slds-large-size_1-of-3 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    width: 50% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .services-page .slds-col,
+  .services-page .slds-size_1-of-1.slds-medium-size_1-of-2.slds-large-size_1-of-3 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+/* ============================================
+   14. ENHANCED IMPACT NUMBERS SECTION
+   ============================================ */
+
+/* Dark background for impact section */
+.impact-numbers-dark {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    padding: 4rem 2rem !important;
+}
+
+/* Enhanced stat card styling */
+.impact-numbers-dark .stat-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-align: center;
+    padding: 2rem 1rem !important;
+}
+
+/* Number wrapper to keep number and suffix together */
+.stat-number-wrapper {
+    display: block;
+    margin-bottom: 1rem;
+    line-height: 1;
+}
+
+/* Larger, blue numbers */
+.impact-numbers-dark .stat-number {
+    font-size: 4rem !important;
+    font-weight: 700 !important;
+    color: #0176d3 !important;
+    line-height: 1 !important;
+    display: inline !important;
+}
+
+/* Suffix styling */
+.impact-numbers-dark .stat-suffix {
+    font-size: 4rem !important;
+    font-weight: 700 !important;
+    color: #0176d3 !important;
+    line-height: 1 !important;
+    display: inline !important;
+}
+
+/* Stat labels - smaller, gray text */
+.impact-numbers-dark .stat-label {
+    font-size: 0.9rem !important;
+    color: #999999 !important;
+    font-weight: 400 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    display: block;
+    line-height: 1.4;
+}
+
+/* Remove hover effects for cleaner look */
+.impact-numbers-dark .stat-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure proper spacing between cards */
+.impact-numbers-dark .slds-grid {
+    align-items: stretch;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .impact-numbers-dark .stat-number,
+    .impact-numbers-dark .stat-suffix {
+        font-size: 3rem !important;
+    }
+    
+    .impact-numbers-dark {
+        padding: 3rem 1rem !important;
+    }
+}
+
+/* ============================================
+   15. RESOURCES PAGE - EQUAL HEIGHTS AND SPACING
+   ============================================ */
+
+/* Resources page alignment fix - ONLY for resource cards section */
+.resources-page section:first-of-type .slds-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 2rem !important;
+    align-items: stretch !important;
+}
+
+/* Only target columns with resource cards */
+.resources-page .slds-col:has(.resource-card) {
+    flex: 0 0 calc(33.333% - 1.333rem) !important;
+    max-width: calc(33.333% - 1.333rem) !important;
+    display: flex !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Fallback for browsers without :has() support */
+.resources-page .slds-large-size_1-of-3:nth-child(-n+6) {
+    flex: 0 0 calc(33.333% - 1.333rem) !important;
+    max-width: calc(33.333% - 1.333rem) !important;
+    display: flex !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Ensure all resource cards have equal height */
+.resources-page .resource-card {
+    width: 100% !important;
+    min-height: 300px !important; /* Base minimum height */
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+}
+
+/* Spacing within cards */
+.resources-page .resource-card > * {
+    margin-bottom: 1rem;
+}
+
+.resources-page .resource-card > *:last-child {
+    margin-bottom: 0;
+    margin-top: auto;
+}
+
+/* Push action buttons to bottom */
+.resources-page .resource-card .resource-action {
+    margin-top: auto !important;
+    align-self: center !important;
+}
+
+/* DO NOT affect featured content section */
+/* Note: These selectors are listed to document that they should not be affected by grid changes */
+/*
+.resources-page .section-gray .slds-col,
+.resources-page .featured-box
+*/
+
+/* Responsive - 2 columns on tablet */
+@media (max-width: 1024px) {
+    .resources-page .slds-col:has(.resource-card),
+    .resources-page .slds-large-size_1-of-3:nth-child(-n+6) {
+        flex: 0 0 calc(50% - 1rem) !important;
+        max-width: calc(50% - 1rem) !important;
+    }
+}
+
+/* Responsive - 1 column on mobile */
+@media (max-width: 768px) {
+    .resources-page .slds-col:has(.resource-card),
+    .resources-page .slds-large-size_1-of-3:nth-child(-n+6) {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}

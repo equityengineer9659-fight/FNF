@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Food-N-Force services include digital strategy, inventory management, workflow automation, data analytics, community engagement tools, and staff training for food banks.">
+    <meta name="keywords" content="food bank services, digital transformation, inventory management, workflow automation, nonprofit technology">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Our Services - Food-N-Force">
+    <meta property="og:description" content="Comprehensive digital solutions to transform your food bank operations and serve more families efficiently.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/services.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Our Services - Food-N-Force">
+    
+    <title>Our Services - Food-N-Force</title>
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Salesforce Lightning Design System CSS - LOAD FIRST -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    
+    <!-- Custom CSS - LOAD AFTER SLDS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation-styles.css">
+    <link rel="stylesheet" href="css/navigation-fixes.css">
+    <link rel="stylesheet" href="css/slds-enhancements.css">
+    <link rel="stylesheet" href="css/animations.css">        <!-- Phase 2 -->
+    <link rel="stylesheet" href="css/premium-effects.css">   <!-- Phase 3 -->
+    <link rel="stylesheet" href="css/slds-dark-theme.css">  <!-- Dark Theme Layer -->
+    <link rel="stylesheet" href="css/slds-dark-theme-fixes.css">
+    <link rel="stylesheet" href="css/slds-cool-effects.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/unified-navigation.js" as="script">
+    
+    <style>
+    /* Critical fix for services page background */
+    body.services-page {
+        background-color: #ffffff !important;
+        background-image: none !important;
+    }
+    
+    body.services-page main {
+        background-color: transparent !important;
+    }
+    
+    body.services-page section {
+        background-color: transparent !important;
+    }
+    
+    /* Ensure white background on service cards */
+    .services-page .service-card {
+        background-color: #ffffff !important;
+        background-image: none !important;
+        color: #333333 !important;
+    }
+    
+    /* Force dark text on services page */
+    .services-page h1,
+    .services-page h2,
+    .services-page h3,
+    .services-page .service-title {
+        color: #333333 !important;
+    }
+    
+    .services-page p,
+    .services-page .service-description {
+        color: #666666 !important;
+    }
+    
+    /* Initial opacity for smooth loading */
+    body {
+        opacity: 0;
+        transition: opacity 0.5s ease-in;
+    }
+    body.loaded {
+        opacity: 1;
+    }
+    </style>
+</head>
+<body class="services-page">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation will be automatically injected here by unified-navigation.js -->
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Services Section -->
+        <section class="section-padding slds-p-horizontal_large" aria-labelledby="services-heading">
+            <div class="slds-container_x-large slds-container_center">
+                <div class="slds-text-align_center slds-m-bottom_x-large">
+                    <h1 id="services-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Services</h1>
+                    <p class="slds-text-body_regular slds-text-color_weak">
+                        Comprehensive digital solutions to transform your food bank operations
+                    </p>
+                </div>
+                
+                <div class="slds-grid slds-wrap slds-gutters_large">
+                    <!-- Digital Strategy & Roadmapping -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_medium">
+                        <article class="service-card">
+                            <div class="service-icon">
+                                <span>📋</span>
+                            </div>
+                            <h3 class="service-title">Digital Strategy & Roadmapping</h3>
+                            <p class="service-description">
+                                Custom digital transformation plans that align technology investments with your mission and budget.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Inventory & Client Management -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_medium">
+                        <article class="service-card">
+                            <div class="service-icon">
+                                <span>📦</span>
+                            </div>
+                            <h3 class="service-title">Inventory & Client Management</h3>
+                            <p class="service-description">
+                                Streamlined systems to track food inventory, manage client relationships, and optimize distribution.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Workflow Automation -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_medium">
+                        <article class="service-card">
+                            <div class="service-icon">
+                                <span>⚙️</span>
+                            </div>
+                            <h3 class="service-title">Workflow Automation</h3>
+                            <p class="service-description">
+                                Automated processes that reduce manual work and help your team focus on serving families.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Data Analytics & Reporting -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_medium">
+                        <article class="service-card">
+                            <div class="service-icon">
+                                <span>📊</span>
+                            </div>
+                            <h3 class="service-title">Data Analytics & Reporting</h3>
+                            <p class="service-description">
+                                Powerful dashboards that turn your data into actionable insights for better decision-making.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Community Engagement Tools -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_medium">
+                        <article class="service-card">
+                            <div class="service-icon">
+                                <span>💬</span>
+                            </div>
+                            <h3 class="service-title">Community Engagement Tools</h3>
+                            <p class="service-description">
+                                SMS, email, and digital platforms that strengthen connections with clients and volunteers.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Staff Training & Support -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-around_medium">
+                        <article class="service-card">
+                            <div class="service-icon">
+                                <span>🎓</span>
+                            </div>
+                            <h3 class="service-title">Staff Training & Support</h3>
+                            <p class="service-description">
+                                Comprehensive training programs to ensure your team maximizes the value of new technologies.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="slds-text-align_center slds-m-top_x-large">
+                    <h3 class="slds-text-heading_medium slds-m-bottom_medium">Ready to Transform Your Operations?</h3>
+                    <p class="slds-text-body_regular slds-m-bottom_large">
+                        Let's discuss how our services can help your food bank serve more families, more efficiently.
+                    </p>
+                    <a href="contact.html" class="slds-button slds-button_brand">
+                        Schedule a Free Consultation
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="custom-footer" role="contentinfo">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/unified-navigation.js"></script>
+    <script src="js/slds-enhancements.js"></script>
+    <script src="js/animations.js"></script>         <!-- Phase 2 -->
+    <script src="js/premium-effects.js"></script>    <!-- Phase 3 -->
+    <script src="js/slds-cool-effects.js"></script>
+    <!-- Disable conflicting counter animations -->
+    <script src="js/disable-conflicting-counters.js"></script>
+    
+    <!-- Page load complete -->
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>
