@@ -1,0 +1,76 @@
+/* ==================================================
+   CSS CONFLICT RESOLUTION NOTES
+   Phase 1 Cleanup - 2024
+   ==================================================
+   
+   PURPOSE: Document which rules win and where conflicts are resolved
+   
+   CASCADE ORDER (files load in this sequence):
+   1. SLDS Framework
+   2. styles.css
+   3. navigation-styles.css  
+   4. slds-enhancements.css
+   5. animations.css
+   6. premium-effects.css (known interferer)
+   7. slds-dark-theme.css
+   8. slds-cool-effects.css
+   9. slds-dark-theme-fixes.css (FINAL OVERRIDE - highest priority)
+   10. focus-area-override.css
+   
+   ==================================================
+   RESOLVED CONFLICTS:
+   ==================================================
+   
+   1. .stat-label color conflict
+      - WINNER: slds-dark-theme-fixes.css -> rgba(255, 255, 255, 0.8)
+      - REMOVED: slds-dark-theme.css rule (commented out)
+      - KEPT: styles.css for font-size and margin
+   
+   2. .stat-number color/font-size conflict  
+      - WINNER: slds-dark-theme-fixes.css -> rgb(0, 161, 224)
+      - WINNER: styles.css -> font-size: var(--font-size-h1) [32px]
+      - REMOVED: slds-dark-theme.css rule (commented out)
+      - KEPT: animations.css for transitions
+      - KEPT: slds-cool-effects.css for gradient text effect
+   
+   3. .hero-subtitle inline style issue
+      - ISSUE: JavaScript adding inline styles with !important
+      - STATUS: Needs investigation - check premium-effects.js
+   
+   ==================================================
+   MISSING SELECTORS (not found on index.html):
+   ==================================================
+   
+   - .stat-item (might be old selector)
+   - .floating-cta-button (check other pages)
+   - .mission-text (check about page)
+   
+   ==================================================
+   PROTECTED SELECTORS (DO NOT DELETE):
+   ==================================================
+   
+   Icon wrappers:
+   - .icon-wrapper
+   - .focus-area-icon
+   - .service-icon
+   - .resource-icon
+   - .expertise-icon
+   - .value-icon
+   
+   Body classes from unified-navigation.js:
+   - .services-page
+   - .about-page
+   - .contact-page
+   - .impact-page
+   - .resources-page
+   
+   JS-dependent animation classes:
+   - .fade-in
+   - .slide-up
+   - .animate
+   - .is-*
+   - .has-*
+   - .js-*
+   
+   ==================================================
+*/

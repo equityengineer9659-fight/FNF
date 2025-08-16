@@ -12,8 +12,13 @@
       "Bash(git pull:*)",
       "Bash(git merge:*)",
       "Bash(git add:*)",
+<<<<<<< HEAD
       "Bash(git cherry-pick:*)",
       "Bash(git commit:*)"
+=======
+      "Bash(git reset:*)",
+      "Bash(git add:*)"
+>>>>>>> 6bc4ee8 (Release v2.0: Major Website Enhancement Update)
     ],
     "deny": [],
     "ask": []

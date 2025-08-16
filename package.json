@@ -1,0 +1,15 @@
+{
+  "name": "website-next-version",
+  "version": "1.0.0",
+  "description": "Website Next Version",
+  "scripts": {
+    "start": "npx live-server --port=8080 --host=localhost --open",
+    "dev": "npx live-server --port=8080 --host=localhost --open",
+    "serve": "npx http-server -p 8080 -c-1",
+    "build": "echo 'This is a static site - no build needed'",
+    "open": "start index.html"
+  },
+  "keywords": ["website", "static-site"],
+  "author": "",
+  "license": "ISC"
+}
