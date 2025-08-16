@@ -1,0 +1,49 @@
+/* gap-fix-nuclear.css - Ultimate override for index page card gaps */
+/* This file MUST be loaded as the VERY LAST CSS file */
+
+/* Nuclear selector for Focus Areas */
+html body.index-page main section:nth-of-type(2) div.slds-container_large div.slds-grid,
+html body.index-page main section:nth-of-type(2) div div.slds-grid,
+html body.index-page main section:nth-of-type(2) .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 340px)) !important;
+    gap: 2.5rem !important;
+    grid-gap: 2.5rem !important;
+    row-gap: 2.5rem !important;
+    column-gap: 2.5rem !important;
+    -webkit-gap: 2.5rem !important;
+    -moz-gap: 2.5rem !important;
+    -ms-gap: 2.5rem !important;
+}
+
+/* Nuclear selector for Measurable Growth */
+html body.index-page main section:nth-of-type(3) div.slds-container_x-large div.slds-grid,
+html body.index-page main section:nth-of-type(3) div div.slds-grid,
+html body.index-page main section:nth-of-type(3) .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 340px)) !important;
+    gap: 2.5rem !important;
+    grid-gap: 2.5rem !important;
+    row-gap: 2.5rem !important;
+    column-gap: 2.5rem !important;
+    -webkit-gap: 2.5rem !important;
+    -moz-gap: 2.5rem !important;
+    -ms-gap: 2.5rem !important;
+}
+
+/* Override any inline styles with ultra-specific attribute selectors */
+[style*="gap: 0"] {
+    gap: 2.5rem !important;
+}
+
+[style*="gap: normal"] {
+    gap: 2.5rem !important;
+}
+
+[style*="gap:0"] {
+    gap: 2.5rem !important;
+}
+
+[style*="gap:normal"] {
+    gap: 2.5rem !important;
+}

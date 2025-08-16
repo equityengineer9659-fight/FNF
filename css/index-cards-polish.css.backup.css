@@ -1,0 +1,253 @@
+/* index-cards-polish.css - Makes all cards uniform and visually appealing */
+
+/* ============================================
+   1. SECTION VERTICAL RHYTHM
+   ============================================ */
+
+/* Consistent section spacing */
+.index-page section {
+    padding: 5rem 0 !important;
+}
+
+/* Slightly less padding for first section */
+.index-page section:first-of-type {
+    padding: 3rem 0 4rem 0 !important;
+}
+
+/* ============================================
+   2. UNIFIED CARD STYLING
+   ============================================ */
+
+/* All cards - Focus Areas and Measurable Growth */
+.index-page .focus-area-card,
+.index-page .measurable-card {
+    /* Consistent dimensions */
+    min-height: 320px !important;
+    height: 100% !important;
+    width: 100% !important;
+    
+    /* Refined padding for better proportions */
+    padding: 2.5rem 2rem !important;
+    
+    /* Visual consistency */
+    background: rgba(20, 20, 20, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    
+    /* Subtle shadow for depth */
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        0 8px 16px rgba(0, 0, 0, 0.15) !important;
+    
+    /* Layout */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    
+    /* Smooth transitions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Hover effect - subtle and elegant */
+.index-page .focus-area-card:hover,
+.index-page .measurable-card:hover {
+    transform: translateY(-4px) !important;
+    background: rgba(25, 25, 25, 0.7) !important;
+    border-color: rgba(0, 112, 240, 0.3) !important;
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        0 12px 24px rgba(0, 112, 240, 0.15) !important;
+}
+
+/* ============================================
+   3. ICON STYLING - CONSISTENT SIZE
+   ============================================ */
+
+.index-page .focus-area-icon,
+.index-page .icon-wrapper {
+    /* Uniform icon containers */
+    width: 72px !important;
+    height: 72px !important;
+    margin: 0 auto 1.75rem !important;
+    
+    /* Perfect circles */
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    
+    /* Consistent blue gradient */
+    background: linear-gradient(135deg, #0070f0 0%, #0099ff 100%) !important;
+    
+    /* Centering */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    /* Subtle shadow */
+    box-shadow: 0 4px 12px rgba(0, 112, 240, 0.25) !important;
+    
+    /* Smooth transitions */
+    transition: all 0.3s ease !important;
+}
+
+/* Icon content */
+.index-page .focus-area-icon span,
+.index-page .icon-wrapper span {
+    font-size: 2rem !important;
+    line-height: 1 !important;
+    color: white !important;
+}
+
+/* Icon hover animation */
+.index-page .focus-area-card:hover .focus-area-icon,
+.index-page .measurable-card:hover .icon-wrapper {
+    transform: scale(1.05) rotate(5deg) !important;
+    box-shadow: 0 6px 16px rgba(0, 112, 240, 0.35) !important;
+}
+
+/* ============================================
+   4. TYPOGRAPHY - CONSISTENT HIERARCHY
+   ============================================ */
+
+/* Card titles */
+.index-page .focus-area-card h3,
+.index-page .measurable-card h3 {
+    font-size: 1.375rem !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    margin: 0 0 1rem 0 !important;
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+}
+
+/* Card descriptions */
+.index-page .focus-area-card p,
+.index-page .measurable-card p {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin: 0 !important;
+    flex-grow: 0 !important;
+}
+
+/* ============================================
+   5. GRID REFINEMENTS - FORCE UNIFORM LAYOUT
+   ============================================ */
+
+/* Both card grids - ensure consistency */
+.index-page section:nth-of-type(2) .slds-grid,
+.index-page section:nth-of-type(3) .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2.5rem !important;
+    width: 100% !important;
+    max-width: 1140px !important;
+    margin: 0 auto !important;
+    padding: 0 2rem !important;
+    justify-items: center !important;
+    align-items: stretch !important;
+}
+
+/* Force all cards to same width */
+.index-page .focus-area-card,
+.index-page .measurable-card {
+    width: 100% !important;
+    max-width: 340px !important;
+}
+
+/* Ensure columns don't interfere */
+.index-page section:nth-of-type(2) .slds-col,
+.index-page section:nth-of-type(3) .slds-col {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+
+/* ============================================
+   6. SECTION HEADERS - REFINED STYLING
+   ============================================ */
+
+.index-page section h2 {
+    font-size: 2.75rem !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.03em !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Blue underline accent */
+.index-page section h2::after {
+    content: '' !important;
+    display: block !important;
+    width: 80px !important;
+    height: 4px !important;
+    background: linear-gradient(90deg, #0070f0 0%, #0099ff 100%) !important;
+    margin: 1.5rem auto !important;
+    border-radius: 2px !important;
+}
+
+/* Section subtitles */
+.index-page section h2 + p {
+    font-size: 1.125rem !important;
+    line-height: 1.6 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    max-width: 700px !important;
+    margin: 0 auto 3.5rem !important;
+}
+
+/* ============================================
+   7. RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 991px) and (min-width: 768px) {
+    .index-page section:nth-of-type(2) .slds-grid,
+    .index-page section:nth-of-type(3) .slds-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+        max-width: 700px !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .index-page section:nth-of-type(2) .slds-grid,
+    .index-page section:nth-of-type(3) .slds-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        max-width: 400px !important;
+    }
+    
+    .index-page .focus-area-card,
+    .index-page .measurable-card {
+        min-height: 280px !important;
+    }
+    
+    .index-page section {
+        padding: 3rem 0 !important;
+    }
+}
+
+/* ============================================
+   8. POLISH DETAILS
+   ============================================ */
+
+/* Subtle background pattern for sections */
+.index-page section:nth-of-type(2) {
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 112, 240, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(0, 153, 255, 0.05) 0%, transparent 50%) !important;
+}
+
+/* Remove any competing styles */
+.index-page .focus-area-card *,
+.index-page .measurable-card * {
+    background-clip: unset !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: unset !important;
+}

@@ -1,0 +1,125 @@
+/* ============================================
+   Focus Area Cards - Nuclear Override
+   This MUST be loaded LAST in your HTML
+   ============================================ */
+
+/* Target with maximum specificity */
+html body.index-page main section:nth-of-type(2) div.slds-container_large div.slds-grid div.slds-col div.focus-area-card {
+    background-color: rgba(26, 26, 26, 0.8) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 2.5rem !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    min-height: 300px !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: center !important;
+    transition: all 0.3s ease !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Hover state */
+html body.index-page main section:nth-of-type(2) div.slds-container_large div.slds-grid div.slds-col div.focus-area-card:hover {
+    background-color: rgba(36, 36, 36, 0.9) !important;
+    border-color: rgba(0, 176, 211, 0.5) !important;
+    box-shadow: 0 6px 20px rgba(0, 176, 211, 0.3) !important;
+    transform: translateY(-5px) !important;
+}
+
+/* Icon styling with maximum specificity - MUST BE CENTERED */
+html body.index-page main section:nth-of-type(2) div.slds-container_large div.slds-grid div.slds-col div.focus-area-card div.focus-area-icon {
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
+    min-height: 80px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #0070f0 0%, #00a1e0 100%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 1.5rem auto !important;
+    box-shadow: 0 4px 15px rgba(0, 112, 240, 0.3) !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    flex-shrink: 0 !important;
+}
+
+/* Icon hover */
+html body.index-page main section:nth-of-type(2) div.slds-container_large div.slds-grid div.slds-col div.focus-area-card:hover div.focus-area-icon {
+    transform: rotate(10deg) scale(1.1) !important;
+    box-shadow: 0 6px 20px rgba(0, 112, 240, 0.4) !important;
+}
+
+/* Icon emoji - ensure centered */
+html body.index-page main section:nth-of-type(2) div.slds-container_large div.slds-grid div.slds-col div.focus-area-card div.focus-area-icon span {
+    font-size: 2.5rem !important;
+    color: #ffffff !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Ensure h3 titles are properly styled and centered */
+html body.index-page main section:nth-of-type(2) div.slds-container_large div.slds-grid div.slds-col div.focus-area-card h3 {
+    color: #ffffff !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    margin: 0 0 1rem 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* Ensure paragraphs are properly styled */
+html body.index-page main section:nth-of-type(2) div.slds-container_large div.slds-grid div.slds-col div.focus-area-card p {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+    flex-grow: 1 !important;
+}
+
+/* Alternative selectors for icons specifically */
+.index-page .focus-area-icon {
+    width: 80px !important;
+    height: 80px !important;
+    background: linear-gradient(135deg, #0070f0 0%, #00a1e0 100%) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 1.5rem auto !important;
+}
+
+/* Reset any conflicting styles on inner elements */
+.index-page .focus-area-card * {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* But restore the icon background */
+.index-page .focus-area-card .focus-area-icon {
+    background: linear-gradient(135deg, #0070f0 0%, #00a1e0 100%) !important;
+    box-shadow: 0 4px 15px rgba(0, 112, 240, 0.3) !important;
+}
+
+/* Force icon to be visible and properly sized */
+.focus-area-icon {
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative !important;
+    z-index: 1 !important;
+}

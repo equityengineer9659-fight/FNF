@@ -1,0 +1,288 @@
+/* ============================================
+   Index Page Grid Fix - Complete Override
+   This file fixes ALL card display issues
+   ============================================ */
+
+/* ============================================
+   0. SECTION SPACING AND CONSISTENCY
+   ============================================ */
+
+/* Ensure consistent section padding */
+.index-page section {
+    padding: 4rem 0 !important;
+}
+
+/* Center all section content */
+.index-page .slds-container_large {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 1rem !important;
+}
+
+/* ============================================
+   1. FIX SUBTITLE CENTERING
+   ============================================ */
+
+/* Center the subtitle text under "Our Focus Areas" */
+.index-page #focus-heading + p {
+    text-align: center !important;
+    margin: 0 auto 3rem !important;
+    max-width: 800px !important;
+    display: block !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 1.1rem !important;
+}
+
+/* ============================================
+   2. GRID LAYOUTS - OVERRIDE EVERYTHING
+   ============================================ */
+
+/* Focus Areas Grid */
+.index-page #focus-heading + p + .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    margin: 0 auto !important;
+    max-width: 1200px !important;
+    width: 100% !important;
+    padding: 0 1rem !important;
+}
+
+/* Measurable Growth Grid */
+.index-page section:nth-of-type(3) .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    margin: 0 auto !important;
+    max-width: 1200px !important;
+    width: 100% !important;
+    padding: 0 1rem !important;
+}
+
+/* Impact Numbers Grid */
+.index-page section:nth-of-type(4) .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 2rem !important;
+    margin: 0 auto !important;
+    max-width: 1200px !important;
+    width: 100% !important;
+    padding: 0 1rem !important;
+}
+
+/* Reset all columns */
+.index-page .slds-col {
+    display: block !important;
+    flex: unset !important;
+    max-width: unset !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    /* Remove any accidental styling */
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ============================================
+   3. CARD STYLING - UNIFIED FOR BOTH SECTIONS
+   ============================================ */
+
+/* Base card styles - identical for both sections */
+.index-page .focus-area-card,
+.index-page .measurable-card {
+    /* Critical visibility */
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    
+    /* Layout - matching service/resource pages */
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 300px !important; /* Match service cards */
+    
+    /* Visual - matching service/resource cards exactly */
+    background-color: rgba(26, 26, 26, 0.8) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 2.5rem !important;
+    
+    /* Effects */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+    
+    /* Text */
+    text-align: center !important;
+    color: #ffffff !important;
+}
+
+/* Hover state - identical for both */
+.index-page .focus-area-card:hover,
+.index-page .measurable-card:hover {
+    background-color: rgba(36, 36, 36, 0.9) !important;
+    border-color: rgba(0, 176, 211, 0.5) !important;
+    box-shadow: 0 6px 20px rgba(0, 176, 211, 0.3) !important;
+    transform: translateY(-5px) !important;
+}
+
+/* ============================================
+   4. ICON STYLING - FORCE BLUE BACKGROUNDS
+   ============================================ */
+
+/* Icons with blue circular backgrounds */
+.index-page .focus-area-icon,
+.index-page .measurable-icon,
+.index-page .icon-wrapper {
+    /* Reset first */
+    display: flex !important;
+    
+    /* Size and shape */
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
+    min-height: 80px !important;
+    border-radius: 50% !important;
+    
+    /* Centering */
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 1.5rem auto !important;
+    
+    /* Blue gradient background - FORCED */
+    background: linear-gradient(135deg, #0070f0 0%, #00a1e0 100%) !important;
+    background-color: #0070f0 !important; /* Fallback */
+    
+    /* Effects */
+    box-shadow: 0 4px 15px rgba(0, 112, 240, 0.3) !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Icon content */
+.index-page .focus-area-icon span,
+.index-page .measurable-icon span,
+.index-page .icon-wrapper span {
+    font-size: 2.5rem !important;
+    line-height: 1 !important;
+    color: #ffffff !important;
+    filter: none !important;
+    display: block !important;
+}
+
+/* Icon hover */
+.index-page .focus-area-card:hover .focus-area-icon,
+.index-page .measurable-card:hover .measurable-icon {
+    transform: rotate(10deg) scale(1.1) !important;
+    box-shadow: 0 6px 20px rgba(0, 112, 240, 0.4) !important;
+}
+
+/* ============================================
+   5. TEXT STYLING - ENSURE VISIBILITY
+   ============================================ */
+
+/* Card headings */
+.index-page .focus-area-card h3,
+.index-page .measurable-card h3 {
+    display: block !important;
+    color: #ffffff !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    margin: 0 0 1rem 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    line-height: 1.3 !important;
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+/* Card paragraphs */
+.index-page .focus-area-card p,
+.index-page .measurable-card p {
+    display: block !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    flex-grow: 1 !important;
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+/* ============================================
+   6. RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Tablet (768px - 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .index-page #focus-heading + p + .slds-grid,
+    .index-page section:nth-of-type(2) .slds-grid,
+    .index-page section:nth-of-type(3) .slds-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    .index-page section:nth-of-type(4) .slds-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 767px) {
+    .index-page #focus-heading + p + .slds-grid,
+    .index-page section:nth-of-type(2) .slds-grid,
+    .index-page section:nth-of-type(3) .slds-grid,
+    .index-page section:nth-of-type(4) .slds-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    
+    .index-page .focus-area-card,
+    .index-page .measurable-card {
+        min-height: 250px !important;
+    }
+}
+
+/* ============================================
+   7. FORCE VISIBILITY - ABSOLUTE OVERRIDE
+   ============================================ */
+
+/* Ensure everything is visible */
+body.index-page .focus-area-card,
+body.index-page .measurable-card,
+body.index-page .focus-area-icon,
+body.index-page .measurable-icon,
+body.index-page .icon-wrapper {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+}
+
+/* Remove any animations that hide cards */
+body.index-page .focus-area-card.visible,
+body.index-page .measurable-card.visible,
+body.index-page .focus-area-card:not(.visible),
+body.index-page .measurable-card:not(.visible) {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* ULTRA SPECIFIC - Force Focus Area cards to show */
+html body.index-page main section:nth-of-type(2) .slds-grid .slds-col .focus-area-card {
+    background-color: rgba(26, 26, 26, 0.8) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* ============================================
+   8. DEBUG MODE - REMOVED
+   ============================================ */
+
+/* Debug code has been removed for production */

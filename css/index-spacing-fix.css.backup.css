@@ -1,0 +1,124 @@
+/* index-spacing-fix.css - Fixes spacing and alignment without JavaScript */
+
+/* 1. Section Spacing - Ensure consistent vertical spacing */
+.index-page section:nth-of-type(2), /* Our Focus Areas */
+.index-page section:nth-of-type(3) { /* Measurable Growth */
+    padding: 5rem 0 !important;
+    margin: 0 !important;
+}
+
+/* 2. Container Alignment - Center and constrain width */
+.index-page section .slds-container_x-large,
+.index-page section .slds-container_large {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 2rem !important;
+}
+
+/* 3. Section Headers - Consistent spacing */
+.index-page section h2 {
+    margin-bottom: 1rem !important;
+    text-align: center !important;
+}
+
+/* 4. Subtitles - Proper spacing after headers */
+.index-page section h2 + p {
+    margin-bottom: 3rem !important;
+    text-align: center !important;
+}
+
+/* 5. Grid Layout - Force consistent 3-column layout */
+.index-page section:nth-of-type(2) .slds-grid,
+.index-page section:nth-of-type(3) .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    margin: 0 !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+}
+
+/* 6. Column Reset - Remove SLDS flexbox interference */
+.index-page section:nth-of-type(2) .slds-col,
+.index-page section:nth-of-type(3) .slds-col {
+    flex: unset !important;
+    max-width: unset !important;
+    width: 100% !important;
+    display: flex !important;
+    margin: 0 !important;
+}
+
+/* 7. Card Uniformity - Ensure all cards have same height and styling */
+.index-page .focus-area-card,
+.index-page .measurable-card {
+    min-height: 340px !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 2.5rem !important;
+    margin: 0 !important;
+    /* Ensure cards are visible */
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 8. Icon Spacing - Consistent icon styling */
+.index-page .focus-area-icon,
+.index-page .icon-wrapper {
+    margin: 0 auto 1.5rem !important;
+    width: 80px !important;
+    height: 80px !important;
+}
+
+/* 9. Card Content Spacing */
+.index-page .focus-area-card h3,
+.index-page .measurable-card h3 {
+    margin: 1rem 0 !important;
+    font-size: 1.25rem !important;
+    line-height: 1.4 !important;
+    text-align: center !important;
+}
+
+.index-page .focus-area-card p,
+.index-page .measurable-card p {
+    margin: 0 !important;
+    flex-grow: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+}
+
+/* 10. Responsive Design - Stack on smaller screens */
+@media (max-width: 768px) {
+    .index-page section:nth-of-type(2) .slds-grid,
+    .index-page section:nth-of-type(3) .slds-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 991px) {
+    .index-page section:nth-of-type(2) .slds-grid,
+    .index-page section:nth-of-type(3) .slds-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* 11. Stats Section Fix - Ensure proper spacing */
+.index-page section:nth-of-type(4) { /* Our Impact in Numbers */
+    padding: 5rem 0 !important;
+}
+
+/* 12. Debug Helper - Remove any transform issues */
+.index-page .focus-area-card,
+.index-page .measurable-card {
+    transform: none !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+}

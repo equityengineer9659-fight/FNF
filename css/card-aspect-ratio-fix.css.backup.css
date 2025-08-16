@@ -1,0 +1,309 @@
+/* card-aspect-ratio-fix.css - Combined card proportion and alignment fixes */
+
+/* ============================================
+   PART 1: CARD PROPORTION FIXES (KEEP THESE!)
+   ============================================ */
+
+/* 1. Reset card heights to normal proportions */
+.index-page .focus-area-card,
+.index-page .measurable-card {
+    /* Remove conflicting height constraints */
+    height: auto !important;
+    min-height: 280px !important;
+    max-height: none !important;
+    
+    /* Fix the aspect ratio */
+    aspect-ratio: unset !important;
+    
+    /* Ensure proper flex behavior */
+    flex: 0 0 auto !important;
+    align-self: stretch !important;
+    
+    /* Consistent padding for proper proportions */
+    padding: 2rem !important;
+}
+
+/* 2. Icon sizing fix */
+.index-page .focus-area-icon,
+.index-page .icon-wrapper {
+    /* Ensure icons don't force card height */
+    width: 70px !important;
+    height: 70px !important;
+    margin: 0 auto 1.5rem !important;
+    flex-shrink: 0 !important;
+}
+
+/* 3. Text content fix */
+.index-page .focus-area-card h3,
+.index-page .measurable-card h3 {
+    margin: 1rem 0 0.75rem 0 !important;
+    font-size: 1.25rem !important;
+}
+
+.index-page .focus-area-card p,
+.index-page .measurable-card p {
+    /* Remove flex-grow that was stretching content */
+    flex-grow: 0 !important;
+    margin: 0 !important;
+    /* Ensure text doesn't force card height */
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 4 !important;
+    -webkit-box-orient: vertical !important;
+    /* Standard syntax without !important for line-clamp */
+    line-clamp: 4;
+}
+
+/* ============================================
+   PART 2: NEW ALIGNMENT & SPACING FIXES
+   ============================================ */
+
+/* 4. Section Spacing */
+.index-page section:first-of-type {
+    padding: 4rem 0 3rem 0 !important;
+}
+
+.index-page section:nth-of-type(2) {
+    padding: 3rem 0 4rem 0 !important;
+}
+
+.index-page section:nth-of-type(3) {
+    padding: 4rem 0 4rem 0 !important;
+}
+
+.index-page section:nth-of-type(4) {
+    padding: 4rem 0 !important;
+}
+
+/* 5. Container Centering */
+.index-page section .slds-container_x-large,
+.index-page section .slds-container_large,
+.index-page section .slds-container_center {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 2rem !important;
+    width: 100% !important;
+}
+
+/* SPECIFIC FIX: Ensure both card sections have same container constraints */
+.index-page section:nth-of-type(2) > div:first-child,
+.index-page section:nth-of-type(3) > div:first-child {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 2rem !important;
+}
+
+/* 6. Grid Centering & Spacing */
+.index-page section:nth-of-type(2) .slds-grid,
+.index-page section:nth-of-type(3) .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    margin: 0 auto !important;
+    max-width: 1000px !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+}
+
+/* SPECIFIC FIX: Force Measurable Growth grid to match Focus Areas */
+.index-page section:nth-of-type(3) .slds-grid.slds-wrap,
+.index-page section:nth-of-type(3) .slds-grid:not(.slds-wrap) {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    margin: 0 auto !important;
+    max-width: 1000px !important;
+    width: 100% !important;
+}
+
+/* 7. Reset SLDS columns */
+.index-page section:nth-of-type(2) .slds-col,
+.index-page section:nth-of-type(3) .slds-col {
+    flex: unset !important;
+    max-width: unset !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 8. Headers & Subtitles */
+.index-page section h2 {
+    text-align: center !important;
+    margin: 0 auto 1rem auto !important;
+    font-size: 2.5rem !important;
+    font-weight: 300 !important;
+}
+
+.index-page section h2 + p {
+    text-align: center !important;
+    margin: 0 auto 3rem auto !important;
+    max-width: 800px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 1.125rem !important;
+}
+
+/* 9. Blue underline for headers */
+.index-page section h2::after {
+    content: '' !important;
+    display: block !important;
+    width: 60px !important;
+    height: 3px !important;
+    background: #0070f0 !important;
+    margin: 1.5rem auto 0 !important;
+}
+
+/* 10. Stats section grid */
+.index-page section:nth-of-type(4) .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 2rem !important;
+    margin: 0 auto !important;
+    max-width: 900px !important;
+    justify-content: center !important;
+}
+
+/* 11. Responsive Design */
+@media (max-width: 991px) and (min-width: 768px) {
+    .index-page section:nth-of-type(2) .slds-grid,
+    .index-page section:nth-of-type(3) .slds-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        max-width: 700px !important;
+    }
+    
+    .index-page section:nth-of-type(4) .slds-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .index-page section:nth-of-type(2) .slds-grid,
+    .index-page section:nth-of-type(3) .slds-grid,
+    .index-page section:nth-of-type(4) .slds-grid {
+        grid-template-columns: 1fr !important;
+        max-width: 400px !important;
+    }
+}
+
+/* 12. Final overrides */
+.index-page .focus-area-card,
+.index-page .measurable-card {
+    transform: none !important;
+    position: relative !important;
+}
+
+/* Optional: subtle background on alternate sections */
+.index-page section:nth-of-type(2),
+.index-page section:nth-of-type(4) {
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* ============================================
+   13. MEASURABLE GROWTH SPECIFIC FIX
+   ============================================ */
+
+/* Force Measurable Growth cards to spread out */
+body.index-page main section:nth-of-type(3) .slds-grid,
+body.index-page main section:nth-of-type(3) > div > .slds-grid,
+body.index-page main section:nth-of-type(3) .slds-grid.slds-wrap {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+}
+
+/* Remove any flexbox properties that might interfere */
+body.index-page main section:nth-of-type(3) .slds-grid {
+    flex-wrap: unset !important;
+    justify-content: unset !important;
+    align-items: unset !important;
+}
+
+/* Ensure Measurable Growth columns don't have width restrictions */
+body.index-page main section:nth-of-type(3) .slds-col,
+body.index-page main section:nth-of-type(3) .slds-size_1-of-1,
+body.index-page main section:nth-of-type(3) .slds-large-size_4-of-12 {
+    flex: unset !important;
+    max-width: unset !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Force the measurable cards to fill their grid cells */
+body.index-page .measurable-card {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* ============================================
+   14. NUCLEAR OVERRIDE FOR MEASURABLE GROWTH
+   ============================================ */
+
+/* Target the exact structure in your HTML */
+html body.index-page main section:nth-child(3) .slds-container_x-large > .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+}
+
+/* Also try nth-of-type in case nth-child doesn't work */
+html body.index-page main section:nth-of-type(3) .slds-container_x-large > .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+}
+
+/* Remove ALL column width restrictions for Measurable Growth */
+html body.index-page main section:nth-of-type(3) [class*="slds-size"],
+html body.index-page main section:nth-of-type(3) [class*="slds-col"] {
+    flex: unset !important;
+    max-width: unset !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* ============================================
+   15. FINAL FIX - TARGET THE EXACT CLASSES
+   ============================================ */
+
+/* Based on diagnostic: force the slds-grid slds-wrap slds-gutters to use grid */
+.index-page section .slds-grid.slds-wrap.slds-gutters {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+    flex-wrap: unset !important;
+}
+
+/* Alternative selector if above doesn't work */
+body.index-page .slds-grid.slds-wrap.slds-gutters {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+}
+
+/* Target by section position and exact classes */
+html body main section:nth-child(4) .slds-grid.slds-wrap.slds-gutters,
+html body main section:nth-of-type(3) .slds-grid.slds-wrap.slds-gutters {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+}
