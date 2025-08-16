@@ -1,0 +1,151 @@
+/* ============================================
+   Navigation Fixes for SLDS Compatibility
+   Ensures consistent navigation across all pages
+   ============================================ */
+
+/* Fix the parent container transform */
+.navbar.universal-nav .company-name-container {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    transform-origin: center center !important;
+    font-size: inherit !important;
+}
+
+/* Force the company name with absolute sizing */
+.navbar.universal-nav h1.brand-logo.universal-brand-logo,
+.navbar.universal-nav .brand-logo,
+.navbar.universal-nav h1 {
+    /* Use absolute units instead of rem */
+    font-size: 40px !important;
+    line-height: 48px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    /* Ensure no inherited transforms */
+    transform: none !important;
+    zoom: 1 !important;
+    /* Force normal rendering */
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Force nav links */
+.navbar.universal-nav a.nav-link {
+    font-size: 18px !important;
+    line-height: 24px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    padding: 16px 24px !important;
+    display: block !important;
+}
+
+/* Override SLDS font size inheritance */
+.navbar.universal-nav * {
+    font-size-adjust: none !important;
+}
+
+/* Specific override for the h1 element */
+h1.brand-logo.universal-brand-logo {
+    font-size: 40px !important;
+    min-height: 48px !important;
+}
+
+/* CRITICAL: Fix mobile hamburger menu visibility */
+@media (max-width: 768px) {
+    /* Fix hamburger button visibility - THIS IS THE KEY FIX */
+    .navbar.universal-nav .mobile-nav-toggle {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        z-index: 9999 !important;
+        background: transparent !important;
+        border: none !important;
+        color: #ffffff !important;
+        font-size: 1.5rem !important;
+        cursor: pointer !important;
+        padding: 0.5rem !important;
+        border-radius: 4px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    /* Override SLDS utility classes for mobile toggle container */
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-hide.slds-show_small {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Company name on mobile */
+    .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+        font-size: 28px !important;
+        min-height: 36px !important;
+    }
+    
+    .navbar.universal-nav .company-name-container {
+        position: static !important;
+        transform: none !important;
+    }
+    
+    /* Hide desktop spacer on mobile */
+    .navbar.universal-nav .nav-spacer {
+        display: none !important;
+    }
+    
+    /* Mobile menu styles */
+    .navbar.universal-nav .nav-menu {
+        display: none;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        background-color: rgba(22, 50, 92, 0.98) !important;
+        flex-direction: column !important;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: all 0.3s ease-out;
+    }
+    
+    .navbar.universal-nav .nav-menu.show {
+        display: flex !important;
+        max-height: 500px;
+        opacity: 1;
+    }
+    
+    .navbar.universal-nav .slds-nav-horizontal__item {
+        width: 100% !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .navbar.universal-nav .nav-link {
+        width: 100% !important;
+        text-align: center !important;
+    }
+}
+
+/* Desktop styles */
+@media (min-width: 769px) {
+    /* Hide mobile toggle on desktop */
+    .navbar.universal-nav .mobile-nav-toggle {
+        display: none !important;
+    }
+    
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-hide.slds-show_small {
+        display: none !important;
+    }
+    
+    /* Show desktop nav menu */
+    .navbar.universal-nav .nav-menu {
+        display: flex !important;
+        position: static !important;
+        max-height: none !important;
+        opacity: 1 !important;
+        background-color: transparent !important;
+        flex-direction: row !important;
+    }
+}
