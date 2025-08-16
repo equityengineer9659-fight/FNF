@@ -9,7 +9,11 @@
       "Bash(git config:*)",
       "Bash(git tag:*)",
       "Bash(git pull:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git merge:*)",
+      "Bash(git reset:*)",
+      "Bash(git stash:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
