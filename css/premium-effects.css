@@ -1,0 +1,398 @@
+/* ============================================
+   Phase 3: Premium Experience Features
+   ADDS visual effects WITHOUT changing content
+   Works WITH Phase 1 and Phase 2 enhancements
+   ============================================ */
+
+/* ============================================
+   1. PARALLAX EFFECTS (Non-Intrusive)
+   ============================================ */
+
+/* Add parallax to existing hero sections */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  transform: translateZ(-1px) scale(1.5);
+  z-index: -1;
+}
+
+/* Floating elements that don't affect content */
+.parallax-float {
+  position: fixed;
+  pointer-events: none;
+  opacity: 0.1;
+  animation: float 20s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-20px) translateX(10px); }
+  50% { transform: translateY(-10px) translateX(-10px); }
+  75% { transform: translateY(-30px) translateX(5px); }
+}
+
+/* ============================================
+   2. ENHANCED BACKGROUNDS (Subtle)
+   ============================================ */
+
+/* Animated gradient overlay - doesn't change content */
+.mesh-gradient::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(1, 118, 211, 0.05) 0%,
+    rgba(0, 153, 204, 0.05) 50%,
+    rgba(1, 118, 211, 0.05) 100%);
+  animation: gradientShift 10s ease infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes gradientShift {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+}
+
+/* ============================================
+   3. ADVANCED CARD EFFECTS
+   ============================================ */
+
+/* 3D tilt effect on existing cards */
+.card-3d-tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.card-3d-tilt:hover {
+  transform: rotateY(5deg) rotateX(5deg);
+}
+
+/* Glassmorphism accent - subtle overlay */
+.glassmorphism-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.glassmorphism-accent:hover::before {
+  opacity: 1;
+}
+
+/* ============================================
+   4. PREMIUM HOVER STATES
+   ============================================ */
+
+/* Magnetic button effect */
+.magnetic-button {
+  position: relative;
+  transition: transform 0.2s;
+}
+
+/* Shine effect on hover */
+.shine-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-hover::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg) translate(-100%, -100%);
+  transition: transform 0.6s;
+}
+
+.shine-hover:hover::after {
+  transform: rotate(45deg) translate(100%, 100%);
+}
+
+/* ============================================
+   5. SCROLL-TRIGGERED ENHANCEMENTS
+   ============================================ */
+
+/* Enhanced scroll reveals */
+.premium-reveal {
+  position: relative;
+}
+
+.premium-reveal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, #0176d3, #0099cc);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.6, 0, 0.4, 1);
+  z-index: -1;
+  opacity: 0.1;
+}
+
+.premium-reveal.revealed::before {
+  transform: scaleX(1);
+}
+
+/* ============================================
+   6. DEPTH EFFECTS
+   ============================================ */
+
+/* Layered shadows for depth */
+.depth-shadow {
+  position: relative;
+}
+
+.depth-shadow::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: -10px;
+  bottom: -10px;
+  background: rgba(0, 0, 0, 0.1);
+  filter: blur(20px);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.depth-shadow:hover::after {
+  opacity: 1;
+}
+
+/* ============================================
+   7. INTERACTIVE COMPONENTS
+   ============================================ */
+
+/* Progress bars with animation */
+.progress-bar {
+  position: relative;
+  background: #f0f0f0;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #0176d3, #0099cc);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-fill.animated {
+  transform: scaleX(var(--progress, 0.5));
+}
+
+/* ============================================
+   8. CONVERSION OPTIMIZATION
+   ============================================ */
+
+/* Floating CTA button */
+.floating-cta {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-cta.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.floating-cta-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 25px;
+  background: linear-gradient(135deg, #0176d3, #0099cc);
+  color: white;
+  border-radius: 50px;
+  text-decoration: none;
+  box-shadow: 0 5px 20px rgba(1, 118, 211, 0.4);
+  transition: all 0.3s;
+}
+
+.floating-cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(1, 118, 211, 0.6);
+}
+
+/* Exit intent modal styling */
+.exit-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.exit-modal.active {
+  display: flex;
+}
+
+.exit-modal-content {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   9. PREMIUM POLISH
+   ============================================ */
+
+/* Smooth page transitions */
+.page-transition-premium {
+  animation: premiumPageEnter 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes premiumPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Rich tooltips */
+.rich-tooltip {
+  position: absolute;
+  background: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 1000;
+}
+
+.rich-tooltip.visible {
+  opacity: 1;
+}
+
+/* ============================================
+   10. MOBILE OPTIMIZATION
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Disable parallax on mobile */
+  .hero-section::before {
+    transform: none;
+  }
+  
+  /* Simpler animations on mobile */
+  .card-3d-tilt:hover {
+    transform: none;
+  }
+  
+  /* Adjust floating CTA */
+  .floating-cta {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .floating-cta-button {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}
+
+/* ============================================
+   11. ACCESSIBILITY
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh-gradient::after,
+  .parallax-float,
+  .shine-hover::after,
+  .premium-reveal::before {
+    animation: none !important;
+  }
+  
+  .progress-fill,
+  .floating-cta,
+  .exit-modal-content {
+    transition: none !important;
+  }
+}
+
+/* ============================================
+   12. PERFORMANCE
+   ============================================ */
+
+/* GPU acceleration for smooth animations */
+.will-animate-premium {
+  will-change: transform, opacity;
+}
+
+/* Remove will-change after animation */
+.animation-complete {
+  will-change: auto;
+}
