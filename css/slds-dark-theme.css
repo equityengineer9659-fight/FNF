@@ -1,0 +1,384 @@
+/* ============================================
+   Food-N-Force Dark Theme Layer
+   SLDS 1 Implementation with SLDS 2 Migration Path
+   
+   This file ONLY contains styling changes - NO content modifications
+   Designed to layer on top of existing styles
+   ============================================ */
+
+/* ============================================
+   1. CSS CUSTOM PROPERTIES - SLDS 2 NAMING
+   ============================================ */
+:root {
+    /* Surface Colors - SLDS 2 naming convention */
+    --slds-g-color-surface-ground: #0a0a0a;
+    --slds-g-color-surface-container-1: #1a1a1a;
+    --slds-g-color-surface-container-2: #242424;
+    --slds-g-color-surface-container-3: #2e2e2e;
+    
+    /* Text Colors */
+    --slds-g-color-on-surface: #ffffff;
+    --slds-g-color-on-surface-variant: #e0e0e0;
+    --slds-g-color-on-surface-subtle: #b0b0b0;
+    
+    /* Brand Colors - Keep existing blues */
+    --slds-g-color-primary: #0176d3;
+    --slds-g-color-primary-hover: #0099cc;
+    --slds-g-color-accent: #00d4ff;
+    
+    /* Borders and Dividers */
+    --slds-g-color-border: #333333;
+    --slds-g-color-border-subtle: #282828;
+    
+    /* Shadows for Dark Theme */
+    --slds-g-shadow-1: 0 2px 4px rgba(0,0,0,0.5);
+    --slds-g-shadow-2: 0 4px 8px rgba(0,0,0,0.6);
+    --slds-g-shadow-3: 0 8px 16px rgba(0,0,0,0.7);
+}
+
+/* ============================================
+   2. GLOBAL DARK THEME OVERRIDES
+   ============================================ */
+
+/* Force dark backgrounds on main elements */
+html,
+body {
+    background-color: var(--slds-g-color-surface-ground) !important;
+    color: var(--slds-g-color-on-surface) !important;
+}
+
+/* Reset all elements to inherit dark theme */
+* {
+    border-color: var(--slds-g-color-border);
+}
+
+/* ============================================
+   3. NAVIGATION DARK THEME - BLUE HEADER
+   ============================================ */
+
+/* Navigation container - DARK BLUE */
+.navbar,
+.navbar.universal-nav {
+    background: rgba(22, 50, 92, 0.95) !important;  /* Dark blue #16325C with transparency */
+    backdrop-filter: blur(10px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Company name in navigation - PURE WHITE */
+.navbar .slds-text-heading_large,
+.navbar .company-name {
+    color: #ffffff !important;
+}
+
+/* Navigation links - PURE WHITE */
+.navbar a,
+.navbar .nav-link,
+.navbar .universal-nav-link {
+    color: #ffffff !important;
+}
+
+.navbar a:hover,
+.navbar .nav-link:hover,
+.navbar .universal-nav-link:hover {
+    color: var(--slds-g-color-accent) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Active navigation state */
+.navbar .nav-link.active,
+.navbar .universal-nav-link.active {
+    border-bottom-color: var(--slds-g-color-accent) !important;
+}
+
+/* ============================================
+   4. CONTENT SECTIONS DARK THEME
+   ============================================ */
+
+/* All sections */
+section,
+.section,
+.slds-section {
+    background-color: var(--slds-g-color-surface-ground) !important;
+    color: var(--slds-g-color-on-surface) !important;
+}
+
+/* Alternate section backgrounds */
+section:nth-of-type(even),
+.section:nth-of-type(even) {
+    background-color: var(--slds-g-color-surface-container-1) !important;
+}
+
+/* Hero section - maintain gradient but darker */
+.hero,
+.hero-section {
+    background: linear-gradient(135deg, #0a2540 0%, #16325c 100%) !important;
+    color: var(--slds-g-color-on-surface) !important;
+}
+
+/* ============================================
+   5. CARDS AND BOXES DARK THEME
+   ============================================ */
+
+/* All card types */
+.slds-card,
+.slds-box,
+.focus-area-card,
+.service-card,
+.resource-card,
+.expertise-card,
+.value-card,
+.stat-card {
+    background-color: var(--slds-g-color-surface-container-2) !important;
+    border: 1px solid var(--slds-g-color-border-subtle) !important;
+    box-shadow: var(--slds-g-shadow-1) !important;
+    color: var(--slds-g-color-on-surface) !important;
+}
+
+/* Card hover states */
+.slds-card:hover,
+.slds-box:hover,
+.focus-area-card:hover,
+.service-card:hover,
+.resource-card:hover,
+.expertise-card:hover,
+.value-card:hover {
+    background-color: var(--slds-g-color-surface-container-3) !important;
+    box-shadow: var(--slds-g-shadow-2) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Card headings */
+.slds-card h3,
+.slds-box h3,
+.focus-area-card h3,
+.service-card h3,
+.resource-card h3,
+.expertise-card h3,
+.value-card h3,
+.slds-text-heading_small,
+.slds-text-heading_medium {
+    color: var(--slds-g-color-on-surface) !important;
+}
+
+/* Card text */
+.slds-card p,
+.slds-box p,
+.focus-area-card p,
+.service-card p,
+.resource-card p,
+.expertise-card p,
+.value-card p,
+.slds-text-body_regular {
+    color: var(--slds-g-color-on-surface-variant) !important;
+}
+
+/* ============================================
+   6. TYPOGRAPHY DARK THEME
+   ============================================ */
+
+/* All headings */
+h1, h2, h3, h4, h5, h6,
+.slds-text-heading_large,
+.slds-text-heading_medium,
+.slds-text-heading_small {
+    color: var(--slds-g-color-on-surface) !important;
+}
+
+/* All paragraphs and body text */
+p, 
+.slds-text-body_regular,
+.slds-text-body_small {
+    color: var(--slds-g-color-on-surface-variant) !important;
+}
+
+/* Links */
+a {
+    color: var(--slds-g-color-accent) !important;
+}
+
+a:hover {
+    color: var(--slds-g-color-primary-hover) !important;
+}
+
+/* ============================================
+   7. BUTTONS DARK THEME
+   ============================================ */
+
+/* Primary buttons - keep gradient */
+.slds-button_brand,
+.btn-primary {
+    /* Keep existing gradient - no change needed */
+    color: #ffffff !important;
+}
+
+/* Outline buttons */
+.slds-button_outline-brand,
+.btn-outline {
+    background-color: transparent !important;
+    border-color: var(--slds-g-color-primary) !important;
+    color: var(--slds-g-color-primary) !important;
+}
+
+.slds-button_outline-brand:hover,
+.btn-outline:hover {
+    background-color: var(--slds-g-color-primary) !important;
+    color: #ffffff !important;
+}
+
+/* ============================================
+   8. FORMS DARK THEME
+   ============================================ */
+
+/* Form inputs */
+.slds-input,
+.slds-textarea,
+.slds-select,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea,
+select {
+    background-color: var(--slds-g-color-surface-container-1) !important;
+    border-color: var(--slds-g-color-border) !important;
+    color: var(--slds-g-color-on-surface) !important;
+}
+
+/* Form labels */
+.slds-form-element__label,
+label {
+    color: var(--slds-g-color-on-surface-variant) !important;
+}
+
+/* Placeholder text */
+::placeholder {
+    color: var(--slds-g-color-on-surface-subtle) !important;
+    opacity: 1 !important;
+}
+
+/* ============================================
+   9. FOOTER DARK THEME - MATCHING BLUE
+   ============================================ */
+
+footer,
+.footer {
+    background-color: #16325C !important;  /* Same dark blue as header */
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+footer p,
+footer .slds-text-body_small {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   10. STATISTICS SECTION
+   ============================================ */
+
+.stats-section {
+    background-color: var(--slds-g-color-surface-container-1) !important;
+}
+
+.stat-number {
+    color: var(--slds-g-color-accent) !important;
+}
+
+.stat-label {
+    color: var(--slds-g-color-on-surface-variant) !important;
+}
+
+/* ============================================
+   11. ICON BACKGROUNDS - MAINTAIN BLUE
+   ============================================ */
+
+/* Keep icon backgrounds blue as per requirements */
+.icon-wrapper,
+.focus-area-icon,
+.service-icon,
+.resource-icon,
+.expertise-icon,
+.value-icon {
+    /* Blue gradient background remains unchanged */
+    background: linear-gradient(135deg, #0176d3, #0099cc) !important;
+    color: #ffffff !important;
+}
+
+/* ============================================
+   12. MOBILE MENU DARK THEME
+   ============================================ */
+
+.mobile-menu {
+    background-color: var(--slds-g-color-surface-container-2) !important;
+    border-left: 1px solid var(--slds-g-color-border) !important;
+}
+
+.mobile-menu a {
+    color: var(--slds-g-color-on-surface-variant) !important;
+    border-bottom: 1px solid var(--slds-g-color-border-subtle) !important;
+}
+
+.mobile-menu a:hover {
+    background-color: var(--slds-g-color-surface-container-3) !important;
+    color: var(--slds-g-color-accent) !important;
+}
+
+/* Mobile menu toggle button */
+.mobile-nav-toggle {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   13. SCROLLBAR DARK THEME
+   ============================================ */
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--slds-g-color-surface-container-1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--slds-g-color-surface-container-3);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--slds-g-color-border);
+}
+
+/* ============================================
+   14. ACCESSIBILITY CONSIDERATIONS
+   ============================================ */
+
+/* Focus states with proper contrast */
+:focus {
+    outline: 2px solid var(--slds-g-color-accent) !important;
+    outline-offset: 2px !important;
+}
+
+/* Skip to content link */
+.skip-to-content:focus {
+    background-color: var(--slds-g-color-surface-container-2) !important;
+    color: var(--slds-g-color-on-surface) !important;
+}
+
+/* ============================================
+   15. MIGRATION NOTES FOR SLDS 2
+   ============================================ */
+
+/* 
+   This dark theme uses SLDS 2 naming conventions:
+   - --slds-g-color-* for colors
+   - --slds-g-shadow-* for shadows
+   - --slds-g-spacing-* for spacing (when needed)
+   
+   When migrating to SLDS 2:
+   1. These custom properties will align with native SLDS 2 dark mode
+   2. Remove this file when SLDS 2 dark mode is available
+   3. Update HTML to use SLDS 2 dark mode toggle
+*/

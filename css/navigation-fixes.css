@@ -1,0 +1,251 @@
+/* ============================================
+   Navigation Fixes for SLDS Compatibility
+   Ensures consistent navigation across all pages
+   ============================================ */
+
+/* Fix the parent container transform - DESKTOP ONLY */
+@media (min-width: 769px) {
+    .navbar.universal-nav .company-name-container {
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        transform-origin: center center !important;
+        font-size: inherit !important;
+    }
+}
+
+/* Force the company name with absolute sizing - DESKTOP */
+@media (min-width: 769px) {
+    .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+    .navbar.universal-nav .brand-logo,
+    .navbar.universal-nav h1 {
+        /* Use absolute units instead of rem */
+        font-size: 40px !important;
+        line-height: 48px !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        /* Ensure no inherited transforms */
+        transform: none !important;
+        zoom: 1 !important;
+        /* Force normal rendering */
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+    }
+}
+
+/* Force nav links */
+.navbar.universal-nav a.nav-link {
+    font-size: 18px !important;
+    line-height: 24px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    padding: 16px 24px !important;
+    display: block !important;
+}
+
+/* Override SLDS font size inheritance */
+.navbar.universal-nav * {
+    font-size-adjust: none !important;
+}
+
+/* CRITICAL: Fix mobile hamburger menu visibility and position */
+@media (max-width: 768px) {
+    /* Ensure proper container padding on mobile */
+    .navbar.universal-nav .slds-container_fluid {
+        padding: 0 1rem !important;
+        max-width: 100% !important;
+        overflow: visible !important; /* Prevent hamburger cutoff */
+    }
+    
+    /* Fix mobile grid layout using CSS Grid for precision */
+    .navbar.universal-nav .slds-grid_align-spread {
+        display: grid !important;
+        grid-template-columns: 50px 1fr 50px !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Logo container - left side */
+    .navbar.universal-nav .slds-col.slds-no-flex:first-child {
+        grid-column: 1 !important;
+        justify-self: start !important;
+        display: block !important;
+    }
+    
+    /* Company name - center column with consistent sizing */
+    .navbar.universal-nav .company-name-container {
+        grid-column: 2 !important;
+        text-align: center !important;
+        position: static !important;
+        transform: none !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* CRITICAL: Consistent mobile font size for company name across ALL pages */
+    .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+        font-size: 26px !important; /* Slightly larger than before for better visibility */
+        line-height: 1.2 !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        transform: none !important;
+    }
+    
+    /* Mobile toggle container - right side with padding */
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-hide.slds-show_small {
+        grid-column: 3 !important;
+        justify-self: end !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        padding-right: 0.5rem !important; /* Add padding to prevent cutoff */
+    }
+    
+    /* Fix hamburger button visibility and spacing */
+    .navbar.universal-nav .mobile-nav-toggle {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        z-index: 9999 !important;
+        background: transparent !important;
+        border: none !important;
+        color: #ffffff !important;
+        font-size: 1.5rem !important;
+        cursor: pointer !important;
+        padding: 0.5rem !important;
+        border-radius: 4px !important;
+        transition: all 0.3s ease !important;
+        margin: 0 !important; /* Remove any margins */
+    }
+    
+    /* Hide desktop spacer on mobile */
+    .navbar.universal-nav .nav-spacer {
+        display: none !important;
+    }
+    
+    /* Mobile menu styles */
+    .navbar.universal-nav .nav-menu {
+        display: none;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        background-color: rgba(22, 50, 92, 0.98) !important;
+        flex-direction: column !important;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: all 0.3s ease-out;
+    }
+    
+    .navbar.universal-nav .nav-menu.show {
+        display: flex !important;
+        max-height: 500px;
+        opacity: 1;
+    }
+    
+    .navbar.universal-nav .slds-nav-horizontal__item {
+        width: 100% !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .navbar.universal-nav .nav-link {
+        width: 100% !important;
+        text-align: center !important;
+    }
+}
+
+/* Desktop styles */
+@media (min-width: 769px) {
+    /* Hide mobile toggle on desktop */
+    .navbar.universal-nav .mobile-nav-toggle {
+        display: none !important;
+    }
+    
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-hide.slds-show_small {
+        display: none !important;
+    }
+    
+    /* Show desktop nav menu */
+    .navbar.universal-nav .nav-menu {
+        display: flex !important;
+        position: static !important;
+        max-height: none !important;
+        opacity: 1 !important;
+        background-color: transparent !important;
+        flex-direction: row !important;
+    }
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS FOR SMALLER SCREENS
+   ============================================ */
+
+@media (max-width: 380px) {
+    /* Smaller font on very small screens */
+    .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+        font-size: 22px !important;
+    }
+    
+    /* Tighter grid on very small screens */
+    .navbar.universal-nav .slds-grid_align-spread {
+        grid-template-columns: 45px 1fr 45px !important;
+        gap: 0.25rem !important;
+    }
+}
+
+@media (max-width: 320px) {
+    /* Minimum font size for tiny screens */
+    .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+        font-size: 20px !important;
+    }
+}
+
+/* ============================================
+   UNIVERSAL OVERRIDES FOR ALL PAGES
+   ============================================ */
+
+/* Force consistent styles on all pages including problematic ones */
+body .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+    white-space: nowrap !important;
+    text-align: center !important;
+}
+
+/* Prevent overflow issues on navigation */
+.navbar.universal-nav {
+    z-index: 1000 !important;
+    overflow: visible !important;
+}
+
+.navbar.universal-nav .mobile-nav-toggle {
+    z-index: 1001 !important;
+}
+
+/* Force all pages to use the same mobile styles */
+@media (max-width: 768px) {
+    body.services-page .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+    body.resources-page .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+    body.impact-page .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+    body.about-page .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+    body.contact-page .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+    body.index-page .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+        font-size: 26px !important;
+    }
+}
