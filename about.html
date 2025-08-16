@@ -22,17 +22,18 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
-    <!-- Salesforce Lightning Design System CSS -->
+    <!-- Salesforce Lightning Design System CSS - LOAD FIRST -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- Custom CSS - LOAD AFTER SLDS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation-styles.css">
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="navigation.js" as="script">
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/universal-navigation.js" as="script">
     
-    <!-- Add smooth loading transition -->
+    <!-- CRITICAL FONT SIZE OVERRIDES - INLINE TO ENSURE THEY APPLY -->
     <style>
         body {
             opacity: 0;
@@ -41,91 +42,75 @@
         body.loaded {
             opacity: 1;
         }
+        
+        /* FORCE BRAND LOGO SIZE */
+        h1.universal-brand-logo,
+        .universal-brand-logo,
+        .brand-logo,
+        h1.brand-logo,
+        .navbar .brand-logo,
+        .custom-nav .brand-logo {
+            font-size: 2.5rem !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            margin: 0 !important;
+            line-height: 1.2 !important;
+        }
+        
+        /* FORCE NAVIGATION LINK SIZE */
+        .universal-nav-link,
+        a.universal-nav-link,
+        .nav-link,
+        a.nav-link,
+        .slds-nav-horizontal__item a,
+        .navbar .nav-link,
+        .custom-nav .slds-nav-horizontal__item a {
+            font-size: 18px !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            padding: 1rem 1.5rem !important;
+        }
+        
+        /* FORCE NAVBAR SPACING */
+        .navbar.universal-nav,
+        .custom-nav {
+            padding: 1rem 0 !important;
+        }
+        
+        .navbar.universal-nav .slds-container_fluid,
+        .custom-nav .slds-container_fluid {
+            padding: 0 2rem !important;
+        }
+        
+        .navbar.universal-nav .slds-p-vertical_small,
+        .custom-nav .slds-p-vertical_small {
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+        }
+        
+        .navbar.universal-nav .slds-p-top_small,
+        .custom-nav .slds-p-top_small {
+            padding-top: 0.75rem !important;
+        }
     </style>
 </head>
 <body>
     <!-- Skip Navigation for Accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Navigation Header -->
-    <header class="custom-nav" role="banner">
-        <div class="slds-container_fluid">
-            <!-- Top row with logo, centered company name, and navigation -->
-            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small">
-                <!-- Brand Logo - Left -->
-                <div class="slds-col slds-no-flex">
-                    <a href="index.html" aria-label="Food-N-Force Home" class="brand-logo-link">
-                        <div class="brand-logo-container">
-                            <div class="brand-logo-inner">
-                                <span class="brand-logo-text">F-n-F</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <!-- Centered Company Name -->
-                <div class="slds-col slds-text-align_center company-name-container">
-                    <h1 class="brand-logo">Food-N-Force</h1>
-                </div>
-                
-                <!-- Mobile Navigation Toggle - Right -->
-                <div class="slds-col slds-no-flex slds-hide slds-show_small">
-                    <button 
-                        class="mobile-nav-toggle" 
-                        aria-label="Toggle navigation menu" 
-                        aria-expanded="false"
-                        aria-controls="main-nav"
-                    >
-                        <span class="hamburger-icon">☰</span>
-                    </button>
-                </div>
-                
-                <!-- Spacer for desktop -->
-                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
-                    <!-- Balances the logo -->
-                </div>
-            </div>
-            
-            <!-- Navigation Menu - Centered Below Company Name -->
-            <div class="slds-grid slds-grid_align-center slds-p-top_small">
-                <div class="slds-col">
-                    <nav class="slds-text-align_center" role="navigation" aria-label="Main navigation">
-                        <ul class="slds-nav-horizontal" id="main-nav">
-                            <li class="slds-nav-horizontal__item">
-                                <a href="index.html">Home</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="services.html">Services</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="resources.html">Resources</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="impact.html">Impact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="contact.html">Contact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item slds-is-active">
-                                <a href="about.html" aria-current="page">About Us</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Navigation will be automatically injected here by universal-navigation.js -->
 
     <!-- Main Content -->
     <main id="main-content" role="main">
         <!-- About Us Section -->
         <section class="section-padding slds-p-horizontal_large" aria-labelledby="about-heading">
             <div class="slds-container_large slds-container_center">
-                <!-- Our Why Section -->
-                <div class="slds-grid slds-wrap slds-grid_align-center slds-m-bottom_x-large">
-                    <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12">
+                
+                <!-- 1. Our Why Section -->
+                <div class="slds-grid slds-wrap slds-grid_align-center slds-m-bottom_xx-large">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_10-of-12">
                         <div class="slds-text-align_center slds-m-bottom_large">
-                            <h2 id="about-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Why</h2>
+                            <h1 id="about-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Why</h1>
                             <p class="mission-text slds-m-bottom_medium">
                                 Hunger shouldn't be a technology problem. Yet, many community food organizations are still managing complex logistics and client engagement with limited tools.
                             </p>
@@ -136,9 +121,9 @@
                     </div>
                 </div>
 
-                <!-- Our Story Section -->
-                <div class="slds-grid slds-wrap slds-grid_align-center slds-m-bottom_x-large">
-                    <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12">
+                <!-- 2. Our Story Section -->
+                <div class="slds-grid slds-wrap slds-grid_align-center slds-m-bottom_xx-large">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_10-of-12">
                         <div class="slds-text-align_center slds-m-bottom_large">
                             <h2 class="slds-text-heading_large slds-m-bottom_medium">Our Story</h2>
                             <p class="mission-text slds-m-bottom_medium">
@@ -151,15 +136,15 @@
                     </div>
                 </div>
 
-                <!-- What We Bring Section -->
-                <div class="slds-grid slds-wrap slds-grid_align-center slds-m-bottom_x-large">
+                <!-- 3. What We Bring Section -->
+                <div class="slds-grid slds-wrap slds-grid_align-center slds-m-bottom_xx-large">
                     <div class="slds-col slds-size_1-of-1">
-                        <div class="slds-text-align_center slds-m-bottom_large">
+                        <div class="slds-text-align_center slds-m-bottom_x-large">
                             <h2 class="slds-text-heading_large slds-m-bottom_medium">What We Bring</h2>
                         </div>
                         
-                        <div class="slds-grid slds-wrap slds-gutters">
-                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-grid slds-wrap slds-gutters_large">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_large">
                                 <article class="expertise-card">
                                     <div class="expertise-icon" aria-hidden="true">
                                         <span>⚡</span>
@@ -168,7 +153,7 @@
                                 </article>
                             </div>
                             
-                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_large">
                                 <article class="expertise-card">
                                     <div class="expertise-icon" aria-hidden="true">
                                         <span>🍞</span>
@@ -177,7 +162,7 @@
                                 </article>
                             </div>
                             
-                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_large">
                                 <article class="expertise-card">
                                     <div class="expertise-icon" aria-hidden="true">
                                         <span>💝</span>
@@ -186,7 +171,7 @@
                                 </article>
                             </div>
                             
-                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_large">
                                 <article class="expertise-card">
                                     <div class="expertise-icon" aria-hidden="true">
                                         <span>📈</span>
@@ -198,9 +183,9 @@
                     </div>
                 </div>
 
-                <!-- Our Vision Section -->
-                <div class="slds-grid slds-wrap slds-grid_align-center slds-m-bottom_x-large">
-                    <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12">
+                <!-- 4. Our Vision Section -->
+                <div class="slds-grid slds-wrap slds-grid_align-center slds-m-bottom_xx-large">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_10-of-12">
                         <div class="slds-text-align_center">
                             <h2 class="slds-text-heading_large slds-m-bottom_medium">Our Vision</h2>
                             <p class="mission-text">
@@ -210,15 +195,15 @@
                     </div>
                 </div>
                 
-                <!-- Core Values Section -->
-                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_x-large">
+                <!-- 5. Core Values Section -->
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_xx-large">
                     <div class="slds-col slds-size_1-of-1">
-                        <div class="slds-text-align_center slds-m-bottom_large">
+                        <div class="slds-text-align_center slds-m-bottom_x-large">
                             <h2 class="slds-text-heading_medium slds-m-bottom_medium">Our Core Values</h2>
                         </div>
                     </div>
                     
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_large">
                         <article class="value-card">
                             <div class="value-icon" aria-hidden="true">
                                 <span>⚖️</span>
@@ -230,7 +215,7 @@
                         </article>
                     </div>
                     
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_large">
                         <article class="value-card">
                             <div class="value-icon" aria-hidden="true">
                                 <span>⚡</span>
@@ -242,7 +227,7 @@
                         </article>
                     </div>
                     
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_large">
                         <article class="value-card">
                             <div class="value-icon" aria-hidden="true">
                                 <span>💝</span>
@@ -254,7 +239,7 @@
                         </article>
                     </div>
                     
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_large">
                         <article class="value-card">
                             <div class="value-icon" aria-hidden="true">
                                 <span>💡</span>
@@ -266,9 +251,40 @@
                         </article>
                     </div>
                 </div>
+
+                <!-- 6. Our Expertise Section -->
+                <div class="slds-m-bottom_x-large">
+                    <h2 class="slds-text-heading_medium slds-text-align_center slds-m-bottom_large">Our Expertise</h2>
+                    <div class="slds-grid slds-wrap slds-gutters_large">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                            <div class="expertise-card">
+                                <div class="expertise-icon" aria-hidden="true">
+                                    <span>☁️</span>
+                                </div>
+                                <h3 class="expertise-title">Salesforce Nonprofit Cloud</h3>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                            <div class="expertise-card">
+                                <div class="expertise-icon" aria-hidden="true">
+                                    <span>📊</span>
+                                </div>
+                                <h3 class="expertise-title">Data Analytics & Reporting</h3>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                            <div class="expertise-card">
+                                <div class="expertise-icon" aria-hidden="true">
+                                    <span>🔄</span>
+                                </div>
+                                <h3 class="expertise-title">Process Automation</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Stats Section -->
-                <div class="stats-container">
+                <div class="stats-container slds-m-bottom_x-large">
                     <div class="stat-item">
                         <span class="stat-number slds-text-color_brand" data-suffix="+">150</span>
                         <p class="stat-label">Food Pantries Served</p>
@@ -282,17 +298,96 @@
                         <p class="stat-label">Families Better Served</p>
                     </div>
                 </div>
+                
+                <!-- Call to Action -->
+                <div class="slds-text-align_center">
+                    <h3 class="slds-text-heading_medium slds-m-bottom_medium">Ready to Join Our Mission?</h3>
+                    <p class="slds-text-body_regular slds-m-bottom_large">
+                        Let's work together to transform how your food bank serves the community.
+                    </p>
+                    <a href="contact.html" class="slds-button slds-button_brand">
+                        Get Started Today
+                    </a>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- JavaScript -->
-    <script src="navigation.js"></script>
+    <!-- Footer -->
+    <footer class="custom-footer" role="contentinfo">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. Empowering food banks through technology.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Navigation script -->
+    <script src="js/universal-navigation.js"></script>
     
-    <!-- Page load complete -->
+    <!-- Enhanced animations for About page -->
     <script>
         window.addEventListener('load', () => {
             document.body.classList.add('loaded');
+        });
+        
+        // Enhanced animation triggers for About page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Stats animation with intersection observer
+            if ('IntersectionObserver' in window) {
+                const statsObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+                            setTimeout(() => {
+                                entry.target.classList.add('visible');
+                                if (entry.target.classList.contains('stat-item')) {
+                                    animateStatNumber(entry.target);
+                                }
+                                statsObserver.unobserve(entry.target);
+                            }, index * 150);
+                        }
+                    });
+                }, {
+                    threshold: 0.2,
+                    rootMargin: '-30px'
+                });
+                
+                // Observe all animatable elements
+                document.querySelectorAll('.stat-item, .expertise-card, .value-card, .mission-text').forEach(el => {
+                    statsObserver.observe(el);
+                });
+            } else {
+                // Fallback for older browsers
+                document.querySelectorAll('.stat-item, .expertise-card, .value-card, .mission-text').forEach(el => {
+                    el.classList.add('visible');
+                });
+            }
+            
+            // Stats animation function
+            function animateStatNumber(statItem) {
+                const numberEl = statItem.querySelector('.stat-number');
+                if (numberEl && !statItem.classList.contains('counted')) {
+                    const target = parseInt(numberEl.textContent.replace(/[^0-9]/g, ''));
+                    const suffix = numberEl.dataset.suffix || '';
+                    let current = 0;
+                    const duration = 1500;
+                    const steps = 50;
+                    const increment = target / steps;
+                    let step = 0;
+                    
+                    const timer = setInterval(() => {
+                        step++;
+                        current = Math.min(Math.floor(increment * step), target);
+                        numberEl.textContent = current + suffix;
+                        
+                        if (step >= steps || current >= target) {
+                            numberEl.textContent = target + suffix;
+                            statItem.classList.add('counted');
+                            clearInterval(timer);
+                        }
+                    }, duration / steps);
+                }
+            }
         });
     </script>
 </body>

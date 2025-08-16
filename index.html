@@ -22,15 +22,16 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
-    <!-- Salesforce Lightning Design System CSS -->
+    <!-- Salesforce Lightning Design System CSS - LOAD FIRST -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- Custom CSS - LOAD AFTER SLDS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation-styles.css">
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="navigation.js" as="script">
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/universal-navigation.js" as="script">
     
     <!-- Add smooth loading transition -->
     <style>
@@ -41,80 +42,63 @@
         body.loaded {
             opacity: 1;
         }
+        
+        /* FORCE BRAND LOGO SIZE */
+        h1.universal-brand-logo,
+        .universal-brand-logo,
+        .brand-logo,
+        h1.brand-logo,
+        .navbar .brand-logo,
+        .custom-nav .brand-logo {
+            font-size: 2.5rem !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            margin: 0 !important;
+            line-height: 1.2 !important;
+        }
+        
+        /* FORCE NAVIGATION LINK SIZE */
+        .universal-nav-link,
+        a.universal-nav-link,
+        .nav-link,
+        a.nav-link,
+        .slds-nav-horizontal__item a,
+        .navbar .nav-link,
+        .custom-nav .slds-nav-horizontal__item a {
+            font-size: 18px !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            padding: 1rem 1.5rem !important;
+        }
+        
+        /* FORCE NAVBAR SPACING */
+        .navbar.universal-nav,
+        .custom-nav {
+            padding: 1rem 0 !important;
+        }
+        
+        .navbar.universal-nav .slds-container_fluid,
+        .custom-nav .slds-container_fluid {
+            padding: 0 2rem !important;
+        }
+        
+        .navbar.universal-nav .slds-p-vertical_small,
+        .custom-nav .slds-p-vertical_small {
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+        }
+        
+        .navbar.universal-nav .slds-p-top_small,
+        .custom-nav .slds-p-top_small {
+            padding-top: 0.75rem !important;
+        }
     </style>
 </head>
 <body>
     <!-- Skip Navigation for Accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Navigation Header -->
-    <header class="custom-nav" role="banner">
-        <div class="slds-container_fluid">
-            <!-- Top row with logo, centered company name, and navigation -->
-            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small">
-                <!-- Brand Logo - Left -->
-                <div class="slds-col slds-no-flex">
-                    <a href="index.html" aria-label="Food-N-Force Home" class="brand-logo-link">
-                        <div class="brand-logo-container">
-                            <div class="brand-logo-inner">
-                                <span class="brand-logo-text">F-n-F</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <!-- Centered Company Name -->
-                <div class="slds-col slds-text-align_center company-name-container">
-                    <h1 class="brand-logo">Food-N-Force</h1>
-                </div>
-                
-                <!-- Mobile Navigation Toggle - Right -->
-                <div class="slds-col slds-no-flex slds-hide slds-show_small">
-                    <button 
-                        class="mobile-nav-toggle" 
-                        aria-label="Toggle navigation menu" 
-                        aria-expanded="false"
-                        aria-controls="main-nav"
-                    >
-                        <span class="hamburger-icon">☰</span>
-                    </button>
-                </div>
-                
-                <!-- Spacer for desktop -->
-                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
-                    <!-- Balances the logo -->
-                </div>
-            </div>
-            
-            <!-- Navigation Menu - Centered Below Company Name -->
-            <div class="slds-grid slds-grid_align-center slds-p-top_small">
-                <div class="slds-col">
-                    <nav class="slds-text-align_center" role="navigation" aria-label="Main navigation">
-                        <ul class="slds-nav-horizontal" id="main-nav">
-                            <li class="slds-nav-horizontal__item slds-is-active">
-                                <a href="index.html" aria-current="page">Home</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="services.html">Services</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="resources.html">Resources</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="impact.html">Impact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="contact.html">Contact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="about.html">About Us</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Navigation will be automatically injected here by universal-navigation.js -->
 
     <!-- Main Content -->
     <main id="main-content" role="main">
@@ -146,7 +130,7 @@
                 <div class="slds-grid slds-wrap slds-grid_align-center">
                     <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12">
                         <div class="slds-text-align_center">
-                            <h2 id="mission-heading" class="slds-visually-hidden">Our Mission</h2>
+                            <h2 id="mission-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Mission</h2>
                             <p class="mission-text slds-m-bottom_medium">
                                 Food-N-Force is a mission-driven consultancy helping food pantries and food banks embrace technology to better serve their communities. Using the power of Salesforce and other leading-edge tools, we design and implement solutions that streamline operations, improve client services, and enhance impact.
                             </p>
@@ -159,7 +143,7 @@
             </div>
         </section>
 
-        <!-- Our Focus Areas Section with Enhanced Cards -->
+        <!-- Our Focus Areas Section - First 3 Cards -->
         <section class="section-padding slds-p-horizontal_large focus-areas-section" aria-labelledby="focus-areas-heading">
             <div class="slds-container_large slds-container_center">
                 <div class="slds-text-align_center slds-m-bottom_x-large">
@@ -171,7 +155,7 @@
                 
                 <div class="slds-grid slds-wrap slds-gutters">
                     <!-- Innovation & Empowerment -->
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <article class="focus-area-card">
                             <div class="focus-area-icon" aria-hidden="true">
                                 <span class="icon-innovation">💡</span>
@@ -184,7 +168,7 @@
                     </div>
                     
                     <!-- Community Connection -->
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <article class="focus-area-card">
                             <div class="focus-area-icon" aria-hidden="true">
                                 <span class="icon-community">👥</span>
@@ -197,10 +181,10 @@
                     </div>
                     
                     <!-- Smart Digital Tools -->
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <article class="focus-area-card">
                             <div class="focus-area-icon" aria-hidden="true">
-                                <span class="icon-tools">⚙️</span>
+                                <span class="icon-tools">🛡️</span>
                             </div>
                             <h3 class="focus-area-title">Smart Digital Tools</h3>
                             <p class="focus-area-description">
@@ -208,25 +192,26 @@
                             </p>
                         </article>
                     </div>
-                    
-                    <!-- Measurable Growth -->
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
-                        <article class="focus-area-card">
-                            <div class="focus-area-icon" aria-hidden="true">
-                                <span class="icon-growth">🎯</span>
-                            </div>
-                            <h3 class="focus-area-title">Measurable Growth</h3>
-                            <p class="focus-area-description">
-                                Data-driven insights that help you scale your impact and reach more families.
-                            </p>
-                        </article>
-                    </div>
-                    
+                </div>
+            </div>
+        </section>
+
+        <!-- Measurable Growth Section - Next 3 Cards -->
+        <section class="section-padding slds-p-horizontal_large" aria-labelledby="expertise-heading">
+            <div class="slds-container_large slds-container_center">
+                <div class="slds-text-align_center slds-m-bottom_x-large">
+                    <h2 id="expertise-heading" class="slds-text-heading_large">Measurable Growth</h2>
+                    <p class="slds-text-body_regular slds-text-color_weak">
+                        Data-driven insights that help you scale your impact and reach more families.
+                    </p>
+                </div>
+                
+                <div class="slds-grid slds-wrap slds-gutters">
                     <!-- Nonprofit Excellence -->
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <article class="focus-area-card">
                             <div class="focus-area-icon" aria-hidden="true">
-                                <span class="icon-excellence">🏆</span>
+                                <span class="icon-excellence">📊</span>
                             </div>
                             <h3 class="focus-area-title">Nonprofit Excellence</h3>
                             <p class="focus-area-description">
@@ -235,11 +220,24 @@
                         </article>
                     </div>
                     
-                    <!-- Food Security Focus -->
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                    <!-- Families Better Served -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <article class="focus-area-card">
                             <div class="focus-area-icon" aria-hidden="true">
-                                <span class="icon-food">🍞</span>
+                                <span class="icon-growth">🌱</span>
+                            </div>
+                            <h3 class="focus-area-title">Families Better Served</h3>
+                            <p class="focus-area-description">
+                                Technology that helps you serve more families with dignity and efficiency.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Food Security Focus -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <article class="focus-area-card">
+                            <div class="focus-area-icon" aria-hidden="true">
+                                <span class="icon-food">🔒</span>
                             </div>
                             <h3 class="focus-area-title">Food Security Focus</h3>
                             <p class="focus-area-description">
@@ -251,10 +249,10 @@
             </div>
         </section>
 
-        <!-- Stats Section -->
+        <!-- Stats Section (Our Impact in Numbers) -->
         <section class="section-padding slds-p-horizontal_large" aria-labelledby="stats-heading">
             <div class="slds-container_large slds-container_center">
-                <h2 id="stats-heading" class="slds-visually-hidden">Our Impact in Numbers</h2>
+                <h2 id="stats-heading" class="slds-text-heading_medium slds-text-align_center slds-m-bottom_large">Our Impact in Numbers</h2>
                 <div class="stats-container">
                     <div class="stat-item">
                         <span class="stat-number slds-text-color_brand" data-suffix="+">150</span>
@@ -280,8 +278,8 @@
         <section class="section-padding slds-p-horizontal_large coming-soon-section" aria-labelledby="coming-soon-heading">
             <div class="slds-container_large slds-container_center">
                 <div class="slds-text-align_center">
-                    <h2 id="coming-soon-heading" class="slds-text-heading_medium slds-m-bottom_medium">
-                        <span aria-hidden="true">📌</span> Featured Success Stories <span class="coming-soon-badge">(Coming Soon)</span>
+                    <h2 id="coming-soon-heading" class="slds-text-heading_large slds-m-bottom_medium">
+                        🚀 Featured Success Stories <span class="coming-soon-badge">(Coming Soon)</span>
                     </h2>
                     <p class="slds-text-body_regular slds-text-color_weak">
                         Learn how we're helping food pantries and food banks modernize their mission—one community at a time.
@@ -291,13 +289,77 @@
         </section>
     </main>
 
-    <!-- JavaScript -->
-    <script src="navigation.js"></script>
+    <!-- Navigation script -->
+    <script src="js/universal-navigation.js"></script>
     
-    <!-- Page load complete -->
+    <!-- Page load complete and animations -->
     <script>
         window.addEventListener('load', () => {
             document.body.classList.add('loaded');
+        });
+        
+        // Enhanced animation triggers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trigger card animations immediately (since they should be visible on load)
+            setTimeout(() => {
+                document.querySelectorAll('.focus-area-card, .stat-item').forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, index * 100);
+                });
+            }, 500);
+            
+            // Enhanced scroll animations
+            if ('IntersectionObserver' in window) {
+                const animationObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.classList.add('visible');
+                                // Trigger stats animation if it's a stat item
+                                if (entry.target.classList.contains('stat-item')) {
+                                    animateStatNumber(entry.target);
+                                }
+                                animationObserver.unobserve(entry.target);
+                            }, index * 100);
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '-50px'
+                });
+                
+                // Observe all animatable elements
+                document.querySelectorAll('.focus-area-card, .stat-item, .mission-text').forEach(el => {
+                    animationObserver.observe(el);
+                });
+            } else {
+                // Fallback for older browsers
+                document.querySelectorAll('.focus-area-card, .stat-item, .mission-text').forEach(el => {
+                    el.classList.add('visible');
+                });
+            }
+            
+            // Stats animation function
+            function animateStatNumber(statItem) {
+                const numberEl = statItem.querySelector('.stat-number');
+                if (numberEl && !statItem.classList.contains('counted')) {
+                    const target = parseInt(numberEl.textContent.replace(/[^0-9]/g, ''));
+                    const suffix = numberEl.dataset.suffix || '';
+                    let current = 0;
+                    const increment = target / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            numberEl.textContent = target + suffix;
+                            statItem.classList.add('counted');
+                            clearInterval(timer);
+                        } else {
+                            numberEl.textContent = Math.floor(current) + suffix;
+                        }
+                    }, 40);
+                }
+            }
         });
     </script>
     

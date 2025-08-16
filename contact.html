@@ -22,17 +22,18 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
-    <!-- Salesforce Lightning Design System CSS -->
+    <!-- Salesforce Lightning Design System CSS - LOAD FIRST -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- Custom CSS - LOAD AFTER SLDS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation-styles.css">
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="navigation.js" as="script">
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/universal-navigation.js" as="script">
     
-    <!-- Add smooth loading transition -->
+    <!-- CRITICAL FONT SIZE OVERRIDES - INLINE TO ENSURE THEY APPLY -->
     <style>
         body {
             opacity: 0;
@@ -41,80 +42,175 @@
         body.loaded {
             opacity: 1;
         }
+        
+        /* FORCE BRAND LOGO SIZE */
+        h1.universal-brand-logo,
+        .universal-brand-logo,
+        .brand-logo,
+        h1.brand-logo,
+        .navbar .brand-logo,
+        .custom-nav .brand-logo {
+            font-size: 2.5rem !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            margin: 0 !important;
+            line-height: 1.2 !important;
+        }
+        
+        /* FORCE NAVIGATION LINK SIZE */
+        .universal-nav-link,
+        a.universal-nav-link,
+        .nav-link,
+        a.nav-link,
+        .slds-nav-horizontal__item a,
+        .navbar .nav-link,
+        .custom-nav .slds-nav-horizontal__item a {
+            font-size: 18px !important;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            padding: 1rem 1.5rem !important;
+        }
+        
+        /* FORCE NAVBAR SPACING */
+        .navbar.universal-nav,
+        .custom-nav {
+            padding: 1rem 0 !important;
+        }
+        
+        .navbar.universal-nav .slds-container_fluid,
+        .custom-nav .slds-container_fluid {
+            padding: 0 2rem !important;
+        }
+        
+        .navbar.universal-nav .slds-p-vertical_small,
+        .custom-nav .slds-p-vertical_small {
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+        }
+        
+        .navbar.universal-nav .slds-p-top_small,
+        .custom-nav .slds-p-top_small {
+            padding-top: 0.75rem !important;
+        }
+        
+        /* Contact Information Styling */
+        .contact-info-section {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            margin-top: 0.25rem;
+            min-width: 2rem;
+        }
+        
+        .contact-text a {
+            color: #5dade2;
+            text-decoration: none;
+        }
+        
+        .contact-text a:hover {
+            color: #85c1e9;
+            text-decoration: underline;
+        }
+        
+        .contact-section-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 2rem 0;
+        }
+        
+        /* Enhanced Form Label Visibility */
+        .contact-form .slds-form-element {
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-form .slds-form-element__label {
+            display: block !important;
+            margin-bottom: 0.5rem !important;
+            font-weight: 600 !important;
+            color: #ffffff !important;
+            font-size: 1rem !important;
+            background: none !important;
+            position: static !important;
+            transform: none !important;
+            padding: 0 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        .contact-form .slds-input,
+        .contact-form .slds-textarea {
+            margin-top: 0.25rem;
+            background: #2a2a2a;
+            border: 1px solid #444444;
+            color: #ffffff;
+        }
+        
+        .contact-form .slds-input:focus,
+        .contact-form .slds-textarea:focus {
+            border-color: #0176d3;
+            background: #333333;
+        }
+        
+        .contact-form .slds-form-element__help {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #cccccc;
+        }
+        
+        .contact-form {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        
+        .contact-form h3 {
+            color: #ffffff;
+        }
+        
+        /* Fix text alignment with icons */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-icon {
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            min-width: 1.5rem;
+            text-align: center;
+        }
+        
+        .contact-text {
+            flex: 1;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
     <!-- Skip Navigation for Accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Navigation Header -->
-    <header class="custom-nav" role="banner">
-        <div class="slds-container_fluid">
-            <!-- Top row with logo, centered company name, and navigation -->
-            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small">
-                <!-- Brand Logo - Left -->
-                <div class="slds-col slds-no-flex">
-                    <a href="index.html" aria-label="Food-N-Force Home" class="brand-logo-link">
-                        <div class="brand-logo-container">
-                            <div class="brand-logo-inner">
-                                <span class="brand-logo-text">F-n-F</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <!-- Centered Company Name -->
-                <div class="slds-col slds-text-align_center company-name-container">
-                    <h1 class="brand-logo">Food-N-Force</h1>
-                </div>
-                
-                <!-- Mobile Navigation Toggle - Right -->
-                <div class="slds-col slds-no-flex slds-hide slds-show_small">
-                    <button 
-                        class="mobile-nav-toggle" 
-                        aria-label="Toggle navigation menu" 
-                        aria-expanded="false"
-                        aria-controls="main-nav"
-                    >
-                        <span class="hamburger-icon">☰</span>
-                    </button>
-                </div>
-                
-                <!-- Spacer for desktop -->
-                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
-                    <!-- Balances the logo -->
-                </div>
-            </div>
-            
-            <!-- Navigation Menu - Centered Below Company Name -->
-            <div class="slds-grid slds-grid_align-center slds-p-top_small">
-                <div class="slds-col">
-                    <nav class="slds-text-align_center" role="navigation" aria-label="Main navigation">
-                        <ul class="slds-nav-horizontal" id="main-nav">
-                            <li class="slds-nav-horizontal__item">
-                                <a href="index.html">Home</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="services.html">Services</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="resources.html">Resources</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="impact.html">Impact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item slds-is-active">
-                                <a href="contact.html" aria-current="page">Contact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="about.html">About Us</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Navigation will be automatically injected here by universal-navigation.js -->
 
     <!-- Main Content -->
     <main id="main-content" role="main">
@@ -128,7 +224,7 @@
                     </p>
                 </div>
                 
-                <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-grid slds-wrap slds-gutters_large">
                     <!-- Contact Form -->
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
                         <div class="contact-form">
@@ -245,31 +341,22 @@
                     
                     <!-- Contact Information -->
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
-                        <div class="contact-info">
+                        <div class="contact-info-section">
                             <h3 class="slds-text-heading_medium slds-m-bottom_medium">Contact Information</h3>
                             
                             <div class="contact-item">
-                                <span class="contact-icon" aria-hidden="true">📞</span>
-                                <div>
-                                    <p class="slds-text-body_small">
-                                        <a href="tel:+15551234567">(555) 123-4567</a>
-                                    </p>
-                                </div>
-                            </div>
-                            
-                            <div class="contact-item">
                                 <span class="contact-icon" aria-hidden="true">✉️</span>
-                                <div>
-                                    <p class="slds-text-body_small">
+                                <div class="contact-text">
+                                    <p class="slds-text-body_regular">
                                         <a href="mailto:info@foodnforce.com">info@foodnforce.com</a>
                                     </p>
                                 </div>
                             </div>
                             
                             <div class="contact-item">
-                                <span class="contact-icon" aria-hidden="true">🗓️</span>
-                                <div>
-                                    <p class="slds-text-body_small">
+                                <span class="contact-icon" aria-hidden="true">📅</span>
+                                <div class="contact-text">
+                                    <p class="slds-text-body_regular">
                                         <a href="#" class="slds-text-color_brand">Schedule a Consultation</a>
                                     </p>
                                 </div>
@@ -277,26 +364,26 @@
                             
                             <div class="contact-item">
                                 <span class="contact-icon" aria-hidden="true">📍</span>
-                                <div>
-                                    <p class="slds-text-body_small">
+                                <div class="contact-text">
+                                    <p class="slds-text-body_regular">
                                         Serving Food Banks & Pantries Nationwide
                                     </p>
                                 </div>
                             </div>
                             
-                            <hr class="slds-m-vertical_medium">
+                            <div class="contact-section-divider"></div>
                             
                             <h4 class="slds-text-heading_small slds-m-bottom_small">Office Hours</h4>
-                            <p class="slds-text-body_small slds-text-color_weak">
+                            <p class="slds-text-body_regular slds-m-bottom_medium">
                                 Monday - Friday: 9:00 AM - 6:00 PM EST<br>
                                 Saturday: 10:00 AM - 2:00 PM EST<br>
                                 Sunday: Closed
                             </p>
                             
-                            <hr class="slds-m-vertical_medium">
+                            <div class="contact-section-divider"></div>
                             
                             <h4 class="slds-text-heading_small slds-m-bottom_small">Response Time</h4>
-                            <p class="slds-text-body_small slds-text-color_weak">
+                            <p class="slds-text-body_regular">
                                 We typically respond within 24 business hours. For urgent matters, please call us directly.
                             </p>
                         </div>
@@ -306,8 +393,17 @@
         </section>
     </main>
 
-    <!-- JavaScript -->
-    <script src="navigation.js"></script>
+    <!-- Footer -->
+    <footer class="custom-footer" role="contentinfo">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. Empowering food banks through technology.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Navigation script -->
+    <script src="js/universal-navigation.js"></script>
     
     <!-- Page load complete -->
     <script>
