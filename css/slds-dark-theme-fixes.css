@@ -1,0 +1,165 @@
+/**
+ * Dark Theme Header Fixes - AGGRESSIVE OVERRIDE
+ * Ensures all section headers are visible and properly styled
+ * Load this AFTER slds-dark-theme.css
+ */
+
+/* ============================================
+   FORCE ALL HEADERS TO BE WHITE - NUCLEAR OPTION
+   ============================================ */
+
+/* Override ALL h1, h2, h3 on specific pages with inline styles */
+body.services-page h1,
+body.services-page h2,
+body.services-page h3,
+body.resources-page h1,
+body.resources-page h2,
+body.resources-page h3,
+body.contact-page h1,
+body.contact-page h2,
+body.contact-page h3,
+body.about-page h1,
+body.about-page h2,
+body.about-page h3,
+body.impact-page h1,
+body.impact-page h2,
+body.impact-page h3 {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Target by ID for extra specificity */
+#services-heading,
+#resources-heading,
+#contact-heading,
+#why-heading,
+#story-heading,
+#expertise-heading,
+#vision-heading,
+#values-heading,
+#impact-heading {
+    color: #ffffff !important;
+    font-size: 2.5rem !important;
+    margin-bottom: 2rem !important;
+    display: block !important;
+    text-align: center !important;
+}
+
+/* ============================================
+   CLEAN SECTION HEADERS
+   ============================================ */
+
+/* All section headers - clean and centered */
+section h1,
+section h2,
+.section h1,
+.section h2,
+h1.slds-text-heading_large,
+h2.slds-text-heading_large,
+.slds-text-align_center h1,
+.slds-text-align_center h2 {
+    /* Text */
+    color: #ffffff !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    text-transform: none !important;
+    
+    /* Layout */
+    display: block !important;
+    width: 100% !important;
+    margin: 0 auto 3rem auto !important;
+    padding: 0 !important;
+    
+    /* Remove any backgrounds */
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    
+    /* Ensure visibility */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Add subtle accent line under headers */
+section h2::after,
+.section h2::after,
+section h1::after,
+.section h1::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #0176d3;
+    margin: 1.5rem auto 0;
+}
+
+/* Specific targeting for stubborn headers */
+.section-padding h1,
+.section-padding h2,
+.slds-p-horizontal_large h1,
+.slds-p-horizontal_large h2,
+.slds-p-vertical_x-large h1,
+.slds-p-vertical_x-large h2 {
+    color: #ffffff !important;
+}
+
+/* Card headers remain simple */
+.slds-card h3,
+.expertise-card h3,
+.value-card h3,
+.service-card h3,
+.resource-card h3,
+.service-title {
+    color: #ffffff !important;
+    font-size: 1.25rem !important;
+    margin-bottom: 1rem !important;
+    background: none !important;
+    padding: 0 !important;
+}
+
+/* Paragraphs on dark theme */
+section p,
+.section p,
+.slds-text-body_regular {
+    color: #e0e0e0 !important;
+}
+
+/* Fix container alignment */
+.slds-text-align_center {
+    text-align: center !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    section h1,
+    section h2,
+    .section h1,
+    .section h2 {
+        font-size: 2rem !important;
+    }
+}
+
+/* CRITICAL: Override inline styles with maximum specificity */
+html body.services-page main section h1#services-heading,
+html body.resources-page main section h1#resources-heading,
+html body.contact-page main section h1#contact-heading,
+html body.about-page main section h1#why-heading {
+    color: #ffffff !important;
+}
+
+/* Debug - Add visual indicator to confirm CSS is loading */
+body::after {
+    content: "Dark theme fixes loaded";
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: #0176d3;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    z-index: 9999;
+    border-radius: 4px;
+}
