@@ -1,0 +1,1120 @@
+/* ============================================
+   SLDS Dark Theme Fixes
+   High-specificity overrides for dark theme issues
+   ============================================ */
+
+/* ============================================
+   1. GLOBAL TEXT COLOR FIXES
+   ============================================ */
+
+/* Force white text on dark backgrounds globally */
+body,
+.slds-text-body_regular,
+.slds-text-body_small,
+.slds-text-heading_large,
+.slds-text-heading_medium,
+.slds-text-heading_small {
+  color: #ffffff !important;
+}
+
+/* Fix paragraph and list text colors */
+p, li, span {
+  color: inherit !important;
+}
+
+/* ============================================
+   2. NAVIGATION DARK THEME FIXES
+   ============================================ */
+
+/* Fix navigation background */
+.navbar {
+  background-color: rgba(22, 50, 92, 0.98) !important;
+}
+
+/* Fix navigation links */
+.nav-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Fix mobile menu background */
+.mobile-menu {
+  background-color: rgba(22, 50, 92, 0.98) !important;
+}
+
+.mobile-menu .nav-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ============================================
+   3. CARD DARK THEME FIXES
+   ============================================ */
+
+/* Fix card backgrounds for better contrast */
+.slds-card,
+.focus-area-card,
+.service-card,
+.resource-card,
+.expertise-card,
+.value-card {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Fix card hover states */
+.slds-card:hover,
+.focus-area-card:hover,
+.service-card:hover,
+.resource-card:hover,
+.expertise-card:hover,
+.value-card:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(0, 112, 240, 0.3) !important;
+}
+
+/* Fix card text colors */
+.slds-card h3,
+.focus-area-card h3,
+.service-card h3,
+.resource-card h3,
+.expertise-card h3,
+.value-card h3 {
+    color: #ffffff !important;
+}
+
+.slds-card p,
+.focus-area-card p,
+.service-card p,
+.resource-card p,
+.expertise-card p,
+.value-card p {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* ============================================
+   4. SECTION BACKGROUND FIXES
+   ============================================ */
+
+/* Fix alternating section backgrounds */
+section {
+    background-color: transparent !important;
+}
+
+section:nth-child(even),
+.section-gray {
+    background-color: rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Fix impact section background */
+.impact-section {
+    background: linear-gradient(135deg, rgba(22, 50, 92, 0.98) 0%, rgba(1, 118, 211, 0.95) 100%) !important;
+}
+
+/* ============================================
+   5. FORM ELEMENT DARK THEME FIXES
+   ============================================ */
+
+/* Fix form inputs */
+.slds-input,
+.slds-textarea,
+.slds-select {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+.slds-input:focus,
+.slds-textarea:focus,
+.slds-select:focus {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: #0070f0 !important;
+    color: #ffffff !important;
+}
+
+/* Fix form labels */
+.slds-form-element__label {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Fix placeholder text */
+.slds-input::placeholder,
+.slds-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ============================================
+   6. FOOTER DARK THEME FIXES
+   ============================================ */
+
+/* Fix footer background */
+footer,
+.footer {
+    background-color: rgba(22, 50, 92, 0.98) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+footer h4,
+.footer h4 {
+    color: #ffffff !important;
+}
+
+footer a,
+.footer a {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+footer a:hover,
+.footer a:hover {
+    color: #00a1e0 !important;
+}
+
+/* ============================================
+   7. BUTTON DARK THEME FIXES
+   ============================================ */
+
+/* Primary buttons */
+.slds-button_brand {
+    background-color: #0070f0 !important;
+    border-color: #0070f0 !important;
+    color: #ffffff !important;
+}
+
+.slds-button_brand:hover {
+    background-color: #005ce6 !important;
+    border-color: #005ce6 !important;
+}
+
+/* Outline buttons */
+.slds-button_outline-brand {
+    background-color: transparent !important;
+    border-color: #0070f0 !important;
+    color: #0070f0 !important;
+}
+
+.slds-button_outline-brand:hover {
+    background-color: #0070f0 !important;
+    color: #ffffff !important;
+}
+
+/* ============================================
+   8. HERO SECTION DARK THEME FIXES
+   ============================================ */
+
+/* Hero text colors */
+.hero-title {
+    color: #ffffff !important;
+}
+
+.hero-subtitle {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Hero overlay for better text readability */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================
+   9. STATS SECTION DARK THEME FIXES
+   ============================================ */
+
+/* Stats numbers */
+.stat-number {
+    color: #00a1e0 !important;
+    font-weight: bold;
+}
+
+.stat-label {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* ============================================
+   10. ICON DARK THEME FIXES
+   ============================================ */
+
+/* Icon backgrounds */
+.icon-wrapper,
+.slds-icon-container {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Icon colors */
+.slds-icon {
+    fill: #ffffff !important;
+}
+
+/* ============================================
+   11. TABLE DARK THEME FIXES
+   ============================================ */
+
+/* Table styling */
+.slds-table {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    color: #ffffff !important;
+}
+
+.slds-table thead {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.slds-table th {
+    color: rgba(255, 255, 255, 0.9) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.slds-table td {
+    color: rgba(255, 255, 255, 0.8) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ============================================
+   12. SPECIFIC PAGE HEADER FIXES
+   ============================================ */
+
+/* Force all page headers to be white */
+.services-page h1,
+.resources-page h1,
+.contact-page h1,
+.about-page h1,
+.impact-page h1 {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   13. UNIFIED ICON STYLING - OVERRIDE ALL
+   ============================================ */
+
+/* Apply consistent blue gradient backgrounds to ALL icon types */
+.icon-wrapper,
+.focus-area-icon,
+.service-icon,
+.resource-icon,
+.expertise-icon,
+.value-icon,
+.measurable-icon {
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 1.5rem !important;
+  background: linear-gradient(135deg, #0070f0 0%, #00a1e0 100%) !important;
+  box-shadow: 0 4px 15px rgba(0, 112, 240, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Icon emoji styling */
+.icon-wrapper span,
+.focus-area-icon span,
+.service-icon span,
+.resource-icon span,
+.expertise-icon span,
+.value-icon span,
+.measurable-icon span {
+  font-size: 2.5rem !important;
+  filter: grayscale(0) !important;
+  color: #ffffff !important;
+}
+
+/* Icon rotation on hover - applies to all icons */
+.focus-area-card:hover .icon-wrapper,
+.focus-area-card:hover .focus-area-icon,
+.service-card:hover .service-icon,
+.resource-card:hover .resource-icon,
+.expertise-card:hover .expertise-icon,
+.value-card:hover .value-icon,
+.measurable-card:hover .icon-wrapper,
+.measurable-card:hover .measurable-icon {
+  transform: rotate(10deg) scale(1.1) !important;
+  box-shadow: 0 6px 20px rgba(0, 112, 240, 0.4) !important;
+}
+
+/* ============================================
+   14. INDEX PAGE CARD FIXES - UNIFORM 320px
+   ============================================ */
+
+/* Focus Area and Measurable Growth Cards - Uniform Heights */
+.focus-area-card,
+.measurable-card {
+  height: 100% !important;
+  min-height: 320px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 2rem !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Card hover effects */
+.focus-area-card:hover,
+.measurable-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 10px 30px rgba(0, 112, 240, 0.2) !important;
+  border-color: rgba(0, 112, 240, 0.3) !important;
+}
+
+/* Card text styling */
+.focus-area-card h3,
+.measurable-card h3 {
+  color: #ffffff !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 1rem !important;
+  text-align: center !important;
+}
+
+.focus-area-card p,
+.measurable-card p {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+  text-align: center !important;
+  flex-grow: 1 !important;
+}
+
+/* Ensure grid alignment for equal heights */
+.slds-grid_align-stretch > .slds-col {
+  display: flex !important;
+}
+
+/* Section spacing fixes */
+section {
+  padding-top: 4rem !important;
+  padding-bottom: 4rem !important;
+}
+
+.section-gray {
+  padding-bottom: 2rem !important;
+}
+
+.section-gray + section {
+  padding-top: 2rem !important;
+}
+
+/* ============================================
+   15. HERO SECTION HEIGHT FIX + PAGE HEADER FIXES
+   ============================================ */
+
+/* Remove height constraints but set reasonable limits */
+.hero-section {
+    max-height: none !important;
+    height: auto !important;
+    min-height: 300px !important;
+}
+
+/* Account for the fixed nav height on ALL pages */
+.index-page .hero-section {
+    margin-top: 165px !important;
+}
+
+/* FIX: Add margin-top to services and resources first sections */
+.services-page main > section:first-child,
+.resources-page main > section:first-child {
+    margin-top: 165px !important;
+}
+
+/* Reduce internal padding to make it more compact */
+.hero-content {
+    padding: 3rem 2rem !important;
+}
+
+/* Reduce spacing between hero elements */
+.hero-title {
+    margin-bottom: 1rem !important;
+}
+
+.hero-subtitle {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Make the hero section more compact overall */
+.index-page .hero-section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+}
+
+/* ============================================
+   16. PAGE HEADER CUT-OFF FIXES
+   ============================================ */
+
+/* Fix header cut-off on services and resources pages */
+.services-page main > section:first-of-type,
+.resources-page main > section:first-of-type {
+    margin-top: 165px !important;
+}
+
+/* ============================================
+   17. COMPREHENSIVE GRID LAYOUT FIXES
+   ============================================ */
+
+/* INDEX PAGE - Our Focus Areas */
+.index-page section .slds-container_large {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+/* Fix Focus Areas section */
+.index-page section:nth-of-type(2) .slds-grid.slds-wrap {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+}
+
+/* Reset all column classes for Focus Areas */
+.index-page section:nth-of-type(2) .slds-col {
+    display: block !important;
+    flex: none !important;
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    grid-column: auto !important;
+}
+
+/* Override SLDS size classes for Focus Areas */
+.index-page section:nth-of-type(2) .slds-col[class*="slds-size"] {
+    flex-basis: auto !important;
+    max-width: none !important;
+    width: 100% !important;
+}
+
+/* Ensure Focus Area cards take full height */
+.index-page .focus-area-card {
+    min-height: 320px !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+
+/* INDEX PAGE - Our Impact in Numbers (4 column stats) */
+.index-page .impact-numbers-dark .slds-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 2rem !important;
+    justify-content: center !important;
+    align-items: center !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+/* Reset stat columns */
+.index-page .impact-numbers-dark .slds-col {
+    flex: unset !important;
+    max-width: unset !important;
+    width: unset !important;
+    grid-column: span 1 !important;
+}
+
+/* Fix stat card layout to stack number above label */
+.index-page .stat-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0.5rem !important;
+}
+
+/* Ensure stat number displays as block */
+.index-page .stat-number {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Ensure stat label displays below number */
+.index-page .stat-label {
+    display: block !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+}
+
+/* SERVICES PAGE - 3x2 Grid with Equal Heights */
+.services-page main > section:first-of-type .slds-grid.slds-wrap {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-auto-rows: 1fr !important;
+    gap: 2rem !important;
+    align-items: stretch !important;
+}
+
+/* Reset service columns */
+.services-page main > section:first-of-type .slds-col {
+    flex: unset !important;
+    max-width: unset !important;
+    width: unset !important;
+    grid-column: span 1 !important;
+    display: flex !important;
+}
+
+/* Ensure service cards fill their grid cells */
+.services-page .service-card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Make service card content fill available space */
+.services-page .service-card .service-description {
+    flex-grow: 1 !important;
+}
+
+/* RESOURCES PAGE - 3x2 Grid with Equal Heights */
+.resources-page main > section:first-of-type .slds-grid.slds-wrap {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-auto-rows: 1fr !important;
+    gap: 2rem !important;
+    align-items: stretch !important;
+}
+
+/* Reset resource columns */
+.resources-page main > section:first-of-type .slds-col {
+    flex: unset !important;
+    max-width: unset !important;
+    width: unset !important;
+    grid-column: span 1 !important;
+    display: flex !important;
+}
+
+/* Ensure resource cards fill their grid cells */
+.resources-page .resource-card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Make resource card content fill available space */
+.resources-page .resource-card p {
+    flex-grow: 1 !important;
+}
+
+/* RESOURCES PAGE - Featured Content Box Styling */
+.resources-page .featured-box {
+    background: rgba(26, 26, 26, 0.8) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 2.5rem !important;
+    height: 100% !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Enhanced hover state for featured boxes */
+.resources-page .featured-box:hover {
+    background: rgba(36, 36, 36, 0.9) !important;
+    border-color: rgba(0, 176, 211, 0.5) !important;
+    box-shadow: 0 6px 20px rgba(0, 176, 211, 0.3) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Make headings inside featured boxes stand out */
+.resources-page .featured-box h3 {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    margin-bottom: 1.5rem !important;
+    font-size: 1.375rem !important;
+}
+
+/* Style the list items in featured boxes */
+.resources-page .featured-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.resources-page .featured-list-item {
+    padding: 1rem 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.resources-page .featured-list-item:last-child {
+    border-bottom: none !important;
+}
+
+/* Style the links in featured boxes */
+.resources-page .featured-link {
+    color: rgba(0, 176, 211, 0.9) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: color 0.3s ease !important;
+}
+
+.resources-page .featured-link:hover {
+    color: #00d4ff !important;
+    text-decoration: underline !important;
+}
+
+/* Style the date/label badges */
+.resources-page .featured-date,
+.resources-page .download-label {
+    background: rgba(0, 176, 211, 0.2) !important;
+    color: #00d4ff !important;
+    padding: 0.25rem 0.75rem !important;
+    border-radius: 16px !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+}
+
+/* ============================================
+   18. RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Tablet - 2 columns */
+@media (max-width: 991px) and (min-width: 768px) {
+    /* Services and Resources - 2 columns */
+    .services-page main > section:first-of-type .slds-grid.slds-wrap,
+    .resources-page main > section:first-of-type .slds-grid.slds-wrap {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    /* Index page - 2 columns for Focus Areas and Measurable Growth */
+    .index-page section:nth-of-type(2) .slds-grid.slds-wrap,
+    .index-page section:nth-of-type(3) .slds-grid.slds-wrap {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    /* Index stats - 2x2 */
+    .index-page .impact-numbers-dark .slds-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* Mobile - 1 column */
+@media (max-width: 767px) {
+    /* All grids to single column */
+    .index-page section:nth-of-type(2) .slds-grid.slds-wrap,
+    .index-page section:nth-of-type(3) .slds-grid.slds-wrap,
+    .services-page main > section:first-of-type .slds-grid.slds-wrap,
+    .resources-page main > section:first-of-type .slds-grid.slds-wrap,
+    .index-page .impact-numbers-dark .slds-grid {
+        grid-template-columns: 1fr !important;
+        grid-auto-flow: row !important;
+    }
+}
+
+/* Override any SLDS medium breakpoint interference */
+@media (max-width: 1024px) and (min-width: 768px) {
+    .slds-medium-size_1-of-2,
+    .slds-medium-size_1-of-3 {
+        flex: unset !important;
+        max-width: unset !important;
+        width: unset !important;
+    }
+}
+
+/* Ensure all cards maintain minimum height */
+.service-card,
+.resource-card,
+.focus-area-card,
+.measurable-card {
+    min-height: 320px !important;
+}
+
+/* ============================================
+   19. IMPACT PAGE - Success Stories Grid
+   ============================================ */
+
+/* Success stories - 2x2 grid */
+.impact-page .slds-grid.slds-wrap.slds-gutters_large {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 2rem !important;
+    margin: 0 !important;
+}
+
+.impact-page .slds-col.slds-size_1-of-1.slds-medium-size_1-of-2 {
+    flex: 0 0 calc(50% - 1rem) !important;
+    max-width: calc(50% - 1rem) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Make testimonial cards visible */
+.impact-page .testimonial-card {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 200px !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .impact-page .slds-col.slds-size_1-of-1.slds-medium-size_1-of-2 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ============================================
+   20. CONTACT PAGE - Two Column Layout
+   ============================================ */
+
+/* Main contact grid */
+.contact-page .contact-section .slds-grid.slds-wrap.slds-gutters_large {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 2rem !important;
+    margin: 0 !important;
+    align-items: stretch !important;
+}
+
+/* Contact form column (left - wider) */
+.contact-page .slds-col.slds-size_1-of-1.slds-medium-size_2-of-3 {
+    flex: 0 0 calc(66.666% - 1rem) !important;
+    max-width: calc(66.666% - 1rem) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Contact info column (right - narrower) */
+.contact-page .slds-col.slds-size_1-of-1.slds-medium-size_1-of-3 {
+    flex: 0 0 calc(33.333% - 1rem) !important;
+    max-width: calc(33.333% - 1rem) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Responsive - stack on mobile */
+@media (max-width: 768px) {
+    .contact-page .slds-col.slds-size_1-of-1.slds-medium-size_2-of-3,
+    .contact-page .slds-col.slds-size_1-of-1.slds-medium-size_1-of-3 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ============================================
+   21. GLOBAL CARD HEIGHT CONSISTENCY
+   ============================================ */
+
+/* Ensure all cards maintain consistent height */
+.service-card,
+.resource-card,
+.focus-area-card,
+.measurable-card,
+.testimonial-card {
+    height: 100% !important;
+    min-height: 320px !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* ============================================
+   22. GLOBAL GRID RESET FOR NESTED GRIDS
+   ============================================ */
+
+/* Prevent fixes from affecting nested grids */
+.slds-grid .slds-grid {
+    display: flex !important;
+    gap: initial !important;
+    margin: initial !important;
+}
+
+/* ============================================
+   23. ALL HEADERS STYLING
+   ============================================ */
+
+/* Override ALL h1, h2, h3 on specific pages with inline styles */
+body.services-page h1,
+body.services-page h2,
+body.services-page h3,
+body.resources-page h1,
+body.resources-page h2,
+body.resources-page h3,
+body.contact-page h1,
+body.contact-page h2,
+body.contact-page h3,
+body.about-page h1,
+body.about-page h2,
+body.about-page h3,
+body.impact-page h1,
+body.impact-page h2,
+body.impact-page h3 {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Target by ID for extra specificity */
+#services-heading,
+#resources-heading,
+#contact-heading,
+#why-heading,
+#story-heading,
+#expertise-heading,
+#vision-heading,
+#values-heading,
+#impact-heading {
+    color: #ffffff !important;
+    font-size: 2.5rem !important;
+    margin-bottom: 2rem !important;
+    display: block !important;
+    text-align: center !important;
+}
+
+/* All section headers - clean and centered */
+section h1,
+section h2,
+.section h1,
+.section h2,
+h1.slds-text-heading_large,
+h2.slds-text-heading_large,
+.slds-text-align_center h1,
+.slds-text-align_center h2 {
+    /* Text */
+    color: #ffffff !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    text-transform: none !important;
+    
+    /* Layout */
+    display: block !important;
+    width: 100% !important;
+    margin: 0 auto 3rem auto !important;
+    padding: 0 !important;
+    
+    /* Remove any backgrounds */
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    
+    /* Ensure visibility */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Add subtle accent line under headers */
+section h2::after,
+.section h2::after,
+section h1::after,
+.section h1::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #0176d3;
+    margin: 1.5rem auto 0;
+}
+
+/* Specific targeting for stubborn headers */
+.section-padding h1,
+.section-padding h2,
+.slds-p-horizontal_large h1,
+.slds-p-horizontal_large h2,
+.slds-p-vertical_x-large h1,
+.slds-p-vertical_x-large h2 {
+    color: #ffffff !important;
+}
+
+/* Card headers remain simple */
+.slds-card h3,
+.expertise-card h3,
+.value-card h3,
+.service-card h3,
+.resource-card h3,
+.service-title {
+    color: #ffffff !important;
+    font-size: 1.25rem !important;
+    margin-bottom: 1rem !important;
+    background: none !important;
+    padding: 0 !important;
+}
+
+/* Paragraphs on dark theme */
+section p,
+.section p,
+.slds-text-body_regular {
+    color: #e0e0e0 !important;
+}
+
+/* Fix container alignment */
+.slds-text-align_center {
+    text-align: center !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    section h1,
+    section h2,
+    .section h1,
+    .section h2 {
+        font-size: 2rem !important;
+    }
+}
+
+/* CRITICAL: Override inline styles with maximum specificity */
+html body.services-page main section h1#services-heading,
+html body.resources-page main section h1#resources-heading,
+html body.contact-page main section h1#contact-heading,
+html body.about-page main section h1#why-heading {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   24. MEASURABLE GROWTH NUCLEAR FIX
+   ============================================ */
+
+/* Remove ALL existing styles and start fresh */
+.index-page section:nth-of-type(3) * {
+    all: unset !important;
+}
+
+/* Rebuild the section */
+.index-page section:nth-of-type(3) {
+    padding: 4rem 0 !important;
+}
+
+/* Container */
+.index-page section:nth-of-type(3) .slds-container_large {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 2rem !important;
+}
+
+/* Title and description */
+.index-page section:nth-of-type(3) h2 {
+    color: #ffffff !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    margin-bottom: 3rem !important;
+    display: block !important;
+}
+
+.index-page section:nth-of-type(3) > .slds-container_large > .slds-text-align_center > p {
+    color: #e0e0e0 !important;
+    text-align: center !important;
+    margin-bottom: 3rem !important;
+    display: block !important;
+}
+
+/* The grid - using flexbox instead of grid */
+.index-page section:nth-of-type(3) .slds-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    gap: 2rem !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Each column */
+.index-page section:nth-of-type(3) .slds-col {
+    flex: 1 1 33.333% !important;
+    max-width: 400px !important;
+    min-width: 300px !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* The cards */
+.index-page section:nth-of-type(3) .measurable-card {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    height: 100% !important;
+    min-height: 320px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+/* Icons */
+.index-page section:nth-of-type(3) .measurable-icon {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 1.5rem !important;
+    background: linear-gradient(135deg, #0070f0 0%, #00a1e0 100%) !important;
+    font-size: 2.5rem !important;
+    color: #ffffff !important;
+}
+
+/* Card text */
+.index-page section:nth-of-type(3) .measurable-card h3 {
+    color: #ffffff !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+    text-align: center !important;
+    display: block !important;
+}
+
+.index-page section:nth-of-type(3) .measurable-card p {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    text-align: center !important;
+    flex-grow: 1 !important;
+    display: block !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .index-page section:nth-of-type(3) .slds-grid {
+        flex-wrap: wrap !important;
+    }
+    
+    .index-page section:nth-of-type(3) .slds-col {
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 1rem !important;
+    }
+}
+
+/* Debug - Add visual indicator to confirm CSS is loading */
+body::after {
+    content: "Dark theme fixes v4";
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: #0176d3;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    z-index: 9999;
+    border-radius: 4px;
+}

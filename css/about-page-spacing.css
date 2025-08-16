@@ -1,0 +1,260 @@
+/**
+ * About Page Spacing and Layout Fixes
+ * 1. Reduces spacing between sections
+ * 2. Forces "What We Bring" boxes into single line
+ * Load this AFTER other CSS files but BEFORE navigation-fixes.css
+ */
+
+/* ============================================
+   REDUCE SECTION SPACING ON ABOUT PAGE
+   ============================================ */
+
+/* Target the main sections on About page */
+body.about-page section,
+body.about-page .section {
+    padding-top: 3rem !important;    /* Reduced from default */
+    padding-bottom: 3rem !important;  /* Reduced from default */
+}
+
+/* First section (Our Why) - less top padding */
+body.about-page main section:first-child {
+    padding-top: 2rem !important;
+}
+
+/* Specific section padding overrides */
+body.about-page .section-padding,
+body.about-page .slds-p-vertical_x-large {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+}
+
+/* Reduce margin on section headers */
+body.about-page section h1,
+body.about-page section h2,
+body.about-page .section h1,
+body.about-page .section h2 {
+    margin-bottom: 2rem !important;  /* Reduced from 3rem */
+}
+
+/* Reduce spacing between paragraphs in these sections */
+body.about-page .story-content p,
+body.about-page section p {
+    margin-bottom: 1rem !important;  /* Reduced from default */
+}
+
+/* Specifically target the three sections */
+body.about-page #why-heading,
+body.about-page #story-heading,
+body.about-page #expertise-heading {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Remove excessive margins from containers */
+body.about-page .slds-m-bottom_x-large {
+    margin-bottom: 2rem !important;  /* Reduced from x-large */
+}
+
+body.about-page .slds-m-bottom_xx-large {
+    margin-bottom: 2.5rem !important;  /* Reduced from xx-large */
+}
+
+/* Story section specific adjustment */
+body.about-page .section-gray {
+    padding: 3rem 2rem !important;
+}
+
+/* ============================================
+   WHAT WE BRING - FORCE SINGLE LINE LAYOUT
+   ============================================ */
+
+/* CRITICAL: Merge the two grid containers into one */
+body.about-page .card-section .slds-grid + .slds-grid {
+    display: contents !important;  /* This removes the second grid wrapper */
+}
+
+/* Target the container that holds both grids */
+body.about-page .card-section .slds-container_large {
+    max-width: 1400px !important;
+}
+
+/* Make the main grid a single row */
+body.about-page .card-section .slds-grid:first-of-type {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-evenly !important;
+    gap: 2rem !important;
+    align-items: stretch !important;
+}
+
+/* Force all columns to be in one row */
+body.about-page .card-section .slds-col,
+body.about-page .expertise-card:parent(.slds-col) {
+    flex: 1 1 0 !important;
+    max-width: none !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+/* Override the 5-of-12 width that's causing issues */
+body.about-page .slds-large-size_5-of-12 {
+    flex: 1 1 0 !important;
+    max-width: none !important;
+}
+
+/* Remove the top margin from second grid */
+body.about-page .slds-m-top_large {
+    margin-top: 0 !important;
+}
+
+/* Ensure expertise cards are uniform */
+body.about-page .expertise-card {
+    height: 100% !important;
+    min-height: 280px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 2rem 1.5rem !important;
+}
+
+/* ============================================
+   FIX: PROPER SPACING BETWEEN HEADERS AND TEXT
+   ============================================ */
+
+/* CRITICAL FIX - Remove flex display from H3 elements and match Core Values styling */
+html body.about-page main section div div div .expertise-card h3,
+html body.about-page .expertise-card h3,
+body.about-page .expertise-card h3 {
+    display: block !important;  /* Changed from flex to block */
+    text-align: center !important;  /* Center text without flexbox */
+    font-size: 1.25rem !important;  /* Increased to match Core Values */
+    font-weight: 600 !important;  /* Match Core Values weight */
+    margin: 0 0 2rem 0 !important;  /* Increased to match Core Values spacing */
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    padding: 0.5rem 1rem !important;  /* Add padding for background box */
+    line-height: 1.3 !important;
+    min-height: auto !important;
+    /* Remove all flex properties */
+    align-items: unset !important;
+    justify-content: unset !important;
+    flex: none !important;
+    /* Add background styling to match Core Values */
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 4px !important;
+    position: relative !important;
+    top: -0.5rem !important;
+}
+
+/* Paragraph styling - ensure proper spacing */
+html body.about-page main section div div div .expertise-card p,
+html body.about-page .expertise-card p,
+body.about-page .expertise-card p {
+    display: block !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    flex-grow: 1 !important;
+    margin: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+}
+
+/* Icon centering with increased bottom margin */
+html body.about-page .expertise-icon,
+body.about-page .expertise-icon {
+    margin: 0 auto 1.5rem !important;  /* Increased from 0.75rem */
+}
+
+/* Apply same fixes to value cards for consistency */
+html body.about-page main section div div div .value-card h3,
+html body.about-page .value-card h3,
+body.about-page .value-card h3 {
+    display: block !important;  /* Changed from flex to block */
+    text-align: center !important;
+    font-size: 1.25rem !important;  /* Match expertise cards */
+    font-weight: 600 !important;  /* Match expertise cards */
+    margin: 0 0 2rem 0 !important;  /* Match expertise cards spacing */
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    padding: 0.5rem 1rem !important;  /* Add padding for background box */
+    line-height: 1.3 !important;
+    min-height: auto !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+    flex: none !important;
+    /* Add background styling */
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 4px !important;
+}
+
+html body.about-page main section div div div .value-card p,
+html body.about-page .value-card p,
+body.about-page .value-card p {
+    display: block !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+}
+
+html body.about-page .value-icon,
+body.about-page .value-icon {
+    margin: 0 auto 1.5rem !important;  /* Match expertise icon spacing */
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 1200px) {
+    /* Allow horizontal scroll if needed */
+    body.about-page .card-section {
+        overflow-x: auto !important;
+    }
+    
+    body.about-page .card-section .slds-grid:first-of-type {
+        min-width: 1000px !important;
+        padding: 0 1rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Tighter spacing on mobile */
+    body.about-page section,
+    body.about-page .section {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+    
+    body.about-page section h1,
+    body.about-page section h2 {
+        margin-bottom: 1.5rem !important;
+    }
+    
+    /* Cards become scrollable */
+    body.about-page .expertise-card {
+        min-width: 250px !important;
+    }
+}
+
+/* ============================================
+   OPTIONAL VISUAL SEPARATORS
+   ============================================ */
+
+/* Add subtle divider between sections if needed */
+body.about-page section:not(:last-child)::after {
+    content: "";
+    display: block;
+    width: 100px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 2rem auto 0;
+}

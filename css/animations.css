@@ -1,0 +1,459 @@
+/* ============================================
+   Food-N-Force Animations CSS
+   Phase 2: Smooth Animations & Micro-interactions
+   ============================================ */
+
+/* ============================================
+   1. SMOOTH SCROLL ANIMATIONS
+   ============================================ */
+
+/* Fade in on scroll */
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+}
+
+/* Fade in and up */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animations */
+.stagger-animation .fade-in-up:nth-child(1) { transition-delay: 0.1s; }
+.stagger-animation .fade-in-up:nth-child(2) { transition-delay: 0.2s; }
+.stagger-animation .fade-in-up:nth-child(3) { transition-delay: 0.3s; }
+.stagger-animation .fade-in-up:nth-child(4) { transition-delay: 0.4s; }
+.stagger-animation .fade-in-up:nth-child(5) { transition-delay: 0.5s; }
+.stagger-animation .fade-in-up:nth-child(6) { transition-delay: 0.6s; }
+
+/* ============================================
+   2. ENHANCED MICRO-INTERACTIONS
+   ============================================ */
+
+/* Advanced button effects */
+.slds-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Ripple effect for buttons */
+.slds-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.slds-button:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Enhanced card interactions */
+.service-card,
+.focus-area-card,
+.resource-card,
+.expertise-card,
+.value-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Shine effect on hover */
+.service-card::before,
+.focus-area-card::before,
+.resource-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg) translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.service-card:hover::before,
+.focus-area-card:hover::before,
+.resource-card:hover::before {
+  transform: rotate(45deg) translateX(100%);
+}
+
+/* Enhanced icon interactions */
+.service-icon,
+.focus-area-icon,
+.resource-icon,
+.expertise-icon,
+.value-icon {
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* REMOVED: iconBounce animation - Now controlled by slds-dark-theme-fixes.css */
+
+/* Form field enhancements */
+.slds-form-element {
+  position: relative;
+}
+
+/* Animated labels */
+.slds-form-element__label {
+  transition: all 0.3s ease;
+}
+
+.slds-input:focus ~ .slds-form-element__label,
+.slds-textarea:focus ~ .slds-form-element__label,
+.slds-input:not(:placeholder-shown) ~ .slds-form-element__label,
+.slds-textarea:not(:placeholder-shown) ~ .slds-form-element__label {
+  transform: translateY(-25px) scale(0.85);
+  color: #0176d3;
+}
+
+/* Input focus effects */
+.slds-input,
+.slds-textarea {
+  position: relative;
+  background-image: linear-gradient(#0176d3, #0176d3);
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.3s ease;
+}
+
+.slds-input:focus,
+.slds-textarea:focus {
+  background-size: 100% 2px;
+}
+
+/* ============================================
+   3. LOADING STATES & TRANSITIONS
+   ============================================ */
+
+/* Skeleton loading animation */
+.skeleton-loading {
+  position: relative;
+  overflow: hidden;
+  background-color: #f3f3f3;
+}
+
+.skeleton-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: skeleton-sweep 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Page transition effects */
+.page-transition {
+  animation: pageEnter 0.6s ease-out;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   4. STATS COUNTER ENHANCEMENTS
+   ============================================ */
+
+/* Enhanced stats animation */
+.stat-number {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.stat-number.counting {
+  animation: numberPulse 0.6s ease;
+}
+
+@keyframes numberPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Stats card enhanced hover */
+.stat-card {
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card:hover .stat-number {
+  color: #00d4ff;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+/* ============================================
+   5. SMOOTH SECTION TRANSITIONS
+   ============================================ */
+
+/* Section reveal animations */
+.section-padding {
+  position: relative;
+}
+
+.section-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease-out;
+}
+
+.section-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Alternating section animations */
+.section-left {
+  transform: translateX(-40px);
+}
+
+.section-left.revealed {
+  transform: translateX(0);
+}
+
+.section-right {
+  transform: translateX(40px);
+}
+
+.section-right.revealed {
+  transform: translateX(0);
+}
+
+/* ============================================
+   6. NAVIGATION ENHANCEMENTS
+   ============================================ */
+
+/* Enhanced navigation shadow on scroll */
+.navbar {
+  transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* Nav link enhanced hover */
+.nav-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #0176d3, #00d4ff);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::before,
+.slds-is-active .nav-link::before {
+  width: 100%;
+}
+
+/* ============================================
+   7. TESTIMONIAL CAROUSEL
+   ============================================ */
+
+/* Carousel container */
+.testimonial-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Slide animations */
+.testimonial-slide {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.5s ease-in-out;
+}
+
+.testimonial-slide.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.testimonial-slide.prev {
+  transform: translateX(-100%);
+}
+
+/* Carousel indicators */
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.carousel-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(1, 118, 211, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.carousel-indicator.active {
+  width: 24px;
+  border-radius: 4px;
+  background: #0176d3;
+}
+
+/* ============================================
+   8. ACCORDION ANIMATIONS
+   ============================================ */
+
+/* Accordion container */
+.accordion-item {
+  border-bottom: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+/* Accordion header */
+.accordion-header {
+  padding: 1rem 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.accordion-header:hover {
+  color: #0176d3;
+}
+
+/* Accordion icon */
+.accordion-icon {
+  transition: transform 0.3s ease;
+}
+
+.accordion-item.active .accordion-icon {
+  transform: rotate(180deg);
+}
+
+/* Accordion content */
+.accordion-content {
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.3s ease-out;
+  overflow: hidden;
+}
+
+.accordion-item.active .accordion-content {
+  max-height: 500px;
+  opacity: 1;
+  padding-bottom: 1rem;
+}
+
+/* ============================================
+   9. PARALLAX SCROLLING
+   ============================================ */
+
+/* Parallax container */
+.parallax-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Parallax background */
+.parallax-bg {
+  position: absolute;
+  top: -20%;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Parallax content */
+.parallax-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   10. PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .parallax-bg {
+    transform: none !important;
+  }
+}
+
+/* GPU acceleration for smooth animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Optimize repaints */
+.will-animate {
+  will-change: opacity, transform;
+}

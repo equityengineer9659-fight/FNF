@@ -1,0 +1,803 @@
+/* Food-N-Force Navigation Styles - Consolidated Version
+   This file combines navigation-styles.css with all fixes from navigation-fixes.css
+   Purpose: Single source of truth for all navigation styling
+*/
+
+/* ============================================
+   CRITICAL: NAVIGATION ISOLATION LAYER
+   This MUST come first to prevent SLDS interference
+   ============================================ */
+
+/* Create an isolation boundary for the navigation */
+.navbar.universal-nav {
+    /* Critical: Reset all inherited styles */
+    all: initial;
+    
+    /* Re-apply only what we need */
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    z-index: 1000;
+}
+
+/* ============================================
+   NAVIGATION BASE STYLES
+   ============================================ */
+
+.navbar.universal-nav {
+    background: rgba(22, 50, 92, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(10px)) {
+    .navbar.universal-nav {
+        background: rgba(22, 50, 92, 0.98);
+    }
+}
+
+/* Container - with isolation */
+.navbar.universal-nav .slds-container_fluid {
+    padding: 0 2rem;
+    max-width: 100%;
+    margin: 0;
+}
+
+/* Grid system - prevent SLDS interference */
+.navbar.universal-nav .slds-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.navbar.universal-nav .slds-grid_align-spread {
+    justify-content: space-between !important;
+}
+
+.navbar.universal-nav .slds-grid_align-center {
+    justify-content: center !important;
+}
+
+.navbar.universal-nav .slds-grid_vertical-align-center {
+    align-items: center !important;
+}
+
+/* Padding utilities - explicit values */
+.navbar.universal-nav .slds-p-vertical_small {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+}
+
+.navbar.universal-nav .slds-p-top_small {
+    padding-top: 0.75rem !important;
+}
+
+/* Override SLDS column flex behavior */
+.navbar.universal-nav .slds-col.slds-no-flex {
+    flex: none !important;
+}
+
+/* ============================================
+   NEW F-N-F LOGO STYLES
+   ============================================ */
+
+/* Logo link container */
+.navbar.universal-nav .brand-logo-link {
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+
+/* Main logo container */
+.navbar.universal-nav .fnf-logo {
+    width: 56px !important; /* 14rem / 4 for navbar scale */
+    height: 56px !important;
+    border-radius: 12px !important; /* 1.5rem scaled */
+    position: relative !important;
+    display: grid !important;
+    place-items: center !important;
+    background: linear-gradient(145deg, #1b96ff, #0b5cab) !important;
+    outline: 2px solid rgba(255,255,255,0.15) !important;
+    transition: transform .28s ease, filter .28s ease !important;
+}
+
+/* Animated gradient glow */
+.navbar.universal-nav .fnf-logo::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: -4px !important; /* Scaled down from -10px */
+    border-radius: 14px !important; /* 1.9rem scaled */
+    background: conic-gradient(from 180deg, #00d1ff, #66ffe6, #13c2ff, #7bd3ff, #00d1ff) !important;
+    filter: blur(8px) !important; /* Scaled from 14px */
+    animation: fnf-spin 8s linear infinite !important;
+    z-index: 0 !important;
+}
+
+@keyframes fnf-spin { 
+    to { transform: rotate(360deg); } 
+}
+
+.navbar.universal-nav .fnf-logo:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    filter: drop-shadow(0 6px 24px rgba(16, 179, 255, 0.35)) !important;
+}
+
+/* Inner (glass) tile */
+.navbar.universal-nav .fnf-inner {
+    position: relative !important;
+    z-index: 1 !important;
+    width: 42px !important; /* 10.5rem / 4 for navbar scale */
+    height: 42px !important;
+    border-radius: 8px !important; /* 1rem scaled */
+    display: grid !important;
+    place-items: center !important;
+    background: rgba(1, 31, 63, 0.55) !important;
+    box-shadow: inset 0 0 18px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.12) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+    backdrop-filter: blur(8px) saturate(120%) !important;
+}
+
+/* White Orbitron wordmark */
+.navbar.universal-nav .fnf-wordmark {
+    font-family: 'Orbitron', 'Salesforce Sans', Arial, sans-serif !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.05em !important; /* Tighter letter spacing */
+    font-size: 11px !important; /* Smaller to fit in one line */
+    line-height: 1 !important;
+    color: #ffffff !important;
+    text-shadow: 0.5px 0.5px 0 rgba(255,255,255,0.15), 2px 2px 6px rgba(0,0,0,0.7) !important;
+    white-space: nowrap !important; /* Force single line */
+    display: block !important;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .navbar.universal-nav .fnf-logo::before { 
+        animation: none !important; 
+    }
+    .navbar.universal-nav .fnf-logo:hover {
+        transform: none !important;
+    }
+}
+
+/* Company name - CRITICAL STYLES */
+.navbar.universal-nav .company-name-container {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    text-align: center !important;
+}
+
+/* THE MOST IMPORTANT RULE - Company Name Text */
+.navbar.universal-nav h1.brand-logo.universal-brand-logo {
+    /* Reset any inherited styles */
+    all: unset;
+    
+    /* Apply our styles with maximum specificity */
+    display: block !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: 2.5rem !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.5px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    
+    /* Prevent any text transformations */
+    text-transform: none !important;
+    text-decoration: none !important;
+    
+    /* Ensure it's visible */
+    visibility: visible !important;
+    opacity: 1 !important;
+    
+    /* Force it above other elements */
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Spacer to balance logo */
+.navbar.universal-nav .nav-spacer {
+    width: 50px !important;
+    height: 50px !important;
+    visibility: hidden !important;
+}
+
+/* ============================================
+   NAVIGATION MENU STYLES
+   ============================================ */
+
+/* Menu container */
+.navbar.universal-nav .nav-menu-container {
+    width: 100%;
+}
+
+/* Navigation list - OVERRIDE SLDS */
+.navbar.universal-nav .nav-menu,
+.navbar.universal-nav .slds-nav-horizontal {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 2rem !important;
+}
+
+/* List items - OVERRIDE SLDS */
+.navbar.universal-nav .slds-nav-horizontal__item {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+/* ============================================
+   NAVIGATION LINKS - CRITICAL OVERRIDE
+   This has maximum specificity to override SLDS
+   ============================================ */
+
+.navbar.universal-nav a.nav-link.universal-nav-link {
+    /* Reset SLDS link styles */
+    all: unset;
+    
+    /* Apply our custom styles */
+    display: inline-block !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: 18px !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    white-space: nowrap !important;
+    
+    /* Typography */
+    font-weight: 500 !important;
+    letter-spacing: 0.3px !important;
+    text-transform: none !important;
+    
+    /* Ensure visibility */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Underline effect */
+.navbar.universal-nav a.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--accent-color, #00d4ff);
+    transition: width 0.3s ease;
+}
+
+/* Hover states */
+.navbar.universal-nav a.nav-link:hover {
+    color: var(--accent-color, #00d4ff) !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 4px !important;
+    text-decoration: none !important; /* Prevent underline */
+}
+
+.navbar.universal-nav a.nav-link:hover::after {
+    width: 80%;
+}
+
+/* Active state */
+.navbar.universal-nav .slds-is-active a.nav-link {
+    color: var(--accent-color, #00d4ff) !important;
+    font-weight: 600 !important;
+}
+
+.navbar.universal-nav .slds-is-active a.nav-link::after {
+    width: 80%;
+}
+
+/* Focus state for accessibility */
+.navbar.universal-nav a.nav-link:focus {
+    outline: 2px solid var(--accent-color, #00d4ff) !important;
+    outline-offset: 2px !important;
+    text-decoration: none !important;
+}
+
+/* ============================================
+   MOBILE NAVIGATION - MAXIMUM OVERRIDE
+   ============================================ */
+
+/* Mobile toggle button - CRITICAL STYLES */
+.navbar.universal-nav .mobile-nav-toggle {
+    all: unset; /* Reset everything */
+    
+    /* Rebuild button styles */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 48px !important;
+    height: 48px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    z-index: 1001 !important;
+}
+
+/* Hamburger icon */
+.navbar.universal-nav .hamburger-icon {
+    display: inline-block !important;
+    font-size: 28px !important;
+    color: #ffffff !important;
+    line-height: 1 !important;
+    transition: transform 0.3s ease !important;
+}
+
+/* Mobile toggle hover */
+.navbar.universal-nav .mobile-nav-toggle:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Mobile toggle focus */
+.navbar.universal-nav .mobile-nav-toggle:focus {
+    outline: 2px solid var(--accent-color, #00d4ff) !important;
+    outline-offset: 2px !important;
+}
+
+/* ============================================
+   RESPONSIVE BEHAVIOR
+   ============================================ */
+
+/* Desktop - hide mobile toggle */
+@media (min-width: 769px) {
+    .navbar.universal-nav .mobile-toggle-container {
+        display: none !important;
+    }
+    
+    .navbar.universal-nav .nav-menu {
+        display: flex !important;
+        position: static !important;
+        max-height: none !important;
+        opacity: 1 !important;
+        background-color: transparent !important;
+        flex-direction: row !important;
+    }
+    
+    /* Ensure desktop layout uses flexbox */
+    .navbar.universal-nav .slds-grid_align-spread {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+    
+    /* Hide mobile toggle on desktop */
+    .navbar.universal-nav .mobile-toggle-container,
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-hide.slds-show_small {
+        display: none !important;
+    }
+    
+    /* Show desktop spacer */
+    .navbar.universal-nav .nav-spacer,
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-show.slds-hide_small {
+        display: block !important;
+    }
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+    /* Navigation container adjustments */
+    .navbar.universal-nav .slds-container_fluid {
+        padding: 0 1rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    
+    /* Force grid layout for mobile navigation - FROM FIXES */
+    .navbar.universal-nav .slds-grid_align-spread {
+        display: grid !important;
+        grid-template-columns: 56px 1fr 56px !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Logo positioning - FROM FIXES */
+    .navbar.universal-nav .slds-col:first-child {
+        grid-column: 1 !important;
+        justify-self: start !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    /* Company name positioning - FROM FIXES */
+    .navbar.universal-nav .company-name-container {
+        grid-column: 2 !important;
+        justify-self: center !important;
+        text-align: center !important;
+        position: relative !important;
+        left: auto !important;
+        transform: none !important;
+    }
+    
+    /* Mobile toggle positioning - FROM FIXES */
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-hide.slds-show_small,
+    .navbar.universal-nav .mobile-toggle-container {
+        grid-column: 3 !important;
+        justify-self: end !important;
+        display: flex !important;
+        align-items: center !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    /* Force mobile toggle to show */
+    .navbar.universal-nav .mobile-toggle-container,
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-hide.slds-show_small {
+        display: block !important;
+    }
+    
+    /* Force spacer to hide */
+    .navbar.universal-nav .nav-spacer,
+    .navbar.universal-nav .slds-col.slds-no-flex.slds-show.slds-hide_small {
+        display: none !important;
+    }
+    
+    /* Company name - smaller on mobile */
+    .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+        font-size: 26px !important;
+    }
+    
+    /* Mobile menu container - FROM FIXES */
+    .navbar.universal-nav .nav-menu-container {
+        position: static !important;  /* Reset positioning context */
+    }
+    
+    /* Position menu relative to navbar - FROM FIXES */
+    .navbar.universal-nav {
+        position: relative !important;  /* Make navbar the positioning context */
+    }
+    
+    /* Navigation menu - mobile styles */
+    .navbar.universal-nav .nav-menu {
+        display: none;
+        position: absolute !important;
+        top: calc(100% + 1rem) !important;
+        left: -1rem !important;
+        right: -1rem !important;
+        background: rgba(22, 50, 92, 0.98) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        padding: 1rem !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+        opacity: 0;
+        transform: translateX(-100%);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        z-index: 9999 !important;  /* FROM FIXES */
+    }
+    
+    /* Show state for mobile menu - FIXED with background */
+    .navbar.universal-nav .nav-menu.show {
+        display: flex !important;
+        opacity: 1;
+        transform: translateX(0);
+        background-color: rgba(22, 50, 92, 0.98) !important;
+        background: rgba(22, 50, 92, 0.98) !important;
+        position: fixed !important;  /* FROM FIXES - Use fixed positioning */
+        top: 80px !important;  /* FROM FIXES - Adjust based on navbar height */
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-height: calc(100vh - 80px) !important;
+        overflow-y: auto !important;
+        z-index: 9999 !important;
+    }
+    
+    /* Mobile menu items */
+    .navbar.universal-nav .slds-nav-horizontal__item {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .navbar.universal-nav .slds-nav-horizontal__item:last-child {
+        border-bottom: none !important;
+    }
+    
+    /* Mobile nav links */
+    .navbar.universal-nav a.nav-link {
+        display: block !important;
+        width: 100% !important;
+        padding: 1rem !important;
+        text-align: left !important;
+        font-size: 18px !important;
+    }
+    
+    .navbar.universal-nav a.nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    /* Remove underline effect on mobile */
+    .navbar.universal-nav a.nav-link::after {
+        display: none !important;
+    }
+    
+    /* Ensure mobile toggle is visible - FROM FIXES */
+    .navbar.universal-nav .mobile-nav-toggle {
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Override SLDS responsive utilities for mobile toggle - FROM FIXES */
+    .navbar.universal-nav .slds-hide.slds-show_small {
+        display: block !important;
+    }
+    
+    .navbar.universal-nav .slds-show.slds-hide_small {
+        display: none !important;
+    }
+    
+    /* Override SLDS-DARK-THEME navigation issues - FROM FIXES */
+    body .navbar.universal-nav .mobile-nav-toggle,
+    body .navbar.universal-nav .mobile-toggle-container {
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+        right: auto !important;
+        position: relative !important;
+    }
+}
+
+/* ============================================
+   Z-INDEX HIERARCHY - FROM FIXES
+   ============================================ */
+
+/* Ensure navigation stays above page content */
+.navbar.universal-nav {
+    z-index: 1000 !important;
+}
+
+.navbar.universal-nav .mobile-nav-toggle {
+    z-index: 1001 !important;
+}
+
+/* Ensure mobile menu appears above everything */
+.navbar.universal-nav .nav-menu {
+    z-index: 9999 !important;
+}
+
+/* Additional fix for mobile menu when shown */
+.navbar.universal-nav .nav-menu.show {
+    z-index: 9999 !important;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS FOR SMALLER SCREENS
+   ============================================ */
+
+@media (max-width: 380px) {
+    /* Smaller font on very small screens */
+    .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+        font-size: 22px !important;
+    }
+    
+    /* Tighter grid on very small screens - FROM FIXES */
+    .navbar.universal-nav .slds-grid_align-spread {
+        grid-template-columns: 48px 1fr 48px !important;
+        gap: 0.25rem !important;
+    }
+}
+
+@media (max-width: 320px) {
+    /* Minimum font size for tiny screens */
+    .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+        font-size: 20px !important;
+    }
+}
+
+/* Landscape mobile - FROM FIXES */
+@media (max-width: 768px) and (orientation: landscape) {
+    .navbar.universal-nav {
+        padding: 0.5rem 0 !important;
+    }
+}
+
+/* ============================================
+   NAVIGATION LOAD ANIMATIONS (Option 1)
+   ============================================ */
+
+/* Initial states for navigation animations */
+.navbar.universal-nav {
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Company name animation */
+.universal-brand-logo {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInDown 0.8s ease-out 0.3s both;
+}
+
+@keyframes fadeInDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Logo animation */
+.fnf-logo {
+    opacity: 0;
+    transform: scale(0.8);
+    animation: zoomIn 0.6s ease-out 0.1s both;
+}
+
+@keyframes zoomIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Nav items staggered animation */
+.nav-link {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.5s ease-out both;
+}
+
+.slds-nav-horizontal__item:nth-child(1) .nav-link { animation-delay: 0.4s; }
+.slds-nav-horizontal__item:nth-child(2) .nav-link { animation-delay: 0.5s; }
+.slds-nav-horizontal__item:nth-child(3) .nav-link { animation-delay: 0.6s; }
+.slds-nav-horizontal__item:nth-child(4) .nav-link { animation-delay: 0.7s; }
+.slds-nav-horizontal__item:nth-child(5) .nav-link { animation-delay: 0.8s; }
+.slds-nav-horizontal__item:nth-child(6) .nav-link { animation-delay: 0.9s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   ANIMATIONS (ORIGINAL)
+   ============================================ */
+
+@keyframes slideInMobile {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Smooth transitions for mobile menu - FROM FIXES */
+.navbar.universal-nav .nav-menu {
+    transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+
+/* Disable transitions on page load to prevent flash - FROM FIXES */
+body:not(.loaded) .navbar.universal-nav * {
+    transition: none !important;
+}
+
+/* ============================================
+   FINAL OVERRIDE - NUCLEAR OPTION
+   Use page-specific body classes
+   ============================================ */
+
+body.services-page .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+body.resources-page .navbar.universal-nav h1.brand-logo.universal-brand-logo,
+body.impact-page .navbar.universal-nav h1.brand-logo.universal-brand-logo {
+    font-size: 2.5rem !important;
+}
+
+body.services-page .navbar.universal-nav a.nav-link,
+body.resources-page .navbar.universal-nav a.nav-link,
+body.impact-page .navbar.universal-nav a.nav-link {
+    font-size: 18px !important;
+}
+
+/* ============================================
+   ACCESSIBILITY - Reduced Motion Support
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar.universal-nav,
+    .universal-brand-logo,
+    .fnf-logo,
+    .nav-link {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    
+    .navbar.universal-nav .fnf-logo::before,
+    .navbar.universal-nav .fnf-logo:hover,
+    .navbar.universal-nav .nav-link::after,
+    .navbar.universal-nav .hamburger-icon {
+        transition: none !important;
+    }
+}
+
+/* Ensure focus states are visible - FROM FIXES */
+.navbar.universal-nav .mobile-nav-toggle:focus {
+    outline: 2px solid var(--accent-color, #00d4ff) !important;
+    outline-offset: 2px !important;
+}
+
+/* High contrast mode support - FROM FIXES */
+@media (prefers-contrast: high) {
+    .navbar.universal-nav .mobile-nav-toggle {
+        border-width: 3px !important;
+    }
+}
+
+/* ============================================
+   BROWSER-SPECIFIC FIXES - FROM FIXES
+   ============================================ */
+
+/* Safari fixes */
+@supports (-webkit-appearance: none) {
+    .navbar.universal-nav .slds-grid_align-spread {
+        box-sizing: border-box !important;  /* Standard property */
+        -webkit-box-sizing: border-box !important;  /* Vendor prefix */
+    }
+}
+
+/* Firefox fixes */
+@-moz-document url-prefix() {
+    .navbar.universal-nav .mobile-nav-toggle {
+        appearance: none !important;  /* Standard property */
+        -moz-appearance: none !important;  /* Vendor prefix */
+    }
+}
+
+/* ============================================
+   PRINT STYLES - FROM FIXES
+   ============================================ */
+
+@media print {
+    .navbar.universal-nav .mobile-nav-toggle,
+    .navbar.universal-nav .nav-menu {
+        display: none !important;
+    }
+}
