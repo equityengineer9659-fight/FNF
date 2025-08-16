@@ -482,3 +482,82 @@ section {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ============================================
+   14. ENHANCED IMPACT NUMBERS SECTION
+   ============================================ */
+
+/* Dark background for impact section */
+.impact-numbers-dark {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    padding: 4rem 2rem !important;
+}
+
+/* Enhanced stat card styling */
+.impact-numbers-dark .stat-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-align: center;
+    padding: 2rem 1rem !important;
+}
+
+/* Number wrapper to keep number and suffix together */
+.stat-number-wrapper {
+    display: block;
+    margin-bottom: 1rem;
+    line-height: 1;
+}
+
+/* Larger, blue numbers */
+.impact-numbers-dark .stat-number {
+    font-size: 4rem !important;
+    font-weight: 700 !important;
+    color: #0176d3 !important;
+    line-height: 1 !important;
+    display: inline !important;
+}
+
+/* Suffix styling */
+.impact-numbers-dark .stat-suffix {
+    font-size: 4rem !important;
+    font-weight: 700 !important;
+    color: #0176d3 !important;
+    line-height: 1 !important;
+    display: inline !important;
+}
+
+/* Stat labels - smaller, gray text */
+.impact-numbers-dark .stat-label {
+    font-size: 0.9rem !important;
+    color: #999999 !important;
+    font-weight: 400 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    display: block;
+    line-height: 1.4;
+}
+
+/* Remove hover effects for cleaner look */
+.impact-numbers-dark .stat-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure proper spacing between cards */
+.impact-numbers-dark .slds-grid {
+    align-items: stretch;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .impact-numbers-dark .stat-number,
+    .impact-numbers-dark .stat-suffix {
+        font-size: 3rem !important;
+    }
+    
+    .impact-numbers-dark {
+        padding: 3rem 1rem !important;
+    }
+}
