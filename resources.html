@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Access expert guidance, tools, and funding opportunities for digital transformation of food banks and pantries. Blog posts, implementation guides, and grant tips.">
+    <meta name="keywords" content="food bank resources, nonprofit digital transformation, implementation guides, grant funding, food pantry best practices">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Resources & Insights - Food-N-Force">
+    <meta property="og:description" content="Expert guidance, tools, and funding opportunities to accelerate your digital transformation.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/resources.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Resources & Insights - Food-N-Force">
+    
+    <title>Resources & Insights - Food-N-Force</title>
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Salesforce Lightning Design System CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="navigation.js" as="script">
+    
+    <!-- Add smooth loading transition -->
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        body.loaded {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation Header -->
+    <header class="custom-nav" role="banner">
+        <div class="slds-container_fluid">
+            <!-- Top row with logo, centered company name, and navigation -->
+            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small">
+                <!-- Brand Logo - Left -->
+                <div class="slds-col slds-no-flex">
+                    <a href="index.html" aria-label="Food-N-Force Home" class="brand-logo-link">
+                        <div class="brand-logo-container">
+                            <div class="brand-logo-inner">
+                                <span class="brand-logo-text">F-n-F</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Centered Company Name -->
+                <div class="slds-col slds-text-align_center company-name-container">
+                    <h1 class="brand-logo">Food-N-Force</h1>
+                </div>
+                
+                <!-- Mobile Navigation Toggle - Right -->
+                <div class="slds-col slds-no-flex slds-hide slds-show_small">
+                    <button 
+                        class="mobile-nav-toggle" 
+                        aria-label="Toggle navigation menu" 
+                        aria-expanded="false"
+                        aria-controls="main-nav"
+                    >
+                        <span class="hamburger-icon">☰</span>
+                    </button>
+                </div>
+                
+                <!-- Spacer for desktop -->
+                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
+                    <!-- Balances the logo -->
+                </div>
+            </div>
+            
+            <!-- Navigation Menu - Centered Below Company Name -->
+            <div class="slds-grid slds-grid_align-center slds-p-top_small">
+                <div class="slds-col">
+                    <nav class="slds-text-align_center" role="navigation" aria-label="Main navigation">
+                        <ul class="slds-nav-horizontal" id="main-nav">
+                            <li class="slds-nav-horizontal__item">
+                                <a href="index.html">Home</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="services.html">Services</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item slds-is-active">
+                                <a href="resources.html" aria-current="page">Resources</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="impact.html">Impact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="contact.html">Contact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="about.html">About Us</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Resources Section -->
+        <section class="section-padding slds-p-horizontal_large resources-section" aria-labelledby="resources-heading">
+            <div class="slds-container_large slds-container_center">
+                <div class="slds-text-align_center slds-m-bottom_x-large">
+                    <h2 id="resources-heading" class="slds-text-heading_large slds-m-bottom_medium">Resources & Insights</h2>
+                    <p class="slds-text-body_regular slds-text-color_weak">
+                        Expert guidance, tools, and funding opportunities to accelerate your digital transformation
+                    </p>
+                </div>
+                
+                <!-- Featured Resources -->
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_x-large">
+                    <!-- Resource 1 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon" aria-hidden="true">
+                                <span>📝</span>
+                            </div>
+                            <h3 class="resource-title">Blog & Thought Leadership</h3>
+                            <p class="resource-description">
+                                Digital trends in nonprofit logistics, best practices, and case studies from the hunger relief sector.
+                            </p>
+                            <a href="#blog" class="slds-button slds-button_outline-brand slds-m-top_small">
+                                Read Articles
+                            </a>
+                        </article>
+                    </div>
+                    
+                    <!-- Resource 2 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon" aria-hidden="true">
+                                <span>🛠️</span>
+                            </div>
+                            <h3 class="resource-title">Implementation Guides</h3>
+                            <p class="resource-description">
+                                "Top 5 Tools for Food Bank Operations" and other practical guides for digital transformation success.
+                            </p>
+                            <a href="#guides" class="slds-button slds-button_outline-brand slds-m-top_small">
+                                View Guides
+                            </a>
+                        </article>
+                    </div>
+                    
+                    <!-- Resource 3 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon" aria-hidden="true">
+                                <span>💰</span>
+                            </div>
+                            <h3 class="resource-title">Grants & Funding Tips</h3>
+                            <p class="resource-description">
+                                Strategic guidance on securing funding for technology upgrades and digital transformation initiatives.
+                            </p>
+                            <a href="#funding" class="slds-button slds-button_outline-brand slds-m-top_small">
+                                Funding Resources
+                            </a>
+                        </article>
+                    </div>
+                    
+                    <!-- Resource 4 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon" aria-hidden="true">
+                                <span>📊</span>
+                            </div>
+                            <h3 class="resource-title">Templates & Tools</h3>
+                            <p class="resource-description">
+                                Free downloadable templates for inventory tracking, volunteer management, and impact reporting.
+                            </p>
+                            <a href="#templates" class="slds-button slds-button_outline-brand slds-m-top_small">
+                                Download Templates
+                            </a>
+                        </article>
+                    </div>
+                    
+                    <!-- Resource 5 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon" aria-hidden="true">
+                                <span>🎥</span>
+                            </div>
+                            <h3 class="resource-title">Webinars & Training</h3>
+                            <p class="resource-description">
+                                Monthly webinars on digital transformation topics specifically for food relief organizations.
+                            </p>
+                            <a href="#webinars" class="slds-button slds-button_outline-brand slds-m-top_small">
+                                Watch Webinars
+                            </a>
+                        </article>
+                    </div>
+                    
+                    <!-- Resource 6 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon" aria-hidden="true">
+                                <span>📚</span>
+                            </div>
+                            <h3 class="resource-title">Case Studies</h3>
+                            <p class="resource-description">
+                                In-depth success stories showcasing real transformations and measurable outcomes.
+                            </p>
+                            <a href="#case-studies" class="slds-button slds-button_outline-brand slds-m-top_small">
+                                Read Case Studies
+                            </a>
+                        </article>
+                    </div>
+                </div>
+                
+                <!-- Featured Content Section -->
+                <div class="slds-m-bottom_x-large">
+                    <h3 class="slds-text-heading_medium slds-text-align_center slds-m-bottom_large">Featured Content</h3>
+                    
+                    <!-- Recent Blog Posts -->
+                    <div class="slds-box slds-m-bottom_medium" id="blog">
+                        <h4 class="slds-text-heading_small slds-m-bottom_medium">Recent Blog Posts</h4>
+                        <ul class="slds-list_dotted">
+                            <li class="slds-m-bottom_small">
+                                <a href="#" class="slds-text-link">5 Signs Your Food Pantry is Ready for Digital Transformation</a>
+                                <span class="slds-text-body_small slds-text-color_weak"> - March 2024</span>
+                            </li>
+                            <li class="slds-m-bottom_small">
+                                <a href="#" class="slds-text-link">How to Choose the Right Technology Stack for Your Food Bank</a>
+                                <span class="slds-text-body_small slds-text-color_weak"> - February 2024</span>
+                            </li>
+                            <li class="slds-m-bottom_small">
+                                <a href="#" class="slds-text-link">Maximizing Volunteer Engagement with Digital Tools</a>
+                                <span class="slds-text-body_small slds-text-color_weak"> - January 2024</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Popular Downloads -->
+                    <div class="slds-box slds-m-bottom_medium" id="templates">
+                        <h4 class="slds-text-heading_small slds-m-bottom_medium">Popular Downloads</h4>
+                        <ul class="slds-list_dotted">
+                            <li class="slds-m-bottom_small">
+                                <a href="#" class="slds-text-link">Food Bank Digital Readiness Assessment (PDF)</a>
+                                <span class="slds-badge slds-badge_lightest slds-m-left_x-small">Free</span>
+                            </li>
+                            <li class="slds-m-bottom_small">
+                                <a href="#" class="slds-text-link">Inventory Management Template (Excel)</a>
+                                <span class="slds-badge slds-badge_lightest slds-m-left_x-small">Free</span>
+                            </li>
+                            <li class="slds-m-bottom_small">
+                                <a href="#" class="slds-text-link">Grant Application Toolkit</a>
+                                <span class="slds-badge slds-badge_lightest slds-m-left_x-small">Free</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Newsletter Signup -->
+                <div class="slds-text-align_center slds-p-around_large" style="background-color: var(--bg-light); border-radius: var(--border-radius-medium);">
+                    <h3 class="slds-text-heading_medium slds-m-bottom_medium">Stay Updated</h3>
+                    <p class="slds-text-body_regular slds-m-bottom_large">
+                        Get the latest resources, tips, and insights delivered to your inbox monthly.
+                    </p>
+                    <form class="slds-form slds-form_inline slds-align_absolute-center">
+                        <div class="slds-form-element slds-m-right_small">
+                            <label class="slds-form-element__label slds-assistive-text" for="newsletter-email">Email Address</label>
+                            <div class="slds-form-element__control">
+                                <input type="email" id="newsletter-email" class="slds-input" placeholder="Your email address" style="min-width: 250px;" />
+                            </div>
+                        </div>
+                        <button type="submit" class="slds-button slds-button_brand">Subscribe</button>
+                    </form>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="slds-text-align_center slds-m-top_x-large">
+                    <h3 class="slds-text-heading_medium slds-m-bottom_medium">Need Personalized Guidance?</h3>
+                    <p class="slds-text-body_regular slds-m-bottom_large">
+                        Our experts are ready to help you navigate your digital transformation journey.
+                    </p>
+                    <a href="contact.html" class="slds-button slds-button_brand">
+                        Schedule a Consultation
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="navigation.js"></script>
+    
+    <!-- Page load complete -->
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>

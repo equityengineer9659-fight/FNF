@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Food-N-Force offers comprehensive digital transformation services for food banks and pantries including Salesforce implementation, inventory management, and workflow automation.">
+    <meta name="keywords" content="food bank services, nonprofit technology consulting, Salesforce for nonprofits, inventory management, workflow automation">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Our Services - Food-N-Force">
+    <meta property="og:description" content="Digital transformation solutions designed specifically for food pantries and food banks.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/services.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Our Services - Food-N-Force">
+    
+    <title>Our Services - Food-N-Force</title>
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Salesforce Lightning Design System CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="navigation.js" as="script">
+    
+    <!-- Add smooth loading transition -->
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        body.loaded {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation Header -->
+    <header class="custom-nav" role="banner">
+        <div class="slds-container_fluid">
+            <!-- Top row with logo, centered company name, and navigation -->
+            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small">
+                <!-- Brand Logo - Left -->
+                <div class="slds-col slds-no-flex">
+                    <a href="index.html" aria-label="Food-N-Force Home" class="brand-logo-link">
+                        <div class="brand-logo-container">
+                            <div class="brand-logo-inner">
+                                <span class="brand-logo-text">F-n-F</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- Centered Company Name -->
+                <div class="slds-col slds-text-align_center company-name-container">
+                    <h1 class="brand-logo">Food-N-Force</h1>
+                </div>
+                
+                <!-- Mobile Navigation Toggle - Right -->
+                <div class="slds-col slds-no-flex slds-hide slds-show_small">
+                    <button 
+                        class="mobile-nav-toggle" 
+                        aria-label="Toggle navigation menu" 
+                        aria-expanded="false"
+                        aria-controls="main-nav"
+                    >
+                        <span class="hamburger-icon">☰</span>
+                    </button>
+                </div>
+                
+                <!-- Spacer for desktop -->
+                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
+                    <!-- Balances the logo -->
+                </div>
+            </div>
+            
+            <!-- Navigation Menu - Centered Below Company Name -->
+            <div class="slds-grid slds-grid_align-center slds-p-top_small">
+                <div class="slds-col">
+                    <nav class="slds-text-align_center" role="navigation" aria-label="Main navigation">
+                        <ul class="slds-nav-horizontal" id="main-nav">
+                            <li class="slds-nav-horizontal__item">
+                                <a href="index.html">Home</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item slds-is-active">
+                                <a href="services.html" aria-current="page">Services</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="resources.html">Resources</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="impact.html">Impact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="contact.html">Contact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="about.html">About Us</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Services Section -->
+        <section class="section-padding slds-p-horizontal_large services-section" aria-labelledby="services-heading">
+            <div class="slds-container_large slds-container_center">
+                <div class="slds-text-align_center slds-m-bottom_x-large">
+                    <h2 id="services-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Services</h2>
+                    <p class="slds-text-body_regular slds-text-color_weak">
+                        Comprehensive digital transformation solutions designed specifically for food pantries and food banks
+                    </p>
+                </div>
+                
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Service 1 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="service-card">
+                            <div class="service-icon" aria-hidden="true">
+                                <span>🗺️</span>
+                            </div>
+                            <h3 class="service-title">Digital Strategy & Roadmapping</h3>
+                            <p class="service-description">
+                                Custom digital transformation plans that align technology investments with your mission and budget.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Service 2 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="service-card">
+                            <div class="service-icon" aria-hidden="true">
+                                <span>📦</span>
+                            </div>
+                            <h3 class="service-title">Inventory & Client Management</h3>
+                            <p class="service-description">
+                                Streamlined systems to track food inventory, manage client relationships, and optimize distribution.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Service 3 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="service-card">
+                            <div class="service-icon" aria-hidden="true">
+                                <span>⚡</span>
+                            </div>
+                            <h3 class="service-title">Workflow Automation</h3>
+                            <p class="service-description">
+                                Automated processes that reduce manual work and help your team focus on serving families.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Service 4 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="service-card">
+                            <div class="service-icon" aria-hidden="true">
+                                <span>📊</span>
+                            </div>
+                            <h3 class="service-title">Data Analytics & Reporting</h3>
+                            <p class="service-description">
+                                Powerful dashboards that turn your data into actionable insights for better decision-making.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Service 5 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="service-card">
+                            <div class="service-icon" aria-hidden="true">
+                                <span>🤝</span>
+                            </div>
+                            <h3 class="service-title">Community Engagement Tools</h3>
+                            <p class="service-description">
+                                SMS, email, and digital platforms that strengthen connections with clients and volunteers.
+                            </p>
+                        </article>
+                    </div>
+                    
+                    <!-- Service 6 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="service-card">
+                            <div class="service-icon" aria-hidden="true">
+                                <span>🎓</span>
+                            </div>
+                            <h3 class="service-title">Staff Training & Support</h3>
+                            <p class="service-description">
+                                Comprehensive training programs to ensure your team maximizes the value of new technologies.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="slds-text-align_center slds-m-top_x-large">
+                    <h3 class="slds-text-heading_medium slds-m-bottom_medium">Ready to Transform Your Operations?</h3>
+                    <p class="slds-text-body_regular slds-m-bottom_large">
+                        Let's discuss how Food-N-Force can help your organization serve more families with greater efficiency.
+                    </p>
+                    <a href="contact.html" class="slds-button slds-button_brand">
+                        Schedule a Free Consultation
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="navigation.js"></script>
+    
+    <!-- Page load complete -->
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>
