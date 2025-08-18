@@ -1,0 +1,562 @@
+/**
+ * Food-N-Force Responsive Design Enhancements
+ * SLDS-Compliant Breakpoint System
+ * Version 1.0 - Optimized for Performance and Accessibility
+ */
+
+/* ============================================
+   SLDS RESPONSIVE BREAKPOINT SYSTEM
+   ============================================ */
+
+:root {
+    /* SLDS Standard Breakpoints */
+    --slds-breakpoint-x-small: 20rem;    /* 320px */
+    --slds-breakpoint-small: 30rem;      /* 480px */
+    --slds-breakpoint-medium: 48rem;     /* 768px */
+    --slds-breakpoint-large: 64rem;      /* 1024px */
+    --slds-breakpoint-x-large: 80rem;    /* 1280px */
+    --slds-breakpoint-max: 90rem;        /* 1440px */
+    
+    /* Touch Target Standards */
+    --slds-touch-target-min: 44px;
+    --slds-touch-target-comfortable: 48px;
+    
+    /* Responsive Typography Scale */
+    --font-scale-mobile: 0.9;
+    --font-scale-tablet: 1.0;
+    --font-scale-desktop: 1.1;
+    --font-scale-wide: 1.2;
+}
+
+/* ============================================
+   MOBILE FIRST RESPONSIVE DESIGN
+   ============================================ */
+
+/* Extra Small: Mobile Portrait (320px - 479px) */
+@media (max-width: 29.9375rem) {
+    :root {
+        --current-font-scale: var(--font-scale-mobile);
+    }
+    
+    /* Hero Section Mobile */
+    .hero-title {
+        font-size: calc(var(--slds-c-font-size-7) * var(--font-scale-mobile)) !important;
+        line-height: 1.2;
+        text-align: center;
+    }
+    
+    .hero-subtitle {
+        font-size: var(--slds-c-font-size-3) !important;
+        line-height: 1.4;
+        text-align: center;
+    }
+    
+    /* Touch Targets */
+    .slds-button,
+    .cta-primary,
+    .cta-secondary {
+        min-height: var(--slds-touch-target-comfortable);
+        min-width: var(--slds-touch-target-comfortable);
+        padding: var(--slds-c-spacing-medium) var(--slds-c-spacing-large);
+    }
+    
+    /* Navigation Logo */
+    .navbar.universal-nav .fnf-logo-image {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    
+    /* Hero Logo */
+    .hero-logo-large,
+    .slds-brand_large .slds-brand__logo-image {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    /* Container Spacing */
+    .slds-container_large {
+        padding-left: var(--slds-c-spacing-medium);
+        padding-right: var(--slds-c-spacing-medium);
+    }
+}
+
+/* Small: Mobile Landscape (480px - 767px) */
+@media (min-width: 30rem) and (max-width: 47.9375rem) {
+    .hero-title {
+        font-size: calc(var(--slds-c-font-size-8) * var(--font-scale-mobile)) !important;
+    }
+    
+    .hero-subtitle {
+        font-size: var(--slds-c-font-size-4) !important;
+    }
+    
+    /* Logo sizing for mobile landscape */
+    .navbar.universal-nav .fnf-logo-image {
+        width: 36px !important;
+        height: 36px !important;
+    }
+    
+    .hero-logo-large,
+    .slds-brand_large .slds-brand__logo-image {
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+/* Medium: Tablet (768px - 1023px) */
+@media (min-width: 48rem) and (max-width: 63.9375rem) {
+    :root {
+        --current-font-scale: var(--font-scale-tablet);
+    }
+    
+    .hero-title {
+        font-size: calc(var(--slds-c-font-size-9) * var(--font-scale-tablet)) !important;
+    }
+    
+    .hero-subtitle {
+        font-size: var(--slds-c-font-size-5) !important;
+    }
+    
+    /* Logo sizing for tablet */
+    .navbar.universal-nav .fnf-logo-image {
+        width: 44px !important;
+        height: 44px !important;
+    }
+    
+    .hero-logo-large,
+    .slds-brand_large .slds-brand__logo-image {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    /* Container spacing */
+    .slds-container_large {
+        padding-left: var(--slds-c-spacing-x-large);
+        padding-right: var(--slds-c-spacing-x-large);
+    }
+}
+
+/* Large: Desktop (1024px - 1279px) */
+@media (min-width: 64rem) and (max-width: 79.9375rem) {
+    :root {
+        --current-font-scale: var(--font-scale-desktop);
+    }
+    
+    .hero-title {
+        font-size: calc(var(--slds-c-font-size-10) * var(--font-scale-desktop)) !important;
+    }
+    
+    /* Logo sizing for desktop */
+    .navbar.universal-nav .fnf-logo-image {
+        width: 48px !important;
+        height: 48px !important;
+    }
+    
+    .hero-logo-large,
+    .slds-brand_large .slds-brand__logo-image {
+        width: 80px !important;
+        height: 80px !important;
+    }
+}
+
+/* Extra Large: Wide Desktop (1280px+) */
+@media (min-width: 80rem) {
+    :root {
+        --current-font-scale: var(--font-scale-wide);
+    }
+    
+    .hero-title {
+        font-size: calc(var(--slds-c-font-size-11) * var(--font-scale-wide)) !important;
+    }
+    
+    /* Container max-width */
+    .slds-container_large {
+        max-width: var(--slds-breakpoint-max);
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* Enhanced effects for wide screens */
+    .hero-section::after {
+        opacity: 0.15;
+    }
+    
+    .impact-numbers-dark::before {
+        opacity: 0.12;
+    }
+}
+
+/* ============================================
+   GRID SYSTEM RESPONSIVE ENHANCEMENTS
+   ============================================ */
+
+/* Mobile: Single Column Layout */
+@media (max-width: 47.9375rem) {
+    .slds-grid.slds-wrap.slds-gutters_large {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: var(--slds-c-spacing-x-large) !important;
+        align-items: stretch;
+        justify-items: center;
+    }
+    
+    /* Exception: Stats grid 2x2 on mobile */
+    body.index-page .impact-numbers-dark .slds-grid.slds-wrap.slds-gutters_large {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--slds-c-spacing-large) !important;
+    }
+    
+    /* Hero CTA Mobile Layout */
+    .hero-cta-group {
+        flex-direction: column !important;
+        gap: var(--slds-c-spacing-large) !important;
+        align-items: center !important;
+        width: 100%;
+    }
+    
+    .cta-primary,
+    .cta-secondary {
+        width: 100% !important;
+        max-width: 280px !important;
+    }
+}
+
+/* Tablet: 2-Column Layout */
+@media (min-width: 48rem) and (max-width: 63.9375rem) {
+    .slds-grid.slds-wrap.slds-gutters_large {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--slds-c-spacing-x-large) !important;
+        align-items: stretch;
+    }
+    
+    /* Stats remain 4-column on tablet */
+    body.index-page .impact-numbers-dark .slds-grid.slds-wrap.slds-gutters_large {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+/* Desktop: Full Grid Layout */
+@media (min-width: 64rem) {
+    .slds-grid.slds-wrap.slds-gutters_large {
+        display: grid !important;
+        gap: var(--slds-c-spacing-xx-large) !important;
+        align-items: stretch;
+    }
+    
+    /* 3-column default for desktop */
+    .focus-areas .slds-grid.slds-wrap.slds-gutters_large,
+    .measurable-growth .slds-grid.slds-wrap.slds-gutters_large {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+    
+    /* 4-column for stats */
+    body.index-page .impact-numbers-dark .slds-grid.slds-wrap.slds-gutters_large {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+    
+    /* Services page 3-column layout */
+    .services-page .slds-grid.slds-gutters_large {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+    
+    /* Resources page 3-column layout */
+    .resources-page .slds-grid.slds-gutters_large {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+    
+    /* About page values: 4-column */
+    .about-page .values-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+    
+    /* About page expertise: 4-column */
+    .about-page .expertise-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+/* ============================================
+   CARD SYSTEM RESPONSIVE BEHAVIOR
+   ============================================ */
+
+.focus-area-card,
+.service-card,
+.resource-card,
+.measurable-card,
+.value-card,
+.impact-card,
+.expertise-card,
+.testimonial-card {
+    transition: transform var(--slds-c-transition-medium) var(--fnf-easing-standard),
+                box-shadow var(--slds-c-transition-medium) var(--fnf-easing-standard);
+    contain: layout style;
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (max-width: 47.9375rem) {
+    .focus-area-card,
+    .service-card,
+    .resource-card,
+    .measurable-card,
+    .value-card,
+    .impact-card,
+    .expertise-card,
+    .testimonial-card {
+        min-height: 180px !important;
+        padding: var(--slds-c-spacing-x-large) !important;
+        margin-bottom: var(--slds-c-spacing-large) !important;
+    }
+}
+
+@media (min-width: 48rem) {
+    .focus-area-card:hover,
+    .service-card:hover,
+    .resource-card:hover,
+    .measurable-card:hover,
+    .value-card:hover,
+    .impact-card:hover,
+    .expertise-card:hover,
+    .testimonial-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--slds-c-elevation-shadow-3);
+    }
+}
+
+/* ============================================
+   FORM RESPONSIVE BEHAVIOR
+   ============================================ */
+
+@media (max-width: 47.9375rem) {
+    .slds-form-element {
+        margin-bottom: var(--slds-c-spacing-large);
+    }
+    
+    .slds-input,
+    .slds-textarea,
+    .slds-select {
+        min-height: var(--slds-touch-target-comfortable);
+        font-size: var(--slds-c-font-size-3);
+        padding: var(--slds-c-spacing-medium);
+    }
+    
+    .newsletter-form {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: var(--slds-c-spacing-large) !important;
+    }
+    
+    .newsletter-form .slds-form-element {
+        width: 100% !important;
+    }
+    
+    .newsletter-form .slds-button {
+        min-height: var(--slds-touch-target-comfortable);
+        width: 100%;
+    }
+}
+
+/* ============================================
+   NAVIGATION RESPONSIVE BEHAVIOR
+   ============================================ */
+
+@media (max-width: 47.9375rem) {
+    /* Mobile navigation improvements already handled in navigation-styles.css */
+    .navbar .slds-global-header__logo {
+        margin-right: auto;
+    }
+    
+    /* Ensure hamburger button meets touch target requirements */
+    .mobile-menu-toggle {
+        min-height: var(--slds-touch-target-comfortable);
+        min-width: var(--slds-touch-target-comfortable);
+    }
+}
+
+/* ============================================
+   FOOTER RESPONSIVE BEHAVIOR
+   ============================================ */
+
+@media (max-width: 47.9375rem) {
+    .custom-footer {
+        padding: var(--slds-c-spacing-x-large) var(--slds-c-spacing-medium) !important;
+        text-align: center;
+    }
+    
+    .footer-logo,
+    .slds-brand_small .slds-brand__logo-image {
+        width: 28px !important;
+        height: 28px !important;
+    }
+    
+    .slds-brand__text {
+        font-size: var(--slds-c-font-size-2) !important;
+    }
+}
+
+@media (min-width: 48rem) {
+    .custom-footer {
+        padding: var(--slds-c-spacing-xx-large) !important;
+    }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 47.9375rem) {
+    /* Reduce animations for mobile performance */
+    * {
+        animation-duration: 0.2s !important;
+        transition-duration: 0.2s !important;
+    }
+    
+    /* Hide performance-heavy effects on mobile */
+    .fnf-particle,
+    .fnf-iridescent-background {
+        display: none !important;
+    }
+    
+    /* Simplify backgrounds */
+    .hero-section::after {
+        opacity: 0.05 !important;
+    }
+    
+    .impact-numbers-dark::before {
+        opacity: 0.02 !important;
+    }
+    
+    /* Optimize stat cards */
+    .stat-card {
+        backdrop-filter: none !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        contain: layout style;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.1s !important;
+        transition-duration: 0.1s !important;
+    }
+    
+    .focus-area-card:hover,
+    .service-card:hover,
+    .resource-card:hover,
+    .measurable-card:hover,
+    .value-card:hover,
+    .impact-card:hover,
+    .expertise-card:hover,
+    .testimonial-card:hover {
+        transform: none !important;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .focus-area-card,
+    .service-card,
+    .resource-card,
+    .measurable-card,
+    .value-card,
+    .impact-card,
+    .expertise-card,
+    .testimonial-card {
+        border: 2px solid currentColor;
+    }
+    
+    .fnf-particle,
+    .fnf-iridescent-background {
+        display: none !important;
+    }
+}
+
+/* Focus Visible Support */
+@supports selector(:focus-visible) {
+    .slds-button:focus-visible {
+        outline: 2px solid var(--slds-c-brand-accessible);
+        outline-offset: 2px;
+    }
+}
+
+/* ============================================
+   SECTION-SPECIFIC RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 47.9375rem) {
+    /* Section padding mobile */
+    .section-padding,
+    .slds-p-vertical_x-large {
+        padding: var(--slds-c-spacing-xx-large) var(--slds-c-spacing-large) !important;
+    }
+    
+    /* Mission section mobile */
+    .mission-section .slds-container_large {
+        max-width: 600px !important;
+        margin: 0 auto;
+    }
+    
+    /* Section dividers */
+    .fnf-section-divider {
+        margin: var(--slds-c-spacing-large) 0 !important;
+        height: 2px;
+    }
+    
+    /* About page specific */
+    body.about-page section {
+        padding-top: var(--slds-c-spacing-xx-large) !important;
+        padding-bottom: var(--slds-c-spacing-xx-large) !important;
+    }
+    
+    /* Impact page stats */
+    body.impact-page .stats-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--slds-c-spacing-x-large) !important;
+    }
+}
+
+/* ============================================
+   CONTAINER SYSTEM OPTIMIZATION
+   ============================================ */
+
+@media (max-width: 47.9375rem) {
+    .slds-container_large {
+        max-width: 100% !important;
+        padding-left: var(--slds-c-spacing-large) !important;
+        padding-right: var(--slds-c-spacing-large) !important;
+    }
+    
+    /* Centered mobile containers for specific sections */
+    body.index-page section:nth-of-type(2) .slds-grid,
+    body.index-page section:nth-of-type(3) .slds-grid {
+        max-width: 400px !important;
+        margin: 0 auto !important;
+    }
+}
+
+@media (min-width: 48rem) and (max-width: 63.9375rem) {
+    .slds-container_large {
+        max-width: 740px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 64rem) and (max-width: 79.9375rem) {
+    .slds-container_large {
+        max-width: 960px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 80rem) {
+    .slds-container_large {
+        max-width: var(--slds-breakpoint-max);
+        margin: 0 auto;
+    }
+}

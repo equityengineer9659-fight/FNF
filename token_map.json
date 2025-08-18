@@ -1,0 +1,373 @@
+{
+  "index_page": {
+    "spacing": {
+      "violations": [
+        "Line 121: padding: 1rem 0; - Should use --slds-c-spacing-large 0",
+        "Line 198: style='color: #ffffff;' - Should use --slds-c-text-inverse",
+        "Hard-coded 1rem, 2rem, 4rem values throughout sections - Should use SLDS spacing tokens"
+      ],
+      "mappings": {
+        "padding: 1rem": "slds-p-around_large",
+        "padding: 2rem": "slds-p-around_x-large", 
+        "padding: 4rem": "slds-p-around_xx-large",
+        "margin: 1rem": "slds-m-around_large",
+        "margin: 1.5rem": "slds-m-around_x-large",
+        "gap: 2rem": "slds-gutters_x-large"
+      }
+    },
+    "color": {
+      "violations": [
+        "Line 198: style='color: #ffffff;' - Inline style should use utility class",
+        "Background gradients using hard-coded hex values",
+        "Custom color #00d4ff not from SLDS palette"
+      ],
+      "mappings": {
+        "#ffffff": "--slds-c-text-inverse",
+        "#181818": "--slds-c-text-default", 
+        "#706e6b": "--slds-c-text-weak",
+        "#16325C": "--slds-c-brand-primary",
+        "#0176d3": "--slds-c-brand-secondary",
+        "color: #ffffff": "slds-text-color_inverse"
+      }
+    },
+    "typography": {
+      "violations": [
+        "Multiple custom font-size declarations not using SLDS scale",
+        "font-size: 3rem - Should use --slds-c-font-size-11",
+        "font-size: 2.8rem - Should use --slds-c-font-size-10"
+      ],
+      "mappings": {
+        "font-size: 3rem": "slds-text-heading_hero",
+        "font-size: 2.8rem": "slds-text-heading_hero",
+        "font-size: 1.75rem": "slds-text-heading_large",
+        "font-size: 1.5rem": "slds-text-heading_medium",
+        "font-size: 1.25rem": "slds-text-heading_small"
+      }
+    },
+    "radius": {
+      "violations": [
+        "border-radius: 12px - Should use SLDS radius tokens",
+        "border-radius: 8px - Should use SLDS radius tokens", 
+        "Custom radius values not aligned with SLDS system"
+      ],
+      "mappings": {
+        "border-radius: 8px": "--slds-c-border-radius-large",
+        "border-radius: 12px": "--slds-c-border-radius-large",
+        "border-radius: 4px": "--slds-c-border-radius-medium"
+      }
+    }
+  },
+  "about_page": {
+    "spacing": {
+      "violations": [
+        "Hard-coded 4rem spacing - Should use --slds-c-spacing-xx-large",
+        "Line 136: padding-top: 4rem !important - Should use slds-p-top_xx-large",
+        "Multiple sections using inconsistent spacing patterns"
+      ],
+      "mappings": {
+        "padding: 4rem": "slds-p-around_xx-large",
+        "padding-top: 4rem": "slds-p-top_xx-large",
+        "padding-bottom: 4rem": "slds-p-bottom_xx-large",
+        "gap: 2rem": "slds-gutters_x-large"
+      }
+    },
+    "color": {
+      "violations": [
+        "Background gradient using hard-coded colors",
+        "color: #ffffff !important - Should use utility class"
+      ],
+      "mappings": {
+        "color: #ffffff": "slds-text-color_inverse",
+        "background gradient": "Should use SLDS background utilities"
+      }
+    },
+    "typography": {
+      "violations": [
+        "Custom font sizing not following SLDS scale"
+      ],
+      "mappings": {
+        "Custom heading sizes": "Should use slds-text-heading_* classes"
+      }
+    },
+    "radius": {
+      "violations": [
+        "Custom border-radius values"
+      ],
+      "mappings": {
+        "Custom radius": "Should use --slds-c-border-radius-* tokens"
+      }
+    }
+  },
+  "services_page": {
+    "spacing": {
+      "violations": [
+        "Inconsistent card padding using custom values",
+        "Hard-coded margin values"
+      ],
+      "mappings": {
+        "Custom padding": "Should use slds-p-around_* classes",
+        "Custom margins": "Should use slds-m-around_* classes"
+      }
+    },
+    "color": {
+      "violations": [
+        "Custom icon colors not from SLDS palette"
+      ],
+      "mappings": {
+        "Custom colors": "Should use SLDS color tokens"
+      }
+    },
+    "typography": {
+      "violations": [
+        "Service card text sizing not using SLDS scale"
+      ],
+      "mappings": {
+        "Custom font sizes": "Should use slds-text-* classes"
+      }
+    },
+    "radius": {
+      "violations": [
+        "Card border-radius not using SLDS tokens"
+      ],
+      "mappings": {
+        "Custom radius": "Should use SLDS radius tokens"
+      }
+    }
+  },
+  "contact_page": {
+    "spacing": {
+      "violations": [
+        "Form spacing using custom values",
+        "Inline style padding and margins"
+      ],
+      "mappings": {
+        "Custom form spacing": "Should use slds-form-element spacing",
+        "Padding/margins": "Should use SLDS spacing utilities"
+      }
+    },
+    "color": {
+      "violations": [
+        "Inline color styles in headings",
+        "Hard-coded background colors"
+      ],
+      "mappings": {
+        "style='color: #ffffff'": "slds-text-color_inverse",
+        "style='color: #ccc'": "slds-text-color_weak"
+      }
+    },
+    "typography": {
+      "violations": [
+        "Custom heading font sizes"
+      ],
+      "mappings": {
+        "Custom sizes": "Should use slds-text-heading_* classes"
+      }
+    },
+    "radius": {
+      "violations": [
+        "Form element custom border-radius"
+      ],
+      "mappings": {
+        "Custom radius": "Should use SLDS form element radius"
+      }
+    }
+  },
+  "resources_page": {
+    "spacing": {
+      "violations": [
+        "Resource card spacing inconsistencies",
+        "Custom gap values"
+      ],
+      "mappings": {
+        "Custom spacing": "Should use SLDS spacing system"
+      }
+    },
+    "color": {
+      "violations": [
+        "Resource icon colors not standardized"
+      ],
+      "mappings": {
+        "Custom colors": "Should use SLDS brand colors"
+      }
+    },
+    "typography": {
+      "violations": [
+        "Resource card text not using SLDS scale"
+      ],
+      "mappings": {
+        "Custom fonts": "Should use SLDS text utilities"
+      }
+    },
+    "radius": {
+      "violations": [
+        "Resource card radius not standardized"
+      ],
+      "mappings": {
+        "Custom radius": "Should use SLDS radius system"
+      }
+    }
+  },
+  "impact_page": {
+    "spacing": {
+      "violations": [
+        "Stats container custom spacing",
+        "Testimonial card inconsistent padding"
+      ],
+      "mappings": {
+        "Custom spacing": "Should use SLDS spacing utilities"
+      }
+    },
+    "color": {
+      "violations": [
+        "Stat number color using custom brand color",
+        "Background colors not from SLDS"
+      ],
+      "mappings": {
+        "slds-text-color_brand": "Should use --slds-c-brand-accessible",
+        "Custom backgrounds": "Should use SLDS background utilities"
+      }
+    },
+    "typography": {
+      "violations": [
+        "Stat numbers using custom sizing"
+      ],
+      "mappings": {
+        "Custom stat sizes": "Should use slds-text-heading_* scale"
+      }
+    },
+    "radius": {
+      "violations": [
+        "Testimonial cards custom radius"
+      ],
+      "mappings": {
+        "Custom radius": "Should use SLDS radius tokens"
+      }
+    }
+  },
+  "navigation_styles_css": {
+    "spacing": {
+      "violations": [
+        "backdrop-filter: blur(10px) - CRITICAL: Glassmorphism anti-pattern",
+        "Custom padding values throughout navigation",
+        "Hard-coded 1rem, 0.5rem spacing"
+      ],
+      "mappings": {
+        "padding: 1rem 0": "slds-p-vertical_large",
+        "padding: 0.5rem 1rem": "slds-p-around_medium",
+        "gap: 1rem": "slds-gutters_large"
+      }
+    },
+    "color": {
+      "violations": [
+        "CRITICAL: Multiple glassmorphism implementations with backdrop-filter",
+        "CRITICAL: Neumorphic shadow effects detected",
+        "Custom gradient backgrounds not from SLDS",
+        "rgba() colors instead of SLDS tokens"
+      ],
+      "mappings": {
+        "rgba(22, 50, 92, 0.95)": "Should use --slds-c-brand-primary with opacity",
+        "rgba(255, 255, 255, 0.1)": "Should use SLDS color tokens with opacity",
+        "Custom gradients": "Should be removed or use SLDS approved gradients"
+      }
+    },
+    "typography": {
+      "violations": [
+        "font-size: 2.8rem - Should use SLDS heading scale",
+        "font-size: 18px - Should use SLDS font size tokens"
+      ],
+      "mappings": {
+        "font-size: 2.8rem": "--slds-c-font-size-10",
+        "font-size: 18px": "--slds-c-font-size-4"
+      }
+    },
+    "radius": {
+      "violations": [
+        "border-radius: 12px - Should use SLDS radius tokens",
+        "border-radius: 8px - Should use SLDS radius tokens"
+      ],
+      "mappings": {
+        "border-radius: 12px": "--slds-c-border-radius-large",
+        "border-radius: 8px": "--slds-c-border-radius-medium"
+      }
+    }
+  },
+  "styles_css": {
+    "spacing": {
+      "violations": [
+        "CRITICAL: Neumorphic shadow patterns detected",
+        "calc() spacing calculations instead of SLDS tokens",
+        "Hard-coded rem values throughout"
+      ],
+      "mappings": {
+        "padding-top: calc(var(--slds-c-spacing-xx-large) * 2.25)": "Should use standard SLDS spacing",
+        "Custom calc values": "Should use predefined SLDS spacing tokens"
+      }
+    },
+    "color": {
+      "violations": [
+        "CRITICAL: Neumorphic shadow system implementation",
+        "--fnf-shadow-neumorphic definitions",
+        "Custom accent color #00d4ff not in SLDS palette",
+        "Multiple gradient implementations"
+      ],
+      "mappings": {
+        "--fnf-accent-color: #00d4ff": "Should use --slds-c-brand-accessible",
+        "Custom gradients": "Should use SLDS background utilities",
+        "Neumorphic shadows": "Should be removed entirely"
+      }
+    },
+    "typography": {
+      "violations": [
+        "Custom font-size declarations not using SLDS scale"
+      ],
+      "mappings": {
+        "Custom font sizes": "Should use --slds-c-font-size-* tokens"
+      }
+    },
+    "radius": {
+      "violations": [
+        "Custom border-radius values not using SLDS tokens"
+      ],
+      "mappings": {
+        "Custom radius": "Should use --slds-c-border-radius-* tokens"
+      }
+    }
+  },
+  "responsive_enhancements_css": {
+    "spacing": {
+      "violations": [
+        "Custom breakpoint values not aligned with SLDS",
+        "Hard-coded spacing throughout responsive rules"
+      ],
+      "mappings": {
+        "Custom breakpoints": "Should use SLDS standard breakpoints",
+        "Custom spacing": "Should use SLDS responsive spacing utilities"
+      }
+    },
+    "color": {
+      "violations": [
+        "backdrop-filter: none - Reference to glassmorphism cleanup"
+      ],
+      "mappings": {
+        "Custom responsive colors": "Should use SLDS responsive color utilities"
+      }
+    },
+    "typography": {
+      "violations": [
+        "calc() font-size calculations with custom scale",
+        "Font scaling not following SLDS responsive typography"
+      ],
+      "mappings": {
+        "Custom font scaling": "Should use SLDS responsive text utilities"
+      }
+    },
+    "radius": {
+      "violations": [
+        "Responsive radius changes not using SLDS system"
+      ],
+      "mappings": {
+        "Custom responsive radius": "Should use SLDS radius utilities"
+      }
+    }
+  }
+}

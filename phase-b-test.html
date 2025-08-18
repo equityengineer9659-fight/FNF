@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase B Test - Container & Spacing Standardization</title>
+    <link rel="stylesheet" href="css/salesforce-lightning-design-system.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="index-page">
+    <main>
+        <h1 style="text-align: center; margin: 2rem 0;">Phase B Test - Grid Layout Verification</h1>
+        
+        <!-- Test Focus Areas Layout (Section 2) -->
+        <section class="slds-p-vertical_x-large section-gray" style="margin: 2rem 0;">
+            <div class="slds-container_large slds-container_center">
+                <h2 class="slds-text-heading_large slds-text-align_center slds-m-bottom_medium">
+                    Focus Areas Test
+                </h2>
+                <div class="slds-grid slds-wrap slds-gutters_large slds-grid_align-stretch">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <div class="focus-area-card">
+                            <div class="focus-area-icon"><span>🎯</span></div>
+                            <h3>Test Card 1</h3>
+                            <p>Testing the grid layout for Focus Areas section.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <div class="focus-area-card">
+                            <div class="focus-area-icon"><span>⚡</span></div>
+                            <h3>Test Card 2</h3>
+                            <p>Verifying centering and alignment.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <div class="focus-area-card">
+                            <div class="focus-area-icon"><span>🚀</span></div>
+                            <h3>Test Card 3</h3>
+                            <p>Ensuring consistent spacing and layout.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Measurable Growth Layout (Section 3) -->
+        <section class="slds-p-vertical_x-large" style="margin: 2rem 0;">
+            <div class="slds-container_large slds-container_center">
+                <h2 class="slds-text-heading_large slds-text-align_center slds-m-bottom_medium">
+                    Measurable Growth Test
+                </h2>
+                <div class="slds-grid slds-wrap slds-gutters_large slds-grid_align-stretch">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <div class="measurable-card">
+                            <div class="measurable-icon"><span>📊</span></div>
+                            <h3>Metrics Card 1</h3>
+                            <p>Testing measurable growth card layout.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <div class="measurable-card">
+                            <div class="measurable-icon"><span>💡</span></div>
+                            <h3>Metrics Card 2</h3>
+                            <p>Verifying grid system consistency.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <div class="measurable-card">
+                            <div class="measurable-icon"><span>✨</span></div>
+                            <h3>Metrics Card 3</h3>
+                            <p>Ensuring uniform alignment across sections.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Impact Numbers Layout (Section 4) -->
+        <section class="slds-p-vertical_x-large impact-numbers-dark" style="margin: 2rem 0;">
+            <div class="slds-container_large slds-container_center">
+                <h2 class="slds-text-heading_large slds-text-align_center slds-m-bottom_x-large" style="color: #ffffff;">
+                    Impact Numbers Test
+                </h2>
+                <div class="slds-grid slds-wrap slds-gutters_large">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <div class="stat-card">
+                            <span class="stat-number">100+</span>
+                            <span class="stat-label">Test Metric 1</span>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <div class="stat-card">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">Test Metric 2</span>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <div class="stat-card">
+                            <span class="stat-number">50K</span>
+                            <span class="stat-label">Test Metric 3</span>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <div class="stat-card">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Test Metric 4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div style="margin: 2rem; padding: 2rem; background: #f3f3f3; border-radius: 8px;">
+        <h3>Phase B Test Results</h3>
+        <p><strong>Expected Behaviors:</strong></p>
+        <ul>
+            <li>All three sections should have consistent container widths</li>
+            <li>Cards should be properly centered in 3-column (sections 2&3) or 4-column (section 4) grids</li>
+            <li>Responsive breakpoints should work: 3→2→1 columns and 4→2→1 columns</li>
+            <li>Section spacing should be uniform (4rem vertical padding)</li>
+            <li>No JavaScript force-centering should be needed</li>
+        </ul>
+        <p><strong>Open browser console to verify:</strong> No force-center-fix.js errors, clean grid layout</p>
+    </div>
+</body>
+</html>

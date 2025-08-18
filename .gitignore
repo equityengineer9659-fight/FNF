@@ -1,0 +1,71 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+.cache/
+public/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test coverage
+coverage/
+.nyc_output
+*.lcov
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary folders
+tmp/
+temp/
+
+# Lighthouse reports
+lighthouse-reports/
+lighthouse-ci-reports/
+
+# Pa11y reports
+pa11y-reports/
+
+# Playwright test results
+test-results/
+playwright-report/
+
+# Browser downloads
+downloads/
+
+# Development artifacts
+.lighthouseci/
+.pa11y/

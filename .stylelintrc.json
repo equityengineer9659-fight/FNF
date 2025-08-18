@@ -1,0 +1,63 @@
+{
+  "extends": [
+    "stylelint-config-standard"
+  ],
+  "plugins": [
+    "stylelint-config-slds"
+  ],
+  "rules": {
+    "block-no-empty": true,
+    "color-no-invalid-hex": true,
+    "declaration-colon-space-after": "always",
+    "declaration-colon-space-before": "never",
+    "function-comma-space-after": "always",
+    "function-url-quotes": "always",
+    "media-feature-colon-space-after": "always",
+    "media-feature-colon-space-before": "never",
+    "media-feature-name-no-vendor-prefix": true,
+    "max-empty-lines": 2,
+    "number-leading-zero": "always",
+    "number-no-trailing-zeros": true,
+    "property-no-vendor-prefix": true,
+    "rule-empty-line-before": [
+      "always",
+      {
+        "except": ["first-nested"],
+        "ignore": ["after-comment"]
+      }
+    ],
+    "selector-list-comma-newline-after": "always",
+    "selector-no-vendor-prefix": true,
+    "string-quotes": "double",
+    "value-no-vendor-prefix": true,
+    "indentation": 2,
+    "max-nesting-depth": 3,
+    "selector-max-id": 1,
+    "selector-max-universal": 1,
+    "shorthand-property-no-redundant-values": true,
+    "property-blacklist": [],
+    "unit-blacklist": [],
+    "custom-property-pattern": "^[a-z][a-zA-Z0-9]*(-[a-z][a-zA-Z0-9]*)*$",
+    "selector-class-pattern": "^[a-z][a-zA-Z0-9]*(-[a-z][a-zA-Z0-9]*)*$",
+    "selector-id-pattern": "^[a-z][a-zA-Z0-9]*(-[a-z][a-zA-Z0-9]*)*$",
+    "comment-empty-line-before": [
+      "always",
+      {
+        "except": ["first-nested"],
+        "ignore": ["stylelint-commands"]
+      }
+    ],
+    "declaration-empty-line-before": [
+      "always",
+      {
+        "except": ["after-declaration", "first-nested"],
+        "ignore": ["after-comment", "inside-single-line-block"]
+      }
+    ]
+  },
+  "ignoreFiles": [
+    "node_modules/**/*",
+    "dist/**/*",
+    "build/**/*"
+  ]
+}

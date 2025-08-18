@@ -1,0 +1,51 @@
+{
+  "mcpServers": {
+    "browser": {
+      "command": "npx",
+      "args": ["-y", "browser-use"],
+      "env": {
+        "BROWSER_HEADLESS": "false",
+        "BROWSER_TIMEOUT": "30000",
+        "BROWSER_VIEWPORT_WIDTH": "1920",
+        "BROWSER_VIEWPORT_HEIGHT": "1080"
+      }
+    },
+    "lighthouse": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-lighthouse"],
+      "env": {
+        "LIGHTHOUSE_FLAGS": "--chrome-flags='--no-sandbox --disable-dev-shm-usage'"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-playwright"],
+      "env": {
+        "PLAYWRIGHT_BROWSERS_PATH": "0",
+        "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD": "false"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-filesystem"],
+      "env": {
+        "MCP_FILESYSTEM_ALLOWED_DIRECTORIES": "C:\\Users\\luetk\\Desktop\\Website\\Website Next Version"
+      }
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-github"],
+      "env": {
+        "GITHUB_TOKEN": "YOUR_GITHUB_TOKEN_HERE"
+      }
+    }
+  },
+  "globalShortcut": "Ctrl+Shift+Space",
+  "allowedMcpServers": [
+    "browser",
+    "lighthouse", 
+    "playwright",
+    "filesystem",
+    "github"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(start \"C:\\Users\\luetk\\Desktop\\Website\\Website Next Version\\index.html\")",
+      "Bash(start index.html)",
+      "Bash(python:*)",
+      "Bash(start http://localhost:8000)",
+      "Bash(start services.html)",
+      "Bash(claude agents remove css-js-optimizer)",
+      "WebFetch(domain:github.com)",
+      "Bash(claude agents list)",
+      "Bash(dir:*)",
+      "Bash(mkdir:*)",
+      "Bash(copy:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(for file in services.html resources.html contact.html impact.html phase-b-test.html)",
+      "Bash(do sed -i 's|<link rel=\"\"stylesheet\"\" href=\"\"css/navigation-styles.css\"\">|<link rel=\"\"stylesheet\"\" href=\"\"css/navigation-styles.css\"\">\\n    <link rel=\"\"stylesheet\"\" href=\"\"css/responsive-enhancements.css\"\">|' \"$file\")",
+      "Bash(done)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(git init:*)",
+      "WebSearch",
+      "Bash(if [ -f \"$HOME/.config/claude-desktop/claude_desktop_config.json\" ])",
+      "Bash(elif [ -f \"$HOME/Library/Application Support/Claude/claude_desktop_config.json\" ])",
+      "Bash(elif [ -f \"$HOME/AppData/Roaming/Claude/claude_desktop_config.json\" ])",
+      "Bash(else echo \"No existing config found - will need to create one\")",
+      "Bash(fi)",
+      "Bash(chmod:*)",
+      "Bash(git add:*)",
+      "Bash(rm:*)"
+    ],
+    "defaultMode": "acceptEdits"
+  }
+}
