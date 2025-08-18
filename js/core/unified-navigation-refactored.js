@@ -16,6 +16,19 @@ class LogoManager {
     }
     
     preloadCriticalLogos() {
+        // Skip preloading for file:// protocol to avoid CORS issues
+        if (location.protocol === 'file:') {
+            console.log('Skipping logo preloading for file:// protocol');
+            return;
+        }
+        
+        // Skip preloading if navigation uses CSS-generated logos (no img elements)
+        const hasImageLogos = document.querySelector('.fnf-logo-image, .hero-logo-large, .footer-logo');
+        if (!hasImageLogos) {
+            console.log('Skipping logo preloading - using CSS-generated logos');
+            return;
+        }
+        
         // Enhanced preloading with WebP support and size variants
         const criticalLogos = [
             { src: 'images/logos/fnf-logo.svg', type: 'image/svg+xml' },
@@ -28,15 +41,8 @@ class LogoManager {
                 criticalLogos.unshift({ src: 'images/logos/fnf-logo.webp', type: 'image/webp' });
             }
             
-            criticalLogos.forEach(logo => {
-                const link = document.createElement('link');
-                link.rel = 'preload';
-                link.as = 'image';
-                link.href = logo.src;
-                if (logo.type) link.type = logo.type;
-                link.crossOrigin = 'anonymous';
-                document.head.appendChild(link);
-            });
+            // Check if logos exist before preloading to avoid 404s
+            this.preloadExistingLogos(criticalLogos);
         });
     }
     
@@ -48,6 +54,67 @@ class LogoManager {
         });
     }
     
+    async preloadExistingLogos(logoArray) {
+        // Check each logo's existence before preloading to prevent 404s
+        const existingLogos = [];
+        
+        for (const logo of logoArray) {
+            try {
+                const exists = await this.checkImageExists(logo.src);
+                if (exists) {
+                    existingLogos.push(logo);
+                } else {
+                    console.log(`Skipping preload for missing logo: ${logo.src}`);
+                }
+            } catch (error) {
+                console.log(`Error checking logo existence for ${logo.src}:`, error.message);
+            }
+        }
+        
+        // Only preload logos that actually exist
+        existingLogos.forEach(logo => {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = logo.src;
+            if (logo.type) link.type = logo.type;
+            link.crossOrigin = 'anonymous';
+            
+            // Add error handling for preload links
+            link.onerror = () => {
+                console.warn(`Failed to preload logo: ${logo.src}`);
+                link.remove();
+            };
+            
+            document.head.appendChild(link);
+        });
+        
+        console.log(`Preloaded ${existingLogos.length} of ${logoArray.length} logos`);
+    }
+    
+    async checkImageExists(src) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            
+            // Set a timeout to avoid hanging on slow/missing images
+            const timeout = setTimeout(() => {
+                resolve(false);
+            }, 3000);
+            
+            img.onload = () => {
+                clearTimeout(timeout);
+                resolve(true);
+            };
+            
+            img.onerror = () => {
+                clearTimeout(timeout);
+                resolve(false);
+            };
+            
+            img.src = src;
+        });
+    }
+    
     handleLogoErrors() {
         // Enhanced fallback system with accessibility and performance tracking
         document.addEventListener('error', (e) => {
@@ -56,7 +123,11 @@ class LogoManager {
                  e.target.classList.contains('hero-logo-large') || 
                  e.target.classList.contains('footer-logo'))) {
                 
-                console.warn('Logo failed to load, attempting fallback:', e.target.src);
+                // Reduce console noise for file:// protocol
+                const isFileProtocol = location.protocol === 'file:';
+                if (!isFileProtocol) {
+                    console.warn('Logo failed to load, attempting fallback:', e.target.src);
+                }
                 
                 // Track loading state
                 const logoId = e.target.id || e.target.className;
@@ -80,8 +151,8 @@ class LogoManager {
                 // Add error styling
                 e.target.classList.add('logo-error');
                 
-                // Performance tracking
-                if (typeof gtag !== 'undefined') {
+                // Performance tracking (skip for file:// protocol)
+                if (!isFileProtocol && typeof gtag !== 'undefined') {
                     gtag('event', 'logo_error', {
                         'event_category': 'performance',
                         'event_label': e.target.src,
@@ -126,11 +197,14 @@ class LogoManager {
         
         imgElement.parentNode.replaceChild(fallbackDiv, imgElement);
         
-        // Log fallback usage for monitoring
-        console.warn('Logo fallback activated: CSS-generated logo displayed');
+        // Log fallback usage for monitoring (reduce noise for file:// protocol)
+        const isFileProtocol = location.protocol === 'file:';
+        if (!isFileProtocol) {
+            console.warn('Logo fallback activated: CSS-generated logo displayed');
+        }
         
-        // Optional: Send analytics event for monitoring
-        if (typeof gtag !== 'undefined') {
+        // Optional: Send analytics event for monitoring (skip for file:// protocol)
+        if (!isFileProtocol && typeof gtag !== 'undefined') {
             gtag('event', 'logo_fallback', {
                 'event_category': 'performance',
                 'event_label': 'css_fallback'
@@ -266,14 +340,11 @@ class FoodNForceNavigation {
             '<div class="slds-col slds-no-flex logo-container">' +
             '<div class="slds-brand fnf-logo-wrapper nav-animate-logo">' +
             '<a href="index.html" class="slds-brand__logo-link brand-logo-link" aria-label="Food-N-Force Home" title="Food-N-Force - Modern Solutions for Food Banks">' +
-            '<img src="images/logos/fnf-logo.svg" ' +
-            'alt="Food-N-Force - Modern Solutions for Food Banks" ' +
-            'class="slds-brand__logo-image fnf-logo-image" ' +
-            'width="56" height="56" ' +
-            'loading="eager" ' +
-            'role="img" ' +
-            'aria-labelledby="nav-logo-title" ' +
-            'onerror="this.onerror=null; this.src=\'images/logos/fnf-logo.png\'">' +
+            '<div class="fnf-logo" role="img" aria-labelledby="nav-logo-title">' +
+            '<div class="fnf-inner">' +
+            '<span class="fnf-wordmark">F-n-F</span>' +
+            '</div>' +
+            '</div>' +
             '<span id="nav-logo-title" class="slds-assistive-text">Food-N-Force Logo - Modern Solutions for Food Banks</span>' +
             '</a>' +
             '</div>' +

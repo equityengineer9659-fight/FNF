@@ -11,17 +11,17 @@
     "lint:fix": "npm run lint:css -- --fix && npm run lint:js -- --fix",
     "test": "npm run test:accessibility && npm run test:performance && npm run test:browser",
     "test:accessibility": "pa11y-ci",
-    "test:performance": "lhci autorun",
-    "test:browser": "playwright test",
-    "validate:html": "html-validate \"**/*.html\"",
-    "validate:slds": "node scripts/slds-compliance-check.js",
+    "test:performance": "lhci autorun --config=tools/testing/lighthouserc.json",
+    "test:browser": "playwright test --config=tools/testing/playwright.config.js",
+    "validate:html": "html-validate --config tools/testing/html-validate.json \"**/*.html\"",
+    "validate:slds": "node tools/deployment/slds-compliance-check.js",
     "security": "npm audit --audit-level moderate",
     "build": "npm run lint && npm run validate:html && npm run test",
     "dev": "live-server --port=8080 --host=localhost",
     "preview": "npm run build && npm run dev",
     "deploy:staging": "netlify deploy",
     "deploy:production": "netlify deploy --prod",
-    "rollback": "node scripts/rollback.js"
+    "rollback": "node tools/deployment/rollback.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,7 @@
   "license": "MIT",
   "devDependencies": {
     "@lhci/cli": "^0.13.0",
+    "glob": "^10.3.0",
     "@playwright/test": "^1.40.0",
     "eslint": "^8.55.0",
     "eslint-config-airbnb-base": "^15.0.0",

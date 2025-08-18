@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="css/responsive-enhancements.css">
     <!-- Preload critical resources -->
     <link rel="preload" href="css/styles.css" as="style">
-    <link rel="preload" href="js/unified-navigation-refactored.js" as="script">
+    <link rel="preload" href="js/core/unified-navigation-refactored.js" as="script">
     
     <!-- Phase C: Inline styles moved to styles.css for unified card system -->
 </head>
@@ -225,14 +225,16 @@
     </footer>
 
     <!-- JavaScript Files -->
-    <script src="js/unified-navigation-refactored.js"></script>
-    <script src="js/slds-enhancements.js"></script>
-    <script src="js/animations.js"></script>         <!-- Phase 2 -->
-    <script src="js/premium-effects-refactored.js"></script>    <!-- Phase 3 -->
-    <script src="js/stats-counter-fix.js"></script>
-    <script src="js/slds-cool-effects.js"></script>
+    <script src="js/core/unified-navigation-refactored.js"></script>
+    <script src="js/core/slds-enhancements.js"></script>
+    <script src="js/core/animations.js"></script>         <!-- Phase 2 -->
+    <script src="js/effects/premium-effects-refactored.js"></script>    <!-- Phase 3 -->
+    <script src="js/pages/stats-counter-fix.js"></script>
+    <script src="js/effects/slds-cool-effects.js"></script>
     <!-- Disable conflicting counter animations -->
-    <script src="js/disable-conflicting-counters.js"></script>
+    <script src="js/pages/disable-conflicting-counters.js"></script>
+    <!-- Navigation diagnostic script -->
+    <script src="js/monitoring/navigation-height-diagnostic.js"></script>
     
     <!-- Page load complete -->
     <script>

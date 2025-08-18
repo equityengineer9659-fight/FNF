@@ -1,0 +1,181 @@
+css-developer-agent.js:1129 ✅ CSS Developer Agent ready!
+css-developer-agent.js:1130 Run `cssAgent.analyze()` to start analysis
+css-developer-agent.js:1131 Run `cssAgent.exportReport(report)` to save results
+css-diagnostic-tools.js:250 🔧 CSS Diagnostic Tools Ready!
+css-diagnostic-tools.js:251 Run `cssDiagnostic.runFullDiagnostic()` for complete analysis
+css-diagnostic-tools.js:252 Run `cssDiagnostic.mapCascadeOrder()` to see CSS load order
+css-diagnostic-tools.js:253 Run `cssDiagnostic.analyzeCriticalConflicts()` for conflict details
+css-agent.html:665 CSS Developer Agent ready! Click "Analyze CSS" to start.
+injection-topics.js:1 Browsing Topics API removed from http://127.0.0.1:5500/css-agent.html which is main frame
+css-developer-agent.js:979 🚀 Starting CSS analysis...
+css-developer-agent.js:982 📁 Full Project Scan Mode
+css-developer-agent.js:983 Scanning: HTML files, CSS folder, JS folder
+css-developer-agent.js:90 📋 Attempting to load 11 CSS files
+css-developer-agent.js:105 ✓ Loaded CSS: css/styles.css (17408 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/navigation-styles.css (23937 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/slds-enhancements.css (3270 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/animations.css (3679 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/premium-effects.css (727 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/slds-dark-theme.css (11011 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/about-page-spacing.css (8524 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/slds-cool-effects.css (4562 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/js-conflict-fixes.css (9181 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/navigation-fixes.css (8204 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/slds-dark-theme-fixes.css (30658 chars)
+css-developer-agent.js:722 📄 Scanning 6 HTML files for inline styles...
+css-developer-agent.js:774 ✓ Scanned HTML: index.html (0 style tags, 1 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: about.html (2 style tags, 0 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: contact.html (1 style tags, 6 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: services.html (1 style tags, 0 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: impact.html (1 style tags, 0 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: resources.html (1 style tags, 0 inline styles)
+css-developer-agent.js:594 📋 Attempting to scan 11 JS files
+css-developer-agent.js:610 ✓ Scanned JS: js/about-page-fix.js (12 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/about-page-layout-fix.js (3 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/animations.js (21 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/disable-conflicting-counters.js (1 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/focus-area-fix.js (13 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/measurable-growth-fix.js (15 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/premium-effects.js (39 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/slds-cool-effects.js (9 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/slds-enhancements.js (25 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/stats-counter-fix.js (2 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/unified-navigation.js (33 style manipulations)
+css-developer-agent.js:453 Scanned Files Summary:
+css-developer-agent.js:454 CSS files: (11) ['css/about-page-spacing.css', 'css/animations.css', 'css/js-conflict-fixes.css', 'css/navigation-fixes.css', 'css/navigation-styles.css', 'css/premium-effects.css', 'css/slds-cool-effects.css', 'css/slds-dark-theme-fixes.css', 'css/slds-dark-theme.css', 'css/slds-enhancements.css', 'css/styles.css']
+css-developer-agent.js:455 HTML files: (6) ['about.html', 'contact.html', 'impact.html', 'index.html', 'resources.html', 'services.html']
+css-developer-agent.js:456 JS files: (11) ['js/about-page-fix.js', 'js/about-page-layout-fix.js', 'js/animations.js', 'js/disable-conflicting-counters.js', 'js/focus-area-fix.js', 'js/measurable-growth-fix.js', 'js/premium-effects.js', 'js/slds-cool-effects.js', 'js/slds-enhancements.js', 'js/stats-counter-fix.js', 'js/unified-navigation.js']
+css-developer-agent.js:481 🔍 CSS Developer Agent Report
+css-developer-agent.js:484 📊 Summary
+css-developer-agent.js:485 (index)Value(index)ValuetotalFiles19totalRules646totalConflicts17totalDuplicates6totalUnused339Object
+css-developer-agent.js:490 🔧 JavaScript Style Manipulation
+css-developer-agent.js:491 Found 14 JS files manipulating styles
+css-developer-agent.js:492 Total manipulations: 184
+css-developer-agent.js:493 Inline styles: 7
+css-developer-agent.js:494 DOM mutations tracked: 0
+css-developer-agent.js:497 Manipulation types:
+css-developer-agent.js:498 (index)Value(index)Valueinline-style110attribute-style2dynamic-style-element11class-manipulation55other4jquery1stylesheet-api1Object
+css-developer-agent.js:515 📝 JS Recommendations
+css-developer-agent.js:519 🟡 Heavy use of .style property detected. Consider using CSS classes instead.
+css-developer-agent.js:529 ⚠️ CSS Conflicts
+css-developer-agent.js:531 .stat-item
+css-developer-agent.js:532 Property: margin
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 a:hover
+css-developer-agent.js:532 Property: color
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .mission-text
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .hero-subtitle
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .slds-button_outline-brand:hover
+css-developer-agent.js:532 Property: color
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .stat-number
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .stat-label
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .stat-label
+css-developer-agent.js:532 Property: color
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .focus-area-card p,.measurable-card p
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .focus-area-card p,.measurable-card p
+css-developer-agent.js:532 Property: color
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:540 💡 Suggestions
+css-developer-agent.js:545 🟠 Found 6 duplicate rules that can be consolidated
+css-developer-agent.js:545 🟡 Found 339 unused selectors that can be removed
+css-developer-agent.js:545 🔴 Found 1 critical CSS conflicts that need resolution
+css-developer-agent.js:545 🟢 Consider consolidating 12 CSS files into fewer, purpose-specific files
+css-developer-agent.js:979 🚀 Starting CSS analysis...
+css-developer-agent.js:982 📁 Full Project Scan Mode
+css-developer-agent.js:983 Scanning: HTML files, CSS folder, JS folder
+css-developer-agent.js:90 📋 Attempting to load 11 CSS files
+css-developer-agent.js:105 ✓ Loaded CSS: css/styles.css (17408 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/navigation-styles.css (23937 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/slds-enhancements.css (3270 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/animations.css (3480 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/premium-effects.css (646 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/slds-dark-theme.css (11011 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/about-page-spacing.css (8524 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/slds-cool-effects.css (4255 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/js-conflict-fixes.css (9181 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/navigation-fixes.css (8204 chars)
+css-developer-agent.js:105 ✓ Loaded CSS: css/slds-dark-theme-fixes.css (30658 chars)
+css-developer-agent.js:722 📄 Scanning 6 HTML files for inline styles...
+css-developer-agent.js:774 ✓ Scanned HTML: index.html (0 style tags, 1 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: about.html (2 style tags, 0 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: contact.html (1 style tags, 6 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: services.html (1 style tags, 0 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: impact.html (1 style tags, 0 inline styles)
+css-developer-agent.js:774 ✓ Scanned HTML: resources.html (1 style tags, 0 inline styles)
+css-developer-agent.js:594 📋 Attempting to scan 11 JS files
+css-developer-agent.js:610 ✓ Scanned JS: js/about-page-fix.js (12 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/about-page-layout-fix.js (3 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/animations.js (21 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/disable-conflicting-counters.js (1 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/focus-area-fix.js (13 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/measurable-growth-fix.js (15 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/premium-effects.js (39 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/slds-cool-effects.js (9 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/slds-enhancements.js (25 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/stats-counter-fix.js (2 style manipulations)
+css-developer-agent.js:610 ✓ Scanned JS: js/unified-navigation.js (33 style manipulations)
+css-developer-agent.js:453 Scanned Files Summary:
+css-developer-agent.js:454 CSS files: (11) ['css/about-page-spacing.css', 'css/animations.css', 'css/js-conflict-fixes.css', 'css/navigation-fixes.css', 'css/navigation-styles.css', 'css/premium-effects.css', 'css/slds-cool-effects.css', 'css/slds-dark-theme-fixes.css', 'css/slds-dark-theme.css', 'css/slds-enhancements.css', 'css/styles.css']
+css-developer-agent.js:455 HTML files: (6) ['about.html', 'contact.html', 'impact.html', 'index.html', 'resources.html', 'services.html']
+css-developer-agent.js:456 JS files: (11) ['js/about-page-fix.js', 'js/about-page-layout-fix.js', 'js/animations.js', 'js/disable-conflicting-counters.js', 'js/focus-area-fix.js', 'js/measurable-growth-fix.js', 'js/premium-effects.js', 'js/slds-cool-effects.js', 'js/slds-enhancements.js', 'js/stats-counter-fix.js', 'js/unified-navigation.js']
+css-developer-agent.js:481 🔍 CSS Developer Agent Report
+css-developer-agent.js:484 📊 Summary
+css-developer-agent.js:485 (index)Value(index)ValuetotalFiles19totalRules642totalConflicts17totalDuplicates6totalUnused325Object
+css-developer-agent.js:490 🔧 JavaScript Style Manipulation
+css-developer-agent.js:491 Found 14 JS files manipulating styles
+css-developer-agent.js:492 Total manipulations: 184
+css-developer-agent.js:493 Inline styles: 7
+css-developer-agent.js:494 DOM mutations tracked: 0
+css-developer-agent.js:497 Manipulation types:
+css-developer-agent.js:498 (index)Value(index)Valueinline-style110attribute-style2dynamic-style-element11class-manipulation55other4jquery1stylesheet-api1Object
+css-developer-agent.js:515 📝 JS Recommendations
+css-developer-agent.js:519 🟡 Heavy use of .style property detected. Consider using CSS classes instead.
+css-developer-agent.js:529 ⚠️ CSS Conflicts
+css-developer-agent.js:531 .stat-item
+css-developer-agent.js:532 Property: margin
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 a:hover
+css-developer-agent.js:532 Property: color
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .mission-text
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .hero-subtitle
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .slds-button_outline-brand:hover
+css-developer-agent.js:532 Property: color
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .stat-number
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .stat-label
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .stat-label
+css-developer-agent.js:532 Property: color
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .focus-area-card p,.measurable-card p
+css-developer-agent.js:532 Property: font-size
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:531 .focus-area-card p,.measurable-card p
+css-developer-agent.js:532 Property: color
+css-developer-agent.js:533 Conflicting values: (2) [{…}, {…}]
+css-developer-agent.js:540 💡 Suggestions
+css-developer-agent.js:545 🟠 Found 6 duplicate rules that can be consolidated
+css-developer-agent.js:545 🟡 Found 325 unused selectors that can be removed
+css-developer-agent.js:545 🔴 Found 1 critical CSS conflicts that need resolution
+css-developer-agent.js:545 🟢 Consider consolidating 12 CSS files into fewer, purpose-specific files

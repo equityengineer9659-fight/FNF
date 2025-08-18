@@ -33,8 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Diagnostic Tool (Temporary for CSS cleanup) -->
-    <script src="js/css-diagnostic-tools.js"></script>
-    <script src="js/grid-diagnostic.js"></script>
+    <!-- Diagnostic scripts moved to backup -->
 </head>
 <body class="index-page">
     <!-- Skip Navigation for Accessibility -->
@@ -48,26 +47,7 @@
     <section class="hero-section" aria-labelledby="hero-heading">
         <div class="hero-content">
             <!-- SLDS Media Object Pattern for Hero Brand Integration -->
-            <div class="slds-media hero-brand-wrapper slds-m-bottom_medium" role="banner">
-                <div class="slds-media__figure slds-media__figure_fixed-width">
-                    <div class="slds-brand slds-brand_large">
-                        <img src="images/logos/fnf-logo.svg" 
-                             alt="Food-N-Force - Modern Solutions for Food Banks"
-                             class="slds-brand__logo-image hero-logo-large"
-                             width="80" height="80"
-                             loading="eager"
-                             role="img"
-                             aria-labelledby="hero-logo-title"
-                             onerror="this.onerror=null; this.src='images/logos/fnf-logo.png'">
-                        <span id="hero-logo-title" class="slds-assistive-text">Food-N-Force Logo - Modern Solutions for Food Banks</span>
-                    </div>
-                </div>
-                <div class="slds-media__body slds-media__body_center">
-                    <h1 id="hero-heading" class="hero-title slds-text-heading_hero">
-                        Modern Solutions to Feed More, Serve Better
-                    </h1>
-                </div>
-            </div>
+            <h1 class="hero-title">Modern Solutions to Feed More, Serve Better</h1>
             <p class="hero-subtitle">Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.</p>
             <div class="hero-cta-group">
                 <a href="#get-started" class="slds-button slds-button_brand cta-primary">
@@ -243,50 +223,26 @@
     </section>
     </main>
 
-    <!-- SLDS-Compliant Footer with Brand Integration -->
-    <footer class="slds-global-footer custom-footer" role="contentinfo">
+    <!-- Footer -->
+    <footer class="custom-footer" role="contentinfo">
         <div class="slds-container_large slds-container_center slds-p-around_large">
-            <!-- SLDS Brand Component for Footer -->
-            <div class="slds-brand slds-brand_small slds-text-align_center slds-m-bottom_medium">
-                <a href="index.html" class="slds-brand__logo-link" aria-label="Food-N-Force Home" title="Return to Food-N-Force Homepage">
-                    <img src="images/logos/fnf-logo.svg" 
-                         alt="Food-N-Force"
-                         class="slds-brand__logo-image footer-logo"
-                         width="32" height="32"
-                         loading="lazy"
-                         role="img"
-                         aria-labelledby="footer-logo-title"
-                         onerror="this.onerror=null; this.src='images/logos/fnf-logo.png'">
-                    <span id="footer-logo-title" class="slds-assistive-text">Food-N-Force Logo</span>
-                </a>
-                <div class="slds-brand__text slds-text-body_small slds-m-top_x-small">
-                    <strong>Food-N-Force</strong>
-                    <div class="slds-text-color_weak">Modern Solutions for Food Banks</div>
-                </div>
-            </div>
             <div class="slds-text-align_center">
-                <p class="slds-text-body_small slds-text-color_weak">&copy; 2025 Food-N-Force. All rights reserved.</p>
-                <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
-                    Empowering food banks and pantries with digital tools.
-                </p>
+                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript Files -->
-    <script src="js/logo-optimization.js"></script>
-    <script src="js/unified-navigation-refactored.js"></script>
-    <script src="js/slds-enhancements.js"></script>
-    <script src="js/animations.js"></script>
-    <script src="js/premium-effects-refactored.js"></script>
-    <script src="js/slds-cool-effects.js"></script>
-    <script src="js/premium-background-effects.js"></script>
-    <!-- <script src="js/index-page-grid-fix.js"></script> -->
-    <!-- <script src="js/gap-enforcer-continuous.js"></script> -->
-    <script src="js/force-center-fix.js"></script>
+    <script src="js/effects/logo-optimization.js"></script>
+    <script src="js/core/unified-navigation-refactored.js"></script>
+    <script src="js/core/slds-enhancements.js"></script>
+    <script src="js/core/animations.js"></script>
+    <script src="js/effects/premium-effects-refactored.js"></script>
+    <script src="js/effects/slds-cool-effects.js"></script>
+    <script src="js/effects/premium-background-effects.js"></script>
     
-    <!-- Responsive Design Validation (Development Only) -->
-    <script src="js/responsive-validation.js"></script>
+    <!-- Development and Monitoring Scripts -->
+    <script src="js/monitoring/responsive-validation.js"></script>
     
     <!-- Page load complete -->
     <script>

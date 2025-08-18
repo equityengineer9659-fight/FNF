@@ -81,7 +81,8 @@ class ResponsiveValidator {
     }
     
     validateMobileBehavior(breakpointName) {
-        const issues = [];\n        
+        const issues = [];
+        
         // Check hero CTA stacking
         const ctaGroup = document.querySelector('.hero-cta-group');
         if (ctaGroup) {
@@ -172,7 +173,8 @@ class ResponsiveValidator {
             const effectiveWidth = rect.width + paddingLeft + paddingRight;
             const effectiveHeight = rect.height + paddingTop + paddingBottom;
             
-            if (effectiveWidth < minSize || effectiveHeight < minSize) {\n                this.errors.push(`Touch target ${index + 1} (${element.tagName}) is too small: ${Math.round(effectiveWidth)}x${Math.round(effectiveHeight)}px (minimum: ${minSize}x${minSize}px)`);
+            if (effectiveWidth < minSize || effectiveHeight < minSize) {
+                this.errors.push(`Touch target ${index + 1} (${element.tagName}) is too small: ${Math.round(effectiveWidth)}x${Math.round(effectiveHeight)}px (minimum: ${minSize}x${minSize}px)`);
             } else if (effectiveWidth < comfortableSize || effectiveHeight < comfortableSize) {
                 this.warnings.push(`Touch target ${index + 1} (${element.tagName}) could be larger for better usability: ${Math.round(effectiveWidth)}x${Math.round(effectiveHeight)}px (recommended: ${comfortableSize}x${comfortableSize}px)`);
             }

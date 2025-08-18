@@ -1433,6 +1433,480 @@ body.index-page .navbar.universal-nav a.nav-link {
 }
 
 /* ============================================
+   BRAND EXCEPTION: GLASSMORPHISM FOR LOGO ELEMENTS
+   
+   ⚠️  APPROVED SLDS DEVIATION ⚠️
+   
+   Exception Rationale:
+   - Brand identity requirement for premium visual effect
+   - Limited scope: Logo elements only (navigation, hero, footer)
+   - Maintains SLDS compliance for all other components
+   - Performance optimized with hardware acceleration
+   - Full accessibility compliance maintained
+   
+   Implementation Details:
+   - Uses backdrop-filter: blur(8px) with vendor prefixes
+   - Includes @supports fallback for browser compatibility  
+   - Performance optimized with will-change and contain
+   - Responsive scaling for mobile performance
+   - Accessibility features: reduced-motion, high-contrast, dark-mode
+   
+   Approval: Brand Team - Logo glassmorphism exception
+   Last Updated: 2025-08-18
+   ============================================ */
+
+/* Navigation Logo Glassmorphism - Brand Exception */
+.navbar.universal-nav .fnf-logo-wrapper {
+    /* Glassmorphism effect - Brand approved exception */
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(8px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 12px !important;
+    padding: 8px !important;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    
+    /* Enhanced hover state for glassmorphism */
+    transition: all 0.3s ease !important;
+}
+
+/* Navigation Logo Glassmorphism Hover State */
+.navbar.universal-nav .fnf-logo-wrapper:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(10px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(200%) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 
+        0 6px 25px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-1px) scale(1.02) !important;
+}
+
+/* ============================================
+   F-N-F GLASSMORPHISM LOGO - USER SPECIFICATION
+   Implementing the user's exact glassmorphism design
+   ============================================ */
+
+/* Main Logo Container - User's Specification */
+.navbar.universal-nav .fnf-logo {
+    position: relative !important;
+    width: var(--logo-size-nav) !important;
+    height: var(--logo-size-nav) !important;
+    border-radius: 12px !important;
+    background: linear-gradient(145deg, #1b96ff, #0b5cab) !important;
+    outline: 2px solid rgba(255,255,255,0.15) !important;
+    transition: transform 0.28s ease, filter 0.28s ease !important;
+    flex-shrink: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    /* Performance optimizations */
+    will-change: transform, filter !important;
+    contain: layout style !important;
+}
+
+/* Spinning Conic Gradient Border - User's Specification */
+.navbar.universal-nav .fnf-logo::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: -4px !important;
+    border-radius: 14px !important;
+    background: conic-gradient(from 180deg, #00d1ff, #66ffe6, #13c2ff, #7bd3ff, #00d1ff) !important;
+    filter: blur(8px) !important;
+    animation: fnf-spin 8s linear infinite !important;
+    z-index: 0 !important;
+}
+
+/* Glass Inner Tile - User's Specification */
+.navbar.universal-nav .fnf-inner {
+    position: relative !important;
+    z-index: 1 !important;
+    width: calc(100% - 16px) !important;
+    height: calc(100% - 16px) !important;
+    border-radius: 8px !important;
+    display: grid !important;
+    place-items: center !important;
+    background: rgba(1, 31, 63, 0.55) !important;
+    box-shadow: inset 0 0 18px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.12) !important;
+    backdrop-filter: blur(8px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+}
+
+/* Orbitron Wordmark - User's Specification */
+.navbar.universal-nav .fnf-wordmark {
+    font-family: 'Orbitron', 'Salesforce Sans', Arial, sans-serif !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.05em !important;
+    font-size: 0.7em !important;
+    line-height: 1 !important;
+    color: #ffffff !important;
+    text-shadow: 0.5px 0.5px 0 rgba(255,255,255,0.15), 2px 2px 6px rgba(0,0,0,0.7) !important;
+    white-space: nowrap !important;
+    display: block !important;
+}
+
+/* Spinning Animation Keyframes - User's Specification */
+@keyframes fnf-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Logo Hover State - Enhanced */
+.navbar.universal-nav .fnf-logo:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    filter: drop-shadow(0 6px 24px rgba(16, 179, 255, 0.35)) !important;
+}
+
+/* Logo Hover - Enhanced Inner Glassmorphism */
+.navbar.universal-nav .fnf-logo:hover .fnf-inner {
+    backdrop-filter: blur(10px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
+    box-shadow: inset 0 0 22px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.18) !important;
+}
+
+/* Focus State for Accessibility */
+.navbar.universal-nav .slds-brand__logo-link:focus .fnf-logo {
+    outline: 2px solid var(--slds-color-border-brand, #1B96FF) !important;
+    outline-offset: 4px !important;
+}
+
+/* Active/Pressed State */
+.navbar.universal-nav .slds-brand__logo-link:active .fnf-logo {
+    transform: translateY(1px) scale(0.98) !important;
+}
+
+.navbar.universal-nav .slds-brand__logo-link:active .fnf-inner {
+    backdrop-filter: blur(6px) saturate(110%) !important;
+    -webkit-backdrop-filter: blur(6px) saturate(110%) !important;
+}
+
+/* ============================================
+   RESPONSIVE GLASSMORPHISM LOGO OPTIMIZATIONS
+   ============================================ */
+
+/* Tablet responsive adjustments */
+@media (max-width: 768px) {
+    .navbar.universal-nav .fnf-logo {
+        width: var(--logo-size-nav-tablet) !important;
+        height: var(--logo-size-nav-tablet) !important;
+    }
+    
+    .navbar.universal-nav .fnf-logo::before {
+        filter: blur(6px) !important; /* Reduced for performance */
+    }
+    
+    .navbar.universal-nav .fnf-inner {
+        backdrop-filter: blur(6px) saturate(150%) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(150%) !important;
+    }
+    
+    .navbar.universal-nav .fnf-wordmark {
+        font-size: 0.65em !important;
+    }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    .navbar.universal-nav .fnf-logo {
+        width: var(--logo-size-nav-mobile) !important;
+        height: var(--logo-size-nav-mobile) !important;
+    }
+    
+    .navbar.universal-nav .fnf-logo::before {
+        filter: blur(4px) !important; /* Further reduced for performance */
+    }
+    
+    .navbar.universal-nav .fnf-inner {
+        backdrop-filter: blur(4px) saturate(120%) !important;
+        -webkit-backdrop-filter: blur(4px) saturate(120%) !important;
+    }
+    
+    .navbar.universal-nav .fnf-wordmark {
+        font-size: 0.6em !important;
+    }
+    
+    /* Simplified hover effects on mobile */
+    .navbar.universal-nav .fnf-logo:hover {
+        transform: translateY(-1px) scale(1.01) !important;
+    }
+}
+
+/* Very small screens optimization */
+@media (max-width: 320px) {
+    .navbar.universal-nav .fnf-logo {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    
+    .navbar.universal-nav .fnf-logo::before {
+        filter: blur(2px) !important;
+    }
+    
+    .navbar.universal-nav .fnf-inner {
+        backdrop-filter: blur(2px) saturate(110%) !important;
+        -webkit-backdrop-filter: blur(2px) saturate(110%) !important;
+    }
+    
+    .navbar.universal-nav .fnf-wordmark {
+        font-size: 0.55em !important;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY AND PERFORMANCE ENHANCEMENTS
+   ============================================ */
+
+/* Reduced motion support - respects user preference */
+@media (prefers-reduced-motion: reduce) {
+    .navbar.universal-nav .fnf-logo::before {
+        animation: none !important;
+    }
+    
+    .navbar.universal-nav .fnf-logo:hover,
+    .navbar.universal-nav .slds-brand__logo-link:active .fnf-logo {
+        transform: none !important;
+    }
+    
+    /* Keep glassmorphism but remove motion */
+    .navbar.universal-nav .fnf-logo:hover .fnf-inner {
+        backdrop-filter: blur(10px) saturate(150%) !important;
+        -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .navbar.universal-nav .fnf-logo {
+        border: 2px solid currentColor !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .navbar.universal-nav .fnf-inner {
+        border: 1px solid currentColor !important;
+        background: rgba(0, 0, 0, 0.8) !important;
+    }
+    
+    .navbar.universal-nav .fnf-wordmark {
+        color: #ffffff !important;
+        text-shadow: 2px 2px 0 #000000 !important;
+    }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    .navbar.universal-nav .fnf-logo {
+        background: linear-gradient(145deg, #2196ff, #1565c0) !important;
+    }
+    
+    .navbar.universal-nav .fnf-inner {
+        background: rgba(5, 35, 75, 0.65) !important;
+    }
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(8px)) {
+    .navbar.universal-nav .fnf-inner {
+        background: rgba(1, 31, 63, 0.85) !important;
+        box-shadow: inset 0 0 18px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.2) !important;
+    }
+    
+    .navbar.universal-nav .fnf-logo:hover .fnf-inner {
+        background: rgba(1, 31, 63, 0.9) !important;
+    }
+}
+
+/* Performance optimization for low-end devices */
+@media (max-width: 480px) and (prefers-reduced-data: reduce) {
+    .navbar.universal-nav .fnf-logo::before {
+        display: none !important; /* Remove spinning border on data saver */
+    }
+    
+    .navbar.universal-nav .fnf-inner {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(1, 31, 63, 0.9) !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar.universal-nav .fnf-logo::before {
+        display: none !important;
+    }
+    
+    .navbar.universal-nav .fnf-logo {
+        background: #1b96ff !important;
+        filter: grayscale(1) !important;
+    }
+    
+    .navbar.universal-nav .fnf-inner {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+    }
+    
+    .navbar.universal-nav .fnf-wordmark {
+        color: #000000 !important;
+        text-shadow: none !important;
+    }
+}
+
+/* Hero Logo Glassmorphism - Brand Exception */
+.hero-brand-wrapper .slds-brand {
+    /* Glassmorphism effect for hero logo container */
+    background: rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(8px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 16px !important;
+    padding: 12px !important;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    
+    transition: all 0.3s ease !important;
+}
+
+/* Hero Logo Glassmorphism Hover State */
+.hero-brand-wrapper .slds-brand:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(12px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(200%) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-2px) scale(1.03) !important;
+}
+
+/* Footer Logo Glassmorphism - Brand Exception */
+.footer .slds-brand {
+    /* Subtle glassmorphism for footer - darker background */
+    background: rgba(255, 255, 255, 0.04) !important;
+    backdrop-filter: blur(6px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(6px) saturate(150%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 6px !important;
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    
+    transition: all 0.2s ease !important;
+}
+
+/* Footer Logo Glassmorphism Hover State */
+.footer .slds-brand:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(8px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(160%) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    transform: translateY(-1px) scale(1.05) !important;
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(8px)) {
+    .navbar.universal-nav .fnf-logo-wrapper {
+        background: rgba(255, 255, 255, 0.15) !important;
+        box-shadow: 
+            0 4px 15px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .hero-brand-wrapper .slds-brand {
+        background: rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    }
+    
+    .footer .slds-brand {
+        background: rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 
+            0 2px 8px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    }
+}
+
+/* Performance optimization for glassmorphism effects */
+.navbar.universal-nav .fnf-logo-wrapper,
+.hero-brand-wrapper .slds-brand,
+.footer .slds-brand {
+    /* Enable hardware acceleration */
+    will-change: transform, backdrop-filter !important;
+    contain: layout style !important;
+    /* Ensure proper stacking context */
+    isolation: isolate !important;
+}
+
+/* Reduced motion support - Brand Exception Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .navbar.universal-nav .fnf-logo-wrapper,
+    .hero-brand-wrapper .slds-brand,
+    .footer .slds-brand {
+        /* Maintain glassmorphism but remove motion */
+        transition: none !important;
+        transform: none !important;
+    }
+    
+    .navbar.universal-nav .fnf-logo-wrapper:hover,
+    .hero-brand-wrapper .slds-brand:hover,
+    .footer .slds-brand:hover {
+        /* Keep glassmorphism effect but no transform */
+        transform: none !important;
+    }
+}
+
+/* High contrast mode adjustments for glassmorphism */
+@media (prefers-contrast: high) {
+    .navbar.universal-nav .fnf-logo-wrapper,
+    .hero-brand-wrapper .slds-brand,
+    .footer .slds-brand {
+        /* Increase border contrast */
+        border-width: 2px !important;
+        border-color: rgba(255, 255, 255, 0.4) !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+    }
+}
+
+/* Dark mode enhancements for glassmorphism */
+@media (prefers-color-scheme: dark) {
+    .navbar.universal-nav .fnf-logo-wrapper,
+    .hero-brand-wrapper .slds-brand,
+    .footer .slds-brand {
+        /* Adjust for dark backgrounds */
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.25) !important;
+    }
+}
+
+/* Mobile responsive adjustments for glassmorphism */
+@media (max-width: 768px) {
+    .navbar.universal-nav .fnf-logo-wrapper {
+        /* Lighter effect on mobile for performance */
+        backdrop-filter: blur(6px) saturate(150%) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(150%) !important;
+        padding: 6px !important;
+    }
+    
+    .hero-brand-wrapper .slds-brand {
+        backdrop-filter: blur(6px) saturate(150%) !important;
+        -webkit-backdrop-filter: blur(6px) saturate(150%) !important;
+        padding: 8px !important;
+    }
+}
+
+/* Cleanup will-change after animations for performance */
+.navbar.universal-nav .fnf-logo-wrapper:not(:hover),
+.hero-brand-wrapper .slds-brand:not(:hover),
+.footer .slds-brand:not(:hover) {
+    will-change: auto !important;
+}
+
+/* ============================================
    LOGO POSITIONING CRITICAL FIXES - FINAL OVERRIDE
    This section ensures logo is positioned at far left edge
    ============================================ */
