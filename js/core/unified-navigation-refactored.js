@@ -508,7 +508,7 @@ class FoodNForceNavigation {
                 firstNavItem.focus();
                 
                 // Announce to screen readers
-                this.announceToScreenReader('Mobile navigation menu opened. Use arrow keys to navigate, escape to close.');
+                this.logoManager.announceToScreenReader('Mobile navigation menu opened. Use arrow keys to navigate, escape to close.');
             }
         }, 300);
     }
@@ -548,7 +548,7 @@ class FoodNForceNavigation {
         }
         
         // Announce to screen readers
-        this.announceToScreenReader('Mobile navigation menu closed.');
+        this.logoManager.announceToScreenReader('Mobile navigation menu closed.');
     }
 
     calculateMobileMenuHeight() {
