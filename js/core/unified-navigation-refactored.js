@@ -470,12 +470,29 @@ class FoodNForceNavigation {
         // Use CSS classes instead of inline styles
         this.nav.classList.add('nav-show');
         
+        // Enhanced ARIA support for dropdown overlay
         this.toggle.setAttribute('aria-expanded', 'true');
         this.nav.setAttribute('aria-hidden', 'false');
+        this.nav.setAttribute('role', 'dialog');
+        this.nav.setAttribute('aria-modal', 'true');
+        this.nav.setAttribute('aria-label', 'Mobile Navigation Menu');
         this.isOpen = true;
 
         // Calculate and set optimal mobile menu height to show all items
         this.calculateMobileMenuHeight();
+
+        // Enhanced positioning for dropdown overlay (mobile only)
+        if (window.innerWidth <= 768) {
+            // Ensure dropdown appears as proper overlay
+            this.nav.style.position = 'fixed';
+            this.nav.style.top = '80px';
+            this.nav.style.left = '0';
+            this.nav.style.right = '0';
+            this.nav.style.zIndex = '999999';
+            
+            // Add body scroll lock for modal behavior
+            document.body.style.overflow = 'hidden';
+        }
 
         // Animate hamburger icon using CSS classes
         const icon = this.toggle.querySelector('.nav-hamburger-icon');
@@ -484,11 +501,14 @@ class FoodNForceNavigation {
             icon.classList.add('nav-hamburger-open');
         }
 
-        // Trap focus
+        // Enhanced focus management for dropdown
         setTimeout(() => {
             const firstNavItem = this.nav.querySelector('.nav-link');
             if (firstNavItem) {
                 firstNavItem.focus();
+                
+                // Announce to screen readers
+                this.announceToScreenReader('Mobile navigation menu opened. Use arrow keys to navigate, escape to close.');
             }
         }, 300);
     }
@@ -496,12 +516,29 @@ class FoodNForceNavigation {
     closeNav() {
         // Use CSS classes instead of inline styles
         this.nav.classList.remove('nav-show');
+        
+        // Reset ARIA attributes
         this.toggle.setAttribute('aria-expanded', 'false');
         this.nav.setAttribute('aria-hidden', 'true');
+        this.nav.removeAttribute('role');
+        this.nav.removeAttribute('aria-modal');
+        this.nav.removeAttribute('aria-label');
         this.isOpen = false;
 
         // Reset mobile menu height override
         this.resetMobileMenuHeight();
+
+        // Reset positioning and body scroll (mobile only)
+        if (window.innerWidth <= 768) {
+            this.nav.style.position = '';
+            this.nav.style.top = '';
+            this.nav.style.left = '';
+            this.nav.style.right = '';
+            this.nav.style.zIndex = '';
+            
+            // Restore body scroll
+            document.body.style.overflow = '';
+        }
 
         // Reset hamburger icon using CSS classes
         const icon = this.toggle.querySelector('.nav-hamburger-icon');
@@ -509,6 +546,9 @@ class FoodNForceNavigation {
             icon.classList.remove('nav-hamburger-open');
             icon.classList.add('nav-hamburger-closed');
         }
+        
+        // Announce to screen readers
+        this.announceToScreenReader('Mobile navigation menu closed.');
     }
 
     calculateMobileMenuHeight() {
