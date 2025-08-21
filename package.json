@@ -21,7 +21,19 @@
     "preview": "npm run build && npm run dev",
     "deploy:staging": "netlify deploy",
     "deploy:production": "netlify deploy --prod",
-    "rollback": "node tools/deployment/rollback.js"
+    "rollback": "node tools/deployment/rollback.js",
+    "governance:sync": "node tools/governance/sync-governance-docs.js sync",
+    "governance:sync:dry": "node tools/governance/sync-governance-docs.js sync --dry-run",
+    "governance:sync:force": "node tools/governance/sync-governance-docs.js sync --force",
+    "governance:validate": "node tools/governance/sync-governance-docs.js validate",
+    "governance:watch": "node tools/governance/governance-hooks.js watch",
+    "governance:status": "node tools/governance/governance-hooks.js status",
+    "governance:test": "node tools/governance/governance-hooks.js test",
+    "governance:rollback": "node tools/governance/sync-governance-docs.js rollback",
+    "test:governance": "npm run governance:validate && npm run governance:sync:dry",
+    "test:multi-page": "playwright test --config=tools/testing/playwright.config.js",
+    "test:special-effects": "playwright test --config=tools/testing/playwright.config.js --grep='special-effects'",
+    "test:quality-gates": "node tools/testing/quality-gates.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +51,7 @@
   "license": "MIT",
   "devDependencies": {
     "@lhci/cli": "^0.13.0",
+    "chokidar": "^3.5.3",
     "glob": "^10.3.0",
     "@playwright/test": "^1.40.0",
     "eslint": "^8.55.0",
