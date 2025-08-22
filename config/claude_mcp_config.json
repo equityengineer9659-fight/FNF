@@ -31,13 +31,6 @@
       "env": {
         "MCP_FILESYSTEM_ALLOWED_DIRECTORIES": "C:\\Users\\luetk\\Desktop\\Website\\Website Next Version"
       }
-    },
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@anthropic/mcp-github"],
-      "env": {
-        "GITHUB_TOKEN": "YOUR_GITHUB_TOKEN_HERE"
-      }
     }
   },
   "globalShortcut": "Ctrl+Shift+Space",
@@ -45,7 +38,6 @@
     "browser",
     "lighthouse", 
     "playwright",
-    "filesystem",
-    "github"
+    "filesystem"
   ]
 }

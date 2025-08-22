@@ -463,60 +463,25 @@ class FoodNForceCore {
     }
 
     async initializeLogoSystem() {
-        // Initialize logo optimization and error handling
-        this.setupLogoErrorHandling();
-        await this.optimizeLogos();
+        // Logo system removed - site uses CSS-generated logos only
         this.setupLogoAccessibility();
     }
 
     setupLogoErrorHandling() {
-        const errorHandler = (e) => {
-            if (e.target.tagName === 'IMG' && 
-                (e.target.classList.contains('fnf-logo-image') || 
-                 e.target.dataset.logoPriority)) {
-                
-                console.warn('Logo failed to load, attempting fallback:', e.target.src);
-                this.handleLogoError(e.target);
-            }
-        };
-        
-        document.addEventListener('error', errorHandler, true);
-        this.eventListeners.push({ element: document, event: 'error', handler: errorHandler, capture: true });
+        // Logo error handling removed - site uses CSS-generated logos only
     }
 
     handleLogoError(img) {
-        let fallbackSrc = img.src;
-        
-        if (fallbackSrc.includes('.webp')) {
-            fallbackSrc = fallbackSrc.replace('.webp', '.svg');
-        } else if (fallbackSrc.includes('.svg')) {
-            fallbackSrc = fallbackSrc.replace('.svg', '.png');
-        } else {
-            this.createCSSFallback(img);
-            return;
-        }
-        
-        img.src = fallbackSrc;
-        img.classList.add('logo-error');
+        // Logo error handling removed - site uses CSS-generated logos only
     }
 
     createCSSFallback(imgElement) {
-        const fallbackDiv = document.createElement('div');
-        fallbackDiv.className = 'fnf-logo-css-fallback slds-brand__logo-image';
-        fallbackDiv.innerHTML = '<div class="fnf-inner slds-brand__logo-text"><span class="fnf-wordmark">F-n-F</span></div>';
-        fallbackDiv.setAttribute('role', 'img');
-        fallbackDiv.setAttribute('aria-label', 'Food-N-Force Logo - Modern Solutions for Food Banks');
-        
-        if (imgElement.hasAttribute('aria-labelledby')) {
-            fallbackDiv.setAttribute('aria-labelledby', imgElement.getAttribute('aria-labelledby'));
-        }
-        
-        imgElement.parentNode.replaceChild(fallbackDiv, imgElement);
-        console.warn('Logo fallback activated: CSS-generated logo displayed');
+        // CSS fallback removed - site uses CSS-generated logos only
     }
 
     async optimizeLogos() {
-        const logos = document.querySelectorAll('[data-logo-priority], .fnf-logo-image, .hero-logo-large, .footer-logo');
+        // Logo optimization removed - site uses CSS-generated logos only
+        const logos = [];
         
         for (const logo of logos) {
             if (logo.dataset.logoPriority === 'critical') {
@@ -603,11 +568,7 @@ class FoodNForceCore {
     }
 
     enhanceLogosForHighContrast() {
-        const logos = document.querySelectorAll('.fnf-logo-image, .hero-logo-large, .footer-logo');
-        logos.forEach(logo => {
-            logo.style.border = '2px solid currentColor';
-            logo.style.filter = 'contrast(1.2)';
-        });
+        // Logo enhancement removed - site uses CSS-generated logos only
     }
 
     setupAccessibilityEnhancements() {
