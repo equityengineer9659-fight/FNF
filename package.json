@@ -33,7 +33,14 @@
     "test:governance": "npm run governance:validate && npm run governance:sync:dry",
     "test:multi-page": "playwright test --config=tools/testing/playwright.config.js",
     "test:special-effects": "playwright test --config=tools/testing/playwright.config.js --grep='special-effects'",
-    "test:quality-gates": "node tools/testing/quality-gates.js"
+    "test:quality-gates": "node tools/testing/quality-gates.js",
+    "test:rollback-validation": "playwright test tools/testing/rollback-validation-protocol.js --config=tools/testing/playwright.config.js",
+    "test:rollback-pre": "playwright test --config=tools/testing/playwright.config.js --grep='Pre-Rollback Documentation'",
+    "test:rollback-post": "playwright test --config=tools/testing/playwright.config.js --grep='Post-Rollback Validation'",
+    "test:performance-budget": "node tools/testing/performance-budget-monitor.js",
+    "test:critical-navigation": "playwright test --config=tools/testing/playwright.config.js --grep='Critical navigation smoke test'",
+    "ci:rollback-validation": "node tools/testing/rollback-ci-integration.js",
+    "setup:rollback-validation": "node tools/testing/setup-rollback-validation.js"
   },
   "repository": {
     "type": "git",
@@ -56,7 +63,6 @@
     "@playwright/test": "^1.40.0",
     "eslint": "^8.55.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-accessibility": "^2.1.0",
     "eslint-plugin-import": "^2.29.0",
     "html-validate": "^8.7.3",
     "htmlhint": "^1.1.4",

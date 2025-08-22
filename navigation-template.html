@@ -1,0 +1,70 @@
+<!-- FOOD-N-FORCE STATIC NAVIGATION TEMPLATE -->
+<!-- Extracted from unified-navigation-refactored.js for HTML-based implementation -->
+<!-- ADR-001: Emergency Navigation Architecture Decision -->
+
+<nav class="navbar universal-nav custom-nav" role="banner">
+    <div class="slds-container_fluid">
+        <!-- SLDS Brand Header Pattern: Logo (far left) | Company Name (center) | Mobile Toggle (far right) -->
+        <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small header-layout">
+            
+            <!-- SLDS Brand Logo Container - Far Left -->
+            <div class="slds-col slds-no-flex logo-container">
+                <div class="slds-brand fnf-logo-wrapper nav-animate-logo">
+                    <a href="index.html" class="slds-brand__logo-link brand-logo-link" aria-label="Food-N-Force Home" title="Food-N-Force - Modern Solutions for Food Banks">
+                        <div class="fnf-logo" role="img" aria-labelledby="nav-logo-title">
+                            <div class="fnf-inner">
+                                <span class="fnf-wordmark">F-n-F</span>
+                            </div>
+                        </div>
+                        <span id="nav-logo-title" class="slds-assistive-text">Food-N-Force Logo - Modern Solutions for Food Banks</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Company Name Container - Center -->
+            <div class="slds-col slds-no-flex company-name-container-centered">
+                <h1 class="brand-logo universal-brand-logo nav-animate-company-name">Food-N-Force</h1>
+            </div>
+            
+            <!-- Mobile Navigation Toggle - Far Right -->
+            <div class="slds-col slds-no-flex slds-hide slds-show_small mobile-toggle-container">
+                <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
+                    <span class="hamburger-icon nav-hamburger-icon nav-hamburger-closed">☰</span>
+                </button>
+            </div>
+            
+            <!-- Spacer for desktop (maintains balance) -->
+            <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
+                <!-- Balances the logo container -->
+            </div>
+        </div>
+        
+        <!-- Navigation Menu - Centered Below Company Name -->
+        <div class="slds-grid slds-grid_align-center slds-p-top_small">
+            <div class="slds-col">
+                <nav class="slds-text-align_center nav-menu-container" role="navigation" aria-label="Main navigation">
+                    <ul class="nav-menu slds-nav-horizontal universal-nav-menu nav-mobile-menu" id="main-nav">
+                        <li class="slds-nav-horizontal__item">
+                            <a href="index.html" class="nav-link universal-nav-link nav-animate-item">Home</a>
+                        </li>
+                        <li class="slds-nav-horizontal__item">
+                            <a href="services.html" class="nav-link universal-nav-link nav-animate-item">Services</a>
+                        </li>
+                        <li class="slds-nav-horizontal__item">
+                            <a href="resources.html" class="nav-link universal-nav-link nav-animate-item">Resources</a>
+                        </li>
+                        <li class="slds-nav-horizontal__item">
+                            <a href="impact.html" class="nav-link universal-nav-link nav-animate-item">Impact</a>
+                        </li>
+                        <li class="slds-nav-horizontal__item">
+                            <a href="contact.html" class="nav-link universal-nav-link nav-animate-item">Contact</a>
+                        </li>
+                        <li class="slds-nav-horizontal__item">
+                            <a href="about.html" class="nav-link universal-nav-link nav-animate-item">About Us</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</nav>

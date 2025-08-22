@@ -470,29 +470,9 @@ class FoodNForceNavigation {
         // Use CSS classes instead of inline styles
         this.nav.classList.add('nav-show');
         
-        // Enhanced ARIA support for dropdown overlay
         this.toggle.setAttribute('aria-expanded', 'true');
         this.nav.setAttribute('aria-hidden', 'false');
-        this.nav.setAttribute('role', 'dialog');
-        this.nav.setAttribute('aria-modal', 'true');
-        this.nav.setAttribute('aria-label', 'Mobile Navigation Menu');
         this.isOpen = true;
-
-        // Calculate and set optimal mobile menu height to show all items
-        this.calculateMobileMenuHeight();
-
-        // Enhanced positioning for dropdown overlay (mobile only)
-        if (window.innerWidth <= 768) {
-            // Ensure dropdown appears as proper overlay
-            this.nav.style.position = 'fixed';
-            this.nav.style.top = '80px';
-            this.nav.style.left = '0';
-            this.nav.style.right = '0';
-            this.nav.style.zIndex = '999999';
-            
-            // Add body scroll lock for modal behavior
-            document.body.style.overflow = 'hidden';
-        }
 
         // Animate hamburger icon using CSS classes
         const icon = this.toggle.querySelector('.nav-hamburger-icon');
@@ -501,14 +481,11 @@ class FoodNForceNavigation {
             icon.classList.add('nav-hamburger-open');
         }
 
-        // Enhanced focus management for dropdown
+        // Trap focus
         setTimeout(() => {
             const firstNavItem = this.nav.querySelector('.nav-link');
             if (firstNavItem) {
                 firstNavItem.focus();
-                
-                // Announce to screen readers
-                this.logoManager.announceToScreenReader('Mobile navigation menu opened. Use arrow keys to navigate, escape to close.');
             }
         }, 300);
     }
@@ -516,29 +493,9 @@ class FoodNForceNavigation {
     closeNav() {
         // Use CSS classes instead of inline styles
         this.nav.classList.remove('nav-show');
-        
-        // Reset ARIA attributes
         this.toggle.setAttribute('aria-expanded', 'false');
         this.nav.setAttribute('aria-hidden', 'true');
-        this.nav.removeAttribute('role');
-        this.nav.removeAttribute('aria-modal');
-        this.nav.removeAttribute('aria-label');
         this.isOpen = false;
-
-        // Reset mobile menu height override
-        this.resetMobileMenuHeight();
-
-        // Reset positioning and body scroll (mobile only)
-        if (window.innerWidth <= 768) {
-            this.nav.style.position = '';
-            this.nav.style.top = '';
-            this.nav.style.left = '';
-            this.nav.style.right = '';
-            this.nav.style.zIndex = '';
-            
-            // Restore body scroll
-            document.body.style.overflow = '';
-        }
 
         // Reset hamburger icon using CSS classes
         const icon = this.toggle.querySelector('.nav-hamburger-icon');
@@ -546,54 +503,6 @@ class FoodNForceNavigation {
             icon.classList.remove('nav-hamburger-open');
             icon.classList.add('nav-hamburger-closed');
         }
-        
-        // Announce to screen readers
-        this.logoManager.announceToScreenReader('Mobile navigation menu closed.');
-    }
-
-    calculateMobileMenuHeight() {
-        // Only calculate on mobile screens
-        if (window.innerWidth > 768) return;
-
-        const navItems = this.nav.querySelectorAll('.slds-nav-horizontal__item');
-        const viewportHeight = window.innerHeight;
-        const headerHeight = 80; // Navigation header height
-        const availableHeight = viewportHeight - headerHeight;
-        
-        // Calculate required height for all navigation items
-        let totalItemHeight = 0;
-        let itemPadding = 32; // 2rem padding top/bottom
-        let itemGap = 16; // Gap between items
-        
-        // Each navigation item needs minimum 60px height + margins
-        const itemMinHeight = 60;
-        const itemMarginBottom = 16;
-        
-        totalItemHeight = (navItems.length * (itemMinHeight + itemMarginBottom)) + itemPadding;
-        
-        // Ensure menu height accommodates all items without scrolling
-        const optimalHeight = Math.min(totalItemHeight, availableHeight - 20); // 20px buffer
-        
-        // Set CSS custom property for mobile menu height
-        document.documentElement.style.setProperty('--mobile-menu-calculated-height', `${optimalHeight}px`);
-        
-        // Add class to indicate height calculation is active
-        this.nav.classList.add('nav-height-calculated');
-        
-        // Ensure no internal scrolling if all items fit
-        if (totalItemHeight <= availableHeight - 20) {
-            this.nav.classList.add('nav-no-scroll');
-        } else {
-            this.nav.classList.remove('nav-no-scroll');
-        }
-
-        console.log(`Mobile menu height calculated: ${optimalHeight}px (${navItems.length} items, viewport: ${viewportHeight}px)`);
-    }
-
-    resetMobileMenuHeight() {
-        // Remove height calculation overrides
-        document.documentElement.style.removeProperty('--mobile-menu-calculated-height');
-        this.nav.classList.remove('nav-height-calculated', 'nav-no-scroll');
     }
 
     handleResize() {
@@ -603,9 +512,6 @@ class FoodNForceNavigation {
             resizeTimer = setTimeout(() => {
                 if (window.innerWidth > 768 && this.isOpen) {
                     this.closeNav();
-                } else if (window.innerWidth <= 768 && this.isOpen) {
-                    // Recalculate mobile menu height on resize
-                    this.calculateMobileMenuHeight();
                 }
             }, 250);
         });
