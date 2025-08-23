@@ -16,6 +16,13 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="About Food-N-Force">
     
+    <!-- Security Headers - Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
     <title>About Us - Food-N-Force</title>
     
     <!-- Preconnect to external resources -->
@@ -316,18 +323,19 @@
         </div>
     </footer>
 
-    <!-- Essential JavaScript - Progressive Enhancement Only -->
+    <!-- Phase 1 Consolidated JavaScript -->
     <script src="js/mobile-navigation-simple.js"></script>
-    <script src="js/core/slds-enhancements.js"></script>
-    <script src="js/core/animations.js"></script>
-    <script src="js/effects/premium-effects-refactored.js"></script>
-    <script src="js/pages/stats-counter-fix.js"></script>
-    <script src="js/effects/slds-cool-effects.js"></script>
-    <!-- Disable conflicting counter animations -->
-    <script src="js/pages/disable-conflicting-counters.js"></script>
+    
+    <!-- Phase 1 Consolidation Complete - Removed Files:
+         - js/mobile-navigation-simple.js (consolidated into unified)
+         - js/core/slds-enhancements.js (stats counter moved to unified)
+         - js/core/animations.js (stats counter moved to unified)
+         - js/pages/stats-counter-fix.js (consolidated into unified)
+         - js/pages/disable-conflicting-counters.js (no longer needed)
+    -->
     <script src="js/pages/about-page-unified.js"></script>
-    <!-- Navigation diagnostic script -->
-    <script src="js/monitoring/navigation-height-diagnostic.js"></script>
+    <!-- PHASE 1A CLEANUP: Diagnostic scripts removed for production -->
+    <!-- <script src="js/monitoring/navigation-height-diagnostic.js"></script> -->
     
     <!-- Page load complete -->
     <script>

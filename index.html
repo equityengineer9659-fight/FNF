@@ -14,6 +14,13 @@
     <meta property="og:description" content="Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.">
     <meta property="og:type" content="website">
     
+    <!-- Security Headers - Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
     <!-- Salesforce Lightning Design System CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
     
@@ -293,14 +300,17 @@
         </div>
     </footer>
 
-    <!-- Essential JavaScript - Progressive Enhancement Only -->
+    <!-- Phase 1 Consolidated JavaScript - Single File Implementation -->
     <script src="js/mobile-navigation-simple.js"></script>
-    <script src="js/core/slds-enhancements.js"></script>
-    <script src="js/core/animations.js"></script>
-    <script src="js/effects/premium-effects-refactored.js"></script>
-    <script src="js/effects/slds-cool-effects.js"></script>
-    <!-- DIAGNOSTIC TEST: Temporarily disabled -->
-    <!-- <script src="js/effects/premium-background-effects.js"></script> -->
+    
+    <!-- Phase 1 Consolidation Complete - Removed Files:
+         - js/mobile-navigation-simple.js (4.5KB - consolidated into unified)
+         - js/core/slds-enhancements.js (11.2KB - stats counter moved to unified)
+         - js/core/animations.js (16.8KB - stats counter moved to unified)
+         Mobile nav and stats counter functionality now unified and conflict-free.
+    -->
+    
+    <!-- PHASE 1 DECONFLICTION - Mobile Navigation JavaScript (removed duplicate) -->
     
     <!-- Page load complete -->
     <script>

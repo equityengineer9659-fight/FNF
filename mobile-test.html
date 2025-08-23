@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Navigation Test - Food-N-Force</title>
+    
+    <!-- Salesforce Lightning Design System CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation-unified.css">
+    <link rel="stylesheet" href="css/responsive-enhancements.css">
+    
+    <style>
+        .test-info {
+            position: fixed;
+            top: 100px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 2000;
+            border-radius: 4px;
+            max-width: 300px;
+        }
+        .test-info h3 {
+            margin: 0 0 10px 0;
+            color: #00d4ff;
+        }
+        .console-log {
+            background: #000;
+            color: #0f0;
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 3px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body class="index-page">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Static HTML Navigation -->
+    <nav class="navbar universal-nav custom-nav" role="banner">
+        <div class="slds-container_fluid">
+            <!-- SLDS Brand Header Pattern: Logo (far left) | Company Name (center) | Mobile Toggle (far right) -->
+            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small header-layout">
+                <!-- SLDS Brand Logo Container - Far Left -->
+                <div class="slds-col slds-no-flex logo-container">
+                    <div class="slds-brand fnf-logo-wrapper">
+                        <a href="index.html" class="slds-brand__logo-link brand-logo-link" aria-label="Food-N-Force Home" title="Food-N-Force - Modern Solutions for Food Banks">
+                            <div class="fnf-logo" role="img" aria-labelledby="nav-logo-title">
+                                <div class="fnf-inner">
+                                    <span class="fnf-wordmark">F-n-F</span>
+                                </div>
+                            </div>
+                            <span id="nav-logo-title" class="slds-assistive-text">Food-N-Force Logo - Modern Solutions for Food Banks</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Company Name Container - Center -->
+                <div class="slds-col slds-no-flex company-name-container-centered">
+                    <h1 class="brand-logo universal-brand-logo">Food-N-Force</h1>
+                </div>
+                <!-- Mobile Navigation Toggle - Far Right -->
+                <div class="slds-col slds-no-flex slds-hide slds-show_small mobile-toggle-container">
+                    <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
+                        <span class="hamburger-icon">☰</span>
+                    </button>
+                </div>
+                <!-- Spacer for desktop (maintains balance) -->
+                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
+                    <!-- Balances the logo container -->
+                </div>
+            </div>
+            <!-- Navigation Menu - Centered Below Company Name -->
+            <div class="slds-grid slds-grid_align-center slds-p-top_small">
+                <div class="slds-col">
+                    <nav class="slds-text-align_center nav-menu-container" role="navigation" aria-label="Main navigation">
+                        <ul class="nav-menu slds-nav-horizontal universal-nav-menu" id="main-nav">
+                            <li class="slds-nav-horizontal__item slds-is-active">
+                                <a href="index.html" class="nav-link universal-nav-link">Home</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="services.html" class="nav-link universal-nav-link">Services</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="resources.html" class="nav-link universal-nav-link">Resources</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="impact.html" class="nav-link universal-nav-link">Impact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="contact.html" class="nav-link universal-nav-link">Contact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="about.html" class="nav-link universal-nav-link">About Us</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Test Information Panel -->
+    <div class="test-info">
+        <h3>Mobile Menu Test</h3>
+        <p><strong>Instructions:</strong></p>
+        <ul>
+            <li>Resize browser to mobile width (&lt;768px)</li>
+            <li>Click hamburger menu (☰)</li>
+            <li>Menu should appear with navigation links</li>
+            <li>Check console for debug messages</li>
+        </ul>
+        <p><strong>Current Status:</strong></p>
+        <div id="status">Initializing...</div>
+        <div class="console-log" id="console-output"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main" style="padding-top: 200px; text-align: center;">
+        <h2>Mobile Navigation Test Page</h2>
+        <p>This page is for testing the mobile hamburger menu functionality.</p>
+        <p>Open developer tools and resize to mobile width to test.</p>
+        <p>Server running at: <code>http://localhost:8080</code></p>
+    </main>
+
+    <!-- Mobile Navigation Script -->
+    <script src="js/mobile-navigation-simple.js"></script>
+    
+    <!-- Test Monitoring Script -->
+    <script>
+        // Capture console logs for display
+        const originalLog = console.log;
+        const originalError = console.error;
+        const consoleOutput = document.getElementById('console-output');
+        const statusDiv = document.getElementById('status');
+        
+        function addToConsoleDisplay(message, type = 'log') {
+            const div = document.createElement('div');
+            div.style.color = type === 'error' ? '#f00' : '#0f0';
+            div.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToConsoleDisplay(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToConsoleDisplay(args.join(' '), 'error');
+        };
+        
+        // Monitor page state
+        function updateStatus() {
+            const toggle = document.querySelector('.mobile-nav-toggle');
+            const menu = document.querySelector('.nav-menu');
+            const width = window.innerWidth;
+            
+            let status = `Width: ${width}px | `;
+            status += toggle ? '✅ Toggle found | ' : '❌ Toggle missing | ';
+            status += menu ? '✅ Menu found | ' : '❌ Menu missing | ';
+            
+            if (menu) {
+                status += `Classes: ${menu.className} | `;
+                status += `Visible: ${menu.classList.contains('nav-show') ? '✅' : '❌'}`;
+            }
+            
+            statusDiv.innerHTML = status;
+        }
+        
+        // Update status every second
+        setInterval(updateStatus, 1000);
+        updateStatus();
+        
+        // Log when mobile toggle is clicked
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.mobile-nav-toggle')) {
+                console.log('🔥 TEST: Mobile toggle clicked detected by test script');
+            }
+        });
+        
+        console.log('🧪 Test monitoring script loaded');
+    </script>
+</body>
+</html>
