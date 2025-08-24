@@ -10,31 +10,13 @@
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // ============================================
-    // FIX: Force divider visibility
+    // DIVIDER STYLING: Ensure consistent appearance
     // ============================================
-    function fixDividers() {
-        console.log('=== DIVIDER FIX START ===');
+    function styleDividers() {
         const dividers = document.querySelectorAll('.fnf-section-divider');
         const isMobile = window.innerWidth <= 768;
         
-        console.log('Window width:', window.innerWidth);
-        console.log('Is mobile:', isMobile);
-        console.log('Dividers found:', dividers.length);
-        
-        // Mobile divider hiding: Hide first 5 dividers on mobile
-        const mobileHideDividers = [0, 1, 2, 3, 4]; // First 5 dividers
-        
-        dividers.forEach((div, index) => {
-            console.log('Processing divider', index + 1);
-            
-            // On mobile: COMPLETELY REMOVE specific dividers
-            if (isMobile && mobileHideDividers.includes(index)) {
-                div.remove();
-                console.log('*** COMPLETELY REMOVED MOBILE DIVIDER ***', index + 1);
-                return; // Skip styling for removed dividers
-            }
-            
-            // Show dividers (desktop or remaining mobile dividers)
+        dividers.forEach(div => {
             div.style.display = 'block';
             div.style.width = '100%';
             div.style.position = 'relative';
@@ -42,43 +24,25 @@
             div.style.border = 'none';
             div.style.padding = '0';
             
-            // Device-specific styling
             if (isMobile) {
-                // Mobile: Ultra-thin and very dark
-                div.style.height = '0.25px';
-                div.style.minHeight = '0.25px';
-                div.style.maxHeight = '0.25px';
-                div.style.background = 'linear-gradient(90deg, transparent 0%, #000000 50%, transparent 100%)';
-                div.style.opacity = '0.9';
-                div.style.boxShadow = '0 0 2px rgba(0, 0, 0, 0.5), 0 0 4px rgba(0, 0, 0, 0.3)';
+                // Mobile: Thin and subtle
+                div.style.height = '1px';
+                div.style.background = 'linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%)';
+                div.style.opacity = '0.5';
                 div.style.margin = '1.5rem 0';
-                div.style.transform = 'translateZ(0)';
-                div.style.willChange = 'opacity';
-                console.log('Mobile divider styled:', index + 1);
             } else {
                 // Desktop: Standard blue styling
                 div.style.height = '2px';
-                div.style.minHeight = '2px';
-                div.style.maxHeight = '2px';
                 div.style.background = 'linear-gradient(90deg, transparent 0%, #0176d3 50%, transparent 100%)';
                 div.style.opacity = '0.6';
                 div.style.boxShadow = '0 0 8px rgba(1, 118, 211, 0.4), 0 0 16px rgba(1, 118, 211, 0.2)';
                 div.style.margin = '2rem 0';
-                console.log('Desktop divider styled:', index + 1);
             }
         });
     }
 
-    // Apply divider fix immediately and after DOM loads
-    fixDividers();
-    document.addEventListener('DOMContentLoaded', fixDividers);
-    
-    // Reapply on resize to handle orientation changes and responsive breakpoints
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(fixDividers, 250);
-    });
+    // Apply divider styling on load
+    document.addEventListener('DOMContentLoaded', styleDividers);
 
     // ============================================
     // 1. INTERSECTION OBSERVER FOR ANIMATIONS
