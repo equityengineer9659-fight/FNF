@@ -590,26 +590,54 @@ p {
 /* Fix index page hero section positioning issue - clear fixed navbar */
 body.index-page main#main-content {
     margin-top: 0 !important;
-    padding-top: 130px !important; /* Match navbar clearance height */
+    padding-top: 0 !important; /* No gap - hero touches navbar */
     position: relative !important;
 }
 
 body.index-page .hero-section {
     margin-top: 0 !important;
-    padding-top: 2rem !important; /* Reduce from 4rem since main has navbar clearance */
+    padding-top: 6rem !important; /* Push content below navbar but background touches */
+    padding-bottom: var(--spacing-large) !important; /* Keep bottom padding */
+}
+
+/* Hero section font sizes - match reference page */
+body.index-page .hero-title,
+body.index-page .hero-section h2 {
+    font-size: 2.5rem !important; /* Moderate hero title size */
+    font-weight: 300 !important;
+    line-height: 1.2 !important;
+}
+
+body.index-page .hero-subtitle,
+body.index-page .hero-section p {
+    font-size: 1.125rem !important; /* 18px for subtitle */
+    font-weight: 400 !important;
+    line-height: 1.4 !important;
+    opacity: 0.95 !important;
 }
 
 /* Mobile responsive navbar clearance for index page */
 @media (max-width: 768px) {
     body.index-page main#main-content {
-        padding-top: 120px !important; /* Mobile navbar height */
+        padding-top: 0 !important; /* Mobile - hero touches navbar */
+    }
+    
+    /* Mobile hero font sizes */
+    body.index-page .hero-title,
+    body.index-page .hero-section h2 {
+        font-size: 1.75rem !important; /* 28px for mobile */
+    }
+    
+    body.index-page .hero-subtitle,
+    body.index-page .hero-section p {
+        font-size: 1rem !important; /* 16px for mobile */
     }
 }
 
 /* Large desktop responsive navbar clearance for index page */
 @media (min-width: 1025px) {
     body.index-page main#main-content {
-        padding-top: 140px !important; /* Large desktop navbar height */
+        padding-top: 0 !important; /* Desktop - hero touches navbar */
     }
 }
 
@@ -1847,10 +1875,10 @@ body.index-page .measurable-card {
         justify-items: center;
     }
 
-/* Stats card styling for horizontal layout */
+/* Stats card styling for horizontal layout - match reference shadow styling */
 .index-page .stat-card {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.008) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
     border-radius: 12px !important;
     padding: 2rem 1.5rem !important;
     text-align: center !important;
@@ -1859,18 +1887,27 @@ body.index-page .measurable-card {
     -webkit-backdrop-filter: blur(10px) !important;
     width: 100% !important;
     max-width: 280px !important;
-    height: auto !important;
+    height: 200px !important; /* Fixed height for alignment */
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
+    /* Soft blurred shadow like reference page */
+    box-shadow: 
+        0 6px 30px rgba(0, 0, 0, 0.2),
+        0 2px 8px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     align-items: center !important;
 }
 
 .index-page .stat-card:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.015) !important;
     border-color: rgba(1, 118, 211, 0.3) !important;
-    transform: translateY(-5px) scale(1.02) !important;
-    box-shadow: 0 10px 30px rgba(1, 118, 211, 0.2) !important;
+    transform: translateY(-8px) scale(1.03) !important;
+    /* More prominent shadow on hover */
+    box-shadow: 
+        0 8px 40px rgba(1, 118, 211, 0.25),
+        0 4px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 /* Stats column styling */
