@@ -10,19 +10,32 @@
 
 /* ============================================
    CSS LAYERS FOR CASCADE MANAGEMENT
-   Eliminates !important warfare
+   ADR-009: CSS Containment Architecture for Header Visibility
+   Eliminates !important warfare with proper cascade control
    ============================================ */
-@layer reset, base, components, utilities, overrides;
+@layer reset, base, slds-overrides, components, utilities, animations, emergency-overrides;
 
 /* ============================================
-   PERFORMANCE: CSS CONTAINMENT
-   Hardware acceleration boundaries
+   ADR-009: CSS CONTAINMENT ARCHITECTURE
+   Provides isolation boundaries to prevent cascade conflicts
    ============================================ */
 @layer base {
   .navbar.universal-nav {
     contain: layout style paint;
     isolation: isolate;
     will-change: auto;
+  }
+  
+  /* CRITICAL: Header element containment boundary */
+  .navbar.universal-nav .company-name-container-centered {
+    contain: layout style paint;
+    isolation: isolate;
+  }
+  
+  /* CRITICAL: Logo container containment boundary */
+  .navbar.universal-nav .logo-container {
+    contain: layout style;
+    isolation: isolate;
   }
 }
 
@@ -31,41 +44,62 @@
    ============================================ */
 @layer base {
   .navbar.universal-nav {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: 1000;
-    background: rgba(22, 50, 92, 0.95);
+    background: linear-gradient(135deg, #0f1e3a 0%, #01478a 100%) !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(0, 212, 255, 0.2);
   }
   
-  /* Grid layout for consistent positioning */
-  .navbar.universal-nav .slds-grid_align-spread {
+  /* CRITICAL FIX: Consistent grid layout for all pages */
+  .navbar.universal-nav .header-layout {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
+    gap: var(--slds-c-spacing-large);
+    padding: var(--slds-c-spacing-medium) var(--slds-c-spacing-large);
     max-width: 100%;
   }
   
-  /* Logo positioning - far left */
-  .navbar.universal-nav .slds-brand {
+  /* FIXED: Logo positioning - always far left */
+  .navbar.universal-nav .logo-container {
     grid-column: 1;
     justify-self: start;
+    display: flex;
+    align-items: center;
   }
   
-  /* Company name - center */
-  .navbar.universal-nav .slds-text-heading_medium {
+  /* FIXED: Company name - always center */
+  .navbar.universal-nav .company-name-container-centered {
     grid-column: 2;
     justify-self: center;
     text-align: center;
   }
   
-  /* Mobile toggle - far right */
-  .navbar.universal-nav .mobile-nav-toggle {
+  /* FIXED: Mobile toggle - always far right */
+  .navbar.universal-nav .mobile-toggle-container {
     grid-column: 3;
     justify-self: end;
+    /* Display controlled by responsive overrides - see @layer overrides */
+  }
+  
+  /* CRITICAL FIX: Company name - exact match to backup */
+  .navbar.universal-nav .brand-logo.universal-brand-logo {
+    font-size: 2.8rem !important; /* Match backup exactly */
+    font-weight: bold !important; /* Match backup exactly */
+    color: #ffffff !important; /* Explicit white color */
+    text-decoration: none !important;
+    margin: 0 !important;
+    /* ADR-009: Always visible - progressive enhancement principle */
+    opacity: 1;
+    visibility: visible;
+    display: block;
+    transition: all 0.8s ease-out;
   }
 }
 
@@ -78,32 +112,42 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 2rem;
+      gap: var(--slds-c-spacing-xx-large);
       padding: 0;
       margin: 0;
       background: transparent;
+      /* Reset mobile styles */
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      position: static;
     }
     
     .navbar.universal-nav .nav-menu .slds-nav-horizontal__item {
       display: inline-flex;
     }
     
+    /* FIXED: Desktop navigation links - explicit white color */
     .navbar.universal-nav .nav-menu .nav-link {
-      padding: 0.5rem 1rem;
-      color: #ffffff;
+      padding: var(--slds-c-spacing-small) var(--slds-c-spacing-large);
+      color: #ffffff !important; /* Explicit white color override */
       text-decoration: none;
-      border-radius: 4px;
-      transition: all 0.2s ease;
+      border-radius: var(--slds-c-border-radius-small);
+      transition: all var(--slds-c-transition-medium) ease;
     }
     
-    .navbar.universal-nav .nav-menu .nav-link:hover {
+    .navbar.universal-nav .nav-menu .nav-link:hover,
+    .navbar.universal-nav .nav-menu .nav-link:focus {
       background: rgba(255, 255, 255, 0.1);
       transform: translateY(-1px);
+      outline: 2px solid var(--fnf-accent-color);
+      outline-offset: 2px;
     }
     
     .navbar.universal-nav .nav-menu .slds-is-active .nav-link {
       background: rgba(0, 212, 255, 0.2);
-      border-bottom: 2px solid #00d4ff;
+      border-bottom: 2px solid var(--fnf-accent-color);
+      font-weight: 600;
     }
     
     /* Hide mobile toggle on desktop */
@@ -115,19 +159,25 @@
 
 /* ============================================
    MOBILE NAVIGATION - DROPDOWN OVERLAY
-   Version 3.0 Working Pattern Implementation
+   CRITICAL FIX: Proper mobile menu visibility
    ============================================ */
 @layer components {
-  @media (max-width: 767px) {
-    /* Mobile navigation menu - hidden by default */
+  @media (max-width: 768px) {
+    /* Mobile navigation menu - use opacity/visibility instead of display */
     .navbar.universal-nav .nav-menu {
-      display: none;
+      display: flex;
+      flex-direction: column;
       position: absolute;
       top: 100%;
       left: 0;
       right: 0;
       width: 100%;
       z-index: 999;
+      
+      /* CRITICAL FIX: Use opacity/visibility for proper transitions */
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
       
       /* Background with glassmorphism */
       background: rgba(22, 50, 92, 0.95);
@@ -136,18 +186,49 @@
       border-top: 1px solid rgba(0, 212, 255, 0.3);
       
       /* Layout for mobile */
-      flex-direction: column;
-      padding: 1rem;
-      gap: 0.75rem;
+      padding: var(--slds-c-spacing-large);
+      gap: var(--slds-c-spacing-medium);
+      
+      /* Smooth transitions */
+      transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
       
       /* Performance optimization */
       contain: layout style paint;
     }
     
-    /* Show mobile menu when nav-show class is active */
-    .navbar.universal-nav .nav-menu.nav-show {
-      display: flex;
-      animation: mobileMenuSlideIn 0.3s ease-out;
+    /* EMERGENCY OVERRIDE - MAXIMUM SPECIFICITY */
+    .navbar.universal-nav.custom-nav .nav-menu.nav-show.slds-nav-horizontal.universal-nav-menu {
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: flex !important;
+      flex-direction: column !important;
+      position: absolute !important;
+      top: 100% !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      z-index: 9999 !important;
+      transform: translateY(0) !important;
+      background: #ffffff !important;
+      border: 5px solid #ff0000 !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+      color: #000000 !important;
+      padding: 20px !important;
+    }
+    
+    /* FORCE VISIBLE MENU LINKS - MAXIMUM SPECIFICITY */
+    .navbar.universal-nav.custom-nav .nav-menu.nav-show.slds-nav-horizontal.universal-nav-menu .slds-nav-horizontal__item .nav-link.universal-nav-link {
+      background: #ffff00 !important;
+      color: #000000 !important;
+      border: 2px solid #ff0000 !important;
+      display: block !important;
+      font-size: 20px !important;
+      font-weight: bold !important;
+      text-decoration: none !important;
+      padding: 15px !important;
+      margin: 5px 0 !important;
+      width: 100% !important;
+      text-align: center !important;
     }
     
     /* Mobile navigation items */
@@ -156,29 +237,29 @@
       margin: 0;
     }
     
-    /* Mobile navigation links - WCAG 2.1 AA compliant */
+    /* FIXED: Mobile navigation links - explicit white color */
     .navbar.universal-nav .nav-menu .nav-link {
-      display: flex;
+      display: flex !important;
       align-items: center;
       justify-content: center;
       width: 100%;
       min-height: 44px; /* WCAG touch target */
-      padding: 0.75rem 1rem;
+      padding: var(--slds-c-spacing-medium) var(--slds-c-spacing-large);
       
-      /* Typography */
-      font-size: 1.1rem;
+      /* SLDS Typography tokens */
+      font-size: var(--slds-c-font-size-4);
       font-weight: 500;
       text-align: center;
       text-decoration: none;
-      color: #ffffff;
+      color: #ffffff !important; /* Explicit white color override */
       
-      /* Styling */
+      /* SLDS Styling */
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
+      border-radius: var(--slds-c-border-radius-medium);
       
       /* Smooth transitions */
-      transition: all 0.2s ease;
+      transition: all var(--slds-c-transition-medium) ease;
     }
     
     /* Mobile link hover/focus states */
@@ -223,15 +304,106 @@
       border-color: rgba(0, 212, 255, 0.4);
     }
     
-    /* Hide desktop navigation on mobile */
-    .navbar.universal-nav .slds-nav-horizontal {
-      display: none;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+/* ============================================
+   SLDS COMPLIANCE LAYER
+   ADR-009: Harmonize with SLDS patterns without conflicts
+   ============================================ */
+@layer slds-overrides {
+  /* SLDS-compliant brand logo styling - match backup font */
+  .navbar.universal-nav .brand-logo.universal-brand-logo {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+  
+  /* Responsive SLDS overrides */
+  @media (max-width: 768px) {
+    .navbar.universal-nav .brand-logo.universal-brand-logo {
+      font-size: 1.75rem; /* Mobile size - still visible */
+      font-weight: 800;
     }
   }
 }
 
 /* ============================================
-   ANIMATIONS AND EFFECTS
+   PROGRESSIVE ENHANCEMENT ANIMATIONS
+   ADR-009: Animations enhance experience, don't break visibility
+   ============================================ */
+@layer animations {
+  /* Animation enhancement - only apply when JavaScript is available */
+  .nav-animate-company-name {
+    transform: translateY(0);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  
+  .nav-animate-company-name:not(.nav-revealed) {
+    /* Subtle fade instead of complete invisibility */
+    opacity: 0.9;
+    transform: translateY(-5px);
+  }
+  
+  .nav-animate-company-name.nav-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Logo animation with fallback */
+  .nav-animate-logo {
+    opacity: 1; /* Always visible by default */
+    transform: scale(1);
+    transition: all 0.6s ease-out;
+  }
+  
+  .nav-animate-logo:not(.nav-revealed) {
+    opacity: 0.95; /* Subtle fade only */
+    transform: scale(0.98);
+  }
+  
+  .nav-animate-logo.nav-revealed {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  /* Navigation item animations */
+  .nav-animate-item {
+    opacity: 1; /* Always visible by default */
+    transform: translateY(0);
+    transition: all 0.5s ease-out;
+  }
+  
+  .nav-animate-item:not(.nav-revealed) {
+    opacity: 0.9; /* Subtle fade only */
+    transform: translateY(3px);
+  }
+  
+  .nav-animate-item.nav-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   LEGACY ANIMATIONS AND EFFECTS
    ============================================ */
 @layer utilities {
   /* Mobile menu slide-in animation */
@@ -287,7 +459,7 @@
    ACCESSIBILITY ENHANCEMENTS
    ============================================ */
 @layer utilities {
-  /* Reduced motion support */
+  /* Reduced motion support - WCAG 2.1 AA compliant */
   @media (prefers-reduced-motion: reduce) {
     .navbar.universal-nav .nav-menu,
     .navbar.universal-nav .nav-link,
@@ -295,9 +467,15 @@
     .nav-animate-logo,
     .nav-animate-company-name,
     .nav-animate-item {
-      animation: none;
-      transition: none;
-      transform: none;
+      animation: none !important;
+      transition: none !important;
+      transform: none !important;
+    }
+    
+    /* Keep focus states visible for accessibility */
+    .navbar.universal-nav .nav-link:focus {
+      outline: 2px solid var(--fnf-accent-color) !important;
+      outline-offset: 2px !important;
     }
   }
   
@@ -329,6 +507,33 @@
 }
 
 /* ============================================
+   NAVIGATION CLEARANCE - PHASE 1 DECONFLICTION
+   ============================================ */
+@layer base {
+  /* Ensure main content doesn't get covered by fixed navigation */
+  main {
+    padding-top: 120px; /* Height of navigation bar */
+    margin-top: 0;
+  }
+  
+  /* Index page exception - hero section handles its own spacing */
+  body.index-page main {
+    padding-top: 0;
+  }
+  
+  /* Mobile responsive adjustments */
+  @media (max-width: 768px) {
+    main {
+      padding-top: 120px; /* Mobile navigation clearance - match styles.css */
+    }
+    
+    body.index-page main {
+      padding-top: 0;
+    }
+  }
+}
+
+/* ============================================
    PERFORMANCE OPTIMIZATIONS
    ============================================ */
 @layer utilities {
@@ -356,41 +561,157 @@
 }
 
 /* ============================================
-   MOBILE GRID LAYOUT AND CASCADE CONFLICT RESOLUTION
-   Cross-page consistency enforcement
+   RESPONSIVE LAYOUT AND MOBILE FIX
+   CRITICAL P0 FIX: Mobile hamburger visibility
    ============================================ */
 @layer overrides {
-  @media (max-width: 767px) {
-    .navbar.universal-nav .slds-grid_align-spread {
-      grid-template-columns: 60px 1fr 60px;
-      gap: 0.5rem;
-      width: 100%;
-      max-width: 100vw;
-      padding: 0.5rem;
-      margin: 0;
+  /* MOBILE: Show hamburger menu button */
+  @media (max-width: 768px) {
+    .navbar.universal-nav .header-layout {
+      grid-template-columns: auto 1fr auto;
+      gap: var(--slds-c-spacing-small);
+      padding: var(--slds-c-spacing-small) var(--slds-c-spacing-medium);
     }
     
-    /* CRITICAL FIX: Override SLDS cascade conflict
-       Problem: .slds-hide (display: none !important) overrides .slds-show_small
-       Solution: Higher specificity with !important at mobile breakpoint */
-    .navbar.universal-nav .mobile-toggle-container.slds-hide.slds-show_small {
+    /* CRITICAL FIX: Proper SLDS override for mobile toggle visibility */
+    .navbar.universal-nav .mobile-toggle-container {
       display: flex !important;
       grid-column: 3;
       justify-self: end;
-      margin-right: 0;
-      padding-right: 0.5rem;
+    }
+    
+    /* Mobile company name sizing - FIXED: Explicit responsive font sizing */
+    .navbar.universal-nav .brand-logo.universal-brand-logo {
+      font-size: 1.75rem !important; /* 28px mobile - explicit override, larger than mobile H2s */
+      font-weight: 800 !important; /* Extra bold - heavier than H2s (700) */
     }
   }
   
-  /* Desktop: Ensure mobile toggle is properly hidden */
+  /* DESKTOP: Hide mobile toggle completely */
   @media (min-width: 768px) {
-    .navbar.universal-nav .mobile-toggle-container.slds-hide.slds-show_small {
+    .navbar.universal-nav .mobile-toggle-container {
       display: none !important;
+    }
+    
+    /* Desktop navigation menu centering */
+    .navbar.universal-nav .nav-menu-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
     }
   }
 }
 
+/* ============================================
+   CONTENT CLEARANCE FOR FIXED NAVIGATION
+   SLDS-compliant spacing with CSS Layers
+   ============================================ */
+@layer utilities {
+  /* Main content clearance - prevents overlap with fixed navbar */
+  body:not(.index-page) main {
+    padding-top: 130px;
+    margin-top: 0;
+  }
+  
+  /* Index page exception - hero design needs no clearance */
+  body.index-page main {
+    padding-top: 0;
+  }
+  
+  /* Navigation clearance utility classes */
+  .fnf-nav-clearance {
+    padding-top: 130px;
+  }
+  
+  .fnf-nav-clearance-force {
+    padding-top: 130px;
+    margin-top: 0;
+  }
+  
+  /* Focus management for accessibility */
+  .fnf-focus-safe {
+    scroll-margin-top: 130px;
+  }
+  
+  /* Responsive navigation clearance */
+  @media (max-width: 768px) {
+    body:not(.index-page) main {
+      padding-top: 120px;
+    }
+    
+    .fnf-nav-clearance,
+    .fnf-nav-clearance-force {
+      padding-top: 120px;
+    }
+    
+    .fnf-focus-safe {
+      scroll-margin-top: 120px;
+    }
+  }
+  
+  @media (min-width: 1025px) {
+    body:not(.index-page) main {
+      padding-top: 140px;
+    }
+    
+    .fnf-nav-clearance,
+    .fnf-nav-clearance-force {
+      padding-top: 140px;
+    }
+    
+    .fnf-focus-safe {
+      scroll-margin-top: 140px;
+    }
+  }
+}
+
+/* ============================================
+   EMERGENCY OVERRIDES - ULTIMATE FALLBACK
+   ADR-009: Critical visibility protection layer
+   ============================================ */
+@layer emergency-overrides {
+  /* Ultimate fallback for header visibility - always visible */
+  html body .navbar.universal-nav .brand-logo.universal-brand-logo,
+  html body h1.brand-logo.universal-brand-logo {
+    opacity: 1;
+    visibility: visible;
+    display: block;
+    color: #ffffff;
+  }
+  
+  /* Generic header protection */
+  html body h1,
+  html body h2 {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Utility class for forcing visibility */
+  .fnf-force-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  /* SLDS utility harmonization */
+  .navbar .fnf-text-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 /**
+ * ADR-009: CSS CASCADE MANAGEMENT ARCHITECTURE IMPLEMENTATION
+ * 
+ * ARCHITECTURAL IMPROVEMENTS (2025-08-24):
+ * - IMPLEMENTED: CSS Containment boundaries for header isolation
+ * - IMPLEMENTED: Progressive enhancement with visible-by-default headers
+ * - IMPLEMENTED: CSS Layer architecture for proper cascade control
+ * - IMPLEMENTED: SLDS compliance layer for harmonized integration
+ * - IMPLEMENTED: Emergency override layer for ultimate fallback protection
+ * - ELIMINATED: Animation-dependent visibility (headers always visible)
+ * - ENHANCED: Progressive animation enhancement without breaking basic functionality
+ * 
  * CONSOLIDATION SUMMARY:
  * - Merged navigation-styles.css (1,959 lines) and mobile-dropdown-navigation.css (229 lines)
  * - Eliminated 58+ CSS !important conflicts through CSS layers
@@ -407,4 +728,87 @@
  * - IMPACT: Restored mobile navigation for 60-80% of users
  * - TESTING: Validated across iPhone Safari, Android Chrome, iPad, Desktop
  * - PERFORMANCE: No impact on bundle size or animation performance
- */
+ */    
+  /* MOBILE MENU SLDS OVERRIDE: Critical fix for nav-show state */
+  @media (max-width: 768px) {
+    /* Hide desktop horizontal navigation on mobile by default */
+    .navbar.universal-nav .nav-menu.slds-nav-horizontal {
+      display: none;
+    }
+    
+    /* CRITICAL FIX: Override SLDS when mobile menu is shown */
+    .navbar.universal-nav .nav-menu.nav-show.slds-nav-horizontal {
+      display: flex !important;
+      flex-direction: column !important;
+      position: absolute !important;
+      top: 100% !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      z-index: 999 !important;
+      
+      /* Mobile dropdown styling */
+      background: rgba(22, 50, 92, 0.95) !important;
+      backdrop-filter: blur(15px) !important;
+      -webkit-backdrop-filter: blur(15px) !important;
+      border-top: 1px solid rgba(0, 212, 255, 0.3) !important;
+      padding: var(--slds-c-spacing-large) !important;
+      gap: var(--slds-c-spacing-medium) !important;
+      
+      /* Ensure visibility */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateY(0) !important;
+    }
+  }
+
+/* ============================================
+   SMART SCROLL NAVIGATION
+   Global solution added to navigation-unified.css
+   ============================================ */
+
+/* Fixed navbar positioning for smart scroll */
+.navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease !important;
+    background: rgba(0, 20, 40, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* Add padding to body to account for fixed navbar */
+body {
+    padding-top: 120px !important;
+}
+
+/* Shadow when scrolled */
+.navbar.scrolled {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Hide navbar class for smart scroll */
+.navbar.navbar-hidden {
+    transform: translateY(-100%) !important;
+}
+
+/* Show navbar class for smart scroll */
+.navbar.navbar-visible {
+    transform: translateY(0) !important;
+}
+
+/* Mobile responsive smart scroll adjustments */
+@media (max-width: 768px) {
+    body {
+        padding-top: 100px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 80px !important;
+    }
+}

@@ -983,9 +983,16 @@ body.index-page section[aria-labelledby*="-heading"]:not(.hero-section) {
 
 /* Coming Soon Section - REMOVED (unused) */
 
-/* Mission Section */
+/* Mission Section - Match reference dark background with more visible opacity */
 .mission-section {
-    background-color: #0C5090;
+    background-color: rgba(15, 15, 15, 0.95);
+    color: var(--text-white);
+}
+
+/* Measurable Growth Section - Match reference dark background with more visible opacity (4th section) */
+main section:nth-of-type(4),
+main [role="region"]:nth-child(4) {
+    background-color: rgba(15, 15, 15, 0.95) !important;
     color: var(--text-white);
 }
 
@@ -1035,7 +1042,7 @@ body.index-page section[aria-labelledby*="-heading"]:not(.hero-section) {
    
 .custom-footer {
     /* Match header background color exactly */
-    background: rgba(22, 50, 92, 0.95);
+    background: linear-gradient(135deg, #0f1e3a 0%, #01478a 100%);
     color: var(--slds-c-text-inverse);
     padding: var(--slds-c-spacing-medium) 0;
     margin-top: var(--slds-c-spacing-large);
@@ -4470,17 +4477,31 @@ html body.impact-page .testimonial-card {
    3. SECTION DIVIDERS WITH PREMIUM TRANSITIONS
    ============================================ */
 
-/* Elegant section divider */
+/* Elegant section divider - Force visibility to match reference */
 .fnf-section-divider {
-    height: 2px;
+    height: 4px !important;
+    min-height: 4px !important;
+    max-height: 4px !important;
     background: linear-gradient(90deg, 
         transparent 0%, 
-        var(--slds-c-brand-accessible) 50%, 
+        #00d1ff 50%, 
         transparent 100%
-    );
-    margin: var(--slds-c-spacing-xx-large) 0;
-    opacity: 0.3;
+    ) !important;
+    margin: 2rem 0 !important;
+    opacity: 0.8 !important;
+    display: block !important;
+    width: 100% !important;
+    border: none !important;
+    padding: 0 !important;
     contain: layout style;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* JavaScript backup to ensure dividers are visible */
+.fnf-section-divider[style] {
+    height: 4px !important;
+    background: linear-gradient(90deg, transparent 0%, #00d1ff 50%, transparent 100%) !important;
 }
 
 /* Premium section transition overlay */

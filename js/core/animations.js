@@ -10,6 +10,29 @@
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // ============================================
+    // FIX: Force divider visibility
+    // ============================================
+    function fixDividers() {
+        const dividers = document.querySelectorAll('.fnf-section-divider');
+        dividers.forEach(div => {
+            div.style.height = '2px';
+            div.style.minHeight = '2px';
+            div.style.background = 'linear-gradient(90deg, transparent 0%, #0176d3 50%, transparent 100%)';
+            div.style.opacity = '0.6';
+            div.style.boxShadow = '0 0 8px rgba(1, 118, 211, 0.4), 0 0 16px rgba(1, 118, 211, 0.2)';
+            div.style.display = 'block';
+            div.style.width = '100%';
+            div.style.margin = '2rem 0';
+            div.style.position = 'relative';
+            div.style.zIndex = '10';
+        });
+    }
+
+    // Apply divider fix immediately and after DOM loads
+    fixDividers();
+    document.addEventListener('DOMContentLoaded', fixDividers);
+
+    // ============================================
     // 1. INTERSECTION OBSERVER FOR ANIMATIONS
     // ============================================
     
@@ -364,8 +387,9 @@
             }, { threshold: 0.5 });
             
             headings.forEach(heading => {
-                heading.style.opacity = '0';
-                observer.observe(heading);
+                // DISABLED: Don't animate headers - let CSS handle visibility
+                // heading.style.opacity = '0';
+                // observer.observe(heading);
             });
         }
     }
