@@ -29,8 +29,8 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
-    <!-- Salesforce Lightning Design System CSS - LOAD FIRST -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <!-- PHASE 2B: Custom SLDS Build (24KB vs 821KB CDN - 97% reduction) -->
+    <link rel="stylesheet" href="css/slds-custom.css">
     
     <!-- Custom CSS - Consolidated after cleanup -->
     <!-- Only loading existing CSS files after consolidation -->
@@ -70,7 +70,7 @@
                     <h1 class="brand-logo universal-brand-logo">Food-N-Force</h1>
                 </div>
                 <!-- Mobile Navigation Toggle - Far Right -->
-                <div class="slds-col slds-no-flex slds-hide slds-show_small mobile-toggle-container">
+                <div class="slds-col slds-no-flex mobile-toggle-container">
                     <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
                         <span class="hamburger-icon">☰</span>
                     </button>
@@ -116,7 +116,7 @@
         <section class="section-padding slds-p-horizontal_large" aria-labelledby="services-heading">
             <div class="slds-container_large slds-container_center">
                 <div class="slds-text-align_center slds-m-bottom_x-large">
-                    <h1 id="services-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Services</h1>
+                    <h2 id="services-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Services</h2>
                     <p class="slds-text-body_regular slds-text-color_weak">
                         Comprehensive digital solutions to transform your food bank operations
                     </p>
@@ -227,6 +227,9 @@
 
     <!-- Phase 1 Consolidated JavaScript -->
     <script src="js/mobile-navigation-simple.js"></script>
+    <script src="js/original-mesh-background.js"></script>
+    <script src="js/core/animations.js"></script>
+    <script src="js/unified-scroll.js"></script>
     <!-- PHASE 1A CLEANUP: Diagnostic scripts removed for production -->
     <!-- <script src="js/monitoring/services-diagnostic.js"></script> -->
     <!-- <script src="js/monitoring/navigation-height-diagnostic.js"></script> -->

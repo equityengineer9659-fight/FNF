@@ -29,8 +29,8 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
-    <!-- Salesforce Lightning Design System CSS - LOAD FIRST -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <!-- PHASE 2B: Custom SLDS Build (24KB vs 821KB CDN - 97% reduction) -->
+    <link rel="stylesheet" href="css/slds-custom.css">
     
     <!-- Custom CSS - Consolidated after cleanup -->
     <!-- Only loading existing CSS files after consolidation -->
@@ -70,7 +70,7 @@
                     <h1 class="brand-logo universal-brand-logo">Food-N-Force</h1>
                 </div>
                 <!-- Mobile Navigation Toggle - Far Right -->
-                <div class="slds-col slds-no-flex slds-hide slds-show_small mobile-toggle-container">
+                <div class="slds-col slds-no-flex mobile-toggle-container">
                     <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
                         <span class="hamburger-icon">☰</span>
                     </button>
@@ -116,7 +116,7 @@
         <section class="section-padding slds-p-horizontal_large" aria-labelledby="resources-heading">
             <div class="slds-container_large slds-container_center">
                 <div class="slds-text-align_center slds-m-bottom_x-large">
-                    <h1 id="resources-heading" class="slds-text-heading_large slds-m-bottom_medium">Resources & Insights</h1>
+                    <h2 id="resources-heading" class="slds-text-heading_large slds-m-bottom_medium">Resources & Insights</h2>
                     <p class="slds-text-body_regular slds-text-color_weak">
                         Expert guidance, tools, and funding opportunities to accelerate your digital transformation
                     </p>
@@ -294,6 +294,9 @@
 
     <!-- Phase 1 Consolidated JavaScript -->
     <script src="js/mobile-navigation-simple.js"></script>
+    <script src="js/original-mesh-background.js"></script>
+    <script src="js/core/animations.js"></script>
+    <script src="js/unified-scroll.js"></script>
     
     <!-- Page load complete -->
     <script>
