@@ -38,11 +38,38 @@
         --current-font-scale: var(--font-scale-mobile);
     }
     
-    /* Hero Section Mobile */
+    /* Hero Section Mobile - NOT bold, with short blue accent bar */
     .hero-title {
-        font-size: calc(var(--slds-c-font-size-7) * var(--font-scale-mobile)) !important;
-        line-height: 1.2;
+        font-size: 4rem !important;
+        font-weight: 300 !important;
+        line-height: 1.1;
         text-align: center;
+        display: block !important;
+        padding-bottom: 1rem !important;
+        margin-bottom: 2rem !important;
+        position: relative !important;
+    }
+    
+    .hero-title::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, #0099cc, #00d1ff, #66ffe6);
+        margin: 0.5rem auto 0;
+    }
+    
+    /* Section H2 Headers - Exact match to reference image */
+    .slds-text-heading_large {
+        font-size: 2.75rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        text-align: center;
+        font-family: 'Salesforce Sans', Arial, sans-serif !important;
+        border-bottom: 4px solid #00d1ff !important;
+        display: inline-block !important;
+        padding-bottom: 0.5rem !important;
+        margin-bottom: 2rem !important;
     }
     
     .hero-subtitle {
@@ -84,6 +111,11 @@
 @media (min-width: 30rem) and (max-width: 47.9375rem) {
     .hero-title {
         font-size: calc(var(--slds-c-font-size-8) * var(--font-scale-mobile)) !important;
+        font-weight: 300 !important;
+        display: block !important;
+        padding-bottom: 1rem !important;
+        margin-bottom: 2rem !important;
+        position: relative !important;
     }
     
     .hero-subtitle {
@@ -111,6 +143,11 @@
     
     .hero-title {
         font-size: calc(var(--slds-c-font-size-9) * var(--font-scale-tablet)) !important;
+        font-weight: 300 !important;
+        display: block !important;
+        padding-bottom: 1rem !important;
+        margin-bottom: 2rem !important;
+        position: relative !important;
     }
     
     .hero-subtitle {
@@ -144,6 +181,11 @@
     
     .hero-title {
         font-size: calc(var(--slds-c-font-size-10) * var(--font-scale-desktop)) !important;
+        font-weight: 300 !important;
+        display: block !important;
+        padding-bottom: 1rem !important;
+        margin-bottom: 2rem !important;
+        position: relative !important;
     }
     
     /* Logo sizing for desktop */
@@ -167,6 +209,11 @@
     
     .hero-title {
         font-size: calc(var(--slds-c-font-size-11) * var(--font-scale-wide)) !important;
+        font-weight: 300 !important;
+        display: block !important;
+        padding-bottom: 1rem !important;
+        margin-bottom: 2rem !important;
+        position: relative !important;
     }
     
     /* Container max-width */
