@@ -1065,6 +1065,24 @@ main [role="region"]:nth-child(4) {
 }
 
 /* ============================================
+   SCROLL PROGRESS BAR
+   ============================================ */
+
+/* Scroll progress bar */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 6px;
+    background: linear-gradient(to right, #0176d3, #00d4ff, #0099cc);
+    box-shadow: 0 2px 8px rgba(1, 118, 211, 0.4);
+    z-index: 1001;
+    transition: width 0.2s ease-out;
+    border-radius: 0 0 2px 2px;
+}
+
+/* ============================================
    FOOTER COMPONENT - SLDS COMPLIANT
    ============================================ */
    
