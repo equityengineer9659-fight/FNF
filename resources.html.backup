@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Food-N-Force resources including white papers, case studies, webinars, tools, templates, and industry guides for food bank digital transformation.">
+    <meta name="keywords" content="food bank resources, nonprofit technology guides, digital transformation tools, food distribution best practices">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Resources - Food-N-Force">
+    <meta property="og:description" content="Expert guidance, tools, and funding opportunities to accelerate your digital transformation.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/resources.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Resources - Food-N-Force">
+    
+    <!-- Security Headers - Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <title>Resources - Food-N-Force</title>
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- PHASE 2B: Custom SLDS Build (24KB vs 821KB CDN - 97% reduction) -->
+    <link rel="stylesheet" href="css/slds-custom.css">
+    
+    <!-- Custom CSS - Consolidated after cleanup -->
+    <!-- Only loading existing CSS files after consolidation -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation-unified.css">
+    <link rel="stylesheet" href="css/responsive-enhancements.css">
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/mobile-navigation-clean.js" as="script">
+    
+    <!-- Phase C: Inline styles moved to styles.css for unified card system -->
+</head>
+<body class="resources-page">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Static HTML Navigation -->
+    <nav class="navbar universal-nav custom-nav" role="banner">
+        <div class="slds-container_fluid">
+            <!-- SLDS Brand Header Pattern: Logo (far left) | Company Name (center) | Mobile Toggle (far right) -->
+            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small header-layout">
+                <!-- SLDS Brand Logo Container - Far Left -->
+                <div class="slds-col slds-no-flex logo-container">
+                    <div class="slds-brand fnf-logo-wrapper">
+                        <a href="index.html" class="slds-brand__logo-link brand-logo-link" aria-label="Food-N-Force Home" title="Food-N-Force - Modern Solutions for Food Banks">
+                            <div class="fnf-logo" role="img" aria-labelledby="nav-logo-title">
+                                <div class="fnf-inner">
+                                    <span class="fnf-wordmark">F-n-F</span>
+                                </div>
+                            </div>
+                            <span id="nav-logo-title" class="slds-assistive-text">Food-N-Force Logo - Modern Solutions for Food Banks</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Company Name Container - Center -->
+                <div class="slds-col slds-no-flex company-name-container-centered">
+                    <h1 class="brand-logo universal-brand-logo">Food-N-Force</h1>
+                </div>
+                <!-- Mobile Navigation Toggle - Far Right -->
+                <div class="slds-col slds-no-flex mobile-toggle-container">
+                    <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
+                        <span class="hamburger-icon">☰</span>
+                    </button>
+                </div>
+                <!-- Spacer for desktop (maintains balance) -->
+                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
+                    <!-- Balances the logo container -->
+                </div>
+            </div>
+            <!-- Navigation Menu - Centered Below Company Name -->
+            <div class="slds-grid slds-grid_align-center slds-p-top_small">
+                <div class="slds-col">
+                    <nav class="slds-text-align_center nav-menu-container" role="navigation" aria-label="Main navigation">
+                        <ul class="nav-menu slds-nav-horizontal universal-nav-menu" id="main-nav">
+                            <li class="slds-nav-horizontal__item">
+                                <a href="index.html" class="nav-link universal-nav-link">Home</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="services.html" class="nav-link universal-nav-link">Services</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item slds-is-active">
+                                <a href="resources.html" class="nav-link universal-nav-link">Resources</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="impact.html" class="nav-link universal-nav-link">Impact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="contact.html" class="nav-link universal-nav-link">Contact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="about.html" class="nav-link universal-nav-link">About Us</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Resources Section -->
+        <section class="section-padding slds-p-horizontal_large" aria-labelledby="resources-heading">
+            <div class="slds-container_large slds-container_center">
+                <div class="slds-text-align_center slds-m-bottom_x-large">
+                    <h2 id="resources-heading" class="slds-text-heading_large slds-m-bottom_medium">Resources & Insights</h2>
+                    <p class="slds-text-body_regular slds-text-color_weak">
+                        Expert guidance, tools, and funding opportunities to accelerate your digital transformation
+                    </p>
+                </div>
+                
+                <div class="slds-grid slds-wrap slds-gutters_large">
+                    <!-- Blog & Thought Leadership -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon">
+                                <span>📋</span>
+                            </div>
+                            <h3>Blog & Thought Leadership</h3>
+                            <p>Digital trends in nonprofit logistics, best practices, and case studies from the hunger relief sector.</p>
+                            <a href="#" class="resource-action">Read Articles</a>
+                        </article>
+                    </div>
+                    
+                    <!-- Implementation Guides -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon">
+                                <span>🛠️</span>
+                            </div>
+                            <h3>Implementation Guides</h3>
+                            <p>"Top 5 Tools for Food Bank Operations" and other practical guides for digital transformation success.</p>
+                            <a href="#" class="resource-action">View Guides</a>
+                        </article>
+                    </div>
+                    
+                    <!-- Grants & Funding Tips -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon">
+                                <span>💰</span>
+                            </div>
+                            <h3>Grants & Funding Tips</h3>
+                            <p>Strategic guidance on securing funding for technology upgrades and digital transformation initiatives.</p>
+                            <a href="#" class="resource-action">Funding Resources</a>
+                        </article>
+                    </div>
+                    
+                    <!-- Templates & Tools -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon">
+                                <span>📄</span>
+                            </div>
+                            <h3>Templates & Tools</h3>
+                            <p>Free downloadable templates for inventory tracking, volunteer management, and impact reporting.</p>
+                            <a href="#" class="resource-action">Download Templates</a>
+                        </article>
+                    </div>
+                    
+                    <!-- Webinars & Training -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon">
+                                <span>🎥</span>
+                            </div>
+                            <h3>Webinars & Training</h3>
+                            <p>Quarterly webinars on digital transformation topics specifically for food relief organizations.</p>
+                            <a href="#" class="resource-action">Watch Webinars</a>
+                        </article>
+                    </div>
+                    
+                    <!-- Case Studies -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="resource-card">
+                            <div class="resource-icon">
+                                <span>📖</span>
+                            </div>
+                            <h3>Case Studies</h3>
+                            <p>In-depth success stories showcasing real transformations and measurable outcomes.</p>
+                            <a href="#" class="resource-action">Read Case Studies</a>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Content Section -->
+        <section class="slds-p-vertical_x-large section-gray" aria-labelledby="featured-heading">
+            <div class="slds-container_large slds-container_center">
+                <h2 id="featured-heading" class="slds-text-heading_large slds-text-align_center slds-m-bottom_x-large">Featured Content</h2>
+                
+                <div class="slds-grid slds-wrap slds-gutters_large">
+                    <!-- Recent Blog Posts -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="featured-box">
+                            <h3 class="slds-text-heading_medium slds-m-bottom_medium">Recent Blog Posts</h3>
+                            <ul class="featured-list">
+                                <li class="featured-list-item">
+                                    <a href="#" class="featured-link">5 Ways Salesforce Transforms Food Bank Operations</a>
+                                    <span class="featured-date">March 15, 2024</span>
+                                </li>
+                                <li class="featured-list-item">
+                                    <a href="#" class="featured-link">Building Donor Relationships with Nonprofit Cloud</a>
+                                    <span class="featured-date">March 10, 2024</span>
+                                </li>
+                                <li class="featured-list-item">
+                                    <a href="#" class="featured-link">Data-Driven Decision Making for Food Banks</a>
+                                    <span class="featured-date">March 5, 2024</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Popular Downloads -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="featured-box">
+                            <h3 class="slds-text-heading_medium slds-m-bottom_medium">Popular Downloads</h3>
+                            <ul class="featured-list">
+                                <li class="featured-list-item">
+                                    <a href="#" class="featured-link">Digital Transformation Roadmap Template</a>
+                                    <span class="download-label">PDF</span>
+                                </li>
+                                <li class="featured-list-item">
+                                    <a href="#" class="featured-link">Salesforce for Food Banks Quick Start Guide</a>
+                                    <span class="download-label">PDF</span>
+                                </li>
+                                <li class="featured-list-item">
+                                    <a href="#" class="featured-link">Grant Writing Toolkit for Technology Projects</a>
+                                    <span class="download-label">ZIP</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="slds-p-vertical_x-large" aria-labelledby="newsletter-heading">
+            <div class="slds-container_large slds-container_center slds-text-align_center">
+                <h2 id="newsletter-heading" class="slds-text-heading_large slds-m-bottom_medium">Stay Updated</h2>
+                <p class="slds-text-body_regular slds-m-bottom_large">
+                    Get the latest resources and insights delivered to your inbox monthly.
+                </p>
+                <form class="newsletter-form slds-form_inline" aria-labelledby="newsletter-heading">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label slds-assistive-text" for="email-input">Email Address for Newsletter</label>
+                        <div class="slds-form-element__control">
+                            <input type="email" id="email-input" class="slds-input" placeholder="Enter your email address" required aria-describedby="email-help">
+                        </div>
+                        <div id="email-help" class="slds-form-element__help slds-assistive-text">We'll send you monthly updates with resources and insights for food bank operations</div>
+                    </div>
+                    <button type="submit" class="slds-button slds-button_brand" aria-describedby="newsletter-heading">Subscribe to Newsletter</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="slds-p-vertical_x-large section-gray">
+            <div class="slds-container_large slds-container_center slds-text-align_center">
+                <h2 class="slds-text-heading_large slds-m-bottom_medium">Need Personalized Guidance?</h2>
+                <p class="slds-text-body_regular slds-m-bottom_large">
+                    Our experts are ready to help you navigate your digital transformation journey.
+                </p>
+                <a href="contact.html" class="slds-button slds-button_brand">
+                    Schedule a Consultation
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="custom-footer" role="contentinfo">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Phase 1 Consolidated JavaScript -->
+    <script>
+        // ULTRA SIMPLE MOBILE NAVIGATION
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.querySelector('.mobile-nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            let isOpen = false;
+            
+            if (!toggle || !navMenu) return;
+            
+            // Show desktop navigation
+            if (window.innerWidth > 768) {
+                navMenu.style.display = 'flex';
+            } else {
+                navMenu.style.display = 'none';
+            }
+            
+            // Mobile toggle
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                isOpen = !isOpen;
+                
+                if (isOpen && window.innerWidth <= 768) {
+                    // Create simple dropdown
+                    const dropdown = document.createElement('div');
+                    dropdown.id = 'mobile-dropdown';
+                    dropdown.innerHTML = `
+                        <div style="position: fixed; top: 80px; left: 20px; right: 20px; background: white; border: 2px solid #0176d3; padding: 20px; z-index: 99999; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                            <a href="index.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Home</a>
+                            <a href="services.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Services</a>
+                            <a href="resources.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Resources</a>
+                            <a href="impact.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Impact</a>
+                            <a href="contact.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Contact</a>
+                            <a href="about.html" style="display: block; padding: 12px; color: #333; text-decoration: none;">About Us</a>
+                        </div>
+                    `;
+                    document.body.appendChild(dropdown);
+                } else {
+                    // Remove dropdown
+                    const dropdown = document.getElementById('mobile-dropdown');
+                    if (dropdown) dropdown.remove();
+                }
+            });
+        });
+    </script>
+    <script src="js/original-mesh-background.js"></script>
+    <script src="js/core/animations.js"></script>
+    <script src="js/unified-scroll.js"></script>
+    
+    <!-- Page load complete -->
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>

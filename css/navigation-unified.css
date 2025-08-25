@@ -15,6 +15,7 @@
    ============================================ */
 @layer reset, base, slds-overrides, components, utilities, animations, emergency-overrides;
 
+
 /* ============================================
    ADR-009: CSS CONTAINMENT ARCHITECTURE
    Provides isolation boundaries to prevent cascade conflicts
@@ -196,40 +197,6 @@
       contain: layout style paint;
     }
     
-    /* EMERGENCY OVERRIDE - MAXIMUM SPECIFICITY */
-    .navbar.universal-nav.custom-nav .nav-menu.nav-show.slds-nav-horizontal.universal-nav-menu {
-      opacity: 1 !important;
-      visibility: visible !important;
-      display: flex !important;
-      flex-direction: column !important;
-      position: absolute !important;
-      top: 100% !important;
-      left: 0 !important;
-      right: 0 !important;
-      width: 100% !important;
-      z-index: 9999 !important;
-      transform: translateY(0) !important;
-      background: #ffffff !important;
-      border: 5px solid #ff0000 !important;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
-      color: #000000 !important;
-      padding: 20px !important;
-    }
-    
-    /* FORCE VISIBLE MENU LINKS - MAXIMUM SPECIFICITY */
-    .navbar.universal-nav.custom-nav .nav-menu.nav-show.slds-nav-horizontal.universal-nav-menu .slds-nav-horizontal__item .nav-link.universal-nav-link {
-      background: #ffff00 !important;
-      color: #000000 !important;
-      border: 2px solid #ff0000 !important;
-      display: block !important;
-      font-size: 20px !important;
-      font-weight: bold !important;
-      text-decoration: none !important;
-      padding: 15px !important;
-      margin: 5px 0 !important;
-      width: 100% !important;
-      text-align: center !important;
-    }
     
     /* Mobile navigation items */
     .navbar.universal-nav .nav-menu .slds-nav-horizontal__item {
@@ -613,9 +580,13 @@
     margin-top: 0;
   }
   
-  /* Index page exception - hero design needs no clearance */
+  /* Index page exception - hero section positioned below nav */
   body.index-page main {
     padding-top: 0;
+  }
+  
+  body.index-page .hero-section {
+    margin-top: 120px; /* Space for fixed navigation */
   }
   
   /* Navigation clearance utility classes */
@@ -639,6 +610,11 @@
       padding-top: 120px;
     }
     
+    /* Mobile hero spacing */
+    body.index-page .hero-section {
+      margin-top: 100px; /* Reduced for mobile */
+    }
+    
     .fnf-nav-clearance,
     .fnf-nav-clearance-force {
       padding-top: 120px;
@@ -652,6 +628,11 @@
   @media (min-width: 1025px) {
     body:not(.index-page) main {
       padding-top: 140px;
+    }
+    
+    /* Desktop hero spacing */
+    body.index-page .hero-section {
+      margin-top: 130px; /* Match desktop spacing */
     }
     
     .fnf-nav-clearance,
@@ -762,53 +743,3 @@
     }
   }
 
-/* ============================================
-   SMART SCROLL NAVIGATION
-   Global solution added to navigation-unified.css
-   ============================================ */
-
-/* Fixed navbar positioning for smart scroll */
-.navbar {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 1000 !important;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease !important;
-    background: rgba(0, 20, 40, 0.95) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-}
-
-/* Add padding to body to account for fixed navbar */
-body {
-    padding-top: 120px !important;
-}
-
-/* Shadow when scrolled */
-.navbar.scrolled {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Hide navbar class for smart scroll */
-.navbar.navbar-hidden {
-    transform: translateY(-100%) !important;
-}
-
-/* Show navbar class for smart scroll */
-.navbar.navbar-visible {
-    transform: translateY(0) !important;
-}
-
-/* Mobile responsive smart scroll adjustments */
-@media (max-width: 768px) {
-    body {
-        padding-top: 100px !important;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        padding-top: 80px !important;
-    }
-}

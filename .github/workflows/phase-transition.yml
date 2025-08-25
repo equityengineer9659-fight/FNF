@@ -1,0 +1,543 @@
+name: Strategic Refactoring Phase Transition
+
+on:
+  workflow_dispatch:
+    inputs:
+      from_phase:
+        description: 'Current Phase'
+        required: true
+        type: choice
+        options:
+        - 'baseline'
+        - 'phase-1'
+        - 'phase-2'
+        - 'phase-3'
+        - 'phase-4'
+      to_phase:
+        description: 'Target Phase'
+        required: true
+        type: choice
+        options:
+        - 'phase-1'
+        - 'phase-2'
+        - 'phase-3'
+        - 'phase-4'
+        - 'complete'
+      technical_architect_approval:
+        description: 'Technical Architect Approval Required'
+        required: true
+        type: boolean
+        default: true
+      skip_mobile_nav_check:
+        description: 'Skip mobile navigation check (EMERGENCY ONLY)'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  NODE_VERSION: '18'
+  PHASE_TRANSITION_TIMEOUT: '30'
+
+jobs:
+  pre-transition-validation:
+    name: Pre-Transition Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      validation-passed: ${{ steps.validate.outputs.passed }}
+      mobile-nav-status: ${{ steps.mobile-check.outputs.status }}
+      readiness-score: ${{ steps.readiness.outputs.score }}
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Mobile Navigation Safety Check
+        id: mobile-check
+        if: github.event.inputs.skip_mobile_nav_check != 'true'
+        run: |
+          echo "📱 CRITICAL: Mobile Navigation Safety Check"
+          
+          # Start dev server
+          npm run dev &
+          sleep 10
+          
+          # Run critical mobile navigation tests
+          npm run test:critical-navigation
+          
+          if [[ $? -eq 0 ]]; then
+            echo "status=passing" >> $GITHUB_OUTPUT
+            echo "✅ Mobile navigation is working correctly"
+          else
+            echo "status=failing" >> $GITHUB_OUTPUT
+            echo "❌ Mobile navigation is broken - BLOCKING TRANSITION"
+            exit 1
+          fi
+
+      - name: Phase Completion Validation
+        id: validate
+        run: |
+          FROM_PHASE="${{ github.event.inputs.from_phase }}"
+          TO_PHASE="${{ github.event.inputs.to_phase }}"
+          VALIDATION_PASSED="true"
+          
+          echo "🔍 Validating transition: $FROM_PHASE → $TO_PHASE"
+          
+          case $FROM_PHASE in
+            "baseline")
+              echo "✅ Starting from clean v3.2 baseline"
+              ;;
+              
+            "phase-1")
+              echo "📦 Validating Phase 1 JavaScript consolidation completion"
+              
+              # Check JavaScript bundle size
+              JS_SIZE=$(find js/ -name "*.js" -exec wc -c {} + | tail -1 | awk '{print $1}')
+              JS_SIZE_KB=$((JS_SIZE / 1024))
+              
+              if [[ $JS_SIZE_KB -gt 90 ]]; then
+                echo "❌ JavaScript bundle too large: ${JS_SIZE_KB}KB (limit: 90KB)"
+                VALIDATION_PASSED="false"
+              fi
+              
+              # Check file count reduction
+              JS_FILE_COUNT=$(find js/ -name "*.js" | wc -l)
+              if [[ $JS_FILE_COUNT -gt 8 ]]; then
+                echo "❌ Too many JS files: $JS_FILE_COUNT (should be ≤8 after consolidation)"
+                VALIDATION_PASSED="false"
+              fi
+              
+              echo "📊 Phase 1 Metrics: ${JS_SIZE_KB}KB bundle, $JS_FILE_COUNT files"
+              ;;
+              
+            "phase-2")
+              echo "🎨 Validating Phase 2 SLDS bundle optimization completion"
+              
+              # Check CSS bundle size
+              CSS_SIZE=$(find css/ -name "*.css" -exec wc -c {} + | tail -1 | awk '{print $1}')
+              CSS_SIZE_KB=$((CSS_SIZE / 1024))
+              
+              if [[ $CSS_SIZE_KB -gt 200 ]]; then
+                echo "❌ CSS bundle too large: ${CSS_SIZE_KB}KB (limit: 200KB)"
+                VALIDATION_PASSED="false"
+              fi
+              
+              # Check SLDS compliance
+              npm run validate:slds || VALIDATION_PASSED="false"
+              
+              echo "📊 Phase 2 Metrics: ${CSS_SIZE_KB}KB CSS bundle"
+              ;;
+              
+            "phase-3")
+              echo "🏗️ Validating Phase 3 CSS architecture unification completion"
+              
+              # Check !important declarations
+              IMPORTANT_COUNT=$(find css/ -name "*.css" -exec grep -c "!important" {} \; | awk '{sum += $1} END {print sum}')
+              
+              if [[ $IMPORTANT_COUNT -gt 400 ]]; then
+                echo "❌ Too many !important declarations: $IMPORTANT_COUNT (limit: 400)"
+                VALIDATION_PASSED="false"
+              fi
+              
+              echo "📊 Phase 3 Metrics: $IMPORTANT_COUNT !important declarations"
+              ;;
+              
+            "phase-4")
+              echo "♿ Validating Phase 4 HTML semantic optimization completion"
+              
+              # Check accessibility compliance
+              npm run test:accessibility || VALIDATION_PASSED="false"
+              
+              # Check HTML validation
+              npm run validate:html || VALIDATION_PASSED="false"
+              
+              echo "📊 Phase 4: Accessibility and HTML validation checked"
+              ;;
+          esac
+          
+          echo "passed=$VALIDATION_PASSED" >> $GITHUB_OUTPUT
+          
+          if [[ "$VALIDATION_PASSED" == "true" ]]; then
+            echo "✅ Pre-transition validation passed"
+          else
+            echo "❌ Pre-transition validation failed"
+            exit 1
+          fi
+
+      - name: Calculate Readiness Score
+        id: readiness
+        run: |
+          # Calculate overall readiness score
+          SCORE=0
+          
+          # Mobile navigation (40% weight)
+          if [[ "${{ steps.mobile-check.outputs.status }}" == "passing" ]]; then
+            SCORE=$((SCORE + 40))
+          fi
+          
+          # Phase validation (35% weight)
+          if [[ "${{ steps.validate.outputs.passed }}" == "true" ]]; then
+            SCORE=$((SCORE + 35))
+          fi
+          
+          # Technical architect approval (25% weight)
+          if [[ "${{ github.event.inputs.technical_architect_approval }}" == "true" ]]; then
+            SCORE=$((SCORE + 25))
+          fi
+          
+          echo "score=$SCORE" >> $GITHUB_OUTPUT
+          echo "📊 Readiness Score: $SCORE/100"
+          
+          if [[ $SCORE -lt 75 ]]; then
+            echo "❌ Readiness score too low for transition"
+            exit 1
+          fi
+
+  execute-phase-transition:
+    name: Execute Phase Transition
+    runs-on: ubuntu-latest
+    needs: pre-transition-validation
+    if: needs.pre-transition-validation.outputs.validation-passed == 'true'
+    timeout-minutes: 30
+    environment:
+      name: phase-transition
+      url: ${{ steps.deploy-staging.outputs.deploy-url }}
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Create Phase Transition Branch
+        run: |
+          FROM_PHASE="${{ github.event.inputs.from_phase }}"
+          TO_PHASE="${{ github.event.inputs.to_phase }}"
+          BRANCH_NAME="transition-${FROM_PHASE}-to-${TO_PHASE}-$(date +%Y%m%d-%H%M%S)"
+          
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          git checkout -b "$BRANCH_NAME"
+          git push -u origin "$BRANCH_NAME"
+          
+          echo "🌿 Created transition branch: $BRANCH_NAME"
+          echo "TRANSITION_BRANCH=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Execute Phase-Specific Transition
+        run: |
+          TO_PHASE="${{ github.event.inputs.to_phase }}"
+          
+          echo "🚀 Executing transition to: $TO_PHASE"
+          
+          case $TO_PHASE in
+            "phase-1")
+              echo "📦 Preparing for JavaScript Consolidation Phase"
+              
+              # Create phase-1 preparation
+              mkdir -p .phase-transition
+              cat > .phase-transition/phase-1-plan.md << EOF
+          # Phase 1: JavaScript Consolidation Plan
+          
+          ## Objectives
+          - Consolidate 23+ JavaScript files into 4 core modules
+          - Reduce JavaScript bundle from 312KB to <90KB
+          - Preserve mobile navigation functionality (P0 priority)
+          - Eliminate circular dependencies and conflicts
+          
+          ## Success Criteria
+          - [ ] Mobile navigation works on all 6 pages × 3 browsers
+          - [ ] JavaScript bundle <90KB
+          - [ ] File count reduced to ≤8 files
+          - [ ] No JavaScript errors in console
+          - [ ] Performance maintained or improved
+          
+          ## Rollback Plan
+          - 2-minute rollback to current state available
+          - Mobile navigation monitoring active
+          - Automatic rollback on P0 failure
+          EOF
+              ;;
+              
+            "phase-2")
+              echo "🎨 Preparing for SLDS Bundle Optimization Phase"
+              
+              mkdir -p .phase-transition
+              cat > .phase-transition/phase-2-plan.md << EOF
+          # Phase 2: SLDS Bundle Optimization Plan
+          
+          ## Objectives  
+          - Optimize SLDS bundle from 821KB to ~100KB (87% reduction)
+          - Maintain visual consistency across all pages
+          - Implement proper SLDS component patterns
+          - Reduce total CSS bundle to <200KB
+          
+          ## Success Criteria
+          - [ ] CSS bundle <200KB total
+          - [ ] Visual consistency maintained (screenshot comparison)
+          - [ ] SLDS compliance validation passes
+          - [ ] Mobile navigation styling preserved
+          - [ ] Cross-browser compatibility maintained
+          
+          ## Rollback Plan
+          - Phase-specific rollback to Phase 1 complete state
+          - Visual regression monitoring
+          - SLDS compliance monitoring
+          EOF
+              ;;
+              
+            "phase-3")
+              echo "🏗️ Preparing for CSS Architecture Unification Phase"
+              
+              mkdir -p .phase-transition
+              cat > .phase-transition/phase-3-plan.md << EOF
+          # Phase 3: CSS Architecture Unification Plan
+          
+          ## Objectives
+          - Reduce !important declarations from 2,156 to <400 (81% reduction)  
+          - Unify CSS architecture with CSS Layers
+          - Resolve cascade conflicts
+          - Maintain visual consistency
+          
+          ## Success Criteria
+          - [ ] !important declarations <400 total
+          - [ ] CSS cascade conflicts resolved
+          - [ ] Visual consistency maintained across all breakpoints
+          - [ ] Performance maintained or improved
+          - [ ] CSS Layers implementation complete
+          
+          ## Rollback Plan
+          - Phase-specific rollback to Phase 2 complete state
+          - Cascade conflict monitoring
+          - Visual regression detection
+          EOF
+              ;;
+              
+            "phase-4")
+              echo "♿ Preparing for HTML Semantic Optimization Phase"
+              
+              mkdir -p .phase-transition
+              cat > .phase-transition/phase-4-plan.md << EOF
+          # Phase 4: HTML Semantic Optimization Plan
+          
+          ## Objectives
+          - Enhance navigation structure semantics
+          - Achieve 100% WCAG 2.1 AA compliance
+          - Optimize HTML for accessibility
+          - Consolidate templates
+          
+          ## Success Criteria  
+          - [ ] WCAG 2.1 AA compliance at 100%
+          - [ ] Navigation semantically correct
+          - [ ] Screen reader compatibility verified
+          - [ ] HTML validation passes
+          - [ ] Mobile navigation accessibility preserved
+          
+          ## Rollback Plan
+          - Phase-specific rollback to Phase 3 complete state  
+          - Accessibility monitoring
+          - Navigation structure monitoring
+          EOF
+              ;;
+              
+            "complete")
+              echo "🎉 Preparing for Strategic Refactoring Completion"
+              
+              mkdir -p .phase-transition
+              cat > .phase-transition/completion-plan.md << EOF
+          # Strategic Refactoring Completion Plan
+          
+          ## Final Validation
+          - [ ] All 4 phases successfully completed
+          - [ ] Mobile navigation working perfectly
+          - [ ] Performance targets achieved
+          - [ ] Accessibility compliance at 100%
+          - [ ] Visual consistency maintained
+          
+          ## Success Metrics
+          - JavaScript: 312KB → <90KB (71% reduction)
+          - CSS: 1,000KB → <200KB (80% reduction)  
+          - !important: 2,156 → <400 (81% reduction)
+          - Accessibility: 99% → 100% WCAG 2.1 AA
+          
+          ## Go-Live Preparation
+          - Production deployment ready
+          - Monitoring and alerting configured
+          - Team training completed
+          - Documentation updated
+          EOF
+              ;;
+          esac
+
+      - name: Commit Phase Transition
+        run: |
+          git add -A
+          git commit -m "Phase transition preparation: ${{ github.event.inputs.from_phase }} → ${{ github.event.inputs.to_phase }}
+
+          Strategic Refactoring Phase Transition
+          
+          From: ${{ github.event.inputs.from_phase }}
+          To: ${{ github.event.inputs.to_phase }}
+          Readiness Score: ${{ needs.pre-transition-validation.outputs.readiness-score }}/100
+          Mobile Navigation: ${{ needs.pre-transition-validation.outputs.mobile-nav-status }}
+          Technical Architect Approval: ${{ github.event.inputs.technical_architect_approval }}
+          
+          Pre-transition validation completed successfully.
+          Ready for phase-specific implementation work."
+          
+          git push origin "$TRANSITION_BRANCH"
+
+      - name: Deploy to Staging for Validation
+        id: deploy-staging
+        run: |
+          echo "🚀 Deploying transition branch to staging"
+          
+          npx netlify-cli deploy --dir=. --json > deploy-output.json
+          DEPLOY_URL=$(cat deploy-output.json | jq -r '.deploy_url')
+          echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          
+          echo "📍 Staging deployment: $DEPLOY_URL"
+          
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAGING_SITE_ID }}
+
+      - name: Post-Transition Validation
+        run: |
+          echo "✅ Running post-transition validation"
+          
+          # Wait for deployment
+          sleep 30
+          
+          # Validate deployment is accessible
+          curl -f "${{ steps.deploy-staging.outputs.deploy-url }}" || exit 1
+          
+          echo "✅ Phase transition completed successfully"
+
+  create-transition-pr:
+    name: Create Phase Transition Pull Request
+    runs-on: ubuntu-latest
+    needs: [pre-transition-validation, execute-phase-transition]
+    if: success()
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create Phase Transition PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fromPhase = '${{ github.event.inputs.from_phase }}';
+            const toPhase = '${{ github.event.inputs.to_phase }}';
+            const readinessScore = '${{ needs.pre-transition-validation.outputs.readiness-score }}';
+            const mobileNavStatus = '${{ needs.pre-transition-validation.outputs.mobile-nav-status }}';
+            
+            const pr = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Strategic Refactoring: Phase Transition ${fromPhase.toUpperCase()} → ${toPhase.toUpperCase()}`,
+              head: process.env.TRANSITION_BRANCH,
+              base: 'master',
+              body: `# 🚀 Strategic Refactoring Phase Transition
+
+            ## Transition Details
+
+            **From Phase:** ${fromPhase}
+            **To Phase:** ${toPhase}
+            **Readiness Score:** ${readinessScore}/100 ✅
+            **Mobile Navigation:** ${mobileNavStatus} ✅
+
+            ## Pre-Transition Validation Results
+
+            ✅ Mobile navigation safety check passed
+            ✅ Phase completion validation passed  
+            ✅ Technical architect approval received
+            ✅ Readiness score above threshold (75+)
+
+            ## Phase-Specific Implementation Plan
+
+            The implementation plan for ${toPhase} has been prepared and is ready for execution by the responsible agents.
+
+            ## Agent Assignments
+
+            ${toPhase === 'phase-1' ? `
+            **@javascript-behavior-expert**: Lead JavaScript consolidation implementation
+            **@technical-architect**: Provide architecture guidance and approval
+            ` : ''}
+            ${toPhase === 'phase-2' ? `
+            **@css-design-systems-expert**: Lead SLDS bundle optimization
+            **@solution-architect-slds**: Provide SLDS implementation guidance
+            ` : ''}
+            ${toPhase === 'phase-3' ? `
+            **@css-design-systems-expert**: Lead CSS architecture unification
+            **@performance-optimizer**: Monitor performance impact
+            ` : ''}
+            ${toPhase === 'phase-4' ? `
+            **@html-expert-slds**: Lead HTML semantic optimization
+            **@testing-validation-specialist**: Lead accessibility validation
+            ` : ''}
+
+            ## Quality Gates
+
+            - [ ] Mobile navigation functionality preserved (P0)
+            - [ ] Phase-specific success criteria met
+            - [ ] Performance budgets maintained
+            - [ ] Visual consistency validated
+            - [ ] Cross-browser compatibility confirmed
+
+            ## Emergency Procedures
+
+            **Rollback Available:** 2-minute rollback to ${fromPhase} state
+            **Emergency Contact:** @technical-architect (15-minute response SLA)
+
+            ## Staging Environment
+
+            **Preview URL:** ${{ needs.execute-phase-transition.outputs.deploy-url || 'To be deployed' }}
+
+            Ready for phase implementation! 🎯`,
+              draft: false
+            });
+
+            // Add phase-specific labels
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.data.number,
+              labels: ['strategic-refactoring', 'phase-transition', fromPhase, toPhase, 'ready-for-implementation']
+            });
+
+            console.log(`Created PR #${pr.data.number}: ${pr.data.html_url}`);
+
+      - name: Transition Summary
+        run: |
+          echo "🎉 PHASE TRANSITION COMPLETED SUCCESSFULLY"
+          echo "================================================="
+          echo "From: ${{ github.event.inputs.from_phase }}"
+          echo "To: ${{ github.event.inputs.to_phase }}"
+          echo "Readiness Score: ${{ needs.pre-transition-validation.outputs.readiness-score }}/100"
+          echo "Mobile Navigation Status: ${{ needs.pre-transition-validation.outputs.mobile-nav-status }}"
+          echo "Technical Architect Approval: ${{ github.event.inputs.technical_architect_approval }}"
+          echo "================================================="
+          echo "Next Steps:"
+          echo "1. Agents implement phase-specific changes"
+          echo "2. Continuous integration validates changes"
+          echo "3. Mobile navigation monitoring active"
+          echo "4. Emergency rollback available"
+          echo "================================================="

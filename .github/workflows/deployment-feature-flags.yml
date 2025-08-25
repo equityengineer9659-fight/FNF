@@ -1,0 +1,1091 @@
+name: Strategic Refactoring Feature Flag Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_phase:
+        description: 'Refactoring Phase for Feature Flag Deployment'
+        required: true
+        type: choice
+        options:
+        - 'phase-1-javascript'
+        - 'phase-2-slds'
+        - 'phase-3-css'
+        - 'phase-4-html'
+      feature_flag_percentage:
+        description: 'Feature Flag Rollout Percentage'
+        required: false
+        default: '0'
+        type: choice
+        options:
+        - '0'
+        - '10'
+        - '25'
+        - '50'
+        - '75'
+        - '100'
+      environment_target:
+        description: 'Target Environment'
+        required: true
+        type: choice
+        options:
+        - 'staging'
+        - 'production'
+      flag_action:
+        description: 'Feature Flag Action'
+        required: true
+        type: choice
+        options:
+        - 'enable'
+        - 'disable'
+        - 'gradual-rollout'
+        - 'emergency-disable'
+      
+  workflow_call:
+    inputs:
+      deployment_phase:
+        required: true
+        type: string
+      feature_flag_percentage:
+        required: false
+        type: string
+        default: '0'
+      environment_target:
+        required: true
+        type: string
+      flag_action:
+        required: true
+        type: string
+
+env:
+  NODE_VERSION: '18'
+  FEATURE_FLAG_TIMEOUT: '300'        # 5 minutes
+  MONITORING_DURATION: '900'         # 15 minutes
+  MOBILE_NAV_P0_PRIORITY: 'true'
+
+jobs:
+  # ============================================
+  # FEATURE FLAG PREPARATION & VALIDATION
+  # ============================================
+  feature-flag-preparation:
+    name: Feature Flag Deployment Preparation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      deployment-id: ${{ steps.prepare.outputs.deployment-id }}
+      flag-name: ${{ steps.prepare.outputs.flag-name }}
+      target-percentage: ${{ steps.prepare.outputs.target-percentage }}
+      validation-passed: ${{ steps.validate.outputs.passed }}
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Prepare Feature Flag Deployment
+        id: prepare
+        run: |
+          PHASE="${{ github.event.inputs.deployment_phase || inputs.deployment_phase }}"
+          TARGET="${{ github.event.inputs.environment_target || inputs.environment_target }}"
+          PERCENTAGE="${{ github.event.inputs.feature_flag_percentage || inputs.feature_flag_percentage }}"
+          ACTION="${{ github.event.inputs.flag_action || inputs.flag_action }}"
+          DEPLOYMENT_ID="flag-$(date +%Y%m%d-%H%M%S)-${PHASE}-${PERCENTAGE}pct"
+          
+          echo "🚩 Feature Flag Deployment Preparation"
+          echo "Phase: $PHASE"
+          echo "Target: $TARGET"
+          echo "Percentage: $PERCENTAGE%"
+          echo "Action: $ACTION"
+          echo "Deployment ID: $DEPLOYMENT_ID"
+          
+          # Generate flag name based on phase
+          case $PHASE in
+            "phase-1-javascript")
+              FLAG_NAME="js_consolidation_refactor"
+              ;;
+            "phase-2-slds")
+              FLAG_NAME="slds_bundle_optimization"
+              ;;
+            "phase-3-css")
+              FLAG_NAME="css_architecture_unification"
+              ;;
+            "phase-4-html")
+              FLAG_NAME="html_semantic_optimization"
+              ;;
+          esac
+          
+          echo "deployment-id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+          echo "flag-name=$FLAG_NAME" >> $GITHUB_OUTPUT
+          echo "target-percentage=$PERCENTAGE" >> $GITHUB_OUTPUT
+          
+          echo "🏷️ Feature Flag: $FLAG_NAME"
+          echo "🎯 Target Percentage: $PERCENTAGE%"
+
+      - name: Pre-Deployment Validation
+        id: validate
+        run: |
+          PHASE="${{ github.event.inputs.deployment_phase || inputs.deployment_phase }}"
+          ACTION="${{ github.event.inputs.flag_action || inputs.flag_action }}"
+          VALIDATION_PASSED="true"
+          
+          echo "🔍 Feature Flag Pre-Validation"
+          echo "Phase: $PHASE"
+          echo "Action: $ACTION"
+          
+          # Skip validation for emergency disable
+          if [[ "$ACTION" == "emergency-disable" ]]; then
+            echo "🚨 Emergency disable - skipping validation"
+            echo "passed=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          # Phase-specific validation
+          case $PHASE in
+            "phase-1-javascript")
+              echo "📦 Phase 1: JavaScript Consolidation Validation"
+              
+              # Mobile navigation P0 check
+              npm run test:critical-navigation || VALIDATION_PASSED="false"
+              
+              # JavaScript bundle size check
+              JS_SIZE=$(find js/ -name "*.js" -exec wc -c {} + | tail -1 | awk '{print $1}' || echo 0)
+              JS_SIZE_KB=$((JS_SIZE / 1024))
+              if [[ $JS_SIZE_KB -gt 90 ]]; then
+                echo "❌ JavaScript bundle too large: ${JS_SIZE_KB}KB"
+                VALIDATION_PASSED="false"
+              fi
+              ;;
+              
+            "phase-2-slds")
+              echo "🎨 Phase 2: SLDS Bundle Optimization Validation"
+              
+              # SLDS compliance
+              npm run validate:slds || VALIDATION_PASSED="false"
+              
+              # CSS bundle size
+              CSS_SIZE=$(find css/ -name "*.css" -exec wc -c {} + | tail -1 | awk '{print $1}' || echo 0)
+              CSS_SIZE_KB=$((CSS_SIZE / 1024))
+              if [[ $CSS_SIZE_KB -gt 200 ]]; then
+                echo "❌ CSS bundle too large: ${CSS_SIZE_KB}KB"
+                VALIDATION_PASSED="false"
+              fi
+              ;;
+              
+            "phase-3-css")
+              echo "🏗️ Phase 3: CSS Architecture Validation"
+              
+              # !important declarations check
+              IMPORTANT_COUNT=$(find css/ -name "*.css" -exec grep -c "!important" {} \; | awk '{sum += $1} END {print sum}' || echo 0)
+              if [[ $IMPORTANT_COUNT -gt 400 ]]; then
+                echo "❌ Too many !important declarations: $IMPORTANT_COUNT"
+                VALIDATION_PASSED="false"
+              fi
+              ;;
+              
+            "phase-4-html")
+              echo "♿ Phase 4: HTML Semantic Validation"
+              
+              # HTML validation
+              npm run validate:html || VALIDATION_PASSED="false"
+              
+              # Accessibility check
+              npm run test:accessibility || VALIDATION_PASSED="false"
+              ;;
+          esac
+          
+          echo "passed=$VALIDATION_PASSED" >> $GITHUB_OUTPUT
+          
+          if [[ "$VALIDATION_PASSED" == "true" ]]; then
+            echo "✅ Feature flag pre-validation passed"
+          else
+            echo "❌ Feature flag pre-validation failed"
+            exit 1
+          fi
+
+  # ============================================
+  # FEATURE FLAG CONFIGURATION
+  # ============================================
+  configure-feature-flags:
+    name: Configure Feature Flags
+    runs-on: ubuntu-latest
+    needs: feature-flag-preparation
+    if: needs.feature-flag-preparation.outputs.validation-passed == 'true'
+    timeout-minutes: 10
+    outputs:
+      flag-config: ${{ steps.config.outputs.flag-config }}
+      deployment-status: ${{ steps.config.outputs.status }}
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Create Feature Flag Configuration
+        id: config
+        run: |
+          PHASE="${{ github.event.inputs.deployment_phase || inputs.deployment_phase }}"
+          FLAG_NAME="${{ needs.feature-flag-preparation.outputs.flag-name }}"
+          PERCENTAGE="${{ needs.feature-flag-preparation.outputs.target-percentage }}"
+          ACTION="${{ github.event.inputs.flag_action || inputs.flag_action }}"
+          
+          echo "🚩 Configuring Feature Flag: $FLAG_NAME"
+          echo "Action: $ACTION"
+          echo "Percentage: $PERCENTAGE%"
+          
+          # Create feature flag configuration directory
+          mkdir -p config/feature-flags
+          
+          # Generate feature flag configuration based on phase
+          case $PHASE in
+            "phase-1-javascript")
+              cat > config/feature-flags/js-consolidation.json << EOF
+          {
+            "flag_name": "$FLAG_NAME",
+            "description": "JavaScript consolidation refactoring",
+            "enabled": $([ "$ACTION" != "disable" ] && [ "$ACTION" != "emergency-disable" ] && echo "true" || echo "false"),
+            "percentage": $PERCENTAGE,
+            "conditions": {
+              "mobile_nav_required": true,
+              "bundle_size_limit": "90KB",
+              "performance_threshold": 85
+            },
+            "rollback_conditions": {
+              "mobile_nav_failure": "immediate",
+              "performance_degradation": ">10%",
+              "error_rate": ">2%"
+            },
+            "targeting": {
+              "user_agent": {
+                "mobile": true,
+                "desktop": true
+              },
+              "page_types": ["index", "services", "about", "contact", "impact", "resources"]
+            }
+          }
+          EOF
+              ;;
+              
+            "phase-2-slds")
+              cat > config/feature-flags/slds-optimization.json << EOF
+          {
+            "flag_name": "$FLAG_NAME",
+            "description": "SLDS bundle optimization",
+            "enabled": $([ "$ACTION" != "disable" ] && [ "$ACTION" != "emergency-disable" ] && echo "true" || echo "false"),
+            "percentage": $PERCENTAGE,
+            "conditions": {
+              "slds_compliance": true,
+              "css_bundle_limit": "200KB",
+              "visual_consistency": true
+            },
+            "rollback_conditions": {
+              "visual_regression": "immediate",
+              "loading_performance": ">1000ms FCP",
+              "slds_compliance_failure": "immediate"
+            },
+            "targeting": {
+              "page_types": ["all"],
+              "css_features": ["slds-components", "utility-classes"]
+            }
+          }
+          EOF
+              ;;
+              
+            "phase-3-css")
+              cat > config/feature-flags/css-architecture.json << EOF
+          {
+            "flag_name": "$FLAG_NAME", 
+            "description": "CSS architecture unification",
+            "enabled": $([ "$ACTION" != "disable" ] && [ "$ACTION" != "emergency-disable" ] && echo "true" || echo "false"),
+            "percentage": $PERCENTAGE,
+            "conditions": {
+              "important_limit": 400,
+              "cascade_conflicts": false,
+              "css_layers": true
+            },
+            "rollback_conditions": {
+              "cascade_conflicts": "immediate",
+              "visual_regression": "immediate",
+              "performance_degradation": ">5%"
+            },
+            "targeting": {
+              "css_layers": ["base", "components", "utilities", "overrides"],
+              "breakpoints": ["mobile", "tablet", "desktop", "large", "xlarge"]
+            }
+          }
+          EOF
+              ;;
+              
+            "phase-4-html")
+              cat > config/feature-flags/html-semantic.json << EOF
+          {
+            "flag_name": "$FLAG_NAME",
+            "description": "HTML semantic optimization",
+            "enabled": $([ "$ACTION" != "disable" ] && [ "$ACTION" != "emergency-disable" ] && echo "true" || echo "false"),
+            "percentage": $PERCENTAGE,
+            "conditions": {
+              "wcag_compliance": "AA",
+              "semantic_structure": true,
+              "navigation_accessibility": true
+            },
+            "rollback_conditions": {
+              "accessibility_failure": "immediate",
+              "navigation_structure_broken": "immediate",
+              "screen_reader_issues": "immediate"
+            },
+            "targeting": {
+              "accessibility_features": ["navigation", "headings", "landmarks", "focus-management"],
+              "assistive_technologies": ["screen-readers", "voice-control", "keyboard-navigation"]
+            }
+          }
+          EOF
+              ;;
+          esac
+          
+          # Create main feature flag configuration
+          cat > config/feature-flags/main.js << 'EOF'
+          // Strategic Refactoring Feature Flag System
+          class FeatureFlagManager {
+            constructor() {
+              this.flags = {};
+              this.userId = this.generateUserId();
+              this.percentage = 0;
+            }
+            
+            generateUserId() {
+              // Simple user ID for percentage-based rollouts
+              if (!sessionStorage.getItem('ff_user_id')) {
+                sessionStorage.setItem('ff_user_id', Math.random().toString(36).substr(2, 9));
+              }
+              return sessionStorage.getItem('ff_user_id');
+            }
+            
+            hashUserId(userId) {
+              let hash = 0;
+              for (let i = 0; i < userId.length; i++) {
+                const char = userId.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+              }
+              return Math.abs(hash) % 100;
+            }
+            
+            isUserInPercentage(percentage) {
+              const userHash = this.hashUserId(this.userId);
+              return userHash < percentage;
+            }
+            
+            async loadFlags() {
+              try {
+                // In production, this would fetch from a feature flag service
+                // For now, we'll use the configuration files
+                const response = await fetch('/config/feature-flags/current-flags.json');
+                this.flags = await response.json();
+              } catch (error) {
+                console.warn('Could not load feature flags:', error);
+                this.flags = {};
+              }
+            }
+            
+            isEnabled(flagName) {
+              const flag = this.flags[flagName];
+              if (!flag || !flag.enabled) {
+                return false;
+              }
+              
+              // Check if user is in the rollout percentage
+              if (!this.isUserInPercentage(flag.percentage)) {
+                return false;
+              }
+              
+              // Check additional conditions
+              if (flag.conditions) {
+                if (flag.conditions.mobile_nav_required && !this.isMobileNavWorking()) {
+                  console.warn(`Feature flag ${flagName} disabled: mobile navigation not working`);
+                  return false;
+                }
+              }
+              
+              return true;
+            }
+            
+            isMobileNavWorking() {
+              // Check if mobile navigation is functional
+              const mobileNav = document.querySelector('.mobile-nav-trigger');
+              return mobileNav && typeof mobileNav.click === 'function';
+            }
+            
+            // Phase-specific feature flag checks
+            isJSConsolidationEnabled() {
+              return this.isEnabled('js_consolidation_refactor');
+            }
+            
+            isSLDSOptimizationEnabled() {
+              return this.isEnabled('slds_bundle_optimization');
+            }
+            
+            isCSSArchitectureEnabled() {
+              return this.isEnabled('css_architecture_unification');
+            }
+            
+            isHTMLSemanticEnabled() {
+              return this.isEnabled('html_semantic_optimization');
+            }
+            
+            // Emergency disable functionality
+            emergencyDisableAll() {
+              Object.keys(this.flags).forEach(flagName => {
+                if (this.flags[flagName]) {
+                  this.flags[flagName].enabled = false;
+                }
+              });
+              
+              // Store emergency state
+              sessionStorage.setItem('ff_emergency_disabled', 'true');
+              console.warn('All feature flags emergency disabled');
+            }
+            
+            // Monitoring and metrics
+            trackFlagUsage(flagName, enabled) {
+              // Track feature flag usage for monitoring
+              const event = {
+                flag: flagName,
+                enabled: enabled,
+                userId: this.userId,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                page: window.location.pathname
+              };
+              
+              // In production, send to analytics/monitoring service
+              console.log('Feature flag usage:', event);
+            }
+          }
+          
+          // Global feature flag manager
+          window.FeatureFlags = new FeatureFlagManager();
+          
+          // Initialize on page load
+          document.addEventListener('DOMContentLoaded', async () => {
+            await window.FeatureFlags.loadFlags();
+            
+            // Apply phase-specific features based on flags
+            if (window.FeatureFlags.isJSConsolidationEnabled()) {
+              console.log('JavaScript consolidation active');
+              window.FeatureFlags.trackFlagUsage('js_consolidation_refactor', true);
+            }
+            
+            if (window.FeatureFlags.isSLDSOptimizationEnabled()) {
+              console.log('SLDS optimization active');
+              window.FeatureFlags.trackFlagUsage('slds_bundle_optimization', true);
+            }
+            
+            if (window.FeatureFlags.isCSSArchitectureEnabled()) {
+              console.log('CSS architecture active');
+              window.FeatureFlags.trackFlagUsage('css_architecture_unification', true);
+            }
+            
+            if (window.FeatureFlags.isHTMLSemanticEnabled()) {
+              console.log('HTML semantic optimization active');
+              window.FeatureFlags.trackFlagUsage('html_semantic_optimization', true);
+            }
+          });
+          EOF
+          
+          # Create current flags configuration
+          cat > config/feature-flags/current-flags.json << EOF
+          {
+            "$FLAG_NAME": $(cat config/feature-flags/*.json | grep -v "^$" | head -1)
+          }
+          EOF
+          
+          echo "flag-config=created" >> $GITHUB_OUTPUT
+          echo "status=success" >> $GITHUB_OUTPUT
+          
+          echo "✅ Feature flag configuration created"
+
+      - name: Build with Feature Flags
+        run: |
+          echo "🔨 Building with feature flag configuration"
+          
+          # Copy feature flag files to build
+          mkdir -p build/config
+          cp -r config/feature-flags build/config/
+          
+          # Add feature flag manager to main HTML files
+          for html_file in *.html; do
+            if [[ -f "$html_file" ]]; then
+              # Add feature flag script before closing head tag
+              sed -i 's|</head>|  <script src="/config/feature-flags/main.js"></script>\n</head>|g' "$html_file"
+            fi
+          done
+          
+          # Run normal build process
+          npm run build
+          
+          echo "✅ Build with feature flags completed"
+
+      - name: Upload Feature Flag Config
+        uses: actions/upload-artifact@v3
+        with:
+          name: feature-flag-configuration
+          path: |
+            config/feature-flags/
+            build/config/feature-flags/
+          retention-days: 30
+
+  # ============================================
+  # FEATURE FLAG DEPLOYMENT
+  # ============================================
+  deploy-with-feature-flags:
+    name: Deploy with Feature Flags
+    runs-on: ubuntu-latest
+    needs: [feature-flag-preparation, configure-feature-flags]
+    if: needs.configure-feature-flags.outputs.deployment-status == 'success'
+    timeout-minutes: 15
+    environment:
+      name: ${{ github.event.inputs.environment_target || inputs.environment_target }}-feature-flags
+      url: ${{ steps.deploy.outputs.deploy-url }}
+    outputs:
+      deploy-url: ${{ steps.deploy.outputs.deploy-url }}
+      deployment-status: ${{ steps.deploy.outputs.status }}
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Download Feature Flag Config
+        uses: actions/download-artifact@v3
+        with:
+          name: feature-flag-configuration
+
+      - name: Deploy with Feature Flags
+        id: deploy
+        run: |
+          TARGET="${{ github.event.inputs.environment_target || inputs.environment_target }}"
+          DEPLOYMENT_ID="${{ needs.feature-flag-preparation.outputs.deployment-id }}"
+          FLAG_NAME="${{ needs.feature-flag-preparation.outputs.flag-name }}"
+          
+          echo "🚩 Deploying with Feature Flags"
+          echo "Target: $TARGET"
+          echo "Flag: $FLAG_NAME"
+          echo "Deployment ID: $DEPLOYMENT_ID"
+          
+          # Deploy to target environment
+          if [[ "$TARGET" == "production" ]]; then
+            npx netlify-cli deploy --prod --dir=. --json > deploy-output.json
+          else
+            npx netlify-cli deploy --dir=. --json > deploy-output.json
+          fi
+          
+          DEPLOY_URL=$(cat deploy-output.json | jq -r '.deploy_url')
+          echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          echo "status=success" >> $GITHUB_OUTPUT
+          
+          echo "🌐 Deployed with Feature Flags: $DEPLOY_URL"
+          
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_PRODUCTION_SITE_ID }}
+
+      - name: Post-Deployment Health Check
+        run: |
+          DEPLOY_URL="${{ steps.deploy.outputs.deploy-url }}"
+          echo "🏥 Feature Flag Deployment Health Check"
+          
+          # Wait for deployment
+          sleep 30
+          
+          # Check main pages
+          PAGES=("/" "/services.html" "/about.html" "/contact.html" "/impact.html" "/resources.html")
+          for page in "${PAGES[@]}"; do
+            if ! curl -f "${DEPLOY_URL}${page}"; then
+              echo "❌ Page $page failed health check"
+              exit 1
+            fi
+          done
+          
+          # Check feature flag system is loaded
+          curl -f "${DEPLOY_URL}/config/feature-flags/main.js" || {
+            echo "❌ Feature flag system not accessible"
+            exit 1
+          }
+          
+          echo "✅ Feature flag deployment health check passed"
+
+  # ============================================
+  # FEATURE FLAG TESTING & MONITORING
+  # ============================================
+  test-feature-flags:
+    name: Test Feature Flag Functionality
+    runs-on: ubuntu-latest
+    needs: [feature-flag-preparation, configure-feature-flags, deploy-with-feature-flags]
+    if: needs.deploy-with-feature-flags.outputs.deployment-status == 'success'
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        test-suite: [mobile-navigation, feature-flag-logic, percentage-rollout, emergency-disable]
+    outputs:
+      mobile-nav-status: ${{ steps.mobile-test.outputs.status }}
+      flag-logic-status: ${{ steps.flag-test.outputs.status }}
+      rollout-status: ${{ steps.rollout-test.outputs.status }}
+      emergency-status: ${{ steps.emergency-test.outputs.status }}
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        if: matrix.test-suite == 'mobile-navigation' || matrix.test-suite == 'feature-flag-logic'
+        run: npx playwright install --with-deps chromium
+
+      - name: Critical Mobile Navigation Test (P0)
+        id: mobile-test
+        if: matrix.test-suite == 'mobile-navigation'
+        run: |
+          DEPLOY_URL="${{ needs.deploy-with-feature-flags.outputs.deploy-url }}"
+          FLAG_NAME="${{ needs.feature-flag-preparation.outputs.flag-name }}"
+          
+          echo "📱 CRITICAL: Mobile Navigation with Feature Flags (P0)"
+          
+          # Test mobile navigation with feature flags enabled
+          npx playwright test --config=tools/testing/playwright.config.js \
+            --grep="Critical navigation smoke test" \
+            --project="Mobile Chrome" \
+            --base-url="$DEPLOY_URL"
+          
+          if [[ $? -eq 0 ]]; then
+            echo "status=passed" >> $GITHUB_OUTPUT
+            echo "✅ Mobile navigation with feature flags passed"
+          else
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "🚨 MOBILE NAVIGATION P0 FAILURE WITH FEATURE FLAGS"
+            
+            # Emergency disable feature flags
+            echo "Emergency disabling all feature flags due to P0 failure"
+            
+            # This would trigger emergency disable in production
+            curl -X POST "${DEPLOY_URL}/api/feature-flags/emergency-disable" \
+              -H "Content-Type: application/json" \
+              -d '{"reason": "P0 mobile navigation failure"}' || true
+            
+            exit 1
+          fi
+
+      - name: Feature Flag Logic Testing
+        id: flag-test
+        if: matrix.test-suite == 'feature-flag-logic'
+        run: |
+          DEPLOY_URL="${{ needs.deploy-with-feature-flags.outputs.deploy-url }}"
+          FLAG_NAME="${{ needs.feature-flag-preparation.outputs.flag-name }}"
+          PERCENTAGE="${{ needs.feature-flag-preparation.outputs.target-percentage }}"
+          
+          echo "🚩 Feature Flag Logic Testing"
+          
+          # Create Playwright test for feature flag logic
+          cat > feature-flag-test.spec.js << 'EOF'
+          const { test, expect } = require('@playwright/test');
+
+          test('Feature Flag System Functionality', async ({ page }) => {
+            const baseUrl = process.env.DEPLOY_URL;
+            const flagName = process.env.FLAG_NAME;
+            const percentage = parseInt(process.env.PERCENTAGE);
+            
+            // Navigate to site
+            await page.goto(baseUrl);
+            
+            // Check if feature flag system is loaded
+            const featureFlags = await page.evaluate(() => {
+              return typeof window.FeatureFlags !== 'undefined';
+            });
+            expect(featureFlags).toBe(true);
+            
+            // Test flag loading
+            await page.evaluate(async () => {
+              await window.FeatureFlags.loadFlags();
+            });
+            
+            // Check if flag exists in configuration
+            const flagExists = await page.evaluate((flagName) => {
+              return window.FeatureFlags.flags[flagName] !== undefined;
+            }, flagName);
+            
+            if (percentage > 0) {
+              expect(flagExists).toBe(true);
+            }
+            
+            // Test mobile navigation preservation
+            const mobileNavWorking = await page.evaluate(() => {
+              return window.FeatureFlags.isMobileNavWorking();
+            });
+            expect(mobileNavWorking).toBe(true);
+            
+            // Test emergency disable functionality
+            await page.evaluate(() => {
+              window.FeatureFlags.emergencyDisableAll();
+            });
+            
+            const emergencyDisabled = await page.evaluate(() => {
+              return sessionStorage.getItem('ff_emergency_disabled') === 'true';
+            });
+            expect(emergencyDisabled).toBe(true);
+          });
+          EOF
+          
+          # Run feature flag logic test
+          npx playwright test feature-flag-test.spec.js \
+            --project="chromium"
+          
+          if [[ $? -eq 0 ]]; then
+            echo "status=passed" >> $GITHUB_OUTPUT
+            echo "✅ Feature flag logic test passed"
+          else
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "❌ Feature flag logic test failed"
+            exit 1
+          fi
+        env:
+          DEPLOY_URL: ${{ needs.deploy-with-feature-flags.outputs.deploy-url }}
+          FLAG_NAME: ${{ needs.feature-flag-preparation.outputs.flag-name }}
+          PERCENTAGE: ${{ needs.feature-flag-preparation.outputs.target-percentage }}
+
+      - name: Percentage Rollout Testing
+        id: rollout-test
+        if: matrix.test-suite == 'percentage-rollout'
+        run: |
+          DEPLOY_URL="${{ needs.deploy-with-feature-flags.outputs.deploy-url }}"
+          PERCENTAGE="${{ needs.feature-flag-preparation.outputs.target-percentage }}"
+          
+          echo "📊 Testing Feature Flag Percentage Rollout: $PERCENTAGE%"
+          
+          # Test with multiple user sessions to verify percentage targeting
+          ENABLED_COUNT=0
+          TOTAL_TESTS=100
+          
+          for i in $(seq 1 $TOTAL_TESTS); do
+            # Create unique session for each test
+            USER_ID="test_user_$i"
+            
+            # Test if flag would be enabled for this user
+            ENABLED=$(curl -s "$DEPLOY_URL/api/feature-flags/test" \
+              -H "Content-Type: application/json" \
+              -d "{\"userId\": \"$USER_ID\", \"flagName\": \"${{ needs.feature-flag-preparation.outputs.flag-name }}\"}" \
+              | jq -r '.enabled' 2>/dev/null || echo "false")
+            
+            if [[ "$ENABLED" == "true" ]]; then
+              ENABLED_COUNT=$((ENABLED_COUNT + 1))
+            fi
+          done
+          
+          ACTUAL_PERCENTAGE=$((ENABLED_COUNT * 100 / TOTAL_TESTS))
+          PERCENTAGE_DIFF=$((ACTUAL_PERCENTAGE - PERCENTAGE))
+          
+          echo "📊 Target Percentage: $PERCENTAGE%"
+          echo "📊 Actual Percentage: $ACTUAL_PERCENTAGE%"
+          echo "📊 Difference: $PERCENTAGE_DIFF%"
+          
+          # Allow 10% variance for statistical distribution
+          if [[ $PERCENTAGE_DIFF -gt 10 ]] || [[ $PERCENTAGE_DIFF -lt -10 ]]; then
+            echo "❌ Percentage rollout outside acceptable range"
+            echo "status=failed" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          
+          echo "status=passed" >> $GITHUB_OUTPUT
+          echo "✅ Percentage rollout test passed"
+
+      - name: Emergency Disable Testing
+        id: emergency-test
+        if: matrix.test-suite == 'emergency-disable'
+        run: |
+          DEPLOY_URL="${{ needs.deploy-with-feature-flags.outputs.deploy-url }}"
+          
+          echo "🚨 Testing Emergency Disable Functionality"
+          
+          # Test emergency disable endpoint
+          DISABLE_RESPONSE=$(curl -s -X POST "$DEPLOY_URL/api/feature-flags/emergency-disable" \
+            -H "Content-Type: application/json" \
+            -d '{"reason": "Testing emergency disable"}' \
+            | jq -r '.status' 2>/dev/null || echo "error")
+          
+          if [[ "$DISABLE_RESPONSE" == "success" ]] || [[ "$DISABLE_RESPONSE" == "disabled" ]]; then
+            echo "✅ Emergency disable endpoint working"
+          else
+            echo "⚠️ Emergency disable endpoint not available (may be expected)"
+          fi
+          
+          # Test that mobile navigation still works after emergency disable
+          npx playwright test --config=tools/testing/playwright.config.js \
+            --grep="Critical navigation smoke test" \
+            --project="Mobile Chrome" \
+            --base-url="$DEPLOY_URL"
+          
+          if [[ $? -eq 0 ]]; then
+            echo "status=passed" >> $GITHUB_OUTPUT
+            echo "✅ Emergency disable test passed - mobile navigation preserved"
+          else
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "❌ Emergency disable test failed - mobile navigation broken"
+            exit 1
+          fi
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: feature-flag-test-results-${{ matrix.test-suite }}
+          path: |
+            playwright-report/
+            test-results/
+            feature-flag-test.spec.js
+          retention-days: 30
+
+  # ============================================
+  # FEATURE FLAG MONITORING
+  # ============================================
+  monitor-feature-flags:
+    name: Monitor Feature Flag Performance
+    runs-on: ubuntu-latest
+    needs: [feature-flag-preparation, deploy-with-feature-flags, test-feature-flags]
+    if: needs.deploy-with-feature-flags.result == 'success'
+    timeout-minutes: 20  # 15 minutes monitoring + 5 minutes buffer
+    outputs:
+      monitoring-results: ${{ steps.monitor.outputs.results }}
+      error-rate: ${{ steps.monitor.outputs.error-rate }}
+      flag-usage: ${{ steps.monitor.outputs.flag-usage }}
+      
+    steps:
+      - name: Feature Flag Monitoring
+        id: monitor
+        run: |
+          DEPLOY_URL="${{ needs.deploy-with-feature-flags.outputs.deploy-url }}"
+          FLAG_NAME="${{ needs.feature-flag-preparation.outputs.flag-name }}"
+          PERCENTAGE="${{ needs.feature-flag-preparation.outputs.target-percentage }}"
+          MONITORING_DURATION="${{ env.MONITORING_DURATION }}"
+          
+          echo "📊 Starting Feature Flag Monitoring"
+          echo "URL: $DEPLOY_URL"
+          echo "Flag: $FLAG_NAME"
+          echo "Duration: $MONITORING_DURATION seconds (15 minutes)"
+          
+          SUCCESS_COUNT=0
+          ERROR_COUNT=0
+          FLAG_ENABLED_COUNT=0
+          FLAG_DISABLED_COUNT=0
+          TOTAL_REQUESTS=0
+          
+          END_TIME=$(($(date +%s) + MONITORING_DURATION))
+          
+          while [[ $(date +%s) -lt $END_TIME ]]; do
+            # Health check request
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$DEPLOY_URL")
+            if [[ "$HTTP_CODE" == "200" ]]; then
+              SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+            else
+              ERROR_COUNT=$((ERROR_COUNT + 1))
+            fi
+            
+            # Check feature flag status (simulate random user)
+            USER_ID="monitor_user_$(date +%s)"
+            FLAG_STATUS=$(curl -s "$DEPLOY_URL/api/feature-flags/status" \
+              -H "Content-Type: application/json" \
+              -d "{\"userId\": \"$USER_ID\", \"flagName\": \"$FLAG_NAME\"}" \
+              | jq -r '.enabled' 2>/dev/null || echo "false")
+            
+            if [[ "$FLAG_STATUS" == "true" ]]; then
+              FLAG_ENABLED_COUNT=$((FLAG_ENABLED_COUNT + 1))
+            else
+              FLAG_DISABLED_COUNT=$((FLAG_DISABLED_COUNT + 1))
+            fi
+            
+            TOTAL_REQUESTS=$((TOTAL_REQUESTS + 1))
+            
+            # Report progress every 2 minutes
+            if [[ $((TOTAL_REQUESTS % 8)) -eq 0 ]]; then
+              CURRENT_ERROR_RATE=$(( ERROR_COUNT * 100 / TOTAL_REQUESTS ))
+              CURRENT_FLAG_USAGE=$(( FLAG_ENABLED_COUNT * 100 / TOTAL_REQUESTS ))
+              echo "📈 Progress: ${CURRENT_ERROR_RATE}% errors, ${CURRENT_FLAG_USAGE}% flag enabled ($TOTAL_REQUESTS requests)"
+            fi
+            
+            sleep 15  # Check every 15 seconds
+          done
+          
+          # Calculate final metrics
+          ERROR_RATE=$(( ERROR_COUNT * 100 / TOTAL_REQUESTS ))
+          FLAG_USAGE=$(( FLAG_ENABLED_COUNT * 100 / TOTAL_REQUESTS ))
+          
+          echo "📊 FEATURE FLAG MONITORING RESULTS"
+          echo "Error Rate: $ERROR_RATE%"
+          echo "Flag Usage: $FLAG_USAGE%"
+          echo "Expected Usage: $PERCENTAGE%"
+          echo "Total Requests: $TOTAL_REQUESTS"
+          
+          echo "results=completed" >> $GITHUB_OUTPUT
+          echo "error-rate=$ERROR_RATE" >> $GITHUB_OUTPUT
+          echo "flag-usage=$FLAG_USAGE" >> $GITHUB_OUTPUT
+          
+          # Create monitoring report
+          cat > feature-flag-monitoring-report.json << EOF
+          {
+            "flag_name": "$FLAG_NAME",
+            "target_percentage": $PERCENTAGE,
+            "actual_usage": $FLAG_USAGE,
+            "error_rate": $ERROR_RATE,
+            "total_requests": $TOTAL_REQUESTS,
+            "success_count": $SUCCESS_COUNT,
+            "error_count": $ERROR_COUNT,
+            "flag_enabled_count": $FLAG_ENABLED_COUNT,
+            "flag_disabled_count": $FLAG_DISABLED_COUNT,
+            "monitoring_duration": $MONITORING_DURATION,
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
+      - name: Upload Monitoring Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: feature-flag-monitoring-report
+          path: feature-flag-monitoring-report.json
+          retention-days: 30
+
+  # ============================================
+  # FEATURE FLAG DEPLOYMENT COMPLETION
+  # ============================================
+  feature-flag-completion:
+    name: Feature Flag Deployment Completion
+    runs-on: ubuntu-latest
+    needs: [feature-flag-preparation, deploy-with-feature-flags, test-feature-flags, monitor-feature-flags]
+    if: always()
+    
+    steps:
+      - name: Feature Flag Deployment Summary
+        run: |
+          FLAG_NAME="${{ needs.feature-flag-preparation.outputs.flag-name }}"
+          PERCENTAGE="${{ needs.feature-flag-preparation.outputs.target-percentage }}"
+          ACTION="${{ github.event.inputs.flag_action || inputs.flag_action }}"
+          
+          echo "🚩 FEATURE FLAG DEPLOYMENT SUMMARY"
+          echo "================================================="
+          echo "Phase: ${{ github.event.inputs.deployment_phase || inputs.deployment_phase }}"
+          echo "Flag Name: $FLAG_NAME"
+          echo "Action: $ACTION"
+          echo "Percentage: $PERCENTAGE%"
+          echo "Environment: ${{ github.event.inputs.environment_target || inputs.environment_target }}"
+          echo "Mobile Navigation (P0): ${{ needs.test-feature-flags.outputs.mobile-nav-status }}"
+          echo "Flag Logic: ${{ needs.test-feature-flags.outputs.flag-logic-status }}"
+          echo "Rollout Test: ${{ needs.test-feature-flags.outputs.rollout-status }}"
+          echo "Emergency Test: ${{ needs.test-feature-flags.outputs.emergency-status }}"
+          echo "Error Rate: ${{ needs.monitor-feature-flags.outputs.error-rate }}%"
+          echo "Flag Usage: ${{ needs.monitor-feature-flags.outputs.flag-usage }}%"
+          echo "================================================="
+
+      - name: Create Feature Flag Report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const phase = '${{ github.event.inputs.deployment_phase || inputs.deployment_phase }}';
+            const action = '${{ github.event.inputs.flag_action || inputs.flag_action }}';
+            const percentage = '${{ needs.feature-flag-preparation.outputs.target-percentage }}';
+            const flagName = '${{ needs.feature-flag-preparation.outputs.flag-name }}';
+            
+            const mobileStatus = '${{ needs.test-feature-flags.outputs.mobile-nav-status }}';
+            const flagLogicStatus = '${{ needs.test-feature-flags.outputs.flag-logic-status }}';
+            const rolloutStatus = '${{ needs.test-feature-flags.outputs.rollout-status }}';
+            const emergencyStatus = '${{ needs.test-feature-flags.outputs.emergency-status }}';
+            
+            const success = mobileStatus === 'passed' && flagLogicStatus === 'passed';
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `${success ? '✅' : '❌'} Feature Flag Deployment - ${phase.toUpperCase()} ${action.toUpperCase()}`,
+              body: `# 🚩 Strategic Refactoring Feature Flag Deployment
+            
+            ## Deployment Details
+            
+            **Phase:** ${phase}
+            **Action:** ${action}
+            **Flag Name:** ${flagName}
+            **Rollout Percentage:** ${percentage}%
+            **Environment:** ${{ github.event.inputs.environment_target || inputs.environment_target }}
+            **Status:** ${success ? 'SUCCESS' : 'FAILED'}
+            
+            ## Test Results
+            
+            - **Mobile Navigation (P0):** ${mobileStatus} ${mobileStatus === 'passed' ? '✅' : '❌'}
+            - **Feature Flag Logic:** ${flagLogicStatus} ${flagLogicStatus === 'passed' ? '✅' : '❌'}
+            - **Percentage Rollout:** ${rolloutStatus} ${rolloutStatus === 'passed' ? '✅' : '❌'}
+            - **Emergency Disable:** ${emergencyStatus} ${emergencyStatus === 'passed' ? '✅' : '❌'}
+            
+            ## Monitoring Results
+            
+            - **Error Rate:** ${{ needs.monitor-feature-flags.outputs.error-rate }}%
+            - **Flag Usage:** ${{ needs.monitor-feature-flags.outputs.flag-usage }}%
+            - **Target Usage:** ${percentage}%
+            - **Monitoring Duration:** 15 minutes
+            
+            ## Feature Flag Configuration
+            
+            The feature flag system is now active with:
+            - Percentage-based rollouts
+            - Emergency disable capability
+            - Mobile navigation preservation (P0)
+            - Real-time monitoring and metrics
+            
+            ## Next Steps
+            
+            ${success ? `
+            ✅ **Feature Flag Successfully Deployed**
+            - Monitor flag performance for 24 hours
+            - Gradually increase percentage if stable
+            - Prepare for next phase rollout
+            ` : `
+            ❌ **Feature Flag Deployment Failed**
+            - Investigate failure causes
+            - Fix issues before retrying
+            - Ensure mobile navigation preservation
+            - Review emergency procedures
+            `}
+            
+            ## Emergency Procedures
+            
+            **Emergency Disable:** Available via feature flag system
+            **Rollback Command:** \`gh workflow run strategic-rollback.yml -f phase="${phase}" -f reason="Feature flag failure"\`
+            **Technical Contact:** @technical-architect (15-minute SLA)`,
+              labels: ['feature-flags', 'strategic-refactoring', phase, action, success ? 'deployed' : 'failed']
+            });

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about Food-N-Force's mission to transform food banks through strategic digital solutions, technology expertise, and data-driven insights.">
+    <meta name="keywords" content="food bank technology, nonprofit innovation, digital transformation experts, food distribution solutions">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="About Food-N-Force - Your Digital Transformation Partner">
+    <meta property="og:description" content="Strategic technology solutions designed specifically for food banks and nonprofit food distribution networks.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/about.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="About Food-N-Force">
+    
+    <!-- Security Headers - Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <title>About Us - Food-N-Force</title>
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- PHASE 2B: Custom SLDS Build (24KB vs 821KB CDN - 97% reduction) -->
+    <link rel="stylesheet" href="css/slds-custom.css">
+    
+    <!-- Orbitron Font is loaded via @import in styles.css -->
+    
+    <!-- Custom CSS - Emergency Rollback: Restored original navigation -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation-unified.css">
+    <link rel="stylesheet" href="css/responsive-enhancements.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/mobile-navigation-clean.js" as="script">
+    
+    <!-- Phase C: Inline styles moved to styles.css for unified card system -->
+</head>
+<body class="about-page">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Static HTML Navigation -->
+    <nav class="navbar universal-nav custom-nav" role="banner">
+        <div class="slds-container_fluid">
+            <!-- SLDS Brand Header Pattern: Logo (far left) | Company Name (center) | Mobile Toggle (far right) -->
+            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small header-layout">
+                <!-- SLDS Brand Logo Container - Far Left -->
+                <div class="slds-col slds-no-flex logo-container">
+                    <div class="slds-brand fnf-logo-wrapper">
+                        <a href="index.html" class="slds-brand__logo-link brand-logo-link" aria-label="Food-N-Force Home" title="Food-N-Force - Modern Solutions for Food Banks">
+                            <div class="fnf-logo" role="img" aria-labelledby="nav-logo-title">
+                                <div class="fnf-inner">
+                                    <span class="fnf-wordmark">F-n-F</span>
+                                </div>
+                            </div>
+                            <span id="nav-logo-title" class="slds-assistive-text">Food-N-Force Logo - Modern Solutions for Food Banks</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Company Name Container - Center -->
+                <div class="slds-col slds-no-flex company-name-container-centered">
+                    <h1 class="brand-logo universal-brand-logo">Food-N-Force</h1>
+                </div>
+                <!-- Mobile Navigation Toggle - Far Right -->
+                <div class="slds-col slds-no-flex mobile-toggle-container">
+                    <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
+                        <span class="hamburger-icon">☰</span>
+                    </button>
+                </div>
+                <!-- Spacer for desktop (maintains balance) -->
+                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
+                    <!-- Balances the logo container -->
+                </div>
+            </div>
+            <!-- Navigation Menu - Centered Below Company Name -->
+            <div class="slds-grid slds-grid_align-center slds-p-top_small">
+                <div class="slds-col">
+                    <nav class="slds-text-align_center nav-menu-container" role="navigation" aria-label="Main navigation">
+                        <ul class="nav-menu slds-nav-horizontal universal-nav-menu" id="main-nav">
+                            <li class="slds-nav-horizontal__item">
+                                <a href="index.html" class="nav-link universal-nav-link">Home</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="services.html" class="nav-link universal-nav-link">Services</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="resources.html" class="nav-link universal-nav-link">Resources</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="impact.html" class="nav-link universal-nav-link">Impact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item">
+                                <a href="contact.html" class="nav-link universal-nav-link">Contact</a>
+                            </li>
+                            <li class="slds-nav-horizontal__item slds-is-active">
+                                <a href="about.html" class="nav-link universal-nav-link">About Us</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Why Section -->
+        <section class="section-padding slds-p-horizontal_large" aria-labelledby="why-heading">
+            <div class="slds-container_large slds-container_center">
+                <div class="slds-text-align_center slds-m-bottom_x-large">
+                    <h2 id="why-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Why</h2>
+                    <p class="slds-text-body_regular">
+                        Hunger shouldn't be a technology problem. Yet, many community food organizations are still managing complex logistics and client engagement with limited tools.
+                    </p>
+                    <p class="slds-text-body_regular slds-m-top_medium">
+                        We created Food-N-Force to change that.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Story Section -->
+        <section class="slds-p-vertical_x-large section-gray" aria-labelledby="story-heading">
+            <div class="slds-container_large slds-container_center">
+                <div class="slds-text-align_center">
+                    <h2 id="story-heading" class="slds-text-heading_large slds-m-bottom_x-large">Our Story</h2>
+                    <div class="slds-text-longform story-content">
+                        <p class="slds-text-body_regular slds-m-bottom_medium">
+                            Food-N-Force was founded by a seasoned Salesforce consultant and Solution Architect with years of experience driving transformation across government and enterprise clients. After witnessing the impact of digital innovation in these sectors, our founder recognized an opportunity to bring similar tools to underserved nonprofit communities.
+                        </p>
+                        <p class="slds-text-body_regular slds-m-bottom_medium">
+                            We're starting in the DC metro area—where we live and work—and expanding from there. Our mission is bigger. We're here to help any organization, anywhere, that wants to do more with less and serve people with dignity and efficiency.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What We Bring Section -->
+        <section class="slds-p-vertical_x-large card-section" aria-labelledby="expertise-heading">
+            <div class="slds-container_large slds-container_center">
+                <h2 id="expertise-heading" class="slds-text-heading_large slds-text-align_center slds-m-bottom_x-large">What We Bring</h2>
+                <div class="slds-grid slds-wrap slds-gutters_large slds-grid_align-center">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="expertise-card">
+                            <span class="card-number">01</span>
+                            <div class="expertise-icon" id="expertise-icon-1">
+                                <span>☁️</span>
+                            </div>
+                            <h3>Salesforce for Nonprofits Expertise</h3>
+                            <p>Certified in Nonprofit Cloud, with deep knowledge of Program Management Module, Case Management, and Grants Management.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="expertise-card">
+                            <span class="card-number">02</span>
+                            <div class="expertise-icon" id="expertise-icon-2">
+                                <span>📦</span>
+                            </div>
+                            <h3>Deep Understanding of Food Relief Workflows</h3>
+                            <p>From intake to distribution, we know the unique challenges of food banking and design solutions that actually work in the field.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="expertise-card">
+                            <span class="card-number">03</span>
+                            <div class="expertise-icon" id="expertise-icon-3">
+                                <span>🤝</span>
+                            </div>
+                            <h3>Human-Centered Technology Consulting</h3>
+                            <p>We start with your team's needs, not the technology. Every solution is designed to be intuitive for staff and volunteers alike.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="expertise-card">
+                            <span class="card-number">04</span>
+                            <div class="expertise-icon" id="expertise-icon-4">
+                                <span>📈</span>
+                            </div>
+                            <h3>Solutions Designed to Scale with Your Mission</h3>
+                            <p>Whether you serve 100 families or 100,000, our implementations grow with you, adapting to your changing needs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision Section -->
+        <section class="slds-p-vertical_x-large section-gray" aria-labelledby="vision-heading">
+            <div class="slds-container_large slds-container_center slds-text-align_center">
+                <h2 id="vision-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Vision</h2>
+                <p class="slds-text-body_regular vision-statement">
+                    We believe in using technology to expand compassion. That's why we partner with food banks and pantries to build digital systems that work behind the scenes—so you can focus on feeding people, not fighting spreadsheets.
+                </p>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="slds-p-vertical_x-large card-section" aria-labelledby="values-heading">
+            <div class="slds-container_large slds-container_center">
+                <h2 id="values-heading" class="slds-text-heading_large slds-text-align_center slds-m-bottom_x-large">Our Core Values</h2>
+                <div class="slds-grid slds-wrap slds-gutters_large slds-grid_align-center">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="value-card">
+                            <span class="card-number">01</span>
+                            <div class="value-icon" id="value-icon-1">
+                                <span>⚖️</span>
+                            </div>
+                            <h3>Equity</h3>
+                            <p>Technology should reduce barriers, not create them. We design with accessibility and inclusion at the forefront.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="value-card">
+                            <span class="card-number">02</span>
+                            <div class="value-icon" id="value-icon-2">
+                                <span>⚡</span>
+                            </div>
+                            <h3>Efficiency</h3>
+                            <p>Every hour saved on admin work is an hour invested in feeding families. We optimize relentlessly.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="value-card">
+                            <span class="card-number">03</span>
+                            <div class="value-icon" id="value-icon-3">
+                                <span>❤️</span>
+                            </div>
+                            <h3>Empathy</h3>
+                            <p>We listen first, design second. Your challenges guide our solutions, not the other way around.</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="value-card">
+                            <span class="card-number">04</span>
+                            <div class="value-icon" id="value-icon-4">
+                                <span>🚀</span>
+                            </div>
+                            <h3>Innovation</h3>
+                            <p>We bring cutting-edge Salesforce capabilities to the nonprofit sector, making enterprise tools accessible.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section class="slds-p-vertical_x-large section-gray" aria-labelledby="expertise-detail-heading">
+            <div class="slds-container_large slds-container_center">
+                <h2 id="expertise-detail-heading" class="slds-text-heading_large slds-text-align_center slds-m-bottom_x-large">Our Expertise</h2>
+                <div class="slds-grid slds-wrap slds-gutters_large">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <h3 class="slds-text-heading_medium slds-m-bottom_small">Functional and Solution Consulting</h3>
+                        <ul class="expertise-list">
+                            <li>End-to-end business process mangement</li>
+                            <li>Program delivery, volunteer operations</li>
+                            <li>Donor engagement optimization</li>
+                            <li>Grant tracking and reporting</li>
+                        </ul>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <h3 class="slds-text-heading_medium slds-m-bottom_small">Data Analytics & Reporting</h3>
+                        <ul class="expertise-list">
+                            <li>Real-time dashboard creation</li>
+                            <li>Impact measurement frameworks</li>
+                            <li>Predictive analytics for demand planning</li>
+                            <li>Automated funder reporting</li>
+                        </ul>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <h3 class="slds-text-heading_medium slds-m-bottom_small">Process Automation</h3>
+                        <ul class="expertise-list">
+                            <li>Client intake streamlining</li>
+                            <li>Inventory management workflows</li>
+                            <li>Distribution scheduling automation</li>
+                            <li>Communication flow optimization</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="slds-text-align_center slds-m-top_x-large">
+                    <h3 class="slds-text-heading_medium slds-m-bottom_small">Ready to Learn More?</h3>
+                    <p class="slds-m-bottom_medium">Discover how we can transform your food bank's operations.</p>
+                    <a href="services.html" class="slds-button slds-button_brand">Explore Our Services</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="about-stats">
+            <div class="slds-container_large slds-container_center">
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-number" data-suffix="+">150</span>
+                        <p class="stat-label">Food Pantries Served</p>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-suffix="%">40</span>
+                        <p class="stat-label">Average Efficiency Increase</p>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-suffix="M+">2</span>
+                        <p class="stat-label">Families Better Served</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="custom-footer" role="contentinfo">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Phase 1 Consolidated JavaScript -->
+    <script>
+        // ULTRA SIMPLE MOBILE NAVIGATION
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.querySelector('.mobile-nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            let isOpen = false;
+            
+            if (!toggle || !navMenu) return;
+            
+            // Show desktop navigation
+            if (window.innerWidth > 768) {
+                navMenu.style.display = 'flex';
+            } else {
+                navMenu.style.display = 'none';
+            }
+            
+            // Mobile toggle
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                isOpen = !isOpen;
+                
+                if (isOpen && window.innerWidth <= 768) {
+                    // Create simple dropdown
+                    const dropdown = document.createElement('div');
+                    dropdown.id = 'mobile-dropdown';
+                    dropdown.innerHTML = `
+                        <div style="position: fixed; top: 80px; left: 20px; right: 20px; background: white; border: 2px solid #0176d3; padding: 20px; z-index: 99999; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                            <a href="index.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Home</a>
+                            <a href="services.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Services</a>
+                            <a href="resources.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Resources</a>
+                            <a href="impact.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Impact</a>
+                            <a href="contact.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Contact</a>
+                            <a href="about.html" style="display: block; padding: 12px; color: #333; text-decoration: none;">About Us</a>
+                        </div>
+                    `;
+                    document.body.appendChild(dropdown);
+                } else {
+                    // Remove dropdown
+                    const dropdown = document.getElementById('mobile-dropdown');
+                    if (dropdown) dropdown.remove();
+                }
+            });
+        });
+    </script>
+    <script src="js/original-mesh-background.js"></script>
+    <script src="js/core/animations.js"></script>
+    <script src="js/unified-scroll.js"></script>
+    <script src="js/pages/about-page-unified.js"></script>
+    
+    <!-- Page load complete -->
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+    <!-- Phase C: Mobile navigation fix moved to navigation-styles.css -->
+</body>
+</html>

@@ -595,8 +595,8 @@ body.index-page main#main-content {
 }
 
 body.index-page .hero-section {
-    margin-top: 0 !important;
-    padding-top: 6rem !important; /* Push content below navbar but background touches */
+    margin-top: 160px !important; /* Space for fixed navigation (header + nav menu) */
+    padding-top: 2rem !important; /* Reduced since we have margin-top now */
     padding-bottom: var(--spacing-large) !important; /* Keep bottom padding */
 }
 
@@ -622,6 +622,12 @@ body.index-page .hero-section p {
         padding-top: 0 !important; /* Mobile - hero touches navbar */
     }
     
+    /* Mobile hero spacing */
+    body.index-page .hero-section {
+        margin-top: 100px !important; /* Space for mobile navigation */
+        padding-top: 2rem !important; /* Less padding since we have margin-top */
+    }
+    
     /* Mobile hero font sizes */
     body.index-page .hero-title,
     body.index-page .hero-section h2 {
@@ -638,6 +644,11 @@ body.index-page .hero-section p {
 @media (min-width: 1025px) {
     body.index-page main#main-content {
         padding-top: 0 !important; /* Desktop - hero touches navbar */
+    }
+    
+    /* Large desktop hero positioning */
+    body.index-page .hero-section {
+        margin-top: 170px !important; /* Account for larger navigation on desktop */
     }
 }
 
@@ -1093,6 +1104,22 @@ main [role="region"]:nth-child(4) {
     h2::after,
     .slds-text-heading_large::after {
         display: none !important;
+    }
+    
+    /* Remove blue border-bottom underlines on mobile */
+    h2, 
+    section h2,
+    h2.hero-title,
+    h2.impact-heading,
+    h2#services-heading,
+    h2#impact-heading,
+    h2#why-heading,
+    h2#contact-heading,
+    h2#resources-heading,
+    h2#mission-heading,
+    h2#focus-heading {
+        border-bottom: none !important;
+        padding-bottom: 0.75rem !important; /* Keep some spacing */
     }
 }
 
@@ -5180,8 +5207,24 @@ h2, section h2 {
     transition: none !important;
     text-align: center !important;
     margin-bottom: 12px !important;
-    border-bottom: 4px solid #00d1ff !important;
     padding-bottom: 0.5rem !important;
+}
+
+/* Desktop only - Blue underline bars for section headings */
+@media (min-width: 769px) {
+    h2, 
+    section h2,
+    h2.hero-title,
+    h2.impact-heading,
+    h2#services-heading,
+    h2#impact-heading,
+    h2#why-heading,
+    h2#contact-heading,
+    h2#resources-heading,
+    h2#mission-heading,
+    h2#focus-heading {
+        border-bottom: 4px solid #00d1ff !important;
+    }
 }
 
 /* Navigation Links - Exact size from reference image */

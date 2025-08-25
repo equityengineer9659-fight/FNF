@@ -1,0 +1,273 @@
+{
+  "strategic_refactoring_deployment": {
+    "version": "v3.2",
+    "last_updated": "2025-08-23",
+    "deployment_specialist": "deployment-cicd-specialist",
+    "project_context": "Food-N-Force website strategic refactoring"
+  },
+  
+  "deployment_strategies": {
+    "blue_green": {
+      "workflow": ".github/workflows/deployment-blue-green.yml",
+      "description": "Zero-downtime deployment with instant rollback",
+      "use_cases": ["phase-1-javascript", "high-risk deployments", "production"],
+      "switch_timeout": "300s",
+      "rollback_sla": "120s",
+      "mobile_nav_priority": "P0"
+    },
+    
+    "canary": {
+      "workflow": ".github/workflows/deployment-canary.yml", 
+      "description": "Gradual rollout with progressive traffic increase",
+      "use_cases": ["phase-2-slds", "phase-3-css", "bundle-changes"],
+      "monitoring_duration": "1800s",
+      "success_threshold": "95%",
+      "performance_threshold": "85"
+    },
+    
+    "feature_flags": {
+      "workflow": ".github/workflows/deployment-feature-flags.yml",
+      "description": "Feature-based deployment with runtime toggles",
+      "use_cases": ["all-phases", "safe-enablement", "A/B-testing"],
+      "rollout_percentages": [0, 10, 25, 50, 75, 100],
+      "emergency_disable": "available"
+    },
+    
+    "environment_promotion": {
+      "workflow": ".github/workflows/deployment-environment-promotion.yml",
+      "description": "Controlled promotion between environments",
+      "environments": ["development", "staging", "production"],
+      "approval_gates": ["staging->production"],
+      "validation_timeout": "600s"
+    },
+    
+    "monitoring": {
+      "workflow": ".github/workflows/deployment-monitoring.yml",
+      "description": "Continuous deployment monitoring and alerting",
+      "schedule": {
+        "health_checks": "*/5 * * * *",
+        "performance_monitoring": "*/15 9-18 * * 1-5"
+      },
+      "incident_escalation": "900s"
+    }
+  },
+  
+  "phase_deployment_mapping": {
+    "phase-1-javascript": {
+      "recommended_strategy": "blue_green",
+      "risk_level": "LOW",
+      "priority": "P0 - Mobile navigation preservation",
+      "deployment_requirements": [
+        "Mobile navigation P0 validation",
+        "JavaScript bundle size ≤90KB", 
+        "File count reduction to ≤8 files",
+        "Performance maintained"
+      ],
+      "rollback_conditions": [
+        "Mobile navigation failure (immediate)",
+        "JavaScript errors (immediate)",
+        "Performance degradation >10%"
+      ]
+    },
+    
+    "phase-2-slds": {
+      "recommended_strategy": "canary",
+      "risk_level": "MEDIUM",
+      "priority": "Bundle optimization with visual consistency",
+      "deployment_requirements": [
+        "SLDS compliance validation",
+        "CSS bundle size ≤200KB",
+        "Visual consistency maintained",
+        "CDN cache invalidation"
+      ],
+      "rollback_conditions": [
+        "Visual regression (immediate)",
+        "SLDS compliance failure (immediate)",
+        "Loading performance >1000ms FCP"
+      ]
+    },
+    
+    "phase-3-css": {
+      "recommended_strategy": "canary",
+      "risk_level": "MEDIUM", 
+      "priority": "CSS architecture with cascade management",
+      "deployment_requirements": [
+        "!important declarations ≤400",
+        "CSS cascade conflicts resolved",
+        "Cross-breakpoint consistency",
+        "CSS Layers implementation"
+      ],
+      "rollback_conditions": [
+        "Cascade conflicts (immediate)",
+        "Visual regression (immediate)", 
+        "Performance degradation >5%"
+      ]
+    },
+    
+    "phase-4-html": {
+      "recommended_strategy": "feature_flags",
+      "risk_level": "LOW",
+      "priority": "Accessibility and semantic optimization",
+      "deployment_requirements": [
+        "WCAG 2.1 AA compliance 100%",
+        "Navigation semantically correct",
+        "Screen reader compatibility",
+        "HTML validation passes"
+      ],
+      "rollback_conditions": [
+        "Accessibility failure (immediate)",
+        "Navigation structure broken (immediate)",
+        "Screen reader issues (immediate)"
+      ]
+    }
+  },
+  
+  "environment_configuration": {
+    "development": {
+      "url": "http://localhost:8080",
+      "auto_deploy": false,
+      "validation_level": "basic"
+    },
+    
+    "staging": {
+      "url": "https://staging--foodnforce.netlify.app",
+      "auto_deploy": true,
+      "validation_level": "comprehensive",
+      "netlify_site_id": "NETLIFY_STAGING_SITE_ID"
+    },
+    
+    "production": {
+      "url": "https://foodnforce.com",
+      "auto_deploy": false,
+      "validation_level": "full",
+      "approval_required": true,
+      "netlify_site_id": "NETLIFY_PRODUCTION_SITE_ID"
+    }
+  },
+  
+  "quality_gates": {
+    "mobile_navigation_p0": {
+      "test_command": "npm run test:critical-navigation",
+      "failure_action": "immediate_rollback",
+      "priority": "P0",
+      "timeout": "30s"
+    },
+    
+    "performance_budget": {
+      "javascript_bundle": "90KB",
+      "css_bundle": "200KB", 
+      "lighthouse_score": "85",
+      "important_declarations": "400"
+    },
+    
+    "accessibility_compliance": {
+      "wcag_level": "AA",
+      "target_score": "100%",
+      "test_command": "npm run test:accessibility"
+    },
+    
+    "slds_compliance": {
+      "test_command": "npm run validate:slds",
+      "bundle_optimization": "required",
+      "component_patterns": "validated"
+    }
+  },
+  
+  "monitoring_configuration": {
+    "health_checks": {
+      "interval": "5m",
+      "timeout": "30s",
+      "endpoints": ["/", "/services.html", "/about.html", "/contact.html", "/impact.html", "/resources.html"]
+    },
+    
+    "performance_monitoring": {
+      "interval": "15m", 
+      "business_hours_only": true,
+      "lighthouse_categories": ["performance", "accessibility"],
+      "core_web_vitals": ["LCP", "FID", "CLS", "FCP"]
+    },
+    
+    "incident_response": {
+      "p0_escalation": "immediate",
+      "p1_escalation": "15m",
+      "technical_architect_sla": "15m",
+      "emergency_rollback_sla": "2m"
+    }
+  },
+  
+  "agent_integration": {
+    "technical_architect": {
+      "emergency_authority": true,
+      "response_sla": "15m",
+      "approval_authority": "production_deployments"
+    },
+    
+    "testing_validation_specialist": {
+      "quality_gate_authority": true,
+      "deployment_approval": "quality_gates"
+    },
+    
+    "performance_optimizer": {
+      "performance_validation": "required_phase_2_3",
+      "budget_enforcement": true
+    },
+    
+    "project_manager_proj": {
+      "deployment_coordination": true,
+      "stakeholder_communication": "required"
+    },
+    
+    "devops_cicd_automation": {
+      "pipeline_integration": "seamless",
+      "workflow_coordination": "primary_partner"
+    }
+  },
+  
+  "rollback_procedures": {
+    "emergency_rollback": {
+      "workflow": ".github/workflows/strategic-rollback.yml",
+      "trigger_conditions": [
+        "P0 mobile navigation failure",
+        "Critical production outage",
+        "Security incident"
+      ],
+      "execution_time": "≤2 minutes",
+      "notification_required": true
+    },
+    
+    "phase_specific_rollback": {
+      "javascript_consolidation": "restore js/ directory",
+      "slds_optimization": "restore css/ directory",
+      "css_architecture": "restore css/ and cascade",
+      "html_semantic": "restore *.html files"
+    }
+  },
+  
+  "security_considerations": {
+    "secrets_management": [
+      "NETLIFY_AUTH_TOKEN",
+      "NETLIFY_PRODUCTION_SITE_ID", 
+      "NETLIFY_STAGING_SITE_ID"
+    ],
+    
+    "access_control": {
+      "production_deployments": ["technical-architect", "project-manager-proj"],
+      "emergency_rollback": ["technical-architect"],
+      "feature_flag_management": ["technical-architect", "testing-validation-specialist"]
+    }
+  },
+  
+  "integration_points": {
+    "existing_ci_cd_pipeline": {
+      "main_workflow": ".github/workflows/ci-cd.yml",
+      "integration_method": "workflow_call",
+      "shared_components": ["phase-detection", "mobile-nav-safety", "quality-checks"]
+    },
+    
+    "netlify_integration": {
+      "deploy_previews": "automatic",
+      "branch_deploys": "enabled",
+      "form_handling": "configured"
+    }
+  }
+}

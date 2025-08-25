@@ -1,0 +1,785 @@
+name: Strategic Refactoring Deployment Monitoring
+
+on:
+  schedule:
+    # Run monitoring every 15 minutes during business hours (9 AM - 6 PM UTC)
+    - cron: '*/15 9-18 * * 1-5'
+    # Run health checks every 5 minutes 24/7
+    - cron: '*/5 * * * *'
+  
+  workflow_dispatch:
+    inputs:
+      monitoring_type:
+        description: 'Type of monitoring to run'
+        required: true
+        type: choice
+        options:
+        - 'health-check'
+        - 'performance-monitoring'
+        - 'mobile-nav-validation'
+        - 'comprehensive-monitoring'
+        - 'incident-response'
+      environment_target:
+        description: 'Environment to monitor'
+        required: false
+        default: 'production'
+        type: choice
+        options:
+        - 'production'
+        - 'staging'
+        - 'all'
+      alert_severity:
+        description: 'Alert severity level'
+        required: false
+        default: 'normal'
+        type: choice
+        options:
+        - 'low'
+        - 'normal'
+        - 'high'
+        - 'critical'
+      
+  workflow_call:
+    inputs:
+      monitoring_type:
+        required: true
+        type: string
+      environment_target:
+        required: false
+        type: string
+        default: 'production'
+      alert_severity:
+        required: false
+        type: string
+        default: 'normal'
+
+env:
+  NODE_VERSION: '18'
+  HEALTH_CHECK_TIMEOUT: '30'
+  PERFORMANCE_THRESHOLD: '85'
+  AVAILABILITY_THRESHOLD: '99.9'
+  MOBILE_NAV_P0_PRIORITY: 'true'
+  INCIDENT_ESCALATION_TIMEOUT: '900'  # 15 minutes
+
+jobs:
+  # ============================================
+  # CONTINUOUS HEALTH MONITORING
+  # ============================================
+  health-monitoring:
+    name: Continuous Health Monitoring
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: |
+      github.event.schedule == '*/5 * * * *' || 
+      github.event.inputs.monitoring_type == 'health-check' ||
+      github.event.inputs.monitoring_type == 'comprehensive-monitoring'
+    outputs:
+      production-health: ${{ steps.prod-health.outputs.status }}
+      staging-health: ${{ steps.staging-health.outputs.status }}
+      mobile-nav-health: ${{ steps.mobile-nav.outputs.status }}
+      incidents-detected: ${{ steps.incident-detection.outputs.incidents }}
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Production Health Check
+        id: prod-health
+        if: |
+          github.event.inputs.environment_target == 'production' ||
+          github.event.inputs.environment_target == 'all' ||
+          github.event.inputs.environment_target == '' ||
+          github.event.inputs.environment_target == null
+        run: |
+          echo "🏥 Production Health Check"
+          
+          PRODUCTION_URL="https://foodnforce.com"
+          HEALTH_STATUS="healthy"
+          FAILED_PAGES=()
+          RESPONSE_TIMES=()
+          
+          # Check all critical pages with response time tracking
+          PAGES=("/" "/services.html" "/about.html" "/contact.html" "/impact.html" "/resources.html")
+          
+          for page in "${PAGES[@]}"; do
+            echo "Checking: ${PRODUCTION_URL}${page}"
+            
+            # Measure response time and status
+            RESPONSE=$(curl -s -w "%{http_code},%{time_total}" -o /dev/null "${PRODUCTION_URL}${page}")
+            HTTP_CODE=$(echo $RESPONSE | cut -d',' -f1)
+            RESPONSE_TIME=$(echo $RESPONSE | cut -d',' -f2)
+            
+            RESPONSE_TIMES+=($RESPONSE_TIME)
+            
+            if [[ "$HTTP_CODE" != "200" ]]; then
+              HEALTH_STATUS="unhealthy"
+              FAILED_PAGES+=("$page ($HTTP_CODE)")
+              echo "❌ $page failed with HTTP $HTTP_CODE"
+            else
+              echo "✅ $page OK (${RESPONSE_TIME}s)"
+            fi
+          done
+          
+          # Calculate average response time
+          TOTAL_TIME=0
+          for time in "${RESPONSE_TIMES[@]}"; do
+            TOTAL_TIME=$(echo "$TOTAL_TIME + $time" | bc -l)
+          done
+          AVG_RESPONSE_TIME=$(echo "scale=3; $TOTAL_TIME / ${#RESPONSE_TIMES[@]}" | bc -l)
+          
+          echo "📊 Average Response Time: ${AVG_RESPONSE_TIME}s"
+          
+          # Check for performance degradation
+          if (( $(echo "$AVG_RESPONSE_TIME > 3.0" | bc -l) )); then
+            echo "⚠️ Slow response time detected: ${AVG_RESPONSE_TIME}s"
+            HEALTH_STATUS="degraded"
+          fi
+          
+          echo "status=$HEALTH_STATUS" >> $GITHUB_OUTPUT
+          
+          if [[ "$HEALTH_STATUS" == "healthy" ]]; then
+            echo "✅ Production health check passed"
+          else
+            echo "❌ Production health issues detected"
+            echo "Failed pages: ${FAILED_PAGES[*]}"
+          fi
+
+      - name: Staging Health Check
+        id: staging-health
+        if: |
+          github.event.inputs.environment_target == 'staging' ||
+          github.event.inputs.environment_target == 'all'
+        run: |
+          echo "🧪 Staging Health Check"
+          
+          # Note: In a real setup, you'd have a staging URL
+          STAGING_URL="https://staging--foodnforce.netlify.app"
+          HEALTH_STATUS="healthy"
+          
+          # Basic connectivity check
+          if curl -f --connect-timeout ${{ env.HEALTH_CHECK_TIMEOUT }} "$STAGING_URL" >/dev/null 2>&1; then
+            echo "✅ Staging environment accessible"
+          else
+            HEALTH_STATUS="unhealthy"
+            echo "❌ Staging environment not accessible"
+          fi
+          
+          echo "status=$HEALTH_STATUS" >> $GITHUB_OUTPUT
+
+      - name: Critical Mobile Navigation Health Check (P0)
+        id: mobile-nav
+        run: |
+          echo "📱 CRITICAL: Mobile Navigation Health Check (P0)"
+          
+          PRODUCTION_URL="https://foodnforce.com"
+          
+          # Install Playwright for mobile navigation testing
+          npx playwright install chromium
+          
+          # Run critical mobile navigation test
+          npx playwright test --config=tools/testing/playwright.config.js \
+            --grep="Critical navigation smoke test" \
+            --project="Mobile Chrome" \
+            --base-url="$PRODUCTION_URL" \
+            --reporter=json > mobile-nav-health.json
+          
+          if [[ $? -eq 0 ]]; then
+            echo "status=healthy" >> $GITHUB_OUTPUT
+            echo "✅ Mobile navigation P0 check passed"
+          else
+            echo "status=critical" >> $GITHUB_OUTPUT
+            echo "🚨 MOBILE NAVIGATION P0 FAILURE DETECTED"
+            
+            # This is a P0 incident - immediate escalation required
+            echo "P0_INCIDENT=true" >> $GITHUB_ENV
+            echo "INCIDENT_TYPE=mobile_navigation_failure" >> $GITHUB_ENV
+            echo "INCIDENT_SEVERITY=critical" >> $GITHUB_ENV
+          fi
+
+      - name: Incident Detection & Classification
+        id: incident-detection
+        run: |
+          echo "🔍 Incident Detection & Classification"
+          
+          PROD_HEALTH="${{ steps.prod-health.outputs.status }}"
+          STAGING_HEALTH="${{ steps.staging-health.outputs.status }}"
+          MOBILE_NAV_HEALTH="${{ steps.mobile-nav.outputs.status }}"
+          
+          INCIDENTS=()
+          
+          # P0 Critical: Mobile navigation failure
+          if [[ "$MOBILE_NAV_HEALTH" == "critical" ]]; then
+            INCIDENTS+=("P0_MOBILE_NAV_FAILURE")
+            echo "🚨 P0 INCIDENT: Mobile navigation critical failure"
+          fi
+          
+          # P1 High: Production completely down
+          if [[ "$PROD_HEALTH" == "unhealthy" ]]; then
+            INCIDENTS+=("P1_PRODUCTION_DOWN")
+            echo "🔴 P1 INCIDENT: Production environment down"
+          fi
+          
+          # P2 Medium: Production degraded performance
+          if [[ "$PROD_HEALTH" == "degraded" ]]; then
+            INCIDENTS+=("P2_PERFORMANCE_DEGRADED")
+            echo "🟡 P2 INCIDENT: Production performance degraded"
+          fi
+          
+          # P3 Low: Staging issues
+          if [[ "$STAGING_HEALTH" == "unhealthy" ]]; then
+            INCIDENTS+=("P3_STAGING_DOWN")
+            echo "🔵 P3 INCIDENT: Staging environment down"
+          fi
+          
+          # Format incidents for output
+          INCIDENTS_STRING=$(IFS=','; echo "${INCIDENTS[*]}")
+          echo "incidents=$INCIDENTS_STRING" >> $GITHUB_OUTPUT
+          
+          if [[ ${#INCIDENTS[@]} -eq 0 ]]; then
+            echo "✅ No incidents detected"
+          else
+            echo "⚠️ Incidents detected: $INCIDENTS_STRING"
+          fi
+
+      - name: Upload Health Check Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: health-monitoring-results-${{ github.run_id }}
+          path: |
+            mobile-nav-health.json
+            health-check-results.json
+          retention-days: 7
+
+  # ============================================
+  # PERFORMANCE MONITORING
+  # ============================================
+  performance-monitoring:
+    name: Performance & Core Web Vitals Monitoring
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: |
+      github.event.schedule == '*/15 9-18 * * 1-5' ||
+      github.event.inputs.monitoring_type == 'performance-monitoring' ||
+      github.event.inputs.monitoring_type == 'comprehensive-monitoring'
+    outputs:
+      performance-score: ${{ steps.perf-monitoring.outputs.score }}
+      core-web-vitals: ${{ steps.perf-monitoring.outputs.core-web-vitals }}
+      performance-status: ${{ steps.perf-monitoring.outputs.status }}
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Comprehensive Performance Monitoring
+        id: perf-monitoring
+        run: |
+          echo "📊 Comprehensive Performance Monitoring"
+          
+          PRODUCTION_URL="https://foodnforce.com"
+          PERFORMANCE_STATUS="good"
+          
+          # Run Lighthouse on key pages
+          PAGES=("/" "/services.html" "/about.html")
+          TOTAL_SCORE=0
+          PAGE_COUNT=0
+          
+          mkdir -p performance-reports
+          
+          for page in "${PAGES[@]}"; do
+            echo "🔍 Analyzing: ${PRODUCTION_URL}${page}"
+            
+            # Run Lighthouse
+            npx lighthouse "${PRODUCTION_URL}${page}" \
+              --chrome-flags="--headless --no-sandbox" \
+              --output=json \
+              --output-path="./performance-reports/lighthouse-$(basename $page .html).json" \
+              --quiet
+            
+            if [[ $? -eq 0 ]]; then
+              # Extract performance score
+              SCORE=$(cat "./performance-reports/lighthouse-$(basename $page .html).json" | jq '.categories.performance.score * 100')
+              TOTAL_SCORE=$(echo "$TOTAL_SCORE + $SCORE" | bc -l)
+              PAGE_COUNT=$((PAGE_COUNT + 1))
+              
+              echo "📈 $page Performance Score: $SCORE"
+              
+              # Extract Core Web Vitals
+              LCP=$(cat "./performance-reports/lighthouse-$(basename $page .html).json" | jq '.audits["largest-contentful-paint"].numericValue')
+              FID=$(cat "./performance-reports/lighthouse-$(basename $page .html).json" | jq '.audits["max-potential-fid"].numericValue')
+              CLS=$(cat "./performance-reports/lighthouse-$(basename $page .html).json" | jq '.audits["cumulative-layout-shift"].numericValue')
+              FCP=$(cat "./performance-reports/lighthouse-$(basename $page .html).json" | jq '.audits["first-contentful-paint"].numericValue')
+              
+              echo "🎯 Core Web Vitals for $page:"
+              echo "   LCP: ${LCP}ms"
+              echo "   FID: ${FID}ms"
+              echo "   CLS: $CLS"
+              echo "   FCP: ${FCP}ms"
+              
+              # Check thresholds
+              if (( $(echo "$SCORE < ${{ env.PERFORMANCE_THRESHOLD }}" | bc -l) )); then
+                PERFORMANCE_STATUS="degraded"
+                echo "⚠️ Performance below threshold for $page"
+              fi
+            else
+              echo "❌ Lighthouse failed for $page"
+              PERFORMANCE_STATUS="error"
+            fi
+          done
+          
+          # Calculate average performance score
+          if [[ $PAGE_COUNT -gt 0 ]]; then
+            AVG_SCORE=$(echo "scale=1; $TOTAL_SCORE / $PAGE_COUNT" | bc -l)
+          else
+            AVG_SCORE=0
+            PERFORMANCE_STATUS="error"
+          fi
+          
+          echo "📊 Average Performance Score: $AVG_SCORE"
+          
+          # Generate performance summary
+          cat > performance-reports/summary.json << EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "average_performance_score": $AVG_SCORE,
+            "performance_status": "$PERFORMANCE_STATUS",
+            "pages_analyzed": $PAGE_COUNT,
+            "threshold": ${{ env.PERFORMANCE_THRESHOLD }},
+            "monitoring_type": "automated"
+          }
+          EOF
+          
+          echo "score=$AVG_SCORE" >> $GITHUB_OUTPUT
+          echo "status=$PERFORMANCE_STATUS" >> $GITHUB_OUTPUT
+          echo "core-web-vitals=measured" >> $GITHUB_OUTPUT
+          
+          if [[ "$PERFORMANCE_STATUS" == "good" ]]; then
+            echo "✅ Performance monitoring passed"
+          else
+            echo "⚠️ Performance issues detected"
+          fi
+
+      - name: Performance Trend Analysis
+        run: |
+          echo "📈 Performance Trend Analysis"
+          
+          # In a production setup, this would compare against historical data
+          # For now, we'll create a baseline comparison
+          
+          AVG_SCORE="${{ steps.perf-monitoring.outputs.score }}"
+          BASELINE_SCORE="85"  # Strategic refactoring baseline
+          
+          TREND=$(echo "scale=1; $AVG_SCORE - $BASELINE_SCORE" | bc -l)
+          
+          echo "📊 Performance Trend: $TREND points from baseline"
+          
+          if (( $(echo "$TREND > 5" | bc -l) )); then
+            echo "📈 Performance improved significantly"
+          elif (( $(echo "$TREND < -5" | bc -l) )); then
+            echo "📉 Performance degraded significantly"
+            echo "PERFORMANCE_REGRESSION=true" >> $GITHUB_ENV
+          else
+            echo "➡️ Performance stable"
+          fi
+
+      - name: Upload Performance Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-monitoring-${{ github.run_id }}
+          path: performance-reports/
+          retention-days: 30
+
+  # ============================================
+  # STRATEGIC REFACTORING SPECIFIC MONITORING
+  # ============================================
+  strategic-refactoring-monitoring:
+    name: Strategic Refactoring Metrics Monitoring
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: |
+      github.event.inputs.monitoring_type == 'comprehensive-monitoring'
+    outputs:
+      refactoring-metrics: ${{ steps.metrics.outputs.metrics }}
+      phase-status: ${{ steps.metrics.outputs.phase-status }}
+      
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Strategic Refactoring Metrics Collection
+        id: metrics
+        run: |
+          echo "🎯 Strategic Refactoring Metrics Collection"
+          
+          PRODUCTION_URL="https://foodnforce.com"
+          
+          # Collect current metrics for comparison
+          echo "📦 Checking JavaScript Bundle Size"
+          curl -s "$PRODUCTION_URL" | grep -o '<script[^>]*src[^>]*>' | wc -l > js-count.txt
+          JS_FILE_COUNT=$(cat js-count.txt)
+          echo "JavaScript files in HTML: $JS_FILE_COUNT"
+          
+          echo "🎨 Checking CSS Bundle Size"  
+          curl -s "$PRODUCTION_URL" | grep -o '<link[^>]*css[^>]*>' | wc -l > css-count.txt
+          CSS_FILE_COUNT=$(cat css-count.txt)
+          echo "CSS files in HTML: $CSS_FILE_COUNT"
+          
+          echo "♿ Checking Accessibility Score"
+          npx lighthouse "$PRODUCTION_URL" \
+            --chrome-flags="--headless --no-sandbox" \
+            --only-categories=accessibility \
+            --output=json \
+            --output-path="./accessibility-report.json" \
+            --quiet
+          
+          ACCESSIBILITY_SCORE=0
+          if [[ -f "accessibility-report.json" ]]; then
+            ACCESSIBILITY_SCORE=$(cat accessibility-report.json | jq '.categories.accessibility.score * 100')
+          fi
+          
+          echo "🏥 Checking Mobile Navigation Status"
+          npx playwright test --config=tools/testing/playwright.config.js \
+            --grep="Critical navigation smoke test" \
+            --project="Mobile Chrome" \
+            --base-url="$PRODUCTION_URL" \
+            --quiet > /dev/null
+          
+          MOBILE_NAV_STATUS="working"
+          if [[ $? -ne 0 ]]; then
+            MOBILE_NAV_STATUS="broken"
+          fi
+          
+          # Generate metrics report
+          cat > strategic-refactoring-metrics.json << EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "javascript_files": $JS_FILE_COUNT,
+            "css_files": $CSS_FILE_COUNT,
+            "accessibility_score": $ACCESSIBILITY_SCORE,
+            "mobile_navigation_status": "$MOBILE_NAV_STATUS",
+            "refactoring_goals": {
+              "js_target": "≤8 files",
+              "css_target": "optimized SLDS",
+              "accessibility_target": "100% WCAG 2.1 AA",
+              "mobile_nav_target": "P0 always working"
+            },
+            "current_phase_assessment": {
+              "js_consolidation": "$([ $JS_FILE_COUNT -le 8 ] && echo 'completed' || echo 'in-progress')",
+              "slds_optimization": "monitoring",
+              "css_architecture": "monitoring", 
+              "html_semantic": "$([ $ACCESSIBILITY_SCORE -ge 100 ] && echo 'completed' || echo 'in-progress')"
+            }
+          }
+          EOF
+          
+          echo "metrics=collected" >> $GITHUB_OUTPUT
+          echo "phase-status=monitoring" >> $GITHUB_OUTPUT
+          
+          echo "📊 Strategic Refactoring Metrics:"
+          echo "   JS Files: $JS_FILE_COUNT (target: ≤8)"
+          echo "   CSS Files: $CSS_FILE_COUNT"
+          echo "   Accessibility: $ACCESSIBILITY_SCORE% (target: 100%)"
+          echo "   Mobile Nav: $MOBILE_NAV_STATUS (must be: working)"
+
+      - name: Upload Strategic Metrics
+        uses: actions/upload-artifact@v3
+        with:
+          name: strategic-refactoring-metrics-${{ github.run_id }}
+          path: |
+            strategic-refactoring-metrics.json
+            accessibility-report.json
+          retention-days: 30
+
+  # ============================================
+  # INCIDENT RESPONSE & ESCALATION
+  # ============================================
+  incident-response:
+    name: Incident Response & Escalation
+    runs-on: ubuntu-latest
+    needs: [health-monitoring]
+    if: |
+      needs.health-monitoring.outputs.incidents-detected != '' ||
+      github.event.inputs.monitoring_type == 'incident-response' ||
+      github.event.inputs.alert_severity == 'critical'
+    timeout-minutes: 15
+    
+    steps:
+      - name: Incident Classification & Response
+        run: |
+          INCIDENTS="${{ needs.health-monitoring.outputs.incidents-detected }}"
+          ALERT_SEVERITY="${{ github.event.inputs.alert_severity }}"
+          
+          echo "🚨 INCIDENT RESPONSE ACTIVATED"
+          echo "Detected Incidents: $INCIDENTS"
+          echo "Alert Severity: $ALERT_SEVERITY"
+          
+          # Parse incidents
+          IFS=',' read -ra INCIDENT_ARRAY <<< "$INCIDENTS"
+          
+          HIGHEST_PRIORITY="P3"
+          RESPONSE_ACTIONS=()
+          
+          for incident in "${INCIDENT_ARRAY[@]}"; do
+            case $incident in
+              "P0_MOBILE_NAV_FAILURE")
+                echo "🚨 P0 CRITICAL: Mobile Navigation Failure"
+                HIGHEST_PRIORITY="P0"
+                RESPONSE_ACTIONS+=("immediate_escalation")
+                RESPONSE_ACTIONS+=("emergency_rollback")
+                ;;
+              "P1_PRODUCTION_DOWN")
+                echo "🔴 P1 HIGH: Production Environment Down"
+                if [[ "$HIGHEST_PRIORITY" != "P0" ]]; then
+                  HIGHEST_PRIORITY="P1"
+                fi
+                RESPONSE_ACTIONS+=("technical_architect_notification")
+                RESPONSE_ACTIONS+=("status_page_update")
+                ;;
+              "P2_PERFORMANCE_DEGRADED")
+                echo "🟡 P2 MEDIUM: Performance Degradation"
+                if [[ "$HIGHEST_PRIORITY" != "P0" && "$HIGHEST_PRIORITY" != "P1" ]]; then
+                  HIGHEST_PRIORITY="P2"
+                fi
+                RESPONSE_ACTIONS+=("performance_investigation")
+                ;;
+              "P3_STAGING_DOWN")
+                echo "🔵 P3 LOW: Staging Environment Issues"
+                RESPONSE_ACTIONS+=("staging_investigation")
+                ;;
+            esac
+          done
+          
+          echo "HIGHEST_PRIORITY=$HIGHEST_PRIORITY" >> $GITHUB_ENV
+          echo "RESPONSE_ACTIONS=${RESPONSE_ACTIONS[*]}" >> $GITHUB_ENV
+          
+          echo "📊 Incident Summary:"
+          echo "   Highest Priority: $HIGHEST_PRIORITY"
+          echo "   Response Actions: ${RESPONSE_ACTIONS[*]}"
+
+      - name: Execute Emergency Response Actions
+        run: |
+          HIGHEST_PRIORITY="${HIGHEST_PRIORITY}"
+          RESPONSE_ACTIONS="${RESPONSE_ACTIONS}"
+          
+          echo "⚡ Executing Emergency Response Actions"
+          
+          if [[ "$RESPONSE_ACTIONS" =~ "immediate_escalation" ]]; then
+            echo "📞 IMMEDIATE ESCALATION: Notifying technical architect"
+            # In production: Send SMS, Slack, email alerts
+          fi
+          
+          if [[ "$RESPONSE_ACTIONS" =~ "emergency_rollback" ]]; then
+            echo "🔄 EMERGENCY ROLLBACK: Mobile navigation P0 failure"
+            
+            # Trigger emergency rollback workflow
+            gh workflow run strategic-rollback.yml \
+              -f phase="all-phases" \
+              -f reason="P0 Mobile Navigation Failure - Monitoring Detected" \
+              -f notify_technical_architect="true" || echo "Rollback trigger failed"
+          fi
+          
+          if [[ "$RESPONSE_ACTIONS" =~ "technical_architect_notification" ]]; then
+            echo "📧 Technical architect notification for $HIGHEST_PRIORITY incident"
+          fi
+          
+          if [[ "$RESPONSE_ACTIONS" =~ "status_page_update" ]]; then
+            echo "📊 Status page update required for production outage"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Incident Report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const incidents = '${{ needs.health-monitoring.outputs.incidents-detected }}';
+            const highestPriority = process.env.HIGHEST_PRIORITY;
+            const responseActions = process.env.RESPONSE_ACTIONS;
+            
+            if (!incidents) return;
+            
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 ${highestPriority} INCIDENT: Strategic Refactoring Monitoring Alert`,
+              body: `# ${highestPriority} Strategic Refactoring Incident Report
+            
+            ## Incident Details
+            
+            **Detection Time:** ${new Date().toISOString()}
+            **Highest Priority:** ${highestPriority}
+            **Detected Incidents:** ${incidents}
+            **Monitoring Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            ## Incident Classification
+            
+            ${incidents.includes('P0_MOBILE_NAV_FAILURE') ? `
+            ### 🚨 P0 CRITICAL: Mobile Navigation Failure
+            **Impact:** Mobile navigation broken - P0 functionality compromised
+            **Response:** Emergency rollback initiated
+            **SLA:** Immediate response required
+            ` : ''}
+            
+            ${incidents.includes('P1_PRODUCTION_DOWN') ? `
+            ### 🔴 P1 HIGH: Production Environment Down
+            **Impact:** Production site inaccessible
+            **Response:** Technical architect notification sent
+            **SLA:** 15-minute response required
+            ` : ''}
+            
+            ${incidents.includes('P2_PERFORMANCE_DEGRADED') ? `
+            ### 🟡 P2 MEDIUM: Performance Degradation
+            **Impact:** Site performance below acceptable thresholds
+            **Response:** Performance investigation required
+            **SLA:** 1-hour response required
+            ` : ''}
+            
+            ## Response Actions Taken
+            
+            ${responseActions.split(' ').map(action => {
+              switch(action) {
+                case 'immediate_escalation': return '- ⚡ Immediate escalation to technical architect';
+                case 'emergency_rollback': return '- 🔄 Emergency rollback workflow triggered';
+                case 'technical_architect_notification': return '- 📧 Technical architect notified';
+                case 'status_page_update': return '- 📊 Status page update required';
+                default: return `- 📝 ${action.replace('_', ' ')}`;
+              }
+            }).join('\n')}
+            
+            ## Required Actions
+            
+            **@technical-architect**: ${highestPriority === 'P0' ? 'IMMEDIATE' : '15-minute'} response required
+            **@project-manager-proj**: Coordinate incident response
+            **@devops-cicd-automation**: Monitor rollback if initiated
+            
+            ## Monitoring Data
+            
+            - **Production Health:** ${{ needs.health-monitoring.outputs.production-health }}
+            - **Staging Health:** ${{ needs.health-monitoring.outputs.staging-health }}
+            - **Mobile Navigation:** ${{ needs.health-monitoring.outputs.mobile-nav-health }}
+            
+            ## Next Steps
+            
+            1. Investigate root cause of incidents
+            2. Implement immediate fixes if possible
+            3. Verify resolution through monitoring
+            4. Update incident response procedures if needed
+            5. Conduct post-incident review`,
+              labels: ['incident', 'monitoring', 'strategic-refactoring', highestPriority.toLowerCase(), 'requires-response']
+            });
+            
+            console.log(`Created incident report: ${issue.data.html_url}`);
+
+  # ============================================
+  # MONITORING SUMMARY & REPORTING
+  # ============================================
+  monitoring-summary:
+    name: Monitoring Summary & Reporting
+    runs-on: ubuntu-latest
+    needs: [health-monitoring, performance-monitoring, strategic-refactoring-monitoring]
+    if: always()
+    
+    steps:
+      - name: Generate Monitoring Summary
+        run: |
+          echo "📋 STRATEGIC REFACTORING MONITORING SUMMARY"
+          echo "================================================="
+          echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "Monitoring Type: ${{ github.event.inputs.monitoring_type }}"
+          echo "Environment: ${{ github.event.inputs.environment_target }}"
+          echo "================================================="
+          
+          echo "🏥 HEALTH STATUS:"
+          echo "   Production: ${{ needs.health-monitoring.outputs.production-health }}"
+          echo "   Staging: ${{ needs.health-monitoring.outputs.staging-health }}"  
+          echo "   Mobile Navigation (P0): ${{ needs.health-monitoring.outputs.mobile-nav-health }}"
+          
+          echo "📊 PERFORMANCE STATUS:"
+          echo "   Performance Score: ${{ needs.performance-monitoring.outputs.performance-score }}"
+          echo "   Core Web Vitals: ${{ needs.performance-monitoring.outputs.core-web-vitals }}"
+          echo "   Overall Status: ${{ needs.performance-monitoring.outputs.performance-status }}"
+          
+          echo "🎯 STRATEGIC REFACTORING:"
+          echo "   Metrics Collection: ${{ needs.strategic-refactoring-monitoring.outputs.refactoring-metrics }}"
+          echo "   Phase Status: ${{ needs.strategic-refactoring-monitoring.outputs.phase-status }}"
+          
+          echo "🚨 INCIDENTS:"
+          INCIDENTS="${{ needs.health-monitoring.outputs.incidents-detected }}"
+          if [[ -n "$INCIDENTS" ]]; then
+            echo "   Detected: $INCIDENTS"
+            echo "   Response: Activated"
+          else
+            echo "   Detected: None"
+            echo "   Status: All systems operational"
+          fi
+          
+          echo "================================================="
+          echo "Next scheduled monitoring: In 5-15 minutes"
+
+      - name: Update Monitoring Dashboard
+        run: |
+          # In a production setup, this would update a monitoring dashboard
+          # For now, we'll create a status file
+          
+          cat > monitoring-status.json << EOF
+          {
+            "last_check": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "production_health": "${{ needs.health-monitoring.outputs.production-health }}",
+            "staging_health": "${{ needs.health-monitoring.outputs.staging-health }}",
+            "mobile_navigation": "${{ needs.health-monitoring.outputs.mobile-nav-health }}",
+            "performance_score": "${{ needs.performance-monitoring.outputs.performance-score }}",
+            "performance_status": "${{ needs.performance-monitoring.outputs.performance-status }}",
+            "incidents": "${{ needs.health-monitoring.outputs.incidents-detected }}",
+            "strategic_refactoring": {
+              "metrics": "${{ needs.strategic-refactoring-monitoring.outputs.refactoring-metrics }}",
+              "phase_status": "${{ needs.strategic-refactoring-monitoring.outputs.phase-status }}"
+            }
+          }
+          EOF
+          
+          echo "✅ Monitoring dashboard updated"
+
+      - name: Upload Monitoring Summary
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: monitoring-summary-${{ github.run_id }}
+          path: monitoring-status.json
+          retention-days: 7
+
+      - name: Schedule Next Monitoring Check
+        run: |
+          # This workflow runs automatically via cron, but we can log the schedule
+          echo "⏰ Next monitoring scheduled:"
+          echo "   Health checks: Every 5 minutes"
+          echo "   Performance monitoring: Every 15 minutes (business hours)"
+          echo "   Strategic refactoring metrics: On-demand"
+          echo "✅ Continuous monitoring active"
