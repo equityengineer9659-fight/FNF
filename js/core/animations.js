@@ -31,11 +31,11 @@
                 div.style.opacity = '0.5';
                 div.style.margin = '1.5rem 0';
             } else {
-                // Desktop: Standard blue styling
-                div.style.height = '2px';
-                div.style.background = 'linear-gradient(90deg, transparent 0%, #0176d3 50%, transparent 100%)';
-                div.style.opacity = '0.6';
-                div.style.boxShadow = '0 0 8px rgba(1, 118, 211, 0.4), 0 0 16px rgba(1, 118, 211, 0.2)';
+                // Desktop: Much darker navy blue styling
+                div.style.height = '3px';
+                div.style.background = 'linear-gradient(90deg, transparent 0%, #001a33 50%, transparent 100%)';
+                div.style.opacity = '1';
+                div.style.boxShadow = '0 0 12px rgba(0, 26, 51, 0.8), 0 0 24px rgba(0, 26, 51, 0.4)';
                 div.style.margin = '2rem 0';
             }
         });

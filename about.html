@@ -39,6 +39,76 @@
     <link rel="stylesheet" href="css/navigation-unified.css">
     <link rel="stylesheet" href="css/responsive-enhancements.css">
     
+    <!-- GLOBAL DARK MODE FORCE - LOADED LAST FOR HIGHEST PRIORITY -->
+    <link rel="stylesheet" href="css/global-dark-mode-force.css">
+    
+    <!-- NUCLEAR OPTION - INLINE ABOUT PAGE TEXT FORCE -->
+    <style>
+        /* NUCLEAR OVERRIDE - Force all text white on about page */
+        body.about-page * {
+            color: #ffffff !important;
+        }
+        
+        /* Company name nuclear override */
+        body.about-page .brand-logo,
+        body.about-page .universal-brand-logo,
+        body.about-page h1 {
+            color: #ffffff !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            text-shadow: none !important;
+        }
+        
+        /* All headings nuclear override */
+        body.about-page h2,
+        body.about-page h3,
+        body.about-page h4,
+        body.about-page .slds-text-heading_large,
+        body.about-page .slds-text-heading_medium {
+            color: #ffffff !important;
+            opacity: 1 !important;
+            text-shadow: none !important;
+        }
+        
+        /* All text nuclear override */
+        body.about-page p,
+        body.about-page span,
+        body.about-page div,
+        body.about-page .slds-text-body_regular {
+            color: #ffffff !important;
+            opacity: 0.9 !important;
+        }
+        
+        /* Remove any background filters causing greyness */
+        body.about-page,
+        body.about-page section,
+        body.about-page main {
+            filter: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        
+        /* Remove any overlays causing transparency */
+        body.about-page *::before,
+        body.about-page *::after {
+            display: none !important;
+        }
+        
+        /* Debug - Make sure page is loaded */
+        body.about-page {
+            background: #0f1419 !important;
+        }
+        
+        /* Remove animation classes that might be causing issues */
+        body.about-page .nav-animate-item,
+        body.about-page .nav-animate-company-name,
+        body.about-page [class*="animate"] {
+            opacity: 1 !important;
+            transform: none !important;
+            animation: none !important;
+        }
+    </style>
+    
     <!-- Preload critical resources -->
     <link rel="preload" href="css/styles.css" as="style">
     <link rel="preload" href="js/mobile-navigation-clean.js" as="script">
@@ -374,6 +444,106 @@
     <script src="js/original-mesh-background.js"></script>
     <script src="js/core/animations.js"></script>
     <script src="js/unified-scroll.js"></script>
+    
+    <!-- NUCLEAR JAVASCRIPT - Force white text with setProperty -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Force all text to be white - Using setProperty with !important
+            function forceWhiteTextWithSetProperty() {
+                // Company name - Maximum force
+                const brandLogos = document.querySelectorAll('.brand-logo, .universal-brand-logo, h1');
+                brandLogos.forEach(el => {
+                    el.style.setProperty('color', '#ffffff', 'important');
+                    el.style.setProperty('opacity', '1', 'important');
+                    el.style.setProperty('visibility', 'visible', 'important');
+                    el.style.setProperty('text-shadow', 'none', 'important');
+                });
+                
+                // All headings - Maximum force
+                const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6, .slds-text-heading_large, .slds-text-heading_medium');
+                headings.forEach(el => {
+                    el.style.setProperty('color', '#ffffff', 'important');
+                    el.style.setProperty('opacity', '1', 'important');
+                    el.style.setProperty('text-shadow', 'none', 'important');
+                });
+                
+                // All paragraphs and text - Maximum force
+                const textElements = document.querySelectorAll('p, span, div, .slds-text-body_regular, .slds-text-body_small');
+                textElements.forEach(el => {
+                    el.style.setProperty('color', '#ffffff', 'important');
+                    el.style.setProperty('opacity', '1', 'important');
+                });
+                
+                // Remove any filters causing greyness
+                document.body.style.setProperty('filter', 'none', 'important');
+                document.body.style.setProperty('backdrop-filter', 'none', 'important');
+                document.body.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
+                
+                console.log('FORCED WHITE TEXT WITH SETPROPERTY APPLIED');
+            }
+            
+            // Apply immediately
+            forceWhiteTextWithSetProperty();
+            
+            // Apply again after delays to catch any late-loading elements
+            setTimeout(forceWhiteTextWithSetProperty, 500);
+            setTimeout(forceWhiteTextWithSetProperty, 1000);
+            setTimeout(forceWhiteTextWithSetProperty, 2000);
+        });
+        
+        // Also force on window load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                // Force all text elements to white using setProperty
+                const allTextElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div, li, a, .brand-logo, .universal-brand-logo');
+                allTextElements.forEach(el => {
+                    if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE') {
+                        el.style.setProperty('color', '#ffffff', 'important');
+                        if (el.tagName === 'P' || el.classList.contains('slds-text-body_regular')) {
+                            el.style.setProperty('opacity', '1', 'important');
+                        }
+                    }
+                });
+                console.log('WINDOW LOAD - FORCED ALL TEXT WHITE WITH SETPROPERTY');
+            }, 100);
+        });
+        
+        // CONTINUOUS MONITOR - Keep forcing white text with setProperty every 1 second
+        setInterval(function() {
+            // Company name continuous fix with setProperty
+            const brandLogos = document.querySelectorAll('.brand-logo, .universal-brand-logo, h1');
+            brandLogos.forEach(el => {
+                const computedColor = window.getComputedStyle(el).color;
+                if (computedColor !== 'rgb(255, 255, 255)') {
+                    el.style.setProperty('color', '#ffffff', 'important');
+                    el.style.setProperty('opacity', '1', 'important');
+                    console.log('FIXED BRAND LOGO COLOR WITH SETPROPERTY');
+                }
+            });
+            
+            // Headers continuous fix with setProperty
+            const headers = document.querySelectorAll('h2, h3');
+            headers.forEach(el => {
+                const computedColor = window.getComputedStyle(el).color;
+                if (computedColor !== 'rgb(255, 255, 255)') {
+                    el.style.setProperty('color', '#ffffff', 'important');
+                    el.style.setProperty('opacity', '1', 'important');
+                    console.log('FIXED HEADER COLOR WITH SETPROPERTY');
+                }
+            });
+            
+            // Paragraphs continuous fix with setProperty
+            const paragraphs = document.querySelectorAll('p');
+            paragraphs.forEach(el => {
+                const computedColor = window.getComputedStyle(el).color;
+                if (computedColor !== 'rgb(255, 255, 255)') {
+                    el.style.setProperty('color', '#ffffff', 'important');
+                    el.style.setProperty('opacity', '1', 'important');
+                    console.log('FIXED PARAGRAPH COLOR WITH SETPROPERTY');
+                }
+            });
+        }, 1000);
+    </script>
     <script src="js/pages/about-page-unified.js"></script>
     
     <!-- Page load complete -->

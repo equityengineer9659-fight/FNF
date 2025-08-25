@@ -289,14 +289,7 @@
     }
   }
   
-  /* Dark mode optimization */
-  @media (prefers-color-scheme: dark) {
-    @media (max-width: 768px) {
-      .navbar.universal-nav .nav-menu.nav-show {
-        background: rgba(10, 25, 50, 0.9);
-      }
-    }
-  }
+  /* Dark mode optimization - REMOVED: Replaced by global-dark-mode-force.css */
   
   /* Focus management for screen readers */
   .navbar.universal-nav .nav-menu.nav-show {

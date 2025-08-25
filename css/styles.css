@@ -587,17 +587,71 @@ p {
 }
 
 
-/* Fix index page hero section positioning issue - clear fixed navbar */
-body.index-page main#main-content {
-    margin-top: 0 !important;
-    padding-top: 0 !important; /* No gap - hero touches navbar */
+/* POSITION MAIN ELEMENT RIGHT AFTER NAVIGATION */
+html body.index-page main#main-content.index-page {
+    margin-top: 160px !important; /* Push main down to start after navigation */
+    padding-top: 0 !important; /* No padding needed */
     position: relative !important;
+    container-type: inline-size !important;
+    contain: layout style paint !important;
+    isolation: isolate !important;
+}
+
+/* Fallback with even higher specificity */
+body.index-page main#main-content {
+    margin-top: 160px !important; /* Push main down to start after navigation */
+    padding-top: 0 !important; /* No padding needed */
+    position: relative !important;
+    container-type: inline-size !important;
 }
 
 body.index-page .hero-section {
-    margin-top: 160px !important; /* Space for fixed navigation (header + nav menu) */
-    padding-top: 2rem !important; /* Reduced since we have margin-top now */
+    margin-top: 0 !important; /* No additional margin */
+    padding-top: 1rem !important; /* Minimal padding */
     padding-bottom: var(--spacing-large) !important; /* Keep bottom padding */
+    position: relative !important;
+    z-index: 1 !important;
+    overflow: visible !important;
+    display: block !important;
+}
+
+/* Chrome-specific fixes */
+@supports (-webkit-appearance: none) {
+    html body.index-page main#main-content.index-page {
+        margin-top: 160px !important; /* Force margin in Chrome - desktop */
+        top: 0 !important; /* Force top position */
+        transform: translateY(0) !important; /* Force translation */
+        -webkit-transform: translateY(0) !important; /* WebKit translation */
+    }
+    
+    body.index-page main#main-content {
+        margin-top: 160px !important; /* Force margin in Chrome - desktop */
+        top: 0 !important; /* Force top position */
+        transform: translateY(0) !important; /* Force translation */
+        -webkit-transform: translateY(0) !important; /* WebKit translation */
+    }
+    
+    /* Chrome mobile specific */
+    @media (max-width: 768px) {
+        html body.index-page main#main-content.index-page {
+            margin-top: 77px !important; /* Force mobile margin in Chrome */
+        }
+        
+        body.index-page main#main-content {
+            margin-top: 77px !important; /* Force mobile margin in Chrome */
+        }
+    }
+    
+    /* Chrome desktop specific */
+    @media (min-width: 1025px) {
+        html body.index-page main#main-content.index-page {
+            margin-top: 160px !important; /* Force desktop margin in Chrome */
+        }
+        
+        body.index-page main#main-content {
+            margin-top: 160px !important; /* Force desktop margin in Chrome */
+        }
+    }
 }
 
 /* Hero section font sizes - match reference page */
@@ -616,16 +670,21 @@ body.index-page .hero-section p {
     opacity: 0.95 !important;
 }
 
-/* Mobile responsive navbar clearance for index page */
+/* Mobile responsive navbar clearance - POSITION MAIN AFTER NAVIGATION */
 @media (max-width: 768px) {
     body.index-page main#main-content {
-        padding-top: 0 !important; /* Mobile - hero touches navbar */
+        margin-top: 77px !important; /* Push main down to start after mobile navigation */
+        padding-top: 0 !important; /* No padding needed */
+        container-type: inline-size !important;
+        position: relative !important;
     }
     
     /* Mobile hero spacing */
     body.index-page .hero-section {
-        margin-top: 100px !important; /* Space for mobile navigation */
-        padding-top: 2rem !important; /* Less padding since we have margin-top */
+        margin-top: 0 !important; /* No additional margin */
+        padding-top: 1rem !important; /* Minimal padding */
+        position: relative !important;
+        z-index: 1 !important;
     }
     
     /* Mobile hero font sizes */
@@ -640,28 +699,27 @@ body.index-page .hero-section p {
     }
 }
 
-/* Large desktop responsive navbar clearance for index page */
+/* Large desktop responsive navbar clearance - POSITION MAIN AFTER NAVIGATION */
 @media (min-width: 1025px) {
     body.index-page main#main-content {
-        padding-top: 0 !important; /* Desktop - hero touches navbar */
+        margin-top: 160px !important; /* Push main down to start after desktop navigation */
+        padding-top: 0 !important; /* No padding needed */
+        container-type: inline-size !important;
+        position: relative !important;
     }
     
     /* Large desktop hero positioning */
     body.index-page .hero-section {
-        margin-top: 170px !important; /* Account for larger navigation on desktop */
+        margin-top: 0 !important; /* No additional margin */
+        padding-top: 2rem !important; /* Standard padding */
+        position: relative !important;
+        z-index: 1 !important;
+        overflow: visible !important;
+        display: block !important;
     }
 }
 
 /* Responsive navigation clearance is handled by navigation-unified.css base rules */
-
-/* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING - /* Section spacing standardization - rely on base navigation clearance */
-/* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING - html body.services-page main#main-content section:first-child,
-/* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING - html body.impact-page main#main-content section:first-child,
-/* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING - html body.about-page main#main-content section:first-child,
-/* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING - html body.contact-page main#main-content section:first-child,
-/* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING - html body.resources-page main#main-content section:first-child {
-/* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING -     padding-top: 2rem !important;
-/* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING - }
 
 /* Fix index page H2 section headers spacing - bring them closer to header */
 body.index-page .mission-section,
@@ -3381,14 +3439,6 @@ body.about-page section[aria-labelledby="values-heading"] .slds-col {
         padding: 4rem 1rem !important;
     }
     
-    /* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING -     /* Mobile: reduce H2 header spacing for better viewport usage */
-    /* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING -     html body.services-page main#main-content section:first-child,
-    /* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING -     html body.impact-page main#main-content section:first-child,
-    /* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING -     html body.about-page main#main-content section:first-child,
-    /* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING -     html body.contact-page main#main-content section:first-child,
-    /* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING -     html body.resources-page main#main-content section:first-child {
-    /* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING -         padding-top: 1.5rem !important;
-    /* COMMENTED OUT - DUPLICATE PADDING CAUSING EXCESSIVE H2 SPACING -     }
     
     body.index-page .mission-section,
     body.index-page section[aria-labelledby*="-heading"]:not(.hero-section) {
@@ -4284,7 +4334,9 @@ h2, .slds-text-heading_large {
     padding-bottom: 0.75rem !important;
 }
 
-h2:after, .slds-text-heading_large:after {
+/* Blue underline ::after effects - ONLY for non-index pages */
+body:not(.index-page) h2:after, 
+body:not(.index-page) .slds-text-heading_large:after {
     content: "" !important;
     position: absolute !important;
     bottom: 0 !important;
@@ -4294,6 +4346,12 @@ h2:after, .slds-text-heading_large:after {
     height: 3px !important;
     background: linear-gradient(90deg, #0176d3, #00d4ff) !important;
     border-radius: 2px !important;
+}
+
+/* Explicitly disable ::after underlines for index page headings */
+body.index-page h2:after,
+body.index-page .slds-text-heading_large:after {
+    display: none !important;
 }
 
 /* NUCLEAR OPTION - CENTER SEND US A MESSAGE HEADING */
@@ -4592,31 +4650,33 @@ html body.impact-page .testimonial-card {
    3. SECTION DIVIDERS WITH PREMIUM TRANSITIONS
    ============================================ */
 
-/* Elegant section divider - Force visibility to match reference */
+/* Elegant section divider - Dark navy blue styling */
 .fnf-section-divider {
-    height: 4px !important;
-    min-height: 4px !important;
-    max-height: 4px !important;
+    height: 3px !important;
+    min-height: 3px !important;
+    max-height: 3px !important;
     background: linear-gradient(90deg, 
         transparent 0%, 
-        #00d1ff 50%, 
+        #001a33 50%, 
         transparent 100%
     ) !important;
     margin: 2rem 0 !important;
-    opacity: 0.8 !important;
+    opacity: 1 !important;
     display: block !important;
     width: 100% !important;
     border: none !important;
     padding: 0 !important;
     contain: layout style;
+    box-shadow: 0 0 12px rgba(0, 26, 51, 0.8), 0 0 24px rgba(0, 26, 51, 0.4) !important;
     position: relative !important;
     z-index: 10 !important;
 }
 
-/* JavaScript backup to ensure dividers are visible */
+/* JavaScript backup to ensure dividers are visible - Dark navy blue */
 .fnf-section-divider[style] {
-    height: 4px !important;
-    background: linear-gradient(90deg, transparent 0%, #00d1ff 50%, transparent 100%) !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, transparent 0%, #001a33 50%, transparent 100%) !important;
+    box-shadow: 0 0 12px rgba(0, 26, 51, 0.8), 0 0 24px rgba(0, 26, 51, 0.4) !important;
 }
 
 /* Premium section transition overlay */
@@ -5210,20 +5270,25 @@ h2, section h2 {
     padding-bottom: 0.5rem !important;
 }
 
-/* Desktop only - Blue underline bars for section headings */
+/* Desktop only - Blue underline bars for section headings - ONLY for specific pages/sections that should have them */
 @media (min-width: 769px) {
-    h2, 
-    section h2,
-    h2.hero-title,
-    h2.impact-heading,
+    /* Only add underlines to headings that should have them - excluding index page main headings */
     h2#services-heading,
-    h2#impact-heading,
-    h2#why-heading,
     h2#contact-heading,
     h2#resources-heading,
-    h2#mission-heading,
-    h2#focus-heading {
+    body:not(.index-page) h2,
+    body:not(.index-page) section h2 {
         border-bottom: 4px solid #00d1ff !important;
+    }
+    
+    /* Explicitly remove underlines from index page main section headings */
+    body.index-page h2#mission-heading,
+    body.index-page h2#focus-heading,
+    body.index-page h2#growth-heading,
+    body.index-page h2#impact-heading,
+    body.index-page h2#stories-heading,
+    body.index-page .hero-section h2 {
+        border-bottom: none !important;
     }
 }
 
@@ -5245,4 +5310,90 @@ h2, section h2 {
 .universal-nav-link.active {
     color: #00d1ff !important;
     border-bottom: 2px solid #00d1ff !important;
+}
+
+/* ============================================
+   REMOVE LONG TEAL LINES ON SPECIFIC PAGES
+   ============================================ */
+
+/* Remove long teal border lines from h2 headings on services, resources, impact, contact, and about pages only */
+/* This preserves the index page styling while cleaning up the other pages */
+html body.services-page h2,
+html body.services-page h2.slds-text-heading_large,
+html body.services-page .slds-text-heading_large,
+html body.services-page section h2,
+html body.services-page h2#services-heading,
+html body.resources-page h2,
+html body.resources-page h2.slds-text-heading_large,
+html body.resources-page .slds-text-heading_large,
+html body.resources-page section h2,
+html body.resources-page h2#resources-heading,
+html body.impact-page h2,
+html body.impact-page h2.slds-text-heading_large,
+html body.impact-page .slds-text-heading_large,
+html body.impact-page section h2,
+html body.impact-page h2#impact-heading,
+html body.contact-page h2,
+html body.contact-page h2.slds-text-heading_large,
+html body.contact-page .slds-text-heading_large,
+html body.contact-page section h2,
+html body.contact-page h2#contact-heading,
+html body.about-page h2,
+html body.about-page h2.slds-text-heading_large,
+html body.about-page .slds-text-heading_large,
+html body.about-page section h2,
+html body.about-page h2#about-heading {
+    border-bottom: 0px solid transparent !important;
+    border-bottom-color: transparent !important;
+    border-bottom-style: none !important;
+    border-bottom-width: 0px !important;
+}
+
+/* ============================================
+   INDEX PAGE CARDS AND DROPDOWN DARK MODE
+   ============================================ */
+
+/* Index page cards dark mode styling */
+body.index-page .focus-area-card,
+body.index-page .measurable-card,
+body.index-page .stat-card {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    border: 1px solid #333333 !important;
+}
+
+/* Card text content dark mode */
+body.index-page .focus-area-card h3,
+body.index-page .focus-area-card p,
+body.index-page .measurable-card h3,
+body.index-page .measurable-card p,
+body.index-page .stat-card h3,
+body.index-page .stat-card p,
+body.index-page .stat-card .stat-number {
+    color: #ffffff !important;
+}
+
+/* Mobile dropdown navigation dark mode - applies to all pages */
+#mobile-dropdown {
+    background: #1a1a1a !important;
+    border: 2px solid #333333 !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.8) !important;
+}
+
+/* Mobile dropdown links dark mode */
+#mobile-dropdown a {
+    color: #ffffff !important;
+    border-bottom: 1px solid #333333 !important;
+}
+
+#mobile-dropdown a:hover {
+    background: #333333 !important;
+    color: #00d4ff !important;
+}
+
+/* Mobile nav toggle button dark mode */
+.mobile-nav-toggle {
+    color: #ffffff !important;
+    background: transparent !important;
+    border: 1px solid #333333 !important;
 }

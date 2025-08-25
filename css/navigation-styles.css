@@ -541,14 +541,7 @@
     }
 }
 
-/* Dark mode considerations */
-@media (prefers-color-scheme: dark) {
-    .fnf-logo-image,
-    .hero-logo-large,
-    .footer-logo {
-        filter: brightness(1.1) contrast(0.95) !important;
-    }
-}
+/* Dark mode considerations - REMOVED: Replaced by global-dark-mode-force.css */
 
 /* Print styles */
 @media print {
@@ -1692,16 +1685,7 @@ body.index-page .navbar.universal-nav a.nav-link {
     }
 }
 
-/* Dark mode enhancements */
-@media (prefers-color-scheme: dark) {
-    .navbar.universal-nav .fnf-logo {
-        background: linear-gradient(145deg, #2196ff, #1565c0) !important;
-    }
-    
-    .navbar.universal-nav .fnf-inner {
-        background: rgba(5, 35, 75, 0.65) !important;
-    }
-}
+/* Dark mode enhancements - REMOVED: Replaced by global-dark-mode-force.css */
 
 /* Fallback for browsers without backdrop-filter support */
 @supports not (backdrop-filter: blur(8px)) {
@@ -1872,16 +1856,7 @@ body.index-page .navbar.universal-nav a.nav-link {
     }
 }
 
-/* Dark mode enhancements for glassmorphism */
-@media (prefers-color-scheme: dark) {
-    .navbar.universal-nav .fnf-logo-wrapper,
-    .hero-brand-wrapper .slds-brand,
-    .footer .slds-brand {
-        /* Adjust for dark backgrounds */
-        background: rgba(255, 255, 255, 0.1) !important;
-        border-color: rgba(255, 255, 255, 0.25) !important;
-    }
-}
+/* Dark mode enhancements for glassmorphism - REMOVED: Replaced by global-dark-mode-force.css */
 
 /* Mobile responsive adjustments for glassmorphism */
 @media (max-width: 767px) {
