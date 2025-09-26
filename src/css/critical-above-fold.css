@@ -10,7 +10,18 @@
 
 *:first-child {display:flex !important;align-items:center !important;justify-content:space-between !important;width:100% !important}
 
-*,.fnf-nav *::before,.fnf-nav *::after {background-color:transparent !important;border-color:transparent !important;box-shadow:none !important}
+/* Ensure navigation and footer are solid backgrounds */
+.fnf-nav {
+  background: var(--fnf-nav-gradient) !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.fnf-footer, footer {
+  background: var(--fnf-primary-dark) !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
 
 * .fnf-nav__toggle .fnf-nav__toggle-icon,* .fnf-nav__toggle .fnf-nav__toggle-icon::before,* .fnf-nav__toggle .fnf-nav__toggle-icon::after {background-color:white !important;border-color:white !important;color:white !important;appearance:none !important}
 
