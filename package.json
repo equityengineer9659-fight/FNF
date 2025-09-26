@@ -5,7 +5,8 @@
   "main": "index.html",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node build-components.js && vite build",
+    "build:components": "node build-components.js",
     "preview": "vite preview",
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
     "lint:html": "htmlhint \"**/*.html\"",
