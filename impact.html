@@ -41,9 +41,9 @@
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- Navigation -->
-    <nav class="fnf-nav" role="navigation" aria-label="Main navigation">
+    <nav class="fnf-nav" aria-label="Main navigation">
         <!-- Hidden checkbox for CSS-only mobile toggle -->
-        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" aria-hidden="true">
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
 
         <div class="fnf-nav__container">
             <!-- Header Row: Logo, Company Name, Mobile Toggle -->
@@ -70,32 +70,32 @@
                 </label>
             </div>
 
-            <!-- Desktop Navigation Menu -->
-            <ul class="fnf-nav__menu" role="list">
-                <li class="fnf-nav__item">
-                    <a href="index.html" class="fnf-nav__link">Home</a>
-                </li>
-                <li class="fnf-nav__item">
-                    <a href="services.html" class="fnf-nav__link">Services</a>
-                </li>
-                <li class="fnf-nav__item">
-                    <a href="resources.html" class="fnf-nav__link">Resources</a>
-                </li>
-                <li class="fnf-nav__item">
-                    <a href="impact.html" class="fnf-nav__link" aria-current="page">Impact</a>
-                </li>
-                <li class="fnf-nav__item">
-                    <a href="contact.html" class="fnf-nav__link">Contact</a>
-                </li>
-                <li class="fnf-nav__item">
-                    <a href="about.html" class="fnf-nav__link">About Us</a>
-                </li>
-            </ul>
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="impact.html" class="fnf-nav__link" aria-current="page">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
         </div>
 
         <!-- Mobile Menu -->
         <div class="fnf-nav__mobile">
-            <ul class="fnf-nav__mobile-menu" role="list">
+            <ul class="fnf-nav__mobile-menu">
                 <li><a href="index.html" class="fnf-nav__mobile-link">Home</a></li>
                 <li><a href="services.html" class="fnf-nav__mobile-link">Services</a></li>
                 <li><a href="resources.html" class="fnf-nav__mobile-link">Resources</a></li>
@@ -213,17 +213,19 @@
     </main>
 
     <!-- Footer -->
-    <footer class="fnf-footer" role="contentinfo">
+    <footer class="fnf-footer">
         <div class="slds-container_large slds-container_center slds-p-around_large">
             <div class="slds-text-align_center">
                 <p class="slds-text-body_small slds-text-color_inverse">&copy; 2025 Food-N-Force. All rights reserved.</p>
             </div>
-            </div>
         </div>
     </footer>
 
-    <!-- JavaScript Modules -->
+    <!-- JavaScript Modules - Deferred for performance -->
     <script type="module" src="src/js/main.js" defer></script>
+
+    <!-- Fallback Particle System for Local File Access -->
+    <script src="src/js/fallback-particles.js" defer></script>
 
     <!-- Fallback Particle System for Local File Access -->
     <script src="src/js/fallback-particles.js" defer></script>
