@@ -36,7 +36,12 @@
       "Bash(npx stylelint:*)",
       "mcp__playwright__browser_evaluate",
       "mcp__browser__browser_new_tab",
-      "Bash(cut:*)"
+      "Bash(cut:*)",
+      "mcp__playwright__browser_click",
+      "Bash(git checkout:*)",
+      "Bash(timeout 5 npm run preview)",
+      "Bash(timeout:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": [],

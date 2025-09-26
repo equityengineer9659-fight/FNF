@@ -14,17 +14,27 @@
     <meta property="og:description" content="Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.">
     <meta property="og:type" content="website">
 
-    <!-- Salesforce Lightning Design System CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
-
-    <!-- Custom CSS -->
-
-    <!-- Performance: Preload critical resources -->
+    <!-- Performance: Preconnect to external domains -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <script type="module" crossorigin src="./assets/main-CNkGLZgz.js"></script>
+
+    <!-- Critical Inline CSS for fastest above-fold rendering -->
+    <style>*,:after,:before{box-sizing:border-box}html{font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}body,html{background:#000;color:#fff}body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,sans-serif;margin:0;min-height:100vh;overflow-x:hidden}:root{--nav-height:80px;--fnf-color-primary:#2e86ab;--fnf-color-white:#fff;--slds-font-family-heading:"Orbitron",sans-serif;--slds-c-background-default:#000;--slds-c-text-default:#fff;--fnf-gradient-primary:linear-gradient(135deg,#667eea,#764ba2);--fnf-gradient-hero:linear-gradient(135deg,rgba(102,126,234,.05),rgba(118,75,162,.05))}.fnf-nav{backdrop-filter:blur(20px);background:rgba(0,0,0,.95);height:var(--nav-height);left:0;position:fixed;right:0;top:0;z-index:9999}.fnf-nav__container{height:100%;margin:0 auto;max-width:1200px;padding:0 2rem}.fnf-nav__top-row{align-items:center;display:flex;height:100%;justify-content:space-between;position:relative}.fnf-nav__logo{z-index:10}.fnf-nav__brand{font-size:2rem;font-weight:900;text-decoration:none}.fnf-nav__brand,.fnf-nav__title{color:#fff;font-family:var(--slds-font-family-heading)}.fnf-nav__title{font-size:1.8rem;font-weight:700;left:50%;position:absolute;transform:translateX(-50%)}.fnf-nav__menu,.fnf-nav__mobile,.fnf-nav__toggle-input{display:none}main{padding-top:var(--nav-height);position:relative;z-index:2}.hero-section{align-items:center;background:var(--fnf-gradient-hero);display:flex;justify-content:center;min-height:100vh;overflow:hidden;position:relative}.hero-content{margin:0 auto;max-width:1200px;padding:2rem;position:relative;text-align:center;z-index:10}.hero-title{background:var(--fnf-gradient-primary);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:var(--slds-font-family-heading);font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;margin:0 0 1.5rem}.hero-subtitle{font-size:clamp(1.25rem,2vw,1.75rem);margin:0 0 2.5rem;opacity:.9}.slds-button{align-items:center;border-radius:.5rem;display:inline-flex;font-weight:600;gap:.5rem;padding:.75rem 1.5rem;text-decoration:none;transition:all .3s ease}.slds-button_brand{background:var(--fnf-gradient-primary);border:2px solid transparent;color:#fff}.slds-button_outline-brand{background:transparent;border:2px solid hsla(0,0%,100%,.3);color:#fff}@media (max-width:768px){.fnf-nav__toggle{align-items:center;cursor:pointer;display:flex;height:44px;justify-content:center;width:44px;z-index:10}.fnf-nav__menu{display:none!important}.fnf-nav__title{font-size:1.4rem}}@media (min-width:769px){.fnf-nav__toggle{display:none}.fnf-nav__menu{display:flex!important;gap:2rem;list-style:none;margin:0;padding:0}.fnf-nav__link{color:#fff;font-weight:500;text-decoration:none;transition:color .3s}.fnf-nav__link:hover{color:var(--fnf-color-primary)}}</style>
+
+    <!-- Preload Orbitron font for hero text with font-display swap -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap"></noscript>
+
+    <!-- Salesforce Lightning Design System CSS - Load asynchronously -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css"></noscript>
+
+    <!-- Custom CSS - Load asynchronously for non-critical styles -->
+    <noscript></noscript>
+  <script type="module" crossorigin src="./assets/main-BX7hfQx7.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/effects-CK45ag1Y.js">
-  <link rel="stylesheet" crossorigin href="./assets/main-DfNUk2qf.css">
+  <link rel="stylesheet" crossorigin href="./assets/main-CaC9JWYc.css">
 </head>
 <body class="fnf-page--index" id="page-top">
     <!-- Skip Navigation for Accessibility -->
@@ -272,9 +282,9 @@
         </div>
     </footer>
 
-    <!-- JavaScript Modules -->
+    <!-- JavaScript Modules - Deferred for performance -->
 
     <!-- Fallback Particle System for Local File Access -->
-    <script src="src/js/fallback-particles.js"></script>
+    <script src="src/js/fallback-particles.js" defer></script>
 </body>
 </html>

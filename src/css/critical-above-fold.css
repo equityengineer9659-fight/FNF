@@ -101,21 +101,7 @@ main-heading,section h2,.slds-text-heading_large {position:relative !important;m
 
 main-heading::after,section h2::after,.slds-text-heading_large::after {content:'' !important;position:absolute !important;bottom:-15px !important;left:50% !important;transform:translateX(-50%) !important;width:80px !important;height:4px !important;background:var(--fnf-h2-underline-gradient) !important;border-radius:2px !important;display:block !important}
 
-.fnf-nav {background:var(--fnf-nav-gradient) !important;padding:0.5rem 2rem !important;position:relative !important;min-height:var(--nav-height) !important;height:var(--nav-height) !important}
-
-.fnf-nav__container {display:flex !important;flex-direction:column !important;align-items:center !important;max-width:1200px !important;margin:0 auto !important;width:100% !important;padding:0.5rem 0 !important;gap:1rem !important}
-
-.fnf-nav__container > *:first-child {display:flex !important;align-items:center !important;justify-content:space-between !important;width:100% !important}
-
-.fnf-nav__logo {order:1 !important;display:flex !important;align-items:center !important;justify-content:center !important}
-
-.fnf-nav__title {position:absolute !important;left:50% !important;transform:translateX(-50%) !important;order:2 !important;color:var(--fnf-color-white) !important;font-size:1.8rem !important;font-weight:700 !important;letter-spacing:1px !important;text-align:center !important;margin:0 !important;z-index:5 !important}
-
-.hero-section {background:var(--fnf-gradient-alternate);position:relative;overflow:hidden;min-height:45vh;display:flex;align-items:center;justify-content:center;padding:2.5rem 2rem 1.125rem !important}
-
-.hero-content {text-align:center;max-width:1200px;margin:0 auto;position:relative;z-index:1}
-
-.hero-title {color:#fff !important;font-size:3.5rem !important;font-weight:400 !important;margin-bottom:var(--fnf-spacing-lg) !important;line-height:1.2 !important;text-align:center !important}
+/* Navigation and hero styles moved to critical-gradients.css to eliminate duplication */
 
 h1 + p,.fnf-page--services h2 + p,.fnf-page--services .slds-text-heading_large + p,.fnf-page--services section p.slds-text-body_regular,.fnf-page--services .slds-text-align_center p {text-align:center !important;margin-left:auto !important;margin-right:auto !important}
 
