@@ -31,7 +31,9 @@
       "Bash(do echo \"=== $file ===\")",
       "Bash(wc:*)",
       "Bash(done)",
-      "mcp__browser__browser_scroll"
+      "mcp__browser__browser_scroll",
+      "Bash(curl:*)",
+      "Bash(npx stylelint:*)"
     ],
     "deny": [],
     "ask": [],

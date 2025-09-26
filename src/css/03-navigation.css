@@ -1,4 +1,5 @@
 /* Navigation styles consolidated into critical-gradients.css for better performance */
+
 /* This file kept minimal to preserve CSS architecture */
 
 .fnf-nav__toggle{display:none;align-items:center;justify-content:center;width:48px;height:48px;background:transparent;border:2px solid var(--nav-white-30);border-radius:var(--slds-border-radius-medium);cursor:pointer;z-index:calc(var(--slds-z-index-overlay) + 1);flex-shrink:0;grid-column:3;justify-self:end;position:relative}
@@ -13,7 +14,7 @@
 
 .fnf-nav__toggle-icon::after{bottom:-6px}
 
-.fnf-nav__mobile{position:fixed;top:var(--nav-height);left:0;right:0;background:var(--glass-bg-secondary);backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--slds-shadow-large);padding:var(--slds-spacing-medium);opacity:0;visibility:hidden;transform:translateY(-20px);transition:all var(--transition-medium);z-index:var(--slds-z-index-overlay)}
+.fnf-nav__mobile{position:fixed;top:var(--nav-height);left:0;right:0;background:var(--glass-bg-secondary);backdrop-filter:var(--glass-blur);box-shadow:var(--slds-shadow-large);padding:var(--slds-spacing-medium);opacity:0;visibility:hidden;transform:translateY(-20px);transition:all var(--transition-medium);z-index:var(--slds-z-index-overlay)}
 
 .fnf-nav__mobile-menu{display:flex;flex-direction:column;gap:var(--slds-spacing-small);list-style:none;padding:0;margin:0}
 
