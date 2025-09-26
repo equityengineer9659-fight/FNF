@@ -20,7 +20,10 @@
       "Bash(findstr:*)",
       "Bash(copy:*)",
       "Bash(npx vite:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": [],
