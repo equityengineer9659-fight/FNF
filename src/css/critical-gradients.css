@@ -1,5 +1,11 @@
 :root {--fnf-color-white:#fff;--fnf-spacing-lg:1.5rem;--fnf-spacing-xl:2rem;--fnf-spacing-hero:4rem 2rem;--fnf-gradient-triple-radial:radial-gradient(circle at 20% 50%,rgba(0,212,255,0.3) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(1,118,211,0.3) 0%,transparent 50%),radial-gradient(circle at 40% 20%,rgba(0,153,204,0.3) 0%,transparent 50%);--fnf-gradient-complex-linear:linear-gradient(135deg,rgba(11,25,45,0.7) 0%,rgba(22,50,92,0.65) 25%,rgba(1,118,211,0.6) 75%,rgba(52,152,255,0.55) 100%);--fnf-gradient-extended:linear-gradient(135deg,rgba(5,12,25,0.7) 0%,rgba(11,25,45,0.65) 15%,rgba(22,50,92,0.6) 40%,rgba(1,118,211,0.55) 70%,rgba(52,152,255,0.5) 90%,rgba(100,180,255,0.45) 100%);--fnf-gradient-alternate:linear-gradient(135deg,rgba(8,18,35,0.6) 0%,rgba(22,50,92,0.55) 20%,rgba(1,118,211,0.5) 60%,rgba(52,152,255,0.45) 85%,rgba(100,180,255,0.4) 100%);--fnf-gradient-blue-cyan:linear-gradient(135deg,#0176d3,#00d4ff);--fnf-gradient-dark-blue:linear-gradient(135deg,#16325C 0%,#0176d3 100%);--fnf-radial-low-opacity:radial-gradient(circle at 20% 50%,rgba(0,212,255,0.1) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(1,118,211,0.1) 0%,transparent 50%),radial-gradient(circle at 40% 20%,rgba(0,153,204,0.1) 0%,transparent 50%);--fnf-radial-med-opacity:radial-gradient(circle at 20% 50%,rgba(0,212,255,0.2) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(1,118,211,0.2) 0%,transparent 50%),radial-gradient(circle at 40% 20%,rgba(0,153,204,0.2) 0%,transparent 50%)}
 
+.fnf-flex{display:flex !important}
+.fnf-m0{margin:0 !important}
+.fnf-p0{padding:0 !important}
+.fnf-bg-trans{background:transparent !important}
+.fnf-border-0{border:none !important}
+
 .fnf-nav {background:var(--fnf-nav-gradient) !important;padding:0.5rem 2rem !important;position:relative !important;min-height:var(--nav-height) !important;height:var(--nav-height) !important}
 
 .fnf-nav__container {display:flex !important;flex-direction:column !important;align-items:center !important;max-width:1200px !important;margin:0 auto !important;width:100% !important;padding:0.5rem 0 !important;gap:1rem !important}
@@ -26,7 +32,7 @@
 
 @media (prefers-reduced-motion:reduce) {.fnf-nav__brand::before {animation:none !important}}
 
-.fnf-nav__menu {list-style:none !important;margin:0 !important;padding:0 !important;background:transparent !important;border:none !important;box-shadow:none !important;white-space:nowrap !important}
+.fnf-nav__menu {list-style:none !important;box-shadow:none !important;white-space:nowrap !important}
 
 .fnf-nav__item {display:inline-block !important;margin:0 1.5rem !important;background:transparent !important;border:none !important;padding:0 !important}
 
@@ -42,9 +48,7 @@
 
 .fnf-nav__link[aria-current="page"]::after {content:'' !important;position:absolute !important;bottom:-2px !important;left:0 !important;right:0 !important;height:3px !important;background:#00d4ff !important;border-radius:2px !important;box-shadow:0 0 8px rgba(0,212,255,0.6) !important}
 
-.fnf-nav .fnf-nav__menu,.fnf-nav__container .fnf-nav__menu,nav .fnf-nav__menu {position:absolute !important;bottom:5px \!important;left:50% !important;transform:translateX(-50%) !important;display:flex !important;flex-flow:row nowrap !important;align-items:center !important;justify-content:center !important;width:auto !important;z-index:10 !important;list-style:none !important;margin:0 !important;padding:0 !important;background:transparent !important;border:none !important;box-shadow:none !important;white-space:nowrap !important}
-
-.fnf-nav .fnf-nav__item,.fnf-nav__container .fnf-nav__item,nav .fnf-nav__item {display:inline-block !important;margin:0 1.5rem !important;background:transparent !important;border:none !important;padding:0 !important}
+.fnf-nav__menu {position:absolute !important;bottom:5px !important;left:50% !important;transform:translateX(-50%) !important;flex-flow:row nowrap !important;align-items:center !important;justify-content:center !important;width:auto !important;z-index:10 !important;list-style:none !important;box-shadow:none !important;white-space:nowrap !important}
 
 @media (width <=768px) {.fnf-nav .fnf-nav__menu,.fnf-nav__container .fnf-nav__menu,nav .fnf-nav__menu,.fnf-nav__menu {display:none !important;visibility:hidden !important;opacity:0 !important;position:absolute !important;top:-9999px !important;left:-9999px !important}
 
