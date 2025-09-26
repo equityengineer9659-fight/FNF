@@ -10,25 +10,25 @@
 
 .fnf-card-base{padding:var(--slds-spacing-large);border-radius:var(--slds-border-radius-large);transition:all var(--transition-medium);height:100%;display:flex;flex-direction:column;align-items:center;text-align:center}
 
-.fnf-focus-card,.fnf-service-card,.fnf-resource-card,.fnf-expertise-card,.fnf-value-card,.fnf-measurable-card,.focus-area-card,.measurable-card,.service-card,.resource-card,.expertise-card,.value-card,.testimonial-card,.impact-card{width:100% !important;max-width:none !important;min-width:280px !important;height:auto !important;min-height:300px !important;max-height:none !important;margin:0 auto;padding:1.5rem;display:flex !important;flex-direction:column !important;justify-content:flex-start !important;align-items:center !important;text-align:center !important;background:rgba(45,55,65,.6) !important;backdrop-filter:blur(10px) !important;border-radius:12px !important;border:1px solid rgba(100,120,140,.3) !important;box-shadow:0 8px 32px rgba(0,0,0,.3) !important;transition:all .3s ease !important}
+.focus-area-card,.measurable-card,.service-card,.resource-card,.expertise-card,.value-card{width:100% !important;max-width:none !important;min-width:280px !important;height:auto !important;min-height:300px !important;max-height:none !important;margin:0 auto;padding:1.5rem;display:flex !important;flex-direction:column !important;justify-content:flex-start !important;align-items:center !important;text-align:center !important;background:rgba(45,55,65,.6) !important;backdrop-filter:blur(10px) !important;border-radius:12px !important;border:1px solid rgba(100,120,140,.3) !important;box-shadow:0 8px 32px rgba(0,0,0,.3) !important;transition:all .3s ease !important}
 
-.fnf-focus-card{min-height:280px}
+.focus-area-card{min-height:280px}
 
-.fnf-service-card{min-height:320px}
+.service-card{min-height:320px}
 
-.fnf-resource-card{min-height:300px}
+.resource-card{min-height:300px}
 
-.fnf-expertise-card{min-height:350px}
+.expertise-card{min-height:350px}
 
-.fnf-value-card{min-height:280px}
+.value-card{min-height:280px}
 
-.fnf-measurable-card{min-height:280px}
+.measurable-card{min-height:280px}
 
 .focus-area-icon,.measurable-icon,.service-icon,.resource-icon,.expertise-icon,.value-icon{width:70px;height:70px;background:#0176d3 !important;border-radius:50% !important;display:flex !important;align-items:center !important;justify-content:center !important;font-size:1.8rem !important;color:white !important;margin-bottom:1rem}
 
-.focus-area-card h3,.measurable-card h3,.service-card h3,.resource-card h3,.expertise-card h3,.value-card h3,.testimonial-card h3,.impact-card h3{font-size:1.2rem !important;font-weight:600 !important;line-height:1.4 !important;color:#fff !important;text-align:center !important;min-height:auto !important;display:block;padding:1rem 1.5rem;background:rgba(20,80,140,.9) !important;border-radius:12px !important;border:1px solid rgba(70,130,180,.4) !important;margin:1.5rem -2rem 2rem}
+.focus-area-card h3,.measurable-card h3,.service-card h3,.resource-card h3,.expertise-card h3,.value-card h3{font-size:1.2rem !important;font-weight:600 !important;line-height:1.4 !important;color:#fff !important;text-align:center !important;min-height:auto !important;display:block;padding:1rem 1.5rem;background:rgba(20,80,140,.9) !important;border-radius:12px !important;border:1px solid rgba(70,130,180,.4) !important;margin:1.5rem -2rem 2rem}
 
-.focus-area-card p,.measurable-card p,.service-card p,.resource-card p,.expertise-card p,.value-card p,.testimonial-card p,.impact-card p{font-size:1rem !important;line-height:1.6 !important;margin:0 !important;color:rgba(200,210,220,.9) !important;text-align:center !important;word-wrap:break-word !important;overflow-wrap:break-word !important;hyphens:auto !important;flex-grow:1 !important;display:block !important;padding:0 1rem}
+.focus-area-card p,.measurable-card p,.service-card p,.resource-card p,.expertise-card p,.value-card p{font-size:1rem !important;line-height:1.6 !important;margin:0 !important;color:rgba(200,210,220,.9) !important;text-align:center !important;word-wrap:break-word !important;overflow-wrap:break-word !important;hyphens:auto !important;flex-grow:1 !important;display:block !important;padding:0 1rem}
 
 .fnf-card__header{font-size:var(--slds-font-size-5);font-weight:600;color:var(--slds-c-text-inverse);padding:var(--slds-spacing-medium) var(--slds-spacing-large);background:rgba(20,80,140,.9);border-radius:var(--slds-border-radius-large);border:1px solid rgba(70,130,180,.4);margin:var(--slds-spacing-large) calc(-1 * var(--slds-spacing-x-large)) var(--slds-spacing-x-large);width:calc(100% + calc(2 * var(--slds-spacing-x-large)))}
 
