@@ -1,0 +1,15 @@
+.hamburger-svg{width:24px !important;height:18px !important;display:block !important}
+
+.hamburger-svg rect{fill:#fff !important;transition:all .3s ease !important}
+
+.simple-hamburger{display:flex !important;flex-direction:column !important;justify-content:space-between !important;width:20px !important;height:14px !important;margin:0 auto !important}
+
+:root{--hamburger-line-color:#fff}
+
+.hamburger-line{height:2px !important;background:var(--hamburger-line-color) !important;border:none !important;margin:0 !important;padding:0 !important;opacity:1 !important}
+
+@media (width >=769px){.fnf-nav__toggle{visibility:hidden !important;opacity:0 !important;height:0 !important;width:0 !important;position:absolute !important;left:-9999px !important}}
+
+@media (width <=768px){.fnf-nav__toggle{visibility:visible !important;position:static !important;left:auto !important;height:auto !important;width:auto !important}}
+
+.fnf-nav__mobile{border:2px solid #fff !important}
