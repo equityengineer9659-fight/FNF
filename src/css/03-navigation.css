@@ -1,32 +1,5 @@
-:root{--nav-white-10:var(--nav-white-10);--nav-white-15:var(--nav-white-15);--nav-white-20:var(--nav-white-20);--nav-white-30:var(--nav-white-30)}
-
-.fnf-nav{position:fixed;top:0;left:0;right:0;z-index:var(--slds-z-index-overlay);height:var(--nav-height);background:linear-gradient(135deg,var(--fnf-gradient-start) 0%,var(--fnf-gradient-end) 100%);backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--slds-shadow-medium);animation:slideDown var(--transition-slow) ease-out}
-
-@keyframes slideDown{from{transform:translateY(-100%);opacity:0}
-
-to{transform:translateY(0);opacity:1}}
-
-.fnf-nav__container{max-width:var(--slds-container-x-large);margin:0 auto;padding:var(--slds-spacing-small) var(--slds-spacing-medium);height:100%;display:flex !important;flex-direction:column !important;gap:var(--slds-spacing-small);position:relative !important}
-
-.fnf-nav__top-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:var(--slds-spacing-medium);width:100%;order:1}
-
-.fnf-nav__logo{flex-shrink:0}
-
-.fnf-nav__brand{font-family:var(--slds-font-family-heading);font-size:var(--slds-font-size-5);font-weight:700;color:var(--slds-c-text-inverse);text-decoration:none;transition:var(--transition-medium)}
-
-.fnf-nav__brand:hover{color:var(--fnf-secondary);text-shadow:0 0 20px rgba(0,212,255,.3)}
-
-nav.fnf-nav .fnf-nav__container .fnf-nav__title,.fnf-nav .fnf-nav__container .fnf-nav__title,.fnf-nav__container .fnf-nav__title,.fnf-nav__title{font-family:var(--slds-font-family-heading) !important;font-size:2.5rem !important;font-weight:700 !important;color:var(--slds-c-text-inverse) !important;text-align:center !important;margin:0 !important;grid-column:2 !important;justify-self:center !important}
-
-nav.fnf-nav .fnf-nav__container .fnf-nav__menu,.fnf-nav .fnf-nav__container .fnf-nav__menu,.fnf-nav__container .fnf-nav__menu,.fnf-nav__menu{display:flex !important;justify-content:center !important;align-items:center !important;gap:var(--slds-spacing-large) !important;list-style:none !important;padding:var(--slds-spacing-medium) 0 var(--slds-spacing-small) 0 !important;margin:0 !important;width:100% !important;flex-wrap:nowrap !important;position:relative !important;z-index:10 !important;order:2 !important;white-space:nowrap !important}
-
-.fnf-nav__item{position:relative}
-
-.fnf-nav__link{display:block;padding:var(--slds-spacing-small) var(--slds-spacing-medium);color:var(--slds-c-text-inverse);text-decoration:none;font-weight:500;border-radius:var(--slds-border-radius-medium);transition:var(--transition-medium);white-space:nowrap}
-
-.fnf-nav__link:hover,.fnf-nav__link:focus{background:var(--nav-white-10);color:var(--fnf-secondary);outline:2px solid var(--nav-white-20);outline-offset:2px}
-
-.fnf-nav__link[aria-current="page"]{background:var(--nav-white-15);color:var(--fnf-secondary)}
+/* Navigation styles consolidated into critical-gradients.css for better performance */
+/* This file kept minimal to preserve CSS architecture */
 
 .fnf-nav__toggle{display:none;align-items:center;justify-content:center;width:48px;height:48px;background:transparent;border:2px solid var(--nav-white-30);border-radius:var(--slds-border-radius-medium);cursor:pointer;z-index:calc(var(--slds-z-index-overlay) + 1);flex-shrink:0;grid-column:3;justify-self:end;position:relative}
 
