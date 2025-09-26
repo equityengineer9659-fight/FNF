@@ -30,7 +30,8 @@
       "Bash(for file in src/css/*.css)",
       "Bash(do echo \"=== $file ===\")",
       "Bash(wc:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "mcp__browser__browser_scroll"
     ],
     "deny": [],
     "ask": [],
