@@ -1,0 +1,218 @@
+/* Critical CSS Refactored with CSS Layers Architecture */
+/* Eliminates !important through proper cascade management */
+
+/* Layer: Base Design Tokens (High Priority) */
+@layer base {
+  :root {
+    /* Navigation gradients using SLDS tokens */
+    --fnf-nav-gradient: linear-gradient(135deg, var(--fnf-gradient-start) 0%, var(--fnf-gradient-end) 100%);
+    --fnf-brand-gradient: linear-gradient(145deg, #1b96ff, #0b5cab);
+    
+    /* Glassmorphism effects */
+    --glass-navigation: rgba(15, 30, 58, 0.85);
+    --glass-blur-strong: blur(12px) saturate(120%);
+    
+    /* Brand logo effects */
+    --logo-glow: conic-gradient(from 180deg, #00d1ff, #66ffe6, #13c2ff, #7bd3ff, #00d1ff);
+    --logo-inner-bg: rgba(1, 31, 63, 0.55);
+    
+    /* Z-index management */
+    --z-navigation: var(--slds-z-index-overlay);
+    --z-logo-bg: -1;
+    --z-logo-content: 1;
+  }
+}
+
+/* Layer: Components (Navigation Structure) */
+@layer components {
+  /* Navigation base structure - no !important needed */
+  .fnf-nav {
+    background: var(--fnf-nav-gradient);
+    padding: var(--slds-spacing-small) var(--slds-spacing-large);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: var(--nav-height);
+    height: var(--nav-height);
+    z-index: var(--z-navigation);
+    backdrop-filter: var(--glass-blur-strong);
+  }
+
+  .fnf-nav__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: var(--slds-container-x-large);
+    margin: 0 auto;
+    width: 100%;
+    padding: var(--slds-spacing-small) 0;
+    gap: var(--slds-spacing-medium);
+  }
+
+  .fnf-nav__container > *:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  /* Logo styling with proper cascade */
+  .fnf-nav__brand {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--slds-border-radius-large);
+    position: relative;
+    display: grid;
+    place-items: center;
+    background: var(--fnf-brand-gradient);
+    outline: 2px solid rgba(255, 255, 255, 0.15);
+    transition: transform var(--transition-medium), filter var(--transition-medium);
+    text-decoration: none;
+    z-index: var(--z-logo-content);
+  }
+
+  .fnf-nav__brand::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: var(--slds-border-radius-large);
+    background: var(--logo-glow);
+    filter: blur(10px);
+    animation: fnf-spin 8s linear infinite;
+    z-index: var(--z-logo-bg);
+  }
+
+  .fnf-nav__brand::after {
+    content: "F-n-F";
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    border-radius: calc(var(--slds-border-radius-large) - 2px);
+    display: grid;
+    place-items: center;
+    background: var(--logo-inner-bg);
+    box-shadow: 
+      inset 0 0 15px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(255, 255, 255, 0.12);
+    backdrop-filter: var(--glass-blur-strong);
+    font-family: var(--slds-font-family-heading);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    font-size: var(--slds-font-size-2);
+    line-height: 1;
+    color: var(--slds-c-text-inverse);
+    text-shadow: 
+      0.5px 0.5px 0 rgba(255, 255, 255, 0.15),
+      2px 2px 6px rgba(0, 0, 0, 0.7);
+    z-index: var(--z-logo-content);
+  }
+
+  /* Navigation menu structure */
+  .fnf-nav__menu {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: calc(var(--z-navigation) - 1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--slds-spacing-large);
+  }
+
+  .fnf-nav__item {
+    display: inline-block;
+    margin: 0;
+  }
+
+  .fnf-nav__link {
+    color: var(--slds-c-text-inverse);
+    text-decoration: none;
+    font-size: var(--slds-font-size-3);
+    font-weight: 500;
+    padding: var(--slds-spacing-small) var(--slds-spacing-medium);
+    position: relative;
+    transition: color var(--transition-medium);
+    white-space: nowrap;
+  }
+
+  .fnf-nav__link:hover {
+    color: var(--fnf-secondary);
+  }
+
+  .fnf-nav__link[aria-current="page"] {
+    color: var(--fnf-secondary);
+  }
+
+  .fnf-nav__link[aria-current="page"]::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--fnf-secondary);
+    border-radius: var(--slds-border-radius-small);
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+  }
+}
+
+/* Layer: Utilities (Responsive & States) */
+@layer utilities {
+  /* Mobile navigation overrides */
+  @media (width <= 768px) {
+    .fnf-nav__menu {
+      display: none;
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    .fnf-nav__title {
+      font-size: var(--slds-font-size-4);
+    }
+  }
+
+  @media (width <= 480px) {
+    .fnf-nav__title {
+      font-size: var(--slds-font-size-3);
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .fnf-nav__brand::before {
+      animation: none;
+    }
+  }
+}
+
+/* Layer: Overrides (Title positioning - last resort) */
+@layer overrides {
+  /* Title positioning - only use when necessary */
+  .fnf-nav__title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--slds-c-text-inverse);
+    font-size: var(--slds-font-size-6);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+    margin: 0;
+    z-index: calc(var(--z-navigation) - 2);
+    font-family: var(--slds-font-family-heading);
+  }
+}
+
+/* Keyframes (outside layers) */
+@keyframes fnf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

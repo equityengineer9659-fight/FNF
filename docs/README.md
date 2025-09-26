@@ -8,8 +8,9 @@
 
 ### **Most Frequently Accessed**
 - [Project Plan (Current)](project/plan.md) - 4-phase strategic refactoring
-- [RACI Matrix (Current)](project/raci.md) - Agent coordination and responsibilities  
-- [Technical Architecture (Current)](technical/CLAUDE.md) - Complete technical architecture
+- [RACI Matrix (Current)](project/raci.md) - Agent coordination and responsibilities
+- [Technical Architecture (Current)](../CLAUDE.md) - Complete technical architecture and build system
+- [Historical Technical Reference](technical/CLAUDE.md) - Crisis resolution context and lessons learned
 - [Performance Budget (Current)](technical/perf_budget.md) - Budget enforcement and monitoring
 - [ADRs (Current)](technical/adr/) - Architecture Decision Records
 

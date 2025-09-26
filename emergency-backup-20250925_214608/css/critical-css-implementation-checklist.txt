@@ -1,0 +1,36 @@
+CRITICAL CSS IMPLEMENTATION CHECKLIST
+
+□ PHASE 1: HTML TEMPLATE UPDATES
+  □ Add inline critical CSS to <head> section
+  □ Implement deferred loading script
+  □ Add noscript fallback
+  □ Test on index.html first
+
+□ PHASE 2: CSS IMPORT MODIFICATIONS
+  □ Update main.css to exclude critical-gradients.css
+  □ Ensure critical-above-fold.css is not imported (inline only)
+  □ Verify import order for remaining files
+
+□ PHASE 3: TESTING & VALIDATION
+  □ Test above-the-fold rendering speed
+  □ Verify all styles eventually load
+  □ Check for layout shifts
+  □ Validate on mobile devices
+
+□ PHASE 4: PERFORMANCE MONITORING
+  □ Measure Time to First Contentful Paint
+  □ Monitor Largest Contentful Paint
+  □ Check Cumulative Layout Shift
+  □ Document performance improvements
+
+ROLLBACK PROCEDURE:
+1. Restore original critical-gradients.css import in main.css
+2. Remove inline critical CSS from HTML templates
+3. Remove deferred loading scripts
+4. Files backed up in: backups/phase-6-critical-path-20250925-1437/
+
+EXPECTED RESULTS:
+- 17.6% faster above-the-fold rendering
+- Improved Core Web Vitals scores
+- Better user experience on slow connections
+- Maintained visual consistency

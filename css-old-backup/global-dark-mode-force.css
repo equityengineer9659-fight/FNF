@@ -1,0 +1,501 @@
+/**
+ * GLOBAL DARK MODE FORCE - OVERRIDES ALL LIGHT MODE
+ * Forces dark mode appearance regardless of user system preference
+ * Applies to all pages, cards, and components
+ * 
+ * Date: 2025-08-25
+ * Priority: Force dark mode globally
+ */
+
+/* ============================================
+   FORCED DARK MODE - OVERRIDE SYSTEM PREFERENCE
+   ============================================ */
+
+/* Force dark mode on root - overrides prefers-color-scheme */
+:root {
+    /* SLDS Dark Mode Color Overrides - Forced */
+    --slds-c-background-default: #0f1419 !important;
+    --slds-c-background-alt: #1a1f26 !important;
+    --slds-c-background-brand: #0176d3 !important;
+    
+    --slds-c-text-default: #ffffff !important;
+    --slds-c-text-weak: #c9c7c5 !important; 
+    --slds-c-text-inverse: #181818 !important;
+    
+    /* Custom Variables - Dark Mode Force */
+    --primary-color: #0176d3 !important;
+    --secondary-color: #00d4ff !important;
+    --text-color: #ffffff !important;
+    --text-light: #c9c7c5 !important;
+    --text-white: #ffffff !important;
+    
+    /* Background Variables */
+    --bg-gradient-start: #0f1419 !important;
+    --bg-gradient-end: #1a1f26 !important;
+}
+
+/* ============================================
+   GLOBAL BODY AND HTML DARK FORCE
+   ============================================ */
+html {
+    background: #0f1419 !important;
+    color: #ffffff !important;
+}
+
+body {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f26 100%) !important;
+    color: #ffffff !important;
+}
+
+/* ============================================
+   ALL CARDS AND COMPONENTS - DARK FORCE
+   ============================================ */
+
+/* All card types - forced dark backgrounds */
+.fnf-card,
+.focus-area-card,
+.service-card, 
+.resource-card,
+.expertise-card,
+.value-card,
+.impact-card,
+.testimonial-card,
+.stat-card,
+.measurable-card {
+    background: linear-gradient(145deg, #1a1f26, #242a32) !important;
+    color: #ffffff !important;
+    border: 1px solid #2d3748 !important;
+}
+
+/* Card hover states */
+.fnf-card:hover,
+.focus-area-card:hover,
+.service-card:hover, 
+.resource-card:hover,
+.expertise-card:hover,
+.value-card:hover,
+.impact-card:hover,
+.testimonial-card:hover,
+.measurable-card:hover {
+    background: linear-gradient(145deg, #242a32, #2d3748) !important;
+    border-color: #0176d3 !important;
+    transform: translateY(-8px) !important;
+}
+
+/* ============================================
+   SECTIONS AND MAIN CONTENT - DARK FORCE
+   ============================================ */
+
+/* All sections */
+section,
+.section-padding,
+.hero-section,
+.mission-section,
+.impact-section {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+/* Section backgrounds with gradients */
+.section-gray,
+.slds-p-vertical_x-large {
+    background: linear-gradient(135deg, #1a1f26 0%, #242a32 100%) !important;
+}
+
+/* Hero section specific */
+.hero-section {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f26 50%, #0176d3 100%) !important;
+}
+
+/* ============================================
+   TEXT AND HEADINGS - DARK FORCE
+   ============================================ */
+
+/* All headings - MAXIMUM SPECIFICITY OVERRIDE */
+html body h1, 
+html body h2, 
+html body h3, 
+html body h4, 
+html body h5, 
+html body h6,
+html body .slds-text-heading_large,
+html body .slds-text-heading_medium,
+html body .slds-text-heading_small,
+html body section h1,
+html body section h2,
+html body section h3 {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+/* Body text - MAXIMUM SPECIFICITY OVERRIDE */
+html body p,
+html body .slds-text-body_regular,
+html body .slds-text-body_small,
+html body section p,
+html body div p {
+    color: #ffffff !important;
+    opacity: 0.9 !important;
+}
+
+/* Weak text */
+html body .slds-text-color_weak {
+    color: #c9c7c5 !important;
+}
+
+/* Company name/brand - GLOBAL OVERRIDE */
+html body .brand-logo,
+html body .universal-brand-logo,
+html body h1.brand-logo,
+html body h1.universal-brand-logo,
+html body .navbar h1.brand-logo,
+html body .navbar h1.universal-brand-logo {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* ============================================
+   NAVIGATION - DARK FORCE OVERRIDE
+   ============================================ */
+
+/* Navigation background - already dark, enhance */
+.navbar.universal-nav {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f26 100%) !important;
+    backdrop-filter: blur(15px) !important;
+    border-bottom: 1px solid #2d3748 !important;
+}
+
+/* Navigation links */
+.nav-link,
+.universal-nav-link {
+    color: #ffffff !important;
+}
+
+/* Company name/brand */
+.brand-logo,
+.universal-brand-logo {
+    color: #ffffff !important;
+}
+
+/* Logo - Enhanced for dark mode */
+.fnf-logo {
+    background: linear-gradient(145deg, #1b96ff, #0b5cab) !important;
+    border: 2px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.fnf-inner {
+    background: rgba(1, 31, 63, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.fnf-wordmark {
+    color: #ffffff !important;
+    text-shadow: 0.5px 0.5px 0 rgba(255,255,255,0.15), 3px 3px 8px rgba(0,0,0,0.8) !important;
+}
+
+/* ============================================
+   BUTTONS - DARK FORCE
+   ============================================ */
+
+/* Primary buttons */
+.slds-button_brand,
+.cta-primary {
+    background: linear-gradient(135deg, #0176d3, #00d4ff) !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+/* Secondary buttons */
+.slds-button_outline-brand,
+.cta-secondary {
+    background: transparent !important;
+    color: #00d4ff !important;
+    border: 2px solid #00d4ff !important;
+}
+
+.slds-button_outline-brand:hover,
+.cta-secondary:hover {
+    background: #00d4ff !important;
+    color: #0f1419 !important;
+}
+
+/* ============================================
+   FORMS - DARK FORCE
+   ============================================ */
+
+/* Form inputs */
+input,
+textarea,
+select,
+.slds-input,
+.slds-textarea {
+    background: #1a1f26 !important;
+    color: #ffffff !important;
+    border: 1px solid #2d3748 !important;
+}
+
+input:focus,
+textarea:focus,
+.slds-input:focus,
+.slds-textarea:focus {
+    border-color: #0176d3 !important;
+    box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.3) !important;
+}
+
+/* Form labels */
+label,
+.slds-form-element__label {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   FOOTER - DARK FORCE
+   ============================================ */
+
+.custom-footer,
+footer {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f26 100%) !important;
+    color: #c9c7c5 !important;
+    border-top: 1px solid #2d3748 !important;
+}
+
+/* ============================================
+   SPECIAL ELEMENTS - DARK FORCE
+   ============================================ */
+
+/* Links */
+a {
+    color: #00d4ff !important;
+}
+
+a:hover {
+    color: #66ffe6 !important;
+}
+
+/* Dividers */
+.fnf-section-divider {
+    background: linear-gradient(90deg, transparent, #2d3748, transparent) !important;
+}
+
+/* Code blocks, pre elements */
+pre,
+code {
+    background: #1a1f26 !important;
+    color: #c9c7c5 !important;
+    border: 1px solid #2d3748 !important;
+}
+
+/* ============================================
+   MOBILE DROPDOWN - DARK FORCE OVERRIDE
+   ============================================ */
+
+/* Mobile navigation dropdown */
+#mobile-dropdown div {
+    background: #1a1f26 !important;
+    border: 2px solid #0176d3 !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.8) !important;
+}
+
+#mobile-dropdown a {
+    color: #ffffff !important;
+    border-bottom: 1px solid #2d3748 !important;
+}
+
+#mobile-dropdown a:hover {
+    background: #0176d3 !important;
+    color: #ffffff !important;
+}
+
+/* ============================================
+   OVERRIDE ANY REMAINING LIGHT MODE
+   ============================================ */
+
+/* Catch-all for any white backgrounds */
+*[style*="background: white"],
+*[style*="background-color: white"],
+*[style*="background: #fff"],
+*[style*="background-color: #fff"],
+*[style*="background: #ffffff"],
+*[style*="background-color: #ffffff"] {
+    background: #1a1f26 !important;
+}
+
+/* Catch-all for any black text on light backgrounds */
+*[style*="color: black"],
+*[style*="color: #000"],
+*[style*="color: #000000"] {
+    color: #ffffff !important;
+}
+
+/* Force dark mode on all containers */
+.container,
+.slds-container_large,
+.slds-container_center,
+.slds-container_fluid {
+    background: transparent !important;
+}
+
+/* ============================================
+   ABOUT PAGE SPECIFIC FIXES
+   ============================================ */
+
+/* About page - Force proper H1/H2/H3 colors - MAXIMUM SPECIFICITY */
+html body.about-page h1,
+html body.about-page h2, 
+html body.about-page h3,
+html body.about-page h4,
+html body.about-page h5,
+html body.about-page h6,
+html body.about-page .slds-text-heading_large,
+html body.about-page .slds-text-heading_medium,
+html body.about-page .slds-text-heading_small,
+html body.about-page section h1,
+html body.about-page section h2,
+html body.about-page section h3 {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+/* About page - Force proper paragraph colors - MAXIMUM SPECIFICITY */
+html body.about-page p,
+html body.about-page .slds-text-body_regular,
+html body.about-page .slds-text-body_small,
+html body.about-page section p,
+html body.about-page div p,
+html body.about-page .slds-text-longform p {
+    color: #ffffff !important;
+    opacity: 0.9 !important;
+}
+
+/* About page - Remove transparency issues on sections */
+.about-page section,
+.about-page .section-gray,
+.about-page .section-padding,
+.about-page .slds-p-vertical_x-large,
+.about-page .card-section {
+    background: transparent !important;
+    opacity: 1 !important;
+}
+
+/* About page - Fix card transparency issues */
+.about-page .expertise-card,
+.about-page .value-card {
+    background: linear-gradient(145deg, #1a1f26, #242a32) !important;
+    color: #ffffff !important;
+    border: 1px solid #2d3748 !important;
+    opacity: 1 !important;
+}
+
+/* About page - Card text colors */
+.about-page .expertise-card h3,
+.about-page .value-card h3 {
+    color: #ffffff !important;
+}
+
+.about-page .expertise-card p,
+.about-page .value-card p {
+    color: #c9c7c5 !important;
+}
+
+/* About page - Fix list items in expertise sections */
+.about-page .expertise-list li {
+    color: #c9c7c5 !important;
+}
+
+/* About page - Remove any remaining transparent overlays */
+.about-page .expertise-card::before,
+.about-page .value-card::before,
+.about-page section::before {
+    display: none !important;
+}
+
+/* About page - Navigation H1 brand logo - MAXIMUM SPECIFICITY */
+html body.about-page .brand-logo,
+html body.about-page .universal-brand-logo,
+html body.about-page h1.brand-logo,
+html body.about-page h1.universal-brand-logo,
+html body.about-page .navbar h1.brand-logo,
+html body.about-page .navbar h1.universal-brand-logo {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Contact page - Navigation H1 brand logo - MAXIMUM SPECIFICITY */
+html body.contact-page .brand-logo,
+html body.contact-page .universal-brand-logo,
+html body.contact-page h1.brand-logo,
+html body.contact-page h1.universal-brand-logo,
+html body.contact-page .navbar h1.brand-logo,
+html body.contact-page .navbar h1.universal-brand-logo {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Contact page - All H2 elements - MAXIMUM SPECIFICITY */
+html body.contact-page h2,
+html body.contact-page h2.slds-text-heading_large,
+html body.contact-page h2.slds-text-heading_medium,
+html body.contact-page .slds-text-heading_large,
+html body.contact-page .slds-text-heading_medium,
+html body.contact-page section h2,
+html body.contact-page h2#contact-heading,
+html body.contact-page .contact-form-container h2,
+html body.contact-page main#main-content section.contact-section div.slds-container_large div.slds-grid div.slds-col div.contact-form-container h2 {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* ============================================
+   CARDS AND DROPDOWN DARK MODE
+   ============================================ */
+
+/* Index page cards dark mode styling */
+.focus-area-card,
+.measurable-card,
+.stat-card {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    border: 1px solid #333333 !important;
+}
+
+/* Card text content dark mode */
+.focus-area-card h3,
+.focus-area-card p,
+.measurable-card h3,
+.measurable-card p,
+.stat-card h3,
+.stat-card p,
+.stat-card .stat-number {
+    color: #ffffff !important;
+}
+
+/* Mobile dropdown navigation dark mode */
+#mobile-dropdown {
+    background: #1a1a1a !important;
+    border: 2px solid #333333 !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.8) !important;
+}
+
+/* Mobile dropdown links dark mode */
+#mobile-dropdown a {
+    color: #ffffff !important;
+    border-bottom: 1px solid #333333 !important;
+}
+
+#mobile-dropdown a:hover {
+    background: #333333 !important;
+    color: #00d4ff !important;
+}
+
+/* Mobile nav toggle button dark mode */
+.mobile-nav-toggle {
+    color: #ffffff !important;
+    background: transparent !important;
+    border: 1px solid #333333 !important;
+}
+
+

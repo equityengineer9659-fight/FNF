@@ -23,40 +23,80 @@
 [context.branch-deploy]
   command = "npm run build"
 
-# Headers for security and performance
+# PHASE 4.2: ENHANCED SECURITY HEADERS FRAMEWORK
 [[headers]]
   for = "/*"
   [headers.values]
-    # Security headers
+    # Core Security Headers
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     
-    # Content Security Policy
+    # Enhanced Referrer Policy for Privacy Protection
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Comprehensive Permissions Policy (Feature Policy successor)
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), ambient-light-sensor=(), autoplay=(), encrypted-media=(), fullscreen=(self), picture-in-picture=()"
+    
+    # HSTS - HTTP Strict Transport Security with preload
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    
+    # Cross-Origin Policies for Enhanced Security
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "same-origin"
+    
+    # Enhanced Content Security Policy for Premium Effects Compatibility
     Content-Security-Policy = """
       default-src 'self';
-      script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
-      style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
-      font-src 'self' https://fonts.gstatic.com;
-      img-src 'self' data: https:;
-      connect-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.jsdelivr.net;
+      style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.jsdelivr.net;
+      font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;
+      img-src 'self' data: https: blob:;
+      connect-src 'self' https://api.netlify.com https://fonts.googleapis.com;
+      media-src 'self';
+      object-src 'none';
       frame-ancestors 'none';
       base-uri 'self';
       form-action 'self';
+      upgrade-insecure-requests;
+      block-all-mixed-content;
     """
+    
+    # Security Reporting and Monitoring
+    Report-To = '''{"group":"csp-endpoint","max_age":31536000,"endpoints":[{"url":"https://foodnforce.report-uri.com/r/d/csp/enforce"}],"include_subdomains":true}'''
+    
+    # Cache Control for Security
+    Cache-Control = "no-cache, no-store, must-revalidate, private"
+    Pragma = "no-cache"
+    Expires = "0"
 
-# Cache optimization for static assets
+# Static Asset Security Headers
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+    Cross-Origin-Resource-Policy = "cross-origin"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+    Cross-Origin-Resource-Policy = "cross-origin"
+
 [[headers]]
   for = "/src/styles/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/src/scripts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/src/assets/*"
@@ -67,6 +107,16 @@
   for = "*.html"
   [headers.values]
     Cache-Control = "public, max-age=3600"
+    X-Content-Type-Options = "nosniff"
+
+# API Endpoints Security
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    X-Content-Type-Options = "nosniff"
 
 # Redirects for clean URLs and SEO
 [[redirects]]
@@ -79,17 +129,24 @@
   to = "/"
   status = 301
 
+# Security redirects - Force HTTPS
+[[redirects]]
+  from = "http://foodnforce.netlify.app/*"
+  to = "https://foodnforce.netlify.app/:splat"
+  status = 301
+  force = true
+
 # SPA fallback for client-side routing (if needed in future)
 [[redirects]]
   from = "/*"
   to = "/404.html"
   status = 404
 
-# Form handling (if contact forms are added)
+# Form handling with enhanced security
 [functions]
   directory = "netlify/functions"
 
-# Plugin configurations
+# Plugin configurations with security enhancements
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
   

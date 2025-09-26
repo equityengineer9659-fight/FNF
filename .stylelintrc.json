@@ -1,0 +1,24 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "declaration-block-trailing-semicolon": "always",
+    "length-zero-no-unit": true,
+    "rule-empty-line-before": ["always", {
+      "except": ["first-nested"],
+      "ignore": ["after-comment"]
+    }],
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "alpha-value-notation": "number",
+    "color-function-notation": "legacy",
+    "selector-not-notation": "simple",
+    "import-notation": "string"
+  },
+  "ignoreFiles": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*.backup*",
+    "**/*.bak*",
+    "**/backup*/**"
+  ]
+}

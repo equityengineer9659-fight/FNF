@@ -122,7 +122,8 @@ To continue with Phase 2 SLDS Bundle Optimization:
 ## 🔗 RELATED DOCUMENTS - UPDATED
 - `docs/project/plan.md` - Strategic refactoring plan (updated with Phase 1 completion)
 - `docs/project/raci.md` - Agent coordination matrix (10 specialized agents)
-- `docs/technical/CLAUDE.md` - Comprehensive project knowledge with CI/CD integration
+- `CLAUDE.md` - Current technical architecture and build system
+- `docs/technical/CLAUDE.md` - Historical reference with crisis resolution context
 - `config/deployment-config.json` - Phase-specific deployment strategies
 - `PHASE-1-BLUE-GREEN-DEPLOYMENT-SUCCESS.md` - Phase 1 deployment results
 

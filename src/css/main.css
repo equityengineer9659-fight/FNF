@@ -1,0 +1,39 @@
+@import 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap';@import './01-reset.css';@import './02-design-tokens.css';@import './03-navigation.css';@import './04-typography.css';@import './05-layout.css';@import './06-effects.css';@import './07-components.css';@import './critical-gradients.css';@import './hamburger-fix.css';
+
+:root {--slds-c-background-default:#000;--slds-c-background-alt:#111;--slds-c-text-default:#fff;--slds-c-text-weak:#ccc;--slds-c-text-inverse:#fff;--fnf-card-bg-opacity:0.8}
+
+html {background:#000;color:#fff}
+
+body {background:#000;color:#fff;min-height:100vh;overflow-x:hidden;position:relative}
+
+body.fnf-page--index {}
+
+body.fnf-page--about {}
+
+body.fnf-page--services {}
+
+body.fnf-page--resources {}
+
+body.fnf-page--impact {}
+
+body.fnf-page--contact {}
+
+main {padding-top:var(--nav-height);position:relative;z-index:2}
+
+@media (prefers-reduced-motion:reduce) {*,*::before,*::after {animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important}}
+
+@media (prefers-contrast:high) {body {background:#000;color:#fff}}
+
+@media print {.fnf-nav,.fnf-particles,.fnf-footer {display:none}
+
+body {background:white;color:black}
+
+main {padding-top:0}}
+
+body.fnf-loading {overflow:hidden}
+
+body.fnf-loading .fnf-particles {opacity:0}
+
+.fnf-reduced-motion {animation:none !important;transition:none !important}
+
+.fnf-reduced-motion * {animation:none !important;transition:none !important}

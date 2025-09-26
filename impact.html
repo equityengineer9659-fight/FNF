@@ -3,216 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="See the real impact Food-N-Force has made on food banks and pantries. Success stories, metrics, and testimonials from organizations we've helped transform.">
-    <meta name="keywords" content="food bank success stories, nonprofit transformation results, Food-N-Force impact, client testimonials">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Community Impact - Food-N-Force">
-    <meta property="og:description" content="Real results from food pantries and food banks who've transformed their operations with Food-N-Force.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://foodnforce.com/impact.html">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Community Impact - Food-N-Force">
-    
-    <!-- Security Headers - Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    
     <title>Community Impact - Food-N-Force</title>
-    
-    <!-- Preconnect to external resources -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    
-    <!-- PHASE 2B: Custom SLDS Build (24KB vs 821KB CDN - 97% reduction) -->
-    <link rel="stylesheet" href="css/slds-custom.css">
-    
-    <!-- Custom CSS - Consolidated after cleanup -->
-    <!-- Only loading existing CSS files after consolidation -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/navigation-unified.css">
-    <link rel="stylesheet" href="css/responsive-enhancements.css">
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="css/styles.css" as="style">
-    <link rel="preload" href="js/mobile-navigation-clean.js" as="script">
-    
-    <!-- Critical styles moved to external CSS for better performance and maintenance -->
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Food-N-Force: Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.">
+    <meta name="keywords" content="food bank software, pantry management, food distribution, community outreach, inventory management">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Community Impact - Food-N-Force">
+    <meta property="og:description" content="Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.">
+    <meta property="og:type" content="website">
+
+    <!-- Salesforce Lightning Design System CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="src/css/main.css">
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 </head>
-<body class="impact-page">
+<body class="fnf-page--impact" id="page-top">
     <!-- Skip Navigation for Accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Static HTML Navigation -->
-    <nav class="navbar universal-nav custom-nav" role="banner">
-        <div class="slds-container_fluid">
-            <!-- SLDS Brand Header Pattern: Logo (far left) | Company Name (center) | Mobile Toggle (far right) -->
-            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small header-layout">
-                <!-- SLDS Brand Logo Container - Far Left -->
-                <div class="slds-col slds-no-flex logo-container">
-                    <div class="slds-brand fnf-logo-wrapper">
-                        <a href="index.html" class="slds-brand__logo-link brand-logo-link" aria-label="Food-N-Force Home" title="Food-N-Force - Modern Solutions for Food Banks">
-                            <div class="fnf-logo" role="img" aria-labelledby="nav-logo-title">
-                                <div class="fnf-inner">
-                                    <span class="fnf-wordmark">F-n-F</span>
-                                </div>
-                            </div>
-                            <span id="nav-logo-title" class="slds-assistive-text">Food-N-Force Logo - Modern Solutions for Food Banks</span>
-                        </a>
-                    </div>
+    <!-- Navigation -->
+    <nav class="fnf-nav" role="navigation" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" aria-hidden="true">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
                 </div>
-                <!-- Company Name Container - Center -->
-                <div class="slds-col slds-no-flex company-name-container-centered">
-                    <h1 class="brand-logo universal-brand-logo">Food-N-Force</h1>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
                 </div>
-                <!-- Mobile Navigation Toggle - Far Right -->
-                <div class="slds-col slds-no-flex mobile-toggle-container">
-                    <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
-                        <span class="hamburger-icon">☰</span>
-                    </button>
-                </div>
-                <!-- Spacer for desktop (maintains balance) -->
-                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
-                    <!-- Balances the logo container -->
-                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
             </div>
-            <!-- Navigation Menu - Centered Below Company Name -->
-            <div class="slds-grid slds-grid_align-center slds-p-top_small">
-                <div class="slds-col">
-                    <nav class="slds-text-align_center nav-menu-container" role="navigation" aria-label="Main navigation">
-                        <ul class="nav-menu slds-nav-horizontal universal-nav-menu" id="main-nav">
-                            <li class="slds-nav-horizontal__item">
-                                <a href="index.html" class="nav-link universal-nav-link">Home</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="services.html" class="nav-link universal-nav-link">Services</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="resources.html" class="nav-link universal-nav-link">Resources</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item slds-is-active">
-                                <a href="impact.html" class="nav-link universal-nav-link">Impact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="contact.html" class="nav-link universal-nav-link">Contact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="about.html" class="nav-link universal-nav-link">About Us</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+
+            <!-- Desktop Navigation Menu -->
+            <ul class="fnf-nav__menu" role="list">
+                <li class="fnf-nav__item">
+                    <a href="index.html" class="fnf-nav__link">Home</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="services.html" class="fnf-nav__link">Services</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="resources.html" class="fnf-nav__link">Resources</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="impact.html" class="fnf-nav__link" aria-current="page">Impact</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="contact.html" class="fnf-nav__link">Contact</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="about.html" class="fnf-nav__link">About Us</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu" role="list">
+                <li><a href="index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="impact.html" class="fnf-nav__mobile-link" aria-current="page">Impact</a></li>
+                <li><a href="contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main id="main-content" role="main">
         <!-- Impact Hero Section -->
-        <section class="section-padding slds-p-horizontal_large impact-section impact-hero-section" aria-labelledby="impact-heading">
+        <section class="section-padding impact-section" aria-labelledby="impact-heading">
             <div class="slds-container_large slds-container_center">
                 <div class="slds-text-align_center slds-m-bottom_x-large">
-                    <h2 id="impact-heading" class="slds-text-heading_large impact-heading">Community Impact</h2>
-                    
-                    <!-- Blue underline for heading -->
-                    <div class="impact-heading-underline"></div>
-                    
-                    <p class="slds-text-body_regular slds-text-color_weak">
+                    <h1 id="impact-heading" class="slds-text-heading_large">Community Impact</h1>
+                    <p class="slds-text-body_regular">
                         Real results from food pantries and food banks who've transformed their operations
                     </p>
                 </div>
-                
+
                 <!-- Impact Metrics -->
                 <div class="stats-container slds-m-bottom_x-large">
                     <div class="stat-item">
-                        <span class="stat-number slds-text-color_brand" data-suffix="%">60</span>
+                        <span class="stat-number" data-target="60" data-format="percentage">60%</span>
                         <p class="stat-label">Reduction in Client Wait Times</p>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number slds-text-color_brand" data-suffix="%">35</span>
+                        <span class="stat-number" data-target="35" data-format="percentage">35%</span>
                         <p class="stat-label">Increase in Distribution Capacity</p>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number slds-text-color_brand" data-suffix="%">75</span>
+                        <span class="stat-number" data-target="75" data-format="percentage">75%</span>
                         <p class="stat-label">Less Time on Admin Tasks</p>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number slds-text-color_brand" data-suffix="%">40</span>
+                        <span class="stat-number" data-target="40" data-format="percentage">40%</span>
                         <p class="stat-label">Increase in Grant Funding</p>
                     </div>
                 </div>
-                
+
                 <!-- Success Stories -->
                 <div class="slds-m-bottom_x-large">
-                    <h3 class="slds-text-heading_medium slds-text-align_center slds-m-bottom_large">Success Stories</h3>
+                    <h2 id="stories-heading" class="slds-text-heading_large slds-text-align_center slds-m-bottom_large">
+                        Success Stories</h2>
                     <div class="slds-grid slds-wrap slds-gutters_large">
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_large">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
                             <article class="testimonial-card">
-                                <div class="testimonial-text">
-                                    <h4 class="slds-text-heading_small slds-m-bottom_small">Metro Food Bank</h4>
-                                    <blockquote class="slds-text-body_small slds-m-bottom_medium">
-                                        "Food-N-Force helped us reduce client wait times by 60% and increase our weekly distribution capacity by 35%. Their inventory system has been a game-changer for our operations."
-                                    </blockquote>
-                                </div>
-                                <div>
-                                    <p class="testimonial-author">Sarah Martinez</p>
-                                    <p class="testimonial-role">Operations Director</p>
-                                </div>
+                                <h4 class="testimonial-heading">Metro Food Bank</h4>
+                                <blockquote class="testimonial-quote">
+                                    "Food-N-Force helped us reduce client wait times by 60% and increase our weekly
+                                    distribution capacity by 35%. Their inventory system has been a game-changer for
+                                    our operations."
+                                </blockquote>
+                                <div class="testimonial-author">Sarah Martinez</div>
+                                <div class="testimonial-role">Operations Director</div>
                             </article>
                         </div>
-                        
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_large">
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
                             <article class="testimonial-card">
-                                <div class="testimonial-text">
-                                    <h4 class="slds-text-heading_small slds-m-bottom_small">Community Harvest Pantry</h4>
-                                    <blockquote class="slds-text-body_small slds-m-bottom_medium">
-                                        "The automated reporting system saves us 15 hours per week and has improved our grant applications significantly. We've secured 40% more funding since implementation."
-                                    </blockquote>
-                                </div>
-                                <div>
-                                    <p class="testimonial-author">Michael Chen</p>
-                                    <p class="testimonial-role">Executive Director</p>
-                                </div>
+                                <h4 class="testimonial-heading">Community Harvest Pantry</h4>
+                                <blockquote class="testimonial-quote">
+                                    "The automated reporting system saves us 15 hours per week and has improved our
+                                    grant applications significantly. We've secured 40% more funding since
+                                    implementation."
+                                </blockquote>
+                                <div class="testimonial-author">Michael Chen</div>
+                                <div class="testimonial-role">Executive Director</div>
                             </article>
                         </div>
-                        
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_large">
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
                             <article class="testimonial-card">
-                                <div class="testimonial-text">
-                                    <h4 class="slds-text-heading_small slds-m-bottom_small">Hope Valley Food Pantry</h4>
-                                    <blockquote class="slds-text-body_small slds-m-bottom_medium">
-                                        "The client management system has transformed how we serve our community. We can now track dietary needs, preferences, and visit history to provide more personalized support."
-                                    </blockquote>
-                                </div>
-                                <div>
-                                    <p class="testimonial-author">Jennifer Williams</p>
-                                    <p class="testimonial-role">Program Manager</p>
-                                </div>
+                                <h4 class="testimonial-heading">Hope Valley Food Pantry</h4>
+                                <blockquote class="testimonial-quote">
+                                    "The client management system has transformed how we serve our community. We can
+                                    now track dietary needs, preferences, and visit history to provide more
+                                    personalized support."
+                                </blockquote>
+                                <div class="testimonial-author">Jennifer Williams</div>
+                                <div class="testimonial-role">Program Manager</div>
                             </article>
                         </div>
-                        
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_large">
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
                             <article class="testimonial-card">
-                                <div class="testimonial-text">
-                                    <h4 class="slds-text-heading_small slds-m-bottom_small">Regional Food Bank Network</h4>
-                                    <blockquote class="slds-text-body_small slds-m-bottom_medium">
-                                        "Food-N-Force's solution connected our 12 partner pantries with real-time inventory sharing. We've reduced food waste by 25% and improved distribution efficiency across the network."
-                                    </blockquote>
-                                </div>
-                                <div>
-                                    <p class="testimonial-author">Robert Thompson</p>
-                                    <p class="testimonial-role">Network Coordinator</p>
-                                </div>
+                                <h4 class="testimonial-heading">Regional Food Bank Network</h4>
+                                <blockquote class="testimonial-quote">
+                                    "Food-N-Force's solution connected our 12 partner pantries with real-time
+                                    inventory sharing. We've reduced food waste by 25% and improved distribution
+                                    efficiency across the network."
+                                </blockquote>
+                                <div class="testimonial-author">Robert Thompson</div>
+                                <div class="testimonial-role">Network Coordinator</div>
                             </article>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Call to Action -->
                 <div class="slds-text-align_center slds-m-top_large">
                     <h3 class="slds-text-heading_medium slds-m-bottom_medium">Ready to Transform Your Impact?</h3>
@@ -225,108 +200,23 @@
                 </div>
             </div>
         </section>
+
     </main>
 
     <!-- Footer -->
-    <footer class="custom-footer" role="contentinfo">
+    <footer class="fnf-footer" role="contentinfo">
         <div class="slds-container_large slds-container_center slds-p-around_large">
             <div class="slds-text-align_center">
-                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. All rights reserved.</p>
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2025 Food-N-Force. All rights reserved.</p>
+            </div>
             </div>
         </div>
     </footer>
 
-    <!-- Phase 1 Consolidated JavaScript -->
-    <script>
-        // ULTRA SIMPLE MOBILE NAVIGATION
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggle = document.querySelector('.mobile-nav-toggle');
-            const navMenu = document.querySelector('.nav-menu');
-            let isOpen = false;
-            
-            if (!toggle || !navMenu) return;
-            
-            // Show desktop navigation
-            if (window.innerWidth > 768) {
-                navMenu.style.display = 'flex';
-            } else {
-                navMenu.style.display = 'none';
-            }
-            
-            // Mobile toggle
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                isOpen = !isOpen;
-                
-                if (isOpen && window.innerWidth <= 768) {
-                    // Create simple dropdown
-                    const dropdown = document.createElement('div');
-                    dropdown.id = 'mobile-dropdown';
-                    dropdown.innerHTML = `
-                        <div style="position: fixed; top: 80px; left: 20px; right: 20px; background: white; border: 2px solid #0176d3; padding: 20px; z-index: 99999; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                            <a href="index.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Home</a>
-                            <a href="services.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Services</a>
-                            <a href="resources.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Resources</a>
-                            <a href="impact.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Impact</a>
-                            <a href="contact.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Contact</a>
-                            <a href="about.html" style="display: block; padding: 12px; color: #333; text-decoration: none;">About Us</a>
-                        </div>
-                    `;
-                    document.body.appendChild(dropdown);
-                } else {
-                    // Remove dropdown
-                    const dropdown = document.getElementById('mobile-dropdown');
-                    if (dropdown) dropdown.remove();
-                }
-            });
-        });
-    </script>
-    <script src="js/mobile-navigation-clean.js"></script>
-    <script src="js/original-mesh-background.js"></script>
-    <script src="js/core/animations.js"></script>
-    <script src="js/unified-scroll.js"></script>
-    
-    <!-- Page load complete - animations handled by unified-navigation-refactored.js -->
-    <script>
-        window.addEventListener('load', () => {
-            document.body.classList.add('loaded');
-            
-            // Force visibility as additional fallback
-            document.body.style.opacity = '1';
-            const main = document.querySelector('main');
-            if (main) {
-                main.style.opacity = '1';
-                main.style.visibility = 'visible';
-            }
-        });
-        
-        // Immediate visibility fix
-        setTimeout(() => {
-            document.body.style.opacity = '1';
-        }, 100);
-        
-        // All animations are now handled by unified-navigation-refactored.js
-        // No duplicate animation code needed here
-    </script>
-    
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Food-N-Force",
-        "description": "Digital solutions for food banks and pantries",
-        "url": "https://foodnforce.com",
-        "logo": "https://foodnforce.com/logo.png",
-        "sameAs": [
-            "https://linkedin.com/company/foodnforce"
-        ],
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+1-555-123-4567",
-            "contactType": "customer service"
-        }
-    }
-    </script>
+    <!-- JavaScript Modules -->
+    <script type="module" src="src/js/main.js"></script>
+
+    <!-- Fallback Particle System for Local File Access -->
+    <script src="src/js/fallback-particles.js"></script>
 </body>
 </html>

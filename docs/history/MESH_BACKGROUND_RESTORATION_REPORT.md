@@ -157,7 +157,7 @@ for (let i = 0; i < 300; i++) {
 
 #### 1. Documentation Updates Required
 - Update `docs/technical/PROJECT_DOCUMENTATION.md` with mesh background module
-- Add to protected files list in `docs/technical/CLAUDE.md`
+- Add to protected files list in `CLAUDE.md` (root technical reference)
 - Update performance budget considerations
 - Document z-index constraint in technical guidelines
 

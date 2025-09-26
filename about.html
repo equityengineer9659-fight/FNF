@@ -3,192 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Learn about Food-N-Force's mission to transform food banks through strategic digital solutions, technology expertise, and data-driven insights.">
-    <meta name="keywords" content="food bank technology, nonprofit innovation, digital transformation experts, food distribution solutions">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="About Food-N-Force - Your Digital Transformation Partner">
-    <meta property="og:description" content="Strategic technology solutions designed specifically for food banks and nonprofit food distribution networks.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://foodnforce.com/about.html">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="About Food-N-Force">
-    
-    <!-- Security Headers - Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    
     <title>About Us - Food-N-Force</title>
-    
-    <!-- Preconnect to external resources -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    
-    <!-- PHASE 2B: Custom SLDS Build (24KB vs 821KB CDN - 97% reduction) -->
-    <link rel="stylesheet" href="css/slds-custom.css">
-    
-    <!-- Orbitron Font is loaded via @import in styles.css -->
-    
-    <!-- Custom CSS - Emergency Rollback: Restored original navigation -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/navigation-unified.css">
-    <link rel="stylesheet" href="css/responsive-enhancements.css">
-    
-    <!-- GLOBAL DARK MODE FORCE - LOADED LAST FOR HIGHEST PRIORITY -->
-    <link rel="stylesheet" href="css/global-dark-mode-force.css">
-    
-    <!-- NUCLEAR OPTION - INLINE ABOUT PAGE TEXT FORCE -->
-    <style>
-        /* NUCLEAR OVERRIDE - Force all text white on about page */
-        body.about-page * {
-            color: #ffffff !important;
-        }
-        
-        /* Company name nuclear override */
-        body.about-page .brand-logo,
-        body.about-page .universal-brand-logo,
-        body.about-page h1 {
-            color: #ffffff !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            text-shadow: none !important;
-        }
-        
-        /* All headings nuclear override */
-        body.about-page h2,
-        body.about-page h3,
-        body.about-page h4,
-        body.about-page .slds-text-heading_large,
-        body.about-page .slds-text-heading_medium {
-            color: #ffffff !important;
-            opacity: 1 !important;
-            text-shadow: none !important;
-        }
-        
-        /* All text nuclear override */
-        body.about-page p,
-        body.about-page span,
-        body.about-page div,
-        body.about-page .slds-text-body_regular {
-            color: #ffffff !important;
-            opacity: 0.9 !important;
-        }
-        
-        /* Remove any background filters causing greyness */
-        body.about-page,
-        body.about-page section,
-        body.about-page main {
-            filter: none !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-        
-        /* Remove any overlays causing transparency */
-        body.about-page *::before,
-        body.about-page *::after {
-            display: none !important;
-        }
-        
-        /* Debug - Make sure page is loaded */
-        body.about-page {
-            background: #0f1419 !important;
-        }
-        
-        /* Remove animation classes that might be causing issues */
-        body.about-page .nav-animate-item,
-        body.about-page .nav-animate-company-name,
-        body.about-page [class*="animate"] {
-            opacity: 1 !important;
-            transform: none !important;
-            animation: none !important;
-        }
-    </style>
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="css/styles.css" as="style">
-    <link rel="preload" href="js/mobile-navigation-clean.js" as="script">
-    
-    <!-- Phase C: Inline styles moved to styles.css for unified card system -->
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Food-N-Force: Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.">
+    <meta name="keywords" content="food bank software, pantry management, food distribution, community outreach, inventory management">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="About Us - Food-N-Force">
+    <meta property="og:description" content="Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.">
+    <meta property="og:type" content="website">
+
+    <!-- Salesforce Lightning Design System CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="src/css/main.css">
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 </head>
-<body class="about-page">
+<body class="fnf-page--about" id="page-top">
     <!-- Skip Navigation for Accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Static HTML Navigation -->
-    <nav class="navbar universal-nav custom-nav" role="banner">
-        <div class="slds-container_fluid">
-            <!-- SLDS Brand Header Pattern: Logo (far left) | Company Name (center) | Mobile Toggle (far right) -->
-            <div class="slds-grid slds-grid_align-spread slds-wrap slds-grid_vertical-align-center slds-p-vertical_small header-layout">
-                <!-- SLDS Brand Logo Container - Far Left -->
-                <div class="slds-col slds-no-flex logo-container">
-                    <div class="slds-brand fnf-logo-wrapper">
-                        <a href="index.html" class="slds-brand__logo-link brand-logo-link" aria-label="Food-N-Force Home" title="Food-N-Force - Modern Solutions for Food Banks">
-                            <div class="fnf-logo" role="img" aria-labelledby="nav-logo-title">
-                                <div class="fnf-inner">
-                                    <span class="fnf-wordmark">F-n-F</span>
-                                </div>
-                            </div>
-                            <span id="nav-logo-title" class="slds-assistive-text">Food-N-Force Logo - Modern Solutions for Food Banks</span>
-                        </a>
-                    </div>
+    <!-- Navigation -->
+    <nav class="fnf-nav" role="navigation" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" aria-hidden="true">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
                 </div>
-                <!-- Company Name Container - Center -->
-                <div class="slds-col slds-no-flex company-name-container-centered">
-                    <h1 class="brand-logo universal-brand-logo">Food-N-Force</h1>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
                 </div>
-                <!-- Mobile Navigation Toggle - Far Right -->
-                <div class="slds-col slds-no-flex mobile-toggle-container">
-                    <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
-                        <span class="hamburger-icon">☰</span>
-                    </button>
-                </div>
-                <!-- Spacer for desktop (maintains balance) -->
-                <div class="slds-col slds-no-flex slds-show slds-hide_small nav-spacer">
-                    <!-- Balances the logo container -->
-                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
             </div>
-            <!-- Navigation Menu - Centered Below Company Name -->
-            <div class="slds-grid slds-grid_align-center slds-p-top_small">
-                <div class="slds-col">
-                    <nav class="slds-text-align_center nav-menu-container" role="navigation" aria-label="Main navigation">
-                        <ul class="nav-menu slds-nav-horizontal universal-nav-menu" id="main-nav">
-                            <li class="slds-nav-horizontal__item">
-                                <a href="index.html" class="nav-link universal-nav-link">Home</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="services.html" class="nav-link universal-nav-link">Services</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="resources.html" class="nav-link universal-nav-link">Resources</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="impact.html" class="nav-link universal-nav-link">Impact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item">
-                                <a href="contact.html" class="nav-link universal-nav-link">Contact</a>
-                            </li>
-                            <li class="slds-nav-horizontal__item slds-is-active">
-                                <a href="about.html" class="nav-link universal-nav-link">About Us</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+
+            <!-- Desktop Navigation Menu -->
+            <ul class="fnf-nav__menu" role="list">
+                <li class="fnf-nav__item">
+                    <a href="index.html" class="fnf-nav__link">Home</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="services.html" class="fnf-nav__link">Services</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="resources.html" class="fnf-nav__link">Resources</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="impact.html" class="fnf-nav__link">Impact</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="contact.html" class="fnf-nav__link">Contact</a>
+                </li>
+                <li class="fnf-nav__item">
+                    <a href="about.html" class="fnf-nav__link" aria-current="page">About Us</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu" role="list">
+                <li><a href="index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="about.html" class="fnf-nav__mobile-link" aria-current="page">About Us</a></li>
+            </ul>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main id="main-content" role="main">
-        <!-- Why Section -->
-        <section class="section-padding slds-p-horizontal_large" aria-labelledby="why-heading">
+<!-- Why Section -->
+        <section class="section-padding slds-p-horizontal_large section-gray our-why-section" aria-labelledby="why-heading">
             <div class="slds-container_large slds-container_center">
                 <div class="slds-text-align_center slds-m-bottom_x-large">
-                    <h2 id="why-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Why</h2>
+                    <h1 id="why-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Why</h1>
                     <p class="slds-text-body_regular">
                         Hunger shouldn't be a technology problem. Yet, many community food organizations are still managing complex logistics and client engagement with limited tools.
                     </p>
@@ -217,56 +132,52 @@
         </section>
 
         <!-- What We Bring Section -->
-        <section class="slds-p-vertical_x-large card-section" aria-labelledby="expertise-heading">
+        <section class="slds-p-vertical_x-large card-section expertise-section" aria-labelledby="expertise-heading">
             <div class="slds-container_large slds-container_center">
                 <h2 id="expertise-heading" class="slds-text-heading_large slds-text-align_center slds-m-bottom_x-large">What We Bring</h2>
                 <div class="slds-grid slds-wrap slds-gutters_large slds-grid_align-center">
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                        <div class="expertise-card">
-                            <span class="card-number">01</span>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                        <article class="expertise-card">
                             <div class="expertise-icon" id="expertise-icon-1">
-                                <span>☁️</span>
+                                ☁️
                             </div>
-                            <h3>Salesforce for Nonprofits Expertise</h3>
-                            <p>Certified in Nonprofit Cloud, with deep knowledge of Program Management Module, Case Management, and Grants Management.</p>
-                        </div>
+                            <div class="expertise-badge">Salesforce for Nonprofits Expertise</div>
+                            <p class="expertise-description">Certified in Nonprofit Cloud, with deep knowledge of Program Management Module, Case Management, and Grants Management.</p>
+                        </article>
                     </div>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                        <div class="expertise-card">
-                            <span class="card-number">02</span>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                        <article class="expertise-card">
                             <div class="expertise-icon" id="expertise-icon-2">
-                                <span>📦</span>
+                                📦
                             </div>
-                            <h3>Deep Understanding of Food Relief Workflows</h3>
-                            <p>From intake to distribution, we know the unique challenges of food banking and design solutions that actually work in the field.</p>
-                        </div>
+                            <div class="expertise-badge">Deep Understanding of Food Relief Workflows</div>
+                            <p class="expertise-description">From intake to distribution, we know the unique challenges of food banking and design solutions that actually work in the field.</p>
+                        </article>
                     </div>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                        <div class="expertise-card">
-                            <span class="card-number">03</span>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                        <article class="expertise-card">
                             <div class="expertise-icon" id="expertise-icon-3">
-                                <span>🤝</span>
+                                🤝
                             </div>
-                            <h3>Human-Centered Technology Consulting</h3>
-                            <p>We start with your team's needs, not the technology. Every solution is designed to be intuitive for staff and volunteers alike.</p>
-                        </div>
+                            <div class="expertise-badge">Human-Centered Technology Consulting</div>
+                            <p class="expertise-description">We start with your team's needs, not the technology. Every solution is designed to be intuitive for staff and volunteers alike.</p>
+                        </article>
                     </div>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                        <div class="expertise-card">
-                            <span class="card-number">04</span>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                        <article class="expertise-card">
                             <div class="expertise-icon" id="expertise-icon-4">
-                                <span>📈</span>
+                                📈
                             </div>
-                            <h3>Solutions Designed to Scale with Your Mission</h3>
-                            <p>Whether you serve 100 families or 100,000, our implementations grow with you, adapting to your changing needs.</p>
-                        </div>
+                            <div class="expertise-badge">Solutions Designed to Scale with Your Mission</div>
+                            <p class="expertise-description">Whether you serve 100 families or 100,000, our implementations grow with you, adapting to your changing needs.</p>
+                        </article>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Vision Section -->
-        <section class="slds-p-vertical_x-large section-gray" aria-labelledby="vision-heading">
+        <section class="slds-p-vertical_x-large section-gray our-vision-section" aria-labelledby="vision-heading">
             <div class="slds-container_large slds-container_center slds-text-align_center">
                 <h2 id="vision-heading" class="slds-text-heading_large slds-m-bottom_medium">Our Vision</h2>
                 <p class="slds-text-body_regular vision-statement">
@@ -276,49 +187,45 @@
         </section>
 
         <!-- Values Section -->
-        <section class="slds-p-vertical_x-large card-section" aria-labelledby="values-heading">
+        <section class="slds-p-vertical_x-large card-section values-section" aria-labelledby="values-heading">
             <div class="slds-container_large slds-container_center">
                 <h2 id="values-heading" class="slds-text-heading_large slds-text-align_center slds-m-bottom_x-large">Our Core Values</h2>
                 <div class="slds-grid slds-wrap slds-gutters_large slds-grid_align-center">
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                        <div class="value-card">
-                            <span class="card-number">01</span>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                        <article class="value-card">
                             <div class="value-icon" id="value-icon-1">
-                                <span>⚖️</span>
+                                ⚖️
                             </div>
-                            <h3>Equity</h3>
-                            <p>Technology should reduce barriers, not create them. We design with accessibility and inclusion at the forefront.</p>
-                        </div>
+                            <div class="value-badge">Equity</div>
+                            <p class="value-description">Technology should reduce barriers, not create them. We design with accessibility and inclusion at the forefront.</p>
+                        </article>
                     </div>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                        <div class="value-card">
-                            <span class="card-number">02</span>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                        <article class="value-card">
                             <div class="value-icon" id="value-icon-2">
-                                <span>⚡</span>
+                                ⚡
                             </div>
-                            <h3>Efficiency</h3>
-                            <p>Every hour saved on admin work is an hour invested in feeding families. We optimize relentlessly.</p>
-                        </div>
+                            <div class="value-badge">Efficiency</div>
+                            <p class="value-description">Every hour saved on admin work is an hour invested in feeding families. We optimize relentlessly.</p>
+                        </article>
                     </div>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                        <div class="value-card">
-                            <span class="card-number">03</span>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                        <article class="value-card">
                             <div class="value-icon" id="value-icon-3">
-                                <span>❤️</span>
+                                ❤️
                             </div>
-                            <h3>Empathy</h3>
-                            <p>We listen first, design second. Your challenges guide our solutions, not the other way around.</p>
-                        </div>
+                            <div class="value-badge">Empathy</div>
+                            <p class="value-description">We listen first, design second. Your challenges guide our solutions, not the other way around.</p>
+                        </article>
                     </div>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                        <div class="value-card">
-                            <span class="card-number">04</span>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                        <article class="value-card">
                             <div class="value-icon" id="value-icon-4">
-                                <span>🚀</span>
+                                🚀
                             </div>
-                            <h3>Innovation</h3>
-                            <p>We bring cutting-edge Salesforce capabilities to the nonprofit sector, making enterprise tools accessible.</p>
-                        </div>
+                            <div class="value-badge">Innovation</div>
+                            <p class="value-description">We bring cutting-edge Salesforce capabilities to the nonprofit sector, making enterprise tools accessible.</p>
+                        </article>
                     </div>
                 </div>
             </div>
@@ -328,8 +235,8 @@
         <section class="slds-p-vertical_x-large section-gray" aria-labelledby="expertise-detail-heading">
             <div class="slds-container_large slds-container_center">
                 <h2 id="expertise-detail-heading" class="slds-text-heading_large slds-text-align_center slds-m-bottom_x-large">Our Expertise</h2>
-                <div class="slds-grid slds-wrap slds-gutters_large">
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                <div class="slds-grid slds-wrap slds-gutters_large fnf-about-stats-grid">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 fnf-about-stat-item">
                         <h3 class="slds-text-heading_medium slds-m-bottom_small">Functional and Solution Consulting</h3>
                         <ul class="expertise-list">
                             <li>End-to-end business process mangement</li>
@@ -338,7 +245,7 @@
                             <li>Grant tracking and reporting</li>
                         </ul>
                     </div>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 fnf-about-stat-item">
                         <h3 class="slds-text-heading_medium slds-m-bottom_small">Data Analytics & Reporting</h3>
                         <ul class="expertise-list">
                             <li>Real-time dashboard creation</li>
@@ -347,7 +254,7 @@
                             <li>Automated funder reporting</li>
                         </ul>
                     </div>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 fnf-about-stat-item">
                         <h3 class="slds-text-heading_medium slds-m-bottom_small">Process Automation</h3>
                         <ul class="expertise-list">
                             <li>Client intake streamlining</li>
@@ -370,15 +277,15 @@
             <div class="slds-container_large slds-container_center">
                 <div class="stats-container">
                     <div class="stat-item">
-                        <span class="stat-number" data-suffix="+">150</span>
+                        <span class="stat-number" data-target="150" data-format="plus">150+</span>
                         <p class="stat-label">Food Pantries Served</p>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number" data-suffix="%">40</span>
+                        <span class="stat-number" data-target="40" data-format="percentage">40%</span>
                         <p class="stat-label">Average Efficiency Increase</p>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number" data-suffix="M+">2</span>
+                        <span class="stat-number" data-target="2" data-format="million">2M+</span>
                         <p class="stat-label">Families Better Served</p>
                     </div>
                 </div>
@@ -387,171 +294,21 @@
     </main>
 
     <!-- Footer -->
-    <footer class="custom-footer" role="contentinfo">
+    <footer class="fnf-footer" role="contentinfo">
         <div class="slds-container_large slds-container_center slds-p-around_large">
             <div class="slds-text-align_center">
-                <p class="slds-text-body_small">&copy; 2025 Food-N-Force. All rights reserved.</p>
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2025 Food-N-Force. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Phase 1 Consolidated JavaScript -->
-    <script>
-        // ULTRA SIMPLE MOBILE NAVIGATION
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggle = document.querySelector('.mobile-nav-toggle');
-            const navMenu = document.querySelector('.nav-menu');
-            let isOpen = false;
-            
-            if (!toggle || !navMenu) return;
-            
-            // Show desktop navigation
-            if (window.innerWidth > 768) {
-                navMenu.style.display = 'flex';
-            } else {
-                navMenu.style.display = 'none';
-            }
-            
-            // Mobile toggle
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                isOpen = !isOpen;
-                
-                if (isOpen && window.innerWidth <= 768) {
-                    // Create simple dropdown
-                    const dropdown = document.createElement('div');
-                    dropdown.id = 'mobile-dropdown';
-                    dropdown.innerHTML = `
-                        <div style="position: fixed; top: 80px; left: 20px; right: 20px; background: white; border: 2px solid #0176d3; padding: 20px; z-index: 99999; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                            <a href="index.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Home</a>
-                            <a href="services.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Services</a>
-                            <a href="resources.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Resources</a>
-                            <a href="impact.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Impact</a>
-                            <a href="contact.html" style="display: block; padding: 12px; color: #333; text-decoration: none; border-bottom: 1px solid #eee;">Contact</a>
-                            <a href="about.html" style="display: block; padding: 12px; color: #333; text-decoration: none;">About Us</a>
-                        </div>
-                    `;
-                    document.body.appendChild(dropdown);
-                } else {
-                    // Remove dropdown
-                    const dropdown = document.getElementById('mobile-dropdown');
-                    if (dropdown) dropdown.remove();
-                }
-            });
-        });
-    </script>
-    <script src="js/mobile-navigation-clean.js"></script>
-    <script src="js/original-mesh-background.js"></script>
-    <script src="js/core/animations.js"></script>
-    <script src="js/unified-scroll.js"></script>
-    
-    <!-- NUCLEAR JAVASCRIPT - Force white text with setProperty -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Force all text to be white - Using setProperty with !important
-            function forceWhiteTextWithSetProperty() {
-                // Company name - Maximum force
-                const brandLogos = document.querySelectorAll('.brand-logo, .universal-brand-logo, h1');
-                brandLogos.forEach(el => {
-                    el.style.setProperty('color', '#ffffff', 'important');
-                    el.style.setProperty('opacity', '1', 'important');
-                    el.style.setProperty('visibility', 'visible', 'important');
-                    el.style.setProperty('text-shadow', 'none', 'important');
-                });
-                
-                // All headings - Maximum force
-                const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6, .slds-text-heading_large, .slds-text-heading_medium');
-                headings.forEach(el => {
-                    el.style.setProperty('color', '#ffffff', 'important');
-                    el.style.setProperty('opacity', '1', 'important');
-                    el.style.setProperty('text-shadow', 'none', 'important');
-                });
-                
-                // All paragraphs and text - Maximum force
-                const textElements = document.querySelectorAll('p, span, div, .slds-text-body_regular, .slds-text-body_small');
-                textElements.forEach(el => {
-                    el.style.setProperty('color', '#ffffff', 'important');
-                    el.style.setProperty('opacity', '1', 'important');
-                });
-                
-                // Remove any filters causing greyness
-                document.body.style.setProperty('filter', 'none', 'important');
-                document.body.style.setProperty('backdrop-filter', 'none', 'important');
-                document.body.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
-                
-                console.log('FORCED WHITE TEXT WITH SETPROPERTY APPLIED');
-            }
-            
-            // Apply immediately
-            forceWhiteTextWithSetProperty();
-            
-            // Apply again after delays to catch any late-loading elements
-            setTimeout(forceWhiteTextWithSetProperty, 500);
-            setTimeout(forceWhiteTextWithSetProperty, 1000);
-            setTimeout(forceWhiteTextWithSetProperty, 2000);
-        });
-        
-        // Also force on window load
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                // Force all text elements to white using setProperty
-                const allTextElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div, li, a, .brand-logo, .universal-brand-logo');
-                allTextElements.forEach(el => {
-                    if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE') {
-                        el.style.setProperty('color', '#ffffff', 'important');
-                        if (el.tagName === 'P' || el.classList.contains('slds-text-body_regular')) {
-                            el.style.setProperty('opacity', '1', 'important');
-                        }
-                    }
-                });
-                console.log('WINDOW LOAD - FORCED ALL TEXT WHITE WITH SETPROPERTY');
-            }, 100);
-        });
-        
-        // CONTINUOUS MONITOR - Keep forcing white text with setProperty every 1 second
-        setInterval(function() {
-            // Company name continuous fix with setProperty
-            const brandLogos = document.querySelectorAll('.brand-logo, .universal-brand-logo, h1');
-            brandLogos.forEach(el => {
-                const computedColor = window.getComputedStyle(el).color;
-                if (computedColor !== 'rgb(255, 255, 255)') {
-                    el.style.setProperty('color', '#ffffff', 'important');
-                    el.style.setProperty('opacity', '1', 'important');
-                    console.log('FIXED BRAND LOGO COLOR WITH SETPROPERTY');
-                }
-            });
-            
-            // Headers continuous fix with setProperty
-            const headers = document.querySelectorAll('h2, h3');
-            headers.forEach(el => {
-                const computedColor = window.getComputedStyle(el).color;
-                if (computedColor !== 'rgb(255, 255, 255)') {
-                    el.style.setProperty('color', '#ffffff', 'important');
-                    el.style.setProperty('opacity', '1', 'important');
-                    console.log('FIXED HEADER COLOR WITH SETPROPERTY');
-                }
-            });
-            
-            // Paragraphs continuous fix with setProperty
-            const paragraphs = document.querySelectorAll('p');
-            paragraphs.forEach(el => {
-                const computedColor = window.getComputedStyle(el).color;
-                if (computedColor !== 'rgb(255, 255, 255)') {
-                    el.style.setProperty('color', '#ffffff', 'important');
-                    el.style.setProperty('opacity', '1', 'important');
-                    console.log('FIXED PARAGRAPH COLOR WITH SETPROPERTY');
-                }
-            });
-        }, 1000);
-    </script>
-    <script src="js/pages/about-page-unified.js"></script>
-    
-    <!-- Page load complete -->
-    <script>
-        window.addEventListener('load', () => {
-            document.body.classList.add('loaded');
-        });
-    </script>
-    <!-- Phase C: Mobile navigation fix moved to navigation-styles.css -->
+    <!-- JavaScript Modules -->
+    <script type="module" src="src/js/main.js"></script>
+
+    <!-- Newsletter Popup Fallback (Non-module version) -->
+    <script src="src/js/newsletter-init.js"></script>
+
+    <!-- Fallback Particle System for Local File Access -->
+    <script src="src/js/fallback-particles.js"></script>
 </body>
 </html>

@@ -1,0 +1,21 @@
+{
+  "totalFiles": 4,
+  "files": [
+    {
+      "href": "http://localhost:8080/css/slds-custom.css",
+      "disabled": false
+    },
+    {
+      "href": "http://localhost:8080/css/styles.css",
+      "disabled": false
+    },
+    {
+      "href": "http://localhost:8080/css/navigation-unified.css",
+      "disabled": false
+    },
+    {
+      "href": "http://localhost:8080/css/responsive-enhancements.css",
+      "disabled": false
+    }
+  ]
+}

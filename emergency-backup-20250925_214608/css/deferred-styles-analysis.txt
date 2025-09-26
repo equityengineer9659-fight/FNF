@@ -1,0 +1,23 @@
+CSS Critical Path Splitting Analysis
+Generated: css-critical-path-splitter.py
+
+CRITICAL CSS (inline candidate):
+- File: critical-above-fold.css
+- Size: 13,096 bytes (12.79 KB)
+- Contains: CSS variables, base styles, navigation, hero section
+
+NON-CRITICAL PATTERNS IDENTIFIED:
+- Mobile media queries: 16 rules
+- Footer styles: 1 rules
+- Animation keyframes: 8 rules
+- Page-specific styles: 97 rules
+
+IMPLEMENTATION RECOMMENDATION:
+1. Inline critical-above-fold.css in HTML <head>
+2. Defer loading of remaining critical-gradients.css
+3. Estimated above-the-fold performance improvement: 17.6% faster initial render
+
+CURRENT BUNDLE IMPACT:
+- Original critical-gradients.css: 72.68 KB
+- Critical path: 12.79 KB (inline)
+- Remaining: 59.89 KB (deferred)
