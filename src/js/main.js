@@ -3,8 +3,9 @@
  * Clean, modular architecture without conflicts
  */
 
-console.log('🎯 MAIN.JS IS LOADING!!!');
-console.log('📧 About to import NewsletterPopup...');
+// Production debug flag - set to false for production builds
+const DEBUG = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const log = DEBUG ? log : () => {};
 
 // Import effects modules
 import SmartScroll from './effects/smart-scroll.js';
@@ -17,15 +18,13 @@ import { initAnimations } from './effects/animations.js';
 import NewsletterPopup from './effects/newsletter-popup.js';
 import { initCounters } from './effects/counters.js';
 
-console.log('📧 Successfully imported NewsletterPopup:', NewsletterPopup);
-
 /**
  * Main Application Class
  * Coordinates all website functionality
  */
 class FNFApp {
   constructor() {
-    console.log('🏗️ FNFApp constructor called!');
+    log('🏗️ FNFApp constructor called!');
     this.particles = null;
     this.animations = null;
     this.counters = null;
@@ -81,7 +80,7 @@ class FNFApp {
         document.body.classList.add('fnf-loaded');
       }, 100);
 
-      console.log('🎉 FNF App initialized successfully');
+      log('🎉 FNF App initialized successfully');
     } catch (error) {
       console.error('❌ Error initializing FNF App:', error);
       this.handleInitializationError(error);
@@ -92,7 +91,7 @@ class FNFApp {
     try {
       this.particles = initParticles();
       if (this.particles) {
-        console.log('✨ Particle system initialized');
+        log('✨ Particle system initialized');
       }
     } catch (error) {
       console.error('❌ Particle system failed to initialize:', error);
@@ -100,20 +99,20 @@ class FNFApp {
   }
 
   initAnimationSystem() {
-    console.log('🎬 Animation system SKIPPED for testing');
+    log('🎬 Animation system SKIPPED for testing');
     // Temporarily disabled
   }
 
   initCounterSystem() {
-    console.log('🔢 Initializing counter system...');
+    log('🔢 Initializing counter system...');
     this.counters = initCounters();
   }
 
   initNewsletterPopup() {
-    console.log('📧 MAIN.JS: Initializing newsletter popup...');
+    log('📧 MAIN.JS: Initializing newsletter popup...');
     try {
       this.newsletterPopup = new NewsletterPopup();
-      console.log('📧 MAIN.JS: Newsletter popup initialized successfully');
+      log('📧 MAIN.JS: Newsletter popup initialized successfully');
     } catch (error) {
       console.error('📧 MAIN.JS: Error initializing newsletter popup:', error);
     }
@@ -126,7 +125,7 @@ class FNFApp {
         scrollThreshold: 100,
         offset: 80
       });
-      console.log('📜 Smart scroll system initialized');
+      log('📜 Smart scroll system initialized');
     } catch (error) {
       console.error('❌ Smart scroll failed to initialize:', error);
     }
@@ -167,7 +166,7 @@ class FNFApp {
     // HAMBURGER FIX: Force hamburger lines to be white
     this.forceHamburgerWhite();
 
-    console.log('🧭 Navigation system initialized');
+    log('🧭 Navigation system initialized');
   }
 
   forceHamburgerWhite() {
@@ -201,7 +200,7 @@ class FNFApp {
       });
     }
 
-    console.log('🍔 Hamburger lines forced to white');
+    log('🍔 Hamburger lines forced to white');
   }
 
   initAccessibility() {
@@ -214,7 +213,7 @@ class FNFApp {
     // ARIA live region for dynamic content
     this.createLiveRegion();
 
-    console.log('♿ Accessibility features initialized');
+    log('♿ Accessibility features initialized');
   }
 
   initFocusManagement() {
@@ -304,7 +303,7 @@ class FNFApp {
                 const stats = this.particles.getStats();
                 if (stats.particleCount > 4) {
                   this.particles.setParticleCount(stats.particleCount - 1);
-                  console.log('🎯 Reduced particle count for performance');
+                  log('🎯 Reduced particle count for performance');
                 }
               }
             }
@@ -319,13 +318,13 @@ class FNFApp {
 
     // Log initialization time
     const initTime = performance.now() - this.performanceStartTime;
-    console.log(`⚡ App initialized in ${initTime.toFixed(2)}ms`);
+    log(`⚡ App initialized in ${initTime.toFixed(2)}ms`);
   }
 
   handleLoad() {
     // Page fully loaded
     const loadTime = performance.now() - this.performanceStartTime;
-    console.log(`🚀 Page loaded in ${loadTime.toFixed(2)}ms`);
+    log(`🚀 Page loaded in ${loadTime.toFixed(2)}ms`);
 
     // Refresh animations to catch any late-loading content
     if (this.animations && this.animations.controller) {
@@ -342,7 +341,7 @@ class FNFApp {
         this.animations.controller.refresh();
       }
 
-      console.log('📐 Viewport resized, systems refreshed');
+      log('📐 Viewport resized, systems refreshed');
     }, 250);
   }
 
@@ -424,14 +423,14 @@ class FNFApp {
     window.removeEventListener('resize', this.handleResize);
     document.removeEventListener('visibilitychange', this.handleVisibilityChange);
 
-    console.log('🧹 FNF App destroyed');
+    log('🧹 FNF App destroyed');
   }
 }
 
 // Initialize the application
-console.log('🎬 About to create FNFApp instance...');
+log('🎬 About to create FNFApp instance...');
 const app = new FNFApp();
-console.log('✅ FNFApp instance created:', app);
+log('✅ FNFApp instance created:', app);
 
 // Signal that modules loaded successfully
 if (typeof window !== 'undefined') {

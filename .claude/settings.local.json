@@ -42,7 +42,8 @@
       "Bash(timeout 5 npm run preview)",
       "Bash(timeout:*)",
       "Bash(git rm:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(for:*)"
     ],
     "deny": [],
     "ask": [],
