@@ -23,7 +23,14 @@
       "Bash(grep:*)",
       "Bash(find:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "mcp__browser__browser_screenshot",
+      "mcp__browser__browser_click",
+      "mcp__browser__browser_close",
+      "Bash(for file in src/css/*.css)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(wc:*)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": [],
