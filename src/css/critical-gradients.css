@@ -10,7 +10,7 @@
 
 .fnf-border-0{border:none !important}
 
-.fnf-nav {background:var(--fnf-nav-gradient) !important;padding:0.5rem 2rem !important;position:relative !important;min-height:var(--nav-height) !important;height:var(--nav-height) !important}
+.fnf-nav {background:var(--fnf-nav-gradient) !important;background-color:rgb(15,30,58) !important;padding:0.5rem 2rem !important;position:relative !important;min-height:var(--nav-height) !important;height:var(--nav-height) !important;z-index:10 !important}
 
 .fnf-nav__container {display:flex !important;flex-direction:column !important;align-items:center !important;max-width:1200px !important;margin:0 auto !important;width:100% !important;padding:0.5rem 0 !important;gap:1rem !important}
 
@@ -265,7 +265,7 @@ to {opacity:1;transform:translateY(0) scale(1)}}
 
 .slds-button_outline-brand:hover,.cta-secondary:hover {background:#00d4ff !important;color:#0f1419 !important}
 
-.fnf-footer,footer {background:var(--fnf-nav-gradient) !important;color:#c9c7c5 !important;border-top:1px solid #2d3748}
+.fnf-footer,footer {background:var(--fnf-primary-dark) !important;background-color:#0f1e3a !important;color:#c9c7c5 !important;border-top:1px solid #2d3748;position:relative !important;z-index:10 !important}
 
 @media (width >=64rem) {.focus-areas .slds-grid,.measurable-growth .slds-grid,.services-section .slds-grid,.resources-section .slds-grid,.impact-section .slds-grid,.contact-section .slds-grid {display:grid !important;grid-template-columns:repeat(3,1fr) !important;gap:var(--slds-spacing-large) !important}
 

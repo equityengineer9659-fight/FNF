@@ -33,7 +33,10 @@
       "Bash(done)",
       "mcp__browser__browser_scroll",
       "Bash(curl:*)",
-      "Bash(npx stylelint:*)"
+      "Bash(npx stylelint:*)",
+      "mcp__playwright__browser_evaluate",
+      "mcp__browser__browser_new_tab",
+      "Bash(cut:*)"
     ],
     "deny": [],
     "ask": [],
