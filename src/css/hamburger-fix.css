@@ -1,15 +1,15 @@
-.hamburger-svg{width:24px !important;height:18px !important;display:block !important}
+.hamburger-svg{width:24px;height:18px;display:block}
 
-.hamburger-svg rect{fill:#fff !important;transition:all .3s ease !important}
+.hamburger-svg rect{fill:#fff;transition:all .3s ease}
 
-.simple-hamburger{display:flex !important;flex-direction:column !important;justify-content:space-between !important;width:20px !important;height:14px !important;margin:0 auto !important}
+.simple-hamburger{display:flex;flex-direction:column;justify-content:space-between;width:20px;height:14px;margin:0 auto}
 
 :root{--hamburger-line-color:#fff}
 
-.hamburger-line{height:2px !important;background:var(--hamburger-line-color) !important;border:none !important;margin:0 !important;padding:0 !important;opacity:1 !important}
+.hamburger-line{height:2px;background:var(--hamburger-line-color);border:none;margin:0;padding:0;opacity:1}
 
-@media (width >=769px){.fnf-nav__toggle{visibility:hidden !important;opacity:0 !important;height:0 !important;width:0 !important;position:absolute !important;left:-9999px !important}}
+@media (width >=769px){.fnf-nav__toggle{visibility:hidden;opacity:0;height:0;width:0;position:absolute;left:-9999px}}
 
-@media (width <=768px){.fnf-nav__toggle{visibility:visible !important;position:static !important;left:auto !important;height:auto !important;width:auto !important}}
+@media (width <=768px){.fnf-nav__toggle{visibility:visible;position:static;left:auto;height:auto;width:auto}}
 
-.fnf-nav__mobile{border:2px solid #fff !important}
+.fnf-nav__mobile{border:2px solid #fff}

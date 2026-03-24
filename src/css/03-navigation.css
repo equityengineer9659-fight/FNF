@@ -1,61 +1,219 @@
-/* Navigation styles consolidated into critical-gradients.css for better performance */
+/* ============================================================
+   03-navigation.css — Consolidated navigation styles
+   Source: merged from critical-gradients.css nav section,
+   03-navigation.css unique rules, and hamburger-fix.css
+   ============================================================ */
 
-/* This file kept minimal to preserve CSS architecture */
+/* --- Hamburger element variables --- */
+:root {
+  --hamburger-line-color: #fff;
+}
 
-.fnf-nav__toggle{display:none;align-items:center;justify-content:center;width:48px;height:48px;background:transparent;border:2px solid var(--nav-white-30);border-radius:var(--slds-border-radius-medium);cursor:pointer;z-index:calc(var(--slds-z-index-overlay) + 1);flex-shrink:0;grid-column:3;justify-self:end;position:relative}
+/* --- Base nav bar --- */
+.fnf-nav {background:var(--fnf-nav-gradient);background-color:rgb(15,30,58);padding:0.5rem 2rem;position:relative;min-height:var(--nav-height);height:var(--nav-height);z-index:10}
 
-.fnf-nav__toggle-input{display:none}
+/* Blue gradient separator line at bottom of nav */
+.fnf-nav::after {content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg, transparent, #00d4ff 20%, #0ea5e9 50%, #00d4ff 80%, transparent);z-index:20}
 
-.fnf-nav__toggle-icon{position:relative;display:block;width:20px;height:2px;background:var(--slds-c-text-inverse);margin:0 auto;transition:var(--transition-medium)}
+/* Reset backgrounds inside nav to prevent interference */
+.fnf-nav *,.fnf-nav *::before,.fnf-nav *::after {background-color:transparent;border-color:transparent;box-shadow:none}
 
-.fnf-nav__toggle-icon::before,.fnf-nav__toggle-icon::after{content:'';position:absolute;width:100%;height:2px;background:var(--slds-c-text-inverse);transition:var(--transition-medium)}
+/* Restore specific elements that need backgrounds */
+.fnf-nav__brand,.fnf-nav__link[aria-current="page"]::after {background-color:revert;border-color:revert;box-shadow:revert}
 
-.fnf-nav__toggle-icon::before{top:-6px}
+/* --- Nav container layout --- */
+.fnf-nav__container {display:flex;flex-direction:column;align-items:center;max-width:1200px;margin:0 auto;width:100%;padding:0.5rem 0;gap:1rem}
 
-.fnf-nav__toggle-icon::after{bottom:-6px}
+.fnf-nav__container > *:first-child {display:flex;align-items:center;justify-content:space-between;width:100%}
 
-.fnf-nav__mobile{position:fixed;top:var(--nav-height);left:0;right:0;background:var(--glass-bg-secondary);backdrop-filter:var(--glass-blur);box-shadow:var(--slds-shadow-large);padding:var(--slds-spacing-medium);opacity:0;visibility:hidden;transform:translateY(-20px);transition:all var(--transition-medium);z-index:var(--slds-z-index-overlay)}
+/* --- Logo --- */
+.fnf-nav__logo {order:1;display:flex;align-items:center;justify-content:center}
 
-.fnf-nav__mobile-menu{display:flex;flex-direction:column;gap:var(--slds-spacing-small);list-style:none;padding:0;margin:0}
+/* --- Brand badge (spinning logo effect) --- */
+.fnf-nav__brand {width:4rem;height:4rem;border-radius:1rem;position:relative;display:grid;place-items:center;background:var(--fnf-brand-gradient);outline:2px solid rgba(255,255,255,0.15);transition:transform .28s ease,filter .28s ease;text-decoration:none;z-index:10;color:transparent;font-size:0;font-family:inherit;font-weight:normal;text-shadow:none}
 
-.fnf-nav__mobile-link{display:block;padding:var(--slds-spacing-medium);color:var(--slds-c-text-inverse);text-decoration:none;font-weight:500;border-radius:var(--slds-border-radius-medium);transition:var(--transition-medium);text-align:center}
+.fnf-nav__brand::before {content:"";position:absolute;inset:-6px;border-radius:1rem;background:conic-gradient(from 180deg,#00d1ff,#66ffe6,#13c2ff,#7bd3ff,#00d1ff);filter:blur(10px);animation:fnf-spin 8s linear infinite;z-index:-1}
 
-.fnf-nav__mobile-link:hover,.fnf-nav__mobile-link:focus{background:var(--nav-white-10);color:var(--fnf-secondary)}
+@keyframes fnf-spin {to {transform:rotate(360deg)}}
 
-.fnf-nav__toggle-input:checked ~ .fnf-nav__mobile{opacity:1;visibility:visible;transform:translateY(0)}
+.fnf-nav__brand:hover {transform:translateY(-2px) scale(1.02);filter:drop-shadow(0 6px 24px rgba(16,179,255,0.35));color:transparent;text-shadow:none}
 
-.fnf-nav__toggle-input:checked ~ .fnf-nav__toggle .fnf-nav__toggle-icon{background:transparent}
+.fnf-nav__brand::after {content:"F-n-F";position:absolute;width:3rem;height:3rem;border-radius:0.75rem;display:grid;place-items:center;background:rgba(1,31,63,0.55);box-shadow:inset 0 0 15px rgba(0,0,0,0.35),0 0 0 1px rgba(255,255,255,0.12);backdrop-filter:blur(8px) saturate(120%);font-family:Orbitron,'Salesforce Sans',Arial,sans-serif;font-weight:700;letter-spacing:0.06em;font-size:0.8rem;line-height:1;color:var(--fnf-color-white);text-shadow:0.5px 0.5px 0 rgba(255,255,255,0.15),2px 2px 6px rgba(0,0,0,0.7);z-index:1}
 
-.fnf-nav__toggle-input:checked ~ .fnf-nav__toggle .fnf-nav__toggle-icon::before{transform:rotate(45deg);top:0}
+/* --- Site title --- */
+.fnf-nav__title {position:absolute;left:50%;transform:translateX(-50%);order:2;color:var(--fnf-color-white);font-family:var(--slds-font-family-heading);font-size:40px;font-weight:700;letter-spacing:1px;text-align:center;margin:0;z-index:5}
 
-.fnf-nav__toggle-input:checked ~ .fnf-nav__toggle .fnf-nav__toggle-icon::after{transform:rotate(-45deg);bottom:0}
+/* --- Desktop menu --- */
+.fnf-nav__menu {position:absolute;bottom:0;left:50%;transform:translateX(-50%);display:flex;flex-flow:row nowrap;align-items:center;justify-content:center;width:auto;z-index:10;order:2;list-style:none;box-shadow:none;white-space:nowrap}
 
-@media (width <=1200px) and (width >=769px){.fnf-nav__menu{gap:var(--slds-spacing-medium) !important}
+.fnf-nav__item {display:inline-block;margin:0 1.5rem;background:transparent;border:none;padding:0}
 
-.fnf-nav__link{padding:var(--slds-spacing-small) var(--slds-spacing-small) !important;font-size:.9rem !important}}
+.fnf-nav__link {color:var(--fnf-color-white);text-decoration:none;font-size:1rem;font-weight:500;padding:0.5rem 1rem;position:relative;transition:color 0.3s ease;white-space:nowrap}
 
-@media (width <=1000px) and (width >=769px){.fnf-nav__menu{gap:var(--slds-spacing-small) !important}
+.fnf-nav__link:hover {color:#00d4ff}
 
-.fnf-nav__link{padding:var(--slds-spacing-x-small) var(--slds-spacing-small) !important}}
+.fnf-nav__link[aria-current="page"] {color:#00d4ff;position:relative}
 
-@media (width <=768px){.fnf-nav__menu{display:none !important}
+.fnf-nav__link[aria-current="page"]::after {content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;background:#00d4ff;border-radius:2px;box-shadow:0 0 8px rgba(0,212,255,0.6)}
 
-.fnf-nav::after{display:none !important}
+/* --- Mobile toggle (hidden by default on desktop) --- */
+.fnf-nav__toggle {
+  order: 3;
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color-scheme: light;
+  display: none;
+}
 
-.fnf-nav__toggle{display:flex !important;align-items:center;justify-content:center;grid-column:3 !important;justify-self:end !important;position:relative !important}
+.fnf-nav__toggle-input {display:none}
 
-.fnf-nav__title{font-size:var(--slds-font-size-4)}
+.fnf-nav__toggle:focus {outline:2px solid var(--fnf-secondary);outline-offset:2px}
 
-.fnf-nav__brand{font-size:var(--slds-font-size-5)}}
+/* --- Hamburger icon lines --- */
+.fnf-nav__toggle-icon {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  position: relative;
+  transition: all 0.3s ease;
+}
 
-@media (width <=480px){.fnf-nav__container{padding:0 var(--slds-spacing-small)}
+.fnf-nav__toggle-icon::before,
+.fnf-nav__toggle-icon::after {
+  content: '';
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  position: absolute;
+  left: 0;
+  transition: all 0.3s ease;
+}
 
-.fnf-nav__title{font-size:var(--slds-font-size-3)}
+.fnf-nav__toggle-icon::before {top:-8px}
+.fnf-nav__toggle-icon::after {bottom:-8px}
 
-.fnf-nav__brand{font-size:var(--slds-font-size-4)}}
+/* Hamburger SVG alternative (from hamburger-fix) */
+.hamburger-svg {width:24px;height:18px;display:block}
+.hamburger-svg rect {fill:#fff;transition:all .3s ease}
+.simple-hamburger {display:flex;flex-direction:column;justify-content:space-between;width:20px;height:14px;margin:0 auto}
+.hamburger-line {height:2px;background:var(--hamburger-line-color);border:none;margin:0;padding:0;opacity:1}
 
-.fnf-nav__toggle:focus{outline:2px solid var(--fnf-secondary);outline-offset:2px}
+/* --- Checked state: hamburger → X animation --- */
+.fnf-nav__toggle-input:checked ~ .fnf-nav__mobile {
+  display: block;
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
 
-@media (prefers-reduced-motion:reduce){.fnf-nav{animation:none}
+.fnf-nav__toggle-input:checked ~ .fnf-nav__toggle .fnf-nav__toggle-icon {background:transparent}
+.fnf-nav__toggle-input:checked ~ .fnf-nav__toggle .fnf-nav__toggle-icon::before {transform:rotate(45deg);top:0}
+.fnf-nav__toggle-input:checked ~ .fnf-nav__toggle .fnf-nav__toggle-icon::after {transform:rotate(-45deg);bottom:0}
 
-.fnf-nav__link,.fnf-nav__mobile-link,.fnf-nav__toggle-icon,.fnf-nav__toggle-icon::before,.fnf-nav__toggle-icon::after,.fnf-nav__mobile{transition:none}}
+/* --- Mobile menu panel (hidden by default) --- */
+.fnf-nav__mobile {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--fnf-nav-gradient);
+  border: 2px solid #fff;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.fnf-nav__mobile-menu {list-style:none;margin:0;padding:1rem}
+.fnf-nav__mobile-menu li {margin-bottom:0.5rem}
+.fnf-nav__mobile-link {color:#fff;text-decoration:none;font-size:1.1rem;font-weight:500;padding:0.75rem 1rem;display:block;border-radius:6px;transition:all 0.3s ease}
+.fnf-nav__mobile-link:hover,.fnf-nav__mobile-link[aria-current="page"] {background:rgba(0,212,255,0.2);color:#00d4ff}
+
+/* ============================================================
+   Responsive breakpoints
+   ============================================================ */
+
+/* Desktop: toggle hidden, menu visible */
+@media (width >= 769px) {
+  .fnf-nav__toggle {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    position: absolute;
+    left: -9999px;
+  }
+
+  .fnf-nav__menu {
+    display: flex;
+  }
+
+  .fnf-nav__mobile {
+    display: none;
+  }
+}
+
+/* Tablet: tighter menu spacing */
+@media (width <= 1200px) and (width >= 769px) {
+  .fnf-nav__menu {gap:var(--slds-spacing-medium)}
+  .fnf-nav__link {padding:var(--slds-spacing-small) var(--slds-spacing-small);font-size:.9rem}
+}
+
+@media (width <= 1000px) and (width >= 769px) {
+  .fnf-nav__menu {gap:var(--slds-spacing-small)}
+  .fnf-nav__link {padding:var(--slds-spacing-x-small) var(--slds-spacing-small)}
+}
+
+/* Mobile: show toggle, hide desktop menu */
+@media (width <= 768px) {
+  .fnf-nav__menu {display:none;visibility:hidden;opacity:0}
+  .fnf-nav .fnf-nav__menu,.fnf-nav__container .fnf-nav__menu,nav .fnf-nav__menu {display:none;visibility:hidden;opacity:0}
+
+  .fnf-nav::after {display:none}
+
+  .fnf-nav__container {display:flex;justify-content:space-between;align-items:center;gap:1rem}
+  .fnf-nav__logo {justify-self:auto}
+  .fnf-nav__title {justify-self:auto;font-family:var(--slds-font-family-heading);font-size:28px;text-align:left;flex:1}
+
+  .fnf-nav__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    z-index: 10;
+    visibility: visible;
+    position: static;
+    left: auto;
+  }
+
+  .fnf-nav__brand {font-size:var(--slds-font-size-5)}
+}
+
+/* Small mobile */
+@media (width <= 480px) {
+  .fnf-nav__container {padding:0 var(--slds-spacing-small)}
+  .fnf-nav__title {font-size:var(--slds-font-size-3)}
+  .fnf-nav__brand {font-size:var(--slds-font-size-4)}
+}
+
+/* Accessibility: reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fnf-nav {animation:none}
+  .fnf-nav__brand::before {animation:none}
+  .fnf-nav__link,
+  .fnf-nav__mobile-link,
+  .fnf-nav__toggle-icon,
+  .fnf-nav__toggle-icon::before,
+  .fnf-nav__toggle-icon::after,
+  .fnf-nav__mobile {transition:none}
+}
