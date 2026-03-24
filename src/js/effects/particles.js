@@ -259,14 +259,13 @@ class ParticleSystem {
   }
 
   destroy() {
+    clearTimeout(this.resizeTimeout);
     this.stop();
 
-    // Remove event listeners
     window.removeEventListener('resize', this.handleResize);
     document.removeEventListener('visibilitychange', this.handleVisibilityChange);
     window.removeEventListener('mousemove', this.handleMouseMove);
 
-    // Remove canvas
     if (this.canvas && this.canvas.parentNode) {
       this.canvas.parentNode.removeChild(this.canvas);
     }
@@ -274,11 +273,6 @@ class ParticleSystem {
     this.particles = [];
     this.canvas = null;
     this.ctx = null;
-
-    // Clear timeouts
-    if (this.resizeTimeout) {
-      clearTimeout(this.resizeTimeout);
-    }
   }
 
   // Public API methods

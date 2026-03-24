@@ -45,29 +45,32 @@ class SmartScroll {
   }
 
   setupEventListeners() {
-    // Throttled scroll handler
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-      if (scrollTimeout) return;
+    this.abortController = new AbortController();
+    const signal = this.abortController.signal;
 
-      scrollTimeout = setTimeout(() => {
+    // Throttled scroll handler
+    this.scrollTimeout = null;
+    window.addEventListener('scroll', () => {
+      if (this.scrollTimeout) return;
+
+      this.scrollTimeout = setTimeout(() => {
         this.handleScroll();
-        scrollTimeout = null;
+        this.scrollTimeout = null;
       }, 16); // ~60fps
-    }, { passive: true });
+    }, { passive: true, signal });
 
     // Navigation link click handlers
     this.navLinks.forEach(link => {
       const href = link.getAttribute('href');
       if (href && href.startsWith('#')) {
-        link.addEventListener('click', (e) => this.handleNavClick(e, href));
+        link.addEventListener('click', (e) => this.handleNavClick(e, href), { signal });
       }
     });
 
     // Handle resize
     window.addEventListener('resize', () => {
       this.updateSectionPositions();
-    });
+    }, { signal });
   }
 
   handleScroll() {
@@ -363,6 +366,10 @@ class SmartScroll {
   }
 
   destroy() {
+    if (this.abortController) {
+      this.abortController.abort();
+    }
+    clearTimeout(this.scrollTimeout);
     if (this.scrollToTopButton && this.scrollToTopButton.parentNode) {
       this.scrollToTopButton.parentNode.removeChild(this.scrollToTopButton);
     }

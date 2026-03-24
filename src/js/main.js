@@ -465,7 +465,8 @@ class FNFApp {
   }
 
   destroy() {
-    // Clean up resources
+    clearTimeout(this.resizeTimeout);
+
     if (this.particles) {
       this.particles.destroy();
     }
@@ -473,9 +474,7 @@ class FNFApp {
       this.smartScroll.destroy();
     }
 
-    // Remove all event listeners registered with the abort signal
     this.abortController.abort();
-
     log('🧹 FNF App destroyed');
   }
 }
