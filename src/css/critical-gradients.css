@@ -18,7 +18,7 @@
 
 .fnf-page--index .impact-numbers-dark .stat-card {text-align:center;padding:1rem}
 
-.fnf-page--index .impact-numbers-dark .stat-number {display:block;font-size:3.5rem;font-weight:700;color:#00d4ff;line-height:1.1;margin-bottom:0.5rem;text-shadow:0 2px 10px rgba(0,212,255,0.3)}
+.fnf-page--index .impact-numbers-dark .stat-number {display:block;font-size:3.5rem;font-weight:700;color:var(--fnf-secondary);line-height:1.1;margin-bottom:0.5rem;text-shadow:0 2px 10px rgba(0,212,255,0.3)}
 
 .fnf-page--index .impact-numbers-dark .stat-label {display:block;font-size:1rem;color:#fff;font-weight:400;margin:0;line-height:1.4}
 
@@ -75,9 +75,9 @@ to {opacity:1;transform:translateY(0) scale(1)}}
 
 .slds-button_brand:hover,.cta-primary:hover {transform:translateY(-2px);box-shadow:0 4px 15px rgba(1,118,211,0.3)}
 
-.slds-button_outline-brand,.cta-secondary {background:transparent;color:#00d4ff;border:2px solid #00d4ff}
+.slds-button_outline-brand,.cta-secondary {background:transparent;color:var(--fnf-secondary);border:2px solid var(--fnf-secondary)}
 
-.slds-button_outline-brand:hover,.cta-secondary:hover {background:#00d4ff;color:#0f1419}
+.slds-button_outline-brand:hover,.cta-secondary:hover {background:var(--fnf-secondary);color:#0f1419}
 
 /* Footer styles moved to 07-components.css */
 
@@ -118,7 +118,7 @@ section[aria-labelledby="expertise-detail-heading"] ul.expertise-list {list-styl
 
 section[aria-labelledby="expertise-detail-heading"] ul.expertise-list li {color:#ccc;margin-bottom:0.75rem;padding-left:1.5rem;position:relative;line-height:1.5;text-align:left;font-size:0.95rem}
 
-section[aria-labelledby="expertise-detail-heading"] ul.expertise-list li::before {content:"✓";position:absolute;left:0;top:0;color:#00d4ff;font-weight:bold;font-size:0.9rem}
+section[aria-labelledby="expertise-detail-heading"] ul.expertise-list li::before {content:"✓";position:absolute;left:0;top:0;color:var(--fnf-secondary);font-weight:bold;font-size:0.9rem}
 
 .expertise-section,.values-section {display:block;visibility:visible;opacity:1;background:transparent}
 
@@ -161,7 +161,7 @@ body.fnf-page--about section p.slds-text-body_regular,body.fnf-page--about secti
 
 .fnf-page--about .about-stats .stat-item {text-align:center;flex:1;min-width:200px}
 
-.fnf-page--about .about-stats .stat-number {display:block;font-size:4rem;font-weight:700;color:#00d4ff;line-height:1.1;margin-bottom:0.5rem;text-shadow:0 2px 10px rgba(0,212,255,0.3)}
+.fnf-page--about .about-stats .stat-number {display:block;font-size:4rem;font-weight:700;color:var(--fnf-secondary);line-height:1.1;margin-bottom:0.5rem;text-shadow:0 2px 10px rgba(0,212,255,0.3)}
 
 .fnf-page--about .about-stats .stat-label {font-size:1.1rem;color:#fff;font-weight:400;margin:0;line-height:1.4}
 
@@ -187,7 +187,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--contact .contact-form-container,.fnf-page--contact .contact-info-container {background:#4a5568;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:var(--fnf-spacing-xl);margin-bottom:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.3);height:auto}
 
-.fnf-page--contact .contact-form-container h3 {color:#00d4ff;font-size:24px;margin-bottom:var(--fnf-spacing-lg);text-align:left}
+.fnf-page--contact .contact-form-container h3 {color:var(--fnf-secondary);font-size:24px;margin-bottom:var(--fnf-spacing-lg);text-align:left}
 
 .fnf-page--contact .contact-form label {color:#fbbf24;font-weight:500;margin-bottom:0.5rem;display:block}
 
@@ -201,7 +201,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--contact .submit-button:hover {background:linear-gradient(135deg,#0189ef 0%,#33ddff 100%);top:2px;box-shadow:0 4px 0 #015395,0 6px 10px rgba(0,0,0,0.4)}
 
-.fnf-page--contact .contact-info-container h3 {color:#00d4ff;font-size:24px;margin-bottom:var(--fnf-spacing-lg);text-align:left}
+.fnf-page--contact .contact-info-container h3 {color:var(--fnf-secondary);font-size:24px;margin-bottom:var(--fnf-spacing-lg);text-align:left}
 
 .fnf-page--contact .contact-info-item {margin-bottom:var(--fnf-spacing-lg)}
 
@@ -228,7 +228,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--impact .stat-item {text-align:center;flex:1;min-width:200px}
 
-.fnf-page--impact .stat-number {display:block;font-size:4rem;font-weight:700;color:#00d4ff;line-height:1.1;margin-bottom:0.5rem;text-shadow:0 2px 10px rgba(0,212,255,0.3)}
+.fnf-page--impact .stat-number {display:block;font-size:4rem;font-weight:700;color:var(--fnf-secondary);line-height:1.1;margin-bottom:0.5rem;text-shadow:0 2px 10px rgba(0,212,255,0.3)}
 
 .fnf-page--impact .stat-label {font-size:1rem;color:#fff;font-weight:400;margin:0;line-height:1.4}
 
@@ -244,7 +244,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--impact .testimonial-card:hover {transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
 
-.fnf-page--impact .testimonial-card h4 {color:#00d4ff;font-size:1.2rem;font-weight:600;margin-bottom:1rem;text-align:center}
+.fnf-page--impact .testimonial-card h4 {color:var(--fnf-secondary);font-size:1.2rem;font-weight:600;margin-bottom:1rem;text-align:center}
 
 .fnf-page--impact .testimonial-card blockquote {color:#fff;font-size:0.95rem;line-height:1.6;font-style:italic;margin-bottom:1.5rem;text-align:left;flex-grow:1}
 
@@ -265,13 +265,13 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .featured-card:hover {transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
 
-.featured-card-title {color:#fff;font-size:1.5rem;font-weight:600;margin-bottom:1.5rem;text-align:center;padding-bottom:0.5rem;border-bottom:2px solid #0176d3}
+.featured-card-title {color:#fff;font-size:1.5rem;font-weight:600;margin-bottom:1.5rem;text-align:center;padding-bottom:0.5rem;border-bottom:2px solid var(--fnf-primary)}
 
 .featured-item {padding:1rem 0;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:flex-start}
 
 .featured-item:last-child {border-bottom:none}
 
-.featured-item-title {color:#0176d3;font-size:1rem;font-weight:500;margin:0;flex:1;line-height:1.4}
+.featured-item-title {color:var(--fnf-primary);font-size:1rem;font-weight:500;margin:0;flex:1;line-height:1.4}
 
 .featured-item-date {color:rgba(255,255,255,0.7);font-size:0.875rem;margin-left:1rem;white-space:nowrap}
 
@@ -391,7 +391,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--resources .resource-card:hover .resource-description {transform:rotateX(-3deg) rotateY(1deg) translateZ(5px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1) 0.2s;text-shadow:0 2px 4px rgba(0,0,0,0.15)}
 
-.fnf-page--resources .resource-action {background:transparent;color:#0176d3;border:2px solid #0176d3;border-radius:6px;padding:0.5rem 1.5rem;font-size:0.9rem;font-weight:600;text-decoration:none;transition:all 0.3s ease;display:inline-block}
+.fnf-page--resources .resource-action {background:transparent;color:var(--fnf-primary);border:2px solid var(--fnf-primary);border-radius:6px;padding:0.5rem 1.5rem;font-size:0.9rem;font-weight:600;text-decoration:none;transition:all 0.3s ease;display:inline-block}
 
 .fnf-page--resources .resource-action:hover {background:var(--fnf-h2-underline-gradient);color:#fff;transform:translateY(-2px);box-shadow:0 4px 15px rgba(1,118,211,0.3)}
 
@@ -518,15 +518,15 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
 
 .fnf-nav--hidden {transform:translateY(-100%)}
 
-.fnf-nav__link--active {color:#00d4ff;background:rgba(255,255,255,0.1)}
+.fnf-nav__link--active {color:var(--fnf-secondary);background:rgba(255,255,255,0.1)}
 
-.fnf-nav__link--active::after {content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;background:#00d4ff;border-radius:2px;box-shadow:0 0 8px rgba(0,212,255,0.6)}
+.fnf-nav__link--active::after {content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;background:var(--fnf-secondary);border-radius:2px;box-shadow:0 0 8px rgba(0,212,255,0.6)}
 
 .fnf-scroll-to-top {position:fixed;bottom:2rem;right:2rem;width:3rem;height:3rem;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:rgba(1,118,211,0.9);color:#fff;font-size:1.2rem;cursor:pointer;z-index:1000;opacity:0;visibility:hidden;transform:translateY(20px);transition:all 0.3s ease;backdrop-filter:blur(10px)}
 
 .fnf-scroll-to-top:hover {background:rgba(1,118,211,1);transform:translateY(0) scale(1.1)}
 
-.fnf-scroll-to-top:focus {outline:2px solid #00d4ff;outline-offset:2px}
+.fnf-scroll-to-top:focus {outline:2px solid var(--fnf-secondary);outline-offset:2px}
 
 .fnf-page--contact {background:#0a0a0a;min-height:100vh}
 
@@ -542,9 +542,9 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
 
 .fnf-page--contact .contact-info-container {background:#4a5568;backdrop-filter:blur(12px);border:2px solid rgba(255,255,255,0.3);border-radius:8px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
 
-.fnf-page--contact .contact-form-container h3 {color:#00d4ff;font-size:1.5rem;font-weight:600;margin-bottom:2rem}
+.fnf-page--contact .contact-form-container h3 {color:var(--fnf-secondary);font-size:1.5rem;font-weight:600;margin-bottom:2rem}
 
-.fnf-page--contact .contact-info-container h3 {color:#00d4ff;font-size:1.5rem;font-weight:600;margin-bottom:2rem}
+.fnf-page--contact .contact-info-container h3 {color:var(--fnf-secondary);font-size:1.5rem;font-weight:600;margin-bottom:2rem}
 
 .fnf-page--contact .contact-info-item h4 {color:#fbbf24;font-size:1.1rem;font-weight:600;margin-bottom:0.5rem}
 
@@ -795,7 +795,7 @@ h3::after,.index-page h3::after,.fnf-page--index h3::after,body.index-page h3::a
 
   section[aria-labelledby="expertise-detail-heading"] h3.slds-text-heading_medium.slds-m-bottom_small::after {
     content: "\25BC";
-    color: #00d4ff;
+    color: var(--fnf-secondary);
     font-size: 1.5rem;
     font-weight: bold;
     transition: transform 0.3s ease;
@@ -851,7 +851,7 @@ h3::after,.index-page h3::after,.fnf-page--index h3::after,body.index-page h3::a
   }
 
   section[aria-labelledby="expertise-detail-heading"] .slds-text-align_center.slds-m-top_x-large h3 {
-    color: #00d4ff;
+    color: var(--fnf-secondary);
     font-size: 1.3rem;
     margin-bottom: 1rem;
     background: none;
