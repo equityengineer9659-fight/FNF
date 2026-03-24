@@ -23,11 +23,11 @@
 .fnf-page--index .impact-numbers-dark .stat-label {display:block;font-size:1rem;color:#fff;font-weight:400;margin:0;line-height:1.4}
 
 
-@media (width >=48rem) and (width <=64rem) {.fnf-page--index .impact-numbers-dark .slds-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:var(--slds-spacing-x-large)}
+@media (width >= 48rem) and (width <= 64rem) {.fnf-page--index .impact-numbers-dark .slds-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:var(--slds-spacing-x-large)}
 
 .fnf-page--index .impact-numbers-dark .slds-col {width:auto;flex:none}}
 
-@media (width <=48rem) {.fnf-page--index .impact-numbers-dark .slds-grid {display:flex;flex-direction:column;gap:var(--slds-spacing-x-large)}
+@media (width <= 48rem) {.fnf-page--index .impact-numbers-dark .slds-grid {display:flex;flex-direction:column;gap:var(--slds-spacing-x-large)}
 
 .fnf-page--index .impact-numbers-dark .slds-col {width:100%}}
 
@@ -82,11 +82,11 @@ to {opacity:1;transform:translateY(0) scale(1)}}
 /* Footer styles moved to 07-components.css */
 
 
-@media (width <=48rem) {.focus-areas .slds-grid,.measurable-growth .slds-grid,.expertise-section .slds-grid,.values-section .slds-grid,.services-section .slds-grid,.resources-section .slds-grid,.impact-section .slds-grid,.contact-section .slds-grid {display:flex;flex-direction:column;gap:var(--slds-spacing-medium)}
+@media (width <= 48rem) {.focus-areas .slds-grid,.measurable-growth .slds-grid,.expertise-section .slds-grid,.values-section .slds-grid,.services-section .slds-grid,.resources-section .slds-grid,.impact-section .slds-grid,.contact-section .slds-grid {display:flex;flex-direction:column;gap:var(--slds-spacing-medium)}
 
 .focus-areas .slds-col,.measurable-growth .slds-col,.expertise-section .slds-col,.values-section .slds-col,.services-section .slds-col,.resources-section .slds-col,.impact-section .slds-col,.contact-section .slds-col {width:100%;margin-bottom:var(--slds-spacing-medium)}}
 
-@media (width >=48rem) and (width <=64rem) {.focus-areas .slds-grid,.measurable-growth .slds-grid,.expertise-section .slds-grid,.values-section .slds-grid,.services-section .slds-grid,.resources-section .slds-grid,.impact-section .slds-grid,.contact-section .slds-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:var(--slds-spacing-medium)}
+@media (width >= 48rem) and (width <= 64rem) {.focus-areas .slds-grid,.measurable-growth .slds-grid,.expertise-section .slds-grid,.values-section .slds-grid,.services-section .slds-grid,.resources-section .slds-grid,.impact-section .slds-grid,.contact-section .slds-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:var(--slds-spacing-medium)}
 
 .focus-areas .slds-col,.measurable-growth .slds-col,.expertise-section .slds-col,.values-section .slds-col,.services-section .slds-col,.resources-section .slds-col,.impact-section .slds-col,.contact-section .slds-col {width:auto;flex:none;align-self:stretch}}
 
@@ -408,7 +408,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 .guidance-cta-button:hover {background:#015395;transform:translateY(-2px);box-shadow:0 4px 15px rgba(1,118,211,0.3)}
 
 /* ===== CONSOLIDATED DESKTOP MEDIA QUERY (>=64rem) ===== */
-@media (width >=64rem) {
+@media (width >= 64rem) {
   /* Index page - Impact numbers section (4-column grid) */
   .fnf-page--index .impact-numbers-dark .slds-grid {
     display: grid;
@@ -496,7 +496,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
   }
 }
 
-@media (width >=48rem) and (width <=64rem) {.featured-content-section .slds-grid {display:grid;grid-template-columns:1fr 1fr;gap:var(--slds-spacing-large)}
+@media (width >= 48rem) and (width <= 64rem) {.featured-content-section .slds-grid {display:grid;grid-template-columns:1fr 1fr;gap:var(--slds-spacing-large)}
 
 .featured-content-section .slds-col {width:auto;flex:none}}
 
@@ -691,7 +691,7 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
   }
 }
 
-@media (width >=769px) and (width <=1024px) {.fnf-page--contact .contact-section .slds-grid {gap:var(--slds-spacing-x-large)}
+@media (width >= 769px) and (width <= 1024px) {.fnf-page--contact .contact-section .slds-grid {gap:var(--slds-spacing-x-large)}
 
 .fnf-page--contact .contact-form-container,.fnf-page--contact .contact-info-container {padding:2rem;background:#4a5568}}
 
@@ -868,7 +868,7 @@ h3::after,.index-page h3::after,.fnf-page--index h3::after,body.index-page h3::a
 }
 
 /* Desktop - ensure accordion classes don't affect 3-column layout */
-@media (width > 768px) {
+@media (width >= 769px) {
   section[aria-labelledby="expertise-detail-heading"] .slds-col.accordion-expanded ul.expertise-list,
   section[aria-labelledby="expertise-detail-heading"] ul.expertise-list {
     max-height: none;

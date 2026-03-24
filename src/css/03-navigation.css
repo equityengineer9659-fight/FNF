@@ -207,7 +207,7 @@
 }
 
 /* Accessibility: reduced motion */
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
   .fnf-nav {animation:none}
   .fnf-nav__brand::before {animation:none}
   .fnf-nav__link,

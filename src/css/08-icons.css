@@ -1,0 +1,404 @@
+/**
+ * Gradient Icon System
+ * Professional icon badges replacing emoji for consistent cross-platform rendering
+ * Provides glassmorphism effects with gradient backgrounds
+ */
+
+:root {
+    --fnf-icon-size-default: 72px;
+}
+
+/* Base gradient icon styling */
+.fnf-icon-gradient {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    min-height: 70px;
+    max-width: 70px;
+    max-height: 70px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0b5cab, #1b96ff);
+    color: var(--fnf-color-white, #fff);
+    font-family: var(--slds-font-family-heading, 'Orbitron', sans-serif);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 14px 32px rgba(1, 118, 211, 0.28);
+    backdrop-filter: blur(6px);
+    overflow: hidden;
+    margin: 0 auto 1rem;
+    transition: transform var(--transition-medium, 0.3s ease),
+        box-shadow var(--transition-medium, 0.3s ease),
+        filter var(--transition-medium, 0.3s ease);
+}
+
+/* Glassmorphism highlight effect */
+.fnf-icon-gradient::before {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), transparent 55%);
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 0;
+    transition: transform var(--transition-medium, 0.3s ease), opacity var(--transition-medium, 0.3s ease);
+}
+
+/* Hover and focus interactions */
+.fnf-icon-gradient:hover,
+.fnf-icon-gradient:focus-visible {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 18px 42px rgba(0, 212, 255, 0.32);
+    filter: saturate(1.1);
+}
+
+.fnf-icon-gradient:hover::before,
+.fnf-icon-gradient:focus-visible::before {
+    transform: translate3d(5%, -5%, 0) scale(1.1);
+    opacity: 1;
+}
+
+.fnf-icon-gradient:focus-visible {
+    outline: 2px solid rgba(0, 212, 255, 0.6);
+    outline-offset: 3px;
+}
+
+/* Glyph text styling */
+.fnf-icon-glyph {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    font-weight: 700;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+    letter-spacing: 0.1em;
+}
+
+/* Color variant gradients */
+.fnf-icon-gradient--cobalt {
+    background: linear-gradient(135deg, #0b5cab, #1b96ff);
+}
+
+.fnf-icon-gradient--amber {
+    background: linear-gradient(135deg, #f6ad55, #f97316);
+}
+
+.fnf-icon-gradient--teal {
+    background: linear-gradient(135deg, #0fb9b1, #2ecc71);
+}
+
+.fnf-icon-gradient--violet {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+}
+
+.fnf-icon-gradient--sunrise {
+    background: linear-gradient(135deg, #ff6b6b, #fddb92);
+}
+
+.fnf-icon-gradient--emerald {
+    background: linear-gradient(135deg, #16a085, #2ecc71);
+}
+
+.fnf-icon-gradient--royal-blue {
+    background: linear-gradient(135deg, #0070d2, #00a1e0);
+}
+
+.fnf-icon-gradient--plum {
+    background: linear-gradient(135deg, #8e44ad, #d291ff);
+}
+
+/* Variant-specific glassmorphism highlights */
+.fnf-icon-gradient--cobalt::before,
+.fnf-icon-gradient--emerald::before,
+.fnf-icon-gradient--plum::before {
+    background: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.35), transparent 60%);
+}
+
+.fnf-icon-gradient--sunrise::before {
+    background: radial-gradient(circle at 30% 35%, rgba(255, 255, 255, 0.45), transparent 55%);
+}
+
+.fnf-icon-gradient--amber::before {
+    background: radial-gradient(circle at 30% 35%, rgba(255, 255, 255, 0.4), transparent 50%);
+}
+
+.fnf-icon-gradient--teal::before {
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.38), transparent 55%);
+}
+
+.fnf-icon-gradient--violet::before {
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.42), transparent 60%);
+}
+
+/* Screen reader only text */
+.fnf-icon-gradient .slds-assistive-text {
+    position: absolute;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Data-icon attribute container styling (fallback for non-gradient icons) */
+[data-icon]:not(.fnf-icon-gradient) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    margin-bottom: var(--slds-spacing-small, 0.75rem);
+    background: none;
+    border: 0;
+    padding: 0;
+}
+
+/* SVG icons inside gradient containers */
+.fnf-icon-gradient svg {
+    width: 42px;
+    height: 42px;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+/* ========================================
+   SVG Icon Color Definitions
+   Base colors for inline SVG icons so they
+   render without external animation CSS.
+   ======================================== */
+
+/* Default strokes/fills for SVG class groups */
+.fnf-icon-gradient .link-glow,
+.fnf-icon-gradient .gear-gradient,
+.fnf-icon-gradient .cursor-trail,
+.fnf-icon-gradient .spark-burst path,
+.fnf-icon-gradient .node-radiant,
+.fnf-icon-gradient .connector-radiant { stroke: #FFD700; fill: none; }
+
+.fnf-icon-gradient .node-pulse,
+.fnf-icon-gradient .connector-draw { stroke: #FFF; fill: #FFD700; }
+
+/* Trophy / Excellence */
+.fnf-icon-gradient .trophy-glow { stroke: #FFD700; fill: #FFD700; fill-opacity: 0.3; }
+
+.fnf-icon-gradient .handle-pulse { stroke: #a29bfe; }
+
+.fnf-icon-gradient .base-solid rect { stroke: #FFF; fill: #FFF; fill-opacity: 0.2; }
+
+.fnf-icon-gradient .trophy-star { fill: #FFF; stroke: none; }
+
+/* Heart / Families */
+.fnf-icon-gradient .heart-pulse { stroke: #ec4899; fill: #ec4899; fill-opacity: 0.2; }
+
+.fnf-icon-gradient .people-fade { fill: #FFF; fill-opacity: 0.8; }
+
+.fnf-icon-gradient .hands-glow { stroke: #FFD700; }
+
+/* Shield / Security */
+.fnf-icon-gradient .box-pulse { stroke: #22d3ee; fill: #22d3ee; fill-opacity: 0.15; }
+
+.fnf-icon-gradient .food-item { fill: #FFD700; fill-opacity: 0.7; }
+
+.fnf-icon-gradient .shield-protect { stroke: #10b981; fill: #10b981; fill-opacity: 0.2; }
+
+.fnf-icon-gradient .check-secure { stroke: #FFF; fill: none; }
+
+/* Blueprint / Strategy */
+.fnf-icon-gradient .blueprint-glow { stroke: #22d3ee; fill: #22d3ee; fill-opacity: 0.1; }
+
+.fnf-icon-gradient .block-stack { stroke: #FFD700; fill: #FFD700; fill-opacity: 0.3; }
+
+.fnf-icon-gradient .plan-lines { stroke: #a29bfe; }
+
+.fnf-icon-gradient .innovation-spark path { fill: #ec4899; }
+
+/* Shelf / Inventory */
+.fnf-icon-gradient .shelf-glow { stroke: #f6ad55; }
+
+.fnf-icon-gradient .inventory-box { stroke: #22d3ee; fill: #22d3ee; fill-opacity: 0.3; }
+
+.fnf-icon-gradient .distribute-arrow { stroke: #10b981; }
+
+.fnf-icon-gradient .people-icon { fill: #a29bfe; fill-opacity: 0.7; }
+
+/* Robot / Automation */
+.fnf-icon-gradient .robot-head { stroke: #22d3ee; fill: #22d3ee; fill-opacity: 0.15; }
+
+.fnf-icon-gradient .robot-eye { fill: #FFD700; fill-opacity: 0.8; }
+
+.fnf-icon-gradient .robot-arm { stroke: #a29bfe; }
+
+.fnf-icon-gradient .task-check { stroke: #10b981; fill: #10b981; fill-opacity: 0.2; }
+
+/* Dashboard / Analytics */
+.fnf-icon-gradient .dashboard-frame { stroke: #22d3ee; fill: #22d3ee; fill-opacity: 0.1; }
+
+.fnf-icon-gradient .bar-chart { fill: #a29bfe; fill-opacity: 0.6; }
+
+.fnf-icon-gradient .line-chart { stroke: #10b981; }
+
+.fnf-icon-gradient .data-point { fill: #FFD700; }
+
+/* Message / Engagement */
+.fnf-icon-gradient .message-bubble { stroke: #22d3ee; fill: #22d3ee; fill-opacity: 0.15; }
+
+.fnf-icon-gradient .email-envelope { stroke: #a29bfe; fill: #a29bfe; fill-opacity: 0.15; }
+
+.fnf-icon-gradient .phone-icon { stroke: #10b981; fill: #10b981; fill-opacity: 0.15; }
+
+.fnf-icon-gradient .notification-dot { fill: #FFD700; fill-opacity: 0.8; }
+
+/* Person / Training */
+.fnf-icon-gradient .person circle,
+.fnf-icon-gradient .person path { stroke: #22d3ee; fill: #22d3ee; fill-opacity: 0.15; }
+
+.fnf-icon-gradient .knowledge-flow { stroke: #a29bfe; fill: #a29bfe; }
+
+.fnf-icon-gradient .skill-badge { stroke: #10b981; fill: #10b981; fill-opacity: 0.2; }
+
+.fnf-icon-gradient .support-hand { stroke: #FFD700; fill: #FFD700; fill-opacity: 0.4; }
+
+/* Megaphone / Blog */
+.fnf-icon-gradient .megaphone path,
+.fnf-icon-gradient .megaphone ellipse { stroke: #FFF; fill: #FFF; fill-opacity: 0.2; }
+
+.fnf-icon-gradient .sound-wave { stroke: #22d3ee; fill: none; }
+
+.fnf-icon-gradient .thought-bubble { stroke: #FFD700; fill: #FFD700; fill-opacity: 0.3; }
+
+.fnf-icon-gradient .leadership-badge circle { stroke: #ec4899; fill: #ec4899; fill-opacity: 0.3; }
+
+/* Roadmap / Guides */
+.fnf-icon-gradient .roadmap-path { stroke: #FFF; fill: none; }
+
+.fnf-icon-gradient .checkpoint { stroke: #FFD700; fill: #FFD700; fill-opacity: 0.3; }
+
+.fnf-icon-gradient .guide-doc rect,
+.fnf-icon-gradient .guide-doc path { stroke: #22d3ee; fill: none; }
+
+.fnf-icon-gradient .direction-arrow path { stroke: #ec4899; fill: none; }
+
+/* Application / Funding */
+.fnf-icon-gradient .application-form rect,
+.fnf-icon-gradient .application-form path { stroke: #FFF; fill: #FFF; fill-opacity: 0.15; }
+
+.fnf-icon-gradient .checkmark { stroke: #22d3ee; }
+
+.fnf-icon-gradient .money-bag ellipse,
+.fnf-icon-gradient .money-bag path { stroke: #FFD700; fill: #FFD700; fill-opacity: 0.3; }
+
+.fnf-icon-gradient .award-ribbon circle,
+.fnf-icon-gradient .award-ribbon path { stroke: #ec4899; fill: #ec4899; fill-opacity: 0.3; }
+
+.fnf-icon-gradient .pen rect,
+.fnf-icon-gradient .pen path { stroke: #22d3ee; fill: none; }
+
+/* Toolbox / Templates */
+.fnf-icon-gradient .toolbox rect,
+.fnf-icon-gradient .toolbox path { stroke: #FFF; fill: #FFF; fill-opacity: 0.15; }
+
+.fnf-icon-gradient .tool rect,
+.fnf-icon-gradient .tool circle,
+.fnf-icon-gradient .tool path { stroke: #22d3ee; fill: none; }
+
+.fnf-icon-gradient .template-doc rect,
+.fnf-icon-gradient .template-doc path { stroke: #FFD700; fill: #FFD700; fill-opacity: 0.15; }
+
+.fnf-icon-gradient .download-arrow path { stroke: #ec4899; fill: none; }
+
+/* Neural Network / AI */
+.fnf-icon-gradient .network-line { stroke: #FFF; fill: none; opacity: 0.5; }
+
+.fnf-icon-gradient .node-layer1 { stroke: #22d3ee; fill: #22d3ee; fill-opacity: 0.4; }
+
+.fnf-icon-gradient .node-layer2 { stroke: #FFD700; fill: #FFD700; fill-opacity: 0.4; }
+
+.fnf-icon-gradient .node-layer3 { stroke: #ec4899; fill: #ec4899; fill-opacity: 0.4; }
+
+/* Book / Case Studies */
+.fnf-icon-gradient .book path { stroke: #FFF; }
+
+.fnf-icon-gradient .success-check { stroke: #22d3ee; }
+
+.fnf-icon-gradient .growth-chart { stroke: #FFD700; }
+
+.fnf-icon-gradient .impact-star { fill: #ec4899; }
+
+/* About page: Salesforce cloud */
+.fnf-icon-gradient .sf-cloud path { stroke: #FFF; fill: #FFF; fill-opacity: 0.2; }
+
+.fnf-icon-gradient .data-flow { stroke: #FFD700; }
+
+.fnf-icon-gradient .connection-node { fill: #22d3ee; }
+
+.fnf-icon-gradient .nonprofit-heart { fill: #ec4899; }
+
+/* About: Shelf / Workflows */
+.fnf-icon-gradient .conveyor-belt { stroke: #22d3ee; }
+
+.fnf-icon-gradient .tracking-dot { fill: #ec4899; }
+
+/* About: Human-centered */
+.fnf-icon-gradient .empathy-heart { fill: #ec4899; }
+
+.fnf-icon-gradient .circuit-pattern { stroke: #22d3ee; }
+
+.fnf-icon-gradient .innovation-bulb { stroke: #FFD700; }
+
+/* About: Scalable */
+.fnf-icon-gradient .building-block { stroke: #22d3ee; fill: #22d3ee; fill-opacity: 0.3; }
+
+.fnf-icon-gradient .scale-arrow { stroke: #FFD700; fill: none; }
+
+.fnf-icon-gradient .foundation rect { stroke: #FFF; fill: #FFF; fill-opacity: 0.2; }
+
+/* About: Equity */
+.fnf-icon-gradient .unity-circle { stroke: #22d3ee; fill: none; }
+
+.fnf-icon-gradient .center-heart { fill: #ec4899; }
+
+.fnf-icon-gradient .person-figure circle { fill: #FFD700; fill-opacity: 0.4; }
+
+.fnf-icon-gradient .person-figure path { stroke: #FFD700; }
+
+/* About: Efficiency */
+.fnf-icon-gradient .lightning-bolt { fill: #FFD700; fill-opacity: 0.8; }
+
+.fnf-icon-gradient .speed-line { stroke: #22d3ee; }
+
+.fnf-icon-gradient .gear circle { fill: #ec4899; fill-opacity: 0.7; }
+
+.fnf-icon-gradient .progress-bar { stroke: #22d3ee; }
+
+/* About: Empathy */
+.fnf-icon-gradient .connection-bridge { stroke: #22d3ee; fill: none; }
+
+.fnf-icon-gradient .shared-heart { fill: #ec4899; }
+
+/* About: Innovation / Rocket */
+.fnf-icon-gradient .rocket-body path,
+.fnf-icon-gradient .rocket-body circle { stroke: #FFD700; fill: #FFD700; fill-opacity: 0.6; }
+
+.fnf-icon-gradient .trail-line { stroke: #22d3ee; }
+
+.fnf-icon-gradient .flame { fill: #ec4899; }
+
+/* Reduced motion support */
+@media (prefers-reduced-motion:reduce) {
+    .fnf-icon-gradient,
+    .fnf-icon-gradient::before {
+        transition: none;
+    }
+
+    .fnf-icon-gradient:hover,
+    .fnf-icon-gradient:focus-visible {
+        transform: none;
+    }
+}
