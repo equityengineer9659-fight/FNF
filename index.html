@@ -8,21 +8,43 @@
     <!-- SEO Meta Tags -->
     <meta name="description" content="Food-N-Force: Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.">
     <meta name="keywords" content="food bank software, pantry management, food distribution, community outreach, inventory management">
+    <meta name="author" content="Food-N-Force">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/">
 
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="Food-N-Force - Modern Solutions to Feed More, Serve Better">
     <meta property="og:description" content="Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Food-N-Force - Modern Solutions to Feed More, Serve Better">
+    <meta name="twitter:description" content="Empowering food banks and pantries with digital tools that increase reach, improve operations, and transform community care.">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2E86AB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <!-- Performance: Preconnect to external domains -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Critical Inline CSS for fastest above-fold rendering -->
-    <style>
-        *,*::before,*::after{box-sizing:border-box}html{font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%;background:#000;color:#fff}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;background:#000;color:#fff;min-height:100vh;overflow-x:hidden}:root{--nav-height:80px;--fnf-color-primary:#2E86AB;--fnf-color-white:#FFFFFF;--slds-font-family-heading:'Orbitron',sans-serif;--slds-c-background-default:#000;--slds-c-text-default:#fff;--fnf-gradient-primary:linear-gradient(135deg,#667eea 0%,#764ba2 100%);--fnf-gradient-hero:linear-gradient(135deg,rgba(102,126,234,0.05) 0%,rgba(118,75,162,0.05) 100%)}.fnf-nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);height:var(--nav-height)}.fnf-nav__container{max-width:1200px;margin:0 auto;padding:0 2rem;height:100%}.fnf-nav__top-row{display:flex;align-items:center;justify-content:space-between;height:100%;position:relative}.fnf-nav__logo{z-index:10}.fnf-nav__brand{color:#fff;text-decoration:none;font-family:var(--slds-font-family-heading);font-size:2rem;font-weight:900}.fnf-nav__title{position:absolute;left:50%;transform:translateX(-50%);font-family:var(--slds-font-family-heading);color:#fff;font-size:1.8rem;font-weight:700}.fnf-nav__toggle-input{display:none}.fnf-nav__menu{display:none}.fnf-nav__mobile{display:none}main{padding-top:var(--nav-height);position:relative;z-index:2}.hero-section{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--fnf-gradient-hero);position:relative;overflow:hidden}.hero-content{text-align:center;max-width:1200px;margin:0 auto;padding:2rem;z-index:10;position:relative}.hero-title{font-family:var(--slds-font-family-heading);font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;margin:0 0 1.5rem;background:var(--fnf-gradient-primary);-webkit-background-clip:text;background-clip:text;color:transparent}.hero-subtitle{font-size:clamp(1.25rem,2vw,1.75rem);margin:0 0 2.5rem;opacity:0.9}.slds-button{display:inline-flex;align-items:center;padding:0.75rem 1.5rem;border-radius:0.5rem;text-decoration:none;font-weight:600;transition:all 0.3s ease;gap:0.5rem}.slds-button_brand{background:var(--fnf-gradient-primary);color:#fff;border:2px solid transparent}.slds-button_outline-brand{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.3)}@media (max-width:768px){.fnf-nav__toggle{display:flex;align-items:center;justify-content:center;width:44px;height:44px;cursor:pointer;z-index:10}.fnf-nav__menu{display:none !important}.fnf-nav__title{font-size:1.4rem}}@media (min-width:769px){.fnf-nav__toggle{display:none}.fnf-nav__menu{display:flex !important;list-style:none;margin:0;padding:0;gap:2rem}.fnf-nav__link{color:#fff;text-decoration:none;font-weight:500;transition:color 0.3s}.fnf-nav__link:hover{color:var(--fnf-color-primary)}}
-    </style>
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="src/css/critical-inline.css">
 
     <!-- Preload Orbitron font for hero text with font-display swap -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -116,17 +138,14 @@
 <!-- Hero Section -->
         <header class="hero-section">
             <div class="hero-content">
-                <h1 class="hero-title hero-fade-in">Modern
-                    Solutions to Feed More, Serve Better</h1>
-                <p class="hero-subtitle hero-fade-in hero-fade-delay-1">Empowering
-                    food banks and pantries with digital tools that increase reach, improve operations, and transform
-                    community care.</p>
+                <h1 class="hero-title hero-fade-in">Transform How You Serve Your Community</h1>
+                <p class="hero-subtitle hero-fade-in hero-fade-delay-1">Strategic technology consulting for food banks and pantries nationwide. We deliver Salesforce and enterprise-grade solutions that streamline operations, strengthen data insights, and expand your capacity to serve more families.</p>
                 <div class="hero-cta-group hero-fade-in hero-fade-delay-2">
-                    <a href="#get-started" class="slds-button slds-button_brand cta-primary">
+                    <a href="contact.html" class="slds-button slds-button_brand cta-primary">
                         <span class="button-text">Start Your Digital Journey</span>
                         <span class="button-icon">→</span>
                     </a>
-                    <a href="#how-it-works" class="slds-button slds-button_outline-brand cta-secondary">
+                    <a href="services.html" class="slds-button slds-button_outline-brand cta-secondary">
                         <span class="button-text">See How We Help</span>
                     </a>
                 </div>
@@ -141,14 +160,10 @@
                 </h2>
                 <div class="slds-text-align_center slds-m-horizontal_x-large">
                     <p class="slds-text-body_regular slds-text-color_weak">
-                        Food-N-Force is a mission-driven consultancy helping food pantries and food banks embrace
-                        technology to better serve their communities. Using the power of Salesforce and other
-                        leading-edge tools, we design and implement solutions that streamline operations, improve client
-                        services, and enhance impact.
+                        Food-N-Force is a technology consulting firm specializing in enterprise solutions for food relief organizations nationwide. With deep expertise in Salesforce and complementary platforms, we deliver strategic implementations that streamline operations, strengthen data insights, and expand your capacity to serve families.
                     </p>
                     <p class="slds-text-body_regular slds-text-color_weak slds-m-top_medium">
-                        Whether you're distributing groceries to 10 families or 5,000, we'll help you operate smarter
-                        and scale sustainably—with a human-centered approach tailored to your unique needs.
+                        From small community pantries to regional food bank networks, our solutions are designed to scale with your mission&mdash;combining enterprise-grade technology with deep understanding of food relief workflows.
                     </p>
                 </div>
             </div>
@@ -158,37 +173,81 @@
         <section class="section-padding focus-areas" aria-labelledby="focus-heading">
             <div class="slds-container_large slds-container_center">
                 <h2 id="focus-heading" class="slds-text-heading_large slds-text-align_center slds-m-bottom_medium">
-                    Our Focus Areas
+                    Our Consulting Focus
                 </h2>
                 <p class="slds-text-body_regular slds-text-color_weak slds-text-align_center slds-m-bottom_x-large">
-                    How we help food pantries and food banks transform their impact through technology
+                    Strategic technology areas where we deliver measurable results for food relief organizations
                 </p>
                 <div class="slds-grid slds-wrap slds-gutters_large slds-grid_align-stretch">
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <div class="focus-area-card">
-                            <div class="focus-area-icon">
-                                <span>💡</span>
+                            <div class="focus-area-icon fnf-icon-gradient fnf-icon-gradient--cobalt" data-icon="focus-innovation" role="img" aria-label="Innovation & Empowerment">
+                                <svg class="svg-icon-innovation" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="innovation-title innovation-desc">
+                                    <title id="innovation-title">Innovation & Empowerment</title>
+                                    <desc id="innovation-desc">Lightbulb representing innovation and bright ideas</desc>
+                                    <circle cx="32" cy="26" r="8" fill="#FFD700" opacity="0.3"/>
+                                    <path d="M32 14 C38.6 14 44 19.4 44 26 C44 30 42 33.5 39 36 L39 42 C39 43.1 38.1 44 37 44 L27 44 C25.9 44 25 43.1 25 42 L25 36 C22 33.5 20 30 20 26 C20 19.4 25.4 14 32 14 Z" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M28 26 L32 22 L32 30 L36 26" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <line x1="27" y1="46" x2="37" y2="46" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+                                    <line x1="27" y1="49" x2="37" y2="49" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+                                </svg>
                             </div>
                             <div class="focus-area-badge">Innovation & Empowerment</div>
-                            <p>Bringing cutting-edge solutions to simplify your mission and impact.</p>
+                            <p>Sparking transformation through proven enterprise platforms tailored to food relief operations.</p>
                         </div>
                     </div>
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <div class="focus-area-card">
-                            <div class="focus-area-icon">
-                                <span>🌐</span>
+                            <div class="focus-area-icon fnf-icon-gradient fnf-icon-gradient--cobalt" data-icon="focus-community" role="img" aria-label="Community Connection">
+                                <svg class="svg-icon-community" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="community-title community-desc">
+                                    <title id="community-title">Community Connection</title>
+                                    <desc id="community-desc">Two interlocking chain links with three connected nodes, symbolizing community and connection.</desc>
+                                    <g class="link-glow" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="16" y="24" width="20" height="12" rx="6" transform="rotate(-45 26 30)"/>
+                                        <rect x="28" y="28" width="20" height="12" rx="6" transform="rotate(45 38 34)"/>
+                                    </g>
+                                    <g stroke-width="2" stroke-linecap="round">
+                                        <circle class="node-pulse" cx="12" cy="18" r="2.5"/>
+                                        <path class="connector-draw" d="M18 24 L12 18"/>
+                                        <circle class="node-pulse" cx="52" cy="18" r="2.5" style="animation-delay: 0.4s"/>
+                                        <path class="connector-draw" d="M46 24 L52 18" style="animation-delay: 0.4s"/>
+                                        <circle class="node-pulse" cx="32" cy="54" r="2.5" style="animation-delay: 0.8s"/>
+                                        <path class="connector-draw" d="M32 44 L32 54" style="animation-delay: 0.8s"/>
+                                    </g>
+                                </svg>
                             </div>
                             <div class="focus-area-badge">Community Connection</div>
-                            <p>Strengthening relationships between organizations, volunteers, and families.</p>
+                            <p>Building connected networks that strengthen relationships between organizations, volunteers, and families.</p>
                         </div>
                     </div>
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <div class="focus-area-card">
-                            <div class="focus-area-icon">
-                                <span>🛡️</span>
+                            <div class="focus-area-icon fnf-icon-gradient fnf-icon-gradient--cobalt" data-icon="focus-tools" role="img" aria-label="Smart Digital Tools">
+                                <svg class="svg-icon-tools" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                                    <title>Smart Digital Tools</title>
+                                    <desc>Gear ring with a cursor pointer and spark, symbolizing modern digital tools.</desc>
+                                    <g class="gear-gradient" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="32" cy="28" r="14"/>
+                                        <path d="M32 12 L32 8"/>
+                                        <path d="M32 44 L32 48"/>
+                                        <path d="M18 28 L14 28"/>
+                                        <path d="M46 28 L50 28"/>
+                                    </g>
+                                    <path class="cursor-trail" d="M29.8 22.5 L37.2 35.6 L34.2 34.7 L32.7 38.9 L29.8 22.5 Z" stroke-width="2.2" stroke-linejoin="round"/>
+                                    <g class="spark-burst" stroke-width="2" stroke-linecap="round" transform-origin="25.5 19.5">
+                                        <path d="M24.5 18.5 L26.5 20.5"/>
+                                        <path d="M26.5 18.5 L24.5 20.5"/>
+                                    </g>
+                                    <g stroke-width="2" stroke-linecap="round">
+                                        <circle class="node-radiant" cx="50" cy="12"/>
+                                        <path class="connector-radiant" d="M45 17 L50 12"/>
+                                        <circle class="node-radiant" cx="14" cy="46" style="animation-delay: 0.5s"/>
+                                        <path class="connector-radiant" d="M18 42 L14 46" style="animation-delay: 0.5s"/>
+                                    </g>
+                                </svg>
                             </div>
                             <div class="focus-area-badge">Smart Digital Tools</div>
-                            <p>Modern technology solutions designed specifically for nonprofit workflows.</p>
+                            <p>Equipping you with enterprise-grade tools architected for food bank and pantry operations.</p>
                         </div>
                     </div>
                 </div>
@@ -207,30 +266,70 @@
                 <div class="slds-grid slds-wrap slds-gutters_large slds-grid_align-stretch">
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <div class="measurable-card">
-                            <div class="measurable-icon">
-                                <span>📊</span>
+                            <div class="measurable-icon fnf-icon-gradient fnf-icon-gradient--cobalt" data-icon="focus-excellence" role="img" aria-label="Nonprofit Excellence">
+                                <svg class="svg-icon-excellence" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                                    <title>Nonprofit Excellence</title>
+                                    <desc>Trophy cup with star, symbolizing achievement and excellence.</desc>
+                                    <path class="trophy-glow" d="M22 14 L22 22 Q22 30 32 32 Q42 30 42 22 L42 14 L22 14 Z" stroke-width="2.6" stroke-linejoin="round"/>
+                                    <g stroke-width="2.4" stroke-linecap="round" fill="none">
+                                        <path class="handle-pulse" d="M22 16 Q16 16 16 22"/>
+                                        <path class="handle-pulse" d="M42 16 Q48 16 48 22"/>
+                                    </g>
+                                    <g class="base-solid" stroke-width="2.4" stroke-linejoin="round">
+                                        <rect x="30" y="32" width="4" height="10" rx="1"/>
+                                        <rect x="24" y="42" width="16" height="4" rx="1"/>
+                                    </g>
+                                    <path class="trophy-star" d="M32 18 L33.5 21 L37 21.5 L34.5 24 L35 27.5 L32 26 L29 27.5 L29.5 24 L27 21.5 L30.5 21 Z"/>
+                                </svg>
                             </div>
                             <div class="measurable-badge">Nonprofit Excellence</div>
-                            <p>Purpose-built solutions that understand the unique needs of food relief organizations.
-                            </p>
+                            <p>Award-worthy strategic implementations informed by deep operational knowledge of food distribution challenges.</p>
                         </div>
                     </div>
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <div class="measurable-card">
-                            <div class="measurable-icon">
-                                <span>❤️</span>
+                            <div class="measurable-icon fnf-icon-gradient fnf-icon-gradient--cobalt" data-icon="focus-families" role="img" aria-label="Families Better Served">
+                                <svg class="svg-icon-families" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                                    <title>Families Better Served</title>
+                                    <desc>Heart with people silhouettes, symbolizing care and service to families.</desc>
+                                    <path class="heart-pulse" d="M32 46 C32 46, 16 34, 16 24 C16 18, 20 14, 24 14 C28 14, 32 18, 32 18 C32 18, 36 14, 40 14 C44 14, 48 18, 48 24 C48 34, 32 46, 32 46 Z" stroke-width="2.6" stroke-linejoin="round"/>
+                                    <g>
+                                        <circle class="people-fade" cx="24" cy="26" r="3"/>
+                                        <path class="people-fade" d="M24 30 C20 30, 19 32, 19 34 L29 34 C29 32, 28 30, 24 30 Z"/>
+                                        <circle class="people-fade" cx="32" cy="24" r="3.5"/>
+                                        <path class="people-fade" d="M32 28.5 C27 28.5, 26 31, 26 33.5 L38 33.5 C38 31, 37 28.5, 32 28.5 Z"/>
+                                        <circle class="people-fade" cx="40" cy="26" r="3"/>
+                                        <path class="people-fade" d="M40 30 C36 30, 35 32, 35 34 L45 34 C45 32, 44 30, 40 30 Z"/>
+                                    </g>
+                                    <g class="hands-glow" stroke-width="2.2" stroke-linecap="round" fill="none">
+                                        <path d="M14 18 L18 22"/>
+                                        <path d="M50 18 L46 22"/>
+                                    </g>
+                                </svg>
                             </div>
                             <div class="measurable-badge">Families Better Served</div>
-                            <p>Technology that helps you serve more families with dignity and efficiency.</p>
+                            <p>Technology with heart that helps you serve more families with dignity and efficiency.</p>
                         </div>
                     </div>
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
                         <div class="measurable-card">
-                            <div class="measurable-icon">
-                                <span>🔒</span>
+                            <div class="measurable-icon fnf-icon-gradient fnf-icon-gradient--cobalt" data-icon="focus-security" role="img" aria-label="Food Security Focus">
+                                <svg class="svg-icon-security" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                                    <title>Food Security Focus</title>
+                                    <desc>Food box with protective shield, symbolizing secure food operations and expertise.</desc>
+                                    <rect class="box-pulse" x="16" y="24" width="20" height="20" rx="2" stroke-width="2.6" stroke-linejoin="round"/>
+                                    <g>
+                                        <circle class="food-item" cx="22" cy="32" r="2.5"/>
+                                        <circle class="food-item" cx="26" cy="30" r="2"/>
+                                        <circle class="food-item" cx="30" cy="34" r="2.5"/>
+                                    </g>
+                                    <path class="box-pulse" d="M16 24 L20 20 L32 20 L36 24" stroke-width="2.2" stroke-linejoin="round" fill="none"/>
+                                    <path class="shield-protect" d="M38 18 C42 18, 46 20, 46 24 L46 28 C46 32, 44 35, 38 38 C32 35, 30 32, 30 28 L30 24 C30 20, 34 18, 38 18 Z" stroke-width="2.4" stroke-linejoin="round"/>
+                                    <path class="check-secure" d="M34 28 L37 31 L42 25" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
                             </div>
                             <div class="measurable-badge">Food Security Focus</div>
-                            <p>Specialized expertise in food pantry and food bank operations and challenges.</p>
+                            <p>Protecting your mission with specialized expertise in food pantry and food bank operations and challenges.</p>
                         </div>
                     </div>
                 </div>
@@ -246,26 +345,26 @@
                 <div class="slds-grid slds-wrap slds-gutters_large">
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
                         <div class="stat-card">
-                            <span class="stat-number" data-target="150" data-format="plus">150+</span>
+                            <span class="stat-number" data-target="15" data-format="plus">15+</span>
                             <span class="stat-label">Food Pantries Served</span>
                         </div>
                     </div>
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
                         <div class="stat-card">
-                            <span class="stat-number" data-target="40" data-format="percentage">40%</span>
+                            <span class="stat-number" data-target="35" data-format="percentage">35%</span>
                             <span class="stat-label">Average Efficiency Increase</span>
                         </div>
                     </div>
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
                         <div class="stat-card">
-                            <span class="stat-number" data-target="2" data-format="million">2M+</span>
+                            <span class="stat-number" data-target="50" data-format="thousand">50K+</span>
                             <span class="stat-label">Families Better Served</span>
                         </div>
                     </div>
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
                         <div class="stat-card">
-                            <span class="stat-number" data-target="95" data-format="percentage">95%</span>
-                            <span class="stat-label">Client Satisfaction Rate</span>
+                            <span class="stat-number" data-target="100" data-format="percentage">100%</span>
+                            <span class="stat-label">Implementation Success Rate</span>
                         </div>
                     </div>
                 </div>
@@ -277,16 +376,13 @@
     <footer class="fnf-footer">
         <div class="slds-container_large slds-container_center slds-p-around_large">
             <div class="slds-text-align_center">
-                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2025 Food-N-Force. All rights reserved.</p>
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript Modules - Deferred for performance -->
     <script type="module" src="src/js/main.js" defer></script>
-
-    <!-- Fallback Particle System for Local File Access -->
-    <script src="src/js/fallback-particles.js" defer></script>
 
     <!-- Fallback Particle System for Local File Access -->
     <script src="src/js/fallback-particles.js" defer></script>
