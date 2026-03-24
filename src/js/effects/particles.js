@@ -45,17 +45,13 @@ class ParticleSystem {
   }
 
   init() {
-    console.log('🌟 Dynamic ParticleSystem.init() called');
-
     // Check for reduced motion preference
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      console.log('🌟 Reduced motion detected, skipping particles');
       return;
     }
 
     // Check if particles should be enabled on this page
     if (!this.shouldShowParticles()) {
-      console.log('🌟 Particles disabled for this page');
       return;
     }
 
@@ -74,10 +70,7 @@ class ParticleSystem {
       'contact.html'
     ];
 
-    const isAllowed = !excludedPages.includes(currentPage);
-    console.log('🎯 Current page:', currentPage, '- Particles allowed:', isAllowed);
-
-    return isAllowed;
+    return !excludedPages.includes(currentPage);
   }
 
   createCanvas() {
@@ -107,7 +100,6 @@ class ParticleSystem {
     this.ctx = this.canvas.getContext('2d');
 
     this.resizeCanvas();
-    console.log('🌟 Created dynamic particle canvas');
   }
 
   resizeCanvas() {
@@ -149,8 +141,6 @@ class ParticleSystem {
       particle.originalX = particle.x;
       particle.originalY = particle.y;
     });
-
-    console.log('🌟 Created', particleCount, 'dynamic particles');
   }
 
   start() {
@@ -347,18 +337,11 @@ export function createParticleSystem(containerId, options = {}) {
 
 // Auto-initialize particles like the reference project
 export function initParticles() {
-  console.log('🎯 initParticles called - Enabling canvas-based network particles');
-
-  // Check for reduced motion preference
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    console.log('🎯 Reduced motion detected, skipping particles');
     return null;
   }
 
-  // Create particle system without needing a pre-existing container
-  const system = new ParticleSystem(null);
-  console.log('🎯 ParticleSystem created:', !!system);
-  return system;
+  return new ParticleSystem(null);
 }
 
 export default ParticleSystem;
