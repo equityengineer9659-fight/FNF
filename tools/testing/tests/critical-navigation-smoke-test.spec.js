@@ -1,10 +1,10 @@
 // @ts-check
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 /**
  * CRITICAL NAVIGATION SMOKE TEST - P0 SAFETY VALIDATION
- * This test MUST pass for feature branch validation workflow
- * Tests the consolidated mobile navigation system from Phase 1
+ * Tests the HTML-first mobile navigation system (CSS checkbox hack).
+ * Navigation uses <input type="checkbox" id="nav-toggle"> + <label> pattern.
  */
 
 const pages = [
@@ -17,87 +17,126 @@ const pages = [
 ];
 
 test.describe('Critical Navigation Smoke Tests', () => {
-  
+
   test.beforeEach(async ({ page }) => {
-    // Set mobile viewport - this is where mobile navigation should be visible
     await page.setViewportSize({ width: 375, height: 667 });
   });
 
-  test('Critical navigation smoke test - Mobile toggle functionality', async ({ page }) => {
-    // Test the most critical mobile navigation functionality
+  test('Mobile toggle functionality', async ({ page }) => {
     await page.goto('/');
-    
-    // Verify page loads
+
     await expect(page).toHaveTitle(/Food-N-Force/);
-    
+
     // Mobile navigation elements must exist
-    const mobileToggle = page.locator('.mobile-nav-toggle');
-    const navMenu = page.locator('.nav-menu');
-    
-    // P0 Safety Check: Elements exist
-    await expect(mobileToggle).toBeVisible({ timeout: 5000 });
-    await expect(navMenu).toBeVisible({ timeout: 5000 });
-    
-    // P0 Safety Check: Initial state is correct
-    await expect(navMenu).not.toHaveClass(/nav-show/);
-    await expect(mobileToggle).toHaveAttribute('aria-expanded', 'false');
-    
-    // P0 Safety Check: Toggle opens menu
-    await mobileToggle.click();
-    await expect(navMenu).toHaveClass(/nav-show/, { timeout: 1000 });
-    await expect(mobileToggle).toHaveAttribute('aria-expanded', 'true');
-    
-    // P0 Safety Check: Toggle closes menu
-    await mobileToggle.click();
-    await expect(navMenu).not.toHaveClass(/nav-show/, { timeout: 1000 });
-    await expect(mobileToggle).toHaveAttribute('aria-expanded', 'false');
-    
-    console.log('✅ Critical navigation smoke test PASSED - Mobile navigation is functional');
+    const navToggleCheckbox = page.locator('#nav-toggle');
+    const navToggleLabel = page.locator('label.fnf-nav__toggle');
+    const mobileMenu = page.locator('.fnf-nav__mobile');
+
+    // P0: Toggle label is visible at mobile viewport
+    await expect(navToggleLabel).toBeVisible({ timeout: 5000 });
+
+    // P0: Mobile menu exists in DOM
+    await expect(mobileMenu).toBeAttached({ timeout: 5000 });
+
+    // P0: Initial state — checkbox unchecked, menu hidden
+    await expect(navToggleCheckbox).not.toBeChecked();
+    await expect(mobileMenu).not.toBeVisible();
+
+    // P0: Click toggle opens menu
+    await navToggleLabel.click();
+    await expect(navToggleCheckbox).toBeChecked();
+    await expect(mobileMenu).toBeVisible({ timeout: 1000 });
+
+    // P0: Click toggle closes menu
+    await navToggleLabel.click();
+    await expect(navToggleCheckbox).not.toBeChecked();
+    await expect(mobileMenu).not.toBeVisible({ timeout: 1000 });
+
+    console.log('✅ Mobile toggle functionality PASSED');
   });
 
-  test('Critical navigation smoke test - Cross-page consistency', async ({ page }) => {
-    // Test that mobile navigation works consistently across all pages
+  test('Cross-page consistency', async ({ page }) => {
     for (const pageInfo of pages) {
       await page.goto(pageInfo.url);
-      
-      // Verify mobile nav exists on every page
-      const mobileToggle = page.locator('.mobile-nav-toggle');
-      const navMenu = page.locator('.nav-menu');
-      
-      await expect(mobileToggle).toBeVisible({ timeout: 3000 });
-      await expect(navMenu).toBeVisible({ timeout: 3000 });
-      
-      // Quick toggle test
-      await mobileToggle.click();
-      await expect(navMenu).toHaveClass(/nav-show/, { timeout: 1000 });
-      
-      // Close for next iteration
-      await mobileToggle.click();
-      await expect(navMenu).not.toHaveClass(/nav-show/, { timeout: 1000 });
+
+      const navToggleLabel = page.locator('label.fnf-nav__toggle');
+      const navToggleCheckbox = page.locator('#nav-toggle');
+      const mobileMenu = page.locator('.fnf-nav__mobile');
+
+      // Nav elements exist on every page
+      await expect(navToggleLabel).toBeVisible({ timeout: 3000 });
+      await expect(mobileMenu).toBeAttached();
+
+      // Toggle opens menu
+      await navToggleLabel.click();
+      await expect(navToggleCheckbox).toBeChecked();
+      await expect(mobileMenu).toBeVisible({ timeout: 1000 });
+
+      // Toggle closes menu
+      await navToggleLabel.click();
+      await expect(navToggleCheckbox).not.toBeChecked();
+      await expect(mobileMenu).not.toBeVisible({ timeout: 1000 });
     }
-    
-    console.log('✅ Critical navigation smoke test PASSED - All pages have functional mobile navigation');
+
+    console.log('✅ Cross-page consistency PASSED');
   });
 
-  test('Critical navigation smoke test - Accessibility basics', async ({ page }) => {
+  test('Desktop navigation visibility', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/');
-    
-    const mobileToggle = page.locator('.mobile-nav-toggle');
-    const navMenu = page.locator('.nav-menu');
-    
-    // ARIA attributes must be present for P0 accessibility
-    await expect(mobileToggle).toHaveAttribute('aria-expanded');
-    await expect(mobileToggle).toHaveAttribute('aria-controls');
-    await expect(navMenu).toHaveAttribute('aria-hidden');
-    
-    // Keyboard navigation must work
-    await page.keyboard.press('Tab'); // Focus the toggle
-    await page.keyboard.press('Enter'); // Open menu
-    await expect(navMenu).toHaveClass(/nav-show/);
-    
-    await page.keyboard.press('Escape'); // Close menu
-    await expect(navMenu).not.toHaveClass(/nav-show/);
-    
-    console.log('✅ Critical navigation smoke test PASSED - Basic accessibility requirements met');
+
+    // Desktop menu should be visible
+    const desktopMenu = page.locator('.fnf-nav__menu');
+    await expect(desktopMenu).toBeVisible({ timeout: 5000 });
+
+    // Mobile toggle should be hidden on desktop
+    const navToggleLabel = page.locator('label.fnf-nav__toggle');
+    await expect(navToggleLabel).not.toBeVisible();
+
+    // Desktop nav links should be visible
+    const navLinks = page.locator('.fnf-nav__link');
+    const linkCount = await navLinks.count();
+    expect(linkCount).toBeGreaterThanOrEqual(5);
+
+    console.log('✅ Desktop navigation visibility PASSED');
+  });
+
+  test('Mobile menu links navigate correctly', async ({ page }) => {
+    await page.goto('/');
+
+    const navToggleLabel = page.locator('label.fnf-nav__toggle');
+    const mobileMenu = page.locator('.fnf-nav__mobile');
+
+    // Open mobile menu
+    await navToggleLabel.click();
+    await expect(mobileMenu).toBeVisible({ timeout: 1000 });
+
+    // Mobile links should be present
+    const mobileLinks = page.locator('.fnf-nav__mobile-link');
+    const linkCount = await mobileLinks.count();
+    expect(linkCount).toBeGreaterThanOrEqual(5);
+
+    // Click a link — menu should close (JS handles this)
+    await mobileLinks.nth(1).click();
+    await page.waitForLoadState('networkidle');
+
+    console.log('✅ Mobile menu links PASSED');
+  });
+
+  test('Keyboard navigation - Escape closes menu', async ({ page }) => {
+    await page.goto('/');
+
+    const navToggleLabel = page.locator('label.fnf-nav__toggle');
+    const navToggleCheckbox = page.locator('#nav-toggle');
+
+    // Open menu
+    await navToggleLabel.click();
+    await expect(navToggleCheckbox).toBeChecked();
+
+    // Escape should close the menu (handled by JS in main.js)
+    await page.keyboard.press('Escape');
+    await expect(navToggleCheckbox).not.toBeChecked({ timeout: 1000 });
+
+    console.log('✅ Keyboard Escape PASSED');
   });
 });

@@ -1,10 +1,10 @@
 // @ts-check
-const { defineConfig, devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
-module.exports = defineConfig({
+export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -23,7 +23,7 @@ module.exports = defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:8080',
+    baseURL: 'http://localhost:4173',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     /* Take screenshot on failure */
@@ -37,21 +37,21 @@ module.exports = defineConfig({
     // Desktop browsers
     {
       name: 'chromium-desktop',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
       },
     },
     {
       name: 'firefox-desktop',
-      use: { 
+      use: {
         ...devices['Desktop Firefox'],
         viewport: { width: 1920, height: 1080 },
       },
     },
     {
       name: 'webkit-desktop',
-      use: { 
+      use: {
         ...devices['Desktop Safari'],
         viewport: { width: 1920, height: 1080 },
       },
@@ -60,7 +60,7 @@ module.exports = defineConfig({
     // Tablet viewports
     {
       name: 'chromium-tablet',
-      use: { 
+      use: {
         ...devices['iPad Pro'],
       },
     },
@@ -73,7 +73,7 @@ module.exports = defineConfig({
     },
     {
       name: 'webkit-tablet',
-      use: { 
+      use: {
         ...devices['iPad Pro'],
       },
     },
@@ -81,7 +81,7 @@ module.exports = defineConfig({
     // Mobile viewports
     {
       name: 'chromium-mobile',
-      use: { 
+      use: {
         ...devices['iPhone 14 Pro Max'],
       },
     },
@@ -94,26 +94,16 @@ module.exports = defineConfig({
     },
     {
       name: 'webkit-mobile',
-      use: { 
+      use: {
         ...devices['iPhone 14 Pro Max'],
       },
     },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
   ],
 
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:8080',
+    url: 'http://localhost:4173',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

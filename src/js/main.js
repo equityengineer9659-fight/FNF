@@ -230,44 +230,7 @@ class FNFApp {
       }
     }, { signal });
 
-    // HAMBURGER FIX: Force hamburger lines to be white
-    this.forceHamburgerWhite();
-
     log('🧭 Navigation system initialized');
-  }
-
-  forceHamburgerWhite() {
-    // Force hamburger lines to be white using JavaScript
-    const forceWhite = () => {
-      const hamburgerLines = document.querySelectorAll('.hamburger-line');
-      hamburgerLines.forEach(line => {
-        line.style.setProperty('background', '#ffffff', 'important');
-        line.style.setProperty('background-color', '#ffffff', 'important');
-        line.style.setProperty('color', '#ffffff', 'important');
-        line.style.setProperty('border-color', '#ffffff', 'important');
-        line.style.setProperty('filter', 'none', 'important');
-        line.style.setProperty('mix-blend-mode', 'normal', 'important');
-      });
-    };
-
-    // Apply immediately
-    forceWhite();
-
-    // Also apply after a short delay in case elements load later
-    setTimeout(forceWhite, 100);
-    setTimeout(forceWhite, 500);
-
-    // Listen for dark mode changes and reapply
-    if (window.matchMedia) {
-      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      darkModeQuery.addEventListener('change', (e) => {
-        if (e.matches) {
-          setTimeout(forceWhite, 50);
-        }
-      });
-    }
-
-    log('🍔 Hamburger lines forced to white');
   }
 
   initAccessibility() {
