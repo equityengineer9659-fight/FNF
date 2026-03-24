@@ -70,31 +70,47 @@ npm run governance:status       # Check governance framework status
 ```
 /
 ├── src/                    # Source files
-│   ├── css/               # CSS files with modular architecture
-│   ├── js/                # JavaScript modules
-│   └── assets/            # Images, fonts, and other assets
+│   ├── css/               # CSS files with modular architecture (10 files)
+│   ├── js/                # JavaScript modules (main.js, effects/, config/, monitoring/)
+│   ├── assets/            # Images, fonts, and other assets
+│   └── templates/         # HTML component templates
 ├── *.html                  # 6 pages: index, about, services, resources, impact, contact
-├── config/                 # Configuration files (HTML validate, Lighthouse, etc.)
-├── docs/                   # Comprehensive documentation with governance framework
+├── config/                 # Configuration files (token_map, deployment, security)
+├── docs/                   # Active documentation (project/, technical/, current/)
 ├── tools/                  # Development utilities (testing, deployment, governance)
+├── scripts/               # Build scripts (sitemap, PWA icons, restore points, CSS analysis)
+├── public/                # Static assets (favicon, PWA icons)
+├── _archive/              # Archived outdated documentation
+├── _audit/                # Historical backups and restore points
 ├── vite.config.js         # Vite build configuration
 └── package.json           # Root-level build configuration
 ```
 
 ### CSS Architecture
-- **CSS Layers**: `@layer reset, base, components, utilities, overrides;`
-- **Location**: `src/css/` with modular organization (main.css imports all layers)
-- **Bundle Optimization**: Minified production builds via Vite + CSSnano
+- **Location**: `src/css/` with modular organization (main.css imports all modules)
+- **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients
+- **Design Tokens**: Centralized in `02-design-tokens.css` (colors, spacing, fonts, gradients, glass effects)
+- **Bundle Optimization**: Minified production builds via Vite + CSSnano (~96KB, ~16KB gzipped)
 - **SLDS Compliance**: 89% baseline maintained with token mapping system
-- **Navigation**: HTML-first with progressive enhancement
-- **Effects**: Premium glassmorphism and background animations preserved
+- **Navigation**: Consolidated in `03-navigation.css` (single source of truth)
+- **Effects/Animations**: Card stagger delays, keyframes, particles in `06-effects.css`
+- **Gradients/Theming**: Section backgrounds, hero gradients, SLDS button overrides in `critical-gradients.css`
+- **Note**: `@layer` declarations are NOT used — blocked by SLDS CDN dependency (un-layered SLDS overrides layered custom CSS)
 
 ### JavaScript Architecture
 - **Progressive Enhancement**: HTML-first, JavaScript optional
 - **Vite Build System**: Modern bundling with tree-shaking and Terser minification
-- **Modules**: Organized in `src/js/` with clean separation (effects/, main.js, etc.)
-- **Development**: Hot module replacement via Vite dev server (port 4173)
-- **Production**: Minified builds with source maps and tree-shaking
+- **Modules**: `src/js/main.js` orchestrates all modules:
+  - `config/environment.js` — feature flags and configuration
+  - `effects/particles.js` — canvas-based network particle system
+  - `effects/smart-scroll.js` — nav auto-hide, active link tracking, scroll-to-top
+  - `effects/counters.js` — animated number counters
+  - `effects/newsletter-popup.js` — scroll-triggered modal with focus trap
+  - `effects/gradient-icons.js` — SVG gradient icon system
+  - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
+- **Cleanup**: All modules use AbortController or explicit cleanup in destroy()
+- **Production**: Source maps disabled, no console.log in production code
+- **Unit Tests**: 133 tests across 6 test files (vitest)
 
 ### Critical Constraints
 **NEVER modify these without explicit permission:**
@@ -116,9 +132,9 @@ Test ALL 6 pages at these configurations:
 - **Browsers**: Chrome, Firefox, Safari minimum
 
 ### Performance Budgets
-- **CSS Bundle**: 106.85KB (105KB minified, includes all layers and effects)
-- **JavaScript Bundle**: 26.29KB total (20.59KB main + 5.70KB effects, tree-shaken & minified)
-- **Gzipped Sizes**: 15.04KB CSS, 7.65KB JS combined
+- **CSS Bundle**: ~96KB minified (includes all modules and effects)
+- **JavaScript Bundle**: ~50KB total (44KB main + 6KB effects, tree-shaken & minified)
+- **Gzipped Sizes**: ~16KB CSS, ~15KB JS combined
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: ≥89% baseline maintained
 - **Bundle Analysis**: Use `npm run analyze:bundle` for detailed reports
@@ -182,11 +198,11 @@ Test ALL 6 pages at these configurations:
 
 ### Key Configuration
 - `tools/testing/html-validate.json` - HTML validation rules (active config used by `npm run validate:html`)
-- `config/html-validate.json` - Legacy HTML validation config (deprecated, more permissive rules)
 - `tools/testing/lighthouserc.json` - Performance audit configuration
 - `tools/testing/playwright.config.js` - Browser testing configuration
 - `config/token_map.json` - SLDS compliance token mappings
 - `config/deployment-config.json` - Deployment settings
+- `config/security-config.json` - Security configuration
 - `vite.config.js` - Vite build system configuration (development server, bundling, minification)
 
 ### MCP Integration
@@ -201,10 +217,11 @@ Test ALL 6 pages at these configurations:
 - **Diagnostic**: Comment out single scripts conservatively
 - **Solution**: CSS Layers architecture eliminates cascade conflicts
 
-### CSS Cascade Conflicts  
-- **Prevention**: Use CSS Layers (`@layer`) for proper cascade management
-- **Legacy**: Avoid !important declarations (58+ eliminated)
+### CSS Cascade Conflicts
+- **Prevention**: Import order in main.css determines cascade priority
+- **Legacy**: Avoid !important declarations (only 8 remain — all in utility classes and accessibility media queries)
 - **Architecture**: HTML-first with progressive CSS enhancement
+- **Note**: @layer is blocked by SLDS CDN — cascade relies on import order
 
 ### SLDS Compliance Violations
 - **Detection**: Use `npm run validate:slds` 
@@ -272,16 +289,32 @@ Test ALL 6 pages at these configurations:
 
 ### Essential Documentation
 - `docs/README.md` - Documentation navigation and quick access guide
-- `docs/current/README.md` - Enhanced documentation structure with shadow implementation
 - `docs/project/plan.md` - 4-phase strategic refactoring plan
 - `docs/project/raci.md` - Agent responsibilities and coordination matrix
 - `docs/current/emergency/15min-response-playbook.md` - Emergency response procedures
+- `docs/CICD_SETUP.md` - CI/CD pipeline configuration
+- `docs/SECURITY.md` - Security procedures
+- `docs/ENVIRONMENT.md` - Environment variables
 
 ### Architecture Decision Records
-Located in `docs/technical/adr/` and `adr/` directories:
+Located in `docs/technical/adr/` with 15 active ADRs covering:
 - Mobile navigation architecture decisions
-- CSS cascade management approach  
+- CSS cascade management approach
 - JavaScript bundle optimization strategy
 - Emergency rollback procedures
+- Documentation consolidation and file management
+- CI/CD pipeline strategy
+- Quality assurance and security compliance frameworks
 
-This codebase represents a mature, governance-driven approach to modern web development with comprehensive testing, multi-agent coordination, and strict performance budgets while preserving premium visual effects.
+### Archived Documentation
+Historical docs moved to `_archive/` during 2026-03-24 audit:
+- `_archive/docs-technical/` - Resolved mobile nav crisis docs, old phase reports
+- `_archive/docs-project/` - Completed requirements, old CSS deconfliction plans
+- `_archive/github-workflows/` - 11 legacy CI/CD workflows (only ci-cd.yml and dependency-update.yml are active)
+
+### Cleanup Completed (2026-03-24)
+All files from `_proposed-deletion/` have been reviewed and deleted:
+- Dead JS (animations.js, sw.js), unused fallback scripts removed from HTML
+- 11 legacy test specs deleted
+- 9 unused tool scripts deleted
+- Backup files and duplicate configs removed
