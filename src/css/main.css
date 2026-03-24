@@ -1,6 +1,6 @@
 @import 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap';@import './01-reset.css';@import './02-design-tokens.css';@import './03-navigation.css';@import './04-typography.css';@import './05-layout.css';@import './06-effects.css';@import './07-components.css';@import './08-icons.css';@import './critical-gradients.css';
 
-:root {--slds-c-background-default:#000;--slds-c-background-alt:#111;--slds-c-text-default:#fff;--slds-c-text-weak:#ccc;--slds-c-text-inverse:#fff;--fnf-card-bg-opacity:0.8}
+/* :root variables consolidated in 02-design-tokens.css */
 
 html {background:#000;color:#fff}
 
