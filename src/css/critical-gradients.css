@@ -79,13 +79,7 @@ to {opacity:1;transform:translateY(0) scale(1)}}
 
 .slds-button_outline-brand:hover,.cta-secondary:hover {background:#00d4ff;color:#0f1419}
 
-.fnf-footer,footer {background:linear-gradient(135deg, #0f1e3a 0%, #01478a 100%);color:#c9c7c5;position:relative;z-index:10;border-top:none;text-align:center}
-
-.fnf-footer *,footer *,footer p,footer div {text-align:center;margin-left:auto;margin-right:auto}
-
-/* Blue gradient separator line at top of footer */
-.fnf-footer::before,footer::before {content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg, transparent, #00d4ff 20%, #0ea5e9 50%, #00d4ff 80%, transparent);z-index:20}
-
+/* Footer styles moved to 07-components.css */
 
 
 @media (width <=48rem) {.focus-areas .slds-grid,.measurable-growth .slds-grid,.expertise-section .slds-grid,.values-section .slds-grid,.services-section .slds-grid,.resources-section .slds-grid,.impact-section .slds-grid,.contact-section .slds-grid {display:flex;flex-direction:column;gap:var(--slds-spacing-medium)}
