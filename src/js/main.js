@@ -30,10 +30,6 @@ import { hydrateGradientIcons } from './effects/gradient-icons.js';
 // Import page-specific modules (side-effect only)
 import './expertise-accordion.js';
 
-// Keep other imports commented for now
-/*
-import { initAnimations } from './effects/animations.js';
-*/
 import NewsletterPopup from './effects/newsletter-popup.js';
 import { initCounters } from './effects/counters.js';
 

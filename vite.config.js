@@ -26,7 +26,7 @@ export default defineConfig({
       output: {
         // Keep separate CSS and JS bundles for maintainability
         manualChunks: {
-          effects: ['./src/js/effects/particles.js', './src/js/effects/animations.js']
+          effects: ['./src/js/effects/particles.js']
         },
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');
