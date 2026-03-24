@@ -2,16 +2,6 @@
 
 .fnf-particle{position:absolute;background:radial-gradient(circle,var(--particle-white) 0%,var(--particle-white-80) 30%,var(--particle-white-40) 60%,var(--particle-white-0) 100%);border-radius:50%;pointer-events:none;box-shadow:0 0 10px var(--particle-white-80),0 0 20px var(--particle-white-60),0 0 30px var(--particle-white-40);border:1px solid var(--particle-white-70);width:var(--particle-size,8px);height:var(--particle-size,8px);left:var(--particle-x,50%);top:var(--particle-y,50%);animation:particle-float var(--particle-duration,20s) linear infinite;animation-delay:var(--particle-delay,0s);z-index:7499}
 
-@keyframes particle-float{0%{transform:translateY(100vh) translateX(0) rotate(0deg);opacity:0}
-
-25%{transform:translateY(75vh) translateX(var(--particle-drift-x,25px)) rotate(90deg);opacity:1}
-
-50%{transform:translateY(50vh) translateX(calc(var(--particle-drift-x,25px) * -.8)) rotate(180deg);opacity:.8}
-
-75%{transform:translateY(25vh) translateX(var(--particle-drift-x,25px)) rotate(270deg);opacity:.7}
-
-100%{transform:translateY(-10vh) translateX(calc(var(--particle-drift-x,25px) * .6)) rotate(360deg);opacity:0}}
-
 .fnf-particle-container{position:fixed;top:0;left:0;width:100vw;height:100vh;overflow:visible;pointer-events:none;z-index:7500}
 
 .fnf-glass{background:var(--glass-bg-primary);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--slds-border-radius-large);box-shadow:var(--slds-shadow-large)}
@@ -26,9 +16,9 @@
 
 100%{transform:translateY(-100px) rotate(360deg);opacity:0}}
 
-.fnf-hero-bg{position:absolute;inset:0;z-index:-1;background:var(--fnf-gradient-triple-radial);animation:gradientShift 20s ease infinite}
+.fnf-hero-bg{position:absolute;inset:0;z-index:-1;background:var(--fnf-gradient-triple-radial);animation:gradientOpacity 20s ease infinite}
 
-@keyframes gradientShift{0%,100%{opacity:1}
+@keyframes gradientOpacity{0%,100%{opacity:1}
 
 50%{opacity:.8}}
 

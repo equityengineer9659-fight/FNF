@@ -124,7 +124,7 @@ to {opacity:1;transform:translateY(0) scale(1)}}
 
 .value-card:nth-child(4) {animation-delay:0.4s}
 
-@keyframes cardFadeInUp {to {opacity:1;transform:translateY(0)}}
+/* cardFadeInUp keyframes defined below (line ~378) */
 
 section[aria-labelledby="expertise-detail-heading"] {width:100%;max-width:none;background-color:#0a0a0a;color:#fff;padding:var(--fnf-spacing-hero);margin:0}
 
