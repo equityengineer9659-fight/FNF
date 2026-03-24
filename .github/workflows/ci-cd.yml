@@ -2,9 +2,9 @@ name: Food-N-Force CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop, 'feature/*', 'hotfix/*' ]
+    branches: [ master, develop, 'feature/*', 'hotfix/*' ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ master, develop ]
   workflow_dispatch:
 
 env:
@@ -64,6 +64,27 @@ jobs:
           npm run lint:js
           echo "✅ JavaScript linting passed"
 
+      # Unit Testing (Vitest)
+      - name: Unit Tests
+        run: |
+          npm run test:unit
+          echo "✅ Unit tests passed"
+
+      # Unit Test Coverage Report
+      - name: Generate Coverage Report
+        run: |
+          npm run test:unit:coverage
+          echo "✅ Coverage report generated"
+
+      # Upload Coverage Report
+      - name: Upload Coverage to Artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 30
+
       # Security Scanning
       - name: Security Audit
         run: |
@@ -74,7 +95,7 @@ jobs:
       - name: Check Deployment Conditions
         id: check-branch
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
             echo "deploy-production=true" >> $GITHUB_OUTPUT
             echo "deploy-staging=false" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/develop" ]] || [[ "${{ github.event_name }}" == "pull_request" ]]; then
@@ -111,7 +132,7 @@ jobs:
         run: |
           npm run dev &
           sleep 10
-          curl -f http://localhost:8080 || exit 1
+          curl -f http://localhost:4173 || exit 1
         
       # Lighthouse CI - Core Web Vitals & Performance
       - name: Lighthouse CI - Performance Testing
@@ -125,6 +146,12 @@ jobs:
           npm run test:accessibility
           echo "✅ Accessibility tests passed"
 
+      # Performance Budget Enforcement
+      - name: Performance Budget Monitoring
+        run: |
+          npm run test:performance-budget
+          echo "✅ Performance budget compliance verified"
+
       # Upload performance reports
       - name: Upload Performance Reports
         if: always()
@@ -134,6 +161,7 @@ jobs:
           path: |
             lighthouse-reports/
             pa11y-reports/
+            test-results/performance-budget-*.json
           retention-days: 30
 
   # ============================================
@@ -213,10 +241,15 @@ jobs:
       - name: Build for Staging
         run: npm run build
 
+      - name: Verify Build Output
+        run: |
+          npm run validate:build
+          echo "✅ Build verification passed"
+
       - name: Deploy to Netlify Staging
         id: deploy
         run: |
-          npx netlify-cli deploy --dir=. --json > deploy-output.json
+          npx netlify-cli deploy --dir=dist --json > deploy-output.json
           DEPLOY_URL=$(cat deploy-output.json | jq -r '.deploy_url')
           echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
           echo "🚀 Staging deployment: $DEPLOY_URL"
@@ -272,6 +305,13 @@ jobs:
 
       - name: Build for Production
         run: npm run build
+        env:
+          VITE_ENV: production
+
+      - name: Verify Build Output
+        run: |
+          npm run validate:build
+          echo "✅ Build verification passed"
 
       - name: Create Release Tag
         id: tag
@@ -286,7 +326,7 @@ jobs:
       - name: Deploy to Netlify Production
         id: deploy
         run: |
-          npx netlify-cli deploy --prod --dir=. --json > deploy-output.json
+          npx netlify-cli deploy --prod --dir=dist --json > deploy-output.json
           DEPLOY_URL=$(cat deploy-output.json | jq -r '.url')
           echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
           echo "🚀 Production deployment: $DEPLOY_URL"

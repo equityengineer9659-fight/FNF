@@ -1,18 +1,27 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { fileURLToPath, URL } from 'url';
+import autoprefixer from 'autoprefixer';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   root: '.',
-  publicDir: 'src/assets',
+  publicDir: 'public',
   base: './', // Use relative paths for better static file compatibility
 
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: false,
     minify: 'terser',
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html')
+        main: resolve(__dirname, 'index.html'),
+        about: resolve(__dirname, 'about.html'),
+        services: resolve(__dirname, 'services.html'),
+        resources: resolve(__dirname, 'resources.html'),
+        impact: resolve(__dirname, 'impact.html'),
+        contact: resolve(__dirname, 'contact.html')
       },
       output: {
         // Keep separate CSS and JS bundles for maintainability
@@ -46,45 +55,22 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
-        require('autoprefixer'),
-        require('cssnano')({
-          preset: ['default', {
-            discardComments: {
-              removeAll: false, // Keep important comments for maintainability
-            },
-          }]
-        })
+        autoprefixer()
       ]
     },
     devSourcemap: true
   },
 
   server: {
-    port: 8080,
+    port: 4173,
     host: 'localhost',
-    strictPort: true, // Fail if port is occupied instead of auto-incrementing
-    open: false, // Don't auto-open browser to prevent conflicts during testing
-    clearScreen: false, // Keep console output visible for debugging
-    // Custom logging to match expected patterns
-    configureServer(server) {
-      server.middlewares.use('/api/health', (req, res) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ status: 'ok', port: 8080 }));
-      });
-
-      const originalListen = server.listen;
-      server.listen = function(...args) {
-        const result = originalListen.apply(this, args);
-        // Output expected pattern for testing tools
-        console.log('\n  Available on: http://localhost:8080/');
-        console.log('  Server ready for conflict analysis tools\n');
-        return result;
-      };
-    }
+    strictPort: true,
+    open: false,
+    clearScreen: false
   },
 
   preview: {
-    port: 8080,
+    port: 4174,
     host: 'localhost',
     strictPort: true,
     open: false

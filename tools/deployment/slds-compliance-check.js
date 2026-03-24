@@ -39,7 +39,7 @@ class SLDSComplianceChecker {
     }
 
     // Check CSS files
-    const cssFiles = await glob('css/**/*.css', { ignore: 'node_modules/**' });
+    const cssFiles = await glob('src/css/**/*.css', { ignore: 'node_modules/**' });
     for (const file of cssFiles) {
       await this.checkCSSFile(file);
     }

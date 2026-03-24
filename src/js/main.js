@@ -1,15 +1,34 @@
 /**
- * Food-N-Force Website - Main JavaScript Entry Point
- * Clean, modular architecture without conflicts
+ * @fileoverview Food-N-Force Website - Main JavaScript Entry Point
+ * @description Clean, modular architecture without conflicts
+ * @version 2.0.0
+ * @license MIT
  */
 
-// Production debug flag - set to false for production builds
-const DEBUG = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const log = DEBUG ? log : () => {};
+// Import configuration
+import config from './config/environment.js';
+
+// Production debug flag from environment config
+const DEBUG = config.features.debugMode;
+const log = DEBUG ? console.log : () => {};
+
+// Import Sentry error monitoring
+import { initSentry } from './monitoring/sentry.js';
+
+// Import monitoring modules
+import errorTracker from './monitoring/error-tracker.js';
+import performanceMonitor from './monitoring/performance-monitor.js';
+
+// Initialize Sentry first (before any errors can occur)
+initSentry();
 
 // Import effects modules
 import SmartScroll from './effects/smart-scroll.js';
 import { initParticles } from './effects/particles.js';
+import { hydrateGradientIcons } from './effects/gradient-icons.js';
+
+// Import page-specific modules (side-effect only)
+import './expertise-accordion.js';
 
 // Keep other imports commented for now
 /*
@@ -19,10 +38,14 @@ import NewsletterPopup from './effects/newsletter-popup.js';
 import { initCounters } from './effects/counters.js';
 
 /**
- * Main Application Class
- * Coordinates all website functionality
+ * @class FNFApp
+ * @description Main Application Class - Coordinates all website functionality
  */
 class FNFApp {
+  /**
+   * @constructor
+   * @description Initialize the FNF application
+   */
   constructor() {
     log('🏗️ FNFApp constructor called!');
     this.particles = null;
@@ -31,6 +54,9 @@ class FNFApp {
     this.newsletterPopup = null;
     this.smartScroll = null;
     this.isInitialized = false;
+
+    // AbortController for centralized event listener cleanup
+    this.abortController = new AbortController();
 
     // Performance monitoring
     this.performanceStartTime = performance.now();
@@ -51,21 +77,32 @@ class FNFApp {
       this.initializeApp();
     }
 
-    // Set up event listeners
-    window.addEventListener('load', this.handleLoad);
-    window.addEventListener('resize', this.handleResize);
-    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+    // Set up event listeners with abort signal for cleanup
+    const signal = this.abortController.signal;
+    window.addEventListener('load', this.handleLoad, { signal });
+    window.addEventListener('resize', this.handleResize, { signal });
+    document.addEventListener('visibilitychange', this.handleVisibilityChange, { signal });
   }
 
+  /**
+   * @method initializeApp
+   * @description Initialize all application systems
+   * @throws {Error} If initialization fails
+   */
   initializeApp() {
     try {
       // Add loading class to body
       document.body.classList.add('fnf-loading');
 
+      // Initialize monitoring first to catch any initialization errors
+      errorTracker.init();
+      performanceMonitor.init();
+
       // Initialize core systems
       this.initParticleSystem();
       this.initAnimationSystem();
       this.initCounterSystem();
+      this.initGradientIcons();
       this.initNewsletterPopup();
       this.initSmartScroll();
       this.initNavigation();
@@ -83,11 +120,18 @@ class FNFApp {
       log('🎉 FNF App initialized successfully');
     } catch (error) {
       console.error('❌ Error initializing FNF App:', error);
+      errorTracker.captureException(error, { context: 'initializeApp' });
       this.handleInitializationError(error);
     }
   }
 
   initParticleSystem() {
+    // Check feature flag
+    if (!config.features.particles) {
+      log('✨ Particle system disabled by feature flag');
+      return;
+    }
+
     try {
       this.particles = initParticles();
       if (this.particles) {
@@ -99,8 +143,14 @@ class FNFApp {
   }
 
   initAnimationSystem() {
+    // Check feature flag
+    if (!config.features.animations) {
+      log('🎬 Animation system disabled by feature flag');
+      return;
+    }
+
     log('🎬 Animation system SKIPPED for testing');
-    // Temporarily disabled
+    // Temporarily disabled - will be enabled when animations module is ready
   }
 
   initCounterSystem() {
@@ -108,7 +158,23 @@ class FNFApp {
     this.counters = initCounters();
   }
 
+  initGradientIcons() {
+    log('🎨 Initializing gradient icon system...');
+    try {
+      hydrateGradientIcons(document);
+      log('🎨 Gradient icons hydrated successfully');
+    } catch (error) {
+      console.error('❌ Gradient icon system failed to initialize:', error);
+    }
+  }
+
   initNewsletterPopup() {
+    // Check feature flag
+    if (!config.features.newsletter) {
+      log('📧 Newsletter popup disabled by feature flag');
+      return;
+    }
+
     log('📧 MAIN.JS: Initializing newsletter popup...');
     try {
       this.newsletterPopup = new NewsletterPopup();
@@ -135,6 +201,7 @@ class FNFApp {
     // Enhanced navigation functionality
     const navToggle = document.getElementById('nav-toggle');
     const navLinks = document.querySelectorAll('.fnf-nav__mobile-link');
+    const signal = this.abortController.signal;
 
     // Close mobile menu when clicking on a link
     navLinks.forEach(link => {
@@ -142,7 +209,7 @@ class FNFApp {
         if (navToggle) {
           navToggle.checked = false;
         }
-      });
+      }, { signal });
     });
 
     // Close mobile menu when clicking outside
@@ -153,7 +220,7 @@ class FNFApp {
       if (!isNavClick && navToggle && navToggle.checked) {
         navToggle.checked = false;
       }
-    });
+    }, { signal });
 
     // Handle keyboard navigation
     document.addEventListener('keydown', (event) => {
@@ -161,7 +228,7 @@ class FNFApp {
         navToggle.checked = false;
         navToggle.focus();
       }
-    });
+    }, { signal });
 
     // HAMBURGER FIX: Force hamburger lines to be white
     this.forceHamburgerWhite();
@@ -193,7 +260,7 @@ class FNFApp {
     // Listen for dark mode changes and reapply
     if (window.matchMedia) {
       const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      darkModeQuery.addListener((e) => {
+      darkModeQuery.addEventListener('change', (e) => {
         if (e.matches) {
           setTimeout(forceWhite, 50);
         }
@@ -217,20 +284,18 @@ class FNFApp {
   }
 
   initFocusManagement() {
-    // Improve focus visibility for keyboard users
-    let isUsingKeyboard = false;
+    const signal = this.abortController.signal;
 
+    // Improve focus visibility for keyboard users
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Tab') {
-        isUsingKeyboard = true;
         document.body.classList.add('fnf-keyboard-user');
       }
-    });
+    }, { signal });
 
     document.addEventListener('mousedown', () => {
-      isUsingKeyboard = false;
       document.body.classList.remove('fnf-keyboard-user');
-    });
+    }, { signal });
 
     // Focus trap for mobile menu
     const navToggle = document.getElementById('nav-toggle');
@@ -251,16 +316,19 @@ class FNFApp {
 
   initSkipLinks() {
     const skipLinks = document.querySelectorAll('.skip-link');
+    const signal = this.abortController.signal;
     skipLinks.forEach(link => {
-      link.addEventListener('click', (event) => {
-        const targetId = link.getAttribute('href').substring(1);
+      link.addEventListener('click', () => {
+        const href = link.getAttribute('href');
+        if (!href) return;
+        const targetId = href.substring(1);
         const target = document.getElementById(targetId);
 
         if (target) {
           target.focus();
           target.scrollIntoView({ behavior: 'smooth' });
         }
-      });
+      }, { signal });
     });
   }
 
@@ -289,36 +357,82 @@ class FNFApp {
   }
 
   initPerformanceMonitoring() {
-    // Monitor performance and adjust accordingly
-    if ('PerformanceObserver' in window) {
-      try {
-        // Monitor long tasks
-        const longTaskObserver = new PerformanceObserver((list) => {
-          list.getEntries().forEach((entry) => {
-            if (entry.duration > 50) {
-              console.warn('⚠️ Long task detected:', entry.duration + 'ms');
+    // Initialize comprehensive performance monitoring
+    try {
+      // Mark app initialization start
+      performanceMonitor.mark('fnf-app-init-start');
 
-              // Reduce particle count if performance is poor
-              if (this.particles && entry.duration > 100) {
-                const stats = this.particles.getStats();
-                if (stats.particleCount > 4) {
-                  this.particles.setParticleCount(stats.particleCount - 1);
-                  log('🎯 Reduced particle count for performance');
+      // Monitor long tasks
+      if ('PerformanceObserver' in window) {
+        try {
+          const longTaskObserver = new PerformanceObserver((list) => {
+            list.getEntries().forEach((entry) => {
+              if (entry.duration > 50) {
+                console.warn('⚠️ Long task detected:', entry.duration + 'ms');
+
+                // Report long task to error tracker
+                errorTracker.captureMessage(`Long task detected: ${entry.duration}ms`, 'warning', {
+                  duration: entry.duration,
+                  startTime: entry.startTime
+                });
+
+                // Reduce particle count if performance is poor
+                if (this.particles && entry.duration > 100) {
+                  const stats = this.particles.getStats();
+                  if (stats.particleCount > 4) {
+                    this.particles.setParticleCount(stats.particleCount - 1);
+                    log('🎯 Reduced particle count for performance');
+                  }
                 }
               }
-            }
+            });
           });
-        });
 
-        longTaskObserver.observe({ entryTypes: ['longtask'] });
-      } catch (error) {
-        console.warn('Performance monitoring not available:', error);
+          longTaskObserver.observe({ entryTypes: ['longtask'] });
+        } catch (error) {
+          console.warn('Long task monitoring not available:', error);
+        }
       }
-    }
 
-    // Log initialization time
-    const initTime = performance.now() - this.performanceStartTime;
-    log(`⚡ App initialized in ${initTime.toFixed(2)}ms`);
+      // Mark app initialization end
+      performanceMonitor.mark('fnf-app-init-end');
+      performanceMonitor.measure('fnf-app-init', 'fnf-app-init-start', 'fnf-app-init-end');
+
+      // Log initialization time
+      const initTime = performance.now() - this.performanceStartTime;
+      log(`⚡ App initialized in ${initTime.toFixed(2)}ms`);
+
+      // Report metrics after page load
+      if (document.readyState === 'complete') {
+        this.reportPerformanceMetrics();
+      } else {
+        window.addEventListener('load', () => this.reportPerformanceMetrics());
+      }
+    } catch (error) {
+      errorTracker.captureException(error, { context: 'initPerformanceMonitoring' });
+    }
+  }
+
+  reportPerformanceMetrics() {
+    // Report performance metrics after a delay to ensure all metrics are collected
+    setTimeout(() => {
+      const metrics = performanceMonitor.getMetrics();
+      const assessment = performanceMonitor.getCoreWebVitalsAssessment();
+
+      log('📊 Performance Metrics:', metrics);
+      log('🎯 Core Web Vitals Assessment:', assessment);
+
+      // Report poor performance metrics as warnings
+      Object.entries(assessment).forEach(([metric, data]) => {
+        if (data.rating === 'poor') {
+          errorTracker.captureMessage(
+            `Poor ${metric} performance: ${data.value}`,
+            'warning',
+            { metric, value: data.value, rating: data.rating }
+          );
+        }
+      });
+    }, 3000);
   }
 
   handleLoad() {
@@ -326,21 +440,12 @@ class FNFApp {
     const loadTime = performance.now() - this.performanceStartTime;
     log(`🚀 Page loaded in ${loadTime.toFixed(2)}ms`);
 
-    // Refresh animations to catch any late-loading content
-    if (this.animations && this.animations.controller) {
-      this.animations.controller.refresh();
-    }
   }
 
   handleResize() {
     // Debounced resize handler
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
-      // Refresh systems that depend on viewport size
-      if (this.animations && this.animations.controller) {
-        this.animations.controller.refresh();
-      }
-
       log('📐 Viewport resized, systems refreshed');
     }, 250);
   }
@@ -351,16 +456,10 @@ class FNFApp {
       if (this.particles) {
         this.particles.pause();
       }
-      if (this.animations && this.animations.controller) {
-        this.animations.controller.pause();
-      }
     } else {
       // Page is visible, resume operations
       if (this.particles) {
         this.particles.resume();
-      }
-      if (this.animations && this.animations.controller) {
-        this.animations.controller.resume();
       }
     }
   }
@@ -411,17 +510,12 @@ class FNFApp {
     if (this.particles) {
       this.particles.destroy();
     }
-    if (this.animations && this.animations.controller) {
-      this.animations.controller.destroy();
-    }
     if (this.smartScroll) {
       this.smartScroll.destroy();
     }
 
-    // Remove event listeners
-    window.removeEventListener('load', this.handleLoad);
-    window.removeEventListener('resize', this.handleResize);
-    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+    // Remove all event listeners registered with the abort signal
+    this.abortController.abort();
 
     log('🧹 FNF App destroyed');
   }
