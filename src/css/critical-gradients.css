@@ -90,7 +90,7 @@ to {opacity:1;transform:translateY(0) scale(1)}}
 
 .focus-areas .slds-col,.measurable-growth .slds-col,.expertise-section .slds-col,.values-section .slds-col,.services-section .slds-col,.resources-section .slds-col,.impact-section .slds-col,.contact-section .slds-col {width:auto;flex:none;align-self:stretch}}
 
-.expertise-card,.value-card {text-align:center;transition:all 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.3);border-radius:12px;padding:var(--fnf-spacing-xl);background:rgba(45,55,65,0.4);backdrop-filter:blur(10px);border:1px solid rgba(100,120,140,0.3);position:relative;max-width:400px;margin:0 auto;opacity:1;transform:translateY(0);display:flex;flex-direction:column;justify-content:flex-start;align-items:center}
+.expertise-card,.value-card {text-align:center;transition:all 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.3);border-radius:12px;padding:var(--fnf-spacing-xl);background:rgba(45,55,65,0.4);backdrop-filter:var(--glass-blur);border:1px solid rgba(100,120,140,0.3);position:relative;max-width:400px;margin:0 auto;opacity:1;transform:translateY(0);display:flex;flex-direction:column;justify-content:flex-start;align-items:center}
 
 .expertise-card:hover,.value-card:hover {transform:translateY(-5px) scale(1.02);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
 
@@ -110,7 +110,7 @@ section[aria-labelledby="expertise-detail-heading"] .slds-container_large.slds-c
 
 section[aria-labelledby="expertise-detail-heading"] .slds-grid.slds-wrap.slds-gutters_large {width:100%;max-width:none;display:flex;flex-wrap:nowrap;justify-content:space-between;align-items:stretch;padding:0;margin:0}
 
-section[aria-labelledby="expertise-detail-heading"] .slds-col.slds-size_1-of-1.slds-medium-size_1-of-3 {width:calc(33.333% - 1.33rem);max-width:none;flex:none;background-color:rgba(42,42,42,0.8);border:1px solid rgba(64,64,64,0.8);border-radius:12px;padding:var(--fnf-spacing-xl);box-shadow:0 8px 32px rgba(0,0,0,0.4);display:flex;flex-direction:column;height:auto;min-height:300px;backdrop-filter:blur(10px)}
+section[aria-labelledby="expertise-detail-heading"] .slds-col.slds-size_1-of-1.slds-medium-size_1-of-3 {width:calc(33.333% - 1.33rem);max-width:none;flex:none;background-color:rgba(42,42,42,0.8);border:1px solid rgba(64,64,64,0.8);border-radius:12px;padding:var(--fnf-spacing-xl);box-shadow:0 8px 32px rgba(0,0,0,0.4);display:flex;flex-direction:column;height:auto;min-height:300px;backdrop-filter:var(--glass-blur)}
 
 section[aria-labelledby="expertise-detail-heading"] h3.slds-text-heading_medium.slds-m-bottom_small {color:#fff;font-size:1.1rem;font-weight:600;text-align:center;padding:1rem 1.5rem;background:rgba(20,80,140,0.9);border-radius:12px;border:1px solid rgba(70,130,180,0.4);margin:1.5rem -2rem 2rem;display:block;min-height:auto;line-height:1.4}
 
@@ -185,7 +185,7 @@ body.fnf-page--contact .contact-section::before {content:'';position:absolute;in
 
 body.fnf-page--contact .contact-section .slds-container_large {position:relative;z-index:1}
 
-.fnf-page--contact .contact-form-container,.fnf-page--contact .contact-info-container {background:#4a5568;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:var(--fnf-spacing-xl);margin-bottom:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.3);height:auto}
+.fnf-page--contact .contact-form-container,.fnf-page--contact .contact-info-container {background:#4a5568;backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:var(--fnf-spacing-xl);margin-bottom:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.3);height:auto}
 
 .fnf-page--contact .contact-form-container h3 {color:var(--fnf-secondary);font-size:24px;margin-bottom:var(--fnf-spacing-lg);text-align:left}
 
@@ -232,7 +232,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--impact .stat-label {font-size:1rem;color:#fff;font-weight:400;margin:0;line-height:1.4}
 
-.fnf-page--impact .testimonial-card {background:rgba(45,55,65,0.5);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:var(--fnf-spacing-xl);box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:all 0.3s ease;height:100%;display:flex;flex-direction:column;justify-content:flex-start;margin-bottom:2rem}
+.fnf-page--impact .testimonial-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:var(--fnf-spacing-xl);box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:all 0.3s ease;height:100%;display:flex;flex-direction:column;justify-content:flex-start;margin-bottom:2rem}
 
 .fnf-page--impact .testimonial-heading {color:#fff;font-size:1.2rem;font-weight:600;margin-bottom:1.5rem;text-align:center}
 
@@ -261,7 +261,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .featured-content-section h2 {color:#fff;text-align:center;margin-bottom:3rem}
 
-.featured-card {background:rgba(45,55,65,0.5);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:all 0.3s ease;height:100%}
+.featured-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:all 0.3s ease;height:100%}
 
 .featured-card:hover {transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
 
@@ -305,7 +305,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--services .services-section p {color:rgba(255,255,255,0.9);text-align:center}
 
-.fnf-page--services .service-card {background:rgba(45,55,65,0.5);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:2rem;text-align:center;transition:all 0.3s ease;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative}
+.fnf-page--services .service-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:2rem;text-align:center;transition:all 0.3s ease;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative}
 
 .fnf-page--services .service-card:hover {transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
 
@@ -375,7 +375,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--resources .resources-section p {color:rgba(255,255,255,0.9);text-align:center}
 
-.fnf-page--resources .resource-card {background:rgba(45,55,65,0.5);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:2rem;text-align:center;transition:all 0.6s cubic-bezier(0.23,1,0.32,1);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative;transform-style:preserve-3d;perspective:1500px;cursor:pointer;will-change:transform;backface-visibility:hidden;transform-origin:center bottom}
+.fnf-page--resources .resource-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:2rem;text-align:center;transition:all 0.6s cubic-bezier(0.23,1,0.32,1);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative;transform-style:preserve-3d;perspective:1500px;cursor:pointer;will-change:transform;backface-visibility:hidden;transform-origin:center bottom}
 
 .fnf-page--resources .resource-card:hover {transform:translateY(-30px) translateZ(120px) rotateX(25deg) rotateY(-8deg) scale(1.08);transform-origin:center bottom;perspective:1500px;box-shadow:0 30px 80px rgba(0,0,0,0.4),0 15px 30px rgba(1,118,211,0.2),0 5px 15px rgba(1,118,211,0.1),inset 0 1px 0 rgba(255,255,255,0.15);transition:all 0.6s cubic-bezier(0.23,1,0.32,1);z-index:15}
 
@@ -522,7 +522,7 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
 
 .fnf-nav__link--active::after {content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;background:var(--fnf-secondary);border-radius:2px;box-shadow:0 0 8px rgba(0,212,255,0.6)}
 
-.fnf-scroll-to-top {position:fixed;bottom:2rem;right:2rem;width:3rem;height:3rem;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:rgba(1,118,211,0.9);color:#fff;font-size:1.2rem;cursor:pointer;z-index:1000;opacity:0;visibility:hidden;transform:translateY(20px);transition:all 0.3s ease;backdrop-filter:blur(10px)}
+.fnf-scroll-to-top {position:fixed;bottom:2rem;right:2rem;width:3rem;height:3rem;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:rgba(1,118,211,0.9);color:#fff;font-size:1.2rem;cursor:pointer;z-index:1000;opacity:0;visibility:hidden;transform:translateY(20px);transition:all 0.3s ease;backdrop-filter:var(--glass-blur)}
 
 .fnf-scroll-to-top:hover {background:rgba(1,118,211,1);transform:translateY(0) scale(1.1)}
 
@@ -538,9 +538,9 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
 
 .fnf-page--contact .contact-section .slds-grid {display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
 
-.fnf-page--contact .contact-form-container {background:#4a5568;backdrop-filter:blur(12px);border:2px solid rgba(255,255,255,0.3);border-radius:8px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.fnf-page--contact .contact-form-container {background:#4a5568;backdrop-filter:var(--glass-blur);border:2px solid rgba(255,255,255,0.3);border-radius:8px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
 
-.fnf-page--contact .contact-info-container {background:#4a5568;backdrop-filter:blur(12px);border:2px solid rgba(255,255,255,0.3);border-radius:8px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.fnf-page--contact .contact-info-container {background:#4a5568;backdrop-filter:var(--glass-blur);border:2px solid rgba(255,255,255,0.3);border-radius:8px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
 
 .fnf-page--contact .contact-form-container h3 {color:var(--fnf-secondary);font-size:1.5rem;font-weight:600;margin-bottom:2rem}
 
