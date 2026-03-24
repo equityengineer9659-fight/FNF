@@ -10,7 +10,7 @@
 
 .fnf-card-base{padding:var(--slds-spacing-large);border-radius:var(--slds-border-radius-large);transition:all var(--transition-medium);height:100%;display:flex;flex-direction:column;align-items:center;text-align:center}
 
-.focus-area-card,.measurable-card,.service-card,.resource-card,.expertise-card,.value-card{width:100%;max-width:none;min-width:280px;height:100%;min-height:300px;max-height:none;margin:0 auto;padding:1.5rem;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;text-align:center;background:rgba(45,55,65,.6);backdrop-filter:blur(10px);border-radius:12px;border:1px solid rgba(100,120,140,.3);box-shadow:0 8px 32px rgba(0,0,0,.3);transition:all .3s ease}
+.focus-area-card,.measurable-card,.service-card,.resource-card,.expertise-card,.value-card{width:100%;max-width:none;min-width:280px;height:100%;min-height:300px;max-height:none;margin:0 auto;padding:1.5rem;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;text-align:center;background:rgba(45,55,65,.6);backdrop-filter:var(--glass-blur);border-radius:var(--slds-border-radius-large);border:1px solid rgba(100,120,140,.3);box-shadow:0 8px 32px rgba(0,0,0,.3);transition:all .3s ease}
 
 .focus-area-card{min-height:280px}
 
@@ -25,9 +25,9 @@
 .measurable-card{min-height:280px}
 
 /* Icon base styles - overridden when gradient icon system is active */
-.focus-area-icon:not(.fnf-icon-gradient),.measurable-icon:not(.fnf-icon-gradient),.service-icon:not(.fnf-icon-gradient),.resource-icon:not(.fnf-icon-gradient),.expertise-icon:not(.fnf-icon-gradient),.value-icon:not(.fnf-icon-gradient){width:70px;height:70px;background:#0176d3;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:white;margin-bottom:1rem}
+.focus-area-icon:not(.fnf-icon-gradient),.measurable-icon:not(.fnf-icon-gradient),.service-icon:not(.fnf-icon-gradient),.resource-icon:not(.fnf-icon-gradient),.expertise-icon:not(.fnf-icon-gradient),.value-icon:not(.fnf-icon-gradient){width:70px;height:70px;background:var(--fnf-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:white;margin-bottom:1rem}
 
-.focus-area-card h3,.measurable-card h3,.service-card h3,.resource-card h3,.expertise-card h3,.value-card h3{font-size:1.2rem;font-weight:600;line-height:1.4;color:#fff;text-align:center;min-height:auto;display:block;padding:1rem 1.5rem;background:rgba(20,80,140,.9);border-radius:12px;border:1px solid rgba(70,130,180,.4);margin:1.5rem -2rem 2rem}
+.focus-area-card h3,.measurable-card h3,.service-card h3,.resource-card h3,.expertise-card h3,.value-card h3{font-size:1.2rem;font-weight:600;line-height:1.4;color:#fff;text-align:center;min-height:auto;display:block;padding:1rem 1.5rem;background:rgba(20,80,140,.9);border-radius:var(--slds-border-radius-large);border:1px solid rgba(70,130,180,.4);margin:1.5rem -2rem 2rem}
 
 .focus-area-card p,.measurable-card p,.service-card p,.resource-card p,.expertise-card p,.value-card p{font-size:1rem;line-height:1.6;margin:0;color:rgba(200,210,220,.9);text-align:center;word-wrap:break-word;overflow-wrap:break-word;hyphens:auto;flex-grow:1;display:block;padding:0 1rem}
 
@@ -37,7 +37,7 @@
 
 .fnf-card__icon:hover{transform:scale(1.1) rotate(5deg);background:var(--fnf-accent)}
 
-.fnf-card__title{font-size:1.2rem;font-weight:600;margin:1.5rem -1.5rem 2rem;line-height:1.4;color:#fff;text-align:center;min-height:auto;display:block;padding:1rem 1.5rem;background:rgba(20,80,140,.9);border-radius:12px;border:1px solid rgba(70,130,180,.4)}
+.fnf-card__title{font-size:1.2rem;font-weight:600;margin:1.5rem -1.5rem 2rem;line-height:1.4;color:#fff;text-align:center;min-height:auto;display:block;padding:1rem 1.5rem;background:rgba(20,80,140,.9);border-radius:var(--slds-border-radius-large);border:1px solid rgba(70,130,180,.4)}
 
 .fnf-card__description{font-size:var(--slds-font-size-3);color:rgba(255,255,255,.9);line-height:1.6;flex-grow:1}
 
@@ -65,7 +65,7 @@
 
 .contact-form-heading{color:#fff;font-size:24px}
 
-.contact-success-message{display:none;background-color:#0176d3;color:#fff;padding:1.5rem;border-radius:8px;margin-top:2rem}
+.contact-success-message{display:none;background-color:var(--fnf-primary);color:#fff;padding:1.5rem;border-radius:8px;margin-top:2rem}
 
 .contact-success-message h3{color:#fff;margin-bottom:0.5rem}
 
