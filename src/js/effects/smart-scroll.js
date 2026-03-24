@@ -127,23 +127,26 @@ class SmartScroll {
   }
 
   updateActiveNavLink(activeSection) {
-    // Remove all active states
+    if (!activeSection) return;
+
+    const sectionId = activeSection.id;
+    const activeLink = this.navLinks.find(link =>
+      link.getAttribute('href') === `#${sectionId}`
+    );
+
+    // Only update if we find a matching anchor link — never strip
+    // aria-current="page" from page-level links (e.g. index.html)
+    if (!activeLink) return;
+
     this.navLinks.forEach(link => {
-      link.classList.remove('fnf-nav__link--active');
-      link.removeAttribute('aria-current');
+      if (link.getAttribute('href')?.startsWith('#')) {
+        link.classList.remove('fnf-nav__link--active');
+        link.removeAttribute('aria-current');
+      }
     });
 
-    if (activeSection) {
-      const sectionId = activeSection.id;
-      const activeLink = this.navLinks.find(link =>
-        link.getAttribute('href') === `#${sectionId}`
-      );
-
-      if (activeLink) {
-        activeLink.classList.add('fnf-nav__link--active');
-        activeLink.setAttribute('aria-current', 'page');
-      }
-    }
+    activeLink.classList.add('fnf-nav__link--active');
+    activeLink.setAttribute('aria-current', 'page');
   }
 
   handleNavClick(event, href) {
