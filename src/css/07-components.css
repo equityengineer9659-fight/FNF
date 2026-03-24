@@ -65,7 +65,7 @@
 
 .contact-form-heading{color:#fff;font-size:24px}
 
-.contact-success-message{display:none;background-color:var(--fnf-primary);color:#fff;padding:1.5rem;border-radius:8px;margin-top:2rem}
+.contact-success-message{display:none;background-color:var(--fnf-primary);color:#fff;padding:1.5rem;border-radius:var(--slds-border-radius-medium);margin-top:2rem}
 
 .contact-success-message h3{color:#fff;margin-bottom:0.5rem}
 
