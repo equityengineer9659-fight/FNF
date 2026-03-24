@@ -102,23 +102,7 @@ to {opacity:1;transform:translateY(0) scale(1)}}
 
 .expertise-card p,.value-card p {color:#ccc;line-height:1.6;font-weight:300;flex-grow:1}
 
-.expertise-card:nth-child(1) {animation-delay:0.1s}
-
-.expertise-card:nth-child(2) {animation-delay:0.2s}
-
-.expertise-card:nth-child(3) {animation-delay:0.3s}
-
-.expertise-card:nth-child(4) {animation-delay:0.4s}
-
-.value-card:nth-child(1) {animation-delay:0.1s}
-
-.value-card:nth-child(2) {animation-delay:0.2s}
-
-.value-card:nth-child(3) {animation-delay:0.3s}
-
-.value-card:nth-child(4) {animation-delay:0.4s}
-
-/* cardFadeInUp keyframes defined below (line ~378) */
+/* Card animation delays moved to 06-effects.css */
 
 section[aria-labelledby="expertise-detail-heading"] {width:100%;max-width:none;background-color:#0a0a0a;color:#fff;padding:var(--fnf-spacing-hero);margin:0}
 
@@ -369,31 +353,9 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .service-icon:hover,.resource-icon:hover,.expertise-icon:hover,.value-icon:hover,.focus-area-icon:hover,.measurable-icon:hover,.impact-icon:hover {transform:rotate(15deg) scale(1.15);transition:all 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);box-shadow:0 8px 25px rgba(1,118,211,0.4)}
 
-@keyframes cardFadeInUp {from {opacity:0;transform:translateY(30px) rotateX(10deg)}
-
-to {opacity:1;transform:translateY(0) rotateX(0deg)}}
-
-.service-card.animate-in,.resource-card.animate-in,.expertise-card.animate-in,.value-card.animate-in,.focus-area-card.animate-in,.measurable-card.animate-in,.impact-card.animate-in {opacity:0;transform:translateY(30px) rotateX(10deg);animation:cardFadeInUp 0.8s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
-
-.service-card.animate-in:nth-child(1),.resource-card.animate-in:nth-child(1),.expertise-card.animate-in:nth-child(1),.value-card.animate-in:nth-child(1),.focus-area-card.animate-in:nth-child(1),.measurable-card.animate-in:nth-child(1),.impact-card.animate-in:nth-child(1) {animation-delay:0.1s}
-
-.service-card.animate-in:nth-child(2),.resource-card.animate-in:nth-child(2),.expertise-card.animate-in:nth-child(2),.value-card.animate-in:nth-child(2),.focus-area-card.animate-in:nth-child(2),.measurable-card.animate-in:nth-child(2),.impact-card.animate-in:nth-child(2) {animation-delay:0.2s}
-
-.service-card.animate-in:nth-child(3),.resource-card.animate-in:nth-child(3),.expertise-card.animate-in:nth-child(3),.value-card.animate-in:nth-child(3),.focus-area-card.animate-in:nth-child(3),.measurable-card.animate-in:nth-child(3),.impact-card.animate-in:nth-child(3) {animation-delay:0.3s}
-
-.service-card.animate-in:nth-child(4),.resource-card.animate-in:nth-child(4),.expertise-card.animate-in:nth-child(4),.value-card.animate-in:nth-child(4),.focus-area-card.animate-in:nth-child(4),.measurable-card.animate-in:nth-child(4),.impact-card.animate-in:nth-child(4) {animation-delay:0.4s}
-
-.service-card.animate-in:nth-child(5),.resource-card.animate-in:nth-child(5),.expertise-card.animate-in:nth-child(5),.value-card.animate-in:nth-child(5),.focus-area-card.animate-in:nth-child(5),.measurable-card.animate-in:nth-child(5),.impact-card.animate-in:nth-child(5) {animation-delay:0.5s}
-
-.service-card.animate-in:nth-child(6),.resource-card.animate-in:nth-child(6),.expertise-card.animate-in:nth-child(6),.value-card.animate-in:nth-child(6),.focus-area-card.animate-in:nth-child(6),.measurable-card.animate-in:nth-child(6),.impact-card.animate-in:nth-child(6) {animation-delay:0.6s}
+/* Card animation and stagger delays moved to 06-effects.css */
 
 .service-card:active,.resource-card:active,.expertise-card:active,.value-card:active,.focus-area-card:active,.measurable-card:active,.impact-card:active {transform:scale(0.98) translateY(-2px);transition:all 0.1s ease}
-
-/* Card hover effects mobile - Consolidated in main mobile media query below */
-
-@media (prefers-reduced-motion:reduce) {.service-card.animate-in,.resource-card.animate-in,.expertise-card.animate-in,.value-card.animate-in,.focus-area-card.animate-in,.measurable-card.animate-in,.impact-card.animate-in {animation:none;opacity:1;transform:none}
-
-.service-card:hover,.resource-card:hover,.expertise-card:hover,.value-card:hover,.focus-area-card:hover,.measurable-card:hover,.impact-card:hover {transform:none}}
 
 .fnf-page--services .slds-text-align_center h3 {color:#fff;margin-bottom:1rem}
 
