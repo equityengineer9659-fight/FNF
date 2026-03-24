@@ -46,17 +46,12 @@
     <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
     <link rel="stylesheet" href="src/css/critical-inline.css">
 
-    <!-- Preload Orbitron font for hero text with font-display swap -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap"></noscript>
-
-    <!-- Salesforce Lightning Design System CSS - Load asynchronously -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css"></noscript>
-
-    <!-- Custom CSS - Load asynchronously for non-critical styles -->
-    <link rel="preload" href="src/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="src/css/main.css"></noscript>
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="src/css/main.css">
 </head>
 <body class="fnf-page--index" id="page-top">
     <!-- Skip Navigation for Accessibility -->
@@ -209,10 +204,10 @@
                                     <g stroke-width="2" stroke-linecap="round">
                                         <circle class="node-pulse" cx="12" cy="18" r="2.5"/>
                                         <path class="connector-draw" d="M18 24 L12 18"/>
-                                        <circle class="node-pulse" cx="52" cy="18" r="2.5" style="animation-delay: 0.4s"/>
-                                        <path class="connector-draw" d="M46 24 L52 18" style="animation-delay: 0.4s"/>
-                                        <circle class="node-pulse" cx="32" cy="54" r="2.5" style="animation-delay: 0.8s"/>
-                                        <path class="connector-draw" d="M32 44 L32 54" style="animation-delay: 0.8s"/>
+                                        <circle class="node-pulse delay-04" cx="52" cy="18" r="2.5"/>
+                                        <path class="connector-draw delay-04" d="M46 24 L52 18"/>
+                                        <circle class="node-pulse delay-08" cx="32" cy="54" r="2.5"/>
+                                        <path class="connector-draw delay-08" d="M32 44 L32 54"/>
                                     </g>
                                 </svg>
                             </div>
@@ -241,8 +236,8 @@
                                     <g stroke-width="2" stroke-linecap="round">
                                         <circle class="node-radiant" cx="50" cy="12"/>
                                         <path class="connector-radiant" d="M45 17 L50 12"/>
-                                        <circle class="node-radiant" cx="14" cy="46" style="animation-delay: 0.5s"/>
-                                        <path class="connector-radiant" d="M18 42 L14 46" style="animation-delay: 0.5s"/>
+                                        <circle class="node-radiant delay-05" cx="14" cy="46"/>
+                                        <path class="connector-radiant delay-05" d="M18 42 L14 46"/>
                                     </g>
                                 </svg>
                             </div>

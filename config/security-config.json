@@ -1,0 +1,33 @@
+{
+  "security": {
+    "headers": {
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+      "Permissions-Policy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+    },
+    "csp": {
+      "default-src": ["'self'"],
+      "script-src": ["'self'"],
+      "style-src": ["'self'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
+      "font-src": ["'self'", "https://fonts.gstatic.com", "data:"],
+      "img-src": ["'self'", "data:", "https:"],
+      "connect-src": ["'self'"],
+      "frame-ancestors": ["'none'"],
+      "base-uri": ["'self'"],
+      "form-action": ["'self'"],
+      "upgrade-insecure-requests": true
+    },
+    "monitoring": {
+      "csp-report-uri": null,
+      "report-to": null
+    },
+    "future-improvements": [
+      "Add Subresource Integrity (SRI) for external resources",
+      "Implement Report-To header for security violation reporting",
+      "Consider implementing Feature-Policy/Permissions-Policy more restrictively"
+    ]
+  }
+}

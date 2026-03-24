@@ -26,3 +26,7 @@ main{padding-top:var(--nav-height);position:relative;z-index:2}
 .slds-button_outline-brand{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.3)}
 @media (max-width:768px){.fnf-nav__toggle{display:flex;align-items:center;justify-content:center;width:44px;height:44px;cursor:pointer;z-index:10}.fnf-nav__menu{display:none !important}.fnf-nav__title{font-size:1.4rem}}
 @media (min-width:769px){.fnf-nav__toggle{display:none}.fnf-nav__menu{display:flex !important;list-style:none;margin:0;padding:0;gap:2rem}.fnf-nav__link{color:#fff;text-decoration:none;font-weight:500;transition:color 0.3s}.fnf-nav__link:hover{color:var(--fnf-color-primary)}}
+/* SVG animation delay classes (replaces inline style attributes for CSP compliance) */
+.delay-04{animation-delay:0.4s}
+.delay-05{animation-delay:0.5s}
+.delay-08{animation-delay:0.8s}
