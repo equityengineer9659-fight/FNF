@@ -57,7 +57,7 @@
 
 .impact-numbers-dark > *{position:relative;z-index:10}
 
-.stat-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:rgba(45,55,65,.2);backdrop-filter:var(--glass-blur);border-radius:var(--slds-border-radius-large);border:1px solid rgba(255,255,255,.1);padding:var(--slds-spacing-large);transition:all var(--transition-medium);min-height:180px;justify-content:center}
+.stat-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--glass-bg-light);backdrop-filter:var(--glass-blur);border-radius:var(--slds-border-radius-large);border:1px solid var(--glass-border);padding:var(--slds-spacing-large);transition:all var(--transition-medium);min-height:180px;justify-content:center}
 
 .stat-card:hover{background:rgba(45,55,65,.35);border-color:rgba(255,255,255,.2);transform:translateY(-4px)}
 
