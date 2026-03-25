@@ -51,9 +51,17 @@
     // Open first card by default
     cards[0].classList.add('accordion-expanded');
 
-    cards.forEach(function (card) {
+    cards.forEach(function (card, index) {
       var header = card.querySelector('h3.slds-text-heading_medium');
+      var list = card.querySelector('ul.expertise-list');
       if (!header) return;
+
+      // Accessibility: link header to controlled panel
+      var listId = 'expertise-list-' + index;
+      if (list) {
+        list.id = listId;
+        header.setAttribute('aria-controls', listId);
+      }
 
       header.addEventListener('click', function (e) {
         e.preventDefault();
