@@ -70,7 +70,7 @@ npm run governance:status       # Check governance framework status
 ```
 /
 ├── src/                    # Source files
-│   ├── css/               # CSS files with modular architecture (11 files)
+│   ├── css/               # CSS files with modular architecture (12 files)
 │   ├── js/                # JavaScript modules (main.js, effects/, config/, monitoring/)
 │   ├── assets/            # Images, fonts, and other assets
 │   └── templates/         # HTML component templates
@@ -88,13 +88,15 @@ npm run governance:status       # Check governance framework status
 
 ### CSS Architecture
 - **Location**: `src/css/` with modular organization (main.css imports all modules)
-- **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients
+- **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients → page-overrides
 - **Design Tokens**: Centralized in `02-design-tokens.css` (colors, spacing, fonts, gradients, glass effects)
 - **Bundle Optimization**: Minified production builds via Vite + CSSnano (~96KB, ~16KB gzipped)
 - **SLDS Compliance**: 89% baseline maintained with token mapping system
 - **Navigation**: Consolidated in `03-navigation.css` (single source of truth)
 - **Effects/Animations**: Card stagger delays, keyframes, particles in `06-effects.css`
 - **Gradients/Theming**: Section backgrounds, hero gradients, SLDS button overrides in `critical-gradients.css`
+- **Page Overrides**: Page-specific mobile/tablet responsive rules and expertise accordion in `10-page-overrides.css`
+- **Critical Inline**: Loading placeholder CSS in `critical-inline.css` (loaded before main.css in HTML)
 - **Note**: `@layer` declarations are NOT used — blocked by SLDS CDN dependency (un-layered SLDS overrides layered custom CSS)
 
 ### JavaScript Architecture
@@ -108,9 +110,11 @@ npm run governance:status       # Check governance framework status
   - `effects/newsletter-popup.js` — scroll-triggered modal with focus trap
   - `effects/gradient-icons.js` — SVG gradient icon system
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
+  - `expertise-accordion.js` — mobile accordion for about page expertise section
 - **Cleanup**: All modules use AbortController or explicit cleanup in destroy()
 - **Production**: Source maps disabled, no console.log in production code
 - **Unit Tests**: 159 tests across 9 test files (vitest)
+- **Design Tokens**: Glass opacity variants (`--glass-bg-light/primary/strong`), contact accent colors (`--fnf-contact-accent/*`), all centralized in `02-design-tokens.css`
 
 ### Critical Constraints
 **NEVER modify these without explicit permission:**
