@@ -90,7 +90,7 @@ npm run governance:status       # Check governance framework status
 - **Location**: `src/css/` with modular organization (main.css imports all modules)
 - **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients → page-overrides
 - **Design Tokens**: Centralized in `02-design-tokens.css` (colors, spacing, fonts, gradients, glass effects)
-- **Bundle Optimization**: Minified production builds via Vite + CSSnano (~96KB, ~16KB gzipped)
+- **Bundle Optimization**: Minified production builds via Vite + CSSnano (~89KB, ~15KB gzipped)
 - **SLDS Compliance**: 89% baseline maintained with token mapping system
 - **Navigation**: Consolidated in `03-navigation.css` (single source of truth)
 - **Effects/Animations**: Card stagger delays, keyframes, particles in `06-effects.css`
@@ -136,8 +136,8 @@ Test ALL 6 pages at these configurations:
 - **Browsers**: Chrome, Firefox, Safari minimum
 
 ### Performance Budgets
-- **CSS Bundle**: ~96KB minified (includes all modules and effects)
-- **JavaScript Bundle**: ~50KB total (44KB main + 6KB effects, tree-shaken & minified)
+- **CSS Bundle**: ~89KB minified (includes all modules and effects)
+- **JavaScript Bundle**: ~50KB total (44KB main + 6KB effects, tree-shaken & minified via Terser)
 - **Gzipped Sizes**: ~16KB CSS, ~15KB JS combined
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: ≥89% baseline maintained
