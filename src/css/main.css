@@ -2,9 +2,9 @@
 
 /* :root variables consolidated in 02-design-tokens.css */
 
-html {background:#000;color:#fff}
+html {background:var(--slds-c-background-default);color:var(--slds-c-text-default)}
 
-body {background:#000;color:#fff;min-height:100vh;overflow-x:hidden;position:relative}
+body {background:var(--slds-c-background-default);color:var(--slds-c-text-default);min-height:100vh;overflow-x:hidden;position:relative}
 
 /* Page-specific body classes for future customization */
 

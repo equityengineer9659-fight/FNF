@@ -211,7 +211,7 @@ body.fnf-page--contact .contact-section::before {content:'';position:absolute;in
 
 body.fnf-page--contact .contact-section .slds-container_large {position:relative;z-index:1}
 
-.fnf-page--contact .contact-form-container,.fnf-page--contact .contact-info-container {background:#4a5568;backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:var(--slds-border-radius-large);padding:var(--fnf-spacing-xl);margin-bottom:var(--slds-spacing-x-large);box-shadow:0 8px 32px rgba(0,0,0,0.3);height:auto}
+.fnf-page--contact .contact-form-container,.fnf-page--contact .contact-info-container {background:#4a5568;backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border-light);border-radius:var(--slds-border-radius-large);padding:var(--fnf-spacing-xl);margin-bottom:var(--slds-spacing-x-large);box-shadow:0 8px 32px rgba(0,0,0,0.3);height:auto}
 
 .fnf-page--contact .contact-form-container h3 {color:var(--fnf-secondary);font-size:24px;margin-bottom:var(--fnf-spacing-lg);text-align:left}
 
@@ -258,7 +258,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--impact .stat-label {font-size:1rem;color:#fff;font-weight:400;margin:0;line-height:1.4}
 
-.fnf-page--impact .testimonial-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:var(--slds-border-radius-large);padding:var(--fnf-spacing-xl);box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:all 0.3s ease;height:100%;display:flex;flex-direction:column;justify-content:flex-start;margin-bottom:var(--slds-spacing-x-large)}
+.fnf-page--impact .testimonial-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border-light);border-radius:var(--slds-border-radius-large);padding:var(--fnf-spacing-xl);box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:all 0.3s ease;height:100%;display:flex;flex-direction:column;justify-content:flex-start;margin-bottom:var(--slds-spacing-x-large)}
 
 .fnf-page--impact .testimonial-heading {color:#fff;font-size:1.2rem;font-weight:600;margin-bottom:var(--slds-spacing-large);text-align:center}
 
@@ -287,13 +287,13 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .featured-content-section h2 {color:#fff;text-align:center;margin-bottom:var(--slds-spacing-xx-large)}
 
-.featured-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:var(--slds-border-radius-large);padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:all 0.3s ease;height:100%}
+.featured-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border-light);border-radius:var(--slds-border-radius-large);padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,0.3);transition:all 0.3s ease;height:100%}
 
 .featured-card:hover {transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
 
 .featured-card-title {color:#fff;font-size:1.5rem;font-weight:600;margin-bottom:var(--slds-spacing-large);text-align:center;padding-bottom:0.5rem;border-bottom:2px solid var(--fnf-primary)}
 
-.featured-item {padding:1rem 0;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:flex-start}
+.featured-item {padding:1rem 0;border-bottom:1px solid var(--glass-border-light);display:flex;justify-content:space-between;align-items:flex-start}
 
 .featured-item:last-child {border-bottom:none}
 
@@ -331,7 +331,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--services .services-section p {color:rgba(255,255,255,0.9);text-align:center}
 
-.fnf-page--services .service-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:var(--slds-border-radius-large);padding:2rem;text-align:center;transition:all 0.3s ease;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative}
+.fnf-page--services .service-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border-light);border-radius:var(--slds-border-radius-large);padding:2rem;text-align:center;transition:all 0.3s ease;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative}
 
 .fnf-page--services .service-card:hover {transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
 
@@ -401,7 +401,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--resources .resources-section p {color:rgba(255,255,255,0.9);text-align:center}
 
-.fnf-page--resources .resource-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid rgba(255,255,255,0.1);border-radius:var(--slds-border-radius-large);padding:2rem;text-align:center;transition:all 0.6s cubic-bezier(0.23,1,0.32,1);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative;transform-style:preserve-3d;perspective:1500px;cursor:pointer;will-change:transform;backface-visibility:hidden;transform-origin:center bottom}
+.fnf-page--resources .resource-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border-light);border-radius:var(--slds-border-radius-large);padding:2rem;text-align:center;transition:all 0.6s cubic-bezier(0.23,1,0.32,1);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative;transform-style:preserve-3d;perspective:1500px;cursor:pointer;will-change:transform;backface-visibility:hidden;transform-origin:center bottom}
 
 .fnf-page--resources .resource-card:hover {transform:translateY(-30px) translateZ(120px) rotateX(25deg) rotateY(-8deg) scale(1.08);transform-origin:center bottom;perspective:1500px;box-shadow:0 30px 80px rgba(0,0,0,0.4),0 15px 30px rgba(1,118,211,0.2),0 5px 15px rgba(1,118,211,0.1),inset 0 1px 0 rgba(255,255,255,0.15);transition:all 0.6s cubic-bezier(0.23,1,0.32,1);z-index:15}
 
@@ -609,7 +609,7 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
     right: 0;
     background: rgba(15,30,58,0.95);
     backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid var(--glass-border-light);
     z-index: 25;
     display: none;
   }
