@@ -1,0 +1,60 @@
+/* Page-specific mobile overrides — extracted from critical-gradients.css */
+/* These rules are scoped to .fnf-page--* within @media blocks */
+
+@media (width <= 768px) {
+  /* About Page: Stats layout */
+  .fnf-page--about .about-stats .stats-container {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .fnf-page--about .about-stats .stat-number {
+    font-size: 3rem;
+  }
+
+  /* Impact Page: Stats and grid layout */
+  .fnf-page--impact .stats-container {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .fnf-page--impact .stat-number {
+    font-size: 3rem;
+  }
+
+  .fnf-page--impact .impact-section .slds-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Contact Page: Grid and form layout */
+  .fnf-page--contact .contact-section .slds-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .fnf-page--contact .contact-form-container,
+  .fnf-page--contact .contact-info-container {
+    padding: 2rem;
+    background: #4a5568;
+  }
+
+  .fnf-page--contact .contact-section {
+    padding: 2rem 1rem;
+    min-height: auto;
+  }
+}
+
+/* Contact Page: Tablet overrides */
+@media (width >= 769px) and (width <= 1024px) {
+  .fnf-page--contact .contact-section .slds-grid {
+    gap: var(--slds-spacing-x-large);
+  }
+
+  .fnf-page--contact .contact-form-container,
+  .fnf-page--contact .contact-info-container {
+    padding: 2rem;
+    background: #4a5568;
+  }
+}

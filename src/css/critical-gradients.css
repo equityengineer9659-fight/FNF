@@ -654,31 +654,7 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
     gap: 1rem;
   }
 
-  /* About Page: Stats layout */
-  .fnf-page--about .about-stats .stats-container {
-    flex-direction: column;
-    gap: 3rem;
-  }
-
-  .fnf-page--about .about-stats .stat-number {
-    font-size: 3rem;
-  }
-
-  /* Impact Page: Stats and grid layout */
-  .fnf-page--impact .stats-container {
-    flex-direction: column;
-    gap: 3rem;
-  }
-
-  .fnf-page--impact .stat-number {
-    font-size: 3rem;
-  }
-
-  .fnf-page--impact .impact-section .slds-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+  /* About/Impact/Contact mobile overrides moved to 10-page-overrides.css */
 
   /* Cards: Mobile hover effects */
   .service-card:hover:not(.card-transform-active),
@@ -709,27 +685,9 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
     width: 100%;
   }
 
-  /* Contact Page: Grid and form layout */
-  .fnf-page--contact .contact-section .slds-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .fnf-page--contact .contact-form-container,
-  .fnf-page--contact .contact-info-container {
-    padding: 2rem;
-    background: #4a5568;
-  }
-
-  .fnf-page--contact .contact-section {
-    padding: 2rem 1rem;
-    min-height: auto;
-  }
 }
 
-@media (width >= 769px) and (width <= 1024px) {.fnf-page--contact .contact-section .slds-grid {gap:var(--slds-spacing-x-large)}
-
-.fnf-page--contact .contact-form-container,.fnf-page--contact .contact-info-container {padding:2rem;background:#4a5568}}
+/* Contact tablet overrides moved to 10-page-overrides.css */
 
 .fnf-page--about .our-why-section,body.fnf-page--about .our-why-section,body.fnf-page--about section.our-why-section {background:rgba(64,64,64,0.8);padding:6rem 2rem;position:relative;color:#fff}
 
