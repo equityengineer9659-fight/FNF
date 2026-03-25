@@ -70,7 +70,7 @@ npm run governance:status       # Check governance framework status
 ```
 /
 ├── src/                    # Source files
-│   ├── css/               # CSS files with modular architecture (10 files)
+│   ├── css/               # CSS files with modular architecture (11 files)
 │   ├── js/                # JavaScript modules (main.js, effects/, config/, monitoring/)
 │   ├── assets/            # Images, fonts, and other assets
 │   └── templates/         # HTML component templates
@@ -110,7 +110,7 @@ npm run governance:status       # Check governance framework status
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
 - **Cleanup**: All modules use AbortController or explicit cleanup in destroy()
 - **Production**: Source maps disabled, no console.log in production code
-- **Unit Tests**: 133 tests across 6 test files (vitest)
+- **Unit Tests**: 159 tests across 9 test files (vitest)
 
 ### Critical Constraints
 **NEVER modify these without explicit permission:**
