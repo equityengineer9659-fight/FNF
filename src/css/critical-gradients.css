@@ -544,6 +544,8 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
 
 .fnf-scroll-to-top:focus {outline:2px solid var(--fnf-secondary);outline-offset:2px}
 
+@media (width <= 768px) {.fnf-scroll-to-top {width:3.5rem;height:3.5rem;font-size:1.4rem;bottom:1.5rem;right:1.5rem}}
+
 .fnf-page--contact {background:#0a0a0a;min-height:100vh}
 
 .fnf-page--contact body {background:#0a0a0a}

@@ -8,12 +8,11 @@
   # Node version for builds
   environment = { NODE_VERSION = "18" }
 
-# Redirect rules
+# Custom 404 page
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
-  conditions = {Language = ["en"]}
+  to = "/404.html"
+  status = 404
 
 # Headers (these merge with _headers file)
 [[headers]]
