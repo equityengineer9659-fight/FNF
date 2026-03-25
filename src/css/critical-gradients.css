@@ -118,13 +118,13 @@ to {opacity:1;transform:translateY(0) scale(1)}}
 /* Footer styles moved to 07-components.css */
 
 
-@media (width <= 48rem) {.focus-areas .slds-grid,.measurable-growth .slds-grid,.expertise-section .slds-grid,.values-section .slds-grid,.services-section .slds-grid,.resources-section .slds-grid,.impact-section .slds-grid,.contact-section .slds-grid {display:flex;flex-direction:column;gap:var(--slds-spacing-medium)}
+@media (width <= 48rem) {.fnf-section-grid .slds-grid {display:flex;flex-direction:column;gap:var(--slds-spacing-medium)}
 
-.focus-areas .slds-col,.measurable-growth .slds-col,.expertise-section .slds-col,.values-section .slds-col,.services-section .slds-col,.resources-section .slds-col,.impact-section .slds-col,.contact-section .slds-col {width:100%;margin-bottom:var(--slds-spacing-medium)}}
+.fnf-section-grid .slds-col {width:100%;margin-bottom:var(--slds-spacing-medium)}}
 
-@media (width >= 48rem) and (width <= 64rem) {.focus-areas .slds-grid,.measurable-growth .slds-grid,.expertise-section .slds-grid,.values-section .slds-grid,.services-section .slds-grid,.resources-section .slds-grid,.impact-section .slds-grid,.contact-section .slds-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:var(--slds-spacing-medium)}
+@media (width >= 48rem) and (width <= 64rem) {.fnf-section-grid .slds-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:var(--slds-spacing-medium)}
 
-.focus-areas .slds-col,.measurable-growth .slds-col,.expertise-section .slds-col,.values-section .slds-col,.services-section .slds-col,.resources-section .slds-col,.impact-section .slds-col,.contact-section .slds-col {width:auto;flex:none;align-self:stretch}}
+.fnf-section-grid .slds-col {width:auto;flex:none;align-self:stretch}}
 
 .expertise-card,.value-card {text-align:center;transition:all 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.3);border-radius:var(--slds-border-radius-large);padding:var(--fnf-spacing-xl);background:rgba(45,55,65,0.4);backdrop-filter:var(--glass-blur);border:1px solid rgba(100,120,140,0.3);position:relative;max-width:400px;margin:0 auto;opacity:1;transform:translateY(0);display:flex;flex-direction:column;justify-content:flex-start;align-items:center}
 
@@ -457,23 +457,13 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
   }
 
   /* General sections - 3-column grid layout */
-  .focus-areas .slds-grid,
-  .measurable-growth .slds-grid,
-  .services-section .slds-grid,
-  .resources-section .slds-grid,
-  .impact-section .slds-grid,
-  .contact-section .slds-grid {
+  .fnf-section-grid .slds-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--slds-spacing-large);
   }
 
-  .focus-areas .slds-col,
-  .measurable-growth .slds-col,
-  .services-section .slds-col,
-  .resources-section .slds-col,
-  .impact-section .slds-col,
-  .contact-section .slds-col {
+  .fnf-section-grid .slds-col {
     width: auto;
     flex: none;
     align-self: stretch;
