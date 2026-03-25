@@ -21,7 +21,8 @@ describe('ErrorTracker', () => {
   });
 
   describe('initialization', () => {
-    it('should be initialized after import', () => {
+    it('should initialize when init() is called', () => {
+      errorTracker.init();
       expect(errorTracker.initialized).toBe(true);
     });
 
@@ -32,9 +33,9 @@ describe('ErrorTracker', () => {
     });
 
     it('should not re-initialize if already initialized', () => {
+      errorTracker.init(); // first init
       const addSpy = vi.spyOn(window, 'addEventListener');
-      errorTracker.init(); // call again
-      // Should not add duplicate listeners
+      errorTracker.init(); // second init — should no-op
       const errorCalls = addSpy.mock.calls.filter(c => c[0] === 'error');
       expect(errorCalls.length).toBe(0);
       addSpy.mockRestore();

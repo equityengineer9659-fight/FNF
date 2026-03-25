@@ -4,8 +4,11 @@
  * Run this as a pre-build step to generate HTML from components
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Component definitions
 const components = {
@@ -79,16 +82,15 @@ const components = {
     <footer class="fnf-footer">
         <div class="slds-container_large slds-container_center slds-p-around_large">
             <div class="slds-text-align_center">
-                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2025 Food-N-Force. All rights reserved.</p>
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
             </div>
         </div>
     </footer>`,
 
-  scripts: () => `    <!-- JavaScript Modules - Deferred for performance -->
-    <script type="module" src="src/js/main.js" defer></script>
-
-    <!-- Fallback Particle System for Local File Access -->
-    <script src="src/js/fallback-particles.js" defer></script>`
+  scripts: () => {
+    return `    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="src/js/main.js" defer></script>`;
+  }
 };
 
 // Process HTML files
@@ -109,10 +111,16 @@ function processHtmlFile(filePath, pageName) {
     console.log(`✅ Updated footer in ${pageName}.html`);
   }
 
-  // Replace scripts component
-  const scriptsPattern = /    <!-- JavaScript Modules[\s\S]*?<\/script>/g;
-  if (scriptsPattern.test(html)) {
-    html = html.replace(scriptsPattern, components.scripts());
+  // Remove all existing script sections and duplicates first
+  const scriptSectionPattern = /    <!-- JavaScript Modules[\s\S]*?(?=<\/body>)/;
+  const fallbackScriptPattern = /    <!-- Fallback Particle System[\s\S]*?<\/script>\n?/g;
+
+  // Remove all fallback scripts first
+  html = html.replace(fallbackScriptPattern, '');
+
+  // Then replace the entire script section
+  if (scriptSectionPattern.test(html)) {
+    html = html.replace(scriptSectionPattern, components.scripts(pageName) + '\n');
     console.log(`✅ Updated scripts in ${pageName}.html`);
   }
 
@@ -146,8 +154,6 @@ function buildComponents() {
 }
 
 // Run if called directly
-if (require.main === module) {
-  buildComponents();
-}
+buildComponents();
 
-module.exports = { buildComponents };
+export { buildComponents };

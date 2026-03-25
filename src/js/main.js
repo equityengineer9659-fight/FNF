@@ -45,7 +45,6 @@ class FNFApp {
   constructor() {
     log('🏗️ FNFApp constructor called!');
     this.particles = null;
-    this.animations = null;
     this.counters = null;
     this.newsletterPopup = null;
     this.smartScroll = null;
@@ -68,7 +67,7 @@ class FNFApp {
   init() {
     // Wait for DOM to be ready
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => this.initializeApp());
+      document.addEventListener('DOMContentLoaded', () => this.initializeApp(), { signal: this.abortController.signal });
     } else {
       this.initializeApp();
     }
@@ -96,7 +95,6 @@ class FNFApp {
 
       // Initialize core systems
       this.initParticleSystem();
-      this.initAnimationSystem();
       this.initCounterSystem();
       this.initGradientIcons();
       this.initNewsletterPopup();
@@ -136,17 +134,6 @@ class FNFApp {
     } catch (error) {
       console.error('❌ Particle system failed to initialize:', error);
     }
-  }
-
-  initAnimationSystem() {
-    // Check feature flag
-    if (!config.features.animations) {
-      log('🎬 Animation system disabled by feature flag');
-      return;
-    }
-
-    log('🎬 Animation system SKIPPED for testing');
-    // Temporarily disabled - will be enabled when animations module is ready
   }
 
   initCounterSystem() {
@@ -269,7 +256,7 @@ class FNFApp {
             setTimeout(() => firstLink.focus(), 100);
           }
         }
-      });
+      }, { signal: this.abortController.signal });
     }
   }
 
@@ -365,7 +352,7 @@ class FNFApp {
       if (document.readyState === 'complete') {
         this.reportPerformanceMetrics();
       } else {
-        window.addEventListener('load', () => this.reportPerformanceMetrics());
+        window.addEventListener('load', () => this.reportPerformanceMetrics(), { signal: this.abortController.signal });
       }
     } catch (error) {
       errorTracker.captureException(error, { context: 'initPerformanceMonitoring' });
@@ -494,8 +481,7 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
   window.fnfApp = app;
   window.fnfDebug = {
     getStats: () => app.getStats(),
-    particles: () => app.particles,
-    animations: () => app.animations
+    particles: () => app.particles
   };
 }
 
