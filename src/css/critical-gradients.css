@@ -223,11 +223,11 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--contact .contact-form-container h3 {color:var(--fnf-secondary);font-size:24px;margin-bottom:var(--fnf-spacing-lg);text-align:left}
 
-.fnf-page--contact .contact-form label {color:#fbbf24;font-weight:500;margin-bottom:var(--slds-spacing-x-small);display:block}
+.fnf-page--contact .contact-form label {color:var(--fnf-contact-accent);font-weight:500;margin-bottom:var(--slds-spacing-x-small);display:block}
 
-.fnf-page--contact .contact-form input,.fnf-page--contact .contact-form select,.fnf-page--contact .contact-form textarea {background:#000;border:4px solid #fbbf24;border-radius:var(--fnf-border-radius-sm-md);color:#fff;padding:0.75rem;width:100%;font-size:14px;transition:border-color 0.3s ease;box-shadow:0 0 8px rgba(251,191,36,0.4)}
+.fnf-page--contact .contact-form input,.fnf-page--contact .contact-form select,.fnf-page--contact .contact-form textarea {background:#000;border:4px solid var(--fnf-contact-accent);border-radius:var(--fnf-border-radius-sm-md);color:#fff;padding:0.75rem;width:100%;font-size:14px;transition:border-color 0.3s ease;box-shadow:0 0 8px var(--fnf-contact-accent-glow)}
 
-.fnf-page--contact .contact-form input:focus,.fnf-page--contact .contact-form select:focus,.fnf-page--contact .contact-form textarea:focus {border-color:#fcd34d;outline:none;box-shadow:0 0 12px rgba(252,211,77,0.6)}
+.fnf-page--contact .contact-form input:focus,.fnf-page--contact .contact-form select:focus,.fnf-page--contact .contact-form textarea:focus {border-color:var(--fnf-contact-accent-light);outline:none;box-shadow:0 0 12px var(--fnf-contact-accent-glow-strong)}
 
 .fnf-page--contact .contact-form input::placeholder,.fnf-page--contact .contact-form textarea::placeholder {color:rgba(255,255,255,0.6)}
 
@@ -239,13 +239,13 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--contact .contact-info-item {margin-bottom:var(--fnf-spacing-lg)}
 
-.fnf-page--contact .contact-info-item h4 {color:#fbbf24;font-size:16px;font-weight:600;margin-bottom:var(--slds-spacing-x-small);text-align:left}
+.fnf-page--contact .contact-info-item h4 {color:var(--fnf-contact-accent);font-size:16px;font-weight:600;margin-bottom:var(--slds-spacing-x-small);text-align:left}
 
 .fnf-page--contact .contact-info-item p {color:rgba(255,255,255,0.9);margin:0;line-height:1.5;text-align:left;margin-bottom:var(--fnf-spacing-lg)}
 
-.fnf-page--contact .contact-info-item a {color:#ff7f50;text-decoration:none;font-weight:500;transition:color 0.3s ease}
+.fnf-page--contact .contact-info-item a {color:var(--fnf-contact-link);text-decoration:none;font-weight:500;transition:color 0.3s ease}
 
-.fnf-page--contact .contact-info-item a:hover {color:#ff9970;text-decoration:underline}
+.fnf-page--contact .contact-info-item a:hover {color:var(--fnf-contact-link-hover);text-decoration:underline}
 
 
 .fnf-page--contact .contact-form-container *,.fnf-page--contact .contact-info-container * {text-align:left}
@@ -570,13 +570,13 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
 
 .fnf-page--contact .contact-info-container h3 {color:var(--fnf-secondary);font-size:1.5rem;font-weight:600;margin-bottom:var(--slds-spacing-x-large)}
 
-.fnf-page--contact .contact-info-item h4 {color:#fbbf24;font-size:1.1rem;font-weight:600;margin-bottom:var(--slds-spacing-x-small)}
+.fnf-page--contact .contact-info-item h4 {color:var(--fnf-contact-accent);font-size:1.1rem;font-weight:600;margin-bottom:var(--slds-spacing-x-small)}
 
-.fnf-page--contact .contact-info-item a:hover {color:#ff9970;text-decoration:underline}
+.fnf-page--contact .contact-info-item a:hover {color:var(--fnf-contact-link-hover);text-decoration:underline}
 
-.fnf-page--contact .contact-form input,.fnf-page--contact .contact-form select,.fnf-page--contact .contact-form textarea {background:#000;border:4px solid #fbbf24;border-radius:var(--fnf-border-radius-sm-md);padding:0.75rem 1rem;color:#fff;width:100%;margin-bottom:var(--slds-spacing-medium);transition:all 0.3s ease;box-shadow:0 0 8px rgba(251,191,36,0.4)}
+.fnf-page--contact .contact-form input,.fnf-page--contact .contact-form select,.fnf-page--contact .contact-form textarea {background:#000;border:4px solid var(--fnf-contact-accent);border-radius:var(--fnf-border-radius-sm-md);padding:0.75rem 1rem;color:#fff;width:100%;margin-bottom:var(--slds-spacing-medium);transition:all 0.3s ease;box-shadow:0 0 8px var(--fnf-contact-accent-glow)}
 
-.fnf-page--contact .contact-form input:focus,.fnf-page--contact .contact-form select:focus,.fnf-page--contact .contact-form textarea:focus {outline:none;border-color:#fcd34d;box-shadow:0 0 12px rgba(252,211,77,0.6);background:#000}
+.fnf-page--contact .contact-form input:focus,.fnf-page--contact .contact-form select:focus,.fnf-page--contact .contact-form textarea:focus {outline:none;border-color:var(--fnf-contact-accent-light);box-shadow:0 0 12px var(--fnf-contact-accent-glow-strong);background:#000}
 
 .fnf-page--contact .submit-button {background:linear-gradient(135deg,#0176d3 0%,#00d4ff 100%);color:#fff;border:none;border-radius:10px;padding:1.1rem 3.5rem;font-size:17px;font-weight:700;cursor:pointer;transition:all 0.3s ease;display:inline-block;width:auto;margin-top:1.5rem;text-transform:uppercase;letter-spacing:0.5px;position:relative;top:0;box-shadow:0 6px 0 #015395,0 8px 12px rgba(0,0,0,0.4)}
 
