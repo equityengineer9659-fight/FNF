@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.html",
   "scripts": {
+    "prepare": "husky",
     "dev": "vite",
     "build": "node scripts/generate-sitemap.js && node build-components.js && vite build",
     "build:components": "node build-components.js",
@@ -48,7 +49,8 @@
     "restore:create": "node scripts/create-restore-point.cjs",
     "restore:apply": "node scripts/apply-restore-point.cjs",
     "restore:list": "node -e \"console.log(require('fs').readdirSync('backups').filter(d => d.startsWith('restore_')).sort().reverse().slice(0, 10).join('\\n'))\"",
-    "css:duplicates": "node scripts/detect-css-duplicates.cjs"
+    "css:duplicates": "node scripts/detect-css-duplicates.cjs",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -81,8 +83,10 @@
     "glob": "^10.3.0",
     "html-validate": "^8.7.3",
     "htmlhint": "^1.1.4",
+    "husky": "^9.1.7",
     "jsdom": "^27.0.0",
     "lighthouse": "^11.4.0",
+    "lint-staged": "^16.4.0",
     "live-server": "^1.2.2",
     "netlify-cli": "^17.10.1",
     "pa11y": "^8.0.0",
@@ -109,7 +113,12 @@
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
   },
+  "lint-staged": {
+    "src/**/*.css": "stylelint",
+    "src/**/*.js": "eslint"
+  },
   "dependencies": {
-    "@sentry/browser": "^10.17.0"
+    "@sentry/browser": "^10.17.0",
+    "pngjs": "^7.0.0"
   }
 }
