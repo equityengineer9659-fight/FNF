@@ -163,9 +163,7 @@ section[aria-labelledby="expertise-detail-heading"] ul.expertise-list li::before
 
 .section-gray * {color:#fff}
 
-.fnf-page--about .expertise-section {background:transparent;background-color:transparent;background-image:none}
-
-body.fnf-page--about main#main-content .expertise-section,body.fnf-page--about .expertise-section,.fnf-page--about section.expertise-section,body.fnf-page--about main#main-content section.expertise-section,body.fnf-page--about main section.expertise-section,body.fnf-page--about section[aria-labelledby="expertise-detail-heading"],.fnf-page--about section[aria-labelledby="expertise-detail-heading"],body.fnf-page--about main section[aria-labelledby="expertise-detail-heading"] {background:transparent;background-color:transparent;background-image:none;perspective:2000px;transform-style:preserve-3d}
+.fnf-page--about section[aria-labelledby="expertise-detail-heading"] {background:transparent;background-color:transparent;background-image:none;perspective:2000px;transform-style:preserve-3d}
 
 .expertise-section .slds-grid,.values-section .slds-grid {display:grid;visibility:visible;opacity:1}
 
@@ -689,7 +687,7 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
 
 /* Contact tablet overrides moved to 10-page-overrides.css */
 
-.fnf-page--about .our-why-section,body.fnf-page--about .our-why-section,body.fnf-page--about section.our-why-section {background:rgba(64,64,64,0.8);padding:6rem 2rem;position:relative;color:#fff}
+.fnf-page--about .our-why-section {background:rgba(64,64,64,0.8);padding:6rem 2rem;position:relative;color:#fff}
 
 .fnf-page--about .our-why-section h1#why-heading {color:#fff;position:relative;margin-bottom:var(--slds-spacing-xx-large)}
 
@@ -697,7 +695,7 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
 
 .fnf-page--about .our-why-section p {color:rgba(255,255,255,0.9);font-size:1.1rem;line-height:1.6;max-width:800px;margin:0 auto 1.5rem}
 
-.fnf-page--about .our-vision-section,body.fnf-page--about .our-vision-section,body.fnf-page--about section.our-vision-section {background:linear-gradient(135deg,rgba(1,118,211,0.6) 0%,rgba(1,118,211,0.4) 25%,rgba(1,118,211,0.3) 50%,rgba(1,118,211,0.4) 75%,rgba(1,118,211,0.6) 100%);padding:6rem 2rem;position:relative;color:#fff}
+.fnf-page--about .our-vision-section {background:linear-gradient(135deg,rgba(1,118,211,0.6) 0%,rgba(1,118,211,0.4) 25%,rgba(1,118,211,0.3) 50%,rgba(1,118,211,0.4) 75%,rgba(1,118,211,0.6) 100%);padding:6rem 2rem;position:relative;color:#fff}
 
 .fnf-page--about .our-vision-section h2#vision-heading {color:#fff;position:relative;margin-bottom:var(--slds-spacing-xx-large);font-size:2.5rem;font-weight:600}
 
