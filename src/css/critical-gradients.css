@@ -1,3 +1,39 @@
+/*
+ * critical-gradients.css — Table of Contents
+ * ============================================
+ * WARNING: Rule order is cascade-dependent. Do NOT reorder sections.
+ *
+ * Line ~3:    Utility classes (!important)
+ * Line ~15:   Impact numbers section (generic + index page)
+ * Line ~38:   Hero section + keyframes
+ * Line ~74:   Buttons (SLDS brand + CTA)
+ * Line ~85:   Section grid layouts (mobile + tablet media queries)
+ * Line ~93:   Expertise/value cards (generic)
+ * Line ~107:  Expertise detail section (aria-labelledby)
+ * Line ~130:  About page overrides (expertise, stats, text centering)
+ * Line ~170:  All-page text centering rules
+ * Line ~180:  Generic body text centering
+ * Line ~182:  Contact page (first block — gradient bg, form, info)
+ * Line ~221:  Impact page (section, stats, testimonials)
+ * Line ~260:  Featured content + newsletter sections
+ * Line ~298:  Services page section + cards
+ * Line ~320:  Badge components (index, about)
+ * Line ~338:  3D card perspective + hover transforms
+ * Line ~360:  Services page buttons
+ * Line ~368:  Resources page section + cards
+ * Line ~400:  Guidance CTA section
+ * Line ~410:  Desktop media query (>=64rem) — grid layouts
+ * Line ~499:  Featured content tablet media query
+ * Line ~505:  Logo brand animation + nav helpers
+ * Line ~531:  Contact page (second block — overrides first block)
+ * Line ~569:  CONSOLIDATED MOBILE media query (<=768px)
+ * Line ~694:  Contact tablet media query
+ * Line ~698:  About page — Our Why + Our Vision sections
+ * Line ~716:  Generic section spacing + scroll margins
+ * Line ~741:  H2/H3 underline decorations
+ * Line ~751:  Expertise accordion (mobile + desktop reset)
+ */
+
 /* :root variables moved to 02-design-tokens.css */
 
 .fnf-flex{display:flex !important}
