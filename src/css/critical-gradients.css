@@ -201,15 +201,7 @@ body.fnf-page--about section p.slds-text-body_regular,body.fnf-page--about secti
 
 /* About page mobile - Consolidated in main mobile media query below */
 
-.fnf-page--index h2 + p,.fnf-page--index .slds-text-heading_large + p,.fnf-page--index section p.slds-text-body_regular,.fnf-page--index .slds-text-align_center p {text-align:center;margin-left:auto;margin-right:auto}
-
-.fnf-page--services h1 + p,.fnf-page--services h2 + p,.fnf-page--services .slds-text-heading_large + p,.fnf-page--services section p.slds-text-body_regular,.fnf-page--services .slds-text-align_center p {text-align:center;margin-left:auto;margin-right:auto}
-
-.fnf-page--resources h1 + p,.fnf-page--resources h2 + p,.fnf-page--resources .slds-text-heading_large + p,.fnf-page--resources section p.slds-text-body_regular,.fnf-page--resources .slds-text-align_center p {text-align:center;margin-left:auto;margin-right:auto}
-
-.fnf-page--impact h1 + p,.fnf-page--impact h2 + p,.fnf-page--impact .slds-text-heading_large + p,.fnf-page--impact section p.slds-text-body_regular,.fnf-page--impact .slds-text-align_center p {text-align:center;margin-left:auto;margin-right:auto}
-
-.fnf-page--contact h1 + p,.fnf-page--contact h2 + p,.fnf-page--contact .slds-text-heading_large + p,.fnf-page--contact section p.slds-text-body_regular,.fnf-page--contact .slds-text-align_center p {text-align:center;margin-left:auto;margin-right:auto}
+/* Per-page text centering removed — covered by generic body rule on line 214 */
 
 body h2 + p,body .slds-text-heading_large + p,body section div.slds-text-align_center p,body .section-padding p.slds-text-body_regular,body .section-padding p.slds-text-color_weak {text-align:center;margin-left:auto;margin-right:auto}
 
