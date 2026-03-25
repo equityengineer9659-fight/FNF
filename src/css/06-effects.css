@@ -77,19 +77,19 @@
 
 to {opacity:1;transform:translateY(0) rotateX(0deg)}}
 
-.service-card.animate-in,.resource-card.animate-in,.expertise-card.animate-in,.value-card.animate-in,.focus-area-card.animate-in,.measurable-card.animate-in,.impact-card.animate-in {opacity:0;transform:translateY(30px) rotateX(10deg);animation:cardFadeInUp 0.8s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
+.service-card.animate-in,.resource-card.animate-in,.expertise-card.animate-in,.value-card.animate-in,.focus-area-card.animate-in,.measurable-card.animate-in {opacity:0;transform:translateY(30px) rotateX(10deg);animation:cardFadeInUp 0.8s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
 
-.service-card.animate-in:nth-child(1),.resource-card.animate-in:nth-child(1),.expertise-card.animate-in:nth-child(1),.value-card.animate-in:nth-child(1),.focus-area-card.animate-in:nth-child(1),.measurable-card.animate-in:nth-child(1),.impact-card.animate-in:nth-child(1) {animation-delay:0.1s}
+.service-card.animate-in:nth-child(1),.resource-card.animate-in:nth-child(1),.expertise-card.animate-in:nth-child(1),.value-card.animate-in:nth-child(1),.focus-area-card.animate-in:nth-child(1),.measurable-card.animate-in:nth-child(1) {animation-delay:0.1s}
 
-.service-card.animate-in:nth-child(2),.resource-card.animate-in:nth-child(2),.expertise-card.animate-in:nth-child(2),.value-card.animate-in:nth-child(2),.focus-area-card.animate-in:nth-child(2),.measurable-card.animate-in:nth-child(2),.impact-card.animate-in:nth-child(2) {animation-delay:0.2s}
+.service-card.animate-in:nth-child(2),.resource-card.animate-in:nth-child(2),.expertise-card.animate-in:nth-child(2),.value-card.animate-in:nth-child(2),.focus-area-card.animate-in:nth-child(2),.measurable-card.animate-in:nth-child(2) {animation-delay:0.2s}
 
-.service-card.animate-in:nth-child(3),.resource-card.animate-in:nth-child(3),.expertise-card.animate-in:nth-child(3),.value-card.animate-in:nth-child(3),.focus-area-card.animate-in:nth-child(3),.measurable-card.animate-in:nth-child(3),.impact-card.animate-in:nth-child(3) {animation-delay:0.3s}
+.service-card.animate-in:nth-child(3),.resource-card.animate-in:nth-child(3),.expertise-card.animate-in:nth-child(3),.value-card.animate-in:nth-child(3),.focus-area-card.animate-in:nth-child(3),.measurable-card.animate-in:nth-child(3) {animation-delay:0.3s}
 
-.service-card.animate-in:nth-child(4),.resource-card.animate-in:nth-child(4),.expertise-card.animate-in:nth-child(4),.value-card.animate-in:nth-child(4),.focus-area-card.animate-in:nth-child(4),.measurable-card.animate-in:nth-child(4),.impact-card.animate-in:nth-child(4) {animation-delay:0.4s}
+.service-card.animate-in:nth-child(4),.resource-card.animate-in:nth-child(4),.expertise-card.animate-in:nth-child(4),.value-card.animate-in:nth-child(4),.focus-area-card.animate-in:nth-child(4),.measurable-card.animate-in:nth-child(4) {animation-delay:0.4s}
 
-.service-card.animate-in:nth-child(5),.resource-card.animate-in:nth-child(5),.expertise-card.animate-in:nth-child(5),.value-card.animate-in:nth-child(5),.focus-area-card.animate-in:nth-child(5),.measurable-card.animate-in:nth-child(5),.impact-card.animate-in:nth-child(5) {animation-delay:0.5s}
+.service-card.animate-in:nth-child(5),.resource-card.animate-in:nth-child(5),.expertise-card.animate-in:nth-child(5),.value-card.animate-in:nth-child(5),.focus-area-card.animate-in:nth-child(5),.measurable-card.animate-in:nth-child(5) {animation-delay:0.5s}
 
-.service-card.animate-in:nth-child(6),.resource-card.animate-in:nth-child(6),.expertise-card.animate-in:nth-child(6),.value-card.animate-in:nth-child(6),.focus-area-card.animate-in:nth-child(6),.measurable-card.animate-in:nth-child(6),.impact-card.animate-in:nth-child(6) {animation-delay:0.6s}
+.service-card.animate-in:nth-child(6),.resource-card.animate-in:nth-child(6),.expertise-card.animate-in:nth-child(6),.value-card.animate-in:nth-child(6),.focus-area-card.animate-in:nth-child(6),.measurable-card.animate-in:nth-child(6) {animation-delay:0.6s}
 
 /* Non-animated card delays (static stagger) */
 .expertise-card:nth-child(1) {animation-delay:0.1s}
@@ -118,7 +118,7 @@ to {opacity:1;transform:translateY(0) rotateX(0deg)}}
 
 .fnf-button:hover,.fnf-card:hover,.fnf-icon:hover{transform:none}
 
-.service-card.animate-in,.resource-card.animate-in,.expertise-card.animate-in,.value-card.animate-in,.focus-area-card.animate-in,.measurable-card.animate-in,.impact-card.animate-in {animation:none;opacity:1;transform:none}}
+.service-card.animate-in,.resource-card.animate-in,.expertise-card.animate-in,.value-card.animate-in,.focus-area-card.animate-in,.measurable-card.animate-in {animation:none;opacity:1;transform:none}}
 
 @media (prefers-contrast:high){.fnf-glass{background:rgba(0,0,0,.9);border:2px solid #fff}
 

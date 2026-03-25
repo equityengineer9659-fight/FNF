@@ -365,23 +365,23 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .slds-grid,.card-section .slds-grid,.expertise-section .slds-grid,.values-section .slds-grid,.fnf-page--index .slds-grid,.fnf-page--services .slds-grid,.fnf-page--resources .slds-grid,.fnf-page--impact .slds-grid {perspective:2000px;perspective-origin:center center;transform-style:preserve-3d}
 
-.service-card,.resource-card,.expertise-card,.value-card,.focus-area-card,.measurable-card,.impact-card {text-align:center;transition:all 0.6s cubic-bezier(0.23,1,0.32,1);box-shadow:0 4px 15px rgba(0,0,0,0.1);opacity:1;transform:translateY(0) translateZ(0) rotateX(0deg) rotateY(0deg);transform-origin:center bottom;border-radius:var(--slds-border-radius-large);padding:1.5rem;box-sizing:border-box;position:relative;transform-style:preserve-3d;perspective:1500px;cursor:pointer;will-change:transform;backface-visibility:hidden;--click-transform:scale(1)}
+.service-card,.resource-card,.expertise-card,.value-card,.focus-area-card,.measurable-card {text-align:center;transition:all 0.6s cubic-bezier(0.23,1,0.32,1);box-shadow:0 4px 15px rgba(0,0,0,0.1);opacity:1;transform:translateY(0) translateZ(0) rotateX(0deg) rotateY(0deg);transform-origin:center bottom;border-radius:var(--slds-border-radius-large);padding:1.5rem;box-sizing:border-box;position:relative;transform-style:preserve-3d;perspective:1500px;cursor:pointer;will-change:transform;backface-visibility:hidden;--click-transform:scale(1)}
 
-.service-card.visible,.resource-card.visible,.expertise-card.visible,.value-card.visible,.focus-area-card.visible,.measurable-card.visible,.impact-card.visible {opacity:1;transform:translateY(0)}
+.service-card.visible,.resource-card.visible,.expertise-card.visible,.value-card.visible,.focus-area-card.visible,.measurable-card.visible {opacity:1;transform:translateY(0)}
 
-.service-card:hover:not(.card-transform-active),.resource-card:hover:not(.card-transform-active),.expertise-card:hover:not(.card-transform-active),.value-card:hover:not(.card-transform-active),.focus-area-card:hover:not(.card-transform-active),.measurable-card:hover:not(.card-transform-active),.impact-card:hover:not(.card-transform-active) {transform:translateY(-30px) translateZ(120px) rotateX(25deg) rotateY(-8deg) scale(1.08);transform-origin:center bottom;perspective:1500px;box-shadow:0 30px 80px rgba(0,0,0,0.3),0 15px 30px rgba(1,118,211,0.2),0 5px 15px rgba(1,118,211,0.1),inset 0 1px 0 rgba(255,255,255,0.15);transition:all 0.6s cubic-bezier(0.23,1,0.32,1);z-index:15}
+.service-card:hover,.resource-card:hover,.expertise-card:hover,.value-card:hover,.focus-area-card:hover,.measurable-card:hover {transform:translateY(-30px) translateZ(120px) rotateX(25deg) rotateY(-8deg) scale(1.08);transform-origin:center bottom;perspective:1500px;box-shadow:0 30px 80px rgba(0,0,0,0.3),0 15px 30px rgba(1,118,211,0.2),0 5px 15px rgba(1,118,211,0.1),inset 0 1px 0 rgba(255,255,255,0.15);transition:all 0.6s cubic-bezier(0.23,1,0.32,1);z-index:15}
 
-.service-card:hover .service-icon,.resource-card:hover .resource-icon,.expertise-card:hover .expertise-icon,.value-card:hover .value-icon,.focus-area-card:hover .focus-area-icon,.measurable-card:hover .measurable-icon,.impact-card:hover .impact-icon {transform:rotateX(-10deg) rotateY(5deg) scale(1.15) translateZ(30px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1) 0.05s;box-shadow:0 12px 35px rgba(1,118,211,0.5),0 6px 15px rgba(1,118,211,0.3);filter:brightness(1.2) contrast(1.1)}
+.service-card:hover .service-icon,.resource-card:hover .resource-icon,.expertise-card:hover .expertise-icon,.value-card:hover .value-icon,.focus-area-card:hover .focus-area-icon,.measurable-card:hover .measurable-icon {transform:rotateX(-10deg) rotateY(5deg) scale(1.15) translateZ(30px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1) 0.05s;box-shadow:0 12px 35px rgba(1,118,211,0.5),0 6px 15px rgba(1,118,211,0.3);filter:brightness(1.2) contrast(1.1)}
 
-.service-card:hover .service-badge,.resource-card:hover .resource-badge,.expertise-card:hover .expertise-badge,.value-card:hover .value-badge,.focus-area-card:hover .focus-area-badge,.measurable-card:hover .measurable-badge,.impact-card:hover .impact-badge {transform:rotateX(-6deg) rotateY(2deg) translateZ(15px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1) 0.1s;text-shadow:0 4px 8px rgba(0,0,0,0.2)}
+.service-card:hover .service-badge,.resource-card:hover .resource-badge,.expertise-card:hover .expertise-badge,.value-card:hover .value-badge,.focus-area-card:hover .focus-area-badge,.measurable-card:hover .measurable-badge {transform:rotateX(-6deg) rotateY(2deg) translateZ(15px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1) 0.1s;text-shadow:0 4px 8px rgba(0,0,0,0.2)}
 
-.service-card:hover .service-description,.resource-card:hover .resource-description,.expertise-card:hover .expertise-description,.value-card:hover .value-description,.focus-area-card:hover .focus-area-description,.measurable-card:hover .measurable-description,.impact-card:hover .impact-description {transform:rotateX(-3deg) rotateY(1deg) translateZ(5px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1) 0.2s;text-shadow:0 2px 4px rgba(0,0,0,0.15)}
+.service-card:hover .service-description,.resource-card:hover .resource-description,.expertise-card:hover .expertise-description,.value-card:hover .value-description,.focus-area-card:hover .focus-area-description,.measurable-card:hover .measurable-description {transform:rotateX(-3deg) rotateY(1deg) translateZ(5px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1) 0.2s;text-shadow:0 2px 4px rgba(0,0,0,0.15)}
 
-.service-icon:hover,.resource-icon:hover,.expertise-icon:hover,.value-icon:hover,.focus-area-icon:hover,.measurable-icon:hover,.impact-icon:hover {transform:rotate(15deg) scale(1.15);transition:all 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);box-shadow:0 8px 25px rgba(1,118,211,0.4)}
+.service-icon:hover,.resource-icon:hover,.expertise-icon:hover,.value-icon:hover,.focus-area-icon:hover,.measurable-icon:hover {transform:rotate(15deg) scale(1.15);transition:all 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);box-shadow:0 8px 25px rgba(1,118,211,0.4)}
 
 /* Card animation and stagger delays moved to 06-effects.css */
 
-.service-card:active,.resource-card:active,.expertise-card:active,.value-card:active,.focus-area-card:active,.measurable-card:active,.impact-card:active {transform:scale(0.98) translateY(-2px);transition:all 0.1s ease}
+.service-card:active,.resource-card:active,.expertise-card:active,.value-card:active,.focus-area-card:active,.measurable-card:active {transform:scale(0.98) translateY(-2px);transition:all 0.1s ease}
 
 .fnf-page--services .slds-text-align_center h3 {color:#fff;margin-bottom:var(--slds-spacing-medium)}
 
@@ -637,13 +637,12 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
   /* About/Impact/Contact mobile overrides moved to 10-page-overrides.css */
 
   /* Cards: Mobile hover effects */
-  .service-card:hover:not(.card-transform-active),
-  .resource-card:hover:not(.card-transform-active),
-  .expertise-card:hover:not(.card-transform-active),
-  .value-card:hover:not(.card-transform-active),
-  .focus-area-card:hover:not(.card-transform-active),
-  .measurable-card:hover:not(.card-transform-active),
-  .impact-card:hover:not(.card-transform-active) {
+  .service-card:hover,
+  .resource-card:hover,
+  .expertise-card:hover,
+  .value-card:hover,
+  .focus-area-card:hover,
+  .measurable-card:hover {
     transform: translateY(-4px) scale(1.01);
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   }
