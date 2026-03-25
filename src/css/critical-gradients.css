@@ -319,11 +319,11 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--index .focus-area-badge {background:var(--fnf-h2-underline-gradient);color:#fff;padding:0.75rem 1.5rem;border-radius:var(--slds-border-radius-medium);font-size:1rem;font-weight:600;margin-bottom:var(--slds-spacing-large);text-align:center;box-shadow:0 2px 8px rgba(1,118,211,0.3);line-height:1.3}
 
-.fnf-page--index .focus-area-description {color:rgba(255,255,255,0.9);line-height:1.6;font-size:0.95rem;text-align:center;flex-grow:1;margin:0}
+/* .focus-area-description removed — not used in HTML */
 
 .fnf-page--index .measurable-badge {background:var(--fnf-h2-underline-gradient);color:#fff;padding:0.75rem 1.5rem;border-radius:var(--slds-border-radius-medium);font-size:1rem;font-weight:600;margin-bottom:var(--slds-spacing-large);text-align:center;box-shadow:0 2px 8px rgba(1,118,211,0.3);line-height:1.3}
 
-.fnf-page--index .measurable-description {color:rgba(255,255,255,0.9);line-height:1.6;font-size:0.95rem;text-align:center;flex-grow:1;margin:0}
+/* .measurable-description removed — not used in HTML */
 
 .fnf-page--index .measurable-growth {margin-bottom:0}
 
@@ -719,7 +719,7 @@ main section:first-child,main section:first-of-type {margin-top:0;padding-top:1r
 
 h1,h2.slds-text-heading_large,h2#story-heading,h2#vision-heading,h2#values-heading,h2#expertise-detail-heading,h1#impact-heading,h1#why-heading,h1.slds-text-heading_large {scroll-margin-top:calc(var(--nav-height) + 0.5rem)}
 
-.section-padding,.slds-p-vertical_x-large,.contact-section,.impact-section,.fnf-page--services .services-section,.fnf-page--resources .resource-section {padding-top:0.75rem;padding-bottom:0.75rem;margin-top:0;margin-bottom:0}
+.section-padding,.slds-p-vertical_x-large,.contact-section,.impact-section,.fnf-page--services .services-section {padding-top:0.75rem;padding-bottom:0.75rem;margin-top:0;margin-bottom:0}
 
 .fnf-page--about section {padding-top:0.75rem;padding-bottom:0.75rem;margin-top:0;margin-bottom:0}
 
@@ -742,9 +742,9 @@ h2.slds-text-heading_large,h2.slds-text-heading_medium,h2#story-heading,h2#visio
 
 h2.slds-text-heading_large::after,h2.slds-text-heading_medium::after,h2#story-heading::after,h2#vision-heading::after,h2#values-heading::after,h2#expertise-detail-heading::after,h2#impact-heading::after,h2#contact-main-heading::after,section h2::after,.slds-text-heading_large::after {content:'';position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);width:80px;height:4px;background:var(--fnf-h2-underline-gradient);border-radius:2px;display:block}
 
-h3,.index-page h3,.fnf-page--index h3,body.index-page h3 {position:relative;margin-bottom:var(--slds-spacing-large)}
+h3,.fnf-page--index h3 {position:relative;margin-bottom:var(--slds-spacing-large)}
 
-h3::after,.index-page h3::after,.fnf-page--index h3::after,body.index-page h3::after {display:none;content:none}
+h3::after,.fnf-page--index h3::after {display:none;content:none}
 
 .focus-area-card h2::after,.service-card h2::after,.testimonial-card h2::after,.value-card h2::after,.expertise-card h2::after,.resource-card h2::after {max-width:calc(100% - 2rem);width:min(80px,calc(100% - 2rem))}
 
