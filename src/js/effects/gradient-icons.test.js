@@ -2,7 +2,7 @@
  * Unit Tests for Gradient Icon System
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { hydrateGradientIcons } from './gradient-icons.js';
 
 describe('Gradient Icon System', () => {

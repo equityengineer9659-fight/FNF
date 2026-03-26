@@ -425,7 +425,7 @@ class PerformanceMonitor {
    * Destroy performance monitor
    */
   destroy() {
-    for (const [key, observer] of this.observers) {
+    for (const [, observer] of this.observers) {
       observer.disconnect();
     }
     this.observers.clear();

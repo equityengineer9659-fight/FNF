@@ -49,6 +49,7 @@ jobs:
         run: npm run build
         env:
           VITE_ENV: production
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
@@ -101,6 +102,9 @@ jobs:
           rsync -avz --delete -e "ssh -p $SSH_PORT" \
             dist/ \
             ${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/
+
+          # Flush SiteGround caches after deploy
+          ssh -p $SSH_PORT ${SSH_USER}@${SSH_HOST} "cd www/food-n-force.com/public_html && find . -name '*.html' -exec touch {} + 2>/dev/null; echo 'Cache touch complete'"
 
           echo "✅ Files deployed to SiteGround"
 

@@ -178,10 +178,10 @@ config.getSummary = function() {
     version: config.appVersion,
     api: config.api.url,
     features: Object.entries(config.features)
-      .filter(([_, enabled]) => enabled)
+      .filter(([, enabled]) => enabled)
       .map(([feature]) => feature),
     monitoring: Object.entries(config.monitoring)
-      .filter(([_, service]) => service.enabled)
+      .filter(([, service]) => service.enabled)
       .map(([service]) => service),
     performance: {
       sampleRate: `${config.performance.sampleRate * 100}%`,
