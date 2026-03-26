@@ -97,10 +97,10 @@ jobs:
           expect eof
           EOF
 
-          # Deploy with rsync to the correct public_html
+          # Deploy to www path (what the web server reads)
           rsync -avz --delete -e "ssh -p $SSH_PORT" \
             dist/ \
-            ${SSH_USER}@${SSH_HOST}:food-n-force.com/public_html/
+            ${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/
 
           echo "✅ Files deployed to SiteGround"
 
