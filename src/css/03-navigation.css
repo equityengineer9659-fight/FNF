@@ -48,11 +48,14 @@
 
 .fnf-nav__item {display:inline-block;margin:0 1.5rem;background:transparent;border:none;padding:0}
 
-.fnf-nav__link {color:var(--fnf-color-white);text-decoration:none;font-size:1rem;font-weight:500;padding:0.5rem 1rem;position:relative;transition:color 0.3s ease;white-space:nowrap}
+.fnf-nav__link,
+.fnf-nav__link:link,
+.fnf-nav__link:visited {color:var(--fnf-color-white);text-decoration:none;font-size:1rem;font-weight:500;padding:0.5rem 1rem;position:relative;transition:color 0.3s ease;white-space:nowrap}
 
 .fnf-nav__link:hover {color:#00d4ff}
 
-.fnf-nav__link[aria-current="page"] {color:#00d4ff;position:relative}
+.fnf-nav__link[aria-current="page"],
+.fnf-nav__link[aria-current="page"]:visited {color:#00d4ff;position:relative}
 
 .fnf-nav__link[aria-current="page"]::after {content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;background:#00d4ff;border-radius:2px;box-shadow:0 0 8px rgba(0,212,255,0.6)}
 
@@ -141,9 +144,13 @@
 
 .fnf-nav__mobile-menu li {margin-bottom:0.5rem}
 
-.fnf-nav__mobile-link {color:#fff;text-decoration:none;font-size:1.1rem;font-weight:500;padding:0.75rem 1rem;display:block;border-radius:6px;transition:all 0.3s ease}
+.fnf-nav__mobile-link,
+.fnf-nav__mobile-link:link,
+.fnf-nav__mobile-link:visited {color:#fff;text-decoration:none;font-size:1.1rem;font-weight:500;padding:0.75rem 1rem;display:block;border-radius:6px;transition:all 0.3s ease}
 
-.fnf-nav__mobile-link:hover,.fnf-nav__mobile-link[aria-current="page"] {background:rgba(0,212,255,0.2);color:#00d4ff}
+.fnf-nav__mobile-link:hover,
+.fnf-nav__mobile-link[aria-current="page"],
+.fnf-nav__mobile-link[aria-current="page"]:visited {background:rgba(0,212,255,0.2);color:#00d4ff}
 
 /* ============================================================
    Responsive breakpoints
