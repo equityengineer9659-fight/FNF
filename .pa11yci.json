@@ -1,0 +1,18 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 30000,
+    "wait": 2000,
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox"]
+    }
+  },
+  "urls": [
+    "http://localhost:4173/index.html",
+    "http://localhost:4173/about.html",
+    "http://localhost:4173/services.html",
+    "http://localhost:4173/resources.html",
+    "http://localhost:4173/impact.html",
+    "http://localhost:4173/contact.html"
+  ]
+}

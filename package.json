@@ -14,9 +14,9 @@
     "serve": "live-server --port=4173 --host=localhost",
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
     "lint:html": "htmlhint \"*.html\" \"!playwright-report/**\" \"!lighthouse-reports/**\" \"!dist/**\" \"!tools/testing/playwright-report/**\"",
-    "lint:css": "stylelint \"src/css/**/*.css\" --fix",
-    "lint:js": "eslint \"src/js/**/*.js\" --fix",
-    "lint:fix": "npm run lint:css -- --fix && npm run lint:js -- --fix",
+    "lint:css": "stylelint \"src/css/**/*.css\"",
+    "lint:js": "eslint \"src/js/**/*.js\"",
+    "lint:fix": "stylelint \"src/css/**/*.css\" --fix && eslint \"src/js/**/*.js\" --fix",
     "test": "npm run test:unit && npm run test:accessibility && npm run test:performance && npm run test:browser",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
@@ -49,8 +49,7 @@
     "restore:create": "node scripts/create-restore-point.cjs",
     "restore:apply": "node scripts/apply-restore-point.cjs",
     "restore:list": "node -e \"console.log(require('fs').readdirSync('backups').filter(d => d.startsWith('restore_')).sort().reverse().slice(0, 10).join('\\n'))\"",
-    "css:duplicates": "node scripts/detect-css-duplicates.cjs",
-    "prepare": "husky"
+    "css:duplicates": "node scripts/detect-css-duplicates.cjs"
   },
   "repository": {
     "type": "git",

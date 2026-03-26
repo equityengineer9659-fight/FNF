@@ -80,20 +80,19 @@ describe('NewsletterPopup', () => {
       const popup = new NewsletterPopup();
       popup.openModal();
 
-      expect(document.body.style.overflow).toBe('hidden');
       expect(document.body.classList.contains('fnf-modal-open')).toBe(true);
 
       popup.destroy();
     });
 
-    it('should inject keyframe styles', () => {
+    it('should not inject runtime style tags (styles moved to CSS for CSP compliance)', () => {
       document.body.classList.add('fnf-page--about');
       const popup = new NewsletterPopup();
       popup.openModal();
 
       const styles = document.querySelectorAll('style');
-      const hasKeyframes = Array.from(styles).some(s => s.textContent.includes('fadeIn'));
-      expect(hasKeyframes).toBe(true);
+      const hasInjectedKeyframes = Array.from(styles).some(s => s.textContent.includes('fadeIn'));
+      expect(hasInjectedKeyframes).toBe(false);
 
       popup.destroy();
     });

@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls src/css/*.css)",
+      "Bash(node -e \":*)",
+      "Bash(rm -rf _regression-test/before _regression-test/after)",
+      "Bash(mkdir -p _regression-test/before _regression-test/after)",
+      "Bash(ls -la \"/c/Users/luetk/Desktop/Website/Website Next Version/\"*.html)",
+      "Read(//c/Users/luetk/Desktop/Website/Website Next Version/**)",
+      "Bash(do grep:*)",
+      "Bash(grep -n '<svg' *.html)",
+      "Bash(npx husky:*)",
+      "Bash(while read:*)",
+      "Bash(do wc:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx update-browserslist-db@latest --update-db)"
+    ]
+  }
+}

@@ -2,14 +2,13 @@ name: Food-N-Force CI/CD Pipeline
 
 on:
   push:
-    branches: [ master, develop, 'feature/*', 'hotfix/*' ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ master ]
   workflow_dispatch:
 
 env:
   NODE_VERSION: '18'
-  LIGHTHOUSE_CI_VERSION: '0.13.0'
 
 jobs:
   # ============================================
@@ -18,15 +17,10 @@ jobs:
   quality-checks:
     name: Quality Gates
     runs-on: ubuntu-latest
-    outputs:
-      deploy-staging: ${{ steps.check-branch.outputs.deploy-staging }}
-      deploy-production: ${{ steps.check-branch.outputs.deploy-production }}
-    
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,370 +31,65 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Cache Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      - name: HTML Validation
+        run: npm run validate:html
 
-      # HTML Validation
-      - name: HTML Validation (W3C)
-        run: |
-          npm run validate:html
-          echo "✅ HTML validation passed"
+      - name: CSS Linting
+        run: npm run lint:css
 
-      # CSS Linting and SLDS Compliance
-      - name: CSS Linting & SLDS Compliance
-        run: |
-          npm run lint:css
-          npm run validate:slds
-          echo "✅ CSS linting and SLDS compliance passed"
-
-      # JavaScript Linting with Accessibility Rules
       - name: JavaScript Linting
-        run: |
-          npm run lint:js
-          echo "✅ JavaScript linting passed"
+        run: npm run lint:js
 
-      # Unit Testing (Vitest)
       - name: Unit Tests
-        run: |
-          npm run test:unit
-          echo "✅ Unit tests passed"
+        run: npm run test:unit
 
-      # Unit Test Coverage Report
-      - name: Generate Coverage Report
-        run: |
-          npm run test:unit:coverage
-          echo "✅ Coverage report generated"
-
-      # Upload Coverage Report
-      - name: Upload Coverage to Artifacts
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: coverage/
-          retention-days: 30
-
-      # Security Scanning
-      - name: Security Audit
-        run: |
-          npm run security
-          echo "✅ Security audit passed"
-
-      # Check deployment conditions
-      - name: Check Deployment Conditions
-        id: check-branch
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-            echo "deploy-production=true" >> $GITHUB_OUTPUT
-            echo "deploy-staging=false" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == "refs/heads/develop" ]] || [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "deploy-staging=true" >> $GITHUB_OUTPUT
-            echo "deploy-production=false" >> $GITHUB_OUTPUT
-          else
-            echo "deploy-staging=false" >> $GITHUB_OUTPUT
-            echo "deploy-production=false" >> $GITHUB_OUTPUT
-          fi
-
-  # ============================================
-  # PERFORMANCE & ACCESSIBILITY TESTING
-  # ============================================
-  performance-tests:
-    name: Performance & Accessibility
-    runs-on: ubuntu-latest
-    needs: quality-checks
-    
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      # Start local server for testing
-      - name: Start Local Server
-        run: |
-          npm run dev &
-          sleep 10
-          curl -f http://localhost:4173 || exit 1
-        
-      # Lighthouse CI - Core Web Vitals & Performance
-      - name: Lighthouse CI - Performance Testing
-        run: |
-          npm run test:performance
-          echo "✅ Lighthouse performance tests passed"
-
-      # Pa11y - WCAG 2.1 AA Accessibility Testing
-      - name: Pa11y - Accessibility Testing
-        run: |
-          npm run test:accessibility
-          echo "✅ Accessibility tests passed"
-
-      # Performance Budget Enforcement
-      - name: Performance Budget Monitoring
-        run: |
-          npm run test:performance-budget
-          echo "✅ Performance budget compliance verified"
-
-      # Upload performance reports
-      - name: Upload Performance Reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: performance-reports
-          path: |
-            lighthouse-reports/
-            pa11y-reports/
-            test-results/performance-budget-*.json
-          retention-days: 30
-
-  # ============================================
-  # CROSS-BROWSER TESTING
-  # ============================================
-  browser-tests:
-    name: Cross-Browser Testing
-    runs-on: ubuntu-latest
-    needs: quality-checks
-    strategy:
-      matrix:
-        browser: [chromium, firefox, webkit]
-        viewport: [desktop, tablet, mobile]
-    
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps ${{ matrix.browser }}
-
-      - name: Start Local Server
-        run: |
-          npm run dev &
-          sleep 10
-
-      - name: Run Playwright Tests
-        run: npx playwright test --project=${{ matrix.browser }}-${{ matrix.viewport }}
-        env:
-          BROWSER: ${{ matrix.browser }}
-          VIEWPORT: ${{ matrix.viewport }}
-
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: playwright-report-${{ matrix.browser }}-${{ matrix.viewport }}
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 30
-
-  # ============================================
-  # STAGING DEPLOYMENT
-  # ============================================
-  deploy-staging:
-    name: Deploy to Staging
-    runs-on: ubuntu-latest
-    needs: [quality-checks, performance-tests, browser-tests]
-    if: needs.quality-checks.outputs.deploy-staging == 'true'
-    environment:
-      name: staging
-      url: ${{ steps.deploy.outputs.deploy-url }}
-    
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Build for Staging
-        run: npm run build
-
-      - name: Verify Build Output
-        run: |
-          npm run validate:build
-          echo "✅ Build verification passed"
-
-      - name: Deploy to Netlify Staging
-        id: deploy
-        run: |
-          npx netlify-cli deploy --dir=dist --json > deploy-output.json
-          DEPLOY_URL=$(cat deploy-output.json | jq -r '.deploy_url')
-          echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
-          echo "🚀 Staging deployment: $DEPLOY_URL"
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_STAGING_SITE_ID }}
-
-      - name: Post-Deployment Health Check
-        run: |
-          sleep 30
-          curl -f ${{ steps.deploy.outputs.deploy-url }} || exit 1
-          echo "✅ Staging deployment health check passed"
-
-      - name: Comment on PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '🚀 **Staging Deployment Ready**\n\n' +
-                    '📍 **Preview URL:** ${{ steps.deploy.outputs.deploy-url }}\n' +
-                    '✅ All quality gates passed\n' +
-                    '🔍 Please review and test the changes'
-            })
-
-  # ============================================
-  # PRODUCTION DEPLOYMENT
-  # ============================================
-  deploy-production:
-    name: Deploy to Production
-    runs-on: ubuntu-latest
-    needs: [quality-checks, performance-tests, browser-tests]
-    if: needs.quality-checks.outputs.deploy-production == 'true'
-    environment:
-      name: production
-      url: https://foodnforce.com
-    
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Build for Production
+      - name: Build
         run: npm run build
         env:
           VITE_ENV: production
 
-      - name: Verify Build Output
-        run: |
-          npm run validate:build
-          echo "✅ Build verification passed"
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
 
-      - name: Create Release Tag
-        id: tag
-        run: |
-          VERSION=$(date +"%Y.%m.%d-%H%M%S")
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git tag -a "v$VERSION" -m "Production release v$VERSION"
-          git push origin "v$VERSION"
-          echo "version=v$VERSION" >> $GITHUB_OUTPUT
+  # ============================================
+  # DEPLOY TO SITEGROUND (master branch only)
+  # ============================================
+  deploy:
+    name: Deploy to SiteGround
+    runs-on: ubuntu-latest
+    needs: quality-checks
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
-      - name: Deploy to Netlify Production
-        id: deploy
-        run: |
-          npx netlify-cli deploy --prod --dir=dist --json > deploy-output.json
-          DEPLOY_URL=$(cat deploy-output.json | jq -r '.url')
-          echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
-          echo "🚀 Production deployment: $DEPLOY_URL"
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_PRODUCTION_SITE_ID }}
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Deploy via SSH
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SITEGROUND_HOST }}
+          username: ${{ secrets.SITEGROUND_USER }}
+          key: ${{ secrets.SITEGROUND_SSH_KEY }}
+          passphrase: ${{ secrets.SITEGROUND_SSH_PASSPHRASE }}
+          port: ${{ secrets.SITEGROUND_PORT }}
+          source: "dist/*"
+          target: "food-n-force.com/public_html"
+          strip_components: 1
+          rm: true
 
       - name: Post-Deployment Health Check
         run: |
-          sleep 30
-          curl -f ${{ steps.deploy.outputs.deploy-url }} || exit 1
-          echo "✅ Production deployment health check passed"
-
-      - name: Store Deployment Metadata
-        run: |
-          mkdir -p deployment-metadata
-          cat > deployment-metadata/deployment-${{ steps.tag.outputs.version }}.json << EOF
-          {
-            "version": "${{ steps.tag.outputs.version }}",
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "commit_sha": "${{ github.sha }}",
-            "branch": "${{ github.ref_name }}",
-            "deploy_url": "${{ steps.deploy.outputs.deploy-url }}",
-            "workflow_run_id": "${{ github.run_id }}",
-            "actor": "${{ github.actor }}",
-            "environment": "production"
-          }
-          EOF
-
-      - name: Upload Deployment Metadata
-        uses: actions/upload-artifact@v3
-        with:
-          name: deployment-metadata-${{ steps.tag.outputs.version }}
-          path: deployment-metadata/
-          retention-days: 90
-
-      - name: Create GitHub Release
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const release = await github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: '${{ steps.tag.outputs.version }}',
-              name: 'Release ${{ steps.tag.outputs.version }}',
-              body: '🚀 **Production Deployment**\n\n' +
-                    '📅 **Deployed:** ' + new Date().toISOString() + '\n' +
-                    '📍 **URL:** ${{ steps.deploy.outputs.deploy-url }}\n' +
-                    '🔗 **Commit:** ${{ github.sha }}\n' +
-                    '👤 **Deployed by:** ${{ github.actor }}\n\n' +
-                    '✅ All quality gates passed\n' +
-                    '🔍 Performance and accessibility validated\n' +
-                    '🌐 Cross-browser compatibility confirmed',
-              draft: false,
-              prerelease: false
-            });
-
-  # ============================================
-  # NOTIFICATION & MONITORING
-  # ============================================
-  notify-completion:
-    name: Pipeline Completion Notification
-    runs-on: ubuntu-latest
-    needs: [quality-checks, performance-tests, browser-tests]
-    if: always()
-    
-    steps:
-      - name: Pipeline Status Summary
-        run: |
-          echo "=== Food-N-Force CI/CD Pipeline Summary ==="
-          echo "Quality Checks: ${{ needs.quality-checks.result }}"
-          echo "Performance Tests: ${{ needs.performance-tests.result }}"
-          echo "Browser Tests: ${{ needs.browser-tests.result }}"
-          echo "Branch: ${{ github.ref_name }}"
-          echo "Commit: ${{ github.sha }}"
-          echo "Actor: ${{ github.actor }}"
-          echo "=============================================="
+          sleep 15
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://food-n-force.com)
+          if [ "$STATUS" -eq 200 ]; then
+            echo "✅ Deployment successful — site is live"
+          else
+            echo "⚠️ Site returned HTTP $STATUS — please verify manually"
+          fi

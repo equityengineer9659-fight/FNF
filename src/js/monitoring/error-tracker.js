@@ -5,6 +5,7 @@
  */
 
 import config from '../config/environment.js';
+import { captureException as sentryCaptureException } from './sentry.js';
 
 class ErrorTracker {
   constructor(customConfig = {}) {
@@ -24,6 +25,11 @@ class ErrorTracker {
     this.errorCounts = new Map();
     this.lastErrorTime = new Map();
     this.initialized = false;
+
+    // Store originals for cleanup in destroy()
+    this._originalConsoleError = null;
+    this._originalFetch = null;
+    this._originalXhrOpen = null;
 
     // Bind methods
     this.captureError = this.captureError.bind(this);
@@ -213,16 +219,12 @@ class ErrorTracker {
       return;
     }
 
-    // Send to Sentry if configured
-    if (config.monitoring.sentry.enabled && window.Sentry) {
-      window.Sentry.captureException(new Error(error.message), {
-        contexts: {
-          error: payload
-        },
-        tags: {
-          environment: config.env,
-          version: config.appVersion
-        }
+    // Send to Sentry via module export (no window.Sentry needed)
+    if (config.monitoring.sentry.dsn) {
+      sentryCaptureException(new Error(error.message), {
+        error: payload,
+        environment: config.env,
+        version: config.appVersion
       });
     }
 
@@ -248,6 +250,7 @@ class ErrorTracker {
    */
   monkeyPatchConsole() {
     const originalError = console.error;
+    this._originalConsoleError = originalError;
     let capturing = false;
     console.error = (...args) => {
       // Call original console.error
@@ -278,6 +281,7 @@ class ErrorTracker {
   setupNetworkCapture() {
     // Intercept fetch errors
     const originalFetch = window.fetch;
+    this._originalFetch = originalFetch;
     window.fetch = async (...args) => {
       try {
         const response = await originalFetch(...args);
@@ -307,9 +311,11 @@ class ErrorTracker {
 
     // Intercept XMLHttpRequest errors
     const originalOpen = XMLHttpRequest.prototype.open;
+    this._originalXhrOpen = originalOpen;
+    const tracker = this;
     XMLHttpRequest.prototype.open = function(...args) {
       this.addEventListener('error', () => {
-        window.errorTracker?.captureError({
+        tracker.captureError({
           type: 'network',
           message: 'XMLHttpRequest failed',
           url: args[1],
@@ -394,6 +400,21 @@ class ErrorTracker {
   destroy() {
     window.removeEventListener('error', this.handleWindowError);
     window.removeEventListener('unhandledrejection', this.handleUnhandledRejection);
+
+    // Restore patched globals
+    if (this._originalConsoleError) {
+      console.error = this._originalConsoleError;
+      this._originalConsoleError = null;
+    }
+    if (this._originalFetch) {
+      window.fetch = this._originalFetch;
+      this._originalFetch = null;
+    }
+    if (this._originalXhrOpen) {
+      XMLHttpRequest.prototype.open = this._originalXhrOpen;
+      this._originalXhrOpen = null;
+    }
+
     this.initialized = false;
   }
 }

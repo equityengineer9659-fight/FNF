@@ -1,0 +1,80 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":dependencyDashboard",
+    ":pinVersions",
+    ":automergePatch",
+    ":semanticCommits"
+  ],
+  "timezone": "America/New_York",
+  "schedule": [
+    "after 10pm every weekday",
+    "before 5am every weekday",
+    "every weekend"
+  ],
+  "labels": ["dependencies", "renovate"],
+  "packageRules": [
+    {
+      "description": "Automatically merge minor and patch updates",
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Require approval for major updates",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "description": "Group ESLint packages",
+      "matchPackagePatterns": ["eslint"],
+      "groupName": "eslint packages",
+      "groupSlug": "eslint"
+    },
+    {
+      "description": "Group testing packages",
+      "matchPackagePatterns": ["playwright", "lighthouse", "pa11y"],
+      "groupName": "testing packages",
+      "groupSlug": "testing"
+    },
+    {
+      "description": "Group Vite and build tools",
+      "matchPackagePatterns": ["vite", "postcss", "autoprefixer", "cssnano"],
+      "groupName": "build tools",
+      "groupSlug": "build-tools"
+    },
+    {
+      "description": "Security updates - high priority",
+      "matchDatasources": ["npm"],
+      "matchUpdateTypes": ["patch"],
+      "matchPackagePatterns": ["*"],
+      "prPriority": 10,
+      "labels": ["security", "dependencies"],
+      "automerge": true,
+      "minimumReleaseAge": "0 days",
+      "schedule": ["at any time"],
+      "stabilityDays": 0
+    },
+    {
+      "description": "Pin digest for Docker images",
+      "matchDatasources": ["docker"],
+      "pinDigests": true
+    }
+  ],
+  "prConcurrentLimit": 3,
+  "prCreation": "immediate",
+  "rangeStrategy": "bump",
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "automerge": true,
+    "assignees": ["@your-github-username"]
+  },
+  "postUpdateOptions": [
+    "npmDedupe"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 5am on monday"]
+  }
+}

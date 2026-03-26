@@ -189,8 +189,7 @@ describe('SmartScroll', () => {
 
       scroll.updateScrollToTopButton(300);
 
-      expect(scroll.scrollToTopButton.style.opacity).toBe('1');
-      expect(scroll.scrollToTopButton.style.visibility).toBe('visible');
+      expect(scroll.scrollToTopButton.classList.contains('fnf-scroll-to-top--visible')).toBe(true);
     });
 
     it('should hide button near top of page', () => {
@@ -199,8 +198,7 @@ describe('SmartScroll', () => {
 
       scroll.updateScrollToTopButton(50);
 
-      expect(scroll.scrollToTopButton.style.opacity).toBe('0');
-      expect(scroll.scrollToTopButton.style.visibility).toBe('hidden');
+      expect(scroll.scrollToTopButton.classList.contains('fnf-scroll-to-top--visible')).toBe(false);
     });
   });
 

@@ -1,5 +1,7 @@
-/* Page-specific overrides — extracted from critical-gradients.css */
-/* These rules are scoped to .fnf-page--* or about-page aria-labelledby within @media blocks */
+/*
+  Page-specific overrides — extracted from critical-gradients.css
+  These rules are scoped to .fnf-page--* or about-page aria-labelledby within @media blocks
+*/
 
 @media (width <= 768px) {
   /* About Page: Stats layout */
@@ -58,6 +60,7 @@
     background: #4a5568;
   }
 }
+
 /* Mobile accordion for Our Expertise section (<=768px) */
 @media (width <= 768px) {
   section[aria-labelledby="expertise-detail-heading"] .slds-grid.slds-wrap.slds-gutters_large {
@@ -174,6 +177,21 @@
 
   section[aria-labelledby="expertise-detail-heading"] .slds-text-align_center.slds-m-top_x-large h3::after {
     display: none;
+  }
+}
+
+/* Reduced motion: disable accordion animations on mobile */
+@media (width <= 768px) and (prefers-reduced-motion: reduce) {
+  section[aria-labelledby="expertise-detail-heading"] ul.expertise-list {
+    transition: none;
+  }
+
+  section[aria-labelledby="expertise-detail-heading"] h3.slds-text-heading_medium.slds-m-bottom_small::after {
+    transition: none;
+  }
+
+  section[aria-labelledby="expertise-detail-heading"] h3.slds-text-heading_medium.slds-m-bottom_small {
+    transition: none;
   }
 }
 

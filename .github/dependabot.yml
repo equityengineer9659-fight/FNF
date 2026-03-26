@@ -1,0 +1,60 @@
+# Dependabot configuration for automated dependency updates
+# Documentation: https://docs.github.com/en/code-security/dependabot
+
+version: 2
+updates:
+  # NPM dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+    open-pull-requests-limit: 5
+    target-branch: "master"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "automated"
+    reviewers:
+      - "@your-github-username"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for critical packages
+      - dependency-name: "vite"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "lighthouse"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Group ESLint updates together
+      eslint:
+        patterns:
+          - "eslint*"
+      # Group testing dependencies
+      testing:
+        patterns:
+          - "@playwright/*"
+          - "lighthouse*"
+          - "pa11y*"
+      # Group build tools
+      build-tools:
+        patterns:
+          - "vite*"
+          - "postcss*"
+          - "autoprefixer"
+          - "cssnano"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    commit-message:
+      prefix: "ci"

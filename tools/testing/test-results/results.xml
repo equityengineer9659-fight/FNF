@@ -1,2 +1,128 @@
-<testsuites id="" name="" tests="0" failures="0" skipped="0" errors="0" time="0.672241">
+<testsuites id="" name="" tests="51" failures="0" skipped="0" errors="0" time="100.215121">
+<testsuite name="critical-navigation-smoke-test.spec.js" timestamp="2026-03-26T10:55:25.673Z" hostname="chromium-desktop" tests="5" failures="0" skipped="0" time="35.064" errors="0">
+<testcase name="Critical Navigation Smoke Tests › Mobile toggle functionality" classname="critical-navigation-smoke-test.spec.js" time="6.928">
+<system-out>
+<![CDATA[✅ Mobile toggle functionality PASSED
+]]>
+</system-out>
+</testcase>
+<testcase name="Critical Navigation Smoke Tests › Cross-page consistency" classname="critical-navigation-smoke-test.spec.js" time="10.904">
+<system-out>
+<![CDATA[✅ Cross-page consistency PASSED
+]]>
+</system-out>
+</testcase>
+<testcase name="Critical Navigation Smoke Tests › Desktop navigation visibility" classname="critical-navigation-smoke-test.spec.js" time="8.148">
+<system-out>
+<![CDATA[✅ Desktop navigation visibility PASSED
+]]>
+</system-out>
+</testcase>
+<testcase name="Critical Navigation Smoke Tests › Mobile menu links navigate correctly" classname="critical-navigation-smoke-test.spec.js" time="6.957">
+<system-out>
+<![CDATA[✅ Mobile menu links PASSED
+]]>
+</system-out>
+</testcase>
+<testcase name="Critical Navigation Smoke Tests › Keyboard navigation - Escape closes menu" classname="critical-navigation-smoke-test.spec.js" time="2.127">
+<system-out>
+<![CDATA[✅ Keyboard Escape PASSED
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="gradient-icons.spec.js" timestamp="2026-03-26T10:55:25.673Z" hostname="chromium-desktop" tests="46" failures="0" skipped="0" time="277.52" errors="0">
+<testcase name="index page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="2.103">
+</testcase>
+<testcase name="index page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="2.791">
+</testcase>
+<testcase name="index page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="2.865">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="3.083">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="5.283">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="4.973">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="5.335">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="5.917">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="6.088">
+</testcase>
+<testcase name="index page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="7.918">
+</testcase>
+<testcase name="index page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="7.882">
+</testcase>
+<testcase name="services page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="3.933">
+</testcase>
+<testcase name="services page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="6.035">
+</testcase>
+<testcase name="services page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="6.24">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="5.058">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="3.751">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="9.472">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="9.227">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="9.78">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="9.05">
+</testcase>
+<testcase name="services page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="12.43">
+</testcase>
+<testcase name="services page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="13.16">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="7.447">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="9.286">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="5.287">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="7.674">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="5.874">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="5.141">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="7.657">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="5.051">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="3.82">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="5.893">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="10.252">
+</testcase>
+<testcase name="about page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="3.656">
+</testcase>
+<testcase name="about page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="3.395">
+</testcase>
+<testcase name="about page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="3.972">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="4.798">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="4.194">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="3.74">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="5.318">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="5.168">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="4.678">
+</testcase>
+<testcase name="about page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="5.019">
+</testcase>
+<testcase name="about page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="7.482">
+</testcase>
+<testcase name="impact page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="5.569">
+</testcase>
+<testcase name="contact page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="4.775">
+</testcase>
+</testsuite>
 </testsuites>

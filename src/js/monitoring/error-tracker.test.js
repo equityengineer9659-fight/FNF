@@ -5,8 +5,13 @@ vi.mock('../config/environment.js', () => ({
     env: 'test',
     appVersion: '2.0.0',
     performance: { errorThrottleMs: 1000 },
-    monitoring: { sentry: { dsn: '' } },
+    monitoring: { sentry: { dsn: '', enabled: false }, logRocket: { appId: '', enabled: false } },
+    security: { cspReportUri: '' },
   },
+}));
+
+vi.mock('./sentry.js', () => ({
+  captureException: vi.fn(),
 }));
 
 // Import the singleton — it auto-initializes

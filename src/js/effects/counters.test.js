@@ -170,7 +170,7 @@ describe('Counter System', () => {
     });
 
     it('should not trigger counter for element without data-target', () => {
-      document.body.innerHTML = `<span class="stat-number">0</span>`;
+      document.body.innerHTML = '<span class="stat-number">0</span>';
 
       const animator = new CounterAnimator();
       const el = document.querySelector('.stat-number');

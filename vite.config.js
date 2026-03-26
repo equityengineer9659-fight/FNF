@@ -21,7 +21,8 @@ export default defineConfig({
         services: resolve(__dirname, 'services.html'),
         resources: resolve(__dirname, 'resources.html'),
         impact: resolve(__dirname, 'impact.html'),
-        contact: resolve(__dirname, 'contact.html')
+        contact: resolve(__dirname, 'contact.html'),
+        notfound: resolve(__dirname, '404.html')
       },
       output: {
         // Keep separate CSS and JS bundles for maintainability
@@ -70,7 +71,7 @@ export default defineConfig({
   },
 
   preview: {
-    port: 4174,
+    port: 4173,
     host: 'localhost',
     strictPort: true,
     open: false

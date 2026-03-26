@@ -74,7 +74,7 @@ npm run governance:status       # Check governance framework status
 │   ├── js/                # JavaScript modules (main.js, effects/, config/, monitoring/)
 │   ├── assets/            # Images, fonts, and other assets
 │   └── templates/         # HTML component templates
-├── *.html                  # 6 pages: index, about, services, resources, impact, contact
+├── *.html                  # 7 pages: index, about, services, resources, impact, contact, 404
 ├── config/                 # Configuration files (token_map, deployment, security)
 ├── docs/                   # Active documentation (project/, technical/, current/)
 ├── tools/                  # Development utilities (testing, deployment, governance)
@@ -90,7 +90,7 @@ npm run governance:status       # Check governance framework status
 - **Location**: `src/css/` with modular organization (main.css imports all modules)
 - **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients → page-overrides
 - **Design Tokens**: Centralized in `02-design-tokens.css` (colors, spacing, fonts, gradients, glass effects)
-- **Bundle Optimization**: Minified production builds via Vite + CSSnano (~89KB, ~15KB gzipped)
+- **Bundle Optimization**: Minified production builds via Vite + CSSnano (~91KB, ~15KB gzipped)
 - **SLDS Compliance**: 89% baseline maintained with token mapping system
 - **Navigation**: Consolidated in `03-navigation.css` (single source of truth)
 - **Effects/Animations**: Card stagger delays, keyframes, particles in `06-effects.css`
@@ -107,7 +107,7 @@ npm run governance:status       # Check governance framework status
   - `effects/particles.js` — canvas-based network particle system
   - `effects/smart-scroll.js` — nav auto-hide, active link tracking, scroll-to-top
   - `effects/counters.js` — animated number counters
-  - `effects/newsletter-popup.js` — scroll-triggered modal with focus trap
+  - `effects/newsletter-popup.js` — scroll-triggered modal with focus trap (all styles in CSS, no inline styles for CSP compliance)
   - `effects/gradient-icons.js` — SVG gradient icon system
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page expertise section
@@ -136,9 +136,9 @@ Test ALL 6 pages at these configurations:
 - **Browsers**: Chrome, Firefox, Safari minimum
 
 ### Performance Budgets
-- **CSS Bundle**: ~89KB minified (includes all modules and effects)
-- **JavaScript Bundle**: ~50KB total (44KB main + 6KB effects, tree-shaken & minified via Terser)
-- **Gzipped Sizes**: ~16KB CSS, ~15KB JS combined
+- **CSS Bundle**: ~91KB minified (includes all modules, effects, and newsletter modal styles)
+- **JavaScript Bundle**: ~47KB total (41KB main + 6KB effects, tree-shaken & minified via Terser)
+- **Gzipped Sizes**: ~15KB CSS, ~14KB JS combined
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: ≥89% baseline maintained
 - **Bundle Analysis**: Use `npm run analyze:bundle` for detailed reports
@@ -203,11 +203,13 @@ Test ALL 6 pages at these configurations:
 ### Key Configuration
 - `tools/testing/html-validate.json` - HTML validation rules (active config used by `npm run validate:html`)
 - `tools/testing/lighthouserc.json` - Performance audit configuration
-- `tools/testing/playwright.config.js` - Browser testing configuration
+- `tools/testing/playwright.config.js` - Browser testing configuration (builds + preview server before tests)
+- `.pa11yci.json` - Pa11y CI accessibility testing (WCAG2AA, all 6 pages)
 - `config/token_map.json` - SLDS compliance token mappings
 - `config/deployment-config.json` - Deployment settings
 - `config/security-config.json` - Security configuration
 - `vite.config.js` - Vite build system configuration (development server, bundling, minification)
+- `_headers` - Netlify security headers and CSP policy (connect-src allows Sentry)
 
 ### MCP Integration
 - **Protected Configuration**: `.mcp.json` contains 11 essential MCP servers
@@ -223,9 +225,15 @@ Test ALL 6 pages at these configurations:
 
 ### CSS Cascade Conflicts
 - **Prevention**: Import order in main.css determines cascade priority
-- **Legacy**: Avoid !important declarations (only 8 remain — all in utility classes and accessibility media queries)
+- **Legacy**: Avoid !important declarations (only 9 remain — all in utility classes and accessibility media queries)
 - **Architecture**: HTML-first with progressive CSS enhancement
 - **Note**: @layer is blocked by SLDS CDN — cascade relies on import order
+
+### CSP and Inline Styles
+- **Policy**: `_headers` CSP forbids `unsafe-inline` for both scripts and styles
+- **Newsletter popup**: Fully CSP-compliant (all styles in `07-components.css`)
+- **Known remaining inline styles**: `particles.js` (canvas), `smart-scroll.js` (scroll-to-top button, progress bar), `main.js` (live region) still use `element.style`. These need migration to CSS classes before strict CSP enforcement.
+- **Sentry integration**: `error-tracker.js` checks `window.Sentry` but `sentry.js` stores SDK in module-private `_sentry`. Bridge must be connected before production monitoring works.
 
 ### SLDS Compliance Violations
 - **Detection**: Use `npm run validate:slds` 

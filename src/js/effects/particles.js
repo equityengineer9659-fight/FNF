@@ -41,6 +41,9 @@ class ParticleSystem {
     // Mouse interaction
     this.mouse = { x: null, y: null, radius: this.config.mouseRadius };
 
+    // AbortController for event listener cleanup
+    this.abortController = new AbortController();
+
     this.init();
   }
 
@@ -82,19 +85,9 @@ class ParticleSystem {
       }
     });
 
-    // Create canvas for dynamic particles
+    // Create canvas for dynamic particles (styles in 07-components.css)
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'particles-canvas';
-    this.canvas.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.8;
-    `;
 
     document.body.appendChild(this.canvas);
     this.ctx = this.canvas.getContext('2d');
@@ -109,9 +102,10 @@ class ParticleSystem {
   }
 
   setupEventListeners() {
-    window.addEventListener('resize', this.handleResize);
-    document.addEventListener('visibilitychange', this.handleVisibilityChange);
-    window.addEventListener('mousemove', this.handleMouseMove);
+    const signal = this.abortController.signal;
+    window.addEventListener('resize', this.handleResize, { signal });
+    document.addEventListener('visibilitychange', this.handleVisibilityChange, { signal });
+    window.addEventListener('mousemove', this.handleMouseMove, { signal });
   }
 
   handleMouseMove(event) {
@@ -262,9 +256,8 @@ class ParticleSystem {
     clearTimeout(this.resizeTimeout);
     this.stop();
 
-    window.removeEventListener('resize', this.handleResize);
-    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
-    window.removeEventListener('mousemove', this.handleMouseMove);
+    // Abort all event listeners at once
+    this.abortController.abort();
 
     if (this.canvas && this.canvas.parentNode) {
       this.canvas.parentNode.removeChild(this.canvas);

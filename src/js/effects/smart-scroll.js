@@ -205,81 +205,27 @@ class SmartScroll {
   }
 
   createScrollToTopButton() {
+    // Styles in 07-components.css (.fnf-scroll-to-top)
     this.scrollToTopButton = document.createElement('button');
     this.scrollToTopButton.className = 'fnf-scroll-to-top';
     this.scrollToTopButton.innerHTML = '↑';
     this.scrollToTopButton.setAttribute('aria-label', 'Scroll to top');
     this.scrollToTopButton.setAttribute('title', 'Scroll to top');
 
-    // Add styles
-    Object.assign(this.scrollToTopButton.style, {
-      position: 'fixed',
-      bottom: '2rem',
-      right: '2rem',
-      width: '3rem',
-      height: '3rem',
-      borderRadius: '50%',
-      border: '2px solid rgba(255, 255, 255, 0.2)',
-      background: 'rgba(39, 245, 231, 0.9)',
-      color: '#ffffff',
-      fontSize: '1.2rem',
-      cursor: 'pointer',
-      zIndex: '1000',
-      opacity: '0',
-      visibility: 'hidden',
-      transform: 'translateY(20px)',
-      transition: 'all 0.3s ease',
-      backdropFilter: 'blur(10px)',
-      WebkitBackdropFilter: 'blur(10px)'
-    });
-
     this.scrollToTopButton.addEventListener('click', () => {
       this.smoothScrollTo(document.body);
-    });
-
-    this.scrollToTopButton.addEventListener('mouseenter', () => {
-      this.scrollToTopButton.style.background = 'rgba(39, 245, 231, 1)';
-      this.scrollToTopButton.style.transform = 'translateY(0) scale(1.1)';
-    });
-
-    this.scrollToTopButton.addEventListener('mouseleave', () => {
-      this.scrollToTopButton.style.background = 'rgba(39, 245, 231, 0.9)';
-      this.scrollToTopButton.style.transform = 'translateY(0) scale(1)';
     });
 
     document.body.appendChild(this.scrollToTopButton);
   }
 
-
   createScrollProgressBar() {
-    // Create container for progress bar
+    // Styles in 07-components.css (.scroll-progress-container, .scroll-progress-bar)
     this.progressBarContainer = document.createElement('div');
     this.progressBarContainer.className = 'scroll-progress-container';
 
-    // Create the actual progress bar
     this.progressBar = document.createElement('div');
     this.progressBar.className = 'scroll-progress-bar';
-
-    // Style the container
-    Object.assign(this.progressBarContainer.style, {
-      position: 'fixed',
-      top: '0',
-      left: '0',
-      width: '100%',
-      height: '6px',
-      background: 'rgba(255, 255, 255, 0.2)',
-      zIndex: '99998',
-      pointerEvents: 'none'
-    });
-
-    // Style the progress bar
-    Object.assign(this.progressBar.style, {
-      height: '100%',
-      width: '0%',
-      background: 'var(--fnf-smart-scroll-gradient)',
-      boxShadow: '0 0 10px rgba(39, 245, 231, 0.5)',
-      transition: 'width 0.1s ease-out'
-    });
 
     this.progressBarContainer.appendChild(this.progressBar);
     document.body.appendChild(this.progressBarContainer);
@@ -292,13 +238,9 @@ class SmartScroll {
 
     const threshold = this.config.scrollThreshold * 2;
     if (scrollTop > threshold) {
-      this.scrollToTopButton.style.opacity = '1';
-      this.scrollToTopButton.style.visibility = 'visible';
-      this.scrollToTopButton.style.transform = 'translateY(0)';
+      this.scrollToTopButton.classList.add('fnf-scroll-to-top--visible');
     } else {
-      this.scrollToTopButton.style.opacity = '0';
-      this.scrollToTopButton.style.visibility = 'hidden';
-      this.scrollToTopButton.style.transform = 'translateY(20px)';
+      this.scrollToTopButton.classList.remove('fnf-scroll-to-top--visible');
     }
   }
 
@@ -311,14 +253,14 @@ class SmartScroll {
     const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
     const scrollPercentage = documentHeight > 0 ? (scrollTop / documentHeight) * 100 : 0;
 
-    // Update progress bar width
+    // Dynamic width must be set via JS (CSS can't know scroll position)
     this.progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercentage))}%`;
 
-    // Optional: add glow effect when scrolling
+    // Glow effect via CSS class
     if (scrollPercentage > 0) {
-      this.progressBar.style.boxShadow = '0 0 20px rgba(39, 245, 231, 0.8)';
+      this.progressBar.classList.add('scroll-progress-bar--glowing');
     } else {
-      this.progressBar.style.boxShadow = '0 0 10px rgba(39, 245, 231, 0.5)';
+      this.progressBar.classList.remove('scroll-progress-bar--glowing');
     }
   }
 

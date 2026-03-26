@@ -279,18 +279,12 @@ class FNFApp {
   }
 
   createLiveRegion() {
-    // Create a live region for announcing dynamic changes
+    // Create a live region for announcing dynamic changes (styles in 07-components.css)
     const liveRegion = document.createElement('div');
     liveRegion.id = 'fnf-live-region';
+    liveRegion.className = 'fnf-sr-only';
     liveRegion.setAttribute('aria-live', 'polite');
     liveRegion.setAttribute('aria-atomic', 'true');
-    liveRegion.style.cssText = `
-      position: absolute;
-      left: -10000px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-    `;
     document.body.appendChild(liveRegion);
 
     // Expose method to announce messages
@@ -418,18 +412,7 @@ class FNFApp {
     // Show error message to developers
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
       const errorDiv = document.createElement('div');
-      errorDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #ff4444;
-        color: white;
-        padding: 1rem;
-        border-radius: 8px;
-        z-index: 10000;
-        font-family: monospace;
-        max-width: 300px;
-      `;
+      errorDiv.className = 'fnf-error-toast';
       errorDiv.textContent = `FNF App Error: ${error.message}`;
       document.body.appendChild(errorDiv);
 
