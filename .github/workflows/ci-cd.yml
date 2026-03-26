@@ -97,13 +97,10 @@ jobs:
           expect eof
           EOF
 
-          # Debug: find the correct public_html path
-          ssh -p $SSH_PORT ${SSH_USER}@${SSH_HOST} "pwd && ls -la && find . -name 'public_html' -type d 2>/dev/null | head -5"
-
-          # Deploy with rsync
+          # Deploy with rsync to the correct public_html
           rsync -avz --delete -e "ssh -p $SSH_PORT" \
             dist/ \
-            ${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/
+            ${SSH_USER}@${SSH_HOST}:food-n-force.com/public_html/
 
           echo "✅ Files deployed to SiteGround"
 
