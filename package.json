@@ -31,7 +31,7 @@
     "test:multi-page": "playwright test --config=tools/testing/playwright.config.js",
     "test:critical-navigation": "playwright test --config=tools/testing/playwright.config.js --grep='Critical navigation smoke test'",
     "test:special-effects": "playwright test --config=tools/testing/playwright.config.js --grep='special-effects'",
-    "validate:html": "html-validate --config tools/testing/html-validate.json \"**/*.html\"",
+    "validate:html": "html-validate --config tools/testing/html-validate.json \"*.html\"",
     "validate:slds": "node tools/deployment/slds-compliance-check.js",
     "validate:build": "node tools/deployment/verify-build.js",
     "security": "npm audit --audit-level critical",
