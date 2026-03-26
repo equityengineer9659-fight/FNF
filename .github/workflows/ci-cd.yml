@@ -29,7 +29,9 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install --no-optional
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: HTML Validation
         run: npm run validate:html
