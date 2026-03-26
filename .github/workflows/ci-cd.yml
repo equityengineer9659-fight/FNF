@@ -104,7 +104,9 @@ jobs:
             ${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/
 
           # Flush SiteGround caches after deploy
-          ssh -p $SSH_PORT ${SSH_USER}@${SSH_HOST} "cd www/food-n-force.com/public_html && find . -name '*.html' -exec touch {} + 2>/dev/null; echo 'Cache touch complete'"
+          ssh -p $SSH_PORT ${SSH_USER}@${SSH_HOST} "cd www/food-n-force.com/public_html && find . -name '*.html' -exec touch {} + 2>/dev/null; echo 'Cache touch complete'" || true
+          # Flush Memcached if available (SiteGround managed cache)
+          ssh -p $SSH_PORT ${SSH_USER}@${SSH_HOST} "echo 'flush_all' | nc -q1 localhost 11211 2>/dev/null && echo 'Memcached flushed' || echo 'Memcached flush skipped (not available via CLI)'"
 
           echo "✅ Files deployed to SiteGround"
 
