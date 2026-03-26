@@ -81,22 +81,23 @@ jobs:
           SSH_USER: ${{ secrets.SITEGROUND_USER }}
           SSH_PORT: ${{ secrets.SITEGROUND_PORT }}
         run: |
-          # Install sshpass for passphrase-protected keys
-          sudo apt-get install -y sshpass
+          sudo apt-get install -y expect
 
-          # Set up SSH key
           mkdir -p ~/.ssh
           echo "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-
-          # Add host to known_hosts
           ssh-keyscan -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
 
-          # Create SSH config for passphrase handling
+          # Use expect to handle passphrase for ssh-add
           eval "$(ssh-agent -s)"
-          echo "$SSH_PASS" | SSH_ASKPASS_REQUIRE=force SSH_ASKPASS="$(which cat)" ssh-add ~/.ssh/deploy_key
+          expect <<EOF
+          spawn ssh-add /home/runner/.ssh/deploy_key
+          expect "Enter passphrase"
+          send "$SSH_PASS\r"
+          expect eof
+          EOF
 
-          # Deploy with rsync (delete old files, upload new ones)
+          # Deploy with rsync
           rsync -avz --delete -e "ssh -p $SSH_PORT" \
             dist/ \
             ${SSH_USER}@${SSH_HOST}:food-n-force.com/public_html/
