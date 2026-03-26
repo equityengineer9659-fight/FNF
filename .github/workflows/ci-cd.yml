@@ -74,17 +74,34 @@ jobs:
           path: dist/
 
       - name: Deploy via SSH
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SITEGROUND_HOST }}
-          username: ${{ secrets.SITEGROUND_USER }}
-          key: ${{ secrets.SITEGROUND_SSH_KEY }}
-          passphrase: ${{ secrets.SITEGROUND_SSH_PASSPHRASE }}
-          port: ${{ secrets.SITEGROUND_PORT }}
-          source: "dist/*"
-          target: "food-n-force.com/public_html"
-          strip_components: 1
-          rm: true
+        env:
+          SSH_KEY: ${{ secrets.SITEGROUND_SSH_KEY }}
+          SSH_PASS: ${{ secrets.SITEGROUND_SSH_PASSPHRASE }}
+          SSH_HOST: ${{ secrets.SITEGROUND_HOST }}
+          SSH_USER: ${{ secrets.SITEGROUND_USER }}
+          SSH_PORT: ${{ secrets.SITEGROUND_PORT }}
+        run: |
+          # Install sshpass for passphrase-protected keys
+          sudo apt-get install -y sshpass
+
+          # Set up SSH key
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+          # Add host to known_hosts
+          ssh-keyscan -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
+
+          # Create SSH config for passphrase handling
+          eval "$(ssh-agent -s)"
+          echo "$SSH_PASS" | SSH_ASKPASS_REQUIRE=force SSH_ASKPASS="$(which cat)" ssh-add ~/.ssh/deploy_key
+
+          # Deploy with rsync (delete old files, upload new ones)
+          rsync -avz --delete -e "ssh -p $SSH_PORT" \
+            dist/ \
+            ${SSH_USER}@${SSH_HOST}:food-n-force.com/public_html/
+
+          echo "✅ Files deployed to SiteGround"
 
       - name: Post-Deployment Health Check
         run: |
