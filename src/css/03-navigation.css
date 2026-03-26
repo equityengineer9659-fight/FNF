@@ -95,12 +95,16 @@
 }
 
 .fnf-nav__toggle-icon::before {top:-8px}
+
 .fnf-nav__toggle-icon::after {bottom:-8px}
 
 /* Hamburger SVG alternative (from hamburger-fix) */
 .hamburger-svg {width:24px;height:18px;display:block}
+
 .hamburger-svg rect {fill:#fff;transition:all .3s ease}
+
 .simple-hamburger {display:flex;flex-direction:column;justify-content:space-between;width:20px;height:14px;margin:0 auto}
+
 .hamburger-line {height:2px;background:var(--hamburger-line-color);border:none;margin:0;padding:0;opacity:1}
 
 /* --- Checked state: hamburger → X animation --- */
@@ -112,7 +116,9 @@
 }
 
 .fnf-nav__toggle-input:checked ~ .fnf-nav__toggle .fnf-nav__toggle-icon {background:transparent}
+
 .fnf-nav__toggle-input:checked ~ .fnf-nav__toggle .fnf-nav__toggle-icon::before {transform:rotate(45deg);top:0}
+
 .fnf-nav__toggle-input:checked ~ .fnf-nav__toggle .fnf-nav__toggle-icon::after {transform:rotate(-45deg);bottom:0}
 
 /* --- Mobile menu panel (hidden by default) --- */
@@ -132,8 +138,11 @@
 }
 
 .fnf-nav__mobile-menu {list-style:none;margin:0;padding:1rem}
+
 .fnf-nav__mobile-menu li {margin-bottom:0.5rem}
+
 .fnf-nav__mobile-link {color:#fff;text-decoration:none;font-size:1.1rem;font-weight:500;padding:0.75rem 1rem;display:block;border-radius:6px;transition:all 0.3s ease}
+
 .fnf-nav__mobile-link:hover,.fnf-nav__mobile-link[aria-current="page"] {background:rgba(0,212,255,0.2);color:#00d4ff}
 
 /* ============================================================
@@ -164,23 +173,28 @@
 /* Tablet: tighter menu spacing */
 @media (width <= 1200px) and (width >= 769px) {
   .fnf-nav__menu {gap:var(--slds-spacing-medium)}
+
   .fnf-nav__link {padding:var(--slds-spacing-small) var(--slds-spacing-small);font-size:.9rem}
 }
 
 @media (width <= 1000px) and (width >= 769px) {
   .fnf-nav__menu {gap:var(--slds-spacing-small)}
+
   .fnf-nav__link {padding:var(--slds-spacing-x-small) var(--slds-spacing-small)}
 }
 
 /* Mobile: show toggle, hide desktop menu */
 @media (width <= 768px) {
   .fnf-nav__menu {display:none;visibility:hidden;opacity:0}
+
   .fnf-nav .fnf-nav__menu,.fnf-nav__container .fnf-nav__menu,nav .fnf-nav__menu {display:none;visibility:hidden;opacity:0}
 
   .fnf-nav::after {display:none}
 
   .fnf-nav__container {display:flex;justify-content:space-between;align-items:center;gap:1rem}
+
   .fnf-nav__logo {justify-self:auto}
+
   .fnf-nav__title {justify-self:auto;font-family:var(--slds-font-family-heading);font-size:28px;text-align:left;flex:1}
 
   .fnf-nav__toggle {
@@ -202,14 +216,18 @@
 /* Small mobile */
 @media (width <= 480px) {
   .fnf-nav__container {padding:0 var(--slds-spacing-small)}
+
   .fnf-nav__title {font-size:var(--slds-font-size-3)}
+
   .fnf-nav__brand {font-size:var(--slds-font-size-4)}
 }
 
 /* Accessibility: reduced motion */
 @media (prefers-reduced-motion:reduce) {
   .fnf-nav {animation:none}
+
   .fnf-nav__brand::before {animation:none}
+
   .fnf-nav__link,
   .fnf-nav__mobile-link,
   .fnf-nav__toggle-icon,
