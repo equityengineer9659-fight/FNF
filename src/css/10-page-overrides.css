@@ -226,6 +226,59 @@
   }
 }
 
+/* Article Page: Mobile overrides */
+@media (width <= 768px) {
+  .article-hero {
+    padding: 6rem 1.25rem 2.5rem;
+    min-height: auto;
+  }
+
+  .article-hero__title {
+    font-size: 1.75rem;
+  }
+
+  .article-hero__meta {
+    font-size: 0.8rem;
+  }
+
+  .article-body-section {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .article-prose {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .article-prose .article-lead {
+    font-size: 1.1rem;
+    padding-left: 1rem;
+  }
+
+  .article-prose h2 {
+    font-size: 1.3rem;
+    margin-top: 2.5rem;
+  }
+
+  .article-pullquote {
+    margin: 2rem -0.5rem;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .article-pullquote p {
+    font-size: 1.1rem;
+  }
+
+  .article-cta {
+    padding: 2rem 1.5rem;
+  }
+
+  .article-cta__actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
 /* Desktop - ensure accordion classes don't affect 3-column layout */
 @media (width >= 769px) {
   section[aria-labelledby="expertise-detail-heading"] .slds-col.accordion-expanded ul.expertise-list,

@@ -23,6 +23,7 @@ export default defineConfig({
         impact: resolve(__dirname, 'impact.html'),
         contact: resolve(__dirname, 'contact.html'),
         blog: resolve(__dirname, 'blog.html'),
+        articleAiFoodBanks: resolve(__dirname, 'ai-reshaping-food-banks.html'),
         notfound: resolve(__dirname, '404.html')
       },
       output: {
