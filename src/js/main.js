@@ -223,6 +223,15 @@ class FNFApp {
       } catch {
         button.disabled = false;
         button.textContent = 'Try Again';
+
+        // Show inline error message if not already present
+        if (!form.querySelector('.newsletter-form-error')) {
+          const errorEl = document.createElement('p');
+          errorEl.className = 'newsletter-form-error';
+          errorEl.setAttribute('role', 'alert');
+          errorEl.textContent = 'Something went wrong. Please try again later or email us directly.';
+          form.appendChild(errorEl);
+        }
       }
     });
 
