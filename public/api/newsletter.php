@@ -23,6 +23,13 @@ if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrfToken)) {
 }
 unset($_SESSION['csrf_token']); // single-use
 
+// Honeypot — reject if bot-field was filled
+if (!empty($_POST['bot-field'])) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'error' => 'Spam detected.']);
+    exit;
+}
+
 $recipient = 'hello@food-n-force.com';
 
 $email = trim($_POST['email'] ?? '');
