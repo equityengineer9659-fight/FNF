@@ -7,6 +7,7 @@ class CounterAnimator {
   constructor() {
     this.counters = [];
     this.observer = null;
+    this.activeAnimations = new Map();
     this.init();
   }
 
@@ -38,7 +39,8 @@ class CounterAnimator {
   }
 
   animateCounter(element) {
-    const target = parseInt(element.dataset.target);
+    const target = parseInt(element.dataset.target, 10);
+    if (isNaN(target)) return;
     const format = element.dataset.format || '';
     const suffix = element.dataset.suffix || '';
     const duration = 2000; // 2 seconds
@@ -70,13 +72,14 @@ class CounterAnimator {
       element.textContent = formatNumber(current);
 
       if (progress < 1) {
-        requestAnimationFrame(updateCounter);
+        this.activeAnimations.set(element, requestAnimationFrame(updateCounter));
       } else {
         element.textContent = formatNumber(target);
+        this.activeAnimations.delete(element);
       }
     };
 
-    requestAnimationFrame(updateCounter);
+    this.activeAnimations.set(element, requestAnimationFrame(updateCounter));
   }
 
   // Public method to manually trigger counter animation
@@ -88,6 +91,10 @@ class CounterAnimator {
 
   // Clean up observers
   destroy() {
+    for (const [, id] of this.activeAnimations) {
+      cancelAnimationFrame(id);
+    }
+    this.activeAnimations.clear();
     if (this.observer) {
       this.observer.disconnect();
     }

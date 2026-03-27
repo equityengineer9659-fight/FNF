@@ -29,9 +29,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: |
-          rm -f package-lock.json
-          npm install
+        run: npm ci
 
       - name: HTML Validation
         run: npm run validate:html
@@ -44,6 +42,10 @@ jobs:
 
       - name: Unit Tests
         run: npm run test:unit
+
+      - name: Accessibility Tests
+        run: npm run test:accessibility
+        continue-on-error: true
 
       - name: Build
         run: npm run build

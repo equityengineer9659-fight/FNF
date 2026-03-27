@@ -170,9 +170,9 @@ class PerformanceMonitor {
 
     const processInteractions = () => {
       if (interactions.length > 0) {
-        // Calculate 98th percentile
-        interactions.sort((a, b) => b - a);
-        const index = Math.floor(interactions.length * 0.98);
+        // Calculate 98th percentile (ascending sort, pick high-end value)
+        interactions.sort((a, b) => a - b);
+        const index = Math.min(Math.floor(interactions.length * 0.98), interactions.length - 1);
         this.metrics.INP = interactions[index];
         this.reportMetric('INP', this.metrics.INP);
       }
@@ -227,6 +227,11 @@ class PerformanceMonitor {
           };
 
           this.metrics.resources.push(resource);
+
+          // Cap resource array to prevent unbounded growth
+          if (this.metrics.resources.length > 100) {
+            this.metrics.resources.shift();
+          }
 
           // Report slow resources
           if (resource.duration > 1000) {
@@ -333,13 +338,16 @@ class PerformanceMonitor {
 
     // Send to custom monitoring endpoint
     if (config.security.cspReportUri && !config.isDevelopment) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
       fetch(config.security.cspReportUri, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(report)
+        body: JSON.stringify(report),
+        signal: controller.signal
       }).catch(() => {
         // Silently fail
-      });
+      }).finally(() => clearTimeout(timeoutId));
     }
   }
 

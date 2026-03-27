@@ -26,6 +26,7 @@ class SmartScroll {
     this.sections = [];
     this.navLinks = [];
     this.scrollToTopButton = null;
+    this.scrollAnimationId = null;
 
     this.init();
   }
@@ -175,6 +176,11 @@ class SmartScroll {
   }
 
   smoothScrollTo(element) {
+    // Cancel any in-progress scroll animation
+    if (this.scrollAnimationId) {
+      cancelAnimationFrame(this.scrollAnimationId);
+    }
+
     const targetPosition = element.offsetTop - this.config.offset;
     const startPosition = window.pageYOffset;
     const distance = targetPosition - startPosition;
@@ -194,14 +200,18 @@ class SmartScroll {
       window.scrollTo(0, startPosition + (distance * easedProgress));
 
       if (progress < 1) {
-        requestAnimationFrame(animateScroll);
+        this.scrollAnimationId = requestAnimationFrame(animateScroll);
       } else {
-        // Focus the target element for accessibility
+        this.scrollAnimationId = null;
+        // Ensure element is focusable before focusing for accessibility
+        if (!element.getAttribute('tabindex')) {
+          element.setAttribute('tabindex', '-1');
+        }
         element.focus();
       }
     };
 
-    requestAnimationFrame(animateScroll);
+    this.scrollAnimationId = requestAnimationFrame(animateScroll);
   }
 
   createScrollToTopButton() {

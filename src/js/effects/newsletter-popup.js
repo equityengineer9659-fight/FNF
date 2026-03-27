@@ -136,7 +136,7 @@ class NewsletterPopup {
     const handleSubmit = (event) => {
       event.preventDefault();
       const email = emailInput.value.trim();
-      if (!email) {
+      if (!email || !emailInput.validity.valid) {
         emailInput.focus();
         return;
       }
@@ -187,7 +187,7 @@ class NewsletterPopup {
 
   showSuccessState(modalContent) {
     modalContent.innerHTML = `
-      <div class="fnf-newsletter-success">
+      <div class="fnf-newsletter-success" role="status" aria-live="polite">
         <h2>Thank you!</h2>
         <p>You've been successfully subscribed to our newsletter.</p>
       </div>

@@ -116,7 +116,7 @@ const config = {
   // Security
   security: {
     cspReportUri: getEnvVar('CSP_REPORT_URI', defaults.CSP_REPORT_URI),
-    allowedOrigins: getEnvVar('ALLOWED_ORIGINS', defaults.ALLOWED_ORIGINS).split(',')
+    allowedOrigins: getEnvVar('ALLOWED_ORIGINS', defaults.ALLOWED_ORIGINS).split(',').map(o => o.trim())
   }
 };
 

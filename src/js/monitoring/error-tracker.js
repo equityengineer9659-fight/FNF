@@ -158,14 +158,28 @@ class ErrorTracker {
       this.errors.shift();
     }
 
-    // Store in localStorage
+    // Store in localStorage (sanitize PII from URLs before storing)
     if (this.config.enableLocalStorage) {
       try {
-        localStorage.setItem('fnf_errors', JSON.stringify(this.errors));
+        const sanitized = this.errors.map(e => this.sanitizeError(e));
+        localStorage.setItem('fnf_errors', JSON.stringify(sanitized));
       } catch (e) {
         // localStorage might be full or disabled
       }
     }
+  }
+
+  /**
+   * Strip query params from URLs to avoid storing PII
+   */
+  sanitizeError(error) {
+    const sanitized = { ...error };
+    const stripQuery = (url) => {
+      try { return new URL(url).origin + new URL(url).pathname; } catch { return url; }
+    };
+    if (sanitized.url) sanitized.url = stripQuery(sanitized.url);
+    if (sanitized.filename) sanitized.filename = stripQuery(sanitized.filename);
+    return sanitized;
   }
 
   /**
@@ -235,13 +249,16 @@ class ErrorTracker {
 
     // Send to custom endpoint if configured
     if (config.security.cspReportUri && error.type !== 'network') {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
       fetch(config.security.cspReportUri, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       }).catch(() => {
         // Silently fail - don't create infinite error loop
-      });
+      }).finally(() => clearTimeout(timeoutId));
     }
   }
 

@@ -140,22 +140,22 @@
                             <form class="contact-form" name="contact" method="post" data-netlify="true" action="/contact.html?success=true" id="contact-form">
                                 <div class="slds-form-element">
                                     <label for="firstName">First Name *</label>
-                                    <input type="text" id="firstName" name="firstName" required placeholder="John">
+                                    <input type="text" id="firstName" name="firstName" required placeholder="John" autocomplete="given-name">
                                 </div>
 
                                 <div class="slds-form-element slds-m-top_medium">
                                     <label for="lastName">Last Name *</label>
-                                    <input type="text" id="lastName" name="lastName" required placeholder="Doe">
+                                    <input type="text" id="lastName" name="lastName" required placeholder="Doe" autocomplete="family-name">
                                 </div>
 
                                 <div class="slds-form-element slds-m-top_medium">
                                     <label for="email">Email Address *</label>
-                                    <input type="email" id="email" name="email" required placeholder="john.doe@foodbank.org">
+                                    <input type="email" id="email" name="email" required placeholder="john.doe@foodbank.org" autocomplete="email">
                                 </div>
 
                                 <div class="slds-form-element slds-m-top_medium">
                                     <label for="organization">Organization *</label>
-                                    <input type="text" id="organization" name="organization" required placeholder="Community Food Bank">
+                                    <input type="text" id="organization" name="organization" required placeholder="Community Food Bank" autocomplete="organization">
                                 </div>
 
                                 <div class="slds-form-element slds-m-top_medium">
@@ -193,7 +193,7 @@
                     <!-- Contact Information -->
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
                         <div class="contact-info-container">
-                            <h3>Contact Information</h3>
+                            <h3 id="contact-info-heading">Contact Information</h3>
 
                             <div class="contact-info-item">
                                 <h4>Email Us</h4>

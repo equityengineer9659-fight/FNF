@@ -78,7 +78,7 @@ The pipeline implements multiple quality gates that must pass before deployment:
 - **Purpose**: Developer testing and validation
 
 #### Staging
-- **Trigger**: Pull requests to `develop` branch
+- **Trigger**: Pull requests to `master` branch
 - **Process**: Full test suite + staging deployment
 - **URL**: Dedicated staging environment
 - **Purpose**: Integration testing and stakeholder review
@@ -167,9 +167,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ master ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ master ]
 
 jobs:
   quality-checks:
@@ -252,7 +252,7 @@ jobs:
         run: npm run test:browser
 
   deploy-staging:
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     needs: [quality-checks, performance-tests, browser-tests]
     steps:
@@ -414,7 +414,7 @@ NETLIFY_PRODUCTION_SITE_ID=your_production_id
 1. **Create Netlify Account**: Sign up at netlify.com
 2. **Create Sites**:
    - Production site: Link to your main branch
-   - Staging site: Link to your develop branch
+   - Staging site: Link to a staging branch (if applicable)
 3. **Get Site IDs**: From site settings → General → Site details
 4. **Configure Build Settings**:
    - Build command: `npm run build`

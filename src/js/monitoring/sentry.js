@@ -37,7 +37,7 @@ export async function initSentry() {
 
       // Setting this option to true will send default PII data to Sentry
       // (like IP addresses for geolocation)
-      sendDefaultPii: true,
+      sendDefaultPii: false,
 
       // Set sample rate for performance monitoring (10% of transactions)
       tracesSampleRate: 0.1,

@@ -48,7 +48,7 @@ git push -u origin main
 1. **Create Netlify Account**: Sign up at netlify.com
 2. **Create Sites**:
    - Production site: Link to your main branch
-   - Staging site: Link to your develop branch
+   - Staging site: Link to a staging branch (if applicable)
 3. **Get Site IDs**: From site settings → General → Site details
 
 ### 3. Set Up Environment Variables

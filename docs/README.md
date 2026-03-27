@@ -59,9 +59,9 @@ docs/
 
 ## Current Performance Metrics
 
-- **CSS Bundle**: ~107KB (105KB minified, all layers and effects)
-- **JavaScript Bundle**: ~26KB total (tree-shaken and minified)
-- **Gzipped**: ~15KB CSS, ~8KB JS
+- **CSS Bundle**: ~91KB (minified, all modules and effects)
+- **JavaScript Bundle**: ~44KB total (39KB main + 5KB effects, tree-shaken & minified)
+- **Gzipped**: ~15KB CSS, ~14KB JS
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: 89% baseline maintained
 

@@ -129,7 +129,7 @@
   }
 
   section[aria-labelledby="expertise-detail-heading"] .slds-col.accordion-expanded ul.expertise-list {
-    max-height: 500px;
+    max-height: 2000px;
     padding: 1rem 1.25rem 1.25rem;
   }
 

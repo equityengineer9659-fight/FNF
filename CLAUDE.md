@@ -61,7 +61,6 @@ npm run rollback                # Emergency rollback utility
 ```bash
 npm run governance:sync         # Sync governance documentation
 npm run governance:validate     # Validate governance compliance
-npm run governance:status       # Check governance framework status
 ```
 
 ## Code Architecture
@@ -72,8 +71,7 @@ npm run governance:status       # Check governance framework status
 ├── src/                    # Source files
 │   ├── css/               # CSS files with modular architecture (12 files)
 │   ├── js/                # JavaScript modules (main.js, effects/, config/, monitoring/)
-│   ├── assets/            # Images, fonts, and other assets
-│   └── templates/         # HTML component templates
+│   └── assets/            # Images, fonts, and other assets
 ├── *.html                  # 7 pages: index, about, services, resources, impact, contact, 404
 ├── config/                 # Configuration files (token_map, deployment, security)
 ├── docs/                   # Active documentation (project/, technical/, current/)
@@ -155,7 +153,7 @@ Test ALL 6 pages at these configurations:
 ### Current Status
 - **Baseline**: 89% SLDS compliance maintained
 - **Token Mapping**: Located in `config/token_map.json`
-- **Phase 2 Target**: CSS bundle 821KB → 100KB (87% reduction)
+- **Current Bundle**: ~91KB minified CSS (down from 821KB pre-optimization)
 - **Validation Command**: `npm run validate:slds`
 
 ### Key Compliance Areas
@@ -269,33 +267,9 @@ Test ALL 6 pages at these configurations:
 - **Process**: Strategic assessment → Architecture decision → Specialized implementation → Validation
 - **Key Learning**: Complex problems require coordinated expertise, not individual "cowboy coding"
 
-### MCP Configuration Protection
+### MCP Configuration (Historical)
 
-**CRITICAL:** The `.mcp.json` file contains 11 essential MCP servers that provide core functionality.
-
-#### Protected Configuration
-- **File**: `.mcp.json`
-- **Server Count**: 11 total servers
-- **Status**: Playwright connection fixed, all servers restored
-
-#### Server List (DO NOT REMOVE without user permission):
-1. `playwright` - Browser automation (fixed with --headless flag)
-2. `puppeteer` - Alternative browser automation
-3. `web-analysis` - Lighthouse integration
-4. `filesystem` - File system operations
-5. `github` - GitHub integration
-6. `lighthouse` - Performance auditing
-7. `browser-tools` - Browser utilities
-8. `browser-server` - Browser server functionality
-9. `browserbase` - Browser base services
-10. `mcp-inspector` - MCP debugging
-11. `mcp-everything` - Comprehensive MCP server
-
-#### Guard Rails
-- Protective comments added to `.mcp.json`
-- Server count verification included
-- Modification warnings in place
-- Always get user permission before modifying MCP configurations
+The `.mcp.json` file with 11 MCP servers was previously used but has been removed from the repository. MCP servers are now configured at the user/IDE level rather than in-repo.
 
 ## Documentation References
 

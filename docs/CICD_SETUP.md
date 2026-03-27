@@ -90,8 +90,7 @@ Check that these workflow files exist:
 1. Go to **Actions** tab in your repository
 2. If workflows are disabled, click **"I understand my workflows, go ahead and enable them"**
 3. Workflows will now run automatically on:
-   - **Push to `main`** → Deploy to production
-   - **Push to `develop`** → Deploy to staging
+   - **Push to `master`** → Deploy to production
    - **Pull requests** → Run tests only
 
 ---
@@ -130,21 +129,15 @@ git push origin test/ci-cd-setup
 
 ### 6.2 Create Pull Request
 1. Go to GitHub → Pull requests → New pull request
-2. Base: `develop`, Compare: `test/ci-cd-setup`
+2. Base: `master`, Compare: `test/ci-cd-setup`
 3. Create pull request
 4. **Verify all checks pass** ✅
 
-### 6.3 Merge to Staging
-1. Merge PR to `develop` branch
+### 6.3 Deploy to Production
+1. Merge PR to `master` branch
 2. Go to **Actions** tab
 3. Watch the deployment workflow
-4. Verify staging site updates: `https://foodnforce-staging.netlify.app`
-
-### 6.4 Deploy to Production
-1. Create PR from `develop` → `main`
-2. Get approval (if required)
-3. Merge PR
-4. Watch production deployment
+4. Verify production site updates
 5. Verify production site updates: `https://foodnforce.com`
 
 ---
@@ -172,16 +165,12 @@ Configure in: **Settings** → **Notifications**
 ```mermaid
 graph LR
     A[Push Code] --> B{Which Branch?}
-    B -->|develop| C[Run Tests]
-    B -->|main| C
+    B -->|master| C[Run Tests]
     B -->|other| D[Tests Only]
     C --> E{Tests Pass?}
-    E -->|Yes| F{Which Branch?}
+    E -->|Yes| F[Deploy to Production]
     E -->|No| G[Fail & Notify]
-    F -->|develop| H[Deploy to Staging]
-    F -->|main| I[Deploy to Production]
-    H --> J[Staging Live]
-    I --> K[Production Live]
+    F --> H[Production Live]
 ```
 
 ### Manual Deployments

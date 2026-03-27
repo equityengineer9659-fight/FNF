@@ -65,8 +65,9 @@ class ParticleSystem {
   }
 
   shouldShowParticles() {
-    // Get current page filename from URL
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    // Get current page filename from URL (handle trailing slashes and extensionless paths)
+    const rawPage = window.location.pathname.replace(/\/$/, '').split('/').pop() || 'index.html';
+    const currentPage = rawPage.includes('.') ? rawPage : rawPage + '.html';
 
     // Exclude particles only on contact page
     const excludedPages = [

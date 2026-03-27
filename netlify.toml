@@ -6,7 +6,7 @@
   # Directory to publish
   publish = "dist"
   # Node version for builds
-  environment = { NODE_VERSION = "18" }
+  environment = { NODE_VERSION = "22" }
 
 # Custom 404 page
 [[redirects]]

@@ -219,13 +219,9 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--contact .contact-form input,.fnf-page--contact .contact-form select,.fnf-page--contact .contact-form textarea {background:#000;border:4px solid var(--fnf-contact-accent);border-radius:var(--fnf-border-radius-sm-md);color:#fff;padding:0.75rem;width:100%;font-size:14px;transition:border-color 0.3s ease;box-shadow:0 0 8px var(--fnf-contact-accent-glow)}
 
-.fnf-page--contact .contact-form input:focus,.fnf-page--contact .contact-form select:focus,.fnf-page--contact .contact-form textarea:focus {border-color:var(--fnf-contact-accent-light);outline:none;box-shadow:0 0 12px var(--fnf-contact-accent-glow-strong)}
+.fnf-page--contact .contact-form input:focus,.fnf-page--contact .contact-form select:focus,.fnf-page--contact .contact-form textarea:focus {border-color:var(--fnf-contact-accent-light);outline:2px solid transparent;box-shadow:0 0 12px var(--fnf-contact-accent-glow-strong)}
 
 .fnf-page--contact .contact-form input::placeholder,.fnf-page--contact .contact-form textarea::placeholder {color:rgba(255,255,255,0.6)}
-
-.fnf-page--contact .submit-button {background:linear-gradient(135deg,#0176d3 0%,#00d4ff 100%);color:#fff;border:none;border-radius:10px;padding:1.1rem 3.5rem;font-size:17px;font-weight:700;cursor:pointer;transition:all 0.3s ease;display:inline-block;width:auto;margin-top:1.5rem;text-transform:uppercase;letter-spacing:0.5px;position:relative;top:0;box-shadow:inset 0 0 0 3px var(--fnf-secondary),0 6px 0 #015395,0 8px 12px rgba(0,0,0,0.4)}
-
-.fnf-page--contact .submit-button:hover {background:linear-gradient(135deg,#0189ef 0%,#3df 100%);top:2px;box-shadow:inset 0 0 0 3px var(--fnf-secondary),0 4px 0 #015395,0 6px 10px rgba(0,0,0,0.4)}
 
 .fnf-page--contact .contact-info-container h3 {color:var(--fnf-secondary);font-size:24px;margin-bottom:var(--fnf-spacing-lg);text-align:left}
 
@@ -270,7 +266,9 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--impact .testimonial-card:hover {transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
 
-.fnf-page--impact .testimonial-card h4 {color:var(--fnf-secondary);font-size:1.2rem;font-weight:600;margin-bottom:var(--slds-spacing-medium);text-align:center}
+.fnf-page--impact .testimonial-card h3 {color:var(--fnf-secondary);font-size:1.2rem;font-weight:600;margin-bottom:var(--slds-spacing-medium);text-align:center}
+
+.fnf-page--impact .testimonial-card figure {margin:0}
 
 .fnf-page--impact .testimonial-card blockquote {color:#fff;font-size:0.95rem;line-height:1.6;font-style:italic;margin-bottom:var(--slds-spacing-large);text-align:left;flex-grow:1}
 
@@ -570,7 +568,7 @@ nav.fnf-nav .fnf-nav__container .fnf-nav__logo .fnf-nav__brand::after,.fnf-nav .
 
 .fnf-page--contact .contact-form input,.fnf-page--contact .contact-form select,.fnf-page--contact .contact-form textarea {background:#000;border:4px solid var(--fnf-contact-accent);border-radius:var(--fnf-border-radius-sm-md);padding:0.75rem 1rem;color:#fff;width:100%;margin-bottom:var(--slds-spacing-medium);transition:all 0.3s ease;box-shadow:0 0 8px var(--fnf-contact-accent-glow)}
 
-.fnf-page--contact .contact-form input:focus,.fnf-page--contact .contact-form select:focus,.fnf-page--contact .contact-form textarea:focus {outline:none;border-color:var(--fnf-contact-accent-light);box-shadow:0 0 12px var(--fnf-contact-accent-glow-strong);background:#000}
+.fnf-page--contact .contact-form input:focus,.fnf-page--contact .contact-form select:focus,.fnf-page--contact .contact-form textarea:focus {outline:2px solid transparent;border-color:var(--fnf-contact-accent-light);box-shadow:0 0 12px var(--fnf-contact-accent-glow-strong);background:#000}
 
 .fnf-page--contact .submit-button {background:linear-gradient(135deg,#0176d3 0%,#00d4ff 100%);color:#fff;border:none;border-radius:10px;padding:1.1rem 3.5rem;font-size:17px;font-weight:700;cursor:pointer;transition:all 0.3s ease;display:inline-block;width:auto;margin-top:1.5rem;text-transform:uppercase;letter-spacing:0.5px;position:relative;top:0;box-shadow:inset 0 0 0 3px var(--fnf-secondary),0 6px 0 #015395,0 8px 12px rgba(0,0,0,0.4)}
 
