@@ -130,18 +130,18 @@
     },
     
     "staging": {
-      "url": "https://staging--foodnforce.netlify.app",
+      "url": "https://foodnforce.com",
       "auto_deploy": true,
       "validation_level": "comprehensive",
-      "netlify_site_id": "NETLIFY_STAGING_SITE_ID"
+      "deploy_method": "github-actions-siteground"
     },
-    
+
     "production": {
       "url": "https://foodnforce.com",
       "auto_deploy": false,
       "validation_level": "full",
       "approval_required": true,
-      "netlify_site_id": "NETLIFY_PRODUCTION_SITE_ID"
+      "deploy_method": "github-actions-siteground"
     }
   },
   
@@ -245,9 +245,11 @@
   
   "security_considerations": {
     "secrets_management": [
-      "NETLIFY_AUTH_TOKEN",
-      "NETLIFY_PRODUCTION_SITE_ID", 
-      "NETLIFY_STAGING_SITE_ID"
+      "SITEGROUND_SSH_KEY",
+      "SITEGROUND_SSH_PASSPHRASE",
+      "SITEGROUND_HOST",
+      "SITEGROUND_USER",
+      "SITEGROUND_PORT"
     ],
     
     "access_control": {
@@ -264,10 +266,10 @@
       "shared_components": ["phase-detection", "mobile-nav-safety", "quality-checks"]
     },
     
-    "netlify_integration": {
-      "deploy_previews": "automatic",
-      "branch_deploys": "enabled",
-      "form_handling": "configured"
+    "siteground_integration": {
+      "deploy_method": "ssh_rsync",
+      "cache_flush": "memcached",
+      "health_check": "post_deploy"
     }
   }
 }
