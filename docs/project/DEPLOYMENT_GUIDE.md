@@ -1,7 +1,7 @@
 # Food-N-Force Website - Deployment Guide
 
 **Version**: 3.0  
-**Last Updated**: 2025-08-18  
+**Last Updated**: 2026-03-26  
 **Pipeline Status**: Production Ready  
 
 ---
@@ -15,7 +15,7 @@ This guide provides comprehensive instructions for deploying the Food-N-Force we
 ## Quick Start
 
 ### Prerequisites
-1. **Node.js**: Version 18 or higher
+1. **Node.js**: Version 22 or higher
 2. **npm**: Version 9 or higher
 3. **Git**: Version control
 4. **Netlify Account**: For deployment
@@ -123,7 +123,7 @@ The pipeline implements multiple quality gates that must pass before deployment:
   publish = "."
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "22"
   NODE_ENV = "production"
 
 [[headers]]
@@ -180,11 +180,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '22'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       
       - name: Lint HTML
         run: npm run lint:html
@@ -213,11 +212,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '22'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       
       - name: Build site
         run: npm run build
@@ -239,11 +237,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '22'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       
       - name: Install Playwright
         run: npx playwright install --with-deps
@@ -261,11 +258,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '22'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       
       - name: Deploy to staging
         run: npm run deploy:staging
@@ -289,11 +285,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: '22'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       
       - name: Deploy to production
         run: npm run deploy:production
@@ -419,7 +414,7 @@ NETLIFY_PRODUCTION_SITE_ID=your_production_id
 4. **Configure Build Settings**:
    - Build command: `npm run build`
    - Publish directory: `.` (root)
-   - Node version: `18`
+   - Node version: `22`
 
 ---
 

@@ -179,14 +179,14 @@ cd tools/dependencies
 node auto-update.js --restore
 
 # Or manually
-git checkout -- package.json package-lock.json
-npm ci
+git checkout -- package.json
+npm install
 ```
 
 #### Conflicting Dependencies
 ```bash
 # Clean install
-rm -rf node_modules package-lock.json
+rm -rf node_modules
 npm install
 ```
 

@@ -216,10 +216,10 @@ legacy-peer-deps=true
 
 ### 1. Install
 ```bash
-npm ci --legacy-peer-deps
+npm install
 ```
-- Clean install of dependencies
-- Uses `package-lock.json` for reproducibility
+- Standard dependency installation
+- `package-lock.json` is not tracked in git (cross-platform lockfile issues with platform-specific optional deps like esbuild/rollup)
 
 ### 2. Lint
 ```bash
@@ -294,8 +294,8 @@ CI/CD will **fail** if budgets exceeded:
 
 | Asset Type | Budget | Actual (Current) |
 |------------|--------|------------------|
-| CSS Bundle | 150 KB | ~105 KB ✅ |
-| JS Bundle  | 200 KB | ~26 KB ✅ |
+| CSS Bundle | 150 KB | ~92 KB ✅ |
+| JS Bundle  | 200 KB | ~46 KB ✅ |
 | Total Build | 2 MB  | ~1.5 MB ✅ |
 
 Configure in: `lighthouse-budget.json`
@@ -377,6 +377,6 @@ npm run deps:security   # Fix vulnerabilities
 
 ---
 
-**Last Updated:** 2025-10-01
+**Last Updated:** 2026-03-26
 **Maintained By:** Technical Architect
 **Next Review:** Monthly or after major infrastructure changes

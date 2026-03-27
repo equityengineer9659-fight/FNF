@@ -110,7 +110,7 @@ npm run governance:validate     # Validate governance compliance
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page expertise section
 - **Cleanup**: All modules use AbortController or explicit cleanup in destroy()
-- **Production**: Source maps disabled, no console.log in production code
+- **Production**: Source maps disabled, no unguarded console.log in production code (ESLint `no-console` rule enforced; `console.warn`/`console.error` allowed, dev-gated `console.log` uses `eslint-disable` comments)
 - **Unit Tests**: 159 tests across 9 test files (vitest)
 - **Design Tokens**: Glass opacity variants (`--glass-bg-light/primary/strong`), contact accent colors (`--fnf-contact-accent/*`), all centralized in `02-design-tokens.css`
 
@@ -134,8 +134,8 @@ Test ALL 6 pages at these configurations:
 - **Browsers**: Chrome, Firefox, Safari minimum
 
 ### Performance Budgets
-- **CSS Bundle**: ~91KB minified (includes all modules, effects, and newsletter modal styles)
-- **JavaScript Bundle**: ~47KB total (41KB main + 6KB effects, tree-shaken & minified via Terser)
+- **CSS Bundle**: ~92KB minified (includes all modules, effects, and newsletter modal styles)
+- **JavaScript Bundle**: ~46KB total (41KB main + 5KB effects, tree-shaken & minified via Terser)
 - **Gzipped Sizes**: ~15KB CSS, ~14KB JS combined
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: ≥89% baseline maintained
