@@ -125,39 +125,27 @@ config.log('Debug message'); // Only logs if debugMode is true
 
 ## Deployment Configuration
 
-### Netlify Deployment
-Netlify automatically reads environment variables from their dashboard.
+### SiteGround Production Deployment
+The site deploys to SiteGround via SSH/rsync from GitHub Actions. Build-time environment variables are set as GitHub Actions secrets and injected during the CI/CD build step.
 
-1. Go to Site Settings → Environment Variables
-2. Add your production variables without the `.env` file
-3. Variables are automatically injected during build
-
-### Vercel Deployment
-Similar to Netlify, add variables in the Vercel dashboard:
-
-1. Go to Project Settings → Environment Variables
-2. Add variables for each environment
-3. Select which environments should use each variable
-
-### Docker Deployment
-```dockerfile
-# Pass environment variables at build time
-ARG VITE_ENV=production
-ARG VITE_API_URL
-
-# Or at runtime
-ENV VITE_ENV=production
-ENV VITE_API_URL=https://api.food-n-force.org/api
-```
-
-### CI/CD Pipeline
+#### GitHub Actions Secrets
 ```yaml
-# GitHub Actions example
-env:
-  VITE_ENV: production
-  VITE_API_URL: ${{ secrets.API_URL }}
-  VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+# Set in: GitHub → Settings → Secrets and variables → Actions
+VITE_ENV: production
+VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+
+# SiteGround deployment credentials
+SITEGROUND_SSH_KEY: (SSH private key)
+SITEGROUND_SSH_PASSPHRASE: (key passphrase)
+SITEGROUND_HOST: (SiteGround server hostname)
+SITEGROUND_USER: (SSH username)
+SITEGROUND_PORT: (SSH port)
 ```
+
+### Important Notes
+- Vite replaces `import.meta.env` variables **at build time** — they cannot be changed after build
+- Only variables prefixed with `VITE_` are exposed to client-side code
+- Production builds are created in CI and deployed as static files via rsync
 
 ## Security Best Practices
 

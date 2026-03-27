@@ -1,9 +1,9 @@
 # Food-N-Force Website - Technical Documentation
 
 **Version**: 3.0  
-**Last Updated**: 2025-08-18  
-**SLDS Version**: 2.22.2  
-**Node.js**: 18.0.0+  
+**Last Updated**: 2026-03-26
+**SLDS Version**: 2.22.2
+**Node.js**: 20.0.0+ (CI uses Node 22)
 
 ---
 
@@ -34,7 +34,7 @@ Food-N-Force Website/
 │   └── Asset Management (Optimized images and logos)
 ├── Build System (NPM + Custom Scripts)
 ├── Testing Suite (Performance, Accessibility, Browser)
-├── Deployment Pipeline (Netlify + CI/CD)
+├── Deployment Pipeline (SiteGround + GitHub Actions CI/CD)
 └── Monitoring (Lighthouse, HTML Validation, SLDS Compliance)
 ```
 

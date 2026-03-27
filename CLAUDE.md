@@ -165,7 +165,7 @@ Test ALL 6 pages at these configurations:
 ## Governance Framework
 
 ### Multi-Agent Coordination
-17+ specialized agents with clear authority matrix:
+16 specialized agents with clear authority matrix:
 - **Emergency (0-15 min)**: technical-architect  
 - **Standard (15 min-4 hrs)**: Domain experts
 - **Strategic (4-24 hrs)**: project-manager-proj + stakeholders
@@ -207,7 +207,7 @@ Test ALL 6 pages at these configurations:
 - `config/deployment-config.json` - Deployment settings
 - `config/security-config.json` - Security configuration
 - `vite.config.js` - Vite build system configuration (development server, bundling, minification)
-- `_headers` - Netlify security headers and CSP policy (connect-src allows Sentry)
+- `_headers` - Security headers and CSP policy (connect-src allows Sentry)
 
 ### MCP Integration
 - **Protected Configuration**: `.mcp.json` contains 11 essential MCP servers
@@ -283,7 +283,7 @@ The `.mcp.json` file with 11 MCP servers was previously used but has been remove
 - `docs/ENVIRONMENT.md` - Environment variables
 
 ### Architecture Decision Records
-Located in `docs/technical/adr/` with 15 active ADRs covering:
+Located in `docs/technical/adr/` with 16 active ADRs covering:
 - Mobile navigation architecture decisions
 - CSS cascade management approach
 - JavaScript bundle optimization strategy
@@ -295,7 +295,7 @@ Located in `docs/technical/adr/` with 15 active ADRs covering:
 ### Archived Documentation
 Historical docs moved to `_archive/` during 2026-03-24 audit:
 - `_archive/docs-technical/` - Resolved mobile nav crisis docs, old phase reports
-- `_archive/docs-project/` - Completed requirements, old CSS deconfliction plans
+- `_archive/docs-project/` - Completed requirements, old CSS deconfliction plans, legacy Netlify deployment guides
 - `_archive/github-workflows/` - 11 legacy CI/CD workflows (only ci-cd.yml and dependency-update.yml are active)
 
 ### Cleanup Completed (2026-03-24)

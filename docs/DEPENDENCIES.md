@@ -47,14 +47,8 @@ npm run deps:audit
 
 ##### Automatic Updates
 ```bash
-# Safe patch updates only
-npm run deps:update:patch
-
-# Patch and minor updates
-npm run deps:update:minor
-
-# All updates (use with caution)
-npm run deps:update:all
+# Run automated update tool
+npm run deps:update
 ```
 
 ##### Manual Updates
@@ -289,14 +283,10 @@ npm run deps:security    # Fix security issues
 
 # Weekly
 npm run deps:check       # Check for updates
-npm run deps:update:patch # Apply patches
-
-# Monthly
-npm run deps:update:minor # Apply minor updates
+npm run deps:update      # Apply updates via auto-update tool
 
 # Quarterly
-npm outdated             # Full review
-npm run deps:update:all  # Major updates (careful!)
+npm outdated             # Full review of all packages
 
 # Before deployment
 npm run security         # Security check

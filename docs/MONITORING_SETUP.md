@@ -122,28 +122,27 @@ This guide walks through setting up production monitoring with Sentry (error tra
 
 ---
 
-## Part 3: Netlify Deployment with Environment Variables
+## Part 3: Production Deployment with Environment Variables
 
-### Step 1: Access Netlify Site Settings
-1. Log into [Netlify](https://app.netlify.com/)
-2. Select your site
-3. Go to **Site settings** → **Build & deploy** → **Environment variables**
+### Step 1: Configure GitHub Actions Secrets
+1. Go to your GitHub repository
+2. Click **Settings** → **Secrets and variables** → **Actions**
+3. Add or update the required secrets
 
 ### Step 2: Add Production Variables
-Add these environment variables:
+Add these as GitHub Actions secrets (used at build time):
 
 | Variable | Value | Source |
 |----------|-------|--------|
-| `VITE_ENV` | `production` | Manual |
 | `VITE_SENTRY_DSN` | Your Sentry DSN | From Sentry Step 3 |
-| `VITE_GA_MEASUREMENT_ID` | Your GA4 ID | From GA4 Step 3 |
-| `VITE_FEATURE_DEBUG_MODE` | `false` | Manual |
+
+Other build-time variables (`VITE_ENV`, `VITE_FEATURE_DEBUG_MODE`) are set directly in the CI/CD workflow.
 
 ### Step 3: Deploy to Production
-1. Push changes to `main` branch
-2. Netlify auto-deploys
-3. Check deployment logs for errors
-4. Visit production site
+1. Push changes to `master` branch
+2. GitHub Actions builds and deploys to SiteGround via SSH/rsync
+3. Check workflow logs in the Actions tab for errors
+4. Visit production site: `https://food-n-force.com`
 
 ### Step 4: Verify Monitoring Works
 1. **Sentry Check**:
@@ -336,7 +335,7 @@ if (window.Sentry) {
 - [ ] GA4 property created
 - [ ] GA4 measurement ID added to `.env.production`
 - [ ] Test page view tracked in GA4
-- [ ] Netlify environment variables set
+- [ ] GitHub Actions secrets configured
 - [ ] Production deployment tested
 - [ ] Sentry alerts configured
 - [ ] GA4 enhanced measurement enabled
@@ -410,9 +409,9 @@ curl -I https://foodnforce.com
 ### Important URLs
 - **Sentry Dashboard**: https://sentry.io/organizations/your-org/issues/
 - **GA4 Dashboard**: https://analytics.google.com/
-- **Netlify Settings**: https://app.netlify.com/sites/your-site/settings
+- **GitHub Actions**: https://github.com/your-org/your-repo/actions
 
 ---
 
-**Last Updated**: 2025-10-01
+**Last Updated**: 2026-03-26
 **Next Review**: After production launch

@@ -14,19 +14,22 @@ This document outlines the security measures implemented for the Food-N-Force we
 - **Permissions-Policy**: Restricts access to browser features
 
 ### Content Security Policy (CSP)
-Current implementation uses a restrictive CSP with the following directives:
+Current implementation uses a strict CSP with **no `unsafe-inline`** for scripts or styles:
 - `default-src 'self'` - Only allow resources from same origin by default
-- `script-src 'self' 'unsafe-inline'` - Scripts from same origin and inline scripts
-- `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com` - Styles with Google Fonts
+- `script-src 'self'` - Scripts from same origin only (no inline scripts)
+- `style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com` - Styles from same origin, Google Fonts, and SLDS CDN
 - `font-src 'self' https://fonts.gstatic.com data:` - Fonts from Google and data URIs
 - `img-src 'self' data: https:` - Images from same origin, data URIs, and HTTPS sources
+- `connect-src 'self' https://*.ingest.us.sentry.io` - XHR/fetch to same origin and Sentry error reporting
 - `frame-ancestors 'none'` - Prevents embedding in frames
+- `base-uri 'self'` - Restricts `<base>` tag targets
+- `form-action 'self'` - Restricts form submission targets
 - `upgrade-insecure-requests` - Upgrades HTTP to HTTPS
 
 ## Implementation Details
 
-### Netlify Deployment
-Security headers are automatically applied via the `_headers` file when deployed to Netlify.
+### Production Deployment
+Security headers are defined in the `_headers` file and applied at the hosting level.
 
 ### Local Development
 For local development, a CSP meta tag can be added to HTML files from `src/security/csp-meta.html`.
@@ -36,17 +39,12 @@ Security settings are documented in `config/security-config.json` for reference 
 
 ## Future Improvements
 
-### Priority 1: Remove Unsafe Inline
-- Move inline scripts to external files
-- Move inline styles to external files
-- Implement CSP nonces or hashes for necessary inline content
-
-### Priority 2: Enhanced Monitoring
+### Priority 1: Enhanced Monitoring
 - Implement CSP reporting endpoint
 - Add Report-To header for violation reporting
 - Set up security monitoring dashboard
 
-### Priority 3: Additional Hardening
+### Priority 2: Additional Hardening
 - Implement Subresource Integrity (SRI) for external resources
 - Add security.txt file
 - Implement CORS policies for API endpoints

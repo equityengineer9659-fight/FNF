@@ -5,120 +5,100 @@
 
 ## Overview
 
-This guide walks through setting up GitHub Actions CI/CD for automated testing and deployment to Netlify.
+This guide walks through setting up GitHub Actions CI/CD for automated testing and deployment to SiteGround via SSH/rsync.
 
 ---
 
 ## Prerequisites
 
 1. **GitHub Repository** - Code hosted on GitHub
-2. **Netlify Account** - For hosting and deployment
-3. **Netlify Site Created** - Staging and Production sites set up
+2. **SiteGround Hosting Account** - With SSH access enabled
+3. **SSH Key Pair** - For automated deployment authentication
 4. **Repository Access** - Admin access to configure secrets
 
 ---
 
-## Step 1: Create Netlify Sites
+## Step 1: Configure SiteGround SSH Access
 
-### 1.1 Production Site
-1. Log into [Netlify](https://app.netlify.com/)
-2. Click **"Add new site" → "Import an existing project"**
-3. Connect your GitHub repository
-4. Configure build settings:
-   ```
-   Build command: npm run build
-   Publish directory: dist
-   ```
-5. Click **"Deploy site"**
-6. Copy the **Site ID** from Settings → General → Site details
+### 1.1 Enable SSH on SiteGround
+1. Log into [SiteGround Site Tools](https://tools.siteground.com/)
+2. Navigate to **Devs** → **SSH Keys Manager**
+3. Generate or import an SSH key pair
+4. Note the SSH connection details:
+   - **Host**: Your SiteGround server hostname
+   - **Port**: SSH port (typically non-standard on SiteGround)
+   - **Username**: Your SSH username
+   - **Web root**: `www/food-n-force.com/public_html/`
 
-### 1.2 Staging Site
-1. Repeat the process above for staging
-2. Use a different site name (e.g., `foodnforce-staging`)
-3. Copy this **Site ID** as well
+### 1.2 Test SSH Connection
+```bash
+ssh -p <PORT> <USERNAME>@<HOST>
+```
 
 ---
 
-## Step 2: Get Netlify Auth Token
+## Step 2: Configure GitHub Secrets
 
-1. Go to [Netlify User Settings](https://app.netlify.com/user/applications)
-2. Click **"New access token"**
-3. Name it: `GitHub Actions CI/CD`
-4. Click **"Generate token"**
-5. **Copy the token immediately** (you won't see it again!)
-
----
-
-## Step 3: Configure GitHub Secrets
-
-### 3.1 Access Repository Secrets
+### 2.1 Access Repository Secrets
 1. Go to your GitHub repository
 2. Click **Settings** → **Secrets and variables** → **Actions**
 3. Click **"New repository secret"**
 
-### 3.2 Add Required Secrets
+### 2.2 Add Required Secrets
 
-Add these three secrets:
+Add these secrets:
 
 | Secret Name | Value | Description |
 |-------------|-------|-------------|
-| `NETLIFY_AUTH_TOKEN` | Your Netlify access token | Authentication for deployments |
-| `NETLIFY_STAGING_SITE_ID` | Staging site ID | Target for staging deployments |
-| `NETLIFY_PRODUCTION_SITE_ID` | Production site ID | Target for production deployments |
-
-**Example:**
-```
-NETLIFY_AUTH_TOKEN: nfp_ABC123xyz...
-NETLIFY_STAGING_SITE_ID: 12345678-abcd-1234-abcd-123456789abc
-NETLIFY_PRODUCTION_SITE_ID: 87654321-dcba-4321-dcba-cba987654321
-```
+| `SITEGROUND_SSH_KEY` | SSH private key (full PEM content) | Authentication for deployment |
+| `SITEGROUND_SSH_PASSPHRASE` | Key passphrase | Decrypts the SSH key |
+| `SITEGROUND_HOST` | Server hostname | SiteGround server address |
+| `SITEGROUND_USER` | SSH username | SiteGround login user |
+| `SITEGROUND_PORT` | SSH port number | SiteGround SSH port |
+| `VITE_SENTRY_DSN` | Sentry DSN URL | Error tracking (build-time) |
 
 ---
 
-## Step 4: Enable GitHub Actions
+## Step 3: Enable GitHub Actions
 
-### 4.1 Verify Workflows Exist
+### 3.1 Verify Workflows Exist
 Check that these workflow files exist:
 ```
 .github/workflows/
 ├── ci-cd.yml                 # Main CI/CD pipeline
-├── dependency-update.yml     # Automated dependency updates
-└── (other workflows)
+└── dependency-update.yml     # Automated dependency updates
 ```
 
-### 4.2 Enable Workflows
+### 3.2 Enable Workflows
 1. Go to **Actions** tab in your repository
 2. If workflows are disabled, click **"I understand my workflows, go ahead and enable them"**
 3. Workflows will now run automatically on:
-   - **Push to `master`** → Deploy to production
-   - **Pull requests** → Run tests only
+   - **Push to `master`** → Run quality checks + deploy to production
+   - **Pull requests** → Run quality checks only
+   - **Manual trigger** → `workflow_dispatch`
 
 ---
 
-## Step 5: Configure Branch Protection
+## Step 4: Configure Branch Protection
 
-### 5.1 Protect Main Branch
+### 4.1 Protect Master Branch
 1. Go to **Settings** → **Branches**
 2. Click **"Add branch protection rule"**
-3. Branch name pattern: `main`
+3. Branch name pattern: `master`
 4. Enable:
    - ☑️ Require a pull request before merging
    - ☑️ Require status checks to pass before merging
    - ☑️ Require branches to be up to date before merging
    - ☑️ Do not allow bypassing the above settings
 
-### 5.2 Required Status Checks
-Select these checks to be required:
-- `lint`
-- `test`
-- `build`
-- `validate`
+### 4.2 Required Status Checks
+Select `Quality Gates` as the required check.
 
 ---
 
-## Step 6: Test the Pipeline
+## Step 5: Test the Pipeline
 
-### 6.1 Create Test Branch
+### 5.1 Create Test Branch
 ```bash
 git checkout -b test/ci-cd-setup
 echo "Testing CI/CD pipeline" > TEST.md
@@ -127,29 +107,23 @@ git commit -m "test: verify CI/CD pipeline"
 git push origin test/ci-cd-setup
 ```
 
-### 6.2 Create Pull Request
+### 5.2 Create Pull Request
 1. Go to GitHub → Pull requests → New pull request
 2. Base: `master`, Compare: `test/ci-cd-setup`
 3. Create pull request
-4. **Verify all checks pass** ✅
+4. **Verify quality checks pass**
 
-### 6.3 Deploy to Production
+### 5.3 Deploy to Production
 1. Merge PR to `master` branch
 2. Go to **Actions** tab
 3. Watch the deployment workflow
-4. Verify production site updates
-5. Verify production site updates: `https://foodnforce.com`
+4. Verify production site: `https://food-n-force.com`
 
 ---
 
-## Step 7: Monitoring & Notifications
+## Step 6: Monitoring & Notifications
 
-### 7.1 Slack Notifications (Optional)
-1. Create Slack incoming webhook
-2. Add `SLACK_WEBHOOK_URL` secret to GitHub
-3. Workflow will send deployment notifications
-
-### 7.2 Email Notifications
+### 6.1 Email Notifications
 GitHub automatically sends email notifications for:
 - Failed workflow runs
 - Deployment status
@@ -165,42 +139,166 @@ Configure in: **Settings** → **Notifications**
 ```mermaid
 graph LR
     A[Push Code] --> B{Which Branch?}
-    B -->|master| C[Run Tests]
-    B -->|other| D[Tests Only]
-    C --> E{Tests Pass?}
-    E -->|Yes| F[Deploy to Production]
+    B -->|master| C[Quality Gates]
+    B -->|PR| D[Quality Gates Only]
+    C --> E{Checks Pass?}
+    E -->|Yes| F[Deploy to SiteGround via SSH/rsync]
     E -->|No| G[Fail & Notify]
-    F --> H[Production Live]
+    F --> H[Health Check]
+    H --> I[Production Live]
 ```
 
 ### Manual Deployments
 
 From GitHub Actions tab:
-1. Click **Actions** → **CI/CD Pipeline**
+1. Click **Actions** → **Food-N-Force CI/CD Pipeline**
 2. Click **"Run workflow"**
 3. Select branch
-4. Choose environment (staging/production)
-5. Click **"Run workflow"**
+4. Click **"Run workflow"**
+
+---
+
+## CI/CD Pipeline Stages
+
+The pipeline runs as two jobs: `quality-checks` and `deploy`.
+
+### Job 1: Quality Gates
+
+#### 1. Install
+```bash
+npm install
+```
+- Standard dependency installation
+- `package-lock.json` is not tracked in git (cross-platform lockfile issues with platform-specific optional deps like esbuild/rollup)
+
+#### 2. Validate HTML
+```bash
+npm run validate:html
+```
+- W3C HTML validation via html-validate
+
+#### 3. Lint
+```bash
+npm run lint:css
+npm run lint:js
+```
+- Checks CSS syntax via Stylelint
+- Enforces JavaScript standards via ESLint
+
+#### 4. Unit Tests
+```bash
+npm run test:unit
+```
+- Runs Vitest unit test suite (159 tests)
+
+#### 5. Build
+```bash
+npm run build
+```
+- Generates sitemap
+- Compiles components
+- Optimizes assets with Vite (tree-shaking, Terser minification)
+
+#### 6. Accessibility Tests
+```bash
+npm run test:accessibility
+```
+- Pa11y WCAG 2.1 AA compliance checks
+- Runs against preview server
+- `continue-on-error: true` (non-blocking)
+
+**Note**: Performance tests (`test:performance`) and browser tests (`test:browser`) are available locally but are not run in CI to keep pipeline fast.
+
+### Job 2: Deploy (master branch only)
+
+#### 7. Deploy via SSH
+```bash
+rsync -avz --delete -e "ssh -p $SSH_PORT" dist/ ${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/
+```
+- Downloads build artifact from quality-checks job
+- Deploys `dist/` to SiteGround via rsync over SSH
+- Flushes SiteGround caches (file touch + Memcached)
+
+#### 8. Health Check
+```bash
+curl -s -o /dev/null -w "%{http_code}" https://food-n-force.com
+```
+- Verifies site returns HTTP 200 after deployment
+
+---
+
+## Environment Variables
+
+### Required in GitHub Secrets
+Set in: **GitHub → Settings → Secrets and variables → Actions**
+
+#### Build-Time Variables
+```
+VITE_SENTRY_DSN=https://your-key@sentry.io/project
+```
+
+#### Deployment Credentials
+```
+SITEGROUND_SSH_KEY=(SSH private key)
+SITEGROUND_SSH_PASSPHRASE=(key passphrase)
+SITEGROUND_HOST=(server hostname)
+SITEGROUND_USER=(SSH username)
+SITEGROUND_PORT=(SSH port)
+```
+
+---
+
+## Performance Budgets
+
+| Asset Type | Budget | Actual (Current) |
+|------------|--------|------------------|
+| CSS Bundle | 150 KB | ~92 KB |
+| JS Bundle  | 200 KB | ~46 KB |
+| Total Build | 2 MB  | ~1.5 MB |
+
+Configure in: `lighthouse-budget.json` and `lighthouse.config.js`
+
+---
+
+## Rollback Procedures
+
+### Quick Rollback via Git
+```bash
+# Revert the last commit and push — triggers a new deployment
+git revert HEAD
+git push origin master
+```
+
+### Restore Point System
+```bash
+# Create a restore point before risky changes
+npm run restore:create
+
+# Apply a previous restore point
+npm run restore:apply
+```
+
+### Manual Re-deployment
+From GitHub Actions:
+1. Go to **Actions** → find the last successful workflow run
+2. Click **"Re-run all jobs"** to redeploy that version
 
 ---
 
 ## Troubleshooting
 
-### "NETLIFY_AUTH_TOKEN not found"
-**Solution:** Double-check secret name matches exactly (case-sensitive)
+### "SSH connection refused"
+**Solution:** Verify SiteGround SSH is enabled and the port number is correct in GitHub secrets
+
+### "Permission denied (publickey)"
+**Solution:** Ensure `SITEGROUND_SSH_KEY` contains the full private key (including `-----BEGIN/END-----` lines) and `SITEGROUND_SSH_PASSPHRASE` is correct
 
 ### "Build failed: npm install timed out"
-**Solution:** Check `package.json` for dependency issues, add `.npmrc` with:
-```
-legacy-peer-deps=true
-```
-
-### "Site ID not found"
-**Solution:** Verify Netlify site exists and ID is correct
+**Solution:** Check `package.json` for dependency issues
 
 ### "Tests failing in CI but pass locally"
 **Solution:**
-- Check Node.js version matches (use `.nvmrc` file)
+- CI uses Node.js 22 — ensure local version matches
 - Verify all dependencies in `package.json`
 - Check for environment-specific issues
 
@@ -208,119 +306,7 @@ legacy-peer-deps=true
 **Solution:**
 - Run `npm run validate:build` locally
 - Check browser console for errors
-- Verify environment variables set in Netlify UI
-
----
-
-## CI/CD Pipeline Stages
-
-### 1. Install
-```bash
-npm install
-```
-- Standard dependency installation
-- `package-lock.json` is not tracked in git (cross-platform lockfile issues with platform-specific optional deps like esbuild/rollup)
-
-### 2. Lint
-```bash
-npm run lint:html
-npm run lint:css
-npm run lint:js
-```
-- Validates HTML structure
-- Checks CSS syntax
-- Enforces JavaScript standards
-
-### 3. Test
-```bash
-npm run test:unit          # Vitest unit tests
-npm run test:accessibility # pa11y WCAG checks
-npm run test:performance   # Lighthouse audits
-npm run test:browser       # Playwright E2E tests
-```
-
-### 4. Build
-```bash
-npm run build
-```
-- Generates sitemap
-- Compiles components
-- Optimizes assets with Vite
-
-### 5. Validate
-```bash
-npm run validate:build
-```
-- Verifies all HTML files exist
-- Checks bundle sizes
-- Validates asset references
-
-### 6. Deploy
-```bash
-netlify deploy --prod --site=$NETLIFY_SITE_ID
-```
-- Uploads `dist/` to Netlify
-- Activates new deployment
-- Returns deploy URL
-
----
-
-## Environment Variables
-
-### Required in Netlify UI
-Set these in: **Site Settings** → **Build & deploy** → **Environment variables**
-
-#### Production
-```
-VITE_ENV=production
-VITE_SENTRY_DSN=https://your-key@sentry.io/project
-VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-VITE_FEATURE_DEBUG_MODE=false
-```
-
-#### Staging
-```
-VITE_ENV=staging
-VITE_SENTRY_DSN=https://your-staging-key@sentry.io/project
-VITE_GA_MEASUREMENT_ID=G-STAGING-ID
-VITE_FEATURE_DEBUG_MODE=true
-```
-
----
-
-## Performance Budgets
-
-CI/CD will **fail** if budgets exceeded:
-
-| Asset Type | Budget | Actual (Current) |
-|------------|--------|------------------|
-| CSS Bundle | 150 KB | ~92 KB ✅ |
-| JS Bundle  | 200 KB | ~46 KB ✅ |
-| Total Build | 2 MB  | ~1.5 MB ✅ |
-
-Configure in: `lighthouse-budget.json`
-
----
-
-## Rollback Procedures
-
-### Automatic Rollback
-If deployment fails validation, GitHub Actions automatically:
-1. Deletes failed Netlify deployment
-2. Reverts to previous version
-3. Notifies team
-
-### Manual Rollback
-From Netlify UI:
-1. Go to **Deploys** tab
-2. Find last working deployment
-3. Click **"..."** → **"Publish deploy"**
-4. Confirm rollback
-
-From CLI:
-```bash
-netlify rollback
-```
+- SSH into SiteGround to verify files were deployed correctly
 
 ---
 
@@ -334,7 +320,7 @@ git push origin feature/your-feature
 # Create PR
 ```
 
-### 2. Never Commit Directly to Main
+### 2. Never Commit Directly to Master
 - All changes via pull requests
 - Require code reviews
 - Enforce status checks
@@ -349,8 +335,8 @@ npm run validate:build
 
 ### 4. Monitor Deployments
 - Check GitHub Actions after each push
-- Verify staging before production
-- Review Netlify deploy logs
+- Verify site at `https://food-n-force.com` after deploy
+- Review health check output in workflow logs
 
 ### 5. Keep Dependencies Updated
 ```bash
@@ -366,14 +352,10 @@ npm run deps:security   # Fix vulnerabilities
 - [Workflow syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
 - [Secrets management](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
 
-### Netlify Documentation
-- [Continuous deployment](https://docs.netlify.com/configure-builds/get-started/)
-- [Environment variables](https://docs.netlify.com/environment-variables/overview/)
-
 ### Internal Documentation
 - `docs/project/plan.md` - Project roadmap
 - `docs/current/emergency/15min-response-playbook.md` - Emergency procedures
-- `PRODUCTION_READINESS_STATUS.md` - Current status
+- `docs/ENVIRONMENT.md` - Environment variable configuration
 
 ---
 

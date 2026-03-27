@@ -43,16 +43,14 @@ docs/
 │   ├── safety-protocols.md
 │   ├── coordination-protocols.md
 │   ├── workspace-setup-protocols.md
-│   ├── multi-page-testing-protocol.md
-│   ├── DEPLOYMENT_GUIDE.md
-│   └── DEPLOYMENT-SETUP-GUIDE.md
+│   └── multi-page-testing-protocol.md
 ├── current/               # Enhanced active documentation
 │   ├── emergency/         # Emergency response procedures
 │   ├── design-system/     # SLDS governance
 │   ├── governance/        # Agent coordination
 │   └── operations/        # Quality gates
 └── technical/             # Technical architecture
-    ├── adr/               # 15 Architecture Decision Records
+    ├── adr/               # 16 Architecture Decision Records
     ├── TECHNICAL_ARCHITECTURE_REVIEW.md
     └── PROJECT_DOCUMENTATION.md
 ```
@@ -75,7 +73,7 @@ Legacy workflows have been archived to `_archive/github-workflows/`.
 
 ## Agent Coordination
 
-### 17+ Specialized Agents
+### 16 Specialized Agents
 - Agent definitions in `.claude/agents/`
 - [RACI Matrix](project/raci.md) - Coordination
 - [Agent Coordination Hub](current/governance/agent-coordination/)
@@ -89,6 +87,6 @@ Legacy workflows have been archived to `_archive/github-workflows/`.
 
 Historical and outdated documentation has been moved to:
 - `_archive/docs-technical/` - Resolved mobile navigation crisis docs, old phase reports
-- `_archive/docs-project/` - Completed requirements, old CSS deconfliction plans
+- `_archive/docs-project/` - Completed requirements, old CSS deconfliction plans, legacy Netlify deployment guides
 - `_archive/github-workflows/` - Legacy CI/CD workflow files
 - `_audit/` - Full historical snapshots and restore points
