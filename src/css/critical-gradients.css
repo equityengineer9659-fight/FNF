@@ -327,13 +327,9 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--services .services-section p {color:rgba(255,255,255,0.9);text-align:center}
 
-.fnf-page--services .service-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border-light);border-radius:var(--slds-border-radius-large);padding:2rem;text-align:center;transition:all 0.3s ease;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative}
-
-.fnf-page--services .service-card:hover {transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+.fnf-page--services .service-card {background:rgba(45,55,65,0.5);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border-light);border-radius:var(--slds-border-radius-large);padding:2rem;text-align:center;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;box-shadow:0 8px 32px rgba(0,0,0,0.3);position:relative}
 
 .fnf-page--services .service-icon:not(.fnf-icon-gradient) {width:80px;height:80px;background:var(--fnf-h2-underline-gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:var(--slds-spacing-large);box-shadow:0 4px 15px rgba(1,118,211,0.3);transition:all 0.3s ease}
-
-.fnf-page--services .service-card:hover .service-icon {transform:scale(1.1);box-shadow:0 6px 20px rgba(1,118,211,0.5)}
 
 .fnf-page--services .service-badge {background:var(--fnf-h2-underline-gradient);color:#fff;padding:0.75rem 1.5rem;border-radius:var(--slds-border-radius-medium);font-size:1rem;font-weight:600;margin-bottom:var(--slds-spacing-large);text-align:center;box-shadow:0 2px 8px rgba(1,118,211,0.3);line-height:1.3}
 
