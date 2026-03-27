@@ -229,7 +229,7 @@ body.fnf-page--contact .contact-section .slds-container_large {position:relative
 
 .fnf-page--contact .contact-info-item p {color:rgba(255,255,255,0.9);margin:0;line-height:1.5;text-align:left;margin-bottom:var(--fnf-spacing-lg)}
 
-.fnf-page--contact .contact-info-item a {color:var(--fnf-contact-link);text-decoration:none;font-weight:500;transition:color 0.3s ease}
+.fnf-page--contact .contact-info-item a {color:var(--fnf-contact-link);text-decoration:underline;font-weight:500;transition:color 0.3s ease}
 
 .fnf-page--contact .contact-info-item a:hover {color:var(--fnf-contact-link-hover);text-decoration:underline}
 
