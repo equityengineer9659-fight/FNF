@@ -147,6 +147,14 @@ class NewsletterPopup {
 
       const formData = new FormData();
       formData.append('email', email);
+
+      // Fetch CSRF token
+      try {
+        const tokenRes = await fetch('/api/csrf-token.php');
+        const tokenData = await tokenRes.json();
+        formData.append('csrf_token', tokenData.token);
+      } catch { /* server will reject if CSRF is enforced */ }
+
       try {
         const response = await fetch('/api/newsletter.php', { method: 'POST', body: formData });
         if (!response.ok) throw new Error('Server error');

@@ -26,9 +26,18 @@ class ContactForm {
     this.setLoading(true);
 
     try {
+      const formData = new FormData(this.form);
+
+      // Fetch CSRF token
+      try {
+        const tokenRes = await fetch('/api/csrf-token.php');
+        const tokenData = await tokenRes.json();
+        formData.append('csrf_token', tokenData.token);
+      } catch { /* server will reject if CSRF is enforced */ }
+
       const response = await fetch(this.form.action, {
         method: 'POST',
-        body: new FormData(this.form),
+        body: formData,
       });
 
       const data = await response.json();

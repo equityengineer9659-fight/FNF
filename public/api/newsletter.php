@@ -13,6 +13,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// CSRF validation
+session_start();
+$csrfToken = $_POST['csrf_token'] ?? '';
+if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrfToken)) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'error' => 'Invalid or missing security token. Please refresh and try again.']);
+    exit;
+}
+unset($_SESSION['csrf_token']); // single-use
+
 $recipient = 'hello@food-n-force.com';
 
 $email = trim($_POST['email'] ?? '');
