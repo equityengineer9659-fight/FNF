@@ -24,6 +24,14 @@ export default defineConfig({
         contact: resolve(__dirname, 'contact.html'),
         blog: resolve(__dirname, 'blog.html'),
         articleAiFoodBanks: resolve(__dirname, 'ai-reshaping-food-banks.html'),
+        articleSalesforce: resolve(__dirname, 'salesforce-food-bank-operations.html'),
+        articleDonor: resolve(__dirname, 'donor-relationships-nonprofit-cloud.html'),
+        articleDataDriven: resolve(__dirname, 'data-driven-food-banks.html'),
+        articleWorkflow: resolve(__dirname, 'food-bank-workflow-automation.html'),
+        articleGrants: resolve(__dirname, 'securing-technology-grants.html'),
+        articleAiInventory: resolve(__dirname, 'ai-inventory-management.html'),
+        caseStudies: resolve(__dirname, 'case-studies.html'),
+        templatesTools: resolve(__dirname, 'templates-tools.html'),
         notfound: resolve(__dirname, '404.html')
       },
       output: {

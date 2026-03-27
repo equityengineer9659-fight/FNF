@@ -21,7 +21,15 @@ const pages = [
   { path: 'impact.html', priority: '0.8', changefreq: 'monthly' },
   { path: 'contact.html', priority: '0.7', changefreq: 'monthly' },
   { path: 'blog.html', priority: '0.8', changefreq: 'weekly' },
-  { path: 'ai-reshaping-food-banks.html', priority: '0.7', changefreq: 'monthly' }
+  { path: 'ai-reshaping-food-banks.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'salesforce-food-bank-operations.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'donor-relationships-nonprofit-cloud.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'data-driven-food-banks.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'food-bank-workflow-automation.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'securing-technology-grants.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'ai-inventory-management.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'case-studies.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'templates-tools.html', priority: '0.7', changefreq: 'monthly' }
 ];
 
 function generateSitemap() {

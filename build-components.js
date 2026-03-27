@@ -10,6 +10,9 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Pages that should highlight "Resources" in navigation
+const resourcesSubpages = ['resources', 'blog', 'ai-reshaping-food-banks', 'salesforce-food-bank-operations', 'donor-relationships-nonprofit-cloud', 'data-driven-food-banks', 'food-bank-workflow-automation', 'securing-technology-grants', 'ai-inventory-management', 'case-studies', 'templates-tools'];
+
 // Component definitions
 const components = {
   navigation: (currentPage) => `    <!-- Navigation -->
@@ -51,7 +54,7 @@ const components = {
                 <a href="services.html" class="fnf-nav__link"${currentPage === 'services' ? ' aria-current="page"' : ''}>Services</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="resources.html" class="fnf-nav__link"${(currentPage === 'resources' || currentPage === 'blog' || currentPage === 'ai-reshaping-food-banks') ? ' aria-current="page"' : ''}>Resources</a>
+                <a href="resources.html" class="fnf-nav__link"${resourcesSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Resources</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="impact.html" class="fnf-nav__link"${currentPage === 'impact' ? ' aria-current="page"' : ''}>Impact</a>
@@ -70,7 +73,7 @@ const components = {
             <ul class="fnf-nav__mobile-menu">
                 <li><a href="index.html" class="fnf-nav__mobile-link"${currentPage === 'index' ? ' aria-current="page"' : ''}>Home</a></li>
                 <li><a href="services.html" class="fnf-nav__mobile-link"${currentPage === 'services' ? ' aria-current="page"' : ''}>Services</a></li>
-                <li><a href="resources.html" class="fnf-nav__mobile-link"${(currentPage === 'resources' || currentPage === 'blog' || currentPage === 'ai-reshaping-food-banks') ? ' aria-current="page"' : ''}>Resources</a></li>
+                <li><a href="resources.html" class="fnf-nav__mobile-link"${resourcesSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Resources</a></li>
                 <li><a href="impact.html" class="fnf-nav__mobile-link"${currentPage === 'impact' ? ' aria-current="page"' : ''}>Impact</a></li>
                 <li><a href="contact.html" class="fnf-nav__mobile-link"${currentPage === 'contact' ? ' aria-current="page"' : ''}>Contact</a></li>
                 <li><a href="about.html" class="fnf-nav__mobile-link"${currentPage === 'about' ? ' aria-current="page"' : ''}>About Us</a></li>
@@ -140,7 +143,15 @@ function buildComponents() {
     'impact',
     'contact',
     'blog',
-    'ai-reshaping-food-banks'
+    'ai-reshaping-food-banks',
+    'salesforce-food-bank-operations',
+    'donor-relationships-nonprofit-cloud',
+    'data-driven-food-banks',
+    'food-bank-workflow-automation',
+    'securing-technology-grants',
+    'ai-inventory-management',
+    'case-studies',
+    'templates-tools'
   ];
 
   pages.forEach(page => {
