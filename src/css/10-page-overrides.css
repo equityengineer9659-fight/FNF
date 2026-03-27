@@ -295,6 +295,49 @@
   .article-pullquote.article-reveal {
     transform: translateX(-10px);
   }
+
+  /* Pullquote breakout: reset to full-width on mobile */
+  .article-pullquote {
+    width: calc(100% + 1rem);
+    margin-left: -0.5rem;
+  }
+
+  /* Case study stat cards: stack on small screens */
+  .case-study-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .case-study-stat {
+    padding: 1rem 0.75rem;
+  }
+
+  .case-study-stat__number {
+    font-size: 1.5rem;
+  }
+
+  /* Template cards */
+  .template-card {
+    padding: 1.5rem;
+  }
+
+  .template-card__title {
+    font-size: 1.1rem;
+  }
+
+  /* Read Next section */
+  .article-read-next {
+    padding: 2rem 1.25rem 0.5rem;
+  }
+
+  .article-read-next__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .article-read-next__card {
+    padding: 1.25rem;
+  }
 }
 
 /* Desktop - ensure accordion classes don't affect 3-column layout */

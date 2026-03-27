@@ -35,6 +35,7 @@ import NewsletterPopup from './effects/newsletter-popup.js';
 import ContactForm from './effects/contact-form.js';
 import { initCounters } from './effects/counters.js';
 import ArticleEnhancements from './effects/article-enhancements.js';
+import BlogFilter from './effects/blog-filter.js';
 
 /**
  * @class FNFApp
@@ -52,6 +53,7 @@ class FNFApp {
     this.newsletterPopup = null;
     this.smartScroll = null;
     this.articleEnhancements = null;
+    this.blogFilter = null;
     this.isInitialized = false;
 
     // AbortController for centralized event listener cleanup
@@ -106,6 +108,7 @@ class FNFApp {
       this.initNewsletterForm();
       this.initSmartScroll();
       this.initArticleEnhancements();
+      this.initBlogFilter();
       this.initNavigation();
       this.initAccessibility();
       this.initPerformanceMonitoring();
@@ -260,6 +263,15 @@ class FNFApp {
       log('📖 Article enhancements initialized');
     } catch (error) {
       console.error('❌ Article enhancements failed:', error);
+    }
+  }
+
+  initBlogFilter() {
+    try {
+      this.blogFilter = new BlogFilter();
+      log('📂 Blog filter initialized');
+    } catch (error) {
+      console.error('❌ Blog filter failed:', error);
     }
   }
 
@@ -518,6 +530,9 @@ class FNFApp {
     }
     if (this.articleEnhancements) {
       this.articleEnhancements.destroy();
+    }
+    if (this.blogFilter) {
+      this.blogFilter.destroy();
     }
 
     this.abortController.abort();
