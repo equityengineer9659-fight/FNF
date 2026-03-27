@@ -43,15 +43,19 @@ jobs:
       - name: Unit Tests
         run: npm run test:unit
 
-      - name: Accessibility Tests
-        run: npm run test:accessibility
-        continue-on-error: true
-
       - name: Build
         run: npm run build
         env:
           VITE_ENV: production
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+
+      - name: Accessibility Tests
+        run: |
+          npx vite preview --port 4173 &
+          sleep 3
+          npm run test:accessibility
+          kill %1 || true
+        continue-on-error: true
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
