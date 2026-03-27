@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <defs>
+    <linearGradient id="da-grad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="da-grad2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="da-grad3" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <!-- Main chart area -->
+  <rect x="80" y="40" width="480" height="320" rx="14" fill="rgba(15,23,42,0.5)" stroke="rgba(5,150,105,0.25)" stroke-width="1.5"/>
+  <!-- Chart title -->
+  <rect x="100" y="55" width="120" height="10" rx="5" fill="rgba(255,255,255,0.15)"/>
+  <!-- Y-axis labels -->
+  <text x="95" y="110" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="end">500</text>
+  <text x="95" y="160" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="end">400</text>
+  <text x="95" y="210" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="end">300</text>
+  <text x="95" y="260" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="end">200</text>
+  <text x="95" y="310" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="end">100</text>
+  <!-- Grid lines -->
+  <line x1="110" y1="105" x2="540" y2="105" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <line x1="110" y1="155" x2="540" y2="155" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <line x1="110" y1="205" x2="540" y2="205" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <line x1="110" y1="255" x2="540" y2="255" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <line x1="110" y1="305" x2="540" y2="305" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <!-- Area chart fill -->
+  <path d="M120 290 L170 265 L220 275 L270 240 L320 220 L370 195 L420 170 L470 145 L520 120 L520 330 L120 330 Z" fill="url(#da-grad1)" opacity="0.12"/>
+  <!-- Main trend line -->
+  <polyline points="120,290 170,265 220,275 270,240 320,220 370,195 420,170 470,145 520,120" stroke="url(#da-grad1)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Data points -->
+  <circle cx="120" cy="290" r="5" fill="#10b981" stroke="rgba(15,23,42,0.8)" stroke-width="2"/>
+  <circle cx="170" cy="265" r="5" fill="#10b981" stroke="rgba(15,23,42,0.8)" stroke-width="2"/>
+  <circle cx="220" cy="275" r="5" fill="#10b981" stroke="rgba(15,23,42,0.8)" stroke-width="2"/>
+  <circle cx="270" cy="240" r="5" fill="#10b981" stroke="rgba(15,23,42,0.8)" stroke-width="2"/>
+  <circle cx="320" cy="220" r="5" fill="#10b981" stroke="rgba(15,23,42,0.8)" stroke-width="2"/>
+  <circle cx="370" cy="195" r="5" fill="#10b981" stroke="rgba(15,23,42,0.8)" stroke-width="2"/>
+  <circle cx="420" cy="170" r="5" fill="#10b981" stroke="rgba(15,23,42,0.8)" stroke-width="2"/>
+  <circle cx="470" cy="145" r="5" fill="#10b981" stroke="rgba(15,23,42,0.8)" stroke-width="2"/>
+  <circle cx="520" cy="120" r="5" fill="#10b981" stroke="rgba(15,23,42,0.8)" stroke-width="2"/>
+  <!-- Secondary line -->
+  <polyline points="120,310 170,295 220,300 270,285 320,270 370,260 420,250 470,235 520,225" stroke="url(#da-grad2)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6" stroke-dasharray="6 4"/>
+  <!-- X-axis labels -->
+  <text x="120" y="348" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Jan</text>
+  <text x="220" y="348" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Mar</text>
+  <text x="320" y="348" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">May</text>
+  <text x="420" y="348" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Jul</text>
+  <text x="520" y="348" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Sep</text>
+  <!-- Right side KPI cards -->
+  <rect x="590" y="40" width="180" height="95" rx="12" fill="rgba(5,150,105,0.1)" stroke="rgba(5,150,105,0.25)" stroke-width="1"/>
+  <text x="610" y="70" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)">Families Served</text>
+  <text x="610" y="105" font-family="system-ui" font-size="32" font-weight="700" fill="url(#da-grad1)">+42%</text>
+  <text x="610" y="122" font-family="system-ui" font-size="10" fill="rgba(16,185,129,0.7)">vs. last quarter</text>
+  <rect x="590" y="152" width="180" height="95" rx="12" fill="rgba(14,165,233,0.1)" stroke="rgba(14,165,233,0.25)" stroke-width="1"/>
+  <text x="610" y="182" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)">Food Rescued (lbs)</text>
+  <text x="610" y="217" font-family="system-ui" font-size="32" font-weight="700" fill="url(#da-grad2)">18.4K</text>
+  <text x="610" y="234" font-family="system-ui" font-size="10" fill="rgba(14,165,233,0.7)">this month</text>
+  <rect x="590" y="264" width="180" height="95" rx="12" fill="rgba(99,102,241,0.1)" stroke="rgba(99,102,241,0.25)" stroke-width="1"/>
+  <text x="610" y="294" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)">Waste Reduction</text>
+  <text x="610" y="329" font-family="system-ui" font-size="32" font-weight="700" fill="url(#da-grad3)">31%</text>
+  <text x="610" y="346" font-family="system-ui" font-size="10" fill="rgba(99,102,241,0.7)">year over year</text>
+</svg>

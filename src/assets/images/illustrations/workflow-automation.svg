@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <defs>
+    <linearGradient id="wf-grad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="wf-grad2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="wf-grad3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <!-- Flow arrows -->
+  <path d="M185 200 L255 200" stroke="url(#wf-grad1)" stroke-width="2" stroke-linecap="round" marker-end="none"/>
+  <polygon points="255,195 265,200 255,205" fill="#f59e0b"/>
+  <path d="M365 200 L435 200" stroke="url(#wf-grad2)" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="435,195 445,200 435,205" fill="#06b6d4"/>
+  <path d="M555 200 L625 200" stroke="url(#wf-grad3)" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="625,195 635,200 625,205" fill="#10b981"/>
+  <!-- Step 1: Intake -->
+  <rect x="60" y="145" width="125" height="110" rx="14" fill="rgba(217,119,6,0.1)" stroke="rgba(217,119,6,0.3)" stroke-width="1.5"/>
+  <circle cx="122" cy="180" r="18" fill="rgba(217,119,6,0.15)" stroke="url(#wf-grad1)" stroke-width="1.5"/>
+  <!-- Document icon -->
+  <rect x="113" y="171" width="14" height="18" rx="2" stroke="#f59e0b" stroke-width="1.5" fill="none"/>
+  <line x1="117" y1="177" x2="123" y2="177" stroke="#f59e0b" stroke-width="1" opacity="0.7"/>
+  <line x1="117" y1="181" x2="123" y2="181" stroke="#f59e0b" stroke-width="1" opacity="0.7"/>
+  <line x1="117" y1="185" x2="121" y2="185" stroke="#f59e0b" stroke-width="1" opacity="0.7"/>
+  <text x="122" y="220" font-family="system-ui" font-size="11" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">Client Intake</text>
+  <text x="122" y="237" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Digital forms</text>
+  <!-- Step 2: Inventory -->
+  <rect x="270" y="145" width="125" height="110" rx="14" fill="rgba(14,165,233,0.1)" stroke="rgba(14,165,233,0.3)" stroke-width="1.5"/>
+  <circle cx="332" cy="180" r="18" fill="rgba(14,165,233,0.15)" stroke="url(#wf-grad2)" stroke-width="1.5"/>
+  <!-- Box/inventory icon -->
+  <rect x="323" y="172" width="16" height="12" rx="1" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <line x1="323" y1="178" x2="339" y2="178" stroke="#06b6d4" stroke-width="1"/>
+  <path d="M328 172 L331 168 L337 168 L339 172" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <text x="332" y="220" font-family="system-ui" font-size="11" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">Inventory</text>
+  <text x="332" y="237" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Auto-tracking</text>
+  <!-- Step 3: Distribution -->
+  <rect x="450" y="145" width="125" height="110" rx="14" fill="rgba(14,165,233,0.1)" stroke="rgba(14,165,233,0.3)" stroke-width="1.5"/>
+  <circle cx="512" cy="180" r="18" fill="rgba(14,165,233,0.15)" stroke="url(#wf-grad2)" stroke-width="1.5"/>
+  <!-- Truck/distribution icon -->
+  <rect x="502" y="174" width="14" height="10" rx="1" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <path d="M516 177 L521 177 L523 180 L523 184 L516 184" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <circle cx="508" cy="186" r="2.5" stroke="#06b6d4" stroke-width="1.2" fill="none"/>
+  <circle cx="519" cy="186" r="2.5" stroke="#06b6d4" stroke-width="1.2" fill="none"/>
+  <text x="512" y="220" font-family="system-ui" font-size="11" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">Distribution</text>
+  <text x="512" y="237" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Smart routing</text>
+  <!-- Step 4: Reporting -->
+  <rect x="640" y="145" width="125" height="110" rx="14" fill="rgba(16,185,129,0.1)" stroke="rgba(16,185,129,0.3)" stroke-width="1.5"/>
+  <circle cx="702" cy="180" r="18" fill="rgba(16,185,129,0.15)" stroke="url(#wf-grad3)" stroke-width="1.5"/>
+  <!-- Chart icon -->
+  <rect x="692" y="172" width="18" height="14" rx="1" stroke="#10b981" stroke-width="1.5" fill="none"/>
+  <polyline points="696,182 700,178 704,180 708,174" stroke="#10b981" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <text x="702" y="220" font-family="system-ui" font-size="11" font-weight="600" fill="rgba(255,255,255,0.8)" text-anchor="middle">Reporting</text>
+  <text x="702" y="237" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Auto-generated</text>
+  <!-- Top decorative: time saved -->
+  <rect x="250" y="50" width="300" height="55" rx="10" fill="rgba(217,119,6,0.08)" stroke="rgba(217,119,6,0.2)" stroke-width="1"/>
+  <text x="290" y="75" font-family="system-ui" font-size="11" fill="rgba(255,255,255,0.5)">Time Saved Per Week</text>
+  <text x="290" y="95" font-family="system-ui" font-size="22" font-weight="700" fill="url(#wf-grad1)">15+ Hours</text>
+  <text x="458" y="95" font-family="system-ui" font-size="11" fill="rgba(245,158,11,0.7)">redirected to mission</text>
+  <!-- Bottom: automation indicators -->
+  <rect x="140" y="300" width="100" height="50" rx="8" fill="rgba(217,119,6,0.06)" stroke="rgba(217,119,6,0.15)" stroke-width="1"/>
+  <text x="190" y="322" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Intake Forms</text>
+  <text x="190" y="340" font-family="system-ui" font-size="14" font-weight="600" fill="#f59e0b" text-anchor="middle">Automated</text>
+  <rect x="270" y="300" width="100" height="50" rx="8" fill="rgba(14,165,233,0.06)" stroke="rgba(14,165,233,0.15)" stroke-width="1"/>
+  <text x="320" y="322" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Reorder Alerts</text>
+  <text x="320" y="340" font-family="system-ui" font-size="14" font-weight="600" fill="#06b6d4" text-anchor="middle">Real-time</text>
+  <rect x="400" y="300" width="100" height="50" rx="8" fill="rgba(14,165,233,0.06)" stroke="rgba(14,165,233,0.15)" stroke-width="1"/>
+  <text x="450" y="322" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Shift Reminders</text>
+  <text x="450" y="340" font-family="system-ui" font-size="14" font-weight="600" fill="#06b6d4" text-anchor="middle">Scheduled</text>
+  <rect x="530" y="300" width="100" height="50" rx="8" fill="rgba(16,185,129,0.06)" stroke="rgba(16,185,129,0.15)" stroke-width="1"/>
+  <text x="580" y="322" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Grant Reports</text>
+  <text x="580" y="340" font-family="system-ui" font-size="14" font-weight="600" fill="#10b981" text-anchor="middle">One-click</text>
+</svg>

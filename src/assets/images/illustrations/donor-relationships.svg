@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <defs>
+    <linearGradient id="dr-grad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="dr-grad2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="dr-grad3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <!-- Connection lines -->
+  <line x1="400" y1="200" x2="200" y2="100" stroke="url(#dr-grad1)" stroke-width="1.5" opacity="0.4"/>
+  <line x1="400" y1="200" x2="600" y2="100" stroke="url(#dr-grad2)" stroke-width="1.5" opacity="0.4"/>
+  <line x1="400" y1="200" x2="180" y2="280" stroke="url(#dr-grad3)" stroke-width="1.5" opacity="0.4"/>
+  <line x1="400" y1="200" x2="620" y2="280" stroke="url(#dr-grad1)" stroke-width="1.5" opacity="0.4"/>
+  <line x1="400" y1="200" x2="300" y2="340" stroke="url(#dr-grad2)" stroke-width="1.5" opacity="0.4"/>
+  <line x1="400" y1="200" x2="500" y2="340" stroke="url(#dr-grad3)" stroke-width="1.5" opacity="0.4"/>
+  <line x1="400" y1="200" x2="140" y2="180" stroke="url(#dr-grad1)" stroke-width="1.5" opacity="0.3"/>
+  <line x1="400" y1="200" x2="660" y2="180" stroke="url(#dr-grad2)" stroke-width="1.5" opacity="0.3"/>
+  <!-- Secondary connections -->
+  <line x1="200" y1="100" x2="140" y2="180" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
+  <line x1="600" y1="100" x2="660" y2="180" stroke="rgba(14,165,233,0.2)" stroke-width="1"/>
+  <line x1="180" y1="280" x2="300" y2="340" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+  <line x1="620" y1="280" x2="500" y2="340" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
+  <!-- Center hub - heart -->
+  <circle cx="400" cy="200" r="50" fill="rgba(99,102,241,0.15)" stroke="url(#dr-grad1)" stroke-width="2"/>
+  <path d="M400 230 C400 230 375 210 375 195 C375 185 385 178 395 182 C398 183 400 186 400 186 C400 186 402 183 405 182 C415 178 425 185 425 195 C425 210 400 230 400 230Z" fill="url(#dr-grad1)" opacity="0.8"/>
+  <!-- Donor nodes -->
+  <circle cx="200" cy="100" r="32" fill="rgba(99,102,241,0.12)" stroke="rgba(99,102,241,0.3)" stroke-width="1.5"/>
+  <circle cx="200" cy="92" r="10" fill="rgba(99,102,241,0.5)"/>
+  <path d="M185 112 Q200 102 215 112" stroke="rgba(99,102,241,0.5)" stroke-width="2" fill="none"/>
+  <text x="200" y="145" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle">Major Donor</text>
+  <circle cx="600" cy="100" r="32" fill="rgba(14,165,233,0.12)" stroke="rgba(14,165,233,0.3)" stroke-width="1.5"/>
+  <circle cx="600" cy="92" r="10" fill="rgba(14,165,233,0.5)"/>
+  <path d="M585 112 Q600 102 615 112" stroke="rgba(14,165,233,0.5)" stroke-width="2" fill="none"/>
+  <text x="600" y="145" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle">Monthly Giver</text>
+  <circle cx="180" cy="280" r="32" fill="rgba(16,185,129,0.12)" stroke="rgba(16,185,129,0.3)" stroke-width="1.5"/>
+  <circle cx="180" cy="272" r="10" fill="rgba(16,185,129,0.5)"/>
+  <path d="M165 292 Q180 282 195 292" stroke="rgba(16,185,129,0.5)" stroke-width="2" fill="none"/>
+  <text x="180" y="325" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle">Corporate</text>
+  <circle cx="620" cy="280" r="32" fill="rgba(99,102,241,0.12)" stroke="rgba(99,102,241,0.3)" stroke-width="1.5"/>
+  <circle cx="620" cy="272" r="10" fill="rgba(99,102,241,0.5)"/>
+  <path d="M605 292 Q620 282 635 292" stroke="rgba(99,102,241,0.5)" stroke-width="2" fill="none"/>
+  <text x="620" y="325" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle">Foundation</text>
+  <!-- Smaller satellite nodes -->
+  <circle cx="140" cy="180" r="20" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
+  <circle cx="140" cy="176" r="6" fill="rgba(99,102,241,0.4)"/>
+  <circle cx="660" cy="180" r="20" fill="rgba(14,165,233,0.08)" stroke="rgba(14,165,233,0.2)" stroke-width="1"/>
+  <circle cx="660" cy="176" r="6" fill="rgba(14,165,233,0.4)"/>
+  <circle cx="300" cy="340" r="20" fill="rgba(14,165,233,0.08)" stroke="rgba(14,165,233,0.2)" stroke-width="1"/>
+  <circle cx="300" cy="336" r="6" fill="rgba(14,165,233,0.4)"/>
+  <circle cx="500" cy="340" r="20" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+  <circle cx="500" cy="336" r="6" fill="rgba(16,185,129,0.4)"/>
+  <!-- Decorative dots -->
+  <circle cx="320" cy="60" r="3" fill="rgba(99,102,241,0.3)"/>
+  <circle cx="480" cy="50" r="2" fill="rgba(14,165,233,0.3)"/>
+  <circle cx="710" cy="150" r="3" fill="rgba(16,185,129,0.3)"/>
+  <circle cx="90" cy="140" r="2" fill="rgba(99,102,241,0.3)"/>
+  <circle cx="350" cy="370" r="2" fill="rgba(14,165,233,0.3)"/>
+  <circle cx="450" cy="380" r="3" fill="rgba(99,102,241,0.3)"/>
+</svg>

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <defs>
+    <linearGradient id="ai-grad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="ai-grad2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="ai-grad3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <!-- Warehouse shelves -->
+  <rect x="80" y="100" width="380" height="260" rx="12" fill="rgba(15,23,42,0.5)" stroke="rgba(14,165,233,0.2)" stroke-width="1"/>
+  <!-- Shelf rows -->
+  <line x1="100" y1="175" x2="440" y2="175" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <line x1="100" y1="250" x2="440" y2="250" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <line x1="100" y1="325" x2="440" y2="325" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <!-- Inventory boxes - Row 1 -->
+  <rect x="110" y="130" width="40" height="40" rx="4" fill="rgba(14,165,233,0.15)" stroke="rgba(14,165,233,0.3)" stroke-width="1"/>
+  <rect x="160" y="140" width="40" height="30" rx="4" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+  <rect x="210" y="125" width="40" height="45" rx="4" fill="rgba(14,165,233,0.15)" stroke="rgba(14,165,233,0.3)" stroke-width="1"/>
+  <rect x="260" y="135" width="40" height="35" rx="4" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+  <rect x="310" y="145" width="40" height="25" rx="4" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+  <rect x="360" y="130" width="40" height="40" rx="4" fill="rgba(99,102,241,0.15)" stroke="rgba(99,102,241,0.3)" stroke-width="1"/>
+  <!-- Row 2 -->
+  <rect x="110" y="205" width="40" height="40" rx="4" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+  <rect x="160" y="215" width="40" height="30" rx="4" fill="rgba(239,68,68,0.15)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+  <rect x="210" y="200" width="40" height="45" rx="4" fill="rgba(14,165,233,0.15)" stroke="rgba(14,165,233,0.3)" stroke-width="1"/>
+  <rect x="260" y="210" width="40" height="35" rx="4" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+  <rect x="310" y="200" width="40" height="45" rx="4" fill="rgba(14,165,233,0.15)" stroke="rgba(14,165,233,0.3)" stroke-width="1"/>
+  <rect x="360" y="220" width="40" height="25" rx="4" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+  <!-- Row 3 -->
+  <rect x="110" y="275" width="40" height="45" rx="4" fill="rgba(14,165,233,0.15)" stroke="rgba(14,165,233,0.3)" stroke-width="1"/>
+  <rect x="160" y="285" width="40" height="35" rx="4" fill="rgba(99,102,241,0.15)" stroke="rgba(99,102,241,0.3)" stroke-width="1"/>
+  <rect x="210" y="280" width="40" height="40" rx="4" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+  <rect x="260" y="290" width="40" height="30" rx="4" fill="rgba(14,165,233,0.15)" stroke="rgba(14,165,233,0.3)" stroke-width="1"/>
+  <rect x="310" y="275" width="40" height="45" rx="4" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+  <rect x="360" y="285" width="40" height="35" rx="4" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+  <!-- Expiration warning on red box -->
+  <circle cx="180" cy="210" r="8" fill="rgba(239,68,68,0.3)" stroke="#ef4444" stroke-width="1"/>
+  <text x="180" y="214" font-family="system-ui" font-size="10" font-weight="700" fill="#ef4444" text-anchor="middle">!</text>
+  <!-- AI brain/network overlay -->
+  <circle cx="580" cy="160" r="60" fill="rgba(14,165,233,0.08)" stroke="rgba(14,165,233,0.25)" stroke-width="1.5"/>
+  <circle cx="580" cy="160" r="35" fill="rgba(14,165,233,0.12)" stroke="url(#ai-grad1)" stroke-width="1.5"/>
+  <text x="580" y="155" font-family="system-ui" font-size="14" font-weight="700" fill="#06b6d4" text-anchor="middle">AI</text>
+  <text x="580" y="172" font-family="system-ui" font-size="9" fill="rgba(14,165,233,0.7)" text-anchor="middle">Engine</text>
+  <!-- Neural connections from AI to features -->
+  <line x1="545" y1="175" x2="470" y2="200" stroke="rgba(14,165,233,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="580" y1="220" x2="580" y2="270" stroke="rgba(14,165,233,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="615" y1="175" x2="690" y2="200" stroke="rgba(14,165,233,0.3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- Feature nodes -->
+  <rect x="490" y="260" width="180" height="50" rx="10" fill="rgba(14,165,233,0.08)" stroke="rgba(14,165,233,0.2)" stroke-width="1"/>
+  <circle cx="512" cy="285" r="10" fill="rgba(14,165,233,0.15)" stroke="rgba(14,165,233,0.3)" stroke-width="1"/>
+  <text x="512" y="289" font-family="system-ui" font-size="11" fill="#06b6d4" text-anchor="middle">P</text>
+  <text x="540" y="281" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.6)">Predict Expiration</text>
+  <text x="540" y="296" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.35)">3-day accuracy window</text>
+  <rect x="490" y="320" width="180" height="50" rx="10" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+  <circle cx="512" cy="345" r="10" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+  <text x="512" y="349" font-family="system-ui" font-size="11" fill="#10b981" text-anchor="middle">D</text>
+  <text x="540" y="341" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.6)">Demand Forecast</text>
+  <text x="540" y="356" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.35)">Weekly site predictions</text>
+  <rect x="490" y="200" width="180" height="50" rx="10" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
+  <circle cx="512" cy="225" r="10" fill="rgba(99,102,241,0.15)" stroke="rgba(99,102,241,0.3)" stroke-width="1"/>
+  <text x="512" y="229" font-family="system-ui" font-size="11" fill="#8b5cf6" text-anchor="middle">S</text>
+  <text x="540" y="221" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.6)">Smart Storage</text>
+  <text x="540" y="236" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.35)">Optimize placement</text>
+  <!-- Top stats -->
+  <rect x="490" y="40" width="85" height="70" rx="10" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+  <text x="532" y="70" font-family="system-ui" font-size="22" font-weight="700" fill="url(#ai-grad3)" text-anchor="middle">30%</text>
+  <text x="532" y="92" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Less waste</text>
+  <rect x="590" y="40" width="85" height="70" rx="10" fill="rgba(14,165,233,0.08)" stroke="rgba(14,165,233,0.2)" stroke-width="1"/>
+  <text x="632" y="70" font-family="system-ui" font-size="22" font-weight="700" fill="url(#ai-grad1)" text-anchor="middle">95%</text>
+  <text x="632" y="92" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Accuracy</text>
+  <rect x="690" y="40" width="85" height="70" rx="10" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
+  <text x="732" y="70" font-family="system-ui" font-size="22" font-weight="700" fill="url(#ai-grad2)" text-anchor="middle">2x</text>
+  <text x="732" y="92" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Turnover</text>
+</svg>

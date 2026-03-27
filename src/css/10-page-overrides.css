@@ -325,6 +325,12 @@
     font-size: 1.1rem;
   }
 
+  /* Illustrations: reset breakout on mobile */
+  .article-illustration--breakout {
+    width: calc(100% + 1rem);
+    margin-left: -0.5rem;
+  }
+
   /* Read Next section */
   .article-read-next {
     padding: 2rem 1.25rem 0.5rem;
