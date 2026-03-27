@@ -202,7 +202,8 @@ class FNFApp {
       const formData = new FormData();
       formData.append('email', email);
       try {
-        await fetch('/api/newsletter.php', { method: 'POST', body: formData });
+        const response = await fetch('/api/newsletter.php', { method: 'POST', body: formData });
+        if (!response.ok) throw new Error('Server error');
         if (container) {
           container.innerHTML = `
             <div class="newsletter-success" role="status" aria-live="polite">

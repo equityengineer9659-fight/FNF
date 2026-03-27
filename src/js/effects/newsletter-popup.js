@@ -148,12 +148,14 @@ class NewsletterPopup {
       const formData = new FormData();
       formData.append('email', email);
       try {
-        await fetch('/api/newsletter.php', { method: 'POST', body: formData });
-      } catch { /* best-effort — show success regardless */ }
-
-      this.showSuccessState(modalContent);
-      try { localStorage.setItem('fnf-newsletter-subscribed', 'true'); } catch { /* storage unavailable */ }
-      window.setTimeout(() => this.closeModal(), 1800);
+        const response = await fetch('/api/newsletter.php', { method: 'POST', body: formData });
+        if (!response.ok) throw new Error('Server error');
+        this.showSuccessState(modalContent);
+        try { localStorage.setItem('fnf-newsletter-subscribed', 'true'); } catch { /* storage unavailable */ }
+        window.setTimeout(() => this.closeModal(), 1800);
+      } catch {
+        this.showErrorState(modalContent);
+      }
     };
     form.addEventListener('submit', handleSubmit);
     cleanupFns.push(() => form.removeEventListener('submit', handleSubmit));
@@ -200,6 +202,15 @@ class NewsletterPopup {
       <div class="fnf-newsletter-success" role="status" aria-live="polite">
         <h2>Thank you!</h2>
         <p>You've been successfully subscribed to our newsletter.</p>
+      </div>
+    `;
+  }
+
+  showErrorState(modalContent) {
+    modalContent.innerHTML = `
+      <div class="fnf-newsletter-error" role="alert">
+        <h2>Something went wrong</h2>
+        <p>Please try again later or email us directly.</p>
       </div>
     `;
   }

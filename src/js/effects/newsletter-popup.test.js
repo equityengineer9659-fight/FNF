@@ -132,6 +132,7 @@ describe('NewsletterPopup', () => {
   describe('form submission', () => {
     it('should set localStorage on valid submission', async () => {
       vi.useFakeTimers();
+      globalThis.fetch = vi.fn().mockResolvedValue({ ok: true });
       document.body.classList.add('fnf-page--about');
       const popup = new NewsletterPopup();
       popup.openModal();
@@ -151,6 +152,7 @@ describe('NewsletterPopup', () => {
 
     it('should show success state after submission', async () => {
       vi.useFakeTimers();
+      globalThis.fetch = vi.fn().mockResolvedValue({ ok: true });
       document.body.classList.add('fnf-page--about');
       const popup = new NewsletterPopup();
       popup.openModal();
@@ -166,6 +168,48 @@ describe('NewsletterPopup', () => {
       expect(successText.textContent).toContain('Thank you');
 
       vi.advanceTimersByTime(2000);
+      vi.useRealTimers();
+    });
+
+    it('should show error state on network failure', async () => {
+      vi.useFakeTimers();
+      globalThis.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
+      document.body.classList.add('fnf-page--about');
+      const popup = new NewsletterPopup();
+      popup.openModal();
+
+      const input = document.querySelector('.fnf-email-input');
+      const form = document.querySelector('.fnf-email-form');
+      input.value = 'test@example.com';
+      form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+      await vi.advanceTimersByTimeAsync(0);
+
+      const content = document.querySelector('.fnf-newsletter-content');
+      expect(content.textContent).toContain('Something went wrong');
+      expect(localStorage.getItem('fnf-newsletter-subscribed')).toBeNull();
+
+      vi.useRealTimers();
+    });
+
+    it('should show error state on server error', async () => {
+      vi.useFakeTimers();
+      globalThis.fetch = vi.fn().mockResolvedValue({ ok: false, status: 500 });
+      document.body.classList.add('fnf-page--about');
+      const popup = new NewsletterPopup();
+      popup.openModal();
+
+      const input = document.querySelector('.fnf-email-input');
+      const form = document.querySelector('.fnf-email-form');
+      input.value = 'test@example.com';
+      form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+      await vi.advanceTimersByTimeAsync(0);
+
+      const content = document.querySelector('.fnf-newsletter-content');
+      expect(content.textContent).toContain('Something went wrong');
+      expect(localStorage.getItem('fnf-newsletter-subscribed')).toBeNull();
+
       vi.useRealTimers();
     });
 

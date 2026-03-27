@@ -204,6 +204,23 @@
   font-size: 1.125rem;
 }
 
+.fnf-newsletter-error {
+  text-align: center;
+  padding: 2rem;
+}
+
+.fnf-newsletter-error h2 {
+  color: #f87171;
+  margin-bottom: 1rem;
+  font-size: 1.875rem;
+  font-family: Orbitron, sans-serif;
+}
+
+.fnf-newsletter-error p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.125rem;
+}
+
 .fnf-modal-open {
   overflow: hidden;
 }
