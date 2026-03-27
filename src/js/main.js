@@ -186,6 +186,8 @@ class FNFApp {
     const input = form.querySelector('.newsletter-input');
     const button = form.querySelector('.newsletter-button');
 
+    const container = form.closest('.slds-text-align_center');
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const email = input.value.trim();
@@ -201,16 +203,18 @@ class FNFApp {
       formData.append('email', email);
       try {
         await fetch('/api/newsletter.php', { method: 'POST', body: formData });
-        input.value = '';
-        button.textContent = 'Subscribed!';
+        if (container) {
+          container.innerHTML = `
+            <div class="newsletter-success" role="status" aria-live="polite">
+              <h2 class="slds-text-heading_large slds-m-bottom_medium">Thank You!</h2>
+              <p class="slds-text-body_regular">You've been successfully subscribed to our newsletter.</p>
+            </div>
+          `;
+        }
       } catch {
+        button.disabled = false;
         button.textContent = 'Try Again';
       }
-
-      setTimeout(() => {
-        button.disabled = false;
-        button.textContent = 'Subscribe';
-      }, 3000);
     });
 
     log('📧 Newsletter form handler initialized');
