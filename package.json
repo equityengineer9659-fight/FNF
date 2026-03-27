@@ -75,7 +75,7 @@
     "autoprefixer": "^10.4.0",
     "cssnano": "^6.0.0",
     "eslint": "^8.55.0",
-    "glob": "^10.3.0",
+    "glob": "^13.0.6",
     "html-validate": "^8.7.3",
     "htmlhint": "^1.1.4",
     "husky": "^9.1.7",
