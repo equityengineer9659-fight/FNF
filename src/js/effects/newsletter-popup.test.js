@@ -130,7 +130,7 @@ describe('NewsletterPopup', () => {
   });
 
   describe('form submission', () => {
-    it('should set localStorage on valid submission', () => {
+    it('should set localStorage on valid submission', async () => {
       vi.useFakeTimers();
       document.body.classList.add('fnf-page--about');
       const popup = new NewsletterPopup();
@@ -140,6 +140,8 @@ describe('NewsletterPopup', () => {
       const form = document.querySelector('.fnf-email-form');
       input.value = 'test@example.com';
       form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(localStorage.getItem('fnf-newsletter-subscribed')).toBe('true');
 
@@ -147,7 +149,7 @@ describe('NewsletterPopup', () => {
       vi.useRealTimers();
     });
 
-    it('should show success state after submission', () => {
+    it('should show success state after submission', async () => {
       vi.useFakeTimers();
       document.body.classList.add('fnf-page--about');
       const popup = new NewsletterPopup();
@@ -157,6 +159,8 @@ describe('NewsletterPopup', () => {
       const form = document.querySelector('.fnf-email-form');
       input.value = 'test@example.com';
       form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+      await vi.advanceTimersByTimeAsync(0);
 
       const successText = document.querySelector('.fnf-newsletter-content');
       expect(successText.textContent).toContain('Thank you');
