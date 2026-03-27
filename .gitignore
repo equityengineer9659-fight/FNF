@@ -20,5 +20,6 @@ playwright-report/
 test-results/
 coverage/
 _audit/
+_regression-test/
 .sfdx/
 package-lock.json
