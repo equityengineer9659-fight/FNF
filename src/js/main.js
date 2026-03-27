@@ -318,22 +318,12 @@ class FNFApp {
         try {
           const longTaskObserver = new PerformanceObserver((list) => {
             list.getEntries().forEach((entry) => {
-              if (entry.duration > 50) {
-                console.warn('⚠️ Long task detected:', entry.duration + 'ms');
-
-                // Report long task to error tracker
-                errorTracker.captureMessage(`Long task detected: ${entry.duration}ms`, 'warning', {
-                  duration: entry.duration,
-                  startTime: entry.startTime
-                });
-
-                // Reduce particle count if performance is poor
-                if (this.particles && entry.duration > 100) {
-                  const stats = this.particles.getStats();
-                  if (stats.particleCount > 4) {
-                    this.particles.setParticleCount(stats.particleCount - 1);
-                    log('🎯 Reduced particle count for performance');
-                  }
+              // Reduce particle count if performance is poor (>100ms)
+              if (this.particles && entry.duration > 100) {
+                const stats = this.particles.getStats();
+                if (stats.particleCount > 4) {
+                  this.particles.setParticleCount(stats.particleCount - 1);
+                  log('🎯 Reduced particle count for performance');
                 }
               }
             });
