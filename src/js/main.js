@@ -34,6 +34,7 @@ import './expertise-accordion.js';
 import NewsletterPopup from './effects/newsletter-popup.js';
 import ContactForm from './effects/contact-form.js';
 import { initCounters } from './effects/counters.js';
+import ArticleEnhancements from './effects/article-enhancements.js';
 
 /**
  * @class FNFApp
@@ -50,6 +51,7 @@ class FNFApp {
     this.counters = null;
     this.newsletterPopup = null;
     this.smartScroll = null;
+    this.articleEnhancements = null;
     this.isInitialized = false;
 
     // AbortController for centralized event listener cleanup
@@ -103,6 +105,7 @@ class FNFApp {
       this.initContactForm();
       this.initNewsletterForm();
       this.initSmartScroll();
+      this.initArticleEnhancements();
       this.initNavigation();
       this.initAccessibility();
       this.initPerformanceMonitoring();
@@ -248,6 +251,15 @@ class FNFApp {
       log('📜 Smart scroll system initialized');
     } catch (error) {
       console.error('❌ Smart scroll failed to initialize:', error);
+    }
+  }
+
+  initArticleEnhancements() {
+    try {
+      this.articleEnhancements = new ArticleEnhancements();
+      log('📖 Article enhancements initialized');
+    } catch (error) {
+      console.error('❌ Article enhancements failed:', error);
     }
   }
 
@@ -503,6 +515,9 @@ class FNFApp {
     }
     if (this.smartScroll) {
       this.smartScroll.destroy();
+    }
+    if (this.articleEnhancements) {
+      this.articleEnhancements.destroy();
     }
 
     this.abortController.abort();
