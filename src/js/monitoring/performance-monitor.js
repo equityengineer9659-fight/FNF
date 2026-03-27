@@ -98,7 +98,7 @@ class PerformanceMonitor {
         }
       });
 
-      observer.observe({ entryTypes: ['navigation'] });
+      observer.observe({ type: 'navigation', buffered: true });
       this.observers.set('navigation', observer);
     }
   }
@@ -122,7 +122,7 @@ class PerformanceMonitor {
         this.reportMetric('LCP', this.metrics.LCP);
       });
 
-      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+      lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
       this.observers.set('lcp', lcpObserver);
     }
 
@@ -135,7 +135,7 @@ class PerformanceMonitor {
         }
       });
 
-      fidObserver.observe({ entryTypes: ['first-input'] });
+      fidObserver.observe({ type: 'first-input', buffered: true });
       this.observers.set('fid', fidObserver);
     }
 
@@ -151,7 +151,7 @@ class PerformanceMonitor {
         this.metrics.CLS = Number(clsScore.toFixed(4));
       });
 
-      clsObserver.observe({ entryTypes: ['layout-shift'] });
+      clsObserver.observe({ type: 'layout-shift', buffered: true });
       this.observers.set('cls', clsObserver);
     }
 
@@ -187,7 +187,7 @@ class PerformanceMonitor {
         }
       });
 
-      inpObserver.observe({ entryTypes: ['event'], buffered: true });
+      inpObserver.observe({ type: 'event', buffered: true });
       this.observers.set('inp', inpObserver);
     }
   }
@@ -205,7 +205,7 @@ class PerformanceMonitor {
         }
       });
 
-      paintObserver.observe({ entryTypes: ['paint'] });
+      paintObserver.observe({ type: 'paint', buffered: true });
       this.observers.set(paintType, paintObserver);
     }
   }
@@ -239,7 +239,7 @@ class PerformanceMonitor {
         }
       });
 
-      resourceObserver.observe({ entryTypes: ['resource'] });
+      resourceObserver.observe({ type: 'resource', buffered: true });
       this.observers.set('resource', resourceObserver);
     }
   }
@@ -260,7 +260,7 @@ class PerformanceMonitor {
           }
         });
 
-        markObserver.observe({ entryTypes: ['mark'] });
+        markObserver.observe({ type: 'mark', buffered: true });
         this.observers.set('mark', markObserver);
       }
 
@@ -281,7 +281,7 @@ class PerformanceMonitor {
           }
         });
 
-        measureObserver.observe({ entryTypes: ['measure'] });
+        measureObserver.observe({ type: 'measure', buffered: true });
         this.observers.set('measure', measureObserver);
       }
     }

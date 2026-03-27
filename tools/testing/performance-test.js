@@ -58,7 +58,7 @@ async function collectMetrics(page, url) {
   await page.goto(url, { waitUntil: 'networkidle0' });
 
   // Wait a bit for everything to settle
-  await page.waitForTimeout(2000);
+  await new Promise(r => setTimeout(r, 2000));
 
   // Inject performance monitoring
   const metrics = await page.evaluate(() => {
@@ -248,7 +248,7 @@ async function generateReport(allResults) {
     <h2>📊 Summary</h2>
     <div class="summary">
       ${Object.entries(CONFIG.thresholds).map(([metric, threshold]) => {
-        const values = allResults.map(r => r.data.metrics[metric]).filter(v => v > 0);
+        const values = allResults.filter(r => r.data).map(r => r.data.metrics[metric]).filter(v => v > 0);
         const avg = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
         const isTime = metric !== 'CLS';
         const displayValue = isTime ? Math.round(avg) + 'ms' : avg.toFixed(3);
@@ -278,7 +278,7 @@ async function generateReport(allResults) {
         </tr>
       </thead>
       <tbody>
-        ${allResults.map(result => `
+        ${allResults.map(result => result.data ? `
           <tr>
             <td><strong>${result.page}</strong></td>
             <td>${result.data.metrics.FCP}ms</td>
@@ -290,6 +290,12 @@ async function generateReport(allResults) {
               '<span class="good">✓ Passed</span>' :
               `<span class="poor">⚠ ${result.analysis.failures.length} issues</span>`
             }</td>
+          </tr>
+        ` : `
+          <tr>
+            <td><strong>${result.page}</strong></td>
+            <td colspan="5"><span class="poor">Error: ${result.analysis.failures[0]}</span></td>
+            <td><span class="poor">⚠ Error</span></td>
           </tr>
         `).join('')}
       </tbody>
@@ -312,11 +318,13 @@ async function generateReport(allResults) {
         <p style="color: #10b981; margin: 0.5rem 0;">
           <strong>Passed:</strong> ${result.analysis.passed.join(', ')}
         </p>
+        ${result.data ? `
         <p style="color: #6b7280; margin: 0.5rem 0; font-size: 0.875rem;">
           Page info: ${result.data.pageInfo.imageCount} images,
           ${result.data.pageInfo.scriptCount} scripts,
           ${result.data.pageInfo.domNodes} DOM nodes
         </p>
+        ` : ''}
       </div>
     `).join('')}
   </div>
@@ -391,6 +399,12 @@ async function main() {
 
       } catch (error) {
         log.error(`  ❌ Error: ${error.message}`);
+        allResults.push({
+          page: pageConfig.name,
+          url: pageConfig.url,
+          data: null,
+          analysis: { failures: [`Runtime error: ${error.message}`], warnings: [], passed: [] }
+        });
       } finally {
         await page.close();
       }

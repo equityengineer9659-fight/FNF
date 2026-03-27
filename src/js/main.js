@@ -32,6 +32,7 @@ import { hydrateGradientIcons } from './effects/gradient-icons.js';
 import './expertise-accordion.js';
 
 import NewsletterPopup from './effects/newsletter-popup.js';
+import ContactForm from './effects/contact-form.js';
 import { initCounters } from './effects/counters.js';
 
 /**
@@ -99,6 +100,7 @@ class FNFApp {
       this.initCounterSystem();
       this.initGradientIcons();
       this.initNewsletterPopup();
+      this.initContactForm();
       this.initSmartScroll();
       this.initNavigation();
       this.initAccessibility();
@@ -165,6 +167,14 @@ class FNFApp {
       log('📧 MAIN.JS: Newsletter popup initialized successfully');
     } catch (error) {
       console.error('📧 MAIN.JS: Error initializing newsletter popup:', error);
+    }
+  }
+
+  initContactForm() {
+    const formEl = document.getElementById('contact-form');
+    if (formEl) {
+      this.contactForm = new ContactForm(formEl);
+      log('📬 Contact form handler initialized');
     }
   }
 

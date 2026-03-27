@@ -32,8 +32,12 @@ class NewsletterPopup {
 
   shouldShowPopup() {
     const isAboutPage = document.body.classList.contains('fnf-page--about');
-    const hasSubscribed = localStorage.getItem('fnf-newsletter-subscribed');
-    return isAboutPage && !hasSubscribed;
+    try {
+      const hasSubscribed = localStorage.getItem('fnf-newsletter-subscribed');
+      return isAboutPage && !hasSubscribed;
+    } catch {
+      return false;
+    }
   }
 
   initScrollListener() {
@@ -142,7 +146,7 @@ class NewsletterPopup {
       }
 
       this.showSuccessState(modalContent);
-      localStorage.setItem('fnf-newsletter-subscribed', 'true');
+      try { localStorage.setItem('fnf-newsletter-subscribed', 'true'); } catch { /* storage unavailable */ }
       window.setTimeout(() => this.closeModal(), 1800);
     };
     form.addEventListener('submit', handleSubmit);
@@ -235,7 +239,7 @@ class NewsletterPopup {
   }
 
   reset() {
-    localStorage.removeItem('fnf-newsletter-subscribed');
+    try { localStorage.removeItem('fnf-newsletter-subscribed'); } catch { /* storage unavailable */ }
     this.hasTriggered = false;
   }
 
