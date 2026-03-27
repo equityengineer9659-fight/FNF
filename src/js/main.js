@@ -10,6 +10,7 @@ import config from './config/environment.js';
 
 // Production debug flag from environment config
 const DEBUG = config.features.debugMode;
+// eslint-disable-next-line no-console -- conditional debug logger
 const log = DEBUG ? console.log : () => {};
 
 // Import Sentry error monitoring

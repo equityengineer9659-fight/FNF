@@ -20,3 +20,5 @@ playwright-report/
 test-results/
 coverage/
 _audit/
+.sfdx/
+package-lock.json

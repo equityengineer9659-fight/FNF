@@ -133,6 +133,7 @@ config.isTest = config.env === 'test';
  */
 config.log = function(...args) {
   if (config.features.debugMode) {
+    // eslint-disable-next-line no-console -- intentional debug logger
     console.log(`[${config.env}]`, ...args);
   }
 };
@@ -192,12 +193,14 @@ config.getSummary = function() {
 
 // Log configuration in development
 if (config.isDevelopment && config.features.debugMode) {
+  /* eslint-disable no-console -- dev-only config dump */
   console.group('🔧 Environment Configuration');
   console.log('Environment:', config.env);
   console.log('Version:', config.appVersion);
   console.log('Features:', config.features);
   console.log('API:', config.api.url);
   console.groupEnd();
+  /* eslint-enable no-console */
 }
 
 // Validate configuration

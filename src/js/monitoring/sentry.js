@@ -18,12 +18,12 @@ export async function initSentry() {
 
   // Only initialize if DSN is configured and we're in production
   if (!dsn) {
-    console.log('[Sentry] DSN not configured, skipping initialization');
+    console.warn('[Sentry] DSN not configured, skipping initialization');
     return;
   }
 
   if (!isProduction) {
-    console.log('[Sentry] Not in production environment, skipping initialization');
+    console.warn('[Sentry] Not in production environment, skipping initialization');
     return;
   }
 
@@ -72,8 +72,6 @@ export async function initSentry() {
         return breadcrumb;
       },
     });
-
-    console.log('[Sentry] Error monitoring initialized successfully');
 
     // Set user context (anonymous by default)
     Sentry.setUser({

@@ -39,7 +39,7 @@ class PerformanceMonitor {
 
     // Check if should sample this session
     if (Math.random() > this.config.sampleRate) {
-      console.log('[PerformanceMonitor] Session not sampled');
+      console.warn('[PerformanceMonitor] Session not sampled');
       return;
     }
 
@@ -62,7 +62,6 @@ class PerformanceMonitor {
     }
 
     this.initialized = true;
-    console.log('[PerformanceMonitor] Initialized');
   }
 
   /**
@@ -324,6 +323,7 @@ class PerformanceMonitor {
 
     // In development, just log
     if (config.isDevelopment) {
+      // eslint-disable-next-line no-console -- dev-only diagnostic output
       console.log(`[PerformanceMonitor] ${name}:`, value);
     }
 

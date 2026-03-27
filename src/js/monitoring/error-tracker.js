@@ -123,8 +123,10 @@ class ErrorTracker {
 
     // Log in development
     if (this.config.environment === 'development') {
+      // eslint-disable-next-line no-console -- dev-only error grouping
       console.group('🔴 Error Captured');
       console.error(error);
+      // eslint-disable-next-line no-console -- closing dev-only group
       console.groupEnd();
     }
   }
@@ -229,6 +231,7 @@ class ErrorTracker {
 
     // For development, just log
     if (config.isDevelopment) {
+      // eslint-disable-next-line no-console -- dev-only diagnostic output
       console.log('Would send to monitoring:', payload);
       return;
     }
@@ -407,6 +410,7 @@ class ErrorTracker {
    */
   log(message, level = 'log') {
     if (this.config.environment === 'development') {
+      // eslint-disable-next-line no-console -- dev-only log helper
       console[level](`[ErrorTracker] ${message}`);
     }
   }

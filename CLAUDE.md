@@ -230,8 +230,8 @@ Test ALL 6 pages at these configurations:
 ### CSP and Inline Styles
 - **Policy**: `_headers` CSP forbids `unsafe-inline` for both scripts and styles
 - **Newsletter popup**: Fully CSP-compliant (all styles in `07-components.css`)
-- **Known remaining inline styles**: `particles.js` (canvas), `smart-scroll.js` (scroll-to-top button, progress bar), `main.js` (live region) still use `element.style`. These need migration to CSS classes before strict CSP enforcement.
-- **Sentry integration**: `error-tracker.js` checks `window.Sentry` but `sentry.js` stores SDK in module-private `_sentry`. Bridge must be connected before production monitoring works.
+- **CSSOM style manipulation**: `particles.js` (canvas), `smart-scroll.js` (progress bar), `main.js` (live region) use `element.style` via JavaScript. This is CSP-compliant — CSSOM property assignment is not blocked by `style-src` directives (only HTML `style=""` attributes and `<style>` tags are affected).
+- **Sentry integration**: `error-tracker.js` imports `captureException` from `sentry.js` via ES module exports. The bridge is correctly wired — no `window.Sentry` dependency.
 
 ### SLDS Compliance Violations
 - **Detection**: Use `npm run validate:slds` 

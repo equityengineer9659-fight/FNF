@@ -26,12 +26,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
 
       - name: Install Dependencies
-        run: |
-          rm -rf node_modules package-lock.json
-          npm install
+        run: npm install
 
       - name: HTML Validation
         run: npm run validate:html
