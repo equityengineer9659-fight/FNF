@@ -137,13 +137,19 @@ class NewsletterPopup {
     modal.addEventListener('keydown', handleKeyDown);
     cleanupFns.push(() => modal.removeEventListener('keydown', handleKeyDown));
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
       const email = emailInput.value.trim();
       if (!email || !emailInput.validity.valid) {
         emailInput.focus();
         return;
       }
+
+      const formData = new FormData();
+      formData.append('email', email);
+      try {
+        await fetch('/api/newsletter.php', { method: 'POST', body: formData });
+      } catch { /* best-effort — show success regardless */ }
 
       this.showSuccessState(modalContent);
       try { localStorage.setItem('fnf-newsletter-subscribed', 'true'); } catch { /* storage unavailable */ }

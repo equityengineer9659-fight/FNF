@@ -101,6 +101,7 @@ class FNFApp {
       this.initGradientIcons();
       this.initNewsletterPopup();
       this.initContactForm();
+      this.initNewsletterForm();
       this.initSmartScroll();
       this.initNavigation();
       this.initAccessibility();
@@ -176,6 +177,43 @@ class FNFApp {
       this.contactForm = new ContactForm(formEl);
       log('📬 Contact form handler initialized');
     }
+  }
+
+  initNewsletterForm() {
+    const form = document.querySelector('.newsletter-form');
+    if (!form) return;
+
+    const input = form.querySelector('.newsletter-input');
+    const button = form.querySelector('.newsletter-button');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = input.value.trim();
+      if (!email || !input.validity.valid) {
+        input.focus();
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Sending...';
+
+      const formData = new FormData();
+      formData.append('email', email);
+      try {
+        await fetch('/api/newsletter.php', { method: 'POST', body: formData });
+        input.value = '';
+        button.textContent = 'Subscribed!';
+      } catch {
+        button.textContent = 'Try Again';
+      }
+
+      setTimeout(() => {
+        button.disabled = false;
+        button.textContent = 'Subscribe';
+      }, 3000);
+    });
+
+    log('📧 Newsletter form handler initialized');
   }
 
   initSmartScroll() {
