@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Configurable recipient — change this to the actual inbox
-$recipient = 'hello@foodnforce.com';
+$recipient = 'hello@food-n-force.com';
 $subject_prefix = '[Food-N-Force Contact]';
 
 // Read and validate fields
