@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          rm -rf node_modules
+          rm -rf node_modules package-lock.json
           npm install
 
       - name: HTML Validation
