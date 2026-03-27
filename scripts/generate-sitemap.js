@@ -19,7 +19,8 @@ const pages = [
   { path: 'services.html', priority: '0.9', changefreq: 'monthly' },
   { path: 'resources.html', priority: '0.8', changefreq: 'weekly' },
   { path: 'impact.html', priority: '0.8', changefreq: 'monthly' },
-  { path: 'contact.html', priority: '0.7', changefreq: 'monthly' }
+  { path: 'contact.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'blog.html', priority: '0.8', changefreq: 'weekly' }
 ];
 
 function generateSitemap() {

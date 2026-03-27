@@ -22,6 +22,7 @@ export default defineConfig({
         resources: resolve(__dirname, 'resources.html'),
         impact: resolve(__dirname, 'impact.html'),
         contact: resolve(__dirname, 'contact.html'),
+        blog: resolve(__dirname, 'blog.html'),
         notfound: resolve(__dirname, '404.html')
       },
       output: {

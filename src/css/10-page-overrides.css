@@ -195,6 +195,37 @@
   }
 }
 
+/* Blog Page: Mobile overrides */
+@media (width <= 768px) {
+  .fnf-page--blog .blog-featured-article {
+    grid-template-columns: 1fr;
+  }
+
+  .fnf-page--blog .blog-featured-article__image {
+    min-height: 200px;
+  }
+
+  .fnf-page--blog .blog-featured-article__content {
+    padding: 1.5rem;
+  }
+
+  .fnf-page--blog .blog-featured-article__title {
+    font-size: 1.35rem;
+  }
+
+  .fnf-page--blog .blog-case-studies-section .slds-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fnf-page--blog .blog-case-study__stats {
+    gap: 1.5rem;
+  }
+
+  .fnf-page--blog .blog-case-study__stat-number {
+    font-size: 1.5rem;
+  }
+}
+
 /* Desktop - ensure accordion classes don't affect 3-column layout */
 @media (width >= 769px) {
   section[aria-labelledby="expertise-detail-heading"] .slds-col.accordion-expanded ul.expertise-list,
