@@ -206,13 +206,14 @@ Claude Code provides 7 built-in subagents:
 - **mobile-navigation-specialist** — mobile navigation design and troubleshooting
 - **statusline-setup** — status line configuration
 
-### Project-Specific Agents (5)
+### Project-Specific Agents (6)
 Custom agents in `.claude/agents/` tailored to this project:
 - **slds-compliance-checker** — validates CSS against SLDS token map; use after CSS changes
 - **accessibility-auditor** — WCAG 2.1 AA checks (headings, labels, ARIA); use after HTML changes
 - **cross-page-consistency** — validates SEO tags, link integrity, Read Next cards across all 17 pages; use after content changes
 - **performance-budget-monitor** — checks bundle sizes against budgets after builds
 - **php-security-reviewer** — reviews PHP API endpoints for injection, CSRF, and validation gaps
+- **uiux-reviewer** — visual consistency, responsive layout, design tokens, and user flow; use after visual changes
 
 ### Project Coordination References
 - `docs/project/raci.md` - Role responsibilities matrix
