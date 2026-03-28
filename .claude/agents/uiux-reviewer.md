@@ -1,7 +1,7 @@
 ---
 name: uiux-reviewer
 description: Review UI/UX quality across pages — visual consistency, responsive layout, glassmorphism effects, spacing, typography, and user flow. Use after visual changes or new page additions to catch design regressions.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, mcp__playwright__*, mcp__lighthouse__*
 model: sonnet
 ---
 
@@ -24,6 +24,13 @@ You are a UI/UX reviewer for the Food-N-Force website. Your job is to ensure vis
 - Logo special effects (gradients, transforms, animations)
 - Blue circular gradients for emoji icons
 - Particle network canvas animation
+
+## MCP Tools Available
+
+- **Playwright**: Navigate to pages, take screenshots at different viewports, inspect accessibility trees
+- **Lighthouse**: Run performance/accessibility/SEO audits with scores
+
+Use these to visually verify pages when the preview server is running (`npm run preview` on port 4173).
 
 ## When Invoked
 

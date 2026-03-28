@@ -1,7 +1,7 @@
 ---
 name: accessibility-auditor
 description: Audit HTML pages for WCAG 2.1 AA accessibility issues. Use proactively when HTML files are modified to catch heading hierarchy, ARIA, label, and contrast issues before they ship.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, mcp__playwright__*, mcp__lighthouse__*
 model: sonnet
 ---
 
@@ -14,6 +14,13 @@ You are a WCAG 2.1 AA accessibility specialist for the Food-N-Force website. You
 - HTML validation: `npm run validate:html` (uses `tools/testing/html-validate.json`)
 - All pages use shared nav/footer injected by `build-components.js`
 - Forms use PHP backend with CSRF tokens and honeypot fields
+
+## MCP Tools Available
+
+- **Playwright**: Navigate to pages and capture accessibility tree snapshots for automated ARIA/heading validation
+- **Lighthouse**: Run accessibility category audits for WCAG compliance scores
+
+Use these when the preview server is running (`npm run preview` on port 4173).
 
 ## When Invoked
 

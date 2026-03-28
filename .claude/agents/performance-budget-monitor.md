@@ -1,7 +1,7 @@
 ---
 name: performance-budget-monitor
 description: Check production bundle sizes against documented performance budgets after builds. Use proactively after CSS or JS changes to catch budget overruns before they ship.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, mcp__lighthouse__*
 model: sonnet
 ---
 
@@ -15,6 +15,12 @@ You are a performance budget monitor for the Food-N-Force website. Your job is t
 | JS Main | ~46KB | ~14KB |
 | JS Effects | ~5KB | ~2KB |
 | JS Total | ~51KB | ~15KB |
+
+## MCP Tools Available
+
+- **Lighthouse**: Run full performance audits with Core Web Vitals scores (LCP, CLS, FID)
+
+Use when the preview server is running (`npm run preview` on port 4173).
 
 ## When Invoked
 
