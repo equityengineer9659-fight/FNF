@@ -35,7 +35,7 @@ npm run test                     # All tests (accessibility, performance, browse
 npm run test:accessibility       # pa11y accessibility tests
 npm run test:performance         # Lighthouse CI audits
 npm run test:browser             # Playwright browser tests
-npm run test:multi-page          # Multi-page validation across all 6 pages
+npm run test:multi-page          # Multi-page validation across all 16 pages
 npm run test:critical-navigation # Mobile navigation smoke tests
 npm run test:performance-budget  # Performance budget monitoring
 
@@ -52,8 +52,8 @@ npm run serve                   # Alternative: live-server on port 8080
 
 ### Deployment
 ```bash
-npm run deploy:staging          # Netlify staging deployment
-npm run deploy:production       # Netlify production deployment
+npm run deploy:staging          # SiteGround staging (via GitHub Actions push to staging branch)
+npm run deploy:production       # SiteGround production (via GitHub Actions push to master)
 npm run rollback                # Emergency rollback utility
 ```
 
@@ -72,23 +72,36 @@ npm run governance:validate     # Validate governance compliance
 │   ├── css/               # CSS files with modular architecture (12 files)
 │   ├── js/                # JavaScript modules (main.js, effects/, config/, monitoring/)
 │   └── assets/            # Images, fonts, and other assets
-├── *.html                  # 7 pages: index, about, services, resources, impact, contact, 404
+├── *.html                  # 17 pages (see Page Inventory below)
 ├── config/                 # Configuration files (token_map, deployment, security)
 ├── docs/                   # Active documentation (project/, technical/, current/)
 ├── tools/                  # Development utilities (testing, deployment, governance)
 ├── scripts/               # Build scripts (sitemap, PWA icons, restore points, CSS analysis)
-├── public/                # Static assets (favicon, PWA icons)
+├── public/                # Static assets (favicon, PWA icons, PHP API endpoints)
+│   └── api/               # PHP backend (contact.php, newsletter.php, csrf-token.php)
 ├── _archive/              # Archived outdated documentation
 ├── _audit/                # Historical backups and restore points
 ├── vite.config.js         # Vite build configuration
 └── package.json           # Root-level build configuration
 ```
 
+### Page Inventory (17 pages)
+- **Core pages (7)**: index, about, services, resources, impact, contact, 404
+- **Blog hub (1)**: blog
+- **Article subpages (9)**: ai-reshaping-food-banks, salesforce-food-bank-operations, donor-relationships-nonprofit-cloud, data-driven-food-banks, food-bank-workflow-automation, securing-technology-grants, ai-inventory-management, case-studies, templates-tools
+
+All pages are registered in `vite.config.js` (rollup input), `build-components.js` (nav/footer injection), `scripts/generate-sitemap.js`, and `.pa11yci.json` (accessibility testing).
+
+### Build Pipeline
+- `build-components.js` injects shared navigation, footer, and script tags into all 17 pages before Vite builds
+- `scripts/generate-sitemap.js` generates sitemap.xml covering all 16 public pages (excludes 404)
+- Vite handles bundling, minification, and asset hashing for production
+
 ### CSS Architecture
 - **Location**: `src/css/` with modular organization (main.css imports all modules)
 - **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients → page-overrides
 - **Design Tokens**: Centralized in `02-design-tokens.css` (colors, spacing, fonts, gradients, glass effects)
-- **Bundle Optimization**: Minified production builds via Vite + CSSnano (~91KB, ~15KB gzipped)
+- **Bundle Optimization**: Minified production builds via Vite + CSSnano (~114KB, ~18KB gzipped)
 - **SLDS Compliance**: 89% baseline maintained with token mapping system
 - **Navigation**: Consolidated in `03-navigation.css` (single source of truth)
 - **Effects/Animations**: Card stagger delays, keyframes, particles in `06-effects.css`
@@ -107,12 +120,31 @@ npm run governance:validate     # Validate governance compliance
   - `effects/counters.js` — animated number counters
   - `effects/newsletter-popup.js` — scroll-triggered modal with focus trap (all styles in CSS, no inline styles for CSP compliance)
   - `effects/gradient-icons.js` — SVG gradient icon system
+  - `effects/contact-form.js` — contact form submission with CSRF tokens
+  - `effects/article-enhancements.js` — article page reading enhancements
+  - `effects/blog-filter.js` — blog category filtering
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page expertise section
 - **Cleanup**: All modules use AbortController or explicit cleanup in destroy()
 - **Production**: Source maps disabled, no unguarded console.log in production code (ESLint `no-console` rule enforced; `console.warn`/`console.error` allowed, dev-gated `console.log` uses `eslint-disable` comments)
-- **Unit Tests**: 159 tests across 9 test files (vitest)
+- **Unit Tests**: ~161 tests across 9 test files (vitest)
 - **Design Tokens**: Glass opacity variants (`--glass-bg-light/primary/strong`), contact accent colors (`--fnf-contact-accent/*`), all centralized in `02-design-tokens.css`
+
+### PHP Backend (SiteGround)
+- **Location**: `public/api/` (copied to `dist/api/` during build)
+- **Hosting**: SiteGround shared hosting, PHP served natively
+- **Deployment**: GitHub Actions → SSH/rsync to SiteGround `public_html/`
+- **Endpoints**:
+  - `POST /api/contact.php` — contact form handler (validates, sanitizes, sends email via `mail()`)
+  - `POST /api/newsletter.php` — newsletter subscription handler (validates email, sends notification)
+  - `GET /api/csrf-token.php` — generates single-use CSRF tokens stored in PHP sessions
+- **Security layers**:
+  - CSRF token validation (session-based, single-use)
+  - Honeypot field (`bot-field`) — hidden input rejected server-side if filled
+  - Input sanitization via `htmlspecialchars()`
+  - Email validation via `filter_var(FILTER_VALIDATE_EMAIL)`
+- **Client integration**: `src/js/effects/contact-form.js` and `src/js/main.js` submit forms via `fetch()` to these endpoints
+- **Recipient**: All form emails sent to `hello@food-n-force.com`
 
 ### Critical Constraints
 **NEVER modify these without explicit permission:**
@@ -127,16 +159,16 @@ npm run governance:validate     # Validate governance compliance
 ## Testing Requirements
 
 ### Multi-Page Protocol
-Test ALL 6 pages at these configurations:
-- **Pages**: index.html, about.html, services.html, resources.html, impact.html, contact.html
+Test ALL 17 pages at these configurations:
+- **Pages**: All core pages, blog, and article subpages (see Page Inventory)
 - **Zoom Levels**: 100% (standard) and 25% (client requirement)  
 - **Breakpoints**: Mobile, tablet, desktop
 - **Browsers**: Chrome, Firefox, Safari minimum
 
 ### Performance Budgets
-- **CSS Bundle**: ~92KB minified (includes all modules, effects, and newsletter modal styles)
-- **JavaScript Bundle**: ~46KB total (41KB main + 5KB effects, tree-shaken & minified via Terser)
-- **Gzipped Sizes**: ~15KB CSS, ~14KB JS combined
+- **CSS Bundle**: ~114KB minified (includes all modules, effects, and newsletter modal styles)
+- **JavaScript Bundle**: ~51KB total (46KB main + 5KB effects, tree-shaken & minified via Terser)
+- **Gzipped Sizes**: ~18KB CSS, ~15KB JS combined
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: ≥89% baseline maintained
 - **Bundle Analysis**: Use `npm run analyze:bundle` for detailed reports
@@ -153,7 +185,7 @@ Test ALL 6 pages at these configurations:
 ### Current Status
 - **Baseline**: 89% SLDS compliance maintained
 - **Token Mapping**: Located in `config/token_map.json`
-- **Current Bundle**: ~91KB minified CSS (down from 821KB pre-optimization)
+- **Current Bundle**: ~114KB minified CSS (down from 821KB pre-optimization)
 - **Validation Command**: `npm run validate:slds`
 
 ### Key Compliance Areas
@@ -181,7 +213,7 @@ Test ALL 6 pages at these configurations:
 - **Architecture**: HTML-first with progressive enhancement
 - **JavaScript Optional**: Core functionality works without JS
 - **CSS Layers**: Proper cascade management eliminates !important conflicts
-- **Testing**: Must validate across all 6 pages and 5 breakpoints
+- **Testing**: Must validate across all 17 pages and 5 breakpoints
 
 ### Performance Optimization
 - **CSS**: Use CSS Layers for cascade management
@@ -202,7 +234,7 @@ Test ALL 6 pages at these configurations:
 - `tools/testing/html-validate.json` - HTML validation rules (active config used by `npm run validate:html`)
 - `tools/testing/lighthouserc.json` - Performance audit configuration
 - `tools/testing/playwright.config.js` - Browser testing configuration (builds + preview server before tests)
-- `.pa11yci.json` - Pa11y CI accessibility testing (WCAG2AA, all 6 pages)
+- `.pa11yci.json` - Pa11y CI accessibility testing (WCAG2AA, all 16 pages)
 - `config/token_map.json` - SLDS compliance token mappings
 - `config/deployment-config.json` - Deployment settings
 - `config/security-config.json` - Security configuration
@@ -210,7 +242,7 @@ Test ALL 6 pages at these configurations:
 - `_headers` - Security headers and CSP policy (connect-src allows Sentry)
 
 ### MCP Integration
-- **Protected Configuration**: `.mcp.json` contains 11 essential MCP servers
+- **Configuration**: MCP servers configured at user/IDE level (not in-repo; `.mcp.json` was removed)
 - **Browser Automation**: Playwright and Puppeteer configured for testing
 - **Performance Monitoring**: Lighthouse integration for CI/CD
 
@@ -253,7 +285,7 @@ Test ALL 6 pages at these configurations:
 - ✅ **CSS Layers architecture** implemented, eliminating 58+ !important cascade conflicts
 - ✅ **93% JavaScript reduction** (718 lines → 47 lines) while maintaining full functionality
 - ✅ **73% CSS bundle reduction** (74KB → 19KB) with better performance
-- ✅ **Mobile navigation functional** across all 6 pages with consistent behavior
+- ✅ **Mobile navigation functional** across all 17 pages with consistent behavior
 - ✅ **WCAG 2.1 AA compliance** maintained throughout transition
 - ✅ **All visual effects preserved** including background animations and glassmorphism
 

@@ -26,6 +26,34 @@ Current implementation uses a strict CSP with **no `unsafe-inline`** for scripts
 - `form-action 'self'` - Restricts form submission targets
 - `upgrade-insecure-requests` - Upgrades HTTP to HTTPS
 
+## Form Security & PHP API Endpoints
+
+### API Endpoints (`public/api/`)
+The site uses PHP endpoints hosted on SiteGround for server-side form processing:
+- `POST /api/contact.php` — contact form submissions
+- `POST /api/newsletter.php` — newsletter subscriptions
+- `GET /api/csrf-token.php` — CSRF token generation
+
+### CSRF Protection
+- All forms request a single-use CSRF token from `/api/csrf-token.php` before submission
+- Tokens are stored server-side in PHP `$_SESSION` and validated with `hash_equals()`
+- Tokens are invalidated after use (single-use via `unset()`)
+
+### Honeypot Spam Protection
+- Both contact and newsletter forms include a hidden `bot-field` input
+- The field is visually hidden via `slds-assistive-text` CSS class
+- Server-side PHP rejects any submission where `bot-field` is non-empty (HTTP 403)
+
+### Input Validation & Sanitization
+- Email addresses validated with `filter_var(FILTER_VALIDATE_EMAIL)`
+- All user input sanitized with `htmlspecialchars(ENT_QUOTES, 'UTF-8')` before use in email bodies
+- Required fields enforced server-side (returns HTTP 422 with specific error messages)
+
+### Client-Side Integration
+- `src/js/effects/contact-form.js` handles contact form submission via `fetch()`
+- `src/js/main.js` handles newsletter form submission via `fetch()`
+- Both fetch CSRF tokens before submitting form data
+
 ## Implementation Details
 
 ### Production Deployment
