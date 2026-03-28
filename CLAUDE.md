@@ -194,16 +194,20 @@ Test ALL 17 pages at these configurations:
 - Typography: Use SLDS heading and text utilities
 - Components: Follow SLDS component patterns where applicable
 
-## Governance Framework
+## Agent Framework
 
-### Multi-Agent Coordination
-16 specialized agents with clear authority matrix:
-- **Emergency (0-15 min)**: technical-architect  
-- **Standard (15 min-4 hrs)**: Domain experts
-- **Strategic (4-24 hrs)**: project-manager-proj + stakeholders
+### Available Subagents (7)
+Claude Code has 7 specialized subagents for different tasks:
+- **general-purpose** — complex multi-step tasks, research, code search
+- **Explore** — fast codebase exploration and file/pattern search
+- **Plan** — implementation planning and architecture design
+- **claude-code-guide** — Claude Code features, API, and SDK questions
+- **deployment-cicd-specialist** — deployment workflows and CI/CD pipelines
+- **mobile-navigation-specialist** — mobile navigation design and troubleshooting
+- **statusline-setup** — status line configuration
 
-### Critical Files for Agent Coordination
-- `docs/project/raci.md` - Agent responsibilities matrix
+### Project Coordination References
+- `docs/project/raci.md` - Role responsibilities matrix
 - `docs/current/governance/agent-coordination/` - Coordination protocols
 - `docs/current/emergency/15min-response-playbook.md` - Emergency procedures
 
