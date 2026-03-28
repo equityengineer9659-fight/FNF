@@ -196,8 +196,8 @@ Test ALL 17 pages at these configurations:
 
 ## Agent Framework
 
-### Available Subagents (7)
-Claude Code has 7 specialized subagents for different tasks:
+### Built-in Subagents (7)
+Claude Code provides 7 built-in subagents:
 - **general-purpose** — complex multi-step tasks, research, code search
 - **Explore** — fast codebase exploration and file/pattern search
 - **Plan** — implementation planning and architecture design
@@ -205,6 +205,14 @@ Claude Code has 7 specialized subagents for different tasks:
 - **deployment-cicd-specialist** — deployment workflows and CI/CD pipelines
 - **mobile-navigation-specialist** — mobile navigation design and troubleshooting
 - **statusline-setup** — status line configuration
+
+### Project-Specific Agents (5)
+Custom agents in `.claude/agents/` tailored to this project:
+- **slds-compliance-checker** — validates CSS against SLDS token map; use after CSS changes
+- **accessibility-auditor** — WCAG 2.1 AA checks (headings, labels, ARIA); use after HTML changes
+- **cross-page-consistency** — validates SEO tags, link integrity, Read Next cards across all 17 pages; use after content changes
+- **performance-budget-monitor** — checks bundle sizes against budgets after builds
+- **php-security-reviewer** — reviews PHP API endpoints for injection, CSRF, and validation gaps
 
 ### Project Coordination References
 - `docs/project/raci.md` - Role responsibilities matrix

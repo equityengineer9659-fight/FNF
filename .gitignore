@@ -24,10 +24,11 @@ _regression-test/
 .sfdx/
 package-lock.json
 
-# Claude Code session artifacts (keep settings tracked)
+# Claude Code session artifacts (keep settings and agents tracked)
 .claude/*
 !.claude/settings.json
 !.claude/settings.local.json
+!.claude/agents/
 
 # Test screenshots and baselines (generated artifacts)
 .playwright-mcp/
