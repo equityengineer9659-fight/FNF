@@ -6,7 +6,7 @@
     <title>Contact Us - Food-N-Force</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Contact Food-N-Force to discuss technology solutions for your food bank or pantry. Start a conversation about your digital transformation.">
+    <meta name="description" content="Contact Food-N-Force to discuss Salesforce consulting for your food bank or pantry. Schedule a free consultation with our nonprofit technology experts today.">
     <meta name="keywords" content="food bank software, pantry management, food distribution, community outreach, inventory management">
     <meta name="author" content="Food-N-Force">
     <meta name="robots" content="index, follow">
@@ -16,7 +16,7 @@
 
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="Contact Us - Food-N-Force">
-    <meta property="og:description" content="Contact Food-N-Force to discuss technology solutions for your food bank or pantry. Start a conversation about your digital transformation.">
+    <meta property="og:description" content="Contact Food-N-Force to discuss Salesforce consulting for your food bank or pantry. Schedule a free consultation with our nonprofit technology experts today.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://foodnforce.com/contact.html">
     <meta property="og:image" content="https://foodnforce.com/og-image.png">
@@ -70,7 +70,7 @@
 
                 <!-- Mobile Toggle Button -->
                 <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
-                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <rect y="0" width="24" height="2" fill="#ffffff"/>
                         <rect y="8" width="24" height="2" fill="#ffffff"/>
                         <rect y="16" width="24" height="2" fill="#ffffff"/>
@@ -135,11 +135,11 @@
                     <!-- Contact Form -->
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
                         <div class="contact-form-container">
-                            <h3 id="contact-form-heading" class="slds-text-heading_medium slds-m-bottom_large contact-form-heading">Send Us a Message</h3>
+                            <h2 id="contact-form-heading" class="slds-text-heading_medium slds-m-bottom_large contact-form-heading">Send Us a Message</h2>
 
                             <form class="contact-form" method="post" action="/api/contact.php" id="contact-form">
-                                <p class="slds-assistive-text">
-                                    <label>Don't fill this out: <input type="text" name="bot-field"></label>
+                                <p class="slds-assistive-text" aria-hidden="true">
+                                    <label>Don't fill this out: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
                                 </p>
                                 <div class="slds-form-element">
                                     <label for="firstName">First Name *</label>
@@ -186,7 +186,7 @@
                             </form>
 
                             <!-- Success Message (hidden by default) -->
-                            <div id="success-message" class="contact-success-message" role="alert" aria-live="polite">
+                            <div id="success-message" class="contact-success-message" role="status" aria-live="polite">
                                 <h3>Thank you for reaching out!</h3>
                                 <p>We've received your message and will respond within 24 business hours.</p>
                             </div>
@@ -196,26 +196,26 @@
                     <!-- Contact Information -->
                     <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
                         <div class="contact-info-container">
-                            <h3 id="contact-info-heading">Contact Information</h3>
+                            <h2 id="contact-info-heading">Contact Information</h2>
 
                             <div class="contact-info-item">
-                                <h4>Email Us</h4>
+                                <h3>Email Us</h3>
                                 <p><a href="mailto:hello@food-n-force.com">hello@food-n-force.com</a></p>
                             </div>
 
                             <div class="contact-info-item">
-                                <h4>Schedule a Call</h4>
+                                <h3>Schedule a Call</h3>
                                 <p><a href="mailto:hello@food-n-force.com?subject=Consultation%20Request">Book a 30-minute consultation</a></p>
                             </div>
 
                             <div class="contact-info-item">
-                                <h4>Location</h4>
+                                <h3>Location</h3>
                                 <p>Serving food banks nationwide<br>
                                 Headquarters: Washington DC</p>
                             </div>
 
                             <div class="contact-info-item">
-                                <h4>Response Time</h4>
+                                <h3>Response Time</h3>
                                 <p>We typically respond within 24 business hours</p>
                             </div>
                         </div>

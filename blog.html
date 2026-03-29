@@ -72,7 +72,7 @@
 
                 <!-- Mobile Toggle Button -->
                 <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
-                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <rect y="0" width="24" height="2" fill="#ffffff"/>
                         <rect y="8" width="24" height="2" fill="#ffffff"/>
                         <rect y="16" width="24" height="2" fill="#ffffff"/>
@@ -181,7 +181,7 @@
                             </p>
                             <div class="blog-card__meta">
                                 <span>March 15, 2026</span>
-                                <span>3 min read</span>
+                                <span>4 min read</span>
                             </div>
                             <a href="salesforce-food-bank-operations.html" class="resource-action">Read More</a>
                         </article>
@@ -197,7 +197,7 @@
                             </p>
                             <div class="blog-card__meta">
                                 <span>March 10, 2026</span>
-                                <span>3 min read</span>
+                                <span>4 min read</span>
                             </div>
                             <a href="donor-relationships-nonprofit-cloud.html" class="resource-action">Read More</a>
                         </article>
@@ -264,6 +264,22 @@
                                 <span>4 min read</span>
                             </div>
                             <a href="ai-inventory-management.html" class="resource-action">Read More</a>
+                        </article>
+                    </div>
+
+                    <!-- Article 7 -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                        <article class="blog-card">
+                            <span class="blog-card__category blog-card__category--ai">AI &amp; Innovation</span>
+                            <h3 class="blog-card__title">How AI Is Reshaping Food Bank Operations in 2026</h3>
+                            <p class="blog-card__excerpt">
+                                Discover how food banks are leveraging artificial intelligence to predict demand, optimize inventory, and serve more families efficiently.
+                            </p>
+                            <div class="blog-card__meta">
+                                <span>March 1, 2026</span>
+                                <span>4 min read</span>
+                            </div>
+                            <a href="ai-reshaping-food-banks.html" class="resource-action">Read More</a>
                         </article>
                     </div>
                 </div>
@@ -378,8 +394,8 @@
                     </p>
 
                     <form class="newsletter-form" method="post" action="/api/newsletter.php">
-                        <p class="slds-assistive-text">
-                            <label>Don't fill this out: <input type="text" name="bot-field"></label>
+                        <p class="slds-assistive-text" aria-hidden="true">
+                            <label>Don't fill this out: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
                         </p>
                         <label for="blog-newsletter-email" class="slds-assistive-text">Email address</label>
                         <input type="email" placeholder="Enter your email address" class="newsletter-input" id="blog-newsletter-email" required autocomplete="email">

@@ -78,8 +78,10 @@ class NewsletterPopup {
       <h2 class="fnf-signup-title">Stay Connected!</h2>
       <p class="fnf-signup-description">Sign up for our monthly newsletter and get the latest updates on food bank technology.</p>
       <form class="fnf-email-form">
+        <label for="fnf-email-input" class="slds-assistive-text">Email address</label>
         <input
           type="email"
+          id="fnf-email-input"
           placeholder="Enter your email address"
           required
           autocomplete="email"

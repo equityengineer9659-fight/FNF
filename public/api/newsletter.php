@@ -6,6 +6,7 @@
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
+header('Cache-Control: no-store');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -34,11 +35,14 @@ $recipient = 'hello@food-n-force.com';
 
 $email = trim($_POST['email'] ?? '');
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254) {
     http_response_code(422);
     echo json_encode(['success' => false, 'error' => 'A valid email address is required.']);
     exit;
 }
+
+// Strip CRLF to prevent header injection via Reply-To
+$email = str_replace(["\r", "\n"], '', $email);
 
 $safe = fn($v) => htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
 

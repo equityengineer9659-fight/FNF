@@ -7,6 +7,7 @@
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
+header('Cache-Control: no-store');
 
 // Only allow POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -50,12 +51,24 @@ if ($lastName === '')     $errors[] = 'Last name is required.';
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'A valid email address is required.';
 if ($organization === '') $errors[] = 'Organization is required.';
 if ($service === '')      $errors[] = 'Service interest is required.';
+if (strlen($firstName) > 100)    $errors[] = 'First name is too long.';
+if (strlen($lastName) > 100)     $errors[] = 'Last name is too long.';
+if (strlen($email) > 254)        $errors[] = 'Email address is too long.';
+if (strlen($organization) > 200) $errors[] = 'Organization name is too long.';
+if (strlen($service) > 100)      $errors[] = 'Service field is too long.';
+if (strlen($message) > 5000)     $errors[] = 'Message must be 5000 characters or fewer.';
 
 if (count($errors) > 0) {
     http_response_code(422);
     echo json_encode(['success' => false, 'error' => implode(' ', $errors)]);
     exit;
 }
+
+// Strip CRLF from any value used in mail headers to prevent header injection
+$email     = str_replace(["\r", "\n"], '', $email);
+$firstName = str_replace(["\r", "\n"], '', $firstName);
+$lastName  = str_replace(["\r", "\n"], '', $lastName);
+$service   = str_replace(["\r", "\n"], '', $service);
 
 // Sanitize for email body
 $safe = fn($v) => htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
