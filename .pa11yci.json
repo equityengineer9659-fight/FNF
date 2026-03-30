@@ -4,7 +4,9 @@
     "timeout": 30000,
     "wait": 2000,
     "chromeLaunchConfig": {
-      "args": ["--no-sandbox"]
+      "args": [
+        "--no-sandbox"
+      ]
     }
   },
   "urls": [
@@ -53,6 +55,10 @@
     "http://localhost:4173/blog/snap-policy-changes-food-banks.html",
     "http://localhost:4173/blog/tax-policy-nonprofit-fundraising.html",
     "http://localhost:4173/blog/volunteer-management-technology.html",
-    "http://localhost:4173/blog/volunteer-recruitment-retention-digital.html"
+    "http://localhost:4173/blog/volunteer-recruitment-retention-digital.html",
+    "http://localhost:4173/blog/purpose-driven-ai-food-banks.html",
+    "http://localhost:4173/blog/salesforce-nonprofit-cloud-ai-automation.html",
+    "http://localhost:4173/blog/snap-cuts-ice-fears-food-bank-response.html",
+    "http://localhost:4173/blog/grant-writing-nonprofit-sustainability.html"
   ]
 }

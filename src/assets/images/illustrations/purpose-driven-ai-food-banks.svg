@@ -1,0 +1,153 @@
+<svg viewBox="0 0 800 400" role="img" aria-label="Abstract geometric diagram showing a central hexagon connected by directional arrows to three outer nodes representing data, people, and mission outcomes, with concentric rings radiating outward suggesting deliberate expansion, using deep navy and warm amber colors" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="qmk-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e1a"/>
+      <stop offset="100%" stop-color="#1a1040"/>
+    </linearGradient>
+    <linearGradient id="qmk-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="qmk-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0176D3"/>
+    </linearGradient>
+    <linearGradient id="qmk-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <filter id="qmk-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="qmk-glow-soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="qmk-arrow-amber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#f59e0b"/>
+    </marker>
+    <marker id="qmk-arrow-cyan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#06b6d4"/>
+    </marker>
+    <marker id="qmk-arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#qmk-bg)"/>
+
+  <!-- Concentric rings from center -->
+  <circle cx="400" cy="200" r="60" fill="none" stroke="#8b5cf6" stroke-width="0.5" opacity="0.2"/>
+  <circle cx="400" cy="200" r="90" fill="none" stroke="#8b5cf6" stroke-width="0.5" opacity="0.18"/>
+  <circle cx="400" cy="200" r="120" fill="none" stroke="#8b5cf6" stroke-width="0.5" opacity="0.16"/>
+  <circle cx="400" cy="200" r="150" fill="none" stroke="#8b5cf6" stroke-width="0.4" opacity="0.14"/>
+  <circle cx="400" cy="200" r="180" fill="none" stroke="#8b5cf6" stroke-width="0.4" opacity="0.12"/>
+  <circle cx="400" cy="200" r="210" fill="none" stroke="#8b5cf6" stroke-width="0.3" opacity="0.1"/>
+  <circle cx="400" cy="200" r="240" fill="none" stroke="#f59e0b" stroke-width="0.3" opacity="0.08"/>
+  <circle cx="400" cy="200" r="270" fill="none" stroke="#f59e0b" stroke-width="0.3" opacity="0.07"/>
+
+  <!-- Glow halos for nodes -->
+  <circle cx="150" cy="110" r="45" fill="#06b6d4" opacity="0.08" filter="url(#qmk-glow-soft)"/>
+  <circle cx="650" cy="110" r="45" fill="#f59e0b" opacity="0.08" filter="url(#qmk-glow-soft)"/>
+  <circle cx="400" cy="330" r="45" fill="#10b981" opacity="0.08" filter="url(#qmk-glow-soft)"/>
+  <circle cx="400" cy="200" r="55" fill="#8b5cf6" opacity="0.1" filter="url(#qmk-glow-soft)"/>
+
+  <!-- Connecting lines / arrows from center hexagon to outer nodes -->
+  <!-- To top-left data node -->
+  <line x1="365" y1="173" x2="195" y2="130" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.7" marker-end="url(#qmk-arrow-cyan)"/>
+  <!-- To top-right people node -->
+  <line x1="435" y1="173" x2="605" y2="130" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.7" marker-end="url(#qmk-arrow-amber)"/>
+  <!-- To bottom mission node -->
+  <line x1="400" y1="240" x2="400" y2="295" stroke="#10b981" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.7" marker-end="url(#qmk-arrow-green)"/>
+
+  <!-- Secondary subtle connection lines -->
+  <line x1="195" y1="130" x2="400" y2="330" stroke="#06b6d4" stroke-width="0.6" opacity="0.15"/>
+  <line x1="605" y1="130" x2="400" y2="330" stroke="#f59e0b" stroke-width="0.6" opacity="0.15"/>
+  <line x1="195" y1="130" x2="605" y2="130" stroke="#8b5cf6" stroke-width="0.6" opacity="0.12"/>
+
+  <!-- Central hexagon (question mark node) -->
+  <polygon points="400,160 434,180 434,220 400,240 366,220 366,180" fill="#1a1040" stroke="url(#qmk-purple)" stroke-width="2.5" filter="url(#qmk-glow)"/>
+  <polygon points="400,168 428,184 428,216 400,232 372,216 372,184" fill="none" stroke="#8b5cf6" stroke-width="0.8" opacity="0.4"/>
+
+  <!-- Question mark symbol inside central hexagon (geometric, path-based) -->
+  <path d="M394,188 Q394,182 400,182 Q406,182 406,188 Q406,194 400,196 L400,202" stroke="#f59e0b" stroke-width="2.5" fill="none" stroke-linecap="round" filter="url(#qmk-glow)"/>
+  <circle cx="400" cy="208" r="1.8" fill="#f59e0b" filter="url(#qmk-glow)"/>
+
+  <!-- Outer node: Data (top-left) - cyan diamond shape -->
+  <g filter="url(#qmk-glow)">
+    <polygon points="150,75 185,110 150,145 115,110" fill="#0d2035" stroke="url(#qmk-cyan)" stroke-width="2"/>
+    <polygon points="150,85 175,110 150,135 125,110" fill="none" stroke="#06b6d4" stroke-width="0.8" opacity="0.5"/>
+    <!-- Data pattern: small rectangles -->
+    <rect x="139" y="101" width="6" height="3" rx="0.5" fill="#06b6d4" opacity="0.9"/>
+    <rect x="139" y="107" width="10" height="3" rx="0.5" fill="#06b6d4" opacity="0.7"/>
+    <rect x="139" y="113" width="8" height="3" rx="0.5" fill="#06b6d4" opacity="0.8"/>
+    <rect x="155" y="101" width="3" height="3" rx="0.5" fill="#0176D3" opacity="0.9"/>
+    <rect x="155" y="107" width="3" height="3" rx="0.5" fill="#0176D3" opacity="0.7"/>
+    <rect x="155" y="113" width="3" height="3" rx="0.5" fill="#0176D3" opacity="0.6"/>
+  </g>
+
+  <!-- Outer node: People (top-right) - amber octagon -->
+  <g filter="url(#qmk-glow)">
+    <polygon points="650,75 672,88 679,112 672,136 650,149 628,136 621,112 628,88" fill="#1a0e00" stroke="url(#qmk-amber)" stroke-width="2"/>
+    <polygon points="650,85 666,94 672,112 666,130 650,139 634,130 628,112 634,94" fill="none" stroke="#f59e0b" stroke-width="0.8" opacity="0.5"/>
+    <!-- People pattern: circles and lines -->
+    <circle cx="650" cy="104" r="6" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.9"/>
+    <path d="M640,122 Q645,116 650,116 Q655,116 660,122" stroke="#f59e0b" stroke-width="1.5" fill="none" opacity="0.9"/>
+    <circle cx="637" cy="107" r="4" fill="none" stroke="#d97706" stroke-width="1.2" opacity="0.6"/>
+    <circle cx="663" cy="107" r="4" fill="none" stroke="#d97706" stroke-width="1.2" opacity="0.6"/>
+  </g>
+
+  <!-- Outer node: Mission (bottom-center) - green hexagon rotated -->
+  <g filter="url(#qmk-glow)">
+    <polygon points="400,295 434,315 434,355 400,375 366,355 366,315" fill="#001a0d" stroke="#10b981" stroke-width="2"/>
+    <polygon points="400,305 428,321 428,349 400,365 372,349 372,321" fill="none" stroke="#10b981" stroke-width="0.8" opacity="0.5"/>
+    <!-- Mission pattern: arrow/target -->
+    <circle cx="400" cy="335" r="14" fill="none" stroke="#10b981" stroke-width="1.2" opacity="0.7"/>
+    <circle cx="400" cy="335" r="7" fill="none" stroke="#10b981" stroke-width="1.5" opacity="0.85"/>
+    <circle cx="400" cy="335" r="2.5" fill="#10b981" opacity="0.9"/>
+    <line x1="400" y1="318" x2="400" y2="322" stroke="#10b981" stroke-width="1.5" opacity="0.6"/>
+    <line x1="400" y1="348" x2="400" y2="352" stroke="#10b981" stroke-width="1.5" opacity="0.6"/>
+    <line x1="383" y1="335" x2="387" y2="335" stroke="#10b981" stroke-width="1.5" opacity="0.6"/>
+    <line x1="413" y1="335" x2="417" y2="335" stroke="#10b981" stroke-width="1.5" opacity="0.6"/>
+  </g>
+
+  <!-- Small decorative dots on rings -->
+  <circle cx="400" cy="110" r="2.5" fill="#8b5cf6" opacity="0.6"/>
+  <circle cx="310" cy="155" r="2" fill="#06b6d4" opacity="0.5"/>
+  <circle cx="490" cy="155" r="2" fill="#f59e0b" opacity="0.5"/>
+  <circle cx="310" cy="245" r="2" fill="#10b981" opacity="0.5"/>
+  <circle cx="490" cy="245" r="2" fill="#8b5cf6" opacity="0.5"/>
+  <circle cx="400" cy="290" r="2.5" fill="#10b981" opacity="0.6"/>
+
+  <!-- Grid dot pattern subtle background -->
+  <g opacity="0.06" fill="#8b5cf6">
+    <circle cx="100" cy="50" r="1.5"/>
+    <circle cx="150" cy="50" r="1.5"/>
+    <circle cx="200" cy="50" r="1.5"/>
+    <circle cx="250" cy="50" r="1.5"/>
+    <circle cx="550" cy="50" r="1.5"/>
+    <circle cx="600" cy="50" r="1.5"/>
+    <circle cx="650" cy="50" r="1.5"/>
+    <circle cx="700" cy="50" r="1.5"/>
+    <circle cx="100" cy="350" r="1.5"/>
+    <circle cx="150" cy="350" r="1.5"/>
+    <circle cx="200" cy="350" r="1.5"/>
+    <circle cx="600" cy="350" r="1.5"/>
+    <circle cx="650" cy="350" r="1.5"/>
+    <circle cx="700" cy="350" r="1.5"/>
+    <circle cx="750" cy="200" r="1.5"/>
+    <circle cx="750" cy="150" r="1.5"/>
+    <circle cx="750" cy="250" r="1.5"/>
+    <circle cx="50" cy="200" r="1.5"/>
+    <circle cx="50" cy="150" r="1.5"/>
+    <circle cx="50" cy="250" r="1.5"/>
+  </g>
+</svg>

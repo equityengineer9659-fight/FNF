@@ -277,9 +277,6 @@
     .na-ai-notice { display:flex; gap:8px; background:rgba(210,153,34,.08); border:1px solid rgba(210,153,34,.25); border-radius:6px; padding:9px 12px; margin-bottom:14px; font-size:12px; color:var(--tm); line-height:1.5; }
     .na-ai-notice.hide { display:none; }
 
-    /* SVG preview */
-    .na-svg-preview { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; overflow:hidden; line-height:0; }
-    .na-svg-preview svg { width:100%; height:auto; display:block; }
 
     /* Iframe preview modal */
     .na-preview-modal { position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:1000; display:flex; flex-direction:column; }
@@ -613,15 +610,6 @@
               </div>
             </div>
 
-            <!-- SVG Illustration Preview (revealed after generation) -->
-            <div class="na-sec hide" id="na-svg-sec">
-              <div class="na-sh">Illustration Preview</div>
-              <div class="na-svg-preview" id="na-svg-preview"></div>
-              <div style="margin-top:10px">
-                <button class="btn btn-q btn-sm" id="btn-regen-svg" onclick="regenerateSvg()">&#8635; Regenerate Illustration</button>
-              </div>
-            </div>
-
             <!-- Refine with Claude (revealed after generation) -->
             <div class="na-sec hide" id="na-feedback-sec">
               <div class="na-sh">Refine with Claude</div>
@@ -646,10 +634,6 @@
               <button class="btn btn-q" onclick="downloadArticle()">
                 <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
                 Download HTML
-              </button>
-              <button class="btn btn-q hide" id="btn-dl-svg" onclick="downloadSvg()">
-                <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
-                Download SVG
               </button>
             </div>
 
@@ -1901,10 +1885,8 @@ function onTitleInput() {
 
 /* ── Server detection ── */
 let serverMode = false;
-let generatedSvgCode = '';
 let generatedContent = null;
 let generationAbortCtrl = null;
-let currentSvgPrompt = '';
 
 async function detectServerMode() {
   try {
@@ -2005,7 +1987,7 @@ async function generateWithClaude(isRefinement = false) {
 
   try {
     fill.style.width = '60%';
-    status.textContent = 'Generating illustration\u2026';
+    status.textContent = 'Generating article\u2026';
 
     const resp = await fetch('/api/generate-article', {
       method: 'POST',
@@ -2026,15 +2008,8 @@ async function generateWithClaude(isRefinement = false) {
     status.textContent = '\u2713 Done';
 
     populateArticleForm(data);
-    generatedSvgCode = data.svgCode || '';
     generatedContent = data.content || null;
-    currentSvgPrompt = data.svgPrompt || '';
 
-    if (data.svgCode) {
-      document.getElementById('na-svg-preview').innerHTML = data.svgCode;
-      document.getElementById('na-svg-sec').classList.remove('hide');
-      document.getElementById('btn-dl-svg').classList.remove('hide');
-    }
     document.getElementById('na-feedback-sec').classList.remove('hide');
     addLog('done', `\u2713 Article draft ready: "${esc(data.title)}" \u2014 review, edit, then save or download`);
 
@@ -2075,28 +2050,6 @@ function populateArticleForm(data) {
   });
 }
 
-/* ── SVG regeneration ── */
-async function regenerateSvg() {
-  if (!currentSvgPrompt) return;
-  const btn = document.getElementById('btn-regen-svg');
-  btn.disabled = true; btn.textContent = '\u8635 Generating\u2026';
-  try {
-    const resp = await fetch('/api/regenerate-svg', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ svgPrompt: currentSvgPrompt })
-    });
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error);
-    generatedSvgCode = data.svgCode;
-    document.getElementById('na-svg-preview').innerHTML = data.svgCode;
-  } catch (err) {
-    addLog('err', `SVG regeneration failed: ${esc(err.message)}`);
-  } finally {
-    btn.disabled = false; btn.textContent = '\u8635 Regenerate Illustration';
-  }
-}
-
 /* ── Collect form data ── */
 function collectFormData() {
   const title = document.getElementById('na-title').value.trim();
@@ -2117,7 +2070,7 @@ function collectFormData() {
     dateDisplay: naFmtDate(dateIso),
     readTime, rels,
     content: generatedContent,
-    svgPath: (generatedSvgCode && slug) ? `/src/assets/images/illustrations/${slug}.svg` : null,
+    svgPath: slug ? `/src/assets/images/illustrations/${slug}.svg` : null,
     sources: getSelectedSources()
   };
 }
@@ -2162,13 +2115,13 @@ async function saveArticleToBlog() {
   try {
     const resp = await fetch('/api/save-article', {
       method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ slug: data.slug, html, svgCode: generatedSvgCode, autoRegister: true })
+      body: JSON.stringify({ slug: data.slug, html, autoRegister: true })
     });
     const result = await resp.json();
     if (!resp.ok) throw new Error(result.error);
     btn.textContent = '\u2713 Saved!';
     const regNote = result.registered?.length ? ` Auto-registered in: ${result.registered.join(', ')}.` : '';
-    addLog('done', `\u2713 Saved blog/${esc(data.slug)}.html${result.svgPath ? ' + SVG illustration' : ''}.${regNote} Run npm run build to publish.`);
+    addLog('done', `\u2713 Saved blog/${esc(data.slug)}.html \u2014 nav injected, blog listing updated.${regNote} Ask Claude Code to create the illustration next.`);
   } catch (err) {
     btn.disabled = false; btn.textContent = 'Save to blog/';
     addLog('err', `Save failed: ${esc(err.message)}`);
@@ -2187,15 +2140,6 @@ function downloadArticle() {
   addLog('done', `\u2713 Downloaded ${esc(data.slug)}.html \u2014 place in blog/ folder, then run: npm run build`);
 }
 
-/* ── Download SVG ── */
-function downloadSvg() {
-  if (!generatedSvgCode) { alert('No illustration generated yet.'); return; }
-  const slug = document.getElementById('na-slug').value.trim() || 'illustration';
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([generatedSvgCode], { type: 'image/svg+xml' }));
-  a.download = slug + '.svg'; a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 100);
-}
 
 function naFmtDate(iso) {
   if (!iso) return '';
@@ -2224,7 +2168,7 @@ function buildArticleHTML(p) {
         .map(para => `                <p>${h(para)}</p>`).join('\n');
       const pullquote = sec.pullquote
         ? `\n                <aside class="article-pullquote"><blockquote><p>${h(sec.pullquote)}</p></blockquote></aside>` : '';
-      // Insert SVG after first section only
+      // Insert SVG slot after first section — illustration created separately by Claude Code
       const svgBlock = (i === 0 && p.svgPath)
         ? `\n                <figure class="article-illustration article-illustration--breakout">\n                    <img src="${hq(p.svgPath)}" alt="${hq(p.title)} illustration" width="800" height="400" loading="lazy">\n                </figure>` : '';
       return `                <h2>${h(sec.heading)}</h2>\n${paragraphs}${pullquote}${svgBlock}`;

@@ -30,6 +30,8 @@ const resourcesSubpages = [
   'salesforce-security-nonprofits', 'salesforce-spring-2026-nonprofits', 'snap-policy-changes-food-banks',
   'tax-policy-nonprofit-fundraising', 'volunteer-management-technology', 'volunteer-recruitment-retention-digital',
   'purpose-driven-ai-food-banks', 'salesforce-nonprofit-cloud-ai-automation',
+  'snap-cuts-ice-fears-food-bank-response',
+  'grant-writing-nonprofit-sustainability',
 ];
 
 // Component definitions — all hrefs use absolute paths so they work from any subdirectory
@@ -176,7 +178,9 @@ function buildComponents() {
     'salesforce-security-nonprofits', 'salesforce-spring-2026-nonprofits', 'snap-policy-changes-food-banks',
     'tax-policy-nonprofit-fundraising', 'volunteer-management-technology', 'volunteer-recruitment-retention-digital',
     'purpose-driven-ai-food-banks', 'salesforce-nonprofit-cloud-ai-automation',
-  ];
+    'snap-cuts-ice-fears-food-bank-response',
+  'grant-writing-nonprofit-sustainability',
+];
 
   [...corePages, ...hubPages].forEach(page => {
     const filePath = path.join(__dirname, `${page}.html`);

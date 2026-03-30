@@ -14,6 +14,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { execSync } from 'child_process';
 import Anthropic from '@anthropic-ai/sdk';
 import { scrapeFeeds, DEFAULT_CATEGORIES, getExcelRowCount } from '../scripts/scrape-sources.js';
 
@@ -103,7 +104,7 @@ app.post('/api/scrape', async (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// POST /api/generate-article — Claude AI article + SVG generation
+// POST /api/generate-article — Claude AI article generation
 // Body: { sources: [{title, url, summary, src, cat}], existingArticles: [...slugs], feedback?: string }
 // ---------------------------------------------------------------------------
 app.post('/api/generate-article', async (req, res) => {
@@ -148,8 +149,7 @@ app.post('/api/generate-article', async (req, res) => {
       }
     ],
     "conclusion": "string — closing paragraph, forward-looking and action-oriented"
-  },
-  "svgPrompt": "string — 2-3 sentences describing an abstract geometric diagram representing this article's theme, suitable for an SVG data visualization"
+  }
 }`;
 
   try {
@@ -196,91 +196,13 @@ ${articleSchema}`
       articleData.readTime = `${Math.max(1, Math.round(articleData.wordCount / 200))} min read`;
     }
 
-    // --- Call 2: Generate SVG illustration ---
-    const svgMsg = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
-      system: `You are an SVG illustration designer creating thematic geometric data visualizations for a tech consulting blog. Generate clean, professional, accessible SVG code only.`,
-      messages: [{
-        role: 'user',
-        content: `Create an SVG illustration for this concept: ${articleData.svgPrompt}
-
-Requirements:
-- viewBox="0 0 800 400" — no fixed width or height attributes
-- Add role="img" and a descriptive aria-label attribute
-- Dark background using a linear gradient from #0a0e1a to #1a1040
-- Color palette: purples (#8b5cf6), Salesforce blue (#0176D3), cyan (#06b6d4), green (#10b981), amber (#f59e0b)
-- Include <defs> with 2-4 named gradients; prefix all IDs with a unique 3-letter code (e.g. "fnf")
-- Add a feGaussianBlur glow filter (stdDeviation="6") applied to key focal elements
-- Style: geometric/abstract — nodes, flows, network diagrams, data patterns (not literal drawings)
-- No text elements — visual only
-- Keep total SVG under 15KB
-
-Return ONLY the SVG markup. Start with <svg and end with </svg>. No explanation, no markdown.`
-      }]
-    });
-
-    let svgCode = svgMsg.content[0].text.trim();
-    // Strip any accidental markdown fences
-    svgCode = svgCode.replace(/^```[a-z]*\n?/i, '').replace(/\n?```$/i, '').trim();
-
-    if (!svgCode.startsWith('<svg')) {
-      return res.status(500).json({ error: 'Claude returned invalid SVG. Try regenerating the illustration.' });
-    }
-
-    res.json({ ...articleData, svgCode });
+    res.json(articleData);
 
   } catch (err) {
     const msg = err.status === 401 ? 'Invalid API key — check your ANTHROPIC_API_KEY in .env'
       : err.status === 429 ? 'Rate limit hit — wait a moment and try again'
       : `Claude API error: ${err.message}`;
     res.status(err.status || 500).json({ error: msg });
-  }
-});
-
-// ---------------------------------------------------------------------------
-// POST /api/regenerate-svg — regenerate illustration only
-// Body: { svgPrompt: string, slug: string }
-// ---------------------------------------------------------------------------
-app.post('/api/regenerate-svg', async (req, res) => {
-  if (!anthropic) {
-    return res.status(503).json({ error: 'No API key configured.' });
-  }
-  const { svgPrompt } = req.body;
-  if (!svgPrompt) return res.status(400).json({ error: 'svgPrompt required.' });
-
-  try {
-    const svgMsg = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
-      system: `You are an SVG illustration designer creating thematic geometric data visualizations for a tech consulting blog. Generate clean, professional, accessible SVG code only.`,
-      messages: [{
-        role: 'user',
-        content: `Create an SVG illustration for this concept: ${svgPrompt}
-
-Requirements:
-- viewBox="0 0 800 400" — no fixed width or height attributes
-- Add role="img" and a descriptive aria-label attribute
-- Dark background using a linear gradient from #0a0e1a to #1a1040
-- Color palette: purples (#8b5cf6), Salesforce blue (#0176D3), cyan (#06b6d4), green (#10b981), amber (#f59e0b)
-- Include <defs> with 2-4 named gradients; prefix all IDs with a unique 3-letter code
-- Add a feGaussianBlur glow filter (stdDeviation="6") applied to key focal elements
-- Style: geometric/abstract — nodes, flows, network diagrams, data patterns (not literal drawings)
-- No text elements — visual only
-- Keep total SVG under 15KB
-
-Return ONLY the SVG markup. Start with <svg and end with </svg>. No explanation, no markdown.`
-      }]
-    });
-
-    let svgCode = svgMsg.content[0].text.trim();
-    svgCode = svgCode.replace(/^```[a-z]*\n?/i, '').replace(/\n?```$/i, '').trim();
-    if (!svgCode.startsWith('<svg')) {
-      return res.status(500).json({ error: 'Claude returned invalid SVG. Try again.' });
-    }
-    res.json({ svgCode });
-  } catch (err) {
-    res.status(err.status || 500).json({ error: `SVG generation error: ${err.message}` });
   }
 });
 
@@ -296,7 +218,7 @@ app.post('/api/check-slug', (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// POST /api/save-article — write HTML + SVG to project, optionally auto-register
+// POST /api/save-article — write HTML + SVG to project, auto-register, and build
 // Body: { slug, html, svgCode, autoRegister }
 // ---------------------------------------------------------------------------
 app.post('/api/save-article', (req, res) => {
@@ -320,16 +242,22 @@ app.post('/api/save-article', (req, res) => {
     const registered = [];
 
     if (autoRegister) {
-      // 1. Patch build-components.js articlePages array
+      // 1. Patch build-components.js — update BOTH arrays: resourcesSubpages and articlePages
+      // Uses bracket-bounded regex ([^\]]*) so it never escapes the target array,
+      // even when the last entry has a trailing comma before ];
       if (existsSync(BUILD_COMPONENTS_PATH)) {
         let src = readFileSync(BUILD_COMPONENTS_PATH, 'utf-8');
         if (!src.includes(`'${slug}'`)) {
-          // Find last slug in the array and insert after it
-          src = src.replace(
-            /(const articlePages\s*=\s*\[[\s\S]*?)'([a-z0-9-]+)'(\s*\];)/,
-            (match, before, lastSlug, after) =>
-              `${before}'${lastSlug}',\n  '${slug}'${after}`
-          );
+          // Helper: inserts slug before the closing ] of the named array
+          const insertIntoArray = (source, arrayName) =>
+            source.replace(
+              new RegExp(`(const ${arrayName}\\s*=\\s*\\[)([^\\]]*)(`  + `\\])`),
+              (m, open, content, close) =>
+                `${open}${content.trimEnd()}\n  '${slug}',\n${close}`
+            );
+
+          src = insertIntoArray(src, 'resourcesSubpages');
+          src = insertIntoArray(src, 'articlePages');
           writeFileSync(BUILD_COMPONENTS_PATH, src, 'utf-8');
           registered.push('build-components.js');
         }
@@ -366,6 +294,22 @@ app.post('/api/save-article', (req, res) => {
           writeFileSync(PA11YCI_PATH, JSON.stringify(pa11y, null, 2) + '\n', 'utf-8');
           registered.push('.pa11yci.json');
         }
+      }
+
+      // 4. Run build-components.js — injects nav/footer/scripts into the new article HTML
+      try {
+        execSync('node build-components.js', { cwd: PROJECT_ROOT, stdio: 'pipe' });
+        registered.push('build-components (nav/footer injected)');
+      } catch (buildErr) {
+        console.error('build-components.js failed:', buildErr.message);
+      }
+
+      // 5. Run sync-blog.js — rebuilds blog.html card grid so new article appears in listing
+      try {
+        execSync('node scripts/sync-blog.js', { cwd: PROJECT_ROOT, stdio: 'pipe' });
+        registered.push('sync-blog (blog listing updated)');
+      } catch (syncErr) {
+        console.error('sync-blog.js failed:', syncErr.message);
       }
     }
 

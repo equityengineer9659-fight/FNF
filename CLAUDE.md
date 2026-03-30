@@ -79,7 +79,7 @@ npm run admin                   # Start Express server for scraper (http://local
 │   ├── js/                # JavaScript modules (main.js, effects/, config/, monitoring/)
 │   └── assets/            # Images, fonts, and other assets
 ├── *.html                  # 10 root pages (core + hub pages — see Page Inventory)
-├── blog/                   # 37 article HTML pages (all at blog/slug.html)
+├── blog/                   # 41 article HTML pages (all at blog/slug.html)
 ├── Blog and Article Content/  # Editorial research tools — NOT part of the public website
 │   ├── scraper-admin.html     # Standalone scraper UI (open directly via VS Code Live Server)
 │   ├── scraper-server.js      # Optional Express server version (npm run admin)
@@ -104,42 +104,55 @@ npm run admin                   # Start Express server for scraper (http://local
 └── package.json           # Root-level build configuration
 ```
 
-### Page Inventory (47 pages)
+### Page Inventory (51 pages)
 - **Core pages (7)**: index, about, services, resources, impact, contact, 404
 - **Blog hub (1)**: blog
 - **Hub pages at root (2)**: case-studies, templates-tools
-- **Articles under `blog/` (37)**: ai-reshaping-food-banks, salesforce-food-bank-operations, donor-relationships-nonprofit-cloud, data-driven-food-banks, food-bank-workflow-automation, securing-technology-grants, ai-inventory-management, agentforce-nonprofits-guide, ai-ethics-nonprofit-governance, centralized-food-hub-case-study, client-choice-food-pantry-technology, community-food-center-model, data-privacy-food-bank-clients, digital-transformation-small-food-banks, donor-prospecting-salesforce, food-bank-client-services-technology, food-bank-crisis-response-planning, food-bank-kitchen-operations, food-bank-strategic-partnerships, food-bank-technology-stack, food-banks-healthcare-social-determinants, food-is-medicine-food-banks, future-food-banking-trends, grant-management-food-banks, impact-measurement-food-banks, measuring-hunger-relief-outcomes, nonprofit-cloud-vs-sales-cloud, nutrition-first-food-bank-strategy, rapid-technology-implementation, salesforce-flow-builder-nonprofits, salesforce-reports-dashboards-food-banks, salesforce-security-nonprofits, salesforce-spring-2026-nonprofits, snap-policy-changes-food-banks, tax-policy-nonprofit-fundraising, volunteer-management-technology, volunteer-recruitment-retention-digital
+- **Articles under `blog/` (41)**: ai-reshaping-food-banks, salesforce-food-bank-operations, donor-relationships-nonprofit-cloud, data-driven-food-banks, food-bank-workflow-automation, securing-technology-grants, ai-inventory-management, agentforce-nonprofits-guide, ai-ethics-nonprofit-governance, centralized-food-hub-case-study, client-choice-food-pantry-technology, community-food-center-model, data-privacy-food-bank-clients, digital-transformation-small-food-banks, donor-prospecting-salesforce, food-bank-client-services-technology, food-bank-crisis-response-planning, food-bank-kitchen-operations, food-bank-strategic-partnerships, food-bank-technology-stack, food-banks-healthcare-social-determinants, food-is-medicine-food-banks, future-food-banking-trends, grant-management-food-banks, grant-writing-nonprofit-sustainability, impact-measurement-food-banks, measuring-hunger-relief-outcomes, nonprofit-cloud-vs-sales-cloud, nutrition-first-food-bank-strategy, purpose-driven-ai-food-banks, rapid-technology-implementation, salesforce-flow-builder-nonprofits, salesforce-nonprofit-cloud-ai-automation, salesforce-reports-dashboards-food-banks, salesforce-security-nonprofits, salesforce-spring-2026-nonprofits, snap-cuts-ice-fears-food-bank-response, snap-policy-changes-food-banks, tax-policy-nonprofit-fundraising, volunteer-management-technology, volunteer-recruitment-retention-digital
 
-**Adding new articles**: Place the HTML file in `blog/` — `vite.config.js` discovers it automatically. Then register it in `build-components.js` (articlePages array), `scripts/generate-sitemap.js`, and `.pa11yci.json`.
+**Adding new articles via scraper tool**: Use `npm run admin` → New Article tab → Generate with Claude → Save to blog/. The save-article endpoint automatically registers the slug in `build-components.js` (both `resourcesSubpages` and `articlePages` arrays), `scripts/generate-sitemap.js`, and `.pa11yci.json`, then runs `build-components.js` and `sync-blog.js` so the article is immediately available. After saving, ask Claude Code to create the illustration: *"Create the illustration for blog/{slug}.html"*.
+
+**Adding new articles manually**: Place the HTML file in `blog/` — `vite.config.js` discovers it automatically. Register the slug in both arrays of `build-components.js`, `scripts/generate-sitemap.js`, and `.pa11yci.json`, then run `node build-components.js` and `node scripts/sync-blog.js`.
 
 All pages processed by `build-components.js` (nav/footer injection), `scripts/generate-sitemap.js`, and `.pa11yci.json` (accessibility testing).
 
 ### Build Pipeline
-- `build-components.js` injects shared navigation, footer, and script tags into all 47 pages before Vite builds
+- `build-components.js` injects shared navigation, footer, and script tags into all 51 pages before Vite builds
 - `scripts/sync-blog.js` rebuilds the blog card grid in blog.html from article metadata (runs automatically on build)
 - `scripts/generate-sitemap.js` generates sitemap.xml covering all public pages (excludes 404)
 - Vite handles bundling, minification, and asset hashing for production
 
 ### Blog Content Pipeline
-A standalone editorial research tool — separate from the public website build.
+A two-part tool: a scraper for finding article candidates and an AI-powered article generator. Separate from the public website build — never deployed by Vite.
 
-**Purpose**: Find and triage article candidates from RSS feeds and web search, output to `Articles.xlsx` for editorial review.
+**Scraper purpose**: Find and triage article candidates from RSS feeds and web search, output to `Articles.xlsx` for editorial review.
 
-**Access**: Open `Blog and Article Content/scraper-admin.html` directly in VS Code Live Server. No server required.
+**Article generator purpose**: Select scraped sources, have Claude write an original professional article, preview and edit, save directly to `blog/` with full nav/footer injection and blog listing update in one step.
 
-**How it works**:
-1. Select a **search preset** (5 pre-configured for FNF content pillars) or enter custom keywords
-2. Choose date lookback range (7 / 30 / 60 / 90 days or custom)
-3. Enable **Web Search** to query Google News RSS + GDELT global news index in addition to RSS feeds
-4. Click **Start Scraping** — results stream in live with relevance scores (1–5)
-5. Click any row to preview the article summary; check articles to mark as "Selected"
-6. Connect `Articles.xlsx` and save — checked articles land with `Status = Selected`, others with `Status = New`
+**Access**:
+- **For AI article generation** (required): `npm run admin` → `http://localhost:3001`
+- **For scraping only**: Open `Blog and Article Content/scraper-admin.html` in VS Code Live Server
+
+**AI generation requires** a `.env` file at project root with `ANTHROPIC_API_KEY=sk-ant-...`. Get a key at console.anthropic.com.
+
+**Article generation workflow**:
+1. Scraper tab → select preset → Start Scraping
+2. New Article tab → check 1–5 sources → Generate with Claude (~10–15 sec)
+3. Review/edit pre-populated form fields (title, slug, category, description, read time, related articles)
+4. Preview in iframe, optionally regenerate with feedback
+5. Save to blog/ — auto-injects nav/footer, updates blog listing, registers in all config files
+6. Ask Claude Code to create the illustration: *"Create the illustration for blog/{slug}.html"*
+
+**Why illustrations are created separately**: Claude Code reads the full saved article and creates a purpose-built SVG that directly reflects the article's specific content, arguments, and structure — producing much better results than generating a generic illustration during the article generation step.
 
 **Files**:
-- `Blog and Article Content/scraper-admin.html` — complete standalone UI (SheetJS + DOMParser + CORS proxies)
-- `Blog and Article Content/scraper-server.js` — Express server alternative (`npm run admin`)
+- `Blog and Article Content/scraper-admin.html` — complete UI (Scraper + New Article tabs; SheetJS + DOMParser + CORS proxies)
+- `Blog and Article Content/scraper-server.js` — Express server (`npm run admin`) — required for AI features
+- `Blog and Article Content/Articles.xlsx` — editorial research queue
+- `.env` — `ANTHROPIC_API_KEY` (gitignored, never committed)
 - `scripts/scrape-sources.js` — core scraper module used by the server version
 - `scripts/rss-feeds.json` — configurable RSS feed list
+- `scripts/sync-blog.js` — rebuilds `blog.html` card grid (auto-run on save)
 
 **Built-in FNF search presets** (configured for each content pillar):
 - **AI & Innovation** — food bank AI, predictive analytics nonprofit, Salesforce Einstein, generative AI
@@ -150,7 +163,7 @@ A standalone editorial research tool — separate from the public website build.
 
 **Excel columns**: Source URL · Title · Source Name · Published Date · Date Scraped · Suggested Category · Summary · Keywords Found · Status · Notes · Article Slug
 
-**npm packages used** (devDependencies): `exceljs`, `rss-parser`, `express`
+**npm packages used** (devDependencies): `exceljs`, `rss-parser`, `express`, `@anthropic-ai/sdk`, `dotenv`
 **Browser libraries** (CDN, standalone only): SheetJS 0.18.5
 
 See `docs/current/blog-content-pipeline.md` for full usage guide.

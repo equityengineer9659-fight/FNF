@@ -63,9 +63,9 @@ npm run admin
         ↓
 3. New Article tab: Check 1–5 results as sources
         ↓
-4. Click "Generate with Claude" (~15–25 seconds)
+4. Click "Generate with Claude" (~10–15 seconds)
    Claude writes: article body, title, slug, category, description,
-   read time, related articles, and SVG illustration
+   read time, and related articles
         ↓
 5. Review all fields — edit anything directly in the form
 6. Preview article in iframe — approve or request refinements
@@ -73,16 +73,18 @@ npm run admin
 7. (Optional) Type feedback → click "Regenerate Article"
    e.g. "Make it more technical" or "Add a SNAP policy section"
         ↓
-8. (Optional) Click "Regenerate Illustration" for a new SVG variant
+8. Click "Save to blog/" → automatically:
+   • Writes blog/{slug}.html (with <figure> slot ready for the illustration)
+   • Registers slug in build-components.js (both arrays), generate-sitemap.js, .pa11yci.json
+   • Runs build-components.js — injects nav, footer, and scripts into the article
+   • Runs sync-blog.js — adds the article card to blog.html listing
         ↓
-9. Click "Save to blog/" → writes directly to:
-   • blog/{slug}.html
-   • src/assets/images/illustrations/{slug}.svg
-   Auto-registers slug in build-components.js, generate-sitemap.js, .pa11yci.json
+9. Ask Claude Code to create the illustration:
+   "Create the illustration for blog/{slug}.html"
+   Claude Code reads the full article and creates a purpose-built SVG that
+   directly reflects the article's specific content and arguments.
         ↓
-10. Run: npm run build
-        ↓
-Done — article live on blog.html
+Done — article live with full styling, navigation, and a matched illustration.
 ```
 
 ---
@@ -110,8 +112,8 @@ All fields are pre-populated by Claude and fully editable:
 | Description | 140–160 char meta description + blog card excerpt |
 | Related Articles (×3) | Claude picks 3 topically relevant existing articles; all editable |
 
-**Illustration Preview**
-Claude generates a themed SVG illustration matching the article topic (dark background, geometric/abstract style, matching FNF color palette). Saved to `src/assets/images/illustrations/{slug}.svg`. Click **Regenerate Illustration** for a new variant.
+**Illustration**
+SVG illustrations are created separately by Claude Code after the article is saved. The article HTML includes the correct `<figure>` tag with the illustration path already set — the image slot is ready and waiting. After saving, ask Claude Code: *"Create the illustration for blog/{slug}.html"* — it reads the full article and builds an illustration that directly reflects the content.
 
 **Refine with Claude**
 After generation, type feedback ("make it more technical", "add a SNAP policy section") and click **Regenerate Article** for a revised draft. Repeat as needed.
@@ -119,14 +121,17 @@ After generation, type feedback ("make it more technical", "add a SNAP policy se
 **Save Actions**
 | Button | Requires | What it does |
 |--------|----------|--------------|
-| Save to blog/ | `npm run admin` | Writes HTML + SVG directly, auto-registers in build config |
+| Save to blog/ | `npm run admin` | Writes HTML, auto-registers in build config, injects nav/footer, updates blog listing |
 | Preview Article | Always | Opens rendered article in a fullscreen iframe |
 | Download HTML | Always | Downloads `{slug}.html` for manual placement |
 | Download SVG | After generation | Downloads `{slug}.svg` for manual placement |
 
-**Auto-registration**: When saving via "Save to blog/", the slug is automatically added to `build-components.js` articlePages, `scripts/generate-sitemap.js`, and `.pa11yci.json` — no manual step 12 required.
+**Auto-registration + instant availability**: When saving via "Save to blog/", the server automatically:
+1. Adds the slug to both arrays in `build-components.js` (`resourcesSubpages` for nav highlighting + `articlePages` for nav/footer injection), `scripts/generate-sitemap.js`, and `.pa11yci.json`
+2. Runs `node build-components.js` — injects the shared nav, footer, and script tag into the new article HTML
+3. Runs `node scripts/sync-blog.js` — adds the article's card to the blog listing in `blog.html`
 
-**Sources footnote**: The generated article includes a "Sources" section at the bottom linking back to all scraped source URLs.
+The article is immediately viewable with full styling and navigation. No separate build step is needed to preview the article in VS Code Live Server or a local dev server.
 
 ---
 
