@@ -281,6 +281,8 @@
       </button>
     </div>
   </header>
+  <!-- A6: assertive live region for errors — visually hidden, announced immediately by screen readers -->
+  <div id="err-live" role="alert" aria-live="assertive" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"></div>
   <div class="prog-strip"><div class="prog-fill" id="prog"></div></div>
 
   <div class="body">
@@ -321,8 +323,8 @@
           <button class="pbtn" onclick="setPeriod('custom')">Custom</button>
         </div>
         <div class="cdates" id="cdates">
-          <span class="dlbl">From</span><input type="date" class="dinp" id="d-from" onchange="updatePrev()">
-          <span class="dlbl">To</span><input type="date" class="dinp" id="d-to" onchange="updatePrev()">
+          <label class="dlbl" for="d-from">From</label><input type="date" class="dinp" id="d-from" onchange="updatePrev()">
+          <label class="dlbl" for="d-to">To</label><input type="date" class="dinp" id="d-to" onchange="updatePrev()">
         </div>
       </div>
 
@@ -437,16 +439,16 @@
         <span class="stxt" id="stxt">Ready</span>
         <span class="sct" id="sct"></span>
       </div>
-      <div class="tabs">
-        <div class="tab on" id="t-log" onclick="showTab('log')">Activity Log</div>
-        <div class="tab" id="t-res" onclick="showTab('res')">Results <span class="tbadge" id="rbadge" style="display:none">0</span></div>
-        <div class="tab" id="t-new" onclick="showTab('new')">New Article</div>
+      <div class="tabs" role="tablist" aria-label="Content sections">
+        <div class="tab on" id="t-log" role="tab" aria-selected="true" aria-controls="log" tabindex="0" onclick="showTab('log')">Activity Log</div>
+        <div class="tab" id="t-res" role="tab" aria-selected="false" aria-controls="results" tabindex="-1" onclick="showTab('res')">Results <span class="tbadge" id="rbadge" style="display:none">0</span></div>
+        <div class="tab" id="t-new" role="tab" aria-selected="false" aria-controls="new-article" tabindex="-1" onclick="showTab('new')">New Article</div>
       </div>
 
-      <div class="log" id="log">
+      <div class="log" id="log" role="tabpanel" aria-labelledby="t-log" aria-live="polite">
         <div class="ll ll-info"><span class="lts">--:--:--</span><span class="lm">FNF Scraper ready. Optionally connect Articles.xlsx, then configure and click Start Scraping.</span></div>
       </div>
-      <div class="results" id="results">
+      <div class="results" id="results" role="tabpanel" aria-labelledby="t-res">
         <div class="res-toolbar">
           <button class="btn btn-q btn-sm" onclick="selectAllNew()">✓ All new</button>
           <button class="btn btn-q btn-sm" onclick="clearSelections()">✗ Clear</button>
@@ -457,13 +459,13 @@
         <div style="overflow-y:auto;flex:1">
           <table>
             <thead><tr>
-              <th style="width:28px"></th>
-              <th>Title</th>
-              <th>Source</th>
-              <th>Category</th>
-              <th style="width:46px;text-align:center">Score</th>
-              <th style="width:88px">Published</th>
-              <th style="width:76px">Status</th>
+              <th scope="col" style="width:28px"></th>
+              <th scope="col">Title</th>
+              <th scope="col">Source</th>
+              <th scope="col">Category</th>
+              <th scope="col" style="width:46px;text-align:center">Score</th>
+              <th scope="col" style="width:88px">Published</th>
+              <th scope="col" style="width:76px">Status</th>
             </tr></thead>
             <tbody id="tbody"></tbody>
           </table>
@@ -477,12 +479,12 @@
           </div>
           <button class="btn btn-accent btn-sm" onclick="connectAndSave()">📁 Connect &amp; Save</button>
           <button class="btn btn-q btn-sm" onclick="downloadExcel()">⬇ Download Excel</button>
-          <button class="btn btn-q btn-sm" style="padding:3px 7px" onclick="document.getElementById('save-banner').classList.remove('show')">✕</button>
+          <button class="btn btn-q btn-sm" style="padding:3px 7px" aria-label="Dismiss" onclick="document.getElementById('save-banner').classList.remove('show')">✕</button>
         </div>
       </div>
 
       <!-- ── New Article Generator panel ── -->
-      <div class="new-article" id="new-article">
+      <div class="new-article" id="new-article" role="tabpanel" aria-labelledby="t-new">
         <div class="na-body">
           <div class="na-form">
 
@@ -499,13 +501,13 @@
 
               <div class="na-row">
                 <label for="na-title">Title <span style="color:var(--red)">*</span></label>
-                <input type="text" class="na-inp" id="na-title" placeholder="e.g. How Salesforce Powers Modern Food Banks" oninput="onTitleInput()">
+                <input type="text" class="na-inp" id="na-title" placeholder="e.g. How Salesforce Powers Modern Food Banks" aria-required="true" oninput="onTitleInput()">
               </div>
 
               <div class="na-row">
                 <label for="na-slug">Slug (filename) <span style="color:var(--red)">*</span></label>
-                <input type="text" class="na-inp na-slug-inp" id="na-slug" placeholder="e.g. salesforce-modern-food-banks">
-                <div class="na-hint">Auto-generated from title. File downloads as {slug}.html — place it in the project root, then run <code style="font-size:11px">node scripts/sync-blog.js</code>.</div>
+                <input type="text" class="na-inp na-slug-inp" id="na-slug" placeholder="e.g. salesforce-modern-food-banks" aria-required="true">
+                <div class="na-hint">Auto-generated from title. File downloads as {slug}.html — place it in the <code style="font-size:11px">blog/</code> folder, then run <code style="font-size:11px">node scripts/sync-blog.js</code>.</div>
               </div>
 
               <div class="na-row">
@@ -727,6 +729,11 @@ async function readXL(file, name) {
     const wb = XLSX.read(ab, { type:'array' });
     const ws = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(ws, { header:1 });
+    if (!rows.length) {
+      addLog('warn', `${esc(name)}: spreadsheet appears empty.`);
+    } else if (String(rows[0][0]||'').trim() !== HEADERS[0]) {
+      addLog('warn', `${esc(name)}: first column is "${esc(String(rows[0][0]||''))}" — expected "${esc(HEADERS[0])}". This may not be an Articles.xlsx export; duplicate detection may be inaccurate.`);
+    }
     existingUrls.clear();
     rows.slice(1).forEach(r => { if (r[0]) existingUrls.add(String(r[0]).trim()); });
     xlRowCount = Math.max(0, rows.length - 1);
@@ -756,7 +763,11 @@ function disconnectXL() {
 
 async function saveToExcel(articles) {
   if (!articles.length) return;
-  const rows = articles.map(a => [a.url, a.title, a.src, a.pubDate, a.scraped, a.cat, a.summary, a.kws.join(', '), selectedUrls.has(a.url)?'Selected':'New', '', '']);
+  const rows = articles.map(a => {
+    // Formula injection guard: prefix with ' if value starts with Excel formula chars
+    const safeTitle = /^[=+\-@]/.test(a.title||'') ? '\'' + a.title : a.title;
+    return [a.url, safeTitle, a.src, a.pubDate, a.scraped, a.cat, a.summary, a.kws.join(', '), selectedUrls.has(a.url)?'Selected':'New', '', ''];
+  });
 
   let wb;
   if (pendingWB) {
@@ -799,6 +810,7 @@ function downloadExcel() {
   const blob = window._dlBlob; if (!blob) return;
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
   a.download = 'Articles_scraped.xlsx'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 100);
   document.getElementById('save-banner').classList.remove('show');
 }
 
@@ -873,6 +885,7 @@ function renderPresets() {
 }
 
 function loadPreset(id) {
+  if (isRunning) { addLog('warn', 'Cannot load preset while a scrape is running.'); return; }
   const p = allPresets().find(x => x.id === id);
   if (!p) return;
   activePreset = id;
@@ -894,6 +907,9 @@ function hideSavePresetRow() { document.getElementById('save-prow').classList.re
 function confirmSavePreset() {
   const name = document.getElementById('preset-name-inp').value.trim();
   if (!name) { alert('Enter a name for this preset.'); return; }
+  if (allPresets().some(p => p.name.toLowerCase() === name.toLowerCase())) {
+    if (!confirm(`A preset named "${name}" already exists. Save anyway?`)) return;
+  }
   const id = 'custom_' + Date.now();
   const p = {
     id, cls:'custom', name,
@@ -1007,7 +1023,10 @@ function setPeriod(p) {
 }
 function getLB() {
   if (period!=='custom') return period;
-  const f=new Date(document.getElementById('d-from').value), t=new Date(document.getElementById('d-to').value);
+  const fv=document.getElementById('d-from').value, tv=document.getElementById('d-to').value;
+  if (!fv||!tv) { alert('Please set both From and To dates for a custom date range.'); return null; }
+  const f=new Date(fv), t=new Date(tv);
+  if (isNaN(f.getTime())||isNaN(t.getTime())) { alert('Invalid date — please check your From/To dates.'); return null; }
   return Math.max(1, Math.ceil((t-f)/864e5));
 }
 
@@ -1048,9 +1067,12 @@ function showTab(t) {
   document.getElementById('log').classList.toggle('hide',!log);
   document.getElementById('results').classList.toggle('show',res);
   document.getElementById('new-article').classList.toggle('show',nw);
-  document.getElementById('t-log').classList.toggle('on',log);
-  document.getElementById('t-res').classList.toggle('on',res);
-  document.getElementById('t-new').classList.toggle('on',nw);
+  ['t-log','t-res','t-new'].forEach(id => {
+    const el=document.getElementById(id), active=el.id===`t-${t}`;
+    el.classList.toggle('on',active);
+    el.setAttribute('aria-selected', active);
+    el.setAttribute('tabindex', active ? '0' : '-1');
+  });
   if (nw) checkScraperResults();
 }
 
@@ -1061,8 +1083,15 @@ function addLog(type, msg) {
   const p=document.getElementById('log'), d=document.createElement('div');
   d.className=`ll ll-${type}`;
   const ts=new Date().toLocaleTimeString('en-US',{hour12:false});
-  d.innerHTML=`<span class="lts">${ts}</span><span class="lm">${msg}</span>`;
+  // A8: text prefix for errors/warnings so type is not conveyed by color alone
+  const pfx = type==='err' ? '[ERR] ' : type==='warn' ? '[WARN] ' : '';
+  d.innerHTML=`<span class="lts">${ts}</span><span class="lm">${pfx}${msg}</span>`;
   p.appendChild(d); p.scrollTop=p.scrollHeight;
+  // A6: populate assertive live region so screen readers announce errors immediately
+  if (type==='err') {
+    const el=document.getElementById('err-live');
+    if (el) { el.textContent=''; setTimeout(()=>{ el.textContent=msg.replace(/<[^>]+>/g,''); }, 10); }
+  }
 }
 function logSep(){ const h=document.createElement('hr'); h.className='sep'; document.getElementById('log').appendChild(h); }
 function setStat(s,t){ document.getElementById('dot').className=`dot ${s}`; document.getElementById('stxt').textContent=t; }
@@ -1079,6 +1108,8 @@ function stopScrape() {
 ───────────────────────────────────────── */
 function addRow(a) {
   const tr=document.createElement('tr');
+  tr.setAttribute('tabindex','0');
+  tr.setAttribute('aria-label', a.title);
   if (a.isNew) tr.classList.add('nr');
   const pub=a.pubDate?new Date(a.pubDate+'T00:00:00').toLocaleDateString():'—';
   const webBadge=a.isWeb?`<span class="pill p-web" style="font-size:10px;margin-right:3px">Web</span>`:'';
@@ -1102,6 +1133,10 @@ function addRow(a) {
   });
   // Click row to expand/collapse summary
   tr.addEventListener('click', () => toggleDetail(tr, a));
+  // A7: keyboard support — Enter/Space to expand detail
+  tr.addEventListener('keydown', e => {
+    if (e.key==='Enter'||e.key===' ') { e.preventDefault(); toggleDetail(tr, a); }
+  });
   document.getElementById('tbody').appendChild(tr);
 }
 
@@ -1586,6 +1621,7 @@ async function startScrape() {
 
   logSep();
   const lb=getLB();
+  if (lb===null) { isRunning=false; resetScrapeBtn(btn); return; }
   const rssFds=activeFd.filter(f=>f.type!=='html'), htmlFds=activeFd.filter(f=>f.type==='html');
   const srcDesc=[rssFds.length?`${rssFds.length} RSS feed${rssFds.length!==1?'s':''}`:null, htmlFds.length?`${htmlFds.length} web source${htmlFds.length!==1?'s':''}`:null, webOn?'GDELT web search':null].filter(Boolean).join(' + ');
   addLog('info',`▶ Starting — ${srcDesc} · ${lb}-day lookback${kwTags.length?' · filter: '+kwTags.join(', '):''}`);
@@ -1620,7 +1656,9 @@ async function startScrape() {
       for (const item of items) {
         if (scrapeAbortCtrl?.signal.aborted) break;
         rawTotal++;
-        const a=processItem(item, f.name, f.cat, cutoff, false);
+        let a;
+        try { a=processItem(item, f.name, f.cat, cutoff, false); }
+        catch(pe) { addLog('warn', `  ! Item error in ${esc(f.name)}: ${esc(pe.message)}`); continue; }
         if (!a) continue;
         n++;
         allResults.push(a); if (a.isNew) newArticles.push(a);
@@ -1630,7 +1668,7 @@ async function startScrape() {
       const filterNote = kwTags.length && n < rawTotal ? ` · ${rawTotal-n} filtered by keywords` : '';
       addLog('info', `  └─ ${esc(f.name)}: ${n} article${n!==1?'s':''} matched${filterNote}`);
     } catch(e) {
-      if (e.name!=='AbortError') addLog('err', `  └─ ${esc(f.name)}: ${e.message}`);
+      if (e.name!=='AbortError') addLog('err', `  └─ ${esc(f.name)}: ${esc(e.message)}`);
     }
   }));
 
@@ -1654,7 +1692,7 @@ async function startScrape() {
       }
       addLog('info', `  └─ Google News: ${n} article${n!==1?'s':''} matched`);
     } catch(e) {
-      addLog('warn', `  └─ Google News unavailable: ${e.message}`);
+      addLog('warn', `  └─ Google News unavailable: ${esc(e.message)}`);
     }
   })() : Promise.resolve();
 
@@ -1678,7 +1716,7 @@ async function startScrape() {
       }
       addLog('info', `  └─ GDELT: ${n} article${n!==1?'s':''} matched`);
     } catch(e) {
-      addLog('warn', `  └─ GDELT unavailable: ${e.message}`);
+      addLog('warn', `  └─ GDELT unavailable: ${esc(e.message)}`);
     }
   })() : Promise.resolve();
 
@@ -1724,10 +1762,10 @@ async function startScrape() {
   setTimeout(()=>{ document.getElementById('prog').style.width='0'; }, 2500);
   sortByScore();
 
-  isRunning=false; resetScrapeBtn(btn);
+  isRunning=false; scrapeAbortCtrl=null; resetScrapeBtn(btn);
   } catch(err) {
-    if (err.name!=='AbortError') { addLog('err', `Scrape failed: ${err.message}`); setStat('idle', 'Error — scrape failed'); }
-    isRunning=false; resetScrapeBtn(btn);
+    if (err.name!=='AbortError') { addLog('err', `Scrape failed: ${esc(err.message)}`); setStat('idle', 'Error — scrape failed'); }
+    isRunning=false; scrapeAbortCtrl=null; resetScrapeBtn(btn);
   }
 }
 function resetScrapeBtn(btn) {
@@ -1744,7 +1782,7 @@ function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'
 function pc(c) { return {'AI & Innovation':'p-ai','Technology Strategy':'p-tech','Implementation':'p-impl','Case Studies':'p-case','Industry Insights':'p-ind'}[c]||'p-ind'; }
 function sc(c) { return {'AI & Innovation':'AI','Technology Strategy':'Tech','Implementation':'Impl','Case Studies':'Cases','Industry Insights':'Industry'}[c]||c; }
 function loadLS(k,fb) { try { const v=localStorage.getItem(k); if (!v) return fb; const p=JSON.parse(v); return p!=null ? p : fb; } catch { return fb; } }
-function saveLS(k,v) { try { localStorage.setItem(k,JSON.stringify(v)); } catch {} }
+function saveLS(k,v) { try { localStorage.setItem(k,JSON.stringify(v)); } catch(e) { if (e.name==='QuotaExceededError'||e.code===22) { addLog('warn','localStorage quota exceeded — some settings may not persist. Try clearing browser storage.'); } } }
 
 /* ─────────────────────────────────────────
    NEW ARTICLE GENERATOR
@@ -1817,13 +1855,14 @@ function generateArticle() {
   const html=buildArticleHTML({title,slug,cat,catClass:CAT_CLASS_MAP[cat]||'insights',desc,dateIso,dateDisplay:naFmtDate(dateIso),readTime,rels});
   const blob=new Blob([html],{type:'text/html'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=slug+'.html'; a.click();
-  addLog('done',`✓ Generated ${esc(slug)}.html — place in project root, then run: node scripts/sync-blog.js`);
+  setTimeout(() => URL.revokeObjectURL(a.href), 100);
+  addLog('done',`✓ Generated ${esc(slug)}.html — place in the blog/ folder, then run: node scripts/sync-blog.js`);
 }
 
 function buildArticleHTML(p) {
   const h=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const hq=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  const j=s=>String(s||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+  const j=s=>String(s||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n').replace(/\r/g,'\\r').replace(/\t/g,'\\t').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
   const catHtml=h(p.cat);
   const relCards=(p.rels&&p.rels.length?p.rels:[{s:'blog',t:'Explore More Articles',c:p.cat}])
     .map(r=>`                <a href="${hq(r.s)}.html" class="article-read-next__card">
@@ -1843,7 +1882,7 @@ function buildArticleHTML(p) {
     <meta name="keywords" content="food bank, nonprofit, Salesforce, food insecurity">
     <meta name="author" content="Food-N-Force Team">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://foodnforce.com/${hq(p.slug)}.html">
+    <link rel="canonical" href="https://foodnforce.com/blog/${hq(p.slug)}.html">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
 
@@ -1851,7 +1890,7 @@ function buildArticleHTML(p) {
     <meta property="og:title" content="${hq(p.title)} | Food-N-Force">
     <meta property="og:description" content="${hq(p.desc)}">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://foodnforce.com/${hq(p.slug)}.html">
+    <meta property="og:url" content="https://foodnforce.com/blog/${hq(p.slug)}.html">
     <meta property="og:image" content="https://foodnforce.com/og-image.png">
     <meta property="og:site_name" content="Food-N-Force">
     <meta property="og:locale" content="en_US">
@@ -1874,7 +1913,7 @@ function buildArticleHTML(p) {
       "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
       "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
       "datePublished": "${j(p.dateIso)}",
-      "url": "https://foodnforce.com/${j(p.slug)}.html",
+      "url": "https://foodnforce.com/blog/${j(p.slug)}.html",
       "image": "https://foodnforce.com/og-image.png",
       "articleSection": "${j(p.cat)}",
       "inLanguage": "en-US"
