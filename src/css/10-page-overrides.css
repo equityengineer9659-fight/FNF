@@ -39,7 +39,7 @@
   .fnf-page--contact .contact-form-container,
   .fnf-page--contact .contact-info-container {
     padding: 2rem;
-    background: #4a5568;
+    background: var(--glass-bg-strong);
   }
 
   .fnf-page--contact .contact-section {
@@ -57,7 +57,7 @@
   .fnf-page--contact .contact-form-container,
   .fnf-page--contact .contact-info-container {
     padding: 2rem;
-    background: #4a5568;
+    background: var(--glass-bg-strong);
   }
 }
 

@@ -1,3 +1,6 @@
+/* Visually-hidden utility — works regardless of SLDS CDN cascade */
+.fnf-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
 .slds-button{display:inline-flex;align-items:center;justify-content:center;gap:var(--slds-spacing-x-small);padding:var(--slds-spacing-small) var(--slds-spacing-medium);border:1px solid transparent;border-radius:var(--slds-border-radius-medium);font-family:var(--slds-font-family-text);font-size:var(--slds-font-size-3);font-weight:500;text-decoration:none;cursor:pointer;transition:all var(--transition-medium);position:relative;overflow:hidden}
 
 .slds-button_brand{background:var(--fnf-primary);color:var(--slds-c-text-inverse);border-color:var(--fnf-primary)}
@@ -61,7 +64,7 @@
 
 .stat-card:hover{background:rgba(45,55,65,.35);border-color:rgba(255,255,255,.2);transform:translateY(-4px)}
 
-.stat-number{font-size:3.5rem;font-weight:700;background:linear-gradient(135deg,#00d4ff,#0176d3);background-clip:text;line-height:1;margin-bottom:var(--slds-spacing-small);text-shadow:0 2px 10px rgba(1,118,211,.3)}
+.stat-number{font-size:3.5rem;font-weight:700;background:linear-gradient(135deg,var(--fnf-secondary),var(--fnf-primary));background-clip:text;color:transparent;line-height:1;margin-bottom:var(--slds-spacing-small)}
 
 .stat-label{color:var(--slds-c-text-inverse);font-size:var(--slds-font-size-3);font-weight:400;line-height:1.3;margin:0}
 
@@ -103,7 +106,7 @@
 }
 
 .fnf-newsletter-content {
-  background: #1a1a2e;
+  background: var(--fnf-gradient-start);
   border-radius: 12px;
   padding: 2rem;
   max-width: 500px;
@@ -132,7 +135,7 @@
 }
 
 .fnf-signup-title {
-  color: #00d4ff;
+  color: var(--fnf-secondary);
   margin-bottom: 1rem;
   font-size: 1.875rem;
   text-align: center;
@@ -163,7 +166,7 @@
 }
 
 .fnf-email-input:focus {
-  border-color: #0176d3;
+  border-color: var(--fnf-primary);
   box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.15);
 }
 
@@ -172,7 +175,7 @@
 }
 
 .fnf-submit-btn {
-  background: #0176d3;
+  background: var(--fnf-primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -184,7 +187,7 @@
 
 .fnf-submit-btn:hover,
 .fnf-submit-btn:focus-visible {
-  background: #015395;
+  background: var(--fnf-accent);
 }
 
 .fnf-newsletter-success {
@@ -193,7 +196,7 @@
 }
 
 .fnf-newsletter-success h2 {
-  color: #00d4ff;
+  color: var(--fnf-secondary);
   margin-bottom: 1rem;
   font-size: 1.875rem;
   font-family: Orbitron, sans-serif;
