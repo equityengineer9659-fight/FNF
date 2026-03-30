@@ -39,7 +39,6 @@ const anthropic = process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY
 const app = express();
 app.use(express.json({ limit: '2mb' }));
 app.use(express.static(__dirname));
-app.use(express.static(PROJECT_ROOT)); // Serve project root so /src/css/main.css resolves in preview iframe
 
 // Serve the admin page at root
 app.get('/', (req, res) => {
@@ -381,6 +380,9 @@ app.post('/api/save-article', (req, res) => {
     res.status(500).json({ error: `Save failed: ${err.message}` });
   }
 });
+
+// Serve project root LAST — only handles unmatched paths like /src/css/main.css for preview iframe
+app.use(express.static(PROJECT_ROOT));
 
 // Error handler
 app.use((err, req, res, next) => {
