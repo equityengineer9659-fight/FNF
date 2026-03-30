@@ -2230,11 +2230,7 @@ function buildArticleHTML(p) {
       return `                <h2>${h(sec.heading)}</h2>\n${paragraphs}${pullquote}${svgBlock}`;
     }).join('\n\n');
 
-    // Sources footnote (S2)
-    const sourcesFootnote = (p.sources && p.sources.length)
-      ? `\n\n                <h2>Sources</h2>\n                <ul class="article-sources">\n${p.sources.map(s=>`                    <li><a href="${hq(s.url)}" target="_blank" rel="noopener noreferrer">${h(s.title)}</a> &mdash; ${h(s.src)}</li>`).join('\n')}\n                </ul>` : '';
-
-    articleBody = `                <p class="article-lead">${h(c.lead)}</p>\n\n${sections}\n\n                <p>${h(c.conclusion)}</p>${sourcesFootnote}`;
+    articleBody = `                <p class="article-lead">${h(c.lead)}</p>\n\n${sections}\n\n                <p>${h(c.conclusion)}</p>`;
   } else {
     // Manual/placeholder mode
     articleBody = `                <p class="article-lead">
