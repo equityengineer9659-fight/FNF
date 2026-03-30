@@ -1,14 +1,13 @@
 # Blog Content Pipeline
 
 **Last Updated**: 2026-03-30
-**Status**: Active — 30 sources (16 enabled / 14 disabled), fully parallel fetching (RSS + web search), stop button, 6-proxy CORS chain, word-boundary keyword matching, bidirectional dedup. Full multi-agent audit completed 2026-03-30; all Tier 1–4 findings fixed (commit `1ea03e3`).
+**Status**: Active — 30 sources (16 enabled / 14 disabled), fully parallel fetching (RSS + web search), stop button, 6-proxy CORS chain, word-boundary keyword matching, bidirectional dedup. Full multi-agent audit completed 2026-03-30; all Tier 1–4 findings fixed (commit `1ea03e3`). Claude AI article generation added with full pipeline: scrape → select sources → generate → preview → save.
 
 ## Overview
 
-The blog content pipeline has two parts:
-1. **Scraper** (`scraper-admin.html`) — find and triage article candidates from RSS feeds and web search, save to `Articles.xlsx`
-2. **Article Generator** (`scraper-admin.html` → New Article tab) — scaffold a complete HTML article file from a form, ready to drop into the project root
-3. **Blog Sync** (`scripts/sync-blog.js`) — rebuild the blog card grid in `blog.html` from all article HTML files
+1. **Scraper** (`scraper-admin.html`) — find article candidates from RSS feeds and web search, save to `Articles.xlsx`
+2. **Article Generator** (`scraper-admin.html` → New Article tab) — select up to 5 scraped sources, Claude writes an original professional article, generates a themed SVG illustration, auto-populates all metadata, then saves directly to `blog/`
+3. **Blog Sync** (`scripts/sync-blog.js`) — rebuilds the blog card grid in `blog.html` from all article HTML files
 
 The tool is **not part of the public website** and is never built or deployed by Vite.
 
@@ -18,54 +17,72 @@ The tool is **not part of the public website** and is never built or deployed by
 
 | File | Purpose |
 |------|---------|
-| `Blog and Article Content/scraper-admin.html` | Complete standalone UI — Scraper + New Article tabs. Open in Live Server. |
-| `Blog and Article Content/scraper-server.js` | Alternative Express server version (`npm run admin`) |
+| `Blog and Article Content/scraper-admin.html` | Complete standalone UI — Scraper + New Article tabs |
+| `Blog and Article Content/scraper-server.js` | Express server (`npm run admin`) — **required for AI generation** |
 | `Blog and Article Content/Articles.xlsx` | Editorial research queue |
+| `.env` | `ANTHROPIC_API_KEY` — required for Claude generation (gitignored) |
 | `scripts/scrape-sources.js` | Core scraper module used by the server version |
 | `scripts/rss-feeds.json` | Configurable RSS feed source list |
 | `scripts/sync-blog.js` | Rebuilds `blog.html` card grid from all article HTML files |
 
 ---
 
-## How to Open
+## One-Time Setup (Claude AI)
 
-**Recommended — VS Code Live Server (no server needed):**
-1. Right-click `Blog and Article Content/scraper-admin.html` in VS Code Explorer
-2. Select **Open with Live Server**
-3. The scraper runs entirely in the browser using CORS proxies
-
-**Alternative — Express server:**
-```bash
-npm run admin
-# Opens at http://localhost:3001
-```
+1. Get an API key at **console.anthropic.com** → API Keys → Create Key
+2. Add it to `.env` at project root:
+   ```
+   ANTHROPIC_API_KEY=sk-ant-your-key-here
+   ```
+3. From now on, always start the tool with `npm run admin` (not VS Code Live Server) to enable AI generation
 
 ---
 
-## Full Workflow: Research → Write → Publish
+## How to Open
+
+**For AI-powered article generation (recommended):**
+```bash
+npm run admin
+# Opens at http://localhost:3001
+# Claude AI features active — "Generate with Claude" button enabled
+```
+
+**For scraping only (no AI):**
+1. Right-click `Blog and Article Content/scraper-admin.html` in VS Code Explorer
+2. Select **Open with Live Server**
+3. Scraper works fully; "Generate with Claude" button shows a notice
+
+---
+
+## Full Workflow: Research → Generate → Publish
 
 ```
-1. Scraper tab: Select a preset (or enter custom keywords)
+1. npm run admin → open http://localhost:3001
         ↓
-2. Set date range (7 / 30 / 60 / 90 days)
+2. Scraper tab: Select a preset → Start Scraping
         ↓
-3. Toggle web search on/off → Start Scraping
+3. New Article tab: Check 1–5 results as sources
         ↓
-4. Review results → check articles to select → Connect Articles.xlsx → Save
+4. Click "Generate with Claude" (~15–25 seconds)
+   Claude writes: article body, title, slug, category, description,
+   read time, related articles, and SVG illustration
         ↓
-5. Open Articles.xlsx → review Selected articles → decide on a topic
+5. Review all fields — edit anything directly in the form
+6. Preview article in iframe — approve or request refinements
         ↓
-6. New Article tab: Fill in title, slug, category, description, date, related articles
+7. (Optional) Type feedback → click "Regenerate Article"
+   e.g. "Make it more technical" or "Add a SNAP policy section"
         ↓
-7. Click Generate & Download → {slug}.html downloads
+8. (Optional) Click "Regenerate Illustration" for a new SVG variant
         ↓
-8. Move {slug}.html to the blog/ folder
+9. Click "Save to blog/" → writes directly to:
+   • blog/{slug}.html
+   • src/assets/images/illustrations/{slug}.svg
+   Auto-registers slug in build-components.js, generate-sitemap.js, .pa11yci.json
         ↓
-9. Write content in the HTML file (placeholder sections are marked)
+10. Run: npm run build
         ↓
-10. Run: node scripts/sync-blog.js
-        ↓  (or just: npm run build — sync-blog runs automatically)
-11. blog.html now shows the new card — done
+Done — article live on blog.html
 ```
 
 ---
@@ -76,22 +93,40 @@ npm run admin
 Research tool for finding article candidates. See sections below.
 
 ### New Article Tab
-Generates a complete, ready-to-edit HTML article file from a form.
+AI-powered article generation. Requires `npm run admin` for Claude features; manual mode works in Live Server.
 
-**Form fields:**
+**Step 1 — Select Sources**
+Check 1–5 results from your scrape. Each card shows title, source, date, and relevance score. Max 5 sources enforced (excess cards grey out). Click **Generate with Claude** to start.
+
+**Step 2 — Review & Edit Article Details**
+All fields are pre-populated by Claude and fully editable:
 | Field | Notes |
 |-------|-------|
-| Title | Required |
-| Slug | Auto-generated from title (kebab-case), editable. Becomes the filename. |
-| Category | Colored pill buttons — AI & Innovation / Tech Strategy / Case Studies / Implementation / Industry Insights |
-| Date Published | Date picker, defaults to today |
-| Description | Used in meta tags and blog card excerpt |
-| Read Time | Defaults to "5 min read" |
-| Related Articles (×3) | Title + slug pairs for the "Read Next" section |
+| Title | Claude-generated headline, editable |
+| Slug | Auto-derived from title (kebab-case). Becomes the filename: `blog/{slug}.html` |
+| Category | Colored pill buttons — 5 content pillars |
+| Date Published | Defaults to today |
+| Read Time | Auto-calculated from actual word count (200 wpm) |
+| Description | 140–160 char meta description + blog card excerpt |
+| Related Articles (×3) | Claude picks 3 topically relevant existing articles; all editable |
 
-**Load from scraper**: If the Results tab has articles from a scrape, a dropdown appears to pre-fill title, description, and category from a selected result.
+**Illustration Preview**
+Claude generates a themed SVG illustration matching the article topic (dark background, geometric/abstract style, matching FNF color palette). Saved to `src/assets/images/illustrations/{slug}.svg`. Click **Regenerate Illustration** for a new variant.
 
-**Generate & Download**: Creates `{slug}.html` with full navigation, hero, placeholder content sections, Read Next cards, CTA, and footer. Place in the `blog/` folder. Build-components.js will inject the live nav/footer on the next build. The generated canonical URL and og:url are correctly set to `foodnforce.com/blog/{slug}.html`.
+**Refine with Claude**
+After generation, type feedback ("make it more technical", "add a SNAP policy section") and click **Regenerate Article** for a revised draft. Repeat as needed.
+
+**Save Actions**
+| Button | Requires | What it does |
+|--------|----------|--------------|
+| Save to blog/ | `npm run admin` | Writes HTML + SVG directly, auto-registers in build config |
+| Preview Article | Always | Opens rendered article in a fullscreen iframe |
+| Download HTML | Always | Downloads `{slug}.html` for manual placement |
+| Download SVG | After generation | Downloads `{slug}.svg` for manual placement |
+
+**Auto-registration**: When saving via "Save to blog/", the slug is automatically added to `build-components.js` articlePages, `scripts/generate-sitemap.js`, and `.pa11yci.json` — no manual step 12 required.
+
+**Sources footnote**: The generated article includes a "Sources" section at the bottom linking back to all scraped source URLs.
 
 ---
 

@@ -237,9 +237,9 @@
     .new-article { flex:1; display:none; flex-direction:column; overflow:hidden; }
     .new-article.show { display:flex; }
     .na-body { flex:1; overflow-y:auto; padding:16px 20px; }
-    .na-form { max-width:700px; }
+    .na-form { max-width:760px; }
     .na-sec { margin-bottom:22px; }
-    .na-sh { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--tm); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+    .na-sh { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--tm); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
     .na-row { margin-bottom:12px; }
     .na-row label { display:block; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--tm); margin-bottom:5px; }
     .na-inp, .na-sel, .na-ta { background:var(--bg-input); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:6px 10px; font-size:13px; width:100%; }
@@ -251,12 +251,42 @@
     .na-rel { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:10px 12px; margin-bottom:8px; }
     .na-rel-lbl { font-size:11px; color:var(--purple); font-weight:600; margin-bottom:7px; }
     .na-rel-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
-    .na-actions { display:flex; gap:10px; align-items:center; padding:14px 0 6px; border-top:1px solid var(--border); margin-top:4px; }
-    .na-from-row { display:flex; gap:8px; align-items:center; margin-bottom:16px; padding:9px 12px; background:rgba(88,166,255,.06); border:1px solid rgba(88,166,255,.2); border-radius:6px; }
-    .na-from-row.hide { display:none; }
-    .na-from-lbl { font-size:12px; color:var(--tm); white-space:nowrap; }
-    .na-from-sel { background:var(--bg-input); border:1px solid var(--border); border-radius:5px; color:var(--text); padding:4px 7px; font-size:12px; flex:1; min-width:0; }
-    .na-from-sel:focus { outline:none; border-color:var(--accent); }
+    .na-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:14px 0 6px; border-top:1px solid var(--border); margin-top:4px; }
+
+    /* Source selection cards */
+    .na-src-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+    .na-src-card { display:flex; gap:8px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:9px 11px; cursor:pointer; transition:border-color .15s; }
+    .na-src-card:hover { border-color:var(--bh); }
+    .na-src-card:has(input:checked) { border-color:var(--accent); background:var(--adim); }
+    .na-src-card.disabled { opacity:.4; pointer-events:none; }
+    .na-src-card input[type=checkbox] { flex-shrink:0; margin-top:2px; accent-color:var(--accent); }
+    .na-src-body { min-width:0; }
+    .na-src-title { font-size:12px; color:var(--tb); line-height:1.4; margin-bottom:3px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+    .na-src-meta { font-size:10px; color:var(--tf); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .na-sel-count { font-size:10px; font-weight:400; color:var(--tm); text-transform:none; letter-spacing:0; margin-left:auto; }
+    .na-no-results { font-size:12px; color:var(--tf); padding:14px; text-align:center; background:var(--bg-card); border:1px dashed var(--border); border-radius:6px; }
+
+    /* Generation progress */
+    .na-gen-row { display:flex; align-items:center; gap:10px; margin-top:10px; flex-wrap:wrap; }
+    .btn-ai { background:linear-gradient(135deg,#1a6db5,#7c3aed); border:none; color:#fff; padding:7px 16px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:opacity .15s; }
+    .btn-ai:hover:not(:disabled) { opacity:.88; }
+    .btn-ai:disabled { opacity:.45; cursor:not-allowed; }
+    .na-gen-progress { flex:1; min-width:120px; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+    .na-gen-fill { height:100%; background:linear-gradient(90deg,#1a6db5,#7c3aed); width:0; transition:width .6s ease; }
+    .na-gen-status { font-size:11px; color:var(--tm); white-space:nowrap; }
+    .na-ai-notice { display:flex; gap:8px; background:rgba(210,153,34,.08); border:1px solid rgba(210,153,34,.25); border-radius:6px; padding:9px 12px; margin-bottom:14px; font-size:12px; color:var(--tm); line-height:1.5; }
+    .na-ai-notice.hide { display:none; }
+
+    /* SVG preview */
+    .na-svg-preview { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; overflow:hidden; line-height:0; }
+    .na-svg-preview svg { width:100%; height:auto; display:block; }
+
+    /* Iframe preview modal */
+    .na-preview-modal { position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:1000; display:flex; flex-direction:column; }
+    .na-preview-modal.hide { display:none; }
+    .na-preview-bar { display:flex; align-items:center; gap:10px; padding:8px 14px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-shrink:0; }
+    .na-preview-bar span { font-size:12px; color:var(--tm); flex:1; }
+    .na-preview-frame { flex:1; border:none; background:#fff; }
   </style>
 </head>
 <body>
@@ -488,26 +518,43 @@
         <div class="na-body">
           <div class="na-form">
 
-            <!-- Load from scraper results (hidden until results exist) -->
-            <div class="na-from-row hide" id="na-from-row">
-              <span class="na-from-lbl">Load from scraper:</span>
-              <select class="na-from-sel" id="na-scraper-sel"><option value="">— pick a result to pre-fill —</option></select>
-              <button class="btn btn-accent btn-sm" onclick="loadFromScraper()">Load</button>
+            <!-- AI notice (shown when running via Live Server without Express server) -->
+            <div class="na-ai-notice hide" id="na-ai-notice">
+              <span>&#9888;</span>
+              <span>Claude AI generation requires the Express server &mdash; run <code style="font-size:11px">npm run admin</code> instead of VS Code Live Server. Manual article creation below still works.</span>
             </div>
 
-            <!-- Metadata -->
+            <!-- Step 1: Source Selection -->
             <div class="na-sec">
-              <div class="na-sh">Article Metadata</div>
+              <div class="na-sh">Step 1 &mdash; Select Sources for Claude <span class="na-sel-count" id="na-sel-count">0 of 5 selected</span></div>
+              <div class="na-hint" style="margin-bottom:10px">Check up to 5 results from your scrape. Claude will synthesize an original professional article from these sources.</div>
+              <div class="na-src-grid" id="na-src-grid">
+                <div class="na-no-results">Run a scrape first &mdash; results will appear here as selectable sources.</div>
+              </div>
+              <div class="na-gen-row">
+                <button class="btn-ai" id="btn-gen-claude" onclick="generateWithClaude()" disabled>
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/></svg>
+                  Generate with Claude
+                </button>
+                <div class="na-gen-progress hide" id="na-gen-progress"><div class="na-gen-fill" id="na-gen-fill"></div></div>
+                <span class="na-gen-status" id="na-gen-status"></span>
+                <button class="btn btn-q btn-sm hide" id="btn-gen-cancel" onclick="cancelGeneration()">Cancel</button>
+              </div>
+            </div>
+
+            <!-- Step 2: Article Metadata (pre-filled by Claude or entered manually) -->
+            <div class="na-sec">
+              <div class="na-sh">Step 2 &mdash; Review &amp; Edit Article Details</div>
 
               <div class="na-row">
-                <label for="na-title">Title <span style="color:var(--red)">*</span></label>
+                <label for="na-title">Title <span style="color:var(--red)" aria-hidden="true">*</span></label>
                 <input type="text" class="na-inp" id="na-title" placeholder="e.g. How Salesforce Powers Modern Food Banks" aria-required="true" oninput="onTitleInput()">
               </div>
 
               <div class="na-row">
-                <label for="na-slug">Slug (filename) <span style="color:var(--red)">*</span></label>
+                <label for="na-slug">Slug (filename) <span style="color:var(--red)" aria-hidden="true">*</span></label>
                 <input type="text" class="na-inp na-slug-inp" id="na-slug" placeholder="e.g. salesforce-modern-food-banks" aria-required="true">
-                <div class="na-hint">Auto-generated from title. File downloads as {slug}.html — place it in the <code style="font-size:11px">blog/</code> folder, then run <code style="font-size:11px">node scripts/sync-blog.js</code>.</div>
+                <div class="na-hint">Becomes the filename: <code style="font-size:11px">blog/{slug}.html</code></div>
               </div>
 
               <div class="na-row">
@@ -522,27 +569,27 @@
                 </div>
               </div>
 
-              <div class="na-row">
-                <label for="na-date">Date Published</label>
-                <input type="date" class="na-inp" id="na-date" style="max-width:180px">
+              <div class="na-grid2" style="margin-bottom:12px">
+                <div>
+                  <label class="na-row" style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tm);margin-bottom:5px" for="na-date">Date Published</label>
+                  <input type="date" class="na-inp" id="na-date">
+                </div>
+                <div>
+                  <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tm);margin-bottom:5px" for="na-readtime">Read Time</label>
+                  <input type="text" class="na-inp" id="na-readtime" placeholder="5 min read">
+                </div>
               </div>
 
               <div class="na-row">
                 <label for="na-desc">Description (meta + blog card excerpt)</label>
-                <textarea class="na-ta" id="na-desc" rows="3" placeholder="Brief description used in SEO meta tags and the blog card excerpt…"></textarea>
-              </div>
-
-              <div class="na-row">
-                <label for="na-readtime">Read Time</label>
-                <input type="text" class="na-inp" id="na-readtime" placeholder="5 min read" style="max-width:140px">
+                <textarea class="na-ta" id="na-desc" rows="3" placeholder="Brief description used in SEO meta tags and the blog card excerpt&hellip;"></textarea>
               </div>
             </div>
 
             <!-- Related Articles -->
             <div class="na-sec">
               <div class="na-sh">Read Next (Related Articles)</div>
-              <div class="na-hint" style="margin-bottom:10px">Slugs are filenames without .html (e.g. <code style="font-size:11px">ai-reshaping-food-banks</code>). Leave a slug blank to omit that card.</div>
-
+              <div class="na-hint" style="margin-bottom:10px">Claude suggests these automatically. Edit any to customize. Slugs are filenames without .html (e.g. <code style="font-size:11px">ai-reshaping-food-banks</code>).</div>
               <div class="na-rel">
                 <div class="na-rel-lbl">Related Article 1</div>
                 <div class="na-rel-grid">
@@ -566,17 +613,57 @@
               </div>
             </div>
 
-            <!-- Generate -->
+            <!-- SVG Illustration Preview (revealed after generation) -->
+            <div class="na-sec hide" id="na-svg-sec">
+              <div class="na-sh">Illustration Preview</div>
+              <div class="na-svg-preview" id="na-svg-preview"></div>
+              <div style="margin-top:10px">
+                <button class="btn btn-q btn-sm" id="btn-regen-svg" onclick="regenerateSvg()">&#8635; Regenerate Illustration</button>
+              </div>
+            </div>
+
+            <!-- Refine with Claude (revealed after generation) -->
+            <div class="na-sec hide" id="na-feedback-sec">
+              <div class="na-sh">Refine with Claude</div>
+              <div class="na-hint" style="margin-bottom:8px">Describe what to improve, then regenerate. All form fields above stay editable regardless.</div>
+              <div class="na-row">
+                <label for="na-feedback">Feedback for Claude</label>
+                <textarea class="na-ta" id="na-feedback" rows="2" placeholder="e.g. Make it more technical, add a section on volunteer management, focus more on SNAP policy&hellip;"></textarea>
+              </div>
+              <button class="btn-ai" style="font-size:12px;padding:6px 14px" onclick="generateWithClaude(true)">&#8635; Regenerate Article</button>
+            </div>
+
+            <!-- Save / Download Actions -->
             <div class="na-actions">
-              <button class="btn btn-g" onclick="generateArticle()">
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
-                Generate &amp; Download
+              <button class="btn btn-g hide" id="btn-save" onclick="saveArticleToBlog()">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4.5L10.5 1H2zm8.854 3.854L9 7.707V10.5a.5.5 0 0 1-1 0V7.707L6.146 9.854a.5.5 0 0 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.292.708z"/></svg>
+                Save to blog/
               </button>
-              <span style="font-size:11px;color:var(--tf)">Downloads {slug}.html — place in project root, then run sync-blog to add it to the blog page</span>
+              <button class="btn btn-q" id="btn-preview" onclick="previewArticle()">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8a13 13 0 0 1-1.66 2.043C11.879 11.332 10.12 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg>
+                Preview Article
+              </button>
+              <button class="btn btn-q" onclick="downloadArticle()">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+                Download HTML
+              </button>
+              <button class="btn btn-q hide" id="btn-dl-svg" onclick="downloadSvg()">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+                Download SVG
+              </button>
             </div>
 
           </div>
         </div>
+      </div>
+
+      <!-- Fullscreen article preview modal (outside tab panel) -->
+      <div class="na-preview-modal hide" id="na-preview-modal" role="dialog" aria-modal="true" aria-label="Article preview">
+        <div class="na-preview-bar">
+          <span>Article Preview &mdash; read-only rendering</span>
+          <button class="btn btn-q btn-sm" onclick="closePreview()">&#10005; Close Preview</button>
+        </div>
+        <iframe class="na-preview-frame" id="na-preview-frame" title="Article preview" sandbox="allow-same-origin"></iframe>
       </div>
 
       <div class="footer">
@@ -689,7 +776,9 @@ function _doInit() {
     try { updatePrev(); } catch(e) { console.error('updatePrev:', e); }
     try { document.getElementById('blocklist-ta').value = blocklist.join('\n'); } catch {}
     try { setNaCatByValue('Industry Insights'); } catch {}
+    try { document.getElementById('na-date').value = new Date().toISOString().slice(0,10); } catch {}
   } catch(e) { console.error('_doInit:', e); }
+  detectServerMode();
 }
 // Run immediately if DOM elements are ready, otherwise wait for DOMContentLoaded
 if (document.readyState !== 'loading') {
@@ -1810,53 +1899,298 @@ function onTitleInput() {
   document.getElementById('na-slug').value=slugify(t);
 }
 
-function checkScraperResults() {
-  const has=allResults.length>0;
-  document.getElementById('na-from-row').classList.toggle('hide',!has);
-  if (has) {
-    const s=document.getElementById('na-scraper-sel');
-    s.innerHTML='<option value="">— pick a result to pre-fill —</option>'+
-      allResults.map((a,i)=>`<option value="${i}">${esc(a.title.slice(0,90))}</option>`).join('');
+/* ── Server detection ── */
+let serverMode = false;
+let generatedSvgCode = '';
+let generatedContent = null;
+let generationAbortCtrl = null;
+let currentSvgPrompt = '';
+
+async function detectServerMode() {
+  try {
+    const r = await fetch('/api/server-status', { signal: AbortSignal.timeout(1200) });
+    if (r.ok) { const d = await r.json(); serverMode = !!(d.ok && d.hasApiKey); }
+  } catch { serverMode = false; }
+  const notice = document.getElementById('na-ai-notice');
+  const btnSave = document.getElementById('btn-save');
+  if (!serverMode) {
+    notice.classList.remove('hide');
+    btnSave.classList.add('hide');
+  } else {
+    notice.classList.add('hide');
+    btnSave.classList.remove('hide');
   }
 }
 
-function loadFromScraper() {
-  const idx=parseInt(document.getElementById('na-scraper-sel').value,10);
-  if (isNaN(idx)||!allResults[idx]) return;
-  const a=allResults[idx];
-  document.getElementById('na-title').value=a.title;
-  document.getElementById('na-slug').value=slugify(a.title);
-  document.getElementById('na-desc').value=a.summary||'';
-  setNaCatByValue(a.cat);
+/* ── Source cards ── */
+function checkScraperResults() {
+  const grid = document.getElementById('na-src-grid');
+  if (!allResults.length) {
+    grid.innerHTML = '<div class="na-no-results">Run a scrape first &mdash; results will appear here as selectable sources.</div>';
+    return;
+  }
+  grid.innerHTML = allResults.map((a, i) => `
+    <label class="na-src-card" id="na-src-${i}">
+      <input type="checkbox" class="na-src-chk" value="${i}" onchange="onSourceToggle()" aria-label="${esc(a.title.slice(0,90))}">
+      <div class="na-src-body">
+        <div class="na-src-title">${esc(a.title.slice(0,90))}</div>
+        <div class="na-src-meta">${esc(a.src)} &middot; ${esc(a.pubDate)} &middot; ${'&#9733;'.repeat(Math.min(5,a.score))}${'&#9734;'.repeat(Math.max(0,5-a.score))}</div>
+      </div>
+    </label>`).join('');
+}
+
+function onSourceToggle() {
+  const checked = [...document.querySelectorAll('.na-src-chk:checked')];
+  const count = checked.length;
+  document.getElementById('na-sel-count').textContent = `${count} of 5 selected`;
+  document.querySelectorAll('.na-src-chk').forEach(chk => {
+    const card = chk.closest('.na-src-card');
+    const atMax = count >= 5 && !chk.checked;
+    card.classList.toggle('disabled', atMax);
+    chk.disabled = atMax;
+  });
+  const btn = document.getElementById('btn-gen-claude');
+  btn.disabled = count === 0 || !serverMode;
+}
+
+function getSelectedSources() {
+  return [...document.querySelectorAll('.na-src-chk:checked')]
+    .map(chk => allResults[parseInt(chk.value)]).filter(Boolean);
+}
+
+/* ── Claude generation ── */
+async function generateWithClaude(isRefinement = false) {
+  const sources = getSelectedSources();
+  if (!sources.length) { alert('Select at least one source.'); return; }
+
+  const feedback = isRefinement ? (document.getElementById('na-feedback').value.trim()) : '';
+  const btn = document.getElementById('btn-gen-claude');
+  const cancelBtn = document.getElementById('btn-gen-cancel');
+  const status = document.getElementById('na-gen-status');
+  const fill = document.getElementById('na-gen-fill');
+
+  btn.disabled = true;
+  cancelBtn.classList.remove('hide');
+  document.getElementById('na-gen-progress').classList.remove('hide');
+  status.textContent = 'Drafting article\u2026';
+  fill.style.width = '30%';
+
+  generationAbortCtrl = new AbortController();
+
+  const existingArticles = [
+    'ai-reshaping-food-banks','salesforce-food-bank-operations','donor-relationships-nonprofit-cloud',
+    'data-driven-food-banks','food-bank-workflow-automation','securing-technology-grants',
+    'ai-inventory-management','agentforce-nonprofits-guide','ai-ethics-nonprofit-governance',
+    'centralized-food-hub-case-study','client-choice-food-pantry-technology','community-food-center-model',
+    'data-privacy-food-bank-clients','digital-transformation-small-food-banks','donor-prospecting-salesforce',
+    'food-bank-client-services-technology','food-bank-crisis-response-planning','food-bank-kitchen-operations',
+    'food-bank-strategic-partnerships','food-bank-technology-stack','food-banks-healthcare-social-determinants',
+    'food-is-medicine-food-banks','future-food-banking-trends','grant-management-food-banks',
+    'impact-measurement-food-banks','measuring-hunger-relief-outcomes','nonprofit-cloud-vs-sales-cloud',
+    'nutrition-first-food-bank-strategy','rapid-technology-implementation','salesforce-flow-builder-nonprofits',
+    'salesforce-reports-dashboards-food-banks','salesforce-security-nonprofits','salesforce-spring-2026-nonprofits',
+    'snap-policy-changes-food-banks','tax-policy-nonprofit-fundraising','volunteer-management-technology',
+    'volunteer-recruitment-retention-digital'
+  ];
+
+  try {
+    fill.style.width = '60%';
+    status.textContent = 'Generating illustration\u2026';
+
+    const resp = await fetch('/api/generate-article', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sources: sources.map(s => ({ title: s.title, url: s.url, summary: s.summary||'', src: s.src, cat: s.cat })),
+        existingArticles,
+        feedback
+      }),
+      signal: generationAbortCtrl.signal
+    });
+
+    fill.style.width = '90%';
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || 'Generation failed');
+
+    fill.style.width = '100%';
+    status.textContent = '\u2713 Done';
+
+    populateArticleForm(data);
+    generatedSvgCode = data.svgCode || '';
+    generatedContent = data.content || null;
+    currentSvgPrompt = data.svgPrompt || '';
+
+    if (data.svgCode) {
+      document.getElementById('na-svg-preview').innerHTML = data.svgCode;
+      document.getElementById('na-svg-sec').classList.remove('hide');
+      document.getElementById('btn-dl-svg').classList.remove('hide');
+    }
+    document.getElementById('na-feedback-sec').classList.remove('hide');
+    addLog('done', `\u2713 Article draft ready: "${esc(data.title)}" \u2014 review, edit, then save or download`);
+
+  } catch (err) {
+    status.textContent = err.name === 'AbortError' ? 'Cancelled' : `Error: ${err.message}`;
+    if (err.name !== 'AbortError') addLog('err', `Article generation failed: ${esc(err.message)}`);
+  } finally {
+    btn.disabled = getSelectedSources().length === 0 || !serverMode;
+    cancelBtn.classList.add('hide');
+    setTimeout(() => {
+      document.getElementById('na-gen-progress').classList.add('hide');
+      fill.style.width = '0';
+      if (status.textContent === '\u2713 Done') status.textContent = '';
+    }, 3000);
+    generationAbortCtrl = null;
+  }
+}
+
+function cancelGeneration() {
+  if (generationAbortCtrl) generationAbortCtrl.abort();
+}
+
+function populateArticleForm(data) {
+  if (data.title) document.getElementById('na-title').value = data.title;
+  if (data.slug) document.getElementById('na-slug').value = data.slug;
+  else if (data.title) document.getElementById('na-slug').value = slugify(data.title);
+  if (data.description) document.getElementById('na-desc').value = data.description;
+  if (data.readTime) document.getElementById('na-readtime').value = data.readTime;
+  if (data.category) setNaCatByValue(data.category);
+  if (!document.getElementById('na-date').value) {
+    document.getElementById('na-date').value = new Date().toISOString().slice(0, 10);
+  }
+  const rels = data.relatedArticles || [];
+  ['1','2','3'].forEach((n, i) => {
+    const r = rels[i] || {};
+    document.getElementById(`na-rel${n}t`).value = r.title || '';
+    document.getElementById(`na-rel${n}s`).value = r.slug || '';
+  });
+}
+
+/* ── SVG regeneration ── */
+async function regenerateSvg() {
+  if (!currentSvgPrompt) return;
+  const btn = document.getElementById('btn-regen-svg');
+  btn.disabled = true; btn.textContent = '\u8635 Generating\u2026';
+  try {
+    const resp = await fetch('/api/regenerate-svg', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ svgPrompt: currentSvgPrompt })
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error);
+    generatedSvgCode = data.svgCode;
+    document.getElementById('na-svg-preview').innerHTML = data.svgCode;
+  } catch (err) {
+    addLog('err', `SVG regeneration failed: ${esc(err.message)}`);
+  } finally {
+    btn.disabled = false; btn.textContent = '\u8635 Regenerate Illustration';
+  }
+}
+
+/* ── Collect form data ── */
+function collectFormData() {
+  const title = document.getElementById('na-title').value.trim();
+  const slug = document.getElementById('na-slug').value.trim();
+  const cat = document.getElementById('na-cat').value;
+  const desc = document.getElementById('na-desc').value.trim();
+  const dateIso = document.getElementById('na-date').value || new Date().toISOString().slice(0, 10);
+  const readTime = document.getElementById('na-readtime').value.trim() || '5 min read';
+  const rels = ['1','2','3'].map(n => {
+    const s = document.getElementById(`na-rel${n}s`).value.trim();
+    const t = document.getElementById(`na-rel${n}t`).value.trim();
+    return s ? { s, t: t||s, c: cat } : null;
+  }).filter(Boolean);
+  return {
+    title, slug, cat,
+    catClass: CAT_CLASS_MAP[cat] || 'insights',
+    desc, dateIso,
+    dateDisplay: naFmtDate(dateIso),
+    readTime, rels,
+    content: generatedContent,
+    svgPath: (generatedSvgCode && slug) ? `/src/assets/images/illustrations/${slug}.svg` : null,
+    sources: getSelectedSources()
+  };
+}
+
+/* ── Preview in iframe ── */
+function previewArticle() {
+  const data = collectFormData();
+  if (!data.title || !data.slug) { alert('Title and slug are required for preview.'); return; }
+  const html = buildArticleHTML(data);
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const modal = document.getElementById('na-preview-modal');
+  const frame = document.getElementById('na-preview-frame');
+  frame.src = url;
+  modal.classList.remove('hide');
+  modal._blobUrl = url;
+}
+
+function closePreview() {
+  const modal = document.getElementById('na-preview-modal');
+  modal.classList.add('hide');
+  if (modal._blobUrl) { URL.revokeObjectURL(modal._blobUrl); modal._blobUrl = null; }
+  document.getElementById('na-preview-frame').src = '';
+}
+
+/* ── Save to blog/ ── */
+async function saveArticleToBlog() {
+  const data = collectFormData();
+  if (!data.title || !data.slug) { alert('Title and slug are required.'); return; }
+  try {
+    const chk = await fetch('/api/check-slug', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ slug: data.slug })
+    });
+    const { taken } = await chk.json();
+    if (taken && !confirm(`blog/${data.slug}.html already exists. Overwrite?`)) return;
+  } catch { /* proceed if check fails */ }
+
+  const html = buildArticleHTML(data);
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true; btn.textContent = 'Saving\u2026';
+  try {
+    const resp = await fetch('/api/save-article', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ slug: data.slug, html, svgCode: generatedSvgCode, autoRegister: true })
+    });
+    const result = await resp.json();
+    if (!resp.ok) throw new Error(result.error);
+    btn.textContent = '\u2713 Saved!';
+    const regNote = result.registered?.length ? ` Auto-registered in: ${result.registered.join(', ')}.` : '';
+    addLog('done', `\u2713 Saved blog/${esc(data.slug)}.html${result.svgPath ? ' + SVG illustration' : ''}.${regNote} Run npm run build to publish.`);
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'Save to blog/';
+    addLog('err', `Save failed: ${esc(err.message)}`);
+  }
+}
+
+/* ── Download HTML ── */
+function downloadArticle() {
+  const data = collectFormData();
+  if (!data.title || !data.slug) { alert('Title and slug are required.'); return; }
+  const html = buildArticleHTML(data);
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+  a.download = data.slug + '.html'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 100);
+  addLog('done', `\u2713 Downloaded ${esc(data.slug)}.html \u2014 place in blog/ folder, then run: npm run build`);
+}
+
+/* ── Download SVG ── */
+function downloadSvg() {
+  if (!generatedSvgCode) { alert('No illustration generated yet.'); return; }
+  const slug = document.getElementById('na-slug').value.trim() || 'illustration';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([generatedSvgCode], { type: 'image/svg+xml' }));
+  a.download = slug + '.svg'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 100);
 }
 
 function naFmtDate(iso) {
   if (!iso) return '';
   const d=new Date(iso+'T00:00:00');
   return MONTHS[d.getMonth()]+' '+d.getFullYear();
-}
-
-function generateArticle() {
-  const title=document.getElementById('na-title').value.trim();
-  const slug=document.getElementById('na-slug').value.trim();
-  const cat=document.getElementById('na-cat').value;
-  const desc=document.getElementById('na-desc').value.trim();
-  const dateIso=document.getElementById('na-date').value;
-  const readTime=document.getElementById('na-readtime').value.trim()||'5 min read';
-  if (!title||!slug){alert('Title and slug are required.');return;}
-  const r1s=document.getElementById('na-rel1s').value.trim(), r1t=document.getElementById('na-rel1t').value.trim();
-  const r2s=document.getElementById('na-rel2s').value.trim(), r2t=document.getElementById('na-rel2t').value.trim();
-  const r3s=document.getElementById('na-rel3s').value.trim(), r3t=document.getElementById('na-rel3t').value.trim();
-  const rels=[
-    r1s?{s:r1s,t:r1t||r1s,c:cat}:null,
-    r2s?{s:r2s,t:r2t||r2s,c:cat}:null,
-    r3s?{s:r3s,t:r3t||r3s,c:cat}:null
-  ].filter(Boolean);
-  const html=buildArticleHTML({title,slug,cat,catClass:CAT_CLASS_MAP[cat]||'insights',desc,dateIso,dateDisplay:naFmtDate(dateIso),readTime,rels});
-  const blob=new Blob([html],{type:'text/html'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=slug+'.html'; a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 100);
-  addLog('done',`✓ Generated ${esc(slug)}.html — place in the blog/ folder, then run: node scripts/sync-blog.js`);
 }
 
 function buildArticleHTML(p) {
@@ -1870,6 +2204,51 @@ function buildArticleHTML(p) {
                     <span class="article-read-next__card-title">${h(r.t)}</span>
                     <span class="article-read-next__card-meta">${h(p.readTime)}</span>
                 </a>`).join('\n');
+
+  // Build article body — real content if p.content provided, else placeholder
+  let articleBody;
+  if (p.content && p.content.lead) {
+    const c = p.content;
+    const sections = (c.sections||[]).map((sec, i) => {
+      const paragraphs = (sec.body||'').split(/\n\n+/).filter(Boolean)
+        .map(para => `                <p>${h(para)}</p>`).join('\n');
+      const pullquote = sec.pullquote
+        ? `\n                <aside class="article-pullquote"><blockquote><p>${h(sec.pullquote)}</p></blockquote></aside>` : '';
+      // Insert SVG after first section only
+      const svgBlock = (i === 0 && p.svgPath)
+        ? `\n                <figure class="article-illustration article-illustration--breakout">\n                    <img src="${hq(p.svgPath)}" alt="${hq(p.title)} illustration" width="800" height="400" loading="lazy">\n                </figure>` : '';
+      return `                <h2>${h(sec.heading)}</h2>\n${paragraphs}${pullquote}${svgBlock}`;
+    }).join('\n\n');
+
+    // Sources footnote (S2)
+    const sourcesFootnote = (p.sources && p.sources.length)
+      ? `\n\n                <h2>Sources</h2>\n                <ul class="article-sources">\n${p.sources.map(s=>`                    <li><a href="${hq(s.url)}" target="_blank" rel="noopener noreferrer">${h(s.title)}</a> &mdash; ${h(s.src)}</li>`).join('\n')}\n                </ul>` : '';
+
+    articleBody = `                <p class="article-lead">${h(c.lead)}</p>\n\n${sections}\n\n                <p>${h(c.conclusion)}</p>${sourcesFootnote}`;
+  } else {
+    // Manual/placeholder mode
+    articleBody = `                <p class="article-lead">
+                    <!-- Write your intro paragraph here -->
+                </p>
+
+                <h2>Section One</h2>
+
+                <p>
+                    <!-- Add content here -->
+                </p>
+
+                <h2>Section Two</h2>
+
+                <p>
+                    <!-- Add content here -->
+                </p>
+
+                <h2>Section Three</h2>
+
+                <p>
+                    <!-- Add content here -->
+                </p>`;
+  }
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2027,27 +2406,7 @@ function buildArticleHTML(p) {
         <!-- Article Body -->
         <article class="article-body-section">
             <div class="article-prose">
-                <p class="article-lead">
-                    <!-- Write your intro paragraph here -->
-                </p>
-
-                <h2>Section One</h2>
-
-                <p>
-                    <!-- Add content here -->
-                </p>
-
-                <h2>Section Two</h2>
-
-                <p>
-                    <!-- Add content here -->
-                </p>
-
-                <h2>Section Three</h2>
-
-                <p>
-                    <!-- Add content here -->
-                </p>
+${articleBody}
             </div>
         </article>
 
