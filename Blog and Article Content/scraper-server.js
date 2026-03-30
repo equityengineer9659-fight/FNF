@@ -33,9 +33,12 @@ const BUILD_COMPONENTS_PATH = path.join(PROJECT_ROOT, 'build-components.js');
 const SITEMAP_SCRIPT_PATH = path.join(PROJECT_ROOT, 'scripts', 'generate-sitemap.js');
 const PA11YCI_PATH = path.join(PROJECT_ROOT, '.pa11yci.json');
 
-const anthropic = process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY !== 'your-api-key-here'
-  ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-  : null;
+let anthropic = null;
+try {
+  if (process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY !== 'your-api-key-here') {
+    anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  }
+} catch (e) { console.error('Anthropic init failed:', e.message); }
 
 const app = express();
 app.use(express.json({ limit: '2mb' }));
@@ -224,6 +227,7 @@ app.post('/api/check-slug', (req, res) => {
 app.post('/api/save-article', (req, res) => {
   const { slug, html, svgCode, autoRegister = true } = req.body;
   if (!slug || !html) return res.status(400).json({ error: 'slug and html are required.' });
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return res.status(400).json({ error: 'Invalid slug format.' });
 
   const htmlPath = path.join(BLOG_DIR, `${slug}.html`);
   const svgPath = path.join(ILLUSTRATIONS_DIR, `${slug}.svg`);
@@ -374,6 +378,9 @@ app.post('/api/delete-articles', (req, res) => {
   if (!Array.isArray(slugs) || !slugs.length) {
     return res.status(400).json({ error: 'slugs array is required.' });
   }
+  if (!slugs.every(s => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s))) {
+    return res.status(400).json({ error: 'Invalid slug format.' });
+  }
 
   const deletedSet = new Set(slugs);
   const warnings = [];
@@ -444,8 +451,9 @@ app.post('/api/delete-articles', (req, res) => {
       let src = readFileSync(BUILD_COMPONENTS_PATH, 'utf-8');
       let changed = false;
       for (const slug of slugs) {
-        const re = new RegExp(`\\s*'${slug}',?\\n?`, 'g');
-        if (re.test(src)) { src = src.replace(re, '\n'); changed = true; }
+        const before = src;
+        src = src.replace(new RegExp(`\\s*'${slug}',?\\n?`, 'g'), '\n');
+        if (src !== before) changed = true;
       }
       if (changed) {
         // Clean up any blank lines that result from removal
@@ -460,8 +468,9 @@ app.post('/api/delete-articles', (req, res) => {
       let src = readFileSync(SITEMAP_SCRIPT_PATH, 'utf-8');
       let changed = false;
       for (const slug of slugs) {
-        const re = new RegExp(`\\s*\\{\\s*path:\\s*'blog/${slug}\\.html'[^}]*\\},?\\n?`);
-        if (re.test(src)) { src = src.replace(re, '\n'); changed = true; }
+        const before = src;
+        src = src.replace(new RegExp(`\\s*\\{\\s*path:\\s*'blog/${slug}\\.html'[^}]*\\},?\\n?`), '\n');
+        if (src !== before) changed = true;
       }
       if (changed) {
         src = src.replace(/\n{3,}/g, '\n\n');

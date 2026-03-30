@@ -828,7 +828,7 @@ async function connectExcel() {
     } else {
       document.getElementById('file-inp').click();
     }
-  } catch(e) { if (e.name !== 'AbortError') addLog('err', 'Could not open file: ' + e.message); }
+  } catch(e) { if (e.name !== 'AbortError') addLog('err', 'Could not open file: ' + esc(e.message)); }
 }
 
 async function onFileInput(e) {
@@ -855,7 +855,7 @@ async function readXL(file, name) {
     pendingWB = wb;
     setXLConnected(name, xlRowCount);
     addLog('info', `Connected: ${esc(name)} — ${xlRowCount} existing rows loaded for duplicate detection`);
-  } catch(e) { addLog('err', 'Could not read Excel file: ' + e.message); }
+  } catch(e) { addLog('err', 'Could not read Excel file: ' + esc(e.message)); }
 }
 
 function setXLConnected(name, count) {
@@ -908,7 +908,7 @@ async function saveToExcel(articles) {
       addLog('done', `✓ Saved ${articles.length} new row${articles.length>1?'s':''} back to Excel`);
       document.getElementById('save-banner').classList.remove('show');
     } catch(e) {
-      addLog('err', `Save failed (is the file open in Excel?): ${e.message}`);
+      addLog('err', `Save failed (is the file open in Excel?): ${esc(e.message)}`);
       offerDownload(blob);
     }
   } else {
@@ -2144,6 +2144,10 @@ function closePreview() {
 async function saveArticleToBlog() {
   const data = collectFormData();
   if (!data.title || !data.slug) { alert('Title and slug are required.'); return; }
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(data.slug)) {
+    addLog('warn', 'Slug must contain only lowercase letters, numbers, and hyphens.');
+    return;
+  }
   try {
     const chk = await fetch('/api/check-slug', {
       method: 'POST', headers: {'Content-Type':'application/json'},
@@ -2470,6 +2474,7 @@ async function cmLoadArticles() {
     badge.style.display = cmArticles.length ? 'inline-block' : 'none';
     document.getElementById('cm-status').textContent = '';
   } catch (e) {
+    cmLoaded = false;
     document.getElementById('cm-status').textContent = 'Error: ' + e.message;
   }
 }
