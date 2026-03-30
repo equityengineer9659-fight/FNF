@@ -1,7 +1,7 @@
 # Food-N-Force Documentation Navigation
 
-**Last Updated**: 2026-03-26
-**Current Phase**: Production maintenance and optimization
+**Last Updated**: 2026-03-30
+**Current Phase**: Production + Blog Content Pipeline active
 
 ## Quick Navigation
 
@@ -10,6 +10,7 @@
 - [RACI Matrix](project/raci.md) - Agent coordination and responsibilities
 - [Technical Architecture](../CLAUDE.md) - Complete technical architecture and build system
 - [ADRs](technical/adr/) - Architecture Decision Records
+- [Blog Content Pipeline](current/blog-content-pipeline.md) - Scraper tool, editorial workflow, search presets
 
 ### Emergency Procedures
 - [Emergency Response](current/emergency/) - 15-minute technical architect response
@@ -45,6 +46,7 @@ docs/
 │   ├── workspace-setup-protocols.md
 │   └── multi-page-testing-protocol.md
 ├── current/               # Enhanced active documentation
+│   ├── blog-content-pipeline.md  # Scraper tool + editorial workflow
 │   ├── emergency/         # Emergency response procedures
 │   ├── design-system/     # SLDS governance
 │   ├── governance/        # Agent coordination
@@ -57,9 +59,9 @@ docs/
 
 ## Current Performance Metrics
 
-- **CSS Bundle**: ~92KB (minified, all modules and effects)
-- **JavaScript Bundle**: ~46KB total (41KB main + 5KB effects, tree-shaken & minified)
-- **Gzipped**: ~15KB CSS, ~14KB JS
+- **CSS Bundle**: ~114KB (minified, all modules including newsletter modal)
+- **JavaScript Bundle**: ~51KB total (46KB main + 5KB effects, tree-shaken & minified via Terser)
+- **Gzipped**: ~18KB CSS, ~15KB JS combined
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: 89% baseline maintained
 
@@ -73,8 +75,9 @@ Legacy workflows have been archived to `_archive/github-workflows/`.
 
 ## Agent Coordination
 
-### 16 Specialized Agents
-- Agent definitions in `.claude/agents/`
+### Agents
+- **7 built-in Claude Code subagents** (general-purpose, Explore, Plan, etc.)
+- **10 project-specific agents** in `.claude/agents/` (slds-compliance-checker, accessibility-auditor, cross-page-consistency, performance-budget-monitor, php-security-reviewer, uiux-reviewer, seo-auditor, content-reviewer, technical-architect, business-analyst)
 - [RACI Matrix](project/raci.md) - Coordination
 - [Agent Coordination Hub](current/governance/agent-coordination/)
 

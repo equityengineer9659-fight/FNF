@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regional Food Hub: Lessons from Successful Networks - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn how regional food hubs aggregate and distribute food across partner networks — with key lessons from multi-site implementations on governance and technology.">
+    <meta name="keywords" content="food bank technology, nonprofit Salesforce, food bank software, food relief">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/blog/centralized-food-hub-case-study.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Building a Regional Food Hub: Lessons from Successful Networks - Food-N-Force">
+    <meta property="og:description" content="Learn how regional food hubs aggregate and distribute food across partner networks — with key lessons from multi-site implementations on governance and technology.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://foodnforce.com/blog/centralized-food-hub-case-study.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2025-09-01">
+    <meta property="article:section" content="Case Studies">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Building a Regional Food Hub: Lessons from Successful Networks - Food-N-Force">
+    <meta name="twitter:description" content="Learn how regional food hubs aggregate and distribute food across partner networks — with key lessons from multi-site implementations on governance and technology.">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Building a Regional Food Hub: Lessons from Successful Networks",
+      "description": "Learn how regional food hubs aggregate and distribute food across partner networks — with key lessons from multi-site implementations on governance and technology.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "datePublished": "2025-09-01",
+      "url": "https://foodnforce.com/blog/centralized-food-hub-case-study.html",
+      "image": "https://foodnforce.com/og-image.png",
+      "articleSection": "Case Studies",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="/blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--case-studies">Case Studies</span>
+                <h1 id="article-title" class="article-hero__title">Building a Regional Food Hub: Lessons from Successful Networks</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2025-09-01">September 2025</time>
+                    <span>5 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+    A single food bank serving thousands of households is a logistical achievement. A regional food hub coordinating dozens of partner pantries across urban neighborhoods, rural counties, and mobile distribution routes is a different kind of organization entirely — one that multiplies impact through infrastructure rather than direct service alone. The hub model is growing, and the lessons from organizations that have built it successfully are worth studying.
+</p>
+
+<p>
+    Regional food hubs are centralized facilities that aggregate food from multiple sources — retail rescue, wholesale purchasing, USDA commodity programs, and donor contributions — and then process and distribute it across a network of smaller partner organizations. The hub does not serve clients directly. It serves the organizations that serve clients. This structural distinction shapes everything: the technology required, the governance model, the funding narrative, and the capabilities needed from staff.
+</p>
+
+<h2>The Operational Model</h2>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="src/assets/images/illustrations/centralized-food-hub-case-study.svg" alt="Hub-and-spoke network diagram showing a central Regional Hub connected to Urban, Rural, Mobile, and Partner Pantry nodes with data flow indicators" width="800" height="400" loading="lazy">
+</figure>
+
+<p>
+    At its core, the hub model follows three operational phases: intake and receiving, processing and sorting, and regional distribution. The intake function requires cold storage capacity, receiving dock infrastructure, and systems to manage the irregular and high-volume flows of donated food. Processing transforms raw donations into distribution-ready inventory — sorting by category, checking quality, repackaging, and in some cases preparing prepared foods through a hub kitchen.
+</p>
+
+<p>
+    Distribution is where the hub's scale advantage becomes visible. By aggregating inventory centrally, the hub can run efficient routes to partner sites rather than having each pantry manage its own sourcing relationships. A rural pantry that could not independently justify a relationship with a regional grocery chain gains access through the hub's consolidated ordering. An urban pantry without cold storage capacity receives temperature-controlled deliveries on a schedule it could not maintain alone.
+</p>
+
+<h2>Technology Requirements at Scale</h2>
+
+<p>
+    The technology stack required to operate a regional hub is meaningfully more complex than that of a single-site pantry. The hub needs multi-site inventory management that tracks stock levels at the central facility, in-transit to partner sites, and at each partner location. Without this visibility, hub staff cannot make informed decisions about which partner sites need priority distribution or when to hold inventory for incoming high-demand periods.
+</p>
+
+<p>
+    Transportation management is another layer that single-site organizations never need. Routing software, vehicle capacity planning, driver communication, and proof-of-delivery tracking all become operational requirements. Some hubs manage their own fleets; others contract with third-party logistics providers. Either way, the data system needs to integrate transportation events with inventory records.
+</p>
+
+<p>
+    Partner organization portals are a third technology requirement that catches hubs off guard. When a partner pantry needs to communicate its upcoming needs, report what it distributed, or flag quality issues with received product, those communications need to flow through a structured channel rather than email and phone. Salesforce Experience Cloud, or a lightweight partner portal built on a similar platform, creates the structured data exchange that makes a hub network manageable at scale.
+</p>
+
+<aside class="article-pullquote">
+    <blockquote>
+        <p>The hubs that struggle most are not the ones with the most partners — they are the ones that tried to scale their partner network before building the data infrastructure to manage it.</p>
+    </blockquote>
+</aside>
+
+<h2>Governance of a Shared Resource</h2>
+
+<p>
+    When multiple partner organizations depend on a shared hub, governance becomes a critical success factor that many food networks underestimate. Partners will disagree about allocation priorities, distribution schedules, product quality standards, and the hub's decision-making process. Without a clear governance structure, these disagreements create conflict that erodes the trust the partnership depends on.
+</p>
+
+<p>
+    Successful hub networks establish explicit agreements on key governance questions before they become sources of conflict. Who makes allocation decisions when inventory is scarce? What quality standards apply to all distributed product? What data does the hub collect from partners, and how is it used? Who has voting rights in decisions about hub operations? These questions may feel premature in the early stages of network development — but organizations that defer them pay a high cost when the first real conflict arises.
+</p>
+
+<h2>Managing Differing Partner Capabilities</h2>
+
+<p>
+    A regional food hub network almost always includes partners with dramatically different operational sophistication. Some partner pantries have professional staff, refrigerated storage, and digital intake systems. Others are volunteer-run operations in church basements with no technology infrastructure at all. A hub that designs its partner communication and reporting systems for the most sophisticated partners will leave the least capable ones behind. A hub that designs for the least capable will frustrate the most capable.
+</p>
+
+<p>
+    The most effective hubs create tiered partner onboarding that meets partners where they are. High-capacity partners receive portal access, API-level data sharing, and shared inventory visibility. Lower-capacity partners receive printed delivery schedules, simple paper-based reporting with hub staff data entry, and personal support. The hub's technology platform must accommodate this diversity without requiring every partner to reach the same technical standard before participating.
+</p>
+
+<h2>Funding the Infrastructure</h2>
+
+<p>
+    Hub infrastructure is expensive to build and expensive to maintain. Cold storage, dock equipment, vehicles, and warehouse staffing represent capital and operating costs that exceed what most individual food banks can absorb. The funding narrative for hub development requires a regional or collective framing — demonstrating that the investment benefits an entire network of organizations and the households they collectively serve, not just the hub operator.
+</p>
+
+<p>
+    The hubs with the strongest funding cases are those that can quantify the value they create for the network. How many pounds of food did partner pantries receive that they could not have sourced independently? What is the cost savings per pound of distribution compared to each pantry self-sourcing? How many additional households gained access to food resources through the network effect of hub membership? These metrics, tracked consistently and reported to funders, build the case for sustained capital investment in regional infrastructure.
+</p>
+
+<p>
+    The regional food hub model works. The organizations that build it successfully are those that invest in governance before conflict arises, build technology before scale demands it, and design for their least capable partners rather than their most capable ones. These are difficult disciplines to maintain in an environment of urgent need — but they are what separates a thriving regional network from a well-intentioned hub that dissolved under its own complexity.
+</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                                <a href="food-bank-strategic-partnerships.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">How Food Banks Build Strategic Partnerships That Last</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+                <a href="community-food-center-model.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">The Community Food Center Model: A New Approach to Hunger Relief</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="food-bank-kitchen-operations.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Implementation</span>
+                    <span class="article-read-next__card-title">Scaling Up: Modern Food Bank Kitchen Operations</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Ready to Scale Your Network?</h2>
+                <p class="article-cta__text">Food-N-Force helps regional food networks build the technology infrastructure to coordinate operations across multiple sites and partners.</p>
+                <div class="article-cta__actions">
+                    <a href="/contact.html" class="resource-action">Get in Touch</a>
+                    <a href="/blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+</body>
+</html>

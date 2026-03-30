@@ -35,7 +35,7 @@ npm run test                     # All tests (accessibility, performance, browse
 npm run test:accessibility       # pa11y accessibility tests
 npm run test:performance         # Lighthouse CI audits
 npm run test:browser             # Playwright browser tests
-npm run test:multi-page          # Multi-page validation across all 16 pages
+npm run test:multi-page          # Multi-page validation across all pages
 npm run test:critical-navigation # Mobile navigation smoke tests
 npm run test:performance-budget  # Performance budget monitoring
 
@@ -63,6 +63,12 @@ npm run governance:sync         # Sync governance documentation
 npm run governance:validate     # Validate governance compliance
 ```
 
+### Blog Content Pipeline
+```bash
+npm run admin                   # Start Express server for scraper (http://localhost:3001)
+# OR — open Blog and Article Content/scraper-admin.html directly in VS Code Live Server
+```
+
 ## Code Architecture
 
 ### File Structure
@@ -72,12 +78,25 @@ npm run governance:validate     # Validate governance compliance
 │   ├── css/               # CSS files with modular architecture (12 files)
 │   ├── js/                # JavaScript modules (main.js, effects/, config/, monitoring/)
 │   └── assets/            # Images, fonts, and other assets
-├── *.html                  # 17 pages (see Page Inventory below)
+├── *.html                  # 10 root pages (core + hub pages — see Page Inventory)
+├── blog/                   # 37 article HTML pages (all at blog/slug.html)
+├── Blog and Article Content/  # Editorial research tools — NOT part of the public website
+│   ├── scraper-admin.html     # Standalone scraper UI (open directly via VS Code Live Server)
+│   ├── scraper-server.js      # Optional Express server version (npm run admin)
+│   └── Articles.xlsx          # Editorial research queue — scraped article candidates
 ├── config/                 # Configuration files (token_map, deployment, security)
 ├── docs/                   # Active documentation (project/, technical/, current/)
 ├── tools/                  # Development utilities (testing, deployment, governance)
-├── scripts/               # Build scripts (sitemap, PWA icons, restore points, CSS analysis)
-├── public/                # Static assets (favicon, PWA icons, PHP API endpoints)
+├── scripts/               # Build scripts + scraper engine
+│   ├── scrape-sources.js      # Core RSS scraper module (server version)
+│   ├── sync-blog.js           # Regenerates blog.html card grid from blog/ article metadata
+│   ├── rss-feeds.json         # Configurable RSS feed source list
+│   ├── generate-sitemap.js    # Sitemap generator
+│   ├── generate-pwa-icons.js  # PWA icon generator
+│   ├── create-restore-point.cjs / apply-restore-point.cjs
+│   └── detect-css-duplicates.cjs
+├── public/                # Static assets (favicon, PWA icons, manifest, PHP API endpoints)
+│   ├── manifest.json          # PWA web app manifest
 │   └── api/               # PHP backend (contact.php, newsletter.php, csrf-token.php)
 ├── _archive/              # Archived outdated documentation
 ├── _audit/                # Historical backups and restore points
@@ -85,17 +104,56 @@ npm run governance:validate     # Validate governance compliance
 └── package.json           # Root-level build configuration
 ```
 
-### Page Inventory (17 pages)
+### Page Inventory (47 pages)
 - **Core pages (7)**: index, about, services, resources, impact, contact, 404
 - **Blog hub (1)**: blog
-- **Article subpages (9)**: ai-reshaping-food-banks, salesforce-food-bank-operations, donor-relationships-nonprofit-cloud, data-driven-food-banks, food-bank-workflow-automation, securing-technology-grants, ai-inventory-management, case-studies, templates-tools
+- **Hub pages at root (2)**: case-studies, templates-tools
+- **Articles under `blog/` (37)**: ai-reshaping-food-banks, salesforce-food-bank-operations, donor-relationships-nonprofit-cloud, data-driven-food-banks, food-bank-workflow-automation, securing-technology-grants, ai-inventory-management, agentforce-nonprofits-guide, ai-ethics-nonprofit-governance, centralized-food-hub-case-study, client-choice-food-pantry-technology, community-food-center-model, data-privacy-food-bank-clients, digital-transformation-small-food-banks, donor-prospecting-salesforce, food-bank-client-services-technology, food-bank-crisis-response-planning, food-bank-kitchen-operations, food-bank-strategic-partnerships, food-bank-technology-stack, food-banks-healthcare-social-determinants, food-is-medicine-food-banks, future-food-banking-trends, grant-management-food-banks, impact-measurement-food-banks, measuring-hunger-relief-outcomes, nonprofit-cloud-vs-sales-cloud, nutrition-first-food-bank-strategy, rapid-technology-implementation, salesforce-flow-builder-nonprofits, salesforce-reports-dashboards-food-banks, salesforce-security-nonprofits, salesforce-spring-2026-nonprofits, snap-policy-changes-food-banks, tax-policy-nonprofit-fundraising, volunteer-management-technology, volunteer-recruitment-retention-digital
 
-All pages are registered in `vite.config.js` (rollup input), `build-components.js` (nav/footer injection), `scripts/generate-sitemap.js`, and `.pa11yci.json` (accessibility testing).
+**Adding new articles**: Place the HTML file in `blog/` — `vite.config.js` discovers it automatically. Then register it in `build-components.js` (articlePages array), `scripts/generate-sitemap.js`, and `.pa11yci.json`.
+
+All pages processed by `build-components.js` (nav/footer injection), `scripts/generate-sitemap.js`, and `.pa11yci.json` (accessibility testing).
 
 ### Build Pipeline
-- `build-components.js` injects shared navigation, footer, and script tags into all 17 pages before Vite builds
-- `scripts/generate-sitemap.js` generates sitemap.xml covering all 16 public pages (excludes 404)
+- `build-components.js` injects shared navigation, footer, and script tags into all 47 pages before Vite builds
+- `scripts/sync-blog.js` rebuilds the blog card grid in blog.html from article metadata (runs automatically on build)
+- `scripts/generate-sitemap.js` generates sitemap.xml covering all public pages (excludes 404)
 - Vite handles bundling, minification, and asset hashing for production
+
+### Blog Content Pipeline
+A standalone editorial research tool — separate from the public website build.
+
+**Purpose**: Find and triage article candidates from RSS feeds and web search, output to `Articles.xlsx` for editorial review.
+
+**Access**: Open `Blog and Article Content/scraper-admin.html` directly in VS Code Live Server. No server required.
+
+**How it works**:
+1. Select a **search preset** (5 pre-configured for FNF content pillars) or enter custom keywords
+2. Choose date lookback range (7 / 30 / 60 / 90 days or custom)
+3. Enable **Web Search** to query Google News RSS + GDELT global news index in addition to RSS feeds
+4. Click **Start Scraping** — results stream in live with relevance scores (1–5)
+5. Click any row to preview the article summary; check articles to mark as "Selected"
+6. Connect `Articles.xlsx` and save — checked articles land with `Status = Selected`, others with `Status = New`
+
+**Files**:
+- `Blog and Article Content/scraper-admin.html` — complete standalone UI (SheetJS + DOMParser + CORS proxies)
+- `Blog and Article Content/scraper-server.js` — Express server alternative (`npm run admin`)
+- `scripts/scrape-sources.js` — core scraper module used by the server version
+- `scripts/rss-feeds.json` — configurable RSS feed list
+
+**Built-in FNF search presets** (configured for each content pillar):
+- **AI & Innovation** — food bank AI, predictive analytics nonprofit, Salesforce Einstein, generative AI
+- **Tech Strategy** — Salesforce nonprofit cloud, nonprofit CRM, food bank software, donor management
+- **Case Studies** — food bank case study, nonprofit Salesforce success, food pantry technology results
+- **Implementation** — Salesforce implementation nonprofit, food bank workflow, volunteer management
+- **Industry Insights** — food insecurity, food bank trends, SNAP benefits, hunger relief
+
+**Excel columns**: Source URL · Title · Source Name · Published Date · Date Scraped · Suggested Category · Summary · Keywords Found · Status · Notes · Article Slug
+
+**npm packages used** (devDependencies): `exceljs`, `rss-parser`, `express`
+**Browser libraries** (CDN, standalone only): SheetJS 0.18.5
+
+See `docs/current/blog-content-pipeline.md` for full usage guide.
 
 ### CSS Architecture
 - **Location**: `src/css/` with modular organization (main.css imports all modules)
@@ -159,7 +217,7 @@ All pages are registered in `vite.config.js` (rollup input), `build-components.j
 ## Testing Requirements
 
 ### Multi-Page Protocol
-Test ALL 17 pages at these configurations:
+Test ALL 47 pages at these configurations:
 - **Pages**: All core pages, blog, and article subpages (see Page Inventory)
 - **Zoom Levels**: 100% (standard) and 25% (client requirement)  
 - **Breakpoints**: Mobile, tablet, desktop
@@ -210,7 +268,7 @@ Claude Code provides 7 built-in subagents:
 Custom agents in `.claude/agents/` tailored to this project:
 - **slds-compliance-checker** — validates CSS against SLDS token map; use after CSS changes
 - **accessibility-auditor** — WCAG 2.1 AA checks (headings, labels, ARIA); use after HTML changes
-- **cross-page-consistency** — validates SEO tags, link integrity, Read Next cards across all 17 pages; use after content changes
+- **cross-page-consistency** — validates SEO tags, link integrity, Read Next cards across all pages; use after content changes
 - **performance-budget-monitor** — checks bundle sizes against budgets after builds
 - **php-security-reviewer** — reviews PHP API endpoints for injection, CSRF, and validation gaps
 - **uiux-reviewer** — visual consistency, responsive layout, design tokens, and user flow; use after visual changes
@@ -230,7 +288,7 @@ Custom agents in `.claude/agents/` tailored to this project:
 - **Architecture**: HTML-first with progressive enhancement
 - **JavaScript Optional**: Core functionality works without JS
 - **CSS Layers**: Proper cascade management eliminates !important conflicts
-- **Testing**: Must validate across all 17 pages and 5 breakpoints
+- **Testing**: Must validate across all pages and 5 breakpoints
 
 ### Performance Optimization
 - **CSS**: Use CSS Layers for cascade management
@@ -251,7 +309,7 @@ Custom agents in `.claude/agents/` tailored to this project:
 - `tools/testing/html-validate.json` - HTML validation rules (active config used by `npm run validate:html`)
 - `tools/testing/lighthouserc.json` - Performance audit configuration
 - `tools/testing/playwright.config.js` - Browser testing configuration (builds + preview server before tests)
-- `.pa11yci.json` - Pa11y CI accessibility testing (WCAG2AA, all 16 pages)
+- `.pa11yci.json` - Pa11y CI accessibility testing (WCAG2AA, all public pages)
 - `config/token_map.json` - SLDS compliance token mappings
 - `config/deployment-config.json` - Deployment settings
 - `config/security-config.json` - Security configuration
@@ -302,7 +360,7 @@ Custom agents in `.claude/agents/` tailored to this project:
 - ✅ **CSS Layers architecture** implemented, eliminating 58+ !important cascade conflicts
 - ✅ **93% JavaScript reduction** (718 lines → 47 lines) while maintaining full functionality
 - ✅ **73% CSS bundle reduction** (74KB → 19KB) with better performance
-- ✅ **Mobile navigation functional** across all 17 pages with consistent behavior
+- ✅ **Mobile navigation functional** across all pages with consistent behavior
 - ✅ **WCAG 2.1 AA compliance** maintained throughout transition
 - ✅ **All visual effects preserved** including background animations and glassmorphism
 

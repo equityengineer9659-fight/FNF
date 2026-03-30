@@ -6,11 +6,14 @@ import { glob } from 'glob';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-// Dynamically discover all root-level HTML pages so new articles are picked up automatically
-const htmlFiles = glob.sync('*.html', { cwd: __dirname, ignore: ['node_modules/**', 'dist/**'] });
+// Dynamically discover all HTML pages (root-level + blog/ subdirectory)
+const htmlFiles = [
+  ...glob.sync('*.html', { cwd: __dirname, ignore: ['node_modules/**', 'dist/**'] }),
+  ...glob.sync('blog/*.html', { cwd: __dirname }),
+];
 const rollupInput = Object.fromEntries(
   htmlFiles.map(f => {
-    const name = f.replace('.html', '');
+    const name = f.replace('.html', '').replace('/', '_');
     return [name === 'index' ? 'main' : name, resolve(__dirname, f)];
   }),
 );
@@ -18,7 +21,7 @@ const rollupInput = Object.fromEntries(
 export default defineConfig({
   root: '.',
   publicDir: 'public',
-  base: './', // Use relative paths for better static file compatibility
+  base: '/', // Absolute paths required for pages in subdirectories (blog/)
 
   build: {
     outDir: 'dist',

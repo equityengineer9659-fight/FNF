@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Feeding America",
+    "url": "https://www.feedingamerica.org/feed",
+    "defaultCategory": "Industry Insights",
+    "enabled": true
+  },
+  {
+    "name": "NonProfit PRO",
+    "url": "https://www.nonprofitpro.com/rss/",
+    "defaultCategory": "Technology Strategy",
+    "enabled": true
+  },
+  {
+    "name": "Stanford Social Innovation Review",
+    "url": "https://ssir.org/articles/rss",
+    "defaultCategory": "Industry Insights",
+    "enabled": true
+  },
+  {
+    "name": "Salesforce.org Blog",
+    "url": "https://www.salesforce.org/blog/feed/",
+    "defaultCategory": "Technology Strategy",
+    "enabled": true
+  },
+  {
+    "name": "Charity Navigator Blog",
+    "url": "https://www.charitynavigator.org/blog/feed/",
+    "defaultCategory": "Industry Insights",
+    "enabled": true
+  },
+  {
+    "name": "Nonprofit Tech for Good",
+    "url": "https://www.nptechforgood.com/feed/",
+    "defaultCategory": "Technology Strategy",
+    "enabled": true
+  },
+  {
+    "name": "TechSoup Blog",
+    "url": "https://blog.techsoup.org/rss.xml",
+    "defaultCategory": "Technology Strategy",
+    "enabled": true
+  },
+  {
+    "name": "Food Research & Action Center",
+    "url": "https://frac.org/feed",
+    "defaultCategory": "Industry Insights",
+    "enabled": true
+  },
+  {
+    "name": "The Nonprofit Times",
+    "url": "https://www.thenonprofittimes.com/feed/",
+    "defaultCategory": "Industry Insights",
+    "enabled": true
+  },
+  {
+    "name": "NTEN (Nonprofit Technology Network)",
+    "url": "https://www.nten.org/feed/",
+    "defaultCategory": "Technology Strategy",
+    "enabled": true
+  },
+  {
+    "name": "Idealist Blog",
+    "url": "https://www.idealist.org/en/feed",
+    "defaultCategory": "Industry Insights",
+    "enabled": false
+  },
+  {
+    "name": "Blue Avocado",
+    "url": "https://blueavocado.org/feed/",
+    "defaultCategory": "Industry Insights",
+    "enabled": false
+  }
+]

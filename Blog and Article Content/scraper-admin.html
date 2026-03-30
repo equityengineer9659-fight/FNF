@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>FNF Content Scraper</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#0d1117; --bg-card:#161b22; --bg-input:#0d1117;
+      --border:#30363d; --bh:#484f58;
+      --text:#c9d1d9; --tm:#8b949e; --tf:#6e7681; --tb:#e6edf3;
+      --accent:#58a6ff; --adim:rgba(88,166,255,.12);
+      --green:#3fb950; --gbg:#238636; --ghov:#2ea043;
+      --yellow:#d29922; --red:#f85149; --purple:#a78bfa;
+    }
+    body { font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; }
+
+    /* Layout */
+    .app { display:flex; flex-direction:column; height:100vh; }
+    .hdr { display:flex; align-items:center; gap:12px; padding:10px 18px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-shrink:0; }
+    .brand { display:flex; align-items:center; gap:10px; }
+    .logo { width:30px; height:30px; background:linear-gradient(135deg,#1a6db5,#0b4da3); border-radius:7px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; color:#fff; }
+    .htitle { font-size:14px; font-weight:600; color:var(--tb); }
+    .hsub { font-size:11px; color:var(--tf); }
+    .hactions { margin-left:auto; display:flex; align-items:center; gap:8px; }
+
+    .xl-btn { display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:500; border:1px solid; transition:all .15s; white-space:nowrap; }
+    .xl-off { border-color:var(--border); color:var(--tm); background:transparent; }
+    .xl-off:hover { border-color:var(--accent); color:var(--accent); }
+    .xl-on { border-color:rgba(63,185,80,.4); color:var(--green); background:rgba(63,185,80,.08); }
+    .xl-on:hover { border-color:rgba(248,81,73,.4); color:var(--red); background:rgba(248,81,73,.06); }
+
+    .prog-strip { height:2px; background:var(--border); flex-shrink:0; overflow:hidden; }
+    .prog-fill { height:100%; background:var(--gbg); width:0; transition:width .4s ease; }
+
+    .body { display:flex; flex:1; overflow:hidden; }
+
+    /* Sidebar */
+    .sidebar { width:355px; flex-shrink:0; border-right:1px solid var(--border); overflow-y:auto; padding:14px; }
+
+    .notice { display:flex; align-items:flex-start; gap:8px; background:rgba(210,153,34,.1); border:1px solid rgba(210,153,34,.3); border-radius:6px; padding:9px 11px; margin-bottom:13px; font-size:12px; }
+    .notice.hide { display:none; }
+    .ni { flex-shrink:0; color:var(--yellow); margin-top:1px; }
+    .nt { color:var(--tm); line-height:1.5; }
+    .nt a { color:var(--accent); cursor:pointer; text-decoration:underline; background:none; border:none; padding:0; font:inherit; }
+
+    .sec { margin-bottom:18px; }
+    .slabel { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--tm); margin-bottom:7px; display:flex; align-items:center; gap:5px; }
+    .tip { width:14px; height:14px; border-radius:50%; background:var(--border); color:var(--tf); font-size:9px; display:inline-flex; align-items:center; justify-content:center; cursor:default; position:relative; flex-shrink:0; }
+    .tip:hover::after { content:attr(data-t); position:absolute; left:18px; top:-4px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:6px 10px; font-size:11px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--text); width:210px; white-space:normal; z-index:50; }
+
+    .preview { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:9px 12px; font-size:13px; color:var(--tm); margin-bottom:13px; line-height:1.6; }
+    .preview strong { color:var(--text); }
+
+    /* Period */
+    .pgrp { display:flex; gap:5px; flex-wrap:wrap; }
+    .pbtn { padding:4px 11px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text); font-size:12px; cursor:pointer; transition:all .15s; }
+    .pbtn:hover { border-color:var(--bh); }
+    .pbtn.on { border-color:var(--accent); color:var(--accent); background:var(--adim); }
+    .cdates { display:none; align-items:center; gap:7px; margin-top:9px; }
+    .cdates.show { display:flex; }
+    .dlbl { font-size:11px; color:var(--tm); white-space:nowrap; }
+    .dinp { background:var(--bg-input); border:1px solid var(--border); border-radius:5px; color:var(--text); padding:3px 7px; font-size:12px; flex:1; min-width:0; }
+    .dinp:focus { outline:none; border-color:var(--accent); }
+
+    /* Tag input */
+    .tagbox { background:var(--bg-input); border:1px solid var(--border); border-radius:6px; padding:5px 7px; min-height:36px; display:flex; flex-wrap:wrap; gap:5px; align-items:center; cursor:text; transition:border-color .15s; }
+    .tagbox:focus-within { border-color:var(--accent); }
+    .tag { display:inline-flex; align-items:center; gap:4px; background:var(--adim); border:1px solid rgba(88,166,255,.3); border-radius:20px; padding:1px 8px 1px 9px; font-size:12px; color:var(--accent); }
+    .tag.ex { background:rgba(248,81,73,.1); border-color:rgba(248,81,73,.3); color:var(--red); }
+    .tag.ws { background:rgba(167,139,250,.1); border-color:rgba(167,139,250,.3); color:var(--purple); }
+    .tagx { cursor:pointer; color:var(--tf); font-size:14px; line-height:1; }
+    .tagx:hover { color:var(--red); }
+    .taginp { border:none; background:transparent; color:var(--text); font-size:12px; outline:none; min-width:80px; flex:1; }
+    .taghint { font-size:11px; color:var(--tf); margin-top:4px; }
+
+    /* Collapsible */
+    .sechdr { display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:3px 0; user-select:none; }
+    .sechdr:hover .slabel { color:var(--text); }
+    .arr { font-size:10px; color:var(--tf); transition:transform .2s; }
+    .arr.open { transform:rotate(90deg); }
+    .coll { display:none; }
+    .coll.open { display:block; }
+
+    /* Feeds */
+    .factns { display:flex; gap:5px; margin:7px 0 8px; }
+    .fitem { display:flex; align-items:center; gap:9px; padding:6px 0; border-bottom:1px solid rgba(48,54,61,.6); }
+    .fitem:last-child { border-bottom:none; }
+    .tog { appearance:none; -webkit-appearance:none; width:28px; height:15px; background:var(--border); border-radius:8px; cursor:pointer; position:relative; flex-shrink:0; transition:background .2s; }
+    .tog::after { content:''; width:11px; height:11px; background:#fff; border-radius:50%; position:absolute; top:2px; left:2px; transition:left .2s; }
+    .tog:checked { background:var(--gbg); }
+    .tog:checked::after { left:15px; }
+    .finfo { flex:1; min-width:0; }
+    .fname { font-size:12px; font-weight:500; color:var(--text); }
+    .furl { font-size:11px; color:var(--tf); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:215px; }
+
+    .pill { font-size:10px; padding:1px 7px; border-radius:10px; white-space:nowrap; flex-shrink:0; }
+    .p-ai { background:rgba(167,139,250,.15); color:var(--purple); }
+    .p-tech { background:rgba(88,166,255,.15); color:var(--accent); }
+    .p-impl { background:rgba(63,185,80,.15); color:var(--green); }
+    .p-case { background:rgba(210,153,34,.15); color:var(--yellow); }
+    .p-ind { background:rgba(251,146,60,.15); color:#fb923c; }
+    .p-web { background:rgba(167,139,250,.15); color:var(--purple); font-style:italic; }
+
+    .addfbtn { font-size:12px; padding:3px 9px; margin-top:7px; border-radius:5px; border:1px solid var(--border); background:transparent; color:var(--tm); cursor:pointer; transition:all .15s; }
+    .addfbtn:hover { border-color:var(--accent); color:var(--accent); }
+    .addf { display:none; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:11px; margin-top:7px; }
+    .addf.show { display:block; }
+    .f2 { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-bottom:7px; }
+    .flbl { font-size:11px; color:var(--tm); display:block; margin-bottom:3px; }
+    .finp, .fsel { background:var(--bg-input); border:1px solid var(--border); border-radius:5px; color:var(--text); padding:4px 7px; font-size:12px; width:100%; }
+    .finp:focus, .fsel:focus { outline:none; border-color:var(--accent); }
+
+    /* Web search section */
+    .web-note { font-size:11px; color:var(--tf); margin-bottom:10px; line-height:1.5; }
+    .web-toggle-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+    .web-toggle-lbl { font-size:13px; color:var(--text); }
+    .mrgrp { display:flex; gap:5px; margin-top:7px; }
+
+    /* Category editor */
+    .cathint { font-size:11px; color:var(--tf); margin:7px 0 9px; line-height:1.5; }
+    .catrow { margin-bottom:9px; }
+    .catname { font-size:11px; font-weight:600; margin-bottom:3px; }
+    .catta { background:var(--bg-input); border:1px solid var(--border); border-radius:5px; color:var(--text); font-size:11px; padding:4px 7px; width:100%; min-height:38px; resize:vertical; }
+    .catta:focus { outline:none; border-color:var(--accent); }
+
+    /* Buttons */
+    .btn { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:6px; border:1px solid; cursor:pointer; font-size:13px; font-weight:500; transition:all .15s; white-space:nowrap; }
+    .btn-g { background:var(--gbg); border-color:var(--ghov); color:#fff; }
+    .btn-g:hover:not(:disabled) { background:var(--ghov); }
+    .btn-g:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-q { background:transparent; border-color:var(--border); color:var(--text); }
+    .btn-q:hover { border-color:var(--bh); background:rgba(255,255,255,.04); }
+    .btn-sm { padding:3px 9px; font-size:12px; }
+    .btn-accent { background:rgba(88,166,255,.15); border-color:rgba(88,166,255,.4); color:var(--accent); }
+    .btn-accent:hover { background:rgba(88,166,255,.25); }
+
+    /* Output */
+    .output { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .statbar { display:flex; align-items:center; gap:9px; padding:8px 16px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-shrink:0; }
+    .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .dot.idle { background:var(--tf); }
+    .dot.run { background:var(--yellow); animation:blink 1s infinite; }
+    .dot.done { background:var(--green); }
+    .dot.err { background:var(--red); }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.2} }
+    .stxt { font-size:13px; color:var(--tm); }
+    .sct { margin-left:auto; font-size:12px; color:var(--tf); }
+
+    .tabs { display:flex; border-bottom:1px solid var(--border); background:var(--bg-card); flex-shrink:0; }
+    .tab { padding:8px 15px; font-size:13px; color:var(--tm); cursor:pointer; border-bottom:2px solid transparent; transition:all .15s; user-select:none; }
+    .tab:hover { color:var(--text); }
+    .tab.on { color:var(--text); border-bottom-color:var(--accent); }
+    .tbadge { display:inline-block; background:var(--border); border-radius:10px; padding:1px 7px; font-size:11px; margin-left:4px; }
+
+    .log { flex:1; overflow-y:auto; padding:12px 16px; font:12.5px/1.6 'Cascadia Code','Consolas',monospace; background:var(--bg); }
+    .log.hide { display:none; }
+    .ll { display:flex; gap:8px; }
+    .lts { color:var(--tf); flex-shrink:0; }
+    .ll-info .lm { color:var(--tm); }
+    .ll-feed .lm { color:var(--accent); }
+    .ll-web .lm { color:var(--purple); }
+    .ll-new .lm { color:var(--green); }
+    .ll-skip .lm { color:var(--tf); }
+    .ll-done .lm { color:var(--green); font-weight:600; }
+    .ll-err .lm { color:var(--red); }
+    hr.sep { border:none; border-top:1px solid var(--border); margin:5px 0; }
+
+    .results { flex:1; display:none; flex-direction:column; overflow:hidden; }
+    .results.show { display:flex; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    thead th { background:var(--bg-card); color:var(--tm); font-size:11px; text-transform:uppercase; letter-spacing:.06em; padding:8px 13px; text-align:left; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:5; font-weight:600; }
+    tbody td { padding:6px 13px; border-bottom:1px solid rgba(48,54,61,.5); vertical-align:middle; }
+    tbody tr:hover td { background:var(--bg-card); }
+    tbody tr.nr td:first-child { border-left:2px solid var(--green); }
+    .rt { color:var(--accent); text-decoration:none; display:block; max-width:360px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .rt:hover { text-decoration:underline; }
+
+    /* Save banner */
+    .save-banner { display:none; align-items:center; gap:8px; padding:7px 14px; background:rgba(35,134,54,.15); border-top:1px solid rgba(63,185,80,.3); flex-shrink:0; }
+    .save-banner.show { display:flex; }
+    .sb-msg { font-size:12px; color:var(--green); font-weight:600; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .sb-msg span { display:none; }
+
+    .footer { display:flex; align-items:center; justify-content:space-between; padding:7px 16px; border-top:1px solid var(--border); background:var(--bg-card); font-size:12px; flex-shrink:0; }
+    .fl { color:var(--tf); font-family:monospace; font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:420px; }
+    .fr { display:flex; align-items:center; gap:8px; }
+
+    /* Presets */
+    .preset-row { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; }
+    .ppill { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:14px; border:1px solid var(--border); background:transparent; color:var(--tm); font-size:12px; cursor:pointer; transition:all .15s; white-space:nowrap; }
+    .ppill:hover { border-color:var(--bh); color:var(--text); }
+    .ppill.ai.on  { border-color:rgba(167,139,250,.6); color:var(--purple); background:rgba(167,139,250,.1); }
+    .ppill.tech.on{ border-color:rgba(88,166,255,.6);  color:var(--accent); background:var(--adim); }
+    .ppill.case.on{ border-color:rgba(210,153,34,.6);  color:var(--yellow); background:rgba(210,153,34,.1); }
+    .ppill.impl.on{ border-color:rgba(63,185,80,.6);   color:var(--green);  background:rgba(63,185,80,.1); }
+    .ppill.ind.on { border-color:rgba(251,146,60,.6);  color:#fb923c;       background:rgba(251,146,60,.1); }
+    .ppill.custom { border-style:dashed; }
+    .ppill.custom.on { border-style:dashed; border-color:var(--bh); color:var(--text); background:rgba(255,255,255,.04); }
+    .ppx { color:var(--tf); font-size:13px; line-height:1; margin-left:2px; }
+    .ppx:hover { color:var(--red); }
+    .save-prow { display:none; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:10px; margin-bottom:8px; }
+    .save-prow.show { display:block; }
+
+    /* Score badge */
+    .score { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; font-size:11px; font-weight:700; }
+    .s5 { background:rgba(63,185,80,.25);  color:#3fb950; }
+    .s4 { background:rgba(86,211,100,.2);  color:#56d364; }
+    .s3 { background:rgba(210,153,34,.25); color:#d29922; }
+    .s2 { background:rgba(248,118,73,.2);  color:#f87649; }
+    .s1 { background:rgba(248,81,73,.2);   color:#f85149; }
+
+    /* Results toolbar + expanded rows */
+    .res-toolbar { display:flex; align-items:center; gap:6px; padding:7px 13px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-shrink:0; font-size:12px; }
+    .res-toolbar span { color:var(--tf); margin-left:4px; }
+    tbody tr.detail-row td { background:rgba(13,17,23,.95) !important; border-left:none !important; }
+    .detail-cell { padding:9px 14px 11px 36px !important; }
+    .detail-body { font-size:12px; color:var(--tm); line-height:1.6; }
+    .detail-body p { margin-bottom:5px; }
+    .detail-body a { color:var(--accent); font-size:11px; }
+    .sel-cb { cursor:pointer; accent-color:var(--gbg); width:13px; height:13px; }
+    tbody tr:hover { cursor:pointer; }
+    tbody tr.detail-row:hover td { background:rgba(13,17,23,.95) !important; cursor:default; }
+
+    ::-webkit-scrollbar { width:7px; height:7px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+    ::-webkit-scrollbar-thumb:hover { background:var(--bh); }
+
+    /* ── New Article Generator ── */
+    .new-article { flex:1; display:none; flex-direction:column; overflow:hidden; }
+    .new-article.show { display:flex; }
+    .na-body { flex:1; overflow-y:auto; padding:16px 20px; }
+    .na-form { max-width:700px; }
+    .na-sec { margin-bottom:22px; }
+    .na-sh { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--tm); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+    .na-row { margin-bottom:12px; }
+    .na-row label { display:block; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--tm); margin-bottom:5px; }
+    .na-inp, .na-sel, .na-ta { background:var(--bg-input); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:6px 10px; font-size:13px; width:100%; }
+    .na-inp:focus, .na-sel:focus, .na-ta:focus { outline:none; border-color:var(--accent); }
+    .na-ta { resize:vertical; font-family:inherit; }
+    .na-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .na-hint { font-size:11px; color:var(--tf); margin-top:4px; line-height:1.5; }
+    .na-slug-inp { font-family:'Cascadia Code','Consolas',monospace; font-size:12px; }
+    .na-rel { background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:10px 12px; margin-bottom:8px; }
+    .na-rel-lbl { font-size:11px; color:var(--purple); font-weight:600; margin-bottom:7px; }
+    .na-rel-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+    .na-actions { display:flex; gap:10px; align-items:center; padding:14px 0 6px; border-top:1px solid var(--border); margin-top:4px; }
+    .na-from-row { display:flex; gap:8px; align-items:center; margin-bottom:16px; padding:9px 12px; background:rgba(88,166,255,.06); border:1px solid rgba(88,166,255,.2); border-radius:6px; }
+    .na-from-row.hide { display:none; }
+    .na-from-lbl { font-size:12px; color:var(--tm); white-space:nowrap; }
+    .na-from-sel { background:var(--bg-input); border:1px solid var(--border); border-radius:5px; color:var(--text); padding:4px 7px; font-size:12px; flex:1; min-width:0; }
+    .na-from-sel:focus { outline:none; border-color:var(--accent); }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header class="hdr">
+    <div class="brand">
+      <div class="logo">FNF</div>
+      <div><div class="htitle">Content Scraper</div><div class="hsub">Blog article research tool</div></div>
+    </div>
+    <div class="hactions">
+      <button class="xl-btn xl-off" id="xl-btn" onclick="connectExcel()">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M14 2h-2V1a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-9-1h6v1H5V1zm8 13H3V4h10zm-6-8H5v1h2V6zm4 0H9v1h2V6zM7 9H5v1h2V9zm4 0H9v1h2V9zm-4 3H5v1h2v-1zm4 0H9v1h2v-1z"/></svg>
+        <span id="xl-lbl">Connect Articles.xlsx</span>
+      </button>
+      <input type="file" id="file-inp" accept=".xlsx" style="display:none" onchange="onFileInput(event)">
+      <button class="btn btn-q btn-sm" onclick="clearLog()">Clear Log</button>
+      <button class="btn btn-g" id="btn-scrape" onclick="startScrape()">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M6.27 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .27-.445z"/></svg>
+        Start Scraping
+      </button>
+    </div>
+  </header>
+  <div class="prog-strip"><div class="prog-fill" id="prog"></div></div>
+
+  <div class="body">
+
+    <!-- ══ Sidebar ══ -->
+    <aside class="sidebar">
+
+      <div class="notice" id="notice">
+        <span class="ni">⚠</span>
+        <span class="nt">No Excel file connected — duplicates won't be detected. <a onclick="connectExcel()">Connect Articles.xlsx</a> first for best results.</span>
+      </div>
+
+      <div class="preview" id="preview">Configure parameters below, then click <strong>Start Scraping</strong>.</div>
+
+      <!-- Presets -->
+      <div class="sec">
+        <div class="slabel">Search Presets <span class="tip" data-t="Pre-configured keyword sets tuned for each FNF content category. Click a preset to load it, then Start Scraping.">?</span></div>
+        <div class="preset-row" id="preset-pills"></div>
+        <div class="save-prow" id="save-prow">
+          <label class="flbl">Preset name</label>
+          <input type="text" class="finp" id="preset-name-inp" placeholder="e.g. Monthly roundup" style="margin-bottom:7px">
+          <div style="display:flex;gap:5px">
+            <button class="btn btn-g btn-sm" onclick="confirmSavePreset()">Save</button>
+            <button class="btn btn-q btn-sm" onclick="hideSavePresetRow()">Cancel</button>
+          </div>
+        </div>
+        <button class="addfbtn" onclick="showSavePresetRow()">+ Save current as preset</button>
+      </div>
+
+      <!-- Date range -->
+      <div class="sec">
+        <div class="slabel">How far back to search</div>
+        <div class="pgrp">
+          <button class="pbtn" onclick="setPeriod(7)">7 days</button>
+          <button class="pbtn on" onclick="setPeriod(30)">30 days</button>
+          <button class="pbtn" onclick="setPeriod(60)">60 days</button>
+          <button class="pbtn" onclick="setPeriod(90)">90 days</button>
+          <button class="pbtn" onclick="setPeriod('custom')">Custom</button>
+        </div>
+        <div class="cdates" id="cdates">
+          <span class="dlbl">From</span><input type="date" class="dinp" id="d-from" onchange="updatePrev()">
+          <span class="dlbl">To</span><input type="date" class="dinp" id="d-to" onchange="updatePrev()">
+        </div>
+      </div>
+
+      <!-- Topic keywords -->
+      <div class="sec">
+        <div class="slabel">Topic keywords <span class="tip" data-t="Articles must contain at least one keyword. Leave empty to include all.">?</span></div>
+        <div class="tagbox" id="kw-box" onclick="document.getElementById('kw-inp').focus()">
+          <input class="taginp" id="kw-inp" placeholder="Add keyword, press Enter…" onkeydown="onKey(event,'kw')">
+        </div>
+        <div class="taghint">Press Enter or comma after each keyword.</div>
+      </div>
+
+      <!-- Exclude keywords -->
+      <div class="sec">
+        <div class="slabel">Exclude keywords <span class="tip" data-t="Skip any article containing these words.">?</span></div>
+        <div class="tagbox" id="ex-box" onclick="document.getElementById('ex-inp').focus()">
+          <input class="taginp" id="ex-inp" placeholder="Add term to exclude…" onkeydown="onKey(event,'ex')">
+        </div>
+      </div>
+
+      <!-- RSS Feeds -->
+      <div class="sec">
+        <div class="sechdr" onclick="toggleSec('feeds')">
+          <div class="slabel" style="margin:0">RSS Feeds <span id="fct" style="font-weight:400;text-transform:none;font-size:11px;letter-spacing:0;color:var(--tf)"></span></div>
+          <span class="arr open" id="arr-feeds">▶</span>
+        </div>
+        <div class="coll open" id="sec-feeds">
+          <div class="factns">
+            <button class="btn btn-q btn-sm" onclick="setAllF(true)">All on</button>
+            <button class="btn btn-q btn-sm" onclick="setAllF(false)">All off</button>
+            <button class="btn btn-q btn-sm" onclick="resetFeeds()" title="Restore default feed list">↺ Reset</button>
+          </div>
+          <div id="flist">Loading…</div>
+          <button class="addfbtn" onclick="toggleAddf()">+ Add custom source</button>
+          <div class="addf" id="addf">
+            <div class="f2">
+              <div><label class="flbl">Name</label><input type="text" class="finp" id="n-nm" placeholder="e.g. Feeding America"></div>
+              <div><label class="flbl">Default category</label>
+                <select class="fsel" id="n-cat">
+                  <option>Industry Insights</option><option>Technology Strategy</option>
+                  <option>Implementation</option><option>Case Studies</option><option>AI &amp; Innovation</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-bottom:7px"><label class="flbl">RSS feed URL</label><input type="url" class="finp" id="n-url" placeholder="https://example.com/feed"></div>
+            <button class="btn btn-q btn-sm" onclick="addFeed()">Add feed</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Web Search (GDELT) -->
+      <div class="sec">
+        <div class="sechdr" onclick="toggleSec('web')">
+          <div class="slabel" style="margin:0">
+            Web Search
+            <span style="background:rgba(167,139,250,.2);color:var(--purple);font-size:10px;padding:1px 6px;border-radius:10px;text-transform:none;letter-spacing:0;font-weight:500">Google News + GDELT</span>
+          </div>
+          <span class="arr" id="arr-web">▶</span>
+        </div>
+        <div class="coll" id="sec-web">
+          <p class="web-note" style="margin-top:8px">
+            Searches <strong>Google News RSS</strong> (primary) and the <strong>GDELT Project</strong> global index (secondary). Both use your Topic Keywords. No API key needed.
+          </p>
+          <div class="web-toggle-row">
+            <input type="checkbox" class="tog" id="web-tog" onchange="updatePrev()">
+            <label class="web-toggle-lbl" for="web-tog">Enable web search</label>
+          </div>
+          <div class="slabel">Extra search terms <span class="tip" data-t="Added to web search only — not applied to RSS feeds.">?</span></div>
+          <div class="tagbox" id="ws-box" onclick="document.getElementById('ws-inp').focus()">
+            <input class="taginp" id="ws-inp" placeholder="Extra terms for web search…" onkeydown="onKey(event,'ws')">
+          </div>
+          <div class="slabel" style="margin-top:10px">Max results</div>
+          <div class="mrgrp">
+            <button class="pbtn" onclick="setMR(25)">25</button>
+            <button class="pbtn on" id="mr50" onclick="setMR(50)">50</button>
+            <button class="pbtn" onclick="setMR(100)">100</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quality Filters -->
+      <div class="sec">
+        <div class="sechdr" onclick="toggleSec('qual')">
+          <div class="slabel" style="margin:0">Quality Filters</div>
+          <span class="arr" id="arr-qual">▶</span>
+        </div>
+        <div class="coll" id="sec-qual">
+          <p class="cathint" style="margin-top:8px">Block articles from low-quality domains. One per line or comma-separated. Applies to RSS and web search results.</p>
+          <textarea class="catta" id="blocklist-ta" rows="4" onchange="saveBlocklist()" placeholder="e.g. blogspot.com&#10;tumblr.com"></textarea>
+          <button class="addfbtn" onclick="resetBlocklist()" style="margin-top:5px">↺ Reset to defaults</button>
+        </div>
+      </div>
+
+      <!-- Category rules -->
+      <div class="sec">
+        <div class="sechdr" onclick="toggleSec('cats')">
+          <div class="slabel" style="margin:0">Category detection rules</div>
+          <span class="arr" id="arr-cats">▶</span>
+        </div>
+        <div class="coll" id="sec-cats">
+          <p class="cathint">Comma-separated keywords matched against title + description. Single words use whole-word matching. Detection order: AI → Tech → Cases → Implementation → Industry.</p>
+          <div id="cat-ed"></div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ══ Output ══ -->
+    <div class="output">
+      <div class="statbar">
+        <div class="dot idle" id="dot"></div>
+        <span class="stxt" id="stxt">Ready</span>
+        <span class="sct" id="sct"></span>
+      </div>
+      <div class="tabs">
+        <div class="tab on" id="t-log" onclick="showTab('log')">Activity Log</div>
+        <div class="tab" id="t-res" onclick="showTab('res')">Results <span class="tbadge" id="rbadge" style="display:none">0</span></div>
+        <div class="tab" id="t-new" onclick="showTab('new')">New Article</div>
+      </div>
+
+      <div class="log" id="log">
+        <div class="ll ll-info"><span class="lts">--:--:--</span><span class="lm">FNF Scraper ready. Optionally connect Articles.xlsx, then configure and click Start Scraping.</span></div>
+      </div>
+      <div class="results" id="results">
+        <div class="res-toolbar">
+          <button class="btn btn-q btn-sm" onclick="selectAllNew()">✓ All new</button>
+          <button class="btn btn-q btn-sm" onclick="clearSelections()">✗ Clear</button>
+          <button class="btn btn-q btn-sm" onclick="sortByScore()">↓ Relevance</button>
+          <span id="sel-count"></span>
+          <span style="margin-left:auto">Checked = "Selected" in Excel</span>
+        </div>
+        <div style="overflow-y:auto;flex:1">
+          <table>
+            <thead><tr>
+              <th style="width:28px"></th>
+              <th>Title</th>
+              <th>Source</th>
+              <th>Category</th>
+              <th style="width:46px;text-align:center">Score</th>
+              <th style="width:88px">Published</th>
+              <th style="width:76px">Status</th>
+            </tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Post-scrape save banner (inside results so it doesn't squash the table) -->
+        <div class="save-banner" id="save-banner">
+          <div class="sb-msg" id="sb-msg">
+            New articles found!
+            <span>Connect Articles.xlsx to save them, or download a new file.</span>
+          </div>
+          <button class="btn btn-accent btn-sm" onclick="connectAndSave()">📁 Connect &amp; Save</button>
+          <button class="btn btn-q btn-sm" onclick="downloadExcel()">⬇ Download Excel</button>
+          <button class="btn btn-q btn-sm" style="padding:3px 7px" onclick="document.getElementById('save-banner').classList.remove('show')">✕</button>
+        </div>
+      </div>
+
+      <!-- ── New Article Generator panel ── -->
+      <div class="new-article" id="new-article">
+        <div class="na-body">
+          <div class="na-form">
+
+            <!-- Load from scraper results (hidden until results exist) -->
+            <div class="na-from-row hide" id="na-from-row">
+              <span class="na-from-lbl">Load from scraper:</span>
+              <select class="na-from-sel" id="na-scraper-sel"><option value="">— pick a result to pre-fill —</option></select>
+              <button class="btn btn-accent btn-sm" onclick="loadFromScraper()">Load</button>
+            </div>
+
+            <!-- Metadata -->
+            <div class="na-sec">
+              <div class="na-sh">Article Metadata</div>
+
+              <div class="na-row">
+                <label for="na-title">Title <span style="color:var(--red)">*</span></label>
+                <input type="text" class="na-inp" id="na-title" placeholder="e.g. How Salesforce Powers Modern Food Banks" oninput="onTitleInput()">
+              </div>
+
+              <div class="na-row">
+                <label for="na-slug">Slug (filename) <span style="color:var(--red)">*</span></label>
+                <input type="text" class="na-inp na-slug-inp" id="na-slug" placeholder="e.g. salesforce-modern-food-banks">
+                <div class="na-hint">Auto-generated from title. File downloads as {slug}.html — place it in the project root, then run <code style="font-size:11px">node scripts/sync-blog.js</code>.</div>
+              </div>
+
+              <div class="na-row">
+                <label>Category</label>
+                <input type="hidden" id="na-cat" value="Industry Insights">
+                <div class="preset-row" style="margin-bottom:0" id="na-cat-pills">
+                  <button class="ppill ind" data-cat="Industry Insights" onclick="setNaCat(this)">Industry Insights</button>
+                  <button class="ppill tech" data-cat="Technology Strategy" onclick="setNaCat(this)">Tech Strategy</button>
+                  <button class="ppill ai" data-cat="AI & Innovation" onclick="setNaCat(this)">AI &amp; Innovation</button>
+                  <button class="ppill impl" data-cat="Implementation" onclick="setNaCat(this)">Implementation</button>
+                  <button class="ppill case" data-cat="Case Studies" onclick="setNaCat(this)">Case Studies</button>
+                </div>
+              </div>
+
+              <div class="na-row">
+                <label for="na-date">Date Published</label>
+                <input type="date" class="na-inp" id="na-date" style="max-width:180px">
+              </div>
+
+              <div class="na-row">
+                <label for="na-desc">Description (meta + blog card excerpt)</label>
+                <textarea class="na-ta" id="na-desc" rows="3" placeholder="Brief description used in SEO meta tags and the blog card excerpt…"></textarea>
+              </div>
+
+              <div class="na-row">
+                <label for="na-readtime">Read Time</label>
+                <input type="text" class="na-inp" id="na-readtime" placeholder="5 min read" style="max-width:140px">
+              </div>
+            </div>
+
+            <!-- Related Articles -->
+            <div class="na-sec">
+              <div class="na-sh">Read Next (Related Articles)</div>
+              <div class="na-hint" style="margin-bottom:10px">Slugs are filenames without .html (e.g. <code style="font-size:11px">ai-reshaping-food-banks</code>). Leave a slug blank to omit that card.</div>
+
+              <div class="na-rel">
+                <div class="na-rel-lbl">Related Article 1</div>
+                <div class="na-rel-grid">
+                  <div><label class="flbl">Title</label><input type="text" class="na-inp" id="na-rel1t" placeholder="Article title"></div>
+                  <div><label class="flbl">Slug</label><input type="text" class="na-inp na-slug-inp" id="na-rel1s" placeholder="article-slug-here"></div>
+                </div>
+              </div>
+              <div class="na-rel">
+                <div class="na-rel-lbl">Related Article 2</div>
+                <div class="na-rel-grid">
+                  <div><label class="flbl">Title</label><input type="text" class="na-inp" id="na-rel2t" placeholder="Article title"></div>
+                  <div><label class="flbl">Slug</label><input type="text" class="na-inp na-slug-inp" id="na-rel2s" placeholder="article-slug-here"></div>
+                </div>
+              </div>
+              <div class="na-rel">
+                <div class="na-rel-lbl">Related Article 3</div>
+                <div class="na-rel-grid">
+                  <div><label class="flbl">Title</label><input type="text" class="na-inp" id="na-rel3t" placeholder="Article title"></div>
+                  <div><label class="flbl">Slug</label><input type="text" class="na-inp na-slug-inp" id="na-rel3s" placeholder="article-slug-here"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Generate -->
+            <div class="na-actions">
+              <button class="btn btn-g" onclick="generateArticle()">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+                Generate &amp; Download
+              </button>
+              <span style="font-size:11px;color:var(--tf)">Downloads {slug}.html — place in project root, then run sync-blog to add it to the blog page</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span class="fl" id="fl">No Excel file connected</span>
+        <span class="fr" id="fr"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────
+   DEFAULTS
+───────────────────────────────────────── */
+const DF = [
+  { name:'NonProfit PRO', url:'https://www.nonprofitpro.com/rss/', cat:'Technology Strategy', on:true },
+  { name:'Nonprofit Tech for Good', url:'https://www.nptechforgood.com/feed/', cat:'Technology Strategy', on:true },
+  { name:'The Nonprofit Times', url:'https://www.thenonprofittimes.com/feed/', cat:'Industry Insights', on:true },
+  { name:'NTEN', url:'https://www.nten.org/feed/', cat:'Technology Strategy', on:true },
+  { name:'Blue Avocado', url:'https://blueavocado.org/feed/', cat:'Industry Insights', on:true },
+  { name:'Food Research & Action Center', url:'https://frac.org/feed', cat:'Industry Insights', on:true },
+  { name:'Nonprofit Hub', url:'https://nonprofithub.org/feed/', cat:'Industry Insights', on:true },
+  { name:'Candid Blog', url:'https://blog.candid.org/feed/', cat:'Industry Insights', on:true },
+  { name:'Stanford Social Innovation Review', url:'https://ssir.org/articles/rss', cat:'Industry Insights', on:false },
+  { name:'Idealist Blog', url:'https://www.idealist.org/en/feed', cat:'Industry Insights', on:false },
+  { name:'Charity Navigator Blog', url:'https://www.charitynavigator.org/blog/rss/', cat:'Industry Insights', on:false }
+];
+
+const DC = {
+  'AI & Innovation': ['AI', 'artificial intelligence', 'machine learning', 'predictive', 'algorithm', 'ChatGPT', 'generative', 'LLM', 'deep learning', 'neural network'],
+  'Technology Strategy': ['Salesforce', 'CRM', 'cloud software', 'digital transformation', 'nonprofit technology', 'tech strategy', 'data management', 'Nonprofit Cloud', 'nonprofit tech', 'software platform'],
+  'Case Studies': ['case study', 'success story', 'client results', 'nonprofit achieved', 'impact story', 'lessons learned'],
+  'Implementation': ['implementation', 'workflow automation', 'system integration', 'deployment', 'onboarding', 'step-by-step', 'best practices for'],
+  'Industry Insights': ['food bank', 'food pantry', 'food insecurity', 'SNAP benefits', 'food distribution', 'food rescue', 'hunger relief', 'nonprofit fundraising', 'nonprofit trends', 'charitable giving']
+};
+
+const CAT_ORDER = ['AI & Innovation', 'Technology Strategy', 'Case Studies', 'Implementation', 'Industry Insights'];
+const HEADERS = ['Source URL','Title','Source Name','Published Date','Date Scraped','Suggested Category','Summary','Keywords Found','Status','Notes','Article Slug'];
+
+const BUILTIN_PRESETS = [
+  { id:'ai',    cls:'ai',   name:'AI & Innovation',    period:30, webOn:true,
+    kws:['food bank AI','predictive analytics nonprofit','machine learning hunger','Salesforce Einstein','generative AI nonprofit'], exkws:[], wskws:[] },
+  { id:'tech',  cls:'tech', name:'Tech Strategy',      period:30, webOn:true,
+    kws:['Salesforce nonprofit cloud','nonprofit CRM','food bank software','donor management system','nonprofit technology'], exkws:[], wskws:[] },
+  { id:'cases', cls:'case', name:'Case Studies',       period:60, webOn:true,
+    kws:['food bank case study','nonprofit Salesforce success','food pantry technology results','nonprofit impact story'], exkws:[], wskws:[] },
+  { id:'impl',  cls:'impl', name:'Implementation',     period:30, webOn:false,
+    kws:['Salesforce implementation nonprofit','food bank workflow','volunteer management nonprofit','nonprofit onboarding','CRM setup food bank'], exkws:[], wskws:[] },
+  { id:'ind',   cls:'ind',  name:'Industry Insights',  period:14, webOn:true,
+    kws:['food insecurity','food bank trends','hunger relief','SNAP benefits','food pantry statistics','charitable giving'], exkws:[], wskws:[] }
+];
+
+const DEFAULT_BLOCKLIST = ['blogspot.com','tumblr.com','wix.com','weebly.com','sites.google.com'];
+
+/* ─────────────────────────────────────────
+   STATE
+───────────────────────────────────────── */
+let feeds = loadLS('fnf2_feeds_v4', DF);       if (!Array.isArray(feeds)) feeds = JSON.parse(JSON.stringify(DF));
+let cats = loadLS('fnf2_cats', DC);             if (typeof cats !== 'object' || cats === null) cats = JSON.parse(JSON.stringify(DC));
+let period = 30;
+let kwTags = [], exTags = [], wsTags = [];
+let maxResults = 50;
+let isRunning = false;
+let allResults = [], newArticles = [];
+let presets = loadLS('fnf2_presets', []);        if (!Array.isArray(presets)) presets = [];
+let activePreset = null;
+let blocklist = loadLS('fnf2_blocklist', DEFAULT_BLOCKLIST); if (!Array.isArray(blocklist)) blocklist = [...DEFAULT_BLOCKLIST];
+let selectedUrls = new Set();
+
+// Excel
+let xlHandle = null, xlFallback = null;
+let existingUrls = new Set();
+let xlRowCount = 0;
+let pendingWB = null;
+
+/* ─────────────────────────────────────────
+   INIT
+───────────────────────────────────────── */
+function _doInit() {
+  try {
+    const now = new Date(), ago = new Date(+now - 30 * 864e5);
+    try { document.getElementById('d-to').value = fd(now); } catch {}
+    try { document.getElementById('d-from').value = fd(ago); } catch {}
+    try { document.getElementById('na-date').value = fd(now); } catch {}
+    try { renderFeeds(); } catch(e) { console.error('renderFeeds:', e); }
+    try { renderCats(); } catch(e) { console.error('renderCats:', e); }
+    try { renderPresets(); } catch(e) { console.error('renderPresets:', e); }
+    try { updatePrev(); } catch(e) { console.error('updatePrev:', e); }
+    try { document.getElementById('blocklist-ta').value = blocklist.join('\n'); } catch {}
+    try { setNaCatByValue('Industry Insights'); } catch {}
+  } catch(e) { console.error('_doInit:', e); }
+}
+// Run immediately if DOM elements are ready, otherwise wait for DOMContentLoaded
+if (document.readyState !== 'loading') {
+  _doInit();
+} else {
+  document.addEventListener('DOMContentLoaded', _doInit);
+}
+
+/* ─────────────────────────────────────────
+   EXCEL  — File System Access API + fallback
+───────────────────────────────────────── */
+async function connectExcel() {
+  try {
+    if ('showOpenFilePicker' in window) {
+      const [h] = await window.showOpenFilePicker({
+        types: [{ description: 'Excel files', accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'] } }],
+        multiple: false
+      });
+      xlHandle = h; xlFallback = null;
+      await readXL(await h.getFile(), h.name);
+    } else {
+      document.getElementById('file-inp').click();
+    }
+  } catch(e) { if (e.name !== 'AbortError') addLog('err', 'Could not open file: ' + e.message); }
+}
+
+async function onFileInput(e) {
+  const f = e.target.files[0]; if (!f) return;
+  xlFallback = f; xlHandle = null;
+  await readXL(f, f.name);
+  e.target.value = '';
+}
+
+async function readXL(file, name) {
+  try {
+    const ab = await file.arrayBuffer();
+    const wb = XLSX.read(ab, { type:'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, { header:1 });
+    existingUrls.clear();
+    rows.slice(1).forEach(r => { if (r[0]) existingUrls.add(String(r[0]).trim()); });
+    xlRowCount = Math.max(0, rows.length - 1);
+    pendingWB = wb;
+    setXLConnected(name, xlRowCount);
+    addLog('info', `Connected: ${esc(name)} — ${xlRowCount} existing rows loaded for duplicate detection`);
+  } catch(e) { addLog('err', 'Could not read Excel file: ' + e.message); }
+}
+
+function setXLConnected(name, count) {
+  const b = document.getElementById('xl-btn');
+  b.className = 'xl-btn xl-on'; b.title = 'Click to disconnect'; b.onclick = disconnectXL;
+  document.getElementById('xl-lbl').textContent = `${name} (${count} rows) ✓`;
+  document.getElementById('notice').classList.add('hide');
+  document.getElementById('fl').textContent = name;
+}
+
+function disconnectXL() {
+  xlHandle = null; xlFallback = null; existingUrls.clear(); pendingWB = null; xlRowCount = 0;
+  const b = document.getElementById('xl-btn');
+  b.className = 'xl-btn xl-off'; b.title = ''; b.onclick = connectExcel;
+  document.getElementById('xl-lbl').textContent = 'Connect Articles.xlsx';
+  document.getElementById('notice').classList.remove('hide');
+  document.getElementById('fl').textContent = 'No Excel file connected';
+  addLog('info', 'Excel file disconnected.');
+}
+
+async function saveToExcel(articles) {
+  if (!articles.length) return;
+  const rows = articles.map(a => [a.url, a.title, a.src, a.pubDate, a.scraped, a.cat, a.summary, a.kws.join(', '), selectedUrls.has(a.url)?'Selected':'New', '', '']);
+
+  let wb;
+  if (pendingWB) {
+    wb = pendingWB;
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    XLSX.utils.sheet_add_aoa(ws, rows, { origin:-1 });
+  } else {
+    wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet([HEADERS, ...rows]);
+    ws['!cols'] = [65,65,25,14,14,22,70,32,11,30,42].map(w=>({wch:w}));
+    XLSX.utils.book_append_sheet(wb, ws, 'Articles');
+  }
+
+  const out = XLSX.write(wb, { bookType:'xlsx', type:'array' });
+  const blob = new Blob([out], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+  if (xlHandle) {
+    try {
+      const w = await xlHandle.createWritable();
+      await w.write(blob); await w.close();
+      const refreshed = await xlHandle.getFile();
+      await readXL(refreshed, refreshed.name);
+      addLog('done', `✓ Saved ${articles.length} new row${articles.length>1?'s':''} back to Excel`);
+      document.getElementById('save-banner').classList.remove('show');
+    } catch(e) {
+      addLog('err', `Save failed (is the file open in Excel?): ${e.message}`);
+      offerDownload(blob);
+    }
+  } else {
+    offerDownload(blob);
+  }
+}
+
+function offerDownload(blob) {
+  window._dlBlob = blob;
+  document.getElementById('fr').innerHTML = '';
+}
+
+function downloadExcel() {
+  const blob = window._dlBlob; if (!blob) return;
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'Articles_scraped.xlsx'; a.click();
+  document.getElementById('save-banner').classList.remove('show');
+}
+
+async function connectAndSave() {
+  await connectExcel();
+  if ((xlHandle || xlFallback) && newArticles.length) {
+    await saveToExcel(newArticles);
+  }
+}
+
+/* ─────────────────────────────────────────
+   FEEDS
+───────────────────────────────────────── */
+function renderFeeds() {
+  document.getElementById('flist').innerHTML = feeds.map((f,i) => `
+    <div class="fitem">
+      <input type="checkbox" class="tog" id="f${i}" ${f.on!==false?'checked':''}
+        onchange="feeds[${i}].on=this.checked; saveLS('fnf2_feeds_v4',feeds); updFct(); updatePrev()">
+      <div class="finfo">
+        <div class="fname">${esc(f.name)}</div>
+        <div class="furl" title="${esc(f.url)}">${esc(f.url)}</div>
+      </div>
+      <span class="pill ${pc(f.cat)}">${sc(f.cat)}</span>
+    </div>`).join('');
+  updFct();
+}
+function resetFeeds() {
+  if (!confirm('Reset feed list to defaults? Your custom feeds will be removed.')) return;
+  feeds = JSON.parse(JSON.stringify(DF));
+  saveLS('fnf2_feeds_v4', feeds);
+  renderFeeds(); updatePrev();
+}
+function updFct() {
+  const on = feeds.filter(f=>f.on!==false).length;
+  document.getElementById('fct').textContent = `(${on}/${feeds.length})`;
+}
+function setAllF(v) { feeds.forEach((f,i)=>{ f.on=v; const c=document.getElementById(`f${i}`); if(c) c.checked=v; }); saveLS('fnf2_feeds_v4',feeds); updFct(); updatePrev(); }
+function toggleAddf() { document.getElementById('addf').classList.toggle('show'); }
+function addFeed() {
+  const nm=document.getElementById('n-nm').value.trim(), url=document.getElementById('n-url').value.trim(), cat=document.getElementById('n-cat').value;
+  if (!nm||!url){alert('Enter both a name and URL.');return;}
+  feeds.push({name:nm,url,cat,on:true}); saveLS('fnf2_feeds_v4',feeds);
+  document.getElementById('n-nm').value=''; document.getElementById('n-url').value='';
+  document.getElementById('addf').classList.remove('show'); renderFeeds(); updatePrev();
+}
+
+/* ─────────────────────────────────────────
+   CATEGORY EDITOR
+───────────────────────────────────────── */
+function renderCats() {
+  document.getElementById('cat-ed').innerHTML = Object.entries(cats).map(([n,kws])=>`
+    <div class="catrow">
+      <div class="catname"><span class="pill ${pc(n)}" style="font-size:10px">${n}</span></div>
+      <textarea class="catta" rows="2" onchange="cats['${n}']=this.value.split(',').map(k=>k.trim()).filter(Boolean); saveLS('fnf2_cats',cats)">${kws.join(', ')}</textarea>
+    </div>`).join('');
+}
+
+/* ─────────────────────────────────────────
+   PRESETS
+───────────────────────────────────────── */
+function allPresets() { return [...BUILTIN_PRESETS, ...presets]; }
+
+function renderPresets() {
+  const all = allPresets();
+  document.getElementById('preset-pills').innerHTML = all.map(p => {
+    const on = p.id === activePreset ? ' on' : '';
+    const isCustom = !BUILTIN_PRESETS.find(b => b.id === p.id);
+    const del = isCustom ? `<span class="ppx" onclick="event.stopPropagation();deletePreset('${p.id}')">×</span>` : '';
+    return `<button class="ppill ${p.cls||'custom'}${on}" onclick="loadPreset('${p.id}')">${esc(p.name)}${del}</button>`;
+  }).join('');
+}
+
+function loadPreset(id) {
+  const p = allPresets().find(x => x.id === id);
+  if (!p) return;
+  activePreset = id;
+  // Set keywords
+  kwTags = [...(p.kws||[])]; rTags('kw');
+  exTags = [...(p.exkws||[])]; rTags('ex');
+  wsTags = [...(p.wskws||[])]; rTags('ws');
+  // Set period
+  setPeriod(p.period||30);
+  // Set web toggle
+  document.getElementById('web-tog').checked = !!p.webOn;
+  renderPresets(); updatePrev();
+  addLog('info', `Preset loaded: ${p.name}`);
+}
+
+function showSavePresetRow() { document.getElementById('save-prow').classList.add('show'); document.getElementById('preset-name-inp').focus(); }
+function hideSavePresetRow() { document.getElementById('save-prow').classList.remove('show'); document.getElementById('preset-name-inp').value=''; }
+
+function confirmSavePreset() {
+  const name = document.getElementById('preset-name-inp').value.trim();
+  if (!name) { alert('Enter a name for this preset.'); return; }
+  const id = 'custom_' + Date.now();
+  const p = {
+    id, cls:'custom', name,
+    period: period === 'custom' ? getLB() : period,
+    webOn: document.getElementById('web-tog').checked,
+    kws: [...kwTags], exkws: [...exTags], wskws: [...wsTags]
+  };
+  presets.push(p);
+  saveLS('fnf2_presets', presets);
+  activePreset = id;
+  renderPresets(); hideSavePresetRow();
+}
+
+function deletePreset(id) {
+  if (!confirm('Delete this preset?')) return;
+  presets = presets.filter(p => p.id !== id);
+  saveLS('fnf2_presets', presets);
+  if (activePreset === id) activePreset = null;
+  renderPresets();
+}
+
+/* ─────────────────────────────────────────
+   BLOCKLIST + SCORING
+───────────────────────────────────────── */
+function saveBlocklist() {
+  const raw = document.getElementById('blocklist-ta').value;
+  blocklist = raw.split(/[\n,]+/).map(s=>s.trim().toLowerCase()).filter(Boolean);
+  saveLS('fnf2_blocklist', blocklist);
+}
+
+function resetBlocklist() {
+  blocklist = [...DEFAULT_BLOCKLIST];
+  saveLS('fnf2_blocklist', blocklist);
+  document.getElementById('blocklist-ta').value = blocklist.join('\n');
+}
+
+function isBlocked(url) {
+  if (!blocklist.length) return false;
+  try {
+    const host = new URL(url).hostname.replace(/^www\./,'').toLowerCase();
+    return blocklist.some(b => host === b || host.endsWith('.'+b));
+  } catch { return false; }
+}
+
+function scoreArticle(title, summary, kws) {
+  if (!kws || !kws.length) return 0;
+  const tl=(title||'').toLowerCase(), sl=(summary||'').toLowerCase();
+  let hits=0;
+  for (const k of kws) {
+    const kl=k.toLowerCase();
+    if (tl.includes(kl)) hits+=2;
+    else if (sl.includes(kl)) hits+=1;
+  }
+  if (!hits) return 1;
+  const max=kws.length*2;
+  const r=hits/max;
+  return r>=.8?5 : r>=.55?4 : r>=.3?3 : r>=.1?2 : 1;
+}
+
+/* ─────────────────────────────────────────
+   TAG INPUTS  (kw / ex / ws)
+───────────────────────────────────────── */
+function onKey(e, t) {
+  if (e.key==='Enter'||e.key===',') {
+    e.preventDefault();
+    const v=e.target.value.trim().replace(/,$/,'');
+    if (v) addTag(t,v); e.target.value='';
+  } else if (e.key==='Backspace'&&!e.target.value) {
+    const a = t==='kw'?kwTags:t==='ex'?exTags:wsTags;
+    if (a.length) remTag(t, a.length-1);
+  }
+}
+function addTag(t,v) {
+  const a=t==='kw'?kwTags:t==='ex'?exTags:wsTags;
+  if (!a.includes(v)){ a.push(v); rTags(t); updatePrev(); }
+}
+function remTag(t,i) {
+  (t==='kw'?kwTags:t==='ex'?exTags:wsTags).splice(i,1); rTags(t); updatePrev();
+}
+function rTags(t) {
+  const a=t==='kw'?kwTags:t==='ex'?exTags:wsTags, box=document.getElementById(`${t}-box`), inp=document.getElementById(`${t}-inp`);
+  box.querySelectorAll('.tag').forEach(x=>x.remove());
+  a.forEach((v,i)=>{
+    const el=document.createElement('span');
+    el.className=`tag ${t==='ex'?'ex':t==='ws'?'ws':''}`;
+    el.innerHTML=`${esc(v)}<span class="tagx" onclick="remTag('${t}',${i})">×</span>`;
+    box.insertBefore(el,inp);
+  });
+}
+
+/* ─────────────────────────────────────────
+   PERIOD
+───────────────────────────────────────── */
+function setPeriod(p) {
+  period=p;
+  document.querySelectorAll('.pbtn').forEach(b=>b.classList.toggle('on', b.textContent.trim()===(p==='custom'?'Custom':`${p} days`)));
+  document.getElementById('cdates').classList.toggle('show', p==='custom');
+  updatePrev();
+}
+function getLB() {
+  if (period!=='custom') return period;
+  const f=new Date(document.getElementById('d-from').value), t=new Date(document.getElementById('d-to').value);
+  return Math.max(1, Math.ceil((t-f)/864e5));
+}
+
+/* ─────────────────────────────────────────
+   WEB SEARCH CONFIG
+───────────────────────────────────────── */
+let maxRes = 50;
+function setMR(n) {
+  maxRes=n;
+  document.querySelectorAll('.mrgrp .pbtn').forEach(b=>b.classList.toggle('on', parseInt(b.textContent)===n));
+}
+
+/* ─────────────────────────────────────────
+   PREVIEW
+───────────────────────────────────────── */
+function updatePrev() {
+  const on=feeds.filter(f=>f.on!==false).length;
+  const days=period==='custom'?getLB():period;
+  const topic=kwTags.length?`<strong>${esc(kwTags.join(', '))}</strong>`:'<strong>all topics</strong>';
+  const web=document.getElementById('web-tog').checked?' + Google News + GDELT':'';
+  document.getElementById('preview').innerHTML=
+    `Searching <strong>${on}</strong> feed${on!==1?'s':''}${esc(web)} · last <strong>${days} days</strong> · ${topic}.`;
+}
+
+/* ─────────────────────────────────────────
+   COLLAPSIBLE SECTIONS
+───────────────────────────────────────── */
+function toggleSec(id) {
+  document.getElementById(`sec-${id}`).classList.toggle('open');
+  document.getElementById(`arr-${id}`).classList.toggle('open');
+}
+
+/* ─────────────────────────────────────────
+   TABS
+───────────────────────────────────────── */
+function showTab(t) {
+  const log=t==='log', res=t==='res', nw=t==='new';
+  document.getElementById('log').classList.toggle('hide',!log);
+  document.getElementById('results').classList.toggle('show',res);
+  document.getElementById('new-article').classList.toggle('show',nw);
+  document.getElementById('t-log').classList.toggle('on',log);
+  document.getElementById('t-res').classList.toggle('on',res);
+  document.getElementById('t-new').classList.toggle('on',nw);
+  if (nw) checkScraperResults();
+}
+
+/* ─────────────────────────────────────────
+   LOG + STATUS
+───────────────────────────────────────── */
+function addLog(type, msg) {
+  const p=document.getElementById('log'), d=document.createElement('div');
+  d.className=`ll ll-${type}`;
+  const ts=new Date().toLocaleTimeString('en-US',{hour12:false});
+  d.innerHTML=`<span class="lts">${ts}</span><span class="lm">${msg}</span>`;
+  p.appendChild(d); p.scrollTop=p.scrollHeight;
+}
+function logSep(){ const h=document.createElement('hr'); h.className='sep'; document.getElementById('log').appendChild(h); }
+function setStat(s,t){ document.getElementById('dot').className=`dot ${s}`; document.getElementById('stxt').textContent=t; }
+function clearLog(){ document.getElementById('log').innerHTML=''; addLog('info','Log cleared.'); }
+
+/* ─────────────────────────────────────────
+   RESULTS TABLE
+───────────────────────────────────────── */
+function addRow(a) {
+  const tr=document.createElement('tr');
+  if (a.isNew) tr.classList.add('nr');
+  const pub=a.pubDate?new Date(a.pubDate).toLocaleDateString():'—';
+  const webBadge=a.isWeb?`<span class="pill p-web" style="font-size:10px;margin-right:3px">Web</span>`:'';
+  const sc=a.score;
+  const scoreBadge=sc?`<span class="score s${sc}">${sc}</span>`:`<span style="color:var(--tf);font-size:12px">—</span>`;
+  const statusTxt=a.isNew?'<span style="color:var(--green);font-size:12px">New</span>':'<span style="color:var(--tf);font-size:12px">Dupe</span>';
+  const cbId=`cb_${btoa(a.url).slice(0,12)}`;
+  tr.innerHTML=`
+    <td style="padding:6px 6px 6px 13px"><input type="checkbox" class="sel-cb" id="${cbId}" ${selectedUrls.has(a.url)?'checked':''}></td>
+    <td><a class="rt" href="${esc(a.url)}" target="_blank" title="${esc(a.title)}" onclick="event.stopPropagation()">${esc(a.title)}</a></td>
+    <td style="font-size:12px;color:var(--tm);white-space:nowrap">${webBadge}${esc(a.src||'—')}</td>
+    <td><span class="pill ${pc(a.cat)}">${esc(a.cat)}</span></td>
+    <td style="text-align:center">${scoreBadge}</td>
+    <td style="font-size:12px;color:var(--tf);white-space:nowrap">${pub}</td>
+    <td>${statusTxt}</td>`;
+  // Checkbox handler — don't toggle detail when clicking checkbox
+  tr.querySelector('.sel-cb').addEventListener('change', e => {
+    e.stopPropagation();
+    if (e.target.checked) selectedUrls.add(a.url); else selectedUrls.delete(a.url);
+    updateSelCount();
+  });
+  // Click row to expand/collapse summary
+  tr.addEventListener('click', () => toggleDetail(tr, a));
+  document.getElementById('tbody').appendChild(tr);
+}
+
+function toggleDetail(tr, a) {
+  const next=tr.nextSibling;
+  if (next && next.classList&&next.classList.contains('detail-row')) { next.remove(); return; }
+  const dr=document.createElement('tr'); dr.className='detail-row';
+  dr.innerHTML=`<td class="detail-cell" colspan="7"><div class="detail-body">
+    <p>${esc(a.summary||'No summary available.')}</p>
+    <a href="${esc(a.url)}" target="_blank" onclick="event.stopPropagation()">Open article ↗</a>
+    ${a.kws&&a.kws.length?`<span style="margin-left:12px;font-size:11px;color:var(--tf)">Keywords: ${esc(a.kws.join(', '))}</span>`:''}
+  </div></td>`;
+  tr.after(dr);
+}
+
+function selectAllNew() {
+  allResults.filter(r=>r.isNew).forEach(r=>selectedUrls.add(r.url));
+  document.querySelectorAll('.sel-cb').forEach(cb=>{
+    const url=allResults.find(r=>btoa(r.url).slice(0,12)===cb.id.replace('cb_',''))?.url;
+    if (url&&selectedUrls.has(url)) cb.checked=true;
+  });
+  // Simpler: re-check by iterating allResults
+  allResults.forEach(a=>{ if(a.isNew){ const el=document.getElementById(`cb_${btoa(a.url).slice(0,12)}`); if(el) el.checked=true; selectedUrls.add(a.url); } });
+  updateSelCount();
+}
+
+function clearSelections() {
+  selectedUrls.clear();
+  document.querySelectorAll('.sel-cb').forEach(cb=>cb.checked=false);
+  updateSelCount();
+}
+
+function updateSelCount() {
+  const n=selectedUrls.size;
+  document.getElementById('sel-count').textContent = n ? `${n} selected` : '';
+}
+
+function sortByScore() {
+  // Close any open detail rows first
+  document.querySelectorAll('.detail-row').forEach(r=>r.remove());
+  allResults.sort((a,b)=>(b.score||0)-(a.score||0));
+  const tbody=document.getElementById('tbody'); tbody.innerHTML='';
+  allResults.forEach(a=>addRow(a));
+}
+function updBadge() {
+  const b=document.getElementById('rbadge'), nw=allResults.filter(r=>r.isNew).length;
+  b.textContent=allResults.length; b.style.display=allResults.length?'inline-block':'none';
+  document.getElementById('sct').textContent=`${allResults.length} found · ${nw} new`;
+}
+
+/* ─────────────────────────────────────────
+   FETCH RSS  — direct → allorigins (JSON) → corsproxy
+   The allorigins JSON API tells us the content-type so we
+   can detect HTML error pages instead of blindly parsing them.
+───────────────────────────────────────── */
+function mkTimeout(ms) {
+  if (AbortSignal.timeout) return AbortSignal.timeout(ms);
+  const c=new AbortController(); setTimeout(()=>c.abort(),ms); return c.signal;
+}
+
+function looksXML(s) {
+  const t=(s||'').trim().slice(0,80).toLowerCase();
+  return t.startsWith('<?xml')||t.startsWith('<rss')||t.startsWith('<feed')||t.startsWith('<rdf:')||t.startsWith('<atom');
+}
+
+async function fetchFeed(url) {
+  // 1) Direct fetch (fast, works when the feed has CORS headers)
+  try {
+    const r=await fetch(url,{signal:mkTimeout(7000)});
+    if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; }
+  } catch { /* CORS or timeout — fall through */ }
+
+  // 2) allorigins JSON wrapper (gives us content-type + HTTP status)
+  try {
+    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,{signal:mkTimeout(15000)});
+    if (r.ok) {
+      const data=await r.json();
+      const { contents, status } = data;
+      if (status.http_code >= 400) throw new Error(`Feed returned HTTP ${status.http_code}`);
+      const ct=(status.content_type||'').toLowerCase();
+      if (ct.includes('html') && !ct.includes('xml')) throw new Error(`Feed returned an HTML page (URL may have changed)`);
+      // allorigins sometimes returns binary content as a base64 data URI
+      if (contents && contents.startsWith('data:')) {
+        const b64=(contents.match(/;base64,([A-Za-z0-9+/=\s]+)/)||[])[1];
+        if (b64) {
+          try {
+            const decoded=atob(b64.replace(/\s/g,''));
+            if (looksXML(decoded)) return decoded;
+          } catch {}
+        }
+        throw new Error(`Feed returned encoded data that could not be decoded`);
+      }
+      if (contents && looksXML(contents)) return contents;
+      if (contents) throw new Error(`Unexpected content — starts with: ${contents.trim().slice(0,60)}…`);
+      /* empty content — fall through to next proxy */
+    }
+  } catch(e) {
+    // Re-throw only definitive errors (dead URLs, wrong content type)
+    if (e.message.startsWith('Feed returned HTTP')||e.message.includes('HTML page')||e.message.startsWith('Unexpected content')||e.message.includes('encoded data')) throw e;
+    /* proxy unreachable or timeout — try next */
+  }
+
+  // 3) corsproxy.io
+  try {
+    const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`,{signal:mkTimeout(13000)});
+    if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; throw new Error(`corsproxy returned non-XML content`); }
+  } catch(e) { if (e.message.includes('non-XML')) throw e; }
+
+  // 4) codetabs proxy
+  try {
+    const r=await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,{signal:mkTimeout(13000)});
+    if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; throw new Error(`codetabs returned non-XML content`); }
+  } catch(e) { if (e.message.includes('non-XML')) throw e; }
+
+  throw new Error('Unreachable via direct fetch and three CORS proxies');
+}
+
+/* ─────────────────────────────────────────
+   RSS / ATOM XML PARSER
+───────────────────────────────────────── */
+function parseXML(xmlText) {
+  const doc=new DOMParser().parseFromString(xmlText,'text/xml');
+  if (doc.querySelector('parsererror')) {
+    const snippet=xmlText.trim().slice(0,60);
+    if (xmlText.trim().toLowerCase().startsWith('<!doctype')||xmlText.includes('<html')) throw new Error('Feed returned an HTML page, not XML');
+    throw new Error(`XML parse error — content starts with: "${snippet}"…`);
+  }
+  const isAtom=!!doc.querySelector('feed');
+  return [...doc.querySelectorAll(isAtom?'entry':'item')].map(el=>{
+    let title='', url='', pubDate='', desc='';
+    if (isAtom) {
+      title=el.querySelector('title')?.textContent?.trim()||'';
+      const lk=el.querySelector('link[rel="alternate"]')||el.querySelector('link');
+      url=lk?.getAttribute('href')||lk?.textContent?.trim()||'';
+      pubDate=el.querySelector('published,updated')?.textContent||'';
+      desc=strip(el.querySelector('summary,content')?.textContent||'');
+    } else {
+      title=el.querySelector('title')?.textContent?.trim()||'';
+      url=el.querySelector('link')?.textContent?.trim()||el.querySelector('guid')?.textContent?.trim()||'';
+      pubDate=el.querySelector('pubDate,pubdate')?.textContent||'';
+      desc=strip(el.querySelector('description')?.textContent||el.querySelector('summary')?.textContent||'');
+    }
+    return { title, url, pubDate, description:desc.slice(0,500) };
+  }).filter(i=>i.url&&i.title);
+}
+
+function strip(h){ if(!h)return''; const d=document.createElement('div'); d.innerHTML=h; return d.textContent.replace(/\s+/g,' ').trim(); }
+
+/* ─────────────────────────────────────────
+   GOOGLE NEWS RSS SEARCH
+   Searches Google News via RSS — uses the same proxy chain as RSS feeds.
+   Returns up to ~100 recent results matching the query.
+───────────────────────────────────────── */
+async function searchGoogleNews(topicKws, extraKws) {
+  const allTerms=[...topicKws,...extraKws];
+  // Google News: space = AND, OR for multiple terms
+  const q=allTerms.length
+    ? allTerms.map(t=>t.includes(' ')?`"${t}"`:t).join(' OR ')
+    : '"food bank" OR "food pantry" OR "nonprofit" OR "food insecurity"';
+  const feedUrl=`https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=en-US&gl=US&ceid=US:en`;
+  addLog('web', `  Google News query: ${q}`);
+  const xml=await fetchFeed(feedUrl);
+  const items=parseXML(xml);
+  // Google News item titles often end in " - Source Name"; extract it
+  return items.map(item=>{
+    const m=item.title.match(/^(.*?)\s+-\s+([^-]+)$/);
+    return {
+      ...item,
+      title: m ? m[1].trim() : item.title,
+      sourceName: m ? m[2].trim() : 'Google News'
+    };
+  });
+}
+
+/* ─────────────────────────────────────────
+   GDELT WEB SEARCH
+   Free global news index — no API key required.
+   Routes through CORS proxy when direct fetch is blocked (localhost).
+───────────────────────────────────────── */
+async function searchGDELT(topicKws, extraKws, lookbackDays) {
+  const allTerms=[...topicKws,...extraKws];
+  let query;
+  if (allTerms.length) {
+    query=allTerms.map(t=>t.includes(' ')?`"${t}"`:t).join(' OR ');
+  } else {
+    query='"food bank" OR "food pantry" OR "nonprofit technology" OR "food insecurity" OR "Salesforce nonprofit"';
+  }
+
+  const timespan = lookbackDays<=7?'7d': lookbackDays<=30?'1m': lookbackDays<=60?'2m':'3m';
+  const params=new URLSearchParams({ query, mode:'artlist', maxrecords:String(maxRes), format:'json', timespan });
+  const apiUrl=`https://api.gdeltproject.org/api/v2/doc/doc?${params}`;
+
+  let txt=null;
+
+  // 1) Direct fetch (works when browser allows it)
+  try {
+    const r=await fetch(apiUrl,{signal:mkTimeout(35000)});
+    if (r.ok) txt=await r.text();
+    else addLog('info','  GDELT direct: HTTP '+r.status+' — trying proxy…');
+  } catch { addLog('info','  GDELT direct blocked (CORS) — trying proxy…'); }
+
+  // 2) allorigins proxy fallback
+  if (!txt) {
+    try {
+      const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`,{signal:mkTimeout(40000)});
+      if (r.ok) {
+        const wrapper=await r.json();
+        if (wrapper.contents) txt=wrapper.contents;
+        else addLog('info','  GDELT proxy returned empty — trying corsproxy…');
+      }
+    } catch { addLog('info','  allorigins proxy failed — trying corsproxy…'); }
+  }
+
+  // 3) corsproxy fallback
+  if (!txt) {
+    try {
+      const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`,{signal:mkTimeout(40000)});
+      if (r.ok) txt=await r.text();
+    } catch {}
+  }
+
+  if (!txt) throw new Error('GDELT could not be reached via direct fetch or proxy');
+
+  // GDELT sometimes returns plain-text error messages instead of JSON
+  const trimmed=txt.trim();
+  if (!trimmed.startsWith('{') && !trimmed.startsWith('[')) {
+    throw new Error(`GDELT returned an error: "${trimmed.slice(0,120)}"`);
+  }
+
+  let data;
+  try { data=JSON.parse(txt); }
+  catch(e) { throw new Error(`GDELT response could not be parsed: ${e.message}`); }
+
+  const articles=data.articles||[];
+  if (!articles.length) {
+    addLog('info','  GDELT: no articles matched the query (try broader keywords or longer date range)');
+  }
+  return articles.map(a=>({
+    title: a.title||'',
+    url: a.url||'',
+    pubDate: a.seendate ? a.seendate.replace(/(\d{4})(\d{2})(\d{2}).*/,'$1-$2-$3') : '',
+    description: `From ${a.domain||'web'}`,
+    sourceName: a.domain||'Web Search'
+  }));
+}
+
+/* ─────────────────────────────────────────
+   KEYWORD MATCHING — word-boundary for single words,
+   substring for phrases. Fixes "ai" matching "fundraising".
+───────────────────────────────────────── */
+function kwMatch(text, keyword) {
+  if (!keyword) return false;
+  const esc2=keyword.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  // Single words: use word boundary  (\b) to prevent false positives
+  // Phrases (contain space): substring is fine — they're already specific
+  if (!keyword.includes(' ')&&!keyword.includes('-')) {
+    try { return new RegExp(`\\b${esc2}\\b`,'i').test(text); }
+    catch { return text.toLowerCase().includes(keyword.toLowerCase()); }
+  }
+  return text.toLowerCase().includes(keyword.toLowerCase());
+}
+
+/* ─────────────────────────────────────────
+   CATEGORY DETECTION
+───────────────────────────────────────── */
+function detectCat(title, desc, fallback) {
+  const txt=title+' '+desc;
+  for (const cat of CAT_ORDER) {
+    const found=(cats[cat]||[]).filter(k=>kwMatch(txt,k));
+    if (found.length) return { cat, kws:found };
+  }
+  return { cat:fallback||'Industry Insights', kws:[] };
+}
+
+/* ─────────────────────────────────────────
+   PROCESS ONE ARTICLE (shared by RSS + GDELT)
+───────────────────────────────────────── */
+function processItem(item, feedName, feedCat, cutoff, isWeb) {
+  const { title, url, pubDate, description } = item;
+  if (!title || !url) return null;
+
+  // Domain blocklist check
+  if (isBlocked(url)) return null;
+
+  const pub = pubDate ? new Date(pubDate) : null;
+  if (pub && pub < cutoff) return null;
+
+  const searchTxt = title + ' ' + description;
+  const searchLow = searchTxt.toLowerCase();
+
+  // Topic keyword filter — plain substring ("profit" matches "nonprofit")
+  if (kwTags.length && !kwTags.some(k => k && searchLow.includes(k.toLowerCase()))) return null;
+
+  // Exclude filter — word-boundary to avoid accidental over-exclusion
+  if (exTags.length && exTags.some(k => kwMatch(searchTxt, k))) {
+    addLog('skip', `  − (excluded) ${esc(title)}`);
+    return null;
+  }
+
+  const isNew = !existingUrls.has(url);
+  const { cat, kws } = detectCat(title, description, feedCat);
+  const summary = description.slice(0, 400);
+  const score = scoreArticle(title, summary, kwTags);
+
+  return { url, title, src: feedName, pubDate: pub ? fd(pub) : '', scraped: fd(new Date()), cat, kws, isNew, isWeb: !!isWeb, summary, score };
+}
+
+/* ─────────────────────────────────────────
+   MAIN SCRAPE
+───────────────────────────────────────── */
+async function startScrape() {
+  if (isRunning) return;
+  const activeFd = feeds.filter(f=>f.on!==false);
+  const webOn = document.getElementById('web-tog').checked;
+  if (!activeFd.length && !webOn) { alert('Please enable at least one feed or web search.'); return; }
+
+  isRunning=true; allResults=[]; newArticles=[]; selectedUrls.clear();
+  document.getElementById('tbody').innerHTML='';
+  document.getElementById('rbadge').style.display='none';
+  document.getElementById('sct').textContent='';
+  document.getElementById('sel-count').textContent='';
+  document.getElementById('save-banner').classList.remove('show');
+  window._dlBlob=null;
+  document.getElementById('prog').style.width='10%';
+  setStat('run','Scraping…'); showTab('log');
+
+  const btn=document.getElementById('btn-scrape');
+  btn.disabled=true;
+  btn.innerHTML=`<svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" style="animation:blink .8s infinite"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" fill="none"/></svg> Scraping…`;
+
+  logSep();
+  const lb=getLB();
+  addLog('info',`▶ Starting — ${activeFd.length} RSS feed${activeFd.length!==1?'s':''}${webOn?` + GDELT web search`:''} · ${lb}-day lookback${kwTags.length?' · filter: '+kwTags.join(', '):''}`);
+  if (!xlHandle&&!xlFallback) addLog('info','No Excel file connected — dedup disabled (all results treated as new).');
+
+  const cutoff=new Date(); cutoff.setDate(cutoff.getDate()-lb);
+  const total=activeFd.length+(webOn?1:0);
+  let done=0;
+
+  /* ── RSS feeds ── */
+  for (const f of activeFd) {
+    addLog('feed', `Fetching RSS: ${esc(f.name)}`);
+    await tick();
+    try {
+      const xml=await fetchFeed(f.url);
+      const items=parseXML(xml);
+      let n=0;
+      for (const item of items) {
+        const a=processItem(item, f.name, f.cat, cutoff, false);
+        if (!a) continue;
+        n++;
+        allResults.push(a); if (a.isNew) newArticles.push(a);
+        addRow(a); updBadge();
+        addLog(a.isNew?'new':'skip', `  ${a.isNew?'+':'~'} ${esc(a.title)} [${esc(a.cat)}]`);
+      }
+      addLog('info', `  └─ ${esc(f.name)}: ${n} article${n!==1?'s':''} in date range`);
+    } catch(e) {
+      addLog('err', `  └─ ${esc(f.name)}: ${e.message}`);
+    }
+    done++;
+    document.getElementById('prog').style.width=`${10+Math.round((done/total)*75)}%`;
+    await tick();
+  }
+
+  /* ── Web search: Google News + GDELT ── */
+  if (webOn) {
+    await tick();
+
+    // — Google News RSS —
+    addLog('web', `Searching Google News RSS…`);
+    await tick();
+    try {
+      const items=await searchGoogleNews(kwTags, wsTags);
+      let n=0;
+      addLog('info',`  Google News: ${items.length} raw results`);
+      for (const item of items) {
+        const a=processItem(item, item.sourceName||'Google News', 'Industry Insights', cutoff, true);
+        if (!a) continue;
+        n++;
+        allResults.push(a); if (a.isNew) newArticles.push(a);
+        addRow(a); updBadge();
+        addLog(a.isNew?'new':'skip', `  ${a.isNew?'+':'~'} [news] ${esc(a.title)} — ${esc(a.src)}`);
+      }
+      addLog('info', `  └─ Google News: ${n} article${n!==1?'s':''} matched`);
+    } catch(e) {
+      addLog('err', `  └─ Google News: ${e.message}`);
+    }
+    await tick();
+
+    // — GDELT —
+    addLog('web', `Searching GDELT global news index…`);
+    await tick();
+    try {
+      const articles=await searchGDELT(kwTags, wsTags, lb);
+      let n=0;
+      addLog('info',`  GDELT: ${articles.length} raw results`);
+      for (const item of articles) {
+        const a=processItem(item, item.sourceName||'Web', 'Industry Insights', cutoff, true);
+        if (!a) continue;
+        // Skip if already found via Google News (same URL)
+        if (allResults.some(r=>r.url===a.url)) continue;
+        n++;
+        allResults.push(a); if (a.isNew) newArticles.push(a);
+        addRow(a); updBadge();
+        addLog(a.isNew?'new':'skip', `  ${a.isNew?'+':'~'} [gdelt] ${esc(a.title)} — ${esc(a.src)}`);
+      }
+      addLog('info', `  └─ GDELT: ${n} article${n!==1?'s':''} matched`);
+    } catch(e) {
+      addLog('err', `  └─ GDELT: ${e.message}`);
+    }
+
+    done++;
+    document.getElementById('prog').style.width='85%';
+    await tick();
+  }
+
+  /* ── Save / offer download ── */
+  const nw=newArticles.length;
+  if (nw > 0) {
+    addLog('info', `Writing ${nw} new article${nw!==1?'s':''} to Excel…`);
+    await tick();
+    if (xlHandle || xlFallback) {
+      await saveToExcel(newArticles);
+    } else {
+      // No file connected — build workbook and offer save banner
+      const wb=XLSX.utils.book_new();
+      const rows=newArticles.map(a=>[a.url,a.title,a.src,a.pubDate,a.scraped,a.cat,a.summary,a.kws.join(', '),'New','','']);
+      const ws=XLSX.utils.aoa_to_sheet([HEADERS,...rows]);
+      ws['!cols']=[65,65,25,14,14,22,70,32,11,30,42].map(w=>({wch:w}));
+      XLSX.utils.book_append_sheet(wb,ws,'Articles');
+      const out=XLSX.write(wb,{bookType:'xlsx',type:'array'});
+      window._dlBlob=new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      // Show save banner
+      document.getElementById('sb-msg').innerHTML=`<strong>${nw} new article${nw!==1?'s':''} ready to save</strong><span>Connect Articles.xlsx to append them, or download as a new file.</span>`;
+      document.getElementById('save-banner').classList.add('show');
+    }
+  } else {
+    addLog('info', 'No new articles — all results were already in the spreadsheet.');
+  }
+
+  /* ── Done ── */
+  logSep();
+  const dup=allResults.length-nw;
+  addLog('done', `Done — ${allResults.length} found · ${nw} new · ${dup} duplicate${dup!==1?'s':''}`);
+  setStat('done', `Complete — ${nw} new article${nw!==1?'s':''} added`);
+  document.getElementById('sct').textContent=`${allResults.length} found · ${nw} new · ${dup} duplicates`;
+  document.getElementById('prog').style.width='100%';
+  setTimeout(()=>{ document.getElementById('prog').style.width='0'; }, 2500);
+  if (allResults.filter(r=>r.isNew).length) { sortByScore(); showTab('res'); }
+
+  isRunning=false; btn.disabled=false;
+  btn.innerHTML=`<svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M6.27 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .27-.445z"/></svg> Start Scraping`;
+}
+
+/* ─────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────── */
+function tick() { return new Promise(r=>setTimeout(r,0)); }
+function fd(d) { return d.toISOString().split('T')[0]; }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function pc(c) { return {'AI & Innovation':'p-ai','Technology Strategy':'p-tech','Implementation':'p-impl','Case Studies':'p-case','Industry Insights':'p-ind'}[c]||'p-ind'; }
+function sc(c) { return {'AI & Innovation':'AI','Technology Strategy':'Tech','Implementation':'Impl','Case Studies':'Cases','Industry Insights':'Industry'}[c]||c; }
+function loadLS(k,fb) { try { const v=localStorage.getItem(k); if (!v) return fb; const p=JSON.parse(v); return p!=null ? p : fb; } catch { return fb; } }
+function saveLS(k,v) { try { localStorage.setItem(k,JSON.stringify(v)); } catch {} }
+
+/* ─────────────────────────────────────────
+   NEW ARTICLE GENERATOR
+───────────────────────────────────────── */
+const CAT_CLASS_MAP = {'AI & Innovation':'ai','Technology Strategy':'tech','Case Studies':'case-studies','Implementation':'implementation','Industry Insights':'insights'};
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function setNaCat(btn) {
+  const cat = btn.dataset.cat;
+  document.getElementById('na-cat').value = cat;
+  document.querySelectorAll('#na-cat-pills .ppill').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function setNaCatByValue(cat) {
+  const btn = [...document.querySelectorAll('#na-cat-pills .ppill')].find(b => b.dataset.cat === cat);
+  if (btn) setNaCat(btn);
+}
+
+function slugify(title) {
+  return title.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+}
+
+function onTitleInput() {
+  const t=document.getElementById('na-title').value;
+  document.getElementById('na-slug').value=slugify(t);
+}
+
+function checkScraperResults() {
+  const has=allResults.length>0;
+  document.getElementById('na-from-row').classList.toggle('hide',!has);
+  if (has) {
+    const s=document.getElementById('na-scraper-sel');
+    s.innerHTML='<option value="">— pick a result to pre-fill —</option>'+
+      allResults.map((a,i)=>`<option value="${i}">${esc(a.title.slice(0,90))}</option>`).join('');
+  }
+}
+
+function loadFromScraper() {
+  const idx=parseInt(document.getElementById('na-scraper-sel').value,10);
+  if (isNaN(idx)||!allResults[idx]) return;
+  const a=allResults[idx];
+  document.getElementById('na-title').value=a.title;
+  document.getElementById('na-slug').value=slugify(a.title);
+  document.getElementById('na-desc').value=a.summary||'';
+  setNaCatByValue(a.cat);
+}
+
+function naFmtDate(iso) {
+  if (!iso) return '';
+  const d=new Date(iso+'T00:00:00');
+  return MONTHS[d.getMonth()]+' '+d.getFullYear();
+}
+
+function generateArticle() {
+  const title=document.getElementById('na-title').value.trim();
+  const slug=document.getElementById('na-slug').value.trim();
+  const cat=document.getElementById('na-cat').value;
+  const desc=document.getElementById('na-desc').value.trim();
+  const dateIso=document.getElementById('na-date').value;
+  const readTime=document.getElementById('na-readtime').value.trim()||'5 min read';
+  if (!title||!slug){alert('Title and slug are required.');return;}
+  const r1s=document.getElementById('na-rel1s').value.trim(), r1t=document.getElementById('na-rel1t').value.trim();
+  const r2s=document.getElementById('na-rel2s').value.trim(), r2t=document.getElementById('na-rel2t').value.trim();
+  const r3s=document.getElementById('na-rel3s').value.trim(), r3t=document.getElementById('na-rel3t').value.trim();
+  const rels=[
+    r1s?{s:r1s,t:r1t||r1s,c:cat}:null,
+    r2s?{s:r2s,t:r2t||r2s,c:cat}:null,
+    r3s?{s:r3s,t:r3t||r3s,c:cat}:null
+  ].filter(Boolean);
+  const html=buildArticleHTML({title,slug,cat,catClass:CAT_CLASS_MAP[cat]||'insights',desc,dateIso,dateDisplay:naFmtDate(dateIso),readTime,rels});
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=slug+'.html'; a.click();
+  addLog('done',`✓ Generated ${esc(slug)}.html — place in project root, then run: node scripts/sync-blog.js`);
+}
+
+function buildArticleHTML(p) {
+  const h=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const hq=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const j=s=>String(s||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+  const catHtml=h(p.cat);
+  const relCards=(p.rels&&p.rels.length?p.rels:[{s:'blog',t:'Explore More Articles',c:p.cat}])
+    .map(r=>`                <a href="${hq(r.s)}.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">${h(r.c)}</span>
+                    <span class="article-read-next__card-title">${h(r.t)}</span>
+                    <span class="article-read-next__card-meta">${h(p.readTime)}</span>
+                </a>`).join('\n');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${h(p.title)} | Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="${hq(p.desc)}">
+    <meta name="keywords" content="food bank, nonprofit, Salesforce, food insecurity">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/${hq(p.slug)}.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="${hq(p.title)} | Food-N-Force">
+    <meta property="og:description" content="${hq(p.desc)}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://foodnforce.com/${hq(p.slug)}.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="${hq(p.dateIso)}">
+    <meta property="article:section" content="${hq(p.cat)}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${hq(p.title)} | Food-N-Force">
+    <meta name="twitter:description" content="${hq(p.desc)}">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "${j(p.title)}",
+      "description": "${j(p.desc)}",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "datePublished": "${j(p.dateIso)}",
+      "url": "https://foodnforce.com/${j(p.slug)}.html",
+      "image": "https://foodnforce.com/og-image.png",
+      "articleSection": "${j(p.cat)}",
+      "inLanguage": "en-US"
+    }
+    <\/script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering -->
+    <link rel="stylesheet" href="src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--${hq(p.catClass)}">${catHtml}</span>
+                <h1 id="article-title" class="article-hero__title">${h(p.title)}</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="${hq(p.dateIso)}">${h(p.dateDisplay)}</time>
+                    <span>${h(p.readTime)}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+                    <!-- Write your intro paragraph here -->
+                </p>
+
+                <h2>Section One</h2>
+
+                <p>
+                    <!-- Add content here -->
+                </p>
+
+                <h2>Section Two</h2>
+
+                <p>
+                    <!-- Add content here -->
+                </p>
+
+                <h2>Section Three</h2>
+
+                <p>
+                    <!-- Add content here -->
+                </p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+${relCards}
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Ready to Modernize Your Operations?</h2>
+                <p class="article-cta__text">
+                    Learn how Food-N-Force helps food banks and pantries leverage technology to serve more families efficiently.
+                </p>
+                <div class="article-cta__actions">
+                    <a href="contact.html" class="resource-action">Get in Touch</a>
+                    <a href="blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="src/js/main.js" defer><\/script>
+<\/body>
+<\/html>`;
+}
+</script>
+</body>
+</html>

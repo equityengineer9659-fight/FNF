@@ -7,7 +7,8 @@
   "scripts": {
     "prepare": "husky",
     "dev": "vite",
-    "build": "node scripts/generate-sitemap.js && node build-components.js && vite build",
+    "build": "node scripts/generate-sitemap.js && node scripts/sync-blog.js && node build-components.js && vite build",
+    "sync:blog": "node scripts/sync-blog.js",
     "build:components": "node build-components.js",
     "build:full": "npm run lint && npm run validate:html && npm run test && npm run build",
     "preview": "vite preview",
@@ -49,7 +50,8 @@
     "restore:create": "node scripts/create-restore-point.cjs",
     "restore:apply": "node scripts/apply-restore-point.cjs",
     "restore:list": "node -e \"console.log(require('fs').readdirSync('backups').filter(d => d.startsWith('restore_')).sort().reverse().slice(0, 10).join('\\n'))\"",
-    "css:duplicates": "node scripts/detect-css-duplicates.cjs"
+    "css:duplicates": "node scripts/detect-css-duplicates.cjs",
+    "admin": "node \"Blog and Article Content/scraper-server.js\""
   },
   "repository": {
     "type": "git",
@@ -75,6 +77,8 @@
     "autoprefixer": "^10.4.0",
     "cssnano": "^6.0.0",
     "eslint": "^8.55.0",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
     "glob": "^10.3.0",
     "html-validate": "^8.7.3",
     "htmlhint": "^1.1.4",
@@ -87,6 +91,7 @@
     "pa11y-ci": "^4.1.0",
     "postcss": "^8.4.0",
     "puppeteer": "^24.0.0",
+    "rss-parser": "^3.13.0",
     "stylelint": "^16.0.2",
     "stylelint-config-slds": "^1.0.0",
     "stylelint-config-standard": "^36.0.0",

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Data Privacy in Food Banks: What to Know - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn how food banks can protect client data, maintain trust, and meet privacy obligations — from HIPAA considerations to Salesforce data controls.">
+    <meta name="keywords" content="food bank technology, nonprofit Salesforce, food bank software, food relief">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/blog/data-privacy-food-bank-clients.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Client Data Privacy in Food Banks: What You Need to Know - Food-N-Force">
+    <meta property="og:description" content="Learn how food banks can protect client data, maintain trust, and meet privacy obligations — from HIPAA considerations to Salesforce data controls.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://foodnforce.com/blog/data-privacy-food-bank-clients.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2025-08-11">
+    <meta property="article:section" content="Technology Strategy">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Client Data Privacy in Food Banks: What You Need to Know - Food-N-Force">
+    <meta name="twitter:description" content="Learn how food banks can protect client data, maintain trust, and meet privacy obligations — from HIPAA considerations to Salesforce data controls.">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Client Data Privacy in Food Banks: What You Need to Know",
+      "description": "Learn how food banks can protect client data, maintain trust, and meet privacy obligations — from HIPAA considerations to Salesforce data controls.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "datePublished": "2025-08-11",
+      "url": "https://foodnforce.com/blog/data-privacy-food-bank-clients.html",
+      "image": "https://foodnforce.com/og-image.png",
+      "articleSection": "Technology Strategy",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="/blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--tech">Technology Strategy</span>
+                <h1 id="article-title" class="article-hero__title">Client Data Privacy in Food Banks: What You Need to Know</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2025-08-11">August 2025</time>
+                    <span>4 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">Food banks hold some of the most sensitive information their communities entrust to any organization — names, addresses, household income, immigration status, health conditions. How that data is collected, stored, shared, and eventually deleted is not just a compliance question. It is a question of mission. When clients fear their information might be shared with landlords, employers, or government agencies, they stay home hungry. Data privacy is inseparable from access.</p>
+
+<h2>What Data Food Banks Typically Collect</h2>
+
+<figure class="article-illustration article-illustration--breakout"><img src="src/assets/images/illustrations/data-privacy-food-bank-clients.svg" alt="Data flow diagram showing client record with branches to staff access, partner access, reporting, and encrypted storage, with a privacy shield overlay" width="800" height="400" loading="lazy"></figure>
+
+<p>Most food banks collect contact and household information at intake: name, address, phone, household size, and income range. Many programs add date of birth for age-targeted services, and some collect race and ethnicity data for grant reporting. Programs that partner with healthcare organizations may capture diagnoses, dietary restrictions, or prescription information. Each additional data point expands both the potential benefit — better-tailored services — and the potential harm if that information is mishandled.</p>
+
+<p>Before collecting any data point, ask a simple question: what will we actually do with this? If the honest answer is "we collect it because we always have," that is reason enough to stop. Data minimization — collecting only what is genuinely needed — reduces risk, reduces storage costs, and communicates respect to every client who sits down at your intake desk.</p>
+
+<h2>Legal and Regulatory Frameworks</h2>
+
+<p>Food banks are not uniformly subject to HIPAA, but any organization that exchanges health information with covered healthcare entities — hospitals, clinics, federally qualified health centers — may trigger HIPAA obligations through a business associate agreement. If your food bank operates a medically tailored meal program, accepts health referrals that include diagnoses, or shares client data back to a health system, legal review of your HIPAA exposure is warranted.</p>
+
+<p>Beyond HIPAA, state consumer privacy laws are expanding rapidly. California, Virginia, Colorado, Connecticut, and a growing number of states have enacted comprehensive privacy statutes. Some explicitly exempt nonprofits; others do not. Feeding America's member food bank standards include data governance requirements for network members. Review your state's current law and your network membership obligations annually — this landscape is changing quickly.</p>
+
+<aside class="article-pullquote"><blockquote><p>When clients fear their information might be shared with landlords or government agencies, they stay home hungry. Data privacy is inseparable from access.</p></blockquote></aside>
+
+<h2>Building a Data Governance Policy</h2>
+
+<p>A data governance policy does not need to be a lengthy legal document. It needs to answer five questions clearly: What data do we collect? Why do we collect it? Who can access it? Who do we share it with, under what conditions? How long do we keep it before deleting it? Document those answers, review them annually, and train every staff member and volunteer who touches client data on the policies that apply to their role.</p>
+
+<p>Access controls are the operational backbone of governance. Not everyone who works at your food bank needs access to every client record. Volunteers processing distribution should not be able to see income or health fields. Partner organizations receiving referrals should receive only the minimum information required to serve the client. Role-based permissions in your client management system — including Salesforce — can enforce these boundaries automatically.</p>
+
+<h2>Consent and Transparency</h2>
+
+<p>Clients have a right to understand what information you collect and why. An intake form written in plain language — not legal boilerplate — that explains each data field, why it is collected, and who can see it builds trust before a word is spoken. Offering the form in the primary languages of your community signals that privacy protection extends to everyone you serve, not just English speakers.</p>
+
+<p>Informed consent means clients genuinely understand what they are agreeing to, not that they signed a form. For immigrant communities and other vulnerable populations, that distinction matters enormously. Make clear, in writing and verbally, that services are not conditioned on sharing optional data, and that clients can ask what information you hold about them.</p>
+
+<h2>Special Considerations for Vulnerable Populations</h2>
+
+<p>Immigrant clients, domestic violence survivors, individuals experiencing homelessness, and justice-involved individuals may face specific risks if their data is mishandled. Develop written protocols for what your organization will and will not do in response to requests for client information from law enforcement, immigration enforcement, or other government agencies. Have that protocol reviewed by an attorney, communicate it to staff, and display it publicly. Knowing that your organization has a clear, protective policy reduces fear and increases access among the people who most need your services.</p>
+
+<h2>Data Retention and Deletion</h2>
+
+<p>Retaining client data indefinitely is not a neutral choice. Old records that are never deleted accumulate risk — a data breach exposes information from clients who visited five years ago and have long since moved on. Set a retention schedule: active clients' records are maintained for the duration of their engagement plus a defined period afterward; inactive records are deleted or anonymized on a rolling basis. Build that schedule into your database processes so deletion happens automatically, not only when someone remembers to do it.</p>
+
+<h2>Technology Controls in Salesforce</h2>
+
+<p>Salesforce provides robust tools for enforcing data governance. Field-level security controls which user profiles can view or edit sensitive fields. Sharing rules govern which records are visible to which teams. The Event Monitoring add-on logs who accessed which records, supporting audit trails. Data classification labels allow you to flag sensitive fields — such as income, health notes, or immigration status — so that they receive additional controls during reports and data exports.</p>
+
+<p>When integrating Salesforce with partner systems or third-party analytics tools, review what data flows through those connections. API integrations that pull full client records to external platforms may unintentionally expose fields that should remain internal. Map your data flows at least annually and review integration permissions whenever you add a new connected tool.</p>
+
+<h2>Making Privacy a Cultural Value</h2>
+
+<p>Technology controls and written policies matter, but data privacy ultimately lives in organizational culture. Staff who understand why client privacy matters — not just that a policy requires it — make better decisions in ambiguous situations. Annual training, clear escalation paths for reporting potential privacy violations, and leadership that models respectful data handling all contribute to a culture where privacy protection is not a bureaucratic obligation but an expression of mission. Every client who trusts your organization with their information is extending a gesture of vulnerability. Honoring that trust is how you earn the right to keep serving your community.</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                                <a href="salesforce-security-nonprofits.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">Salesforce Security Best Practices for Nonprofits</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+                <a href="food-bank-client-services-technology.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Industry Insights</span>
+                    <span class="article-read-next__card-title">Technology That Serves with Dignity: Modernizing Food Bank Client Services</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+                <a href="salesforce-food-bank-operations.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">5 Ways Salesforce Transforms Food Bank Operations</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Want to Review Your Data Privacy Practices?</h2>
+                <p class="article-cta__text">Food-N-Force helps food banks implement data governance practices that protect clients and build trust in your community.</p>
+                <div class="article-cta__actions">
+                    <a href="/contact.html" class="resource-action">Get in Touch</a>
+                    <a href="/blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+</body>
+</html>
