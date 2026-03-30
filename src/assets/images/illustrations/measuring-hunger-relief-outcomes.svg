@@ -1,0 +1,130 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Side-by-side comparison showing a simple output bar chart on the left and a richer outcome dashboard on the right">
+  <defs>
+    <linearGradient id="mhr-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#111827;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="mhr-left-panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1B4F72;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#1e3a5f;stop-opacity:0.35"/>
+    </linearGradient>
+    <linearGradient id="mhr-right-panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.45"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.35"/>
+    </linearGradient>
+    <linearGradient id="mhr-bar1" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#1B4F72;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0.7"/>
+    </linearGradient>
+    <linearGradient id="mhr-bar2" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#1B4F72;stop-opacity:0.75"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.65"/>
+    </linearGradient>
+    <linearGradient id="mhr-metric-a" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.8"/>
+    </linearGradient>
+    <linearGradient id="mhr-metric-b" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.8"/>
+    </linearGradient>
+    <linearGradient id="mhr-metric-c" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:0.8"/>
+    </linearGradient>
+    <linearGradient id="mhr-metric-d" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#mhr-bg)"/>
+
+  <!-- Divider line -->
+  <line x1="400" y1="20" x2="400" y2="380" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="5,5"/>
+
+  <!-- VS badge at center -->
+  <circle cx="400" cy="200" r="20" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="400" y="205" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.6)" text-anchor="middle">VS</text>
+
+  <!-- ===== LEFT PANEL: Output Metrics ===== -->
+  <rect x="20" y="55" width="355" height="305" rx="14" fill="url(#mhr-left-panel)"/>
+  <rect x="20" y="55" width="355" height="305" rx="14" fill="none" stroke="rgba(1,118,211,0.3)" stroke-width="1.5"/>
+
+  <!-- Left panel header -->
+  <text x="197" y="85" font-family="system-ui" font-size="13" font-weight="700" fill="rgba(255,255,255,0.6)" text-anchor="middle" letter-spacing="1">WHAT WE COUNT</text>
+  <text x="197" y="103" font-family="system-ui" font-size="16" font-weight="700" fill="white" text-anchor="middle">Output Metrics</text>
+
+  <!-- Bar chart: Pounds Distributed -->
+  <text x="197" y="126" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle">Pounds Distributed (millions)</text>
+
+  <!-- Bars -->
+  <!-- Bar: Q1 -->
+  <rect x="65" y="230" width="42" height="90" rx="4" fill="url(#mhr-bar1)"/>
+  <text x="86" y="224" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">1.2M</text>
+  <text x="86" y="336" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Q1</text>
+
+  <!-- Bar: Q2 -->
+  <rect x="125" y="200" width="42" height="120" rx="4" fill="url(#mhr-bar1)"/>
+  <text x="146" y="194" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">1.6M</text>
+  <text x="146" y="336" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Q2</text>
+
+  <!-- Bar: Q3 -->
+  <rect x="185" y="175" width="42" height="145" rx="4" fill="url(#mhr-bar2)"/>
+  <text x="206" y="169" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">1.9M</text>
+  <text x="206" y="336" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Q3</text>
+
+  <!-- Bar: Q4 -->
+  <rect x="245" y="190" width="42" height="130" rx="4" fill="url(#mhr-bar2)"/>
+  <text x="266" y="184" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">1.7M</text>
+  <text x="266" y="336" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Q4</text>
+
+  <!-- Axis line -->
+  <line x1="50" y1="320" x2="315" y2="320" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <line x1="50" y1="320" x2="50" y2="145" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+
+  <!-- Annotation: does this = less hunger? -->
+  <text x="197" y="355" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle" font-style="italic">Does more volume = less hunger? Unknown.</text>
+
+  <!-- ===== RIGHT PANEL: Outcome Metrics ===== -->
+  <rect x="425" y="55" width="355" height="305" rx="14" fill="url(#mhr-right-panel)"/>
+  <rect x="425" y="55" width="355" height="305" rx="14" fill="none" stroke="rgba(14,165,233,0.4)" stroke-width="1.5"/>
+
+  <!-- Right panel header -->
+  <text x="602" y="85" font-family="system-ui" font-size="13" font-weight="700" fill="rgba(14,165,233,0.8)" text-anchor="middle" letter-spacing="1">WHAT WE MEASURE</text>
+  <text x="602" y="103" font-family="system-ui" font-size="16" font-weight="700" fill="white" text-anchor="middle">Outcome Dashboard</text>
+
+  <!-- Metric A: Food Security Score -->
+  <rect x="445" y="115" width="155" height="72" rx="8" fill="url(#mhr-metric-a)" opacity="0.85"/>
+  <text x="522" y="135" font-family="system-ui" font-size="10" font-weight="600" fill="rgba(255,255,255,0.7)" text-anchor="middle">Food Security Score</text>
+  <text x="522" y="158" font-family="system-ui" font-size="22" font-weight="700" fill="white" text-anchor="middle">↑ 34%</text>
+  <text x="522" y="178" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.6)" text-anchor="middle">improved over 6 months</text>
+
+  <!-- Metric B: Client Stability -->
+  <rect x="610" y="115" width="155" height="72" rx="8" fill="url(#mhr-metric-b)" opacity="0.85"/>
+  <text x="687" y="135" font-family="system-ui" font-size="10" font-weight="600" fill="rgba(255,255,255,0.7)" text-anchor="middle">Client Stability Rate</text>
+  <text x="687" y="158" font-family="system-ui" font-size="22" font-weight="700" fill="white" text-anchor="middle">62%</text>
+  <text x="687" y="178" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.6)" text-anchor="middle">stabilized within 90 days</text>
+
+  <!-- Metric C: Return Visit Pattern -->
+  <rect x="445" y="200" width="155" height="72" rx="8" fill="url(#mhr-metric-c)" opacity="0.85"/>
+  <text x="522" y="218" font-family="system-ui" font-size="10" font-weight="600" fill="rgba(255,255,255,0.7)" text-anchor="middle">Visit Frequency Trend</text>
+  <!-- Mini sparkline -->
+  <polyline points="452,245 465,248 478,244 492,238 505,235 518,230 530,228" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+  <circle cx="530" cy="228" r="3" fill="white"/>
+  <text x="522" y="262" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.6)" text-anchor="middle">declining → stabilization</text>
+
+  <!-- Metric D: Referral Connection Rate -->
+  <rect x="610" y="200" width="155" height="72" rx="8" fill="url(#mhr-metric-d)" opacity="0.85"/>
+  <text x="687" y="218" font-family="system-ui" font-size="10" font-weight="600" fill="rgba(255,255,255,0.7)" text-anchor="middle">Referral Connect Rate</text>
+  <text x="687" y="241" font-family="system-ui" font-size="22" font-weight="700" fill="white" text-anchor="middle">78%</text>
+  <text x="687" y="262" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.6)" text-anchor="middle">connected to services</text>
+
+  <!-- Longitudinal note -->
+  <text x="602" y="302" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Tracked longitudinally via Salesforce client records</text>
+  <text x="602" y="316" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle" font-style="italic">These numbers answer: Are people better off?</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="388" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.3)" text-anchor="middle">Outcome Measurement Framework — From Outputs to Meaningful Hunger Relief Indicators</text>
+</svg>

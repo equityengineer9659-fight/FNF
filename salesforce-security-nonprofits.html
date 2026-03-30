@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Security Best Practices for Nonprofits - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="How nonprofits can protect sensitive client data in Salesforce using profiles, Health Check, field-level security, audit trails, and incident response.">
+    <meta name="keywords" content="food bank technology, nonprofit Salesforce, food bank software, food relief">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/salesforce-security-nonprofits.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Salesforce Security Best Practices for Nonprofits - Food-N-Force">
+    <meta property="og:description" content="How nonprofits can protect sensitive client data in Salesforce using profiles, Health Check, field-level security, audit trails, and incident response.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://foodnforce.com/salesforce-security-nonprofits.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2025-12-18">
+    <meta property="article:section" content="Technology Strategy">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Salesforce Security Best Practices for Nonprofits - Food-N-Force">
+    <meta name="twitter:description" content="How nonprofits can protect sensitive client data in Salesforce using profiles, Health Check, field-level security, audit trails, and incident response.">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Salesforce Security Best Practices for Nonprofits",
+      "description": "How nonprofits can protect sensitive client data in Salesforce using profiles, Health Check, field-level security, audit trails, and incident response.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "datePublished": "2025-12-18",
+      "url": "https://foodnforce.com/salesforce-security-nonprofits.html",
+      "image": "https://foodnforce.com/og-image.png",
+      "articleSection": "Technology Strategy",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--tech">Technology Strategy</span>
+                <h1 id="article-title" class="article-hero__title">Salesforce Security Best Practices for Nonprofits</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2025-12-18">December 2025</time>
+                    <span>4 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+    When a food bank collects household income data, immigration status, health information, and family composition to serve clients well, it takes on a serious responsibility. That data exists to help people — not to expose them to harm. Salesforce is a powerful platform for managing it, but a powerful platform configured carelessly is still a liability. Security is not a technical afterthought for nonprofits handling sensitive client information; it is a core expression of your organization's values.
+</p>
+
+<p>
+    Most Salesforce security breaches in nonprofits don't involve sophisticated hackers. They involve overly permissive user accounts, weak passwords, unreviewed sharing settings, and access that was never removed when a staff member or volunteer departed. The good news is that Salesforce provides robust tools to prevent exactly these scenarios — and most of them require no additional cost, only deliberate configuration.
+</p>
+
+<h2>Start with Profiles and the Principle of Least Privilege</h2>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="src/assets/images/illustrations/salesforce-security-nonprofits.svg" alt="Layered security diagram showing concentric rings from network security through application security to data security and client privacy at the center" width="800" height="400" loading="lazy">
+</figure>
+
+<p>
+    The foundation of Salesforce security is access control: who can see what, and who can do what. Profiles determine the baseline permissions for every user in your org — the objects they can access, the fields they can read or edit, and the system permissions they hold. Permission sets then extend those baselines for specific roles without requiring you to create a proliferation of custom profiles.
+</p>
+
+<p>
+    The principle of least privilege means every user has exactly the access they need to do their job — no more. This sounds obvious, but it's common to find nonprofit orgs where most staff share a single "Standard User" profile with broad access, because narrowing it down felt like an administrative burden at implementation time. That burden is worth taking on. A case manager does not need access to financial records. A volunteer does not need to edit client contact information. Walk through each role in your organization and map what they actually need — then configure accordingly.
+</p>
+
+<h2>Field-Level Security for Sensitive Data</h2>
+
+<p>
+    Field-level security (FLS) is one of Salesforce's most underused protections. Even when a user has access to an object — say, a client intake record — FLS lets you restrict which fields within that record they can see or edit. Income information, household size, health conditions, and immigration-adjacent data should be restricted to staff with a legitimate need to access them.
+</p>
+
+<p>
+    To configure FLS, navigate to each sensitive field's definition in Setup and review the field accessibility settings for each profile. It's painstaking work the first time, but the result is a far more defensible data architecture. If a staff laptop is compromised or a login credential is stolen, field-level security limits how much of your clients' most sensitive information is actually reachable.
+</p>
+
+<aside class="article-pullquote">
+    <blockquote>
+        <p>Nonprofits handling income, health, and household data have ethical obligations that go far beyond convenience — and Salesforce gives you the tools to honor them.</p>
+    </blockquote>
+</aside>
+
+<h2>The Health Check Tool: Your Security Baseline</h2>
+
+<p>
+    Salesforce's Health Check tool provides a scored assessment of your org's security configuration against Salesforce's recommended baseline. You'll find it in Setup under Security Center. The score runs from 0 to 100, and while no single number tells the complete story, consistently reviewing and improving it is one of the most efficient security investments an admin can make.
+</p>
+
+<p>
+    Health Check flags issues in categories including password policies, session settings, network access, and certificate configurations. Common findings in nonprofit orgs include: password expiration policies that are too lenient or disabled entirely; session timeout settings that allow users to remain logged in indefinitely; and connected apps with permissions that exceed what those apps require. Address critical and high-risk findings first. Medium-risk items that relate to client data access should be prioritized over those affecting only administrative functions.
+</p>
+
+<h2>Two-Factor Authentication: Non-Negotiable</h2>
+
+<p>
+    Multi-factor authentication (MFA) is now required by Salesforce for all users, but enforcement and compliance aren't the same thing. Verify that MFA is actually enabled and active for every user in your org — including service accounts, integration users, and any administrative accounts that may have been grandfathered through older configurations. The Salesforce MFA Enforcement Roadmap provides guidance on which editions are fully enforced versus those that still require manual activation.
+</p>
+
+<p>
+    For nonprofits, the practical challenge is supporting staff and volunteers who may be less technically comfortable. Invest time in clear onboarding documentation for MFA setup, provide in-person support for those who struggle with authenticator apps, and designate someone responsible for helping users who get locked out. The friction is real but manageable — and far less costly than a compromised account.
+</p>
+
+<h2>Audit Trails and Login History</h2>
+
+<p>
+    Salesforce maintains a Setup Audit Trail that records configuration changes made in your org — who changed what, and when. It also maintains Login History, showing every login attempt including source IP address, browser, and authentication method. These logs are invaluable after a security incident, but they're worth reviewing proactively as well.
+</p>
+
+<p>
+    Set a recurring calendar reminder to review Login History monthly. Look for logins from unfamiliar geographic locations, unusual login times, or failed authentication attempts that suggest a credential stuffing attempt. Review the Audit Trail quarterly to catch configuration changes you didn't authorize. If you use a managed services partner, this audit process also gives you visibility into what changes are being made to your org and why.
+</p>
+
+<h2>Regular Permission Reviews and Offboarding</h2>
+
+<p>
+    One of the highest-risk moments in any organization is when a staff member or volunteer departs. A former employee retaining access to client data is both a security risk and, depending on your jurisdiction, a compliance issue. Build a formal offboarding checklist that includes immediate Salesforce account deactivation as a required step — not a nice-to-have. Deactivated accounts retain their record history but cannot log in, which preserves data integrity while eliminating access.
+</p>
+
+<p>
+    Beyond offboarding, conduct a full permission audit at least annually. Pull a report of all active users, their profiles, permission sets, and last login dates. Accounts that haven't been used in 90 days warrant review. Roles that have accumulated permission sets over time may have drifted far from the original least-privilege intent. Clean, well-maintained access control isn't just good security — it makes your org easier to manage and document for funders and auditors.
+</p>
+
+<h2>When a Security Incident Occurs</h2>
+
+<p>
+    Despite best efforts, incidents happen. A staff member clicks a phishing link. A password is reused across services and compromised in an unrelated breach. A former volunteer's account was never deactivated. When you discover a potential security incident, move quickly: immediately deactivate any accounts you believe are compromised, run Login History to establish a timeline of suspicious activity, and document what data may have been accessed. Salesforce's security team is reachable for incidents involving platform-level concerns, and your organization's legal counsel should be notified if client data was accessed without authorization.
+</p>
+
+<p>
+    The organizations that handle security incidents well are the ones that have thought through their response in advance. A one-page incident response checklist kept in an accessible location — not only in Salesforce itself — means that when the pressure is on, staff have clear steps to follow. Security is not a destination; it's an ongoing practice that reflects how seriously your organization takes its obligation to the people it serves.
+</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                                <a href="data-privacy-food-bank-clients.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">Client Data Privacy in Food Banks: What You Need to Know</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+                <a href="salesforce-food-bank-operations.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">5 Ways Salesforce Transforms Food Bank Operations</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+                <a href="salesforce-spring-2026-nonprofits.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">Salesforce Spring 2026: Key Updates for Nonprofit Admins</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Want a Security Review of Your Salesforce Org?</h2>
+                <p class="article-cta__text">Food-N-Force conducts comprehensive Salesforce security assessments and helps nonprofits implement best practices that protect client data.</p>
+                <div class="article-cta__actions">
+                    <a href="contact.html" class="resource-action">Get in Touch</a>
+                    <a href="blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="src/js/main.js" defer></script>
+</body>
+</html>

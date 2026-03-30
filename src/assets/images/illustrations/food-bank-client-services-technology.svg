@@ -1,0 +1,175 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Client journey flow diagram showing Before and After comparison across five stages: Arrival, Intake, Service Selection, Distribution, and Follow-up">
+  <defs>
+    <linearGradient id="fbcs-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="fbcs-before" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0.35"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.2"/>
+    </linearGradient>
+    <linearGradient id="fbcs-after" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:0.35"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.2"/>
+    </linearGradient>
+    <linearGradient id="fbcs-arrow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#fbcs-bg)" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="white" opacity="0.9" text-anchor="middle">Client Service Journey: Before vs. After Digital Modernization</text>
+
+  <!-- Row labels -->
+  <rect x="8" y="50" width="60" height="134" rx="6" fill="rgba(220,38,38,0.15)" stroke="#dc2626" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="38" y="105" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#f87171" text-anchor="middle" transform="rotate(-90,38,105)">BEFORE</text>
+
+  <rect x="8" y="200" width="60" height="164" rx="6" fill="rgba(5,150,105,0.15)" stroke="#10b981" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="38" y="280" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#6ee7b7" text-anchor="middle" transform="rotate(-90,38,280)">AFTER</text>
+
+  <!-- Stage column headers -->
+  <!-- Stage 1: Arrival -->
+  <text x="120" y="48" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle">Arrival</text>
+  <!-- Stage 2: Intake -->
+  <text x="260" y="48" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle">Intake</text>
+  <!-- Stage 3: Selection -->
+  <text x="410" y="48" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle">Service Selection</text>
+  <!-- Stage 4: Distribution -->
+  <text x="570" y="48" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle">Distribution</text>
+  <!-- Stage 5: Follow-up -->
+  <text x="710" y="48" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle">Follow-up</text>
+
+  <!-- Progress arrows (top, before) -->
+  <line x1="75" y1="117" x2="785" y2="117" stroke="#334155" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+
+  <!-- ===== BEFORE ROW ===== -->
+  <!-- Arrival Before -->
+  <rect x="75" y="55" width="90" height="108" rx="8" fill="url(#fbcs-before)" stroke="#f87171" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="120" y="78" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">😰</text>
+  <text x="120" y="96" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">Long queue</text>
+  <text x="120" y="109" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">No appointment</text>
+  <text x="120" y="122" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">Uncertainty</text>
+  <text x="120" y="135" font-family="system-ui, sans-serif" font-size="9" fill="#f59e0b" text-anchor="middle">45 min wait</text>
+  <text x="120" y="149" font-family="system-ui, sans-serif" font-size="8" fill="#ef4444" text-anchor="middle">★ friction</text>
+
+  <!-- Arrow 1 -->
+  <polygon points="169,117 180,112 180,122" fill="#475569"/>
+
+  <!-- Intake Before -->
+  <rect x="185" y="55" width="150" height="108" rx="8" fill="url(#fbcs-before)" stroke="#f87171" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="260" y="78" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">📋</text>
+  <text x="260" y="96" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">Paper clipboard</text>
+  <text x="260" y="109" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">Repeat questions</text>
+  <text x="260" y="122" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">English only</text>
+  <text x="260" y="135" font-family="system-ui, sans-serif" font-size="9" fill="#f59e0b" text-anchor="middle">8 min per client</text>
+  <text x="260" y="149" font-family="system-ui, sans-serif" font-size="8" fill="#ef4444" text-anchor="middle">★★ friction</text>
+
+  <!-- Arrow 2 -->
+  <polygon points="338,117 349,112 349,122" fill="#475569"/>
+
+  <!-- Selection Before -->
+  <rect x="354" y="55" width="110" height="108" rx="8" fill="url(#fbcs-before)" stroke="#f87171" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="410" y="78" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">🛒</text>
+  <text x="410" y="96" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">Staff-selected only</text>
+  <text x="410" y="109" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">No preferences</text>
+  <text x="410" y="122" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">Food waste risk</text>
+  <text x="410" y="135" font-family="system-ui, sans-serif" font-size="9" fill="#f59e0b" text-anchor="middle">Limited choice</text>
+  <text x="410" y="149" font-family="system-ui, sans-serif" font-size="8" fill="#ef4444" text-anchor="middle">★★ friction</text>
+
+  <!-- Arrow 3 -->
+  <polygon points="467,117 478,112 478,122" fill="#475569"/>
+
+  <!-- Distribution Before -->
+  <rect x="483" y="55" width="170" height="108" rx="8" fill="url(#fbcs-before)" stroke="#f87171" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="568" y="78" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">📦</text>
+  <text x="568" y="96" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">Manual check-in</text>
+  <text x="568" y="109" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">No record update</text>
+  <text x="568" y="122" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">Inventory guesswork</text>
+  <text x="568" y="135" font-family="system-ui, sans-serif" font-size="9" fill="#f59e0b" text-anchor="middle">Paper tracking</text>
+  <text x="568" y="149" font-family="system-ui, sans-serif" font-size="8" fill="#ef4444" text-anchor="middle">★ friction</text>
+
+  <!-- Arrow 4 -->
+  <polygon points="656,117 667,112 667,122" fill="#475569"/>
+
+  <!-- Follow-up Before -->
+  <rect x="672" y="55" width="108" height="108" rx="8" fill="url(#fbcs-before)" stroke="#f87171" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="726" y="78" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">🤷</text>
+  <text x="726" y="96" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">No follow-up</text>
+  <text x="726" y="109" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">No reminder</text>
+  <text x="726" y="122" font-family="system-ui, sans-serif" font-size="9" fill="#fca5a5" text-anchor="middle">Client lost</text>
+  <text x="726" y="135" font-family="system-ui, sans-serif" font-size="9" fill="#f59e0b" text-anchor="middle">High lapse rate</text>
+  <text x="726" y="149" font-family="system-ui, sans-serif" font-size="8" fill="#ef4444" text-anchor="middle">★★ friction</text>
+
+  <!-- ===== AFTER ROW ===== -->
+  <!-- Progress arrows (bottom, after) -->
+  <line x1="75" y1="282" x2="785" y2="282" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.4"/>
+
+  <!-- Arrival After -->
+  <rect x="75" y="205" width="90" height="148" rx="8" fill="url(#fbcs-after)" stroke="#10b981" stroke-width="1" stroke-opacity="0.6"/>
+  <text x="120" y="230" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">📱</text>
+  <text x="120" y="249" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Scheduled appt.</text>
+  <text x="120" y="262" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">SMS reminder</text>
+  <text x="120" y="275" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">QR check-in</text>
+  <text x="120" y="288" font-family="system-ui, sans-serif" font-size="9" fill="#34d399" text-anchor="middle">5 min wait</text>
+  <text x="120" y="301" font-family="system-ui, sans-serif" font-size="8" fill="#10b981" text-anchor="middle">✓ smooth</text>
+  <text x="120" y="344" font-family="system-ui, sans-serif" font-size="8" fill="#0ea5e9" text-anchor="middle">-89% wait time</text>
+
+  <!-- Arrow 1 After -->
+  <polygon points="169,282 180,277 180,287" fill="#10b981" opacity="0.7"/>
+
+  <!-- Intake After -->
+  <rect x="185" y="205" width="150" height="148" rx="8" fill="url(#fbcs-after)" stroke="#10b981" stroke-width="1" stroke-opacity="0.6"/>
+  <text x="260" y="230" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">💻</text>
+  <text x="260" y="249" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Tablet — auto-fill</text>
+  <text x="260" y="262" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Bilingual forms</text>
+  <text x="260" y="275" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Minimal data ask</text>
+  <text x="260" y="288" font-family="system-ui, sans-serif" font-size="9" fill="#34d399" text-anchor="middle">2 min per client</text>
+  <text x="260" y="301" font-family="system-ui, sans-serif" font-size="8" fill="#10b981" text-anchor="middle">✓ smooth</text>
+  <text x="260" y="344" font-family="system-ui, sans-serif" font-size="8" fill="#0ea5e9" text-anchor="middle">-75% intake time</text>
+
+  <!-- Arrow 2 After -->
+  <polygon points="338,282 349,277 349,287" fill="#10b981" opacity="0.7"/>
+
+  <!-- Selection After -->
+  <rect x="354" y="205" width="110" height="148" rx="8" fill="url(#fbcs-after)" stroke="#10b981" stroke-width="1" stroke-opacity="0.6"/>
+  <text x="410" y="230" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">✅</text>
+  <text x="410" y="249" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Client-choice</text>
+  <text x="410" y="262" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Saved prefs</text>
+  <text x="410" y="275" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Dietary filters</text>
+  <text x="410" y="288" font-family="system-ui, sans-serif" font-size="9" fill="#34d399" text-anchor="middle">Autonomy respected</text>
+  <text x="410" y="301" font-family="system-ui, sans-serif" font-size="8" fill="#10b981" text-anchor="middle">✓ smooth</text>
+  <text x="410" y="344" font-family="system-ui, sans-serif" font-size="8" fill="#0ea5e9" text-anchor="middle">+31% satisfaction</text>
+
+  <!-- Arrow 3 After -->
+  <polygon points="467,282 478,277 478,287" fill="#10b981" opacity="0.7"/>
+
+  <!-- Distribution After -->
+  <rect x="483" y="205" width="170" height="148" rx="8" fill="url(#fbcs-after)" stroke="#10b981" stroke-width="1" stroke-opacity="0.6"/>
+  <text x="568" y="230" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">📊</text>
+  <text x="568" y="249" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Auto inventory update</text>
+  <text x="568" y="262" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Real-time capacity</text>
+  <text x="568" y="275" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Digital receipt</text>
+  <text x="568" y="288" font-family="system-ui, sans-serif" font-size="9" fill="#34d399" text-anchor="middle">Data auto-captured</text>
+  <text x="568" y="301" font-family="system-ui, sans-serif" font-size="8" fill="#10b981" text-anchor="middle">✓ smooth</text>
+  <text x="568" y="344" font-family="system-ui, sans-serif" font-size="8" fill="#0ea5e9" text-anchor="middle">-60% data entry</text>
+
+  <!-- Arrow 4 After -->
+  <polygon points="656,282 667,277 667,287" fill="#10b981" opacity="0.7"/>
+
+  <!-- Follow-up After -->
+  <rect x="672" y="205" width="108" height="148" rx="8" fill="url(#fbcs-after)" stroke="#10b981" stroke-width="1" stroke-opacity="0.6"/>
+  <text x="726" y="230" font-family="system-ui, sans-serif" font-size="19" text-anchor="middle">💬</text>
+  <text x="726" y="249" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Auto next-visit</text>
+  <text x="726" y="262" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">SMS resources</text>
+  <text x="726" y="275" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Satisfaction pulse</text>
+  <text x="726" y="288" font-family="system-ui, sans-serif" font-size="9" fill="#34d399" text-anchor="middle">Client retained</text>
+  <text x="726" y="301" font-family="system-ui, sans-serif" font-size="8" fill="#10b981" text-anchor="middle">✓ smooth</text>
+  <text x="726" y="344" font-family="system-ui, sans-serif" font-size="8" fill="#0ea5e9" text-anchor="middle">+44% retention</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="390" font-family="system-ui, sans-serif" font-size="10" fill="#475569" text-anchor="middle">food-n-force.com · Client Services Technology</text>
+</svg>

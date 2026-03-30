@@ -1,0 +1,109 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four-phase digital transformation roadmap for small food banks showing Digitize, Connect, Automate, and Analyze phases on an upward path">
+  <defs>
+    <linearGradient id="dtsb-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="dtsb-phase1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="dtsb-phase2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1d4ed8;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="dtsb-phase3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="dtsb-phase4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="dtsb-path" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#dtsb-bg)" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="white" opacity="0.9" text-anchor="middle">Digital Transformation Roadmap for Small Food Banks</text>
+
+  <!-- Upward path (background road) -->
+  <path d="M 80 320 L 230 270 L 390 210 L 570 150 L 730 100" stroke="url(#dtsb-path)" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.5"/>
+  <!-- Dashed centerline -->
+  <path d="M 80 320 L 230 270 L 390 210 L 570 150 L 730 100" stroke="#475569" stroke-width="1" fill="none" stroke-dasharray="6,5"/>
+
+  <!-- ===== Phase 1: Digitize ===== -->
+  <!-- Node circle -->
+  <circle cx="80" cy="320" r="32" fill="url(#dtsb-phase1)" opacity="0.9"/>
+  <text x="80" y="316" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Phase</text>
+  <text x="80" y="329" font-family="system-ui, sans-serif" font-size="18" font-weight="800" fill="white" text-anchor="middle">1</text>
+  <!-- Label card -->
+  <rect x="20" y="360" width="120" height="30" rx="6" fill="url(#dtsb-phase1)" opacity="0.8"/>
+  <text x="80" y="379" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">Digitize</text>
+  <!-- Bullet items -->
+  <text x="80" y="250" font-family="system-ui, sans-serif" font-size="9" fill="#93c5fd" text-anchor="middle">Digital intake forms</text>
+  <text x="80" y="263" font-family="system-ui, sans-serif" font-size="9" fill="#93c5fd" text-anchor="middle">Shared spreadsheets</text>
+  <text x="80" y="276" font-family="system-ui, sans-serif" font-size="9" fill="#93c5fd" text-anchor="middle">Online scheduling</text>
+  <text x="80" y="289" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Weeks 1–6</text>
+
+  <!-- ===== Phase 2: Connect ===== -->
+  <circle cx="250" cy="260" r="32" fill="url(#dtsb-phase2)" opacity="0.9"/>
+  <text x="250" y="256" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Phase</text>
+  <text x="250" y="269" font-family="system-ui, sans-serif" font-size="18" font-weight="800" fill="white" text-anchor="middle">2</text>
+  <rect x="190" y="298" width="120" height="30" rx="6" fill="url(#dtsb-phase2)" opacity="0.8"/>
+  <text x="250" y="317" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">Connect</text>
+  <!-- Bullets -->
+  <text x="250" y="190" font-family="system-ui, sans-serif" font-size="9" fill="#93c5fd" text-anchor="middle">System integrations</text>
+  <text x="250" y="203" font-family="system-ui, sans-serif" font-size="9" fill="#93c5fd" text-anchor="middle">Data flows unified</text>
+  <text x="250" y="216" font-family="system-ui, sans-serif" font-size="9" fill="#93c5fd" text-anchor="middle">Zapier / Power Automate</text>
+  <text x="250" y="229" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Months 2–4</text>
+
+  <!-- ===== Phase 3: Automate ===== -->
+  <circle cx="420" cy="195" r="32" fill="url(#dtsb-phase3)" opacity="0.9"/>
+  <text x="420" y="191" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Phase</text>
+  <text x="420" y="204" font-family="system-ui, sans-serif" font-size="18" font-weight="800" fill="white" text-anchor="middle">3</text>
+  <rect x="360" y="233" width="120" height="30" rx="6" fill="url(#dtsb-phase3)" opacity="0.8"/>
+  <text x="420" y="252" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">Automate</text>
+  <!-- Bullets -->
+  <text x="420" y="125" font-family="system-ui, sans-serif" font-size="9" fill="#7dd3fc" text-anchor="middle">Workflow triggers</text>
+  <text x="420" y="138" font-family="system-ui, sans-serif" font-size="9" fill="#7dd3fc" text-anchor="middle">Auto-reminders</text>
+  <text x="420" y="151" font-family="system-ui, sans-serif" font-size="9" fill="#7dd3fc" text-anchor="middle">Salesforce platform</text>
+  <text x="420" y="164" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Months 4–9</text>
+
+  <!-- ===== Phase 4: Analyze ===== -->
+  <circle cx="590" cy="133" r="32" fill="url(#dtsb-phase4)" opacity="0.95"/>
+  <text x="590" y="129" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Phase</text>
+  <text x="590" y="142" font-family="system-ui, sans-serif" font-size="18" font-weight="800" fill="white" text-anchor="middle">4</text>
+  <rect x="530" y="171" width="120" height="30" rx="6" fill="url(#dtsb-phase4)" opacity="0.8"/>
+  <text x="590" y="190" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">Analyze</text>
+  <!-- Bullets -->
+  <text x="590" y="65" font-family="system-ui, sans-serif" font-size="9" fill="#67e8f9" text-anchor="middle">Impact dashboards</text>
+  <text x="590" y="78" font-family="system-ui, sans-serif" font-size="9" fill="#67e8f9" text-anchor="middle">Funder reporting</text>
+  <text x="590" y="91" font-family="system-ui, sans-serif" font-size="9" fill="#67e8f9" text-anchor="middle">Data-driven decisions</text>
+  <text x="590" y="104" font-family="system-ui, sans-serif" font-size="9" fill="#64748b" text-anchor="middle">Month 9 onward</text>
+
+  <!-- Continuous improvement loop at end -->
+  <path d="M 720 100 Q 760 80 760 115 Q 760 140 720 130" stroke="#06b6d4" stroke-width="2" fill="none"/>
+  <polygon points="718,127 728,133 720,140" fill="#06b6d4"/>
+  <text x="760" y="100" font-family="system-ui, sans-serif" font-size="9" fill="#06b6d4" text-anchor="middle">Continuous</text>
+  <text x="760" y="112" font-family="system-ui, sans-serif" font-size="9" fill="#06b6d4" text-anchor="middle">Improvement</text>
+
+  <!-- Starting point indicator -->
+  <rect x="20" y="310" width="42" height="20" rx="4" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1"/>
+  <text x="41" y="324" font-family="system-ui, sans-serif" font-size="8" fill="#f87171" text-anchor="middle">Paper</text>
+
+  <!-- Ending point indicator -->
+  <rect x="666" y="90" width="56" height="20" rx="4" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="1"/>
+  <text x="694" y="104" font-family="system-ui, sans-serif" font-size="8" fill="#67e8f9" text-anchor="middle">Data-Driven</text>
+
+  <!-- Budget note -->
+  <rect x="20" y="338" width="440" height="24" rx="6" fill="rgba(1,118,211,0.1)" stroke="#0176D3" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="30" y="354" font-family="system-ui, sans-serif" font-size="9" fill="#7dd3fc">Phase 1–2: $0–$500/yr (free tools) · Phase 3: $500–$3,000/yr · Phase 4: Salesforce NPSP (Power of Us: 10 free licenses)</text>
+
+  <text x="400" y="393" font-family="system-ui, sans-serif" font-size="10" fill="#475569" text-anchor="middle">food-n-force.com · Digital Transformation Strategy</text>
+</svg>

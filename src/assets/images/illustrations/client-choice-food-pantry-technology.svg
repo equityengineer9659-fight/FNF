@@ -1,0 +1,151 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Side-by-side comparison of pre-packed box model versus client choice pantry model">
+  <defs>
+    <linearGradient id="cc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1628;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0d1f3c;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="cc-old-panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#1f2937;stop-opacity:0.5"/>
+    </linearGradient>
+    <linearGradient id="cc-new-panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.2"/>
+    </linearGradient>
+    <linearGradient id="cc-box" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6b7280;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#4b5563;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="cc-produce" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cc-protein" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cc-grains" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cc-dairy" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#cc-bg)"/>
+
+  <!-- Divider line -->
+  <line x1="400" y1="20" x2="400" y2="380" stroke="#334155" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="400" y="16" font-family="Arial, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">VS</text>
+
+  <!-- ===== LEFT SIDE: Pre-Packed Box Model ===== -->
+  <rect x="20" y="25" width="360" height="320" rx="10" fill="url(#cc-old-panel)" stroke="#4b5563" stroke-width="1.5"/>
+
+  <!-- Header -->
+  <rect x="20" y="25" width="360" height="36" rx="10" fill="#374151" opacity="0.8"/>
+  <rect x="20" y="45" width="360" height="16" fill="#374151" opacity="0.8"/>
+  <text x="200" y="49" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#9ca3af" text-anchor="middle">Pre-Packed Box Model</text>
+
+  <!-- Step 1: Staff packs box -->
+  <rect x="50" y="80" width="80" height="55" rx="6" fill="url(#cc-box)" opacity="0.8"/>
+  <!-- Box icon -->
+  <rect x="58" y="88" width="64" height="42" rx="3" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+  <line x1="58" y1="100" x2="122" y2="100" stroke="#6b7280" stroke-width="1"/>
+  <line x1="90" y1="88" x2="90" y2="130" stroke="#6b7280" stroke-width="1"/>
+  <text x="90" y="148" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af" text-anchor="middle">Staff Packs</text>
+  <text x="90" y="159" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af" text-anchor="middle">the Box</text>
+
+  <!-- Arrow -->
+  <path d="M138 108 L158 108" stroke="#6b7280" stroke-width="2" marker-end="url(#arrowGray)"/>
+  <text x="148" y="104" font-family="Arial, sans-serif" font-size="8" fill="#6b7280" text-anchor="middle">→</text>
+
+  <!-- Client receives box -->
+  <rect x="160" y="80" width="80" height="55" rx="6" fill="#374151" opacity="0.7" stroke="#4b5563" stroke-width="1"/>
+  <!-- Person + box icon -->
+  <circle cx="200" cy="95" r="8" fill="#6b7280"/>
+  <rect x="188" y="110" width="24" height="18" rx="2" fill="#4b5563" stroke="#6b7280" stroke-width="1"/>
+  <text x="200" y="148" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af" text-anchor="middle">Client Gets</text>
+  <text x="200" y="159" font-family="Arial, sans-serif" font-size="8" fill="#9ca3af" text-anchor="middle">Same Box</text>
+
+  <!-- Arrow -->
+  <text x="258" y="112" font-family="Arial, sans-serif" font-size="14" fill="#6b7280" text-anchor="middle">→</text>
+
+  <!-- Outcome: waste + low satisfaction -->
+  <rect x="270" y="80" width="85" height="55" rx="6" fill="#374151" opacity="0.7" stroke="#ef4444" stroke-width="1"/>
+  <text x="313" y="100" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">🗑️</text>
+  <text x="313" y="120" font-family="Arial, sans-serif" font-size="8" fill="#f87171" text-anchor="middle">Unwanted</text>
+  <text x="313" y="131" font-family="Arial, sans-serif" font-size="8" fill="#f87171" text-anchor="middle">Food Waste</text>
+
+  <!-- Pain points -->
+  <text x="50" y="185" font-family="Arial, sans-serif" font-size="10" fill="#9ca3af">Pain Points:</text>
+  <text x="50" y="202" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">✗  No dietary or cultural customization</text>
+  <text x="50" y="218" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">✗  High rate of unwanted items discarded</text>
+  <text x="50" y="234" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">✗  Lower client return rates</text>
+  <text x="50" y="250" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">✗  Treats all households as identical</text>
+  <text x="50" y="266" font-family="Arial, sans-serif" font-size="9" fill="#6b7280">✗  Staff-intensive box assembly</text>
+
+  <!-- Outcome badges -->
+  <rect x="50" y="285" width="140" height="22" rx="5" fill="#374151" stroke="#6b7280" stroke-width="1"/>
+  <text x="120" y="300" font-family="Arial, sans-serif" font-size="9" fill="#9ca3af" text-anchor="middle">Lower Satisfaction Scores</text>
+  <rect x="200" y="285" width="140" height="22" rx="5" fill="#374151" stroke="#ef4444" stroke-width="1"/>
+  <text x="270" y="300" font-family="Arial, sans-serif" font-size="9" fill="#f87171" text-anchor="middle">Higher Waste Rates</text>
+
+  <!-- ===== RIGHT SIDE: Client Choice Model ===== -->
+  <rect x="420" y="25" width="360" height="320" rx="10" fill="url(#cc-new-panel)" stroke="#0ea5e9" stroke-width="1.5"/>
+
+  <!-- Header -->
+  <rect x="420" y="25" width="360" height="36" rx="10" fill="#0176D3" opacity="0.4"/>
+  <rect x="420" y="45" width="360" height="16" fill="#0176D3" opacity="0.4"/>
+  <text x="600" y="49" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#bae6fd" text-anchor="middle">Client Choice Model</text>
+
+  <!-- Shopping sections row 1 -->
+  <!-- Produce section -->
+  <rect x="440" y="80" width="75" height="62" rx="6" fill="url(#cc-produce)" opacity="0.85"/>
+  <text x="478" y="100" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">🥦</text>
+  <text x="478" y="118" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="white" text-anchor="middle">Produce</text>
+  <text x="478" y="131" font-family="Arial, sans-serif" font-size="8" fill="#d1fae5" text-anchor="middle">Choose 3 items</text>
+
+  <!-- Protein section -->
+  <rect x="524" y="80" width="75" height="62" rx="6" fill="url(#cc-protein)" opacity="0.85"/>
+  <text x="562" y="100" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">🥩</text>
+  <text x="562" y="118" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="white" text-anchor="middle">Protein</text>
+  <text x="562" y="131" font-family="Arial, sans-serif" font-size="8" fill="#bae6fd" text-anchor="middle">Choose 2 items</text>
+
+  <!-- Grains section -->
+  <rect x="608" y="80" width="75" height="62" rx="6" fill="url(#cc-grains)" opacity="0.85"/>
+  <text x="646" y="100" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">🌾</text>
+  <text x="646" y="118" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="white" text-anchor="middle">Grains</text>
+  <text x="646" y="131" font-family="Arial, sans-serif" font-size="8" fill="#fef3c7" text-anchor="middle">Choose 2 items</text>
+
+  <!-- Dairy section -->
+  <rect x="692" y="80" width="75" height="62" rx="6" fill="url(#cc-dairy)" opacity="0.85"/>
+  <text x="730" y="100" font-family="Arial, sans-serif" font-size="16" text-anchor="middle">🥛</text>
+  <text x="730" y="118" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="white" text-anchor="middle">Dairy</text>
+  <text x="730" y="131" font-family="Arial, sans-serif" font-size="8" fill="#ede9fe" text-anchor="middle">Choose 1 item</text>
+
+  <!-- Shopping basket / client -->
+  <rect x="530" y="158" width="140" height="42" rx="8" fill="#0176D3" opacity="0.2" stroke="#0ea5e9" stroke-width="1.5"/>
+  <circle cx="560" cy="176" r="10" fill="#0ea5e9" opacity="0.7"/>
+  <text x="585" y="172" font-family="Arial, sans-serif" font-size="10" fill="#bae6fd">Client shops with</text>
+  <text x="585" y="186" font-family="Arial, sans-serif" font-size="10" fill="#bae6fd">their basket</text>
+
+  <!-- Benefits list -->
+  <text x="440" y="220" font-family="Arial, sans-serif" font-size="10" fill="#7dd3fc">Benefits:</text>
+  <text x="440" y="237" font-family="Arial, sans-serif" font-size="9" fill="#6ee7b7">✓  Dietary &amp; cultural preferences honored</text>
+  <text x="440" y="253" font-family="Arial, sans-serif" font-size="9" fill="#6ee7b7">✓  Dramatically lower food waste</text>
+  <text x="440" y="269" font-family="Arial, sans-serif" font-size="9" fill="#6ee7b7">✓  Higher return visit rates</text>
+  <text x="440" y="285" font-family="Arial, sans-serif" font-size="9" fill="#6ee7b7">✓  Treats clients as autonomous individuals</text>
+
+  <!-- Outcome badges -->
+  <rect x="440" y="298" width="148" height="22" rx="5" fill="#10b981" opacity="0.2" stroke="#10b981" stroke-width="1"/>
+  <text x="514" y="313" font-family="Arial, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">Higher Satisfaction</text>
+  <rect x="598" y="298" width="148" height="22" rx="5" fill="#0ea5e9" opacity="0.2" stroke="#0ea5e9" stroke-width="1"/>
+  <text x="672" y="313" font-family="Arial, sans-serif" font-size="9" fill="#7dd3fc" text-anchor="middle">Less Waste</text>
+
+  <!-- Bottom title -->
+  <text x="400" y="365" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#e0f2fe" text-anchor="middle">From Uniform Boxes to Client-Directed Choice</text>
+  <text x="400" y="383" font-family="Arial, sans-serif" font-size="10" fill="#7ec8e8" text-anchor="middle">Technology makes client choice operationally viable at scale</text>
+</svg>

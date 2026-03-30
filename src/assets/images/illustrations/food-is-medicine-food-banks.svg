@@ -1,0 +1,114 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Venn diagram showing the intersection of food bank services and healthcare systems producing improved health outcomes">
+  <defs>
+    <linearGradient id="fim-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#042f2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="fim-food" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:0.35"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.35"/>
+    </linearGradient>
+    <linearGradient id="fim-health" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.35"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.35"/>
+    </linearGradient>
+    <linearGradient id="fim-intersect" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.55"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.55"/>
+    </linearGradient>
+    <linearGradient id="fim-graph" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+    </linearGradient>
+    <filter id="fim-glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="fim-clip-intersect">
+      <circle cx="340" cy="200" r="155"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#fim-bg)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.04" stroke="white" stroke-width="0.5">
+    <line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="200" y1="0" x2="200" y2="400"/>
+    <line x1="400" y1="0" x2="400" y2="400"/>
+    <line x1="600" y1="0" x2="600" y2="400"/>
+  </g>
+
+  <!-- Food Bank circle -->
+  <circle cx="310" cy="200" r="155" fill="url(#fim-food)" stroke="rgba(16,185,129,0.5)" stroke-width="1.5"/>
+
+  <!-- Healthcare circle -->
+  <circle cx="490" cy="200" r="155" fill="url(#fim-health)" stroke="rgba(14,165,233,0.5)" stroke-width="1.5"/>
+
+  <!-- Intersection highlight (teal overlap) — approximate with a path -->
+  <path d="M 400,85 Q 455,110 455,200 Q 455,290 400,315 Q 345,290 345,200 Q 345,110 400,85 Z"
+        fill="url(#fim-intersect)" opacity="0.7"/>
+
+  <!-- Food Bank label -->
+  <text x="255" y="165" font-family="system-ui" font-size="16" font-weight="700" fill="rgba(52,211,153,0.9)" text-anchor="middle">Food Bank</text>
+
+  <!-- Food icons group -->
+  <!-- Apple icon (simple circle + leaf) -->
+  <circle cx="215" cy="210" r="16" fill="rgba(16,185,129,0.3)" stroke="rgba(52,211,153,0.6)" stroke-width="1.5"/>
+  <path d="M 215 194 Q 222 188 225 194" stroke="rgba(52,211,153,0.8)" stroke-width="1.5" fill="none"/>
+  <text x="215" y="215" font-family="system-ui" font-size="14" text-anchor="middle" fill="rgba(255,255,255,0.6)">🥕</text>
+
+  <!-- Box icon -->
+  <rect x="246" y="228" width="28" height="22" rx="3" fill="rgba(16,185,129,0.2)" stroke="rgba(52,211,153,0.5)" stroke-width="1.5"/>
+  <line x1="246" y1="234" x2="274" y2="234" stroke="rgba(52,211,153,0.4)" stroke-width="1"/>
+  <line x1="260" y1="228" x2="260" y2="250" stroke="rgba(52,211,153,0.4)" stroke-width="1"/>
+
+  <!-- Food bank sub-labels -->
+  <text x="255" y="270" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Food Access</text>
+  <text x="255" y="283" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Distribution</text>
+  <text x="255" y="296" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Community Programs</text>
+
+  <!-- Healthcare label -->
+  <text x="545" y="165" font-family="system-ui" font-size="16" font-weight="700" fill="rgba(56,189,248,0.9)" text-anchor="middle">Healthcare</text>
+
+  <!-- Medical cross icon -->
+  <rect x="529" y="197" width="30" height="30" rx="4" fill="rgba(14,165,233,0.15)" stroke="rgba(14,165,233,0.5)" stroke-width="1.5"/>
+  <rect x="541" y="201" width="6" height="22" rx="2" fill="rgba(56,189,248,0.6)"/>
+  <rect x="533" y="209" width="22" height="6" rx="2" fill="rgba(56,189,248,0.6)"/>
+
+  <!-- Healthcare sub-labels -->
+  <text x="545" y="270" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Clinical Care</text>
+  <text x="545" y="283" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Screenings</text>
+  <text x="545" y="296" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.45)" text-anchor="middle">Referral Pathways</text>
+
+  <!-- Intersection label -->
+  <text x="400" y="155" font-family="system-ui" font-size="11" font-weight="700" fill="rgba(103,232,249,0.95)" text-anchor="middle">Health</text>
+  <text x="400" y="170" font-family="system-ui" font-size="11" font-weight="700" fill="rgba(103,232,249,0.95)" text-anchor="middle">Outcomes</text>
+
+  <!-- Rising graph in intersection -->
+  <g transform="translate(370,185)">
+    <!-- Graph bars -->
+    <rect x="0" y="38" width="8" height="8" rx="1" fill="url(#fim-graph)" opacity="0.7"/>
+    <rect x="11" y="30" width="8" height="16" rx="1" fill="url(#fim-graph)" opacity="0.8"/>
+    <rect x="22" y="20" width="8" height="26" rx="1" fill="url(#fim-graph)" opacity="0.9"/>
+    <rect x="33" y="8" width="8" height="38" rx="1" fill="url(#fim-graph)"/>
+    <!-- Trend line -->
+    <polyline points="4,42 15,38 26,24 37,12" stroke="rgba(103,232,249,0.8)" stroke-width="1.5" fill="none"/>
+    <!-- Arrow tip -->
+    <polygon points="35,8 41,12 37,16" fill="rgba(103,232,249,0.8)"/>
+  </g>
+
+  <!-- Medically tailored meals label in intersection -->
+  <text x="400" y="255" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.5)" text-anchor="middle">Medically Tailored Meals</text>
+  <text x="400" y="267" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.5)" text-anchor="middle">Shared Data • Referrals</text>
+
+  <!-- Title -->
+  <text x="400" y="355" font-family="system-ui" font-size="12" font-weight="600" fill="rgba(255,255,255,0.4)" text-anchor="middle">Food Is Medicine — Integrated Health &amp; Hunger Relief</text>
+
+  <!-- Glow dots on circle borders -->
+  <circle cx="310" cy="45" r="4" fill="rgba(52,211,153,0.5)" filter="url(#fim-glow)"/>
+  <circle cx="490" cy="45" r="4" fill="rgba(56,189,248,0.5)" filter="url(#fim-glow)"/>
+</svg>

@@ -1,0 +1,141 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Volunteer journey arc showing six stages from Discover to Advocate with increasing engagement score, transitioning from gray to vibrant blue-green">
+  <defs>
+    <linearGradient id="vr-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="vr-arc" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#334155;stop-opacity:0.8"/>
+      <stop offset="30%" style="stop-color:#0176D3;stop-opacity:0.9"/>
+      <stop offset="60%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="80%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.95"/>
+    </linearGradient>
+    <linearGradient id="vr-node1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#475569;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#334155;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="vr-node2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1d4ed8;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="vr-node3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="vr-node4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="vr-node5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="vr-node6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.95"/>
+    </linearGradient>
+    <filter id="vr-glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#vr-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="28" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">VOLUNTEER JOURNEY — DIGITAL ERA</text>
+
+  <!-- Engagement score bar (background track) -->
+  <rect x="60" y="310" width="680" height="12" rx="6" fill="rgba(255,255,255,0.05)"/>
+  <!-- Engagement fill -->
+  <rect x="60" y="310" width="680" height="12" rx="6" fill="url(#vr-arc)" opacity="0.7"/>
+
+  <!-- Engagement label -->
+  <text x="60" y="340" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)">Low Engagement</text>
+  <text x="740" y="340" font-family="system-ui,sans-serif" font-size="9" fill="rgba(16,185,129,0.6)" text-anchor="end">Loyal Advocate</text>
+
+  <!-- Arc path (upward curve) -->
+  <!-- Arc from left-low to right-high using a quadratic bezier -->
+  <path d="M 80 300 Q 200 280 280 230 Q 360 180 430 150 Q 500 120 570 100 Q 640 80 730 65" fill="none" stroke="url(#vr-arc)" stroke-width="3" opacity="0.5" stroke-dasharray="6,4"/>
+
+  <!-- === NODE POSITIONS along the arc === -->
+  <!-- Stage 1: Discover — x=80, y=300 -->
+  <!-- Stage 2: Apply — x=200, y=255 -->
+  <!-- Stage 3: Onboard — x=330, y=195 -->
+  <!-- Stage 4: First Shift — x=455, y=150 -->
+  <!-- Stage 5: Return — x=580, y=108 -->
+  <!-- Stage 6: Advocate — x=720, y=70 -->
+
+  <!-- Connector dots on arc -->
+  <circle cx="80" cy="295" r="3" fill="rgba(71,85,105,0.8)"/>
+  <circle cx="198" cy="253" r="3" fill="rgba(1,118,211,0.7)"/>
+  <circle cx="330" cy="193" r="3" fill="rgba(14,165,233,0.7)"/>
+  <circle cx="455" cy="148" r="3" fill="rgba(6,182,212,0.7)"/>
+  <circle cx="575" cy="108" r="3" fill="rgba(16,185,129,0.7)"/>
+  <circle cx="718" cy="68" r="3" fill="rgba(16,185,129,0.9)"/>
+
+  <!-- === STAGE NODES === -->
+
+  <!-- Stage 1: DISCOVER -->
+  <circle cx="80" cy="254" r="30" fill="url(#vr-node1)" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+  <line x1="80" y1="284" x2="80" y2="293" stroke="rgba(71,85,105,0.5)" stroke-width="1.5"/>
+  <text x="80" y="245" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="rgba(255,255,255,0.6)" text-anchor="middle">DISCOVER</text>
+  <text x="80" y="260" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Apps, Search</text>
+  <text x="80" y="271" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Social Media</text>
+  <!-- Score badge -->
+  <rect x="57" y="195" width="46" height="18" rx="9" fill="rgba(71,85,105,0.5)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="80" y="208" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">Score: 1</text>
+
+  <!-- Stage 2: APPLY -->
+  <circle cx="198" cy="210" r="30" fill="url(#vr-node2)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+  <line x1="198" y1="240" x2="198" y2="251" stroke="rgba(1,118,211,0.5)" stroke-width="1.5"/>
+  <text x="198" y="201" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">APPLY</text>
+  <text x="198" y="217" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">Online Sign-Up</text>
+  <text x="198" y="228" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">e-Signature</text>
+  <rect x="175" y="151" width="46" height="18" rx="9" fill="rgba(1,118,211,0.4)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="198" y="164" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">Score: 2</text>
+
+  <!-- Stage 3: ONBOARD -->
+  <circle cx="330" cy="157" r="30" fill="url(#vr-node3)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+  <line x1="330" y1="187" x2="330" y2="191" stroke="rgba(14,165,233,0.5)" stroke-width="1.5"/>
+  <text x="330" y="148" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">ONBOARD</text>
+  <text x="330" y="164" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Video Orient.</text>
+  <text x="330" y="175" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Pre-Shift Info</text>
+  <rect x="307" y="98" width="46" height="18" rx="9" fill="rgba(14,165,233,0.4)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="330" y="111" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.65)" text-anchor="middle">Score: 3</text>
+
+  <!-- Stage 4: FIRST SHIFT -->
+  <circle cx="455" cy="116" r="30" fill="url(#vr-node4)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <line x1="455" y1="146" x2="455" y2="147" stroke="rgba(6,182,212,0.5)" stroke-width="1.5"/>
+  <text x="455" y="107" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">FIRST SHIFT</text>
+  <text x="455" y="123" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)" text-anchor="middle">Welcomed</text>
+  <text x="455" y="134" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)" text-anchor="middle">Impact Seen</text>
+  <rect x="432" y="57" width="46" height="18" rx="9" fill="rgba(6,182,212,0.4)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="455" y="70" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.7)" text-anchor="middle">Score: 4</text>
+
+  <!-- Stage 5: RETURN -->
+  <circle cx="578" cy="79" r="30" fill="url(#vr-node5)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" filter="url(#vr-glow)"/>
+  <line x1="578" y1="109" x2="578" y2="106" stroke="rgba(16,185,129,0.6)" stroke-width="1.5"/>
+  <text x="578" y="70" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">RETURN</text>
+  <text x="578" y="86" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.8)" text-anchor="middle">Recognition</text>
+  <text x="578" y="97" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.8)" text-anchor="middle">Milestones</text>
+
+  <!-- Stage 6: ADVOCATE -->
+  <circle cx="718" cy="48" r="34" fill="url(#vr-node6)" stroke="rgba(16,185,129,0.4)" stroke-width="2" filter="url(#vr-glow)"/>
+  <text x="718" y="39" font-family="system-ui,sans-serif" font-size="10" font-weight="800" fill="white" text-anchor="middle">ADVOCATE</text>
+  <text x="718" y="54" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.85)" text-anchor="middle">Recruits Friends</text>
+  <text x="718" y="65" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.85)" text-anchor="middle">Donates · Boards</text>
+  <rect x="695" y="357" width="46" height="18" rx="9" fill="rgba(16,185,129,0.4)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <text x="718" y="370" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Score: 6</text>
+
+  <!-- Score labels for nodes 1-5 -->
+  <rect x="555" y="357" width="46" height="18" rx="9" fill="rgba(6,182,212,0.3)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="578" y="370" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.6)" text-anchor="middle">Score: 5</text>
+
+  <!-- Bottom captions -->
+  <text x="80" y="385" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.2)" text-anchor="middle">New</text>
+  <text x="400" y="385" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Volunteer Lifetime Value Grows with Each Stage</text>
+  <text x="718" y="385" font-family="system-ui,sans-serif" font-size="9" fill="rgba(16,185,129,0.5)" text-anchor="middle">Loyal</text>
+</svg>

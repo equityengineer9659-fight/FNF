@@ -1,0 +1,140 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Volunteer coordination dashboard showing weekly schedule, hours tracked, and automated reminders">
+  <defs>
+    <linearGradient id="vmt-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="vmt-card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:0.1"/>
+    </linearGradient>
+    <linearGradient id="vmt-teal" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="vmt-amber" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="vmt-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#vmt-bg)" rx="12"/>
+
+  <!-- Platform frame / header bar -->
+  <rect x="20" y="20" width="760" height="48" rx="8" fill="url(#vmt-blue)" opacity="0.25"/>
+  <text x="40" y="50" font-family="system-ui, sans-serif" font-size="15" font-weight="600" fill="white" opacity="0.9">Volunteer Management Dashboard</text>
+
+  <!-- Stat cards row -->
+  <!-- Hours Tracked -->
+  <rect x="20" y="82" width="170" height="78" rx="8" fill="url(#vmt-card)" stroke="#0ea5e9" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="36" y="108" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Hours Tracked</text>
+  <text x="36" y="134" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="url(#vmt-teal)">4,820</text>
+  <text x="36" y="152" font-family="system-ui, sans-serif" font-size="10" fill="#10b981">▲ 12% this month</text>
+
+  <!-- Active Volunteers -->
+  <rect x="204" y="82" width="170" height="78" rx="8" fill="url(#vmt-card)" stroke="#0ea5e9" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="220" y="108" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Active Volunteers</text>
+  <text x="220" y="134" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="url(#vmt-blue)">342</text>
+  <text x="220" y="152" font-family="system-ui, sans-serif" font-size="10" fill="#0ea5e9">▲ 28 new this week</text>
+
+  <!-- Reminders Sent -->
+  <rect x="388" y="82" width="170" height="78" rx="8" fill="url(#vmt-card)" stroke="#0ea5e9" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="404" y="108" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Auto-Reminders Sent</text>
+  <text x="404" y="134" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="url(#vmt-amber)">218</text>
+  <text x="404" y="152" font-family="system-ui, sans-serif" font-size="10" fill="#f59e0b">↓ 37% no-show rate</text>
+
+  <!-- No-Shows Prevented -->
+  <rect x="572" y="82" width="208" height="78" rx="8" fill="url(#vmt-card)" stroke="#0ea5e9" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="588" y="108" font-family="system-ui, sans-serif" font-size="11" fill="#94a3b8">Shifts Filled</text>
+  <text x="588" y="134" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#10b981">96%</text>
+  <text x="588" y="152" font-family="system-ui, sans-serif" font-size="10" fill="#10b981">vs 71% pre-platform</text>
+
+  <!-- Weekly Schedule Grid -->
+  <text x="20" y="185" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="white" opacity="0.7">This Week's Shifts</text>
+
+  <!-- Day headers -->
+  <rect x="20" y="192" width="760" height="22" rx="4" fill="rgba(255,255,255,0.05)"/>
+  <text x="78" y="208" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">MON</text>
+  <text x="188" y="208" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">TUE</text>
+  <text x="298" y="208" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">WED</text>
+  <text x="408" y="208" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">THU</text>
+  <text x="518" y="208" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">FRI</text>
+  <text x="628" y="208" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">SAT</text>
+  <text x="738" y="208" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">SUN</text>
+
+  <!-- Row 1: Warehouse Sorting -->
+  <text x="20" y="230" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Warehouse</text>
+  <!-- Filled shifts (teal) -->
+  <rect x="36" y="218" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="78" y="231" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">12/12 ✓</text>
+  <rect x="146" y="218" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="188" y="231" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">10/12 ✓</text>
+  <!-- Open shift (amber) -->
+  <rect x="256" y="218" width="84" height="18" rx="4" fill="#f59e0b" opacity="0.7"/>
+  <text x="298" y="231" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">8/12 open</text>
+  <rect x="366" y="218" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="408" y="231" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">12/12 ✓</text>
+  <rect x="476" y="218" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="518" y="231" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">11/12 ✓</text>
+  <rect x="586" y="218" width="84" height="18" rx="4" fill="#0176D3" opacity="0.7"/>
+  <text x="628" y="231" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">20/24 dist.</text>
+  <rect x="696" y="218" width="84" height="18" rx="4" fill="rgba(255,255,255,0.1)" stroke="#334155" stroke-width="1"/>
+  <text x="738" y="231" font-family="system-ui, sans-serif" font-size="9" fill="#475569" text-anchor="middle">closed</text>
+
+  <!-- Row 2: Client Services -->
+  <text x="20" y="255" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Client Svcs</text>
+  <rect x="36" y="243" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="78" y="256" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">6/6 ✓</text>
+  <rect x="146" y="243" width="84" height="18" rx="4" fill="#f59e0b" opacity="0.7"/>
+  <text x="188" y="256" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">4/6 open</text>
+  <rect x="256" y="243" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="298" y="256" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">6/6 ✓</text>
+  <rect x="366" y="243" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="408" y="256" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">6/6 ✓</text>
+  <rect x="476" y="243" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="518" y="256" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">5/6 ✓</text>
+  <rect x="586" y="243" width="84" height="18" rx="4" fill="#0176D3" opacity="0.7"/>
+  <text x="628" y="256" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">10/10 dist.</text>
+  <rect x="696" y="243" width="84" height="18" rx="4" fill="rgba(255,255,255,0.1)" stroke="#334155" stroke-width="1"/>
+  <text x="738" y="256" font-family="system-ui, sans-serif" font-size="9" fill="#475569" text-anchor="middle">closed</text>
+
+  <!-- Row 3: Mobile Pantry -->
+  <text x="20" y="280" font-family="system-ui, sans-serif" font-size="9" fill="#64748b">Mobile</text>
+  <rect x="36" y="268" width="84" height="18" rx="4" fill="rgba(255,255,255,0.1)" stroke="#334155" stroke-width="1"/>
+  <text x="78" y="281" font-family="system-ui, sans-serif" font-size="9" fill="#475569" text-anchor="middle">—</text>
+  <rect x="146" y="268" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="188" y="281" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">8/8 ✓</text>
+  <rect x="256" y="268" width="84" height="18" rx="4" fill="rgba(255,255,255,0.1)" stroke="#334155" stroke-width="1"/>
+  <text x="298" y="281" font-family="system-ui, sans-serif" font-size="9" fill="#475569" text-anchor="middle">—</text>
+  <rect x="366" y="268" width="84" height="18" rx="4" fill="#f59e0b" opacity="0.7"/>
+  <text x="408" y="281" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">5/8 open</text>
+  <rect x="476" y="268" width="84" height="18" rx="4" fill="rgba(255,255,255,0.1)" stroke="#334155" stroke-width="1"/>
+  <text x="518" y="281" font-family="system-ui, sans-serif" font-size="9" fill="#475569" text-anchor="middle">—</text>
+  <rect x="586" y="268" width="84" height="18" rx="4" fill="#10b981" opacity="0.8"/>
+  <text x="628" y="281" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">12/12 ✓</text>
+  <rect x="696" y="268" width="84" height="18" rx="4" fill="rgba(255,255,255,0.1)" stroke="#334155" stroke-width="1"/>
+  <text x="738" y="281" font-family="system-ui, sans-serif" font-size="9" fill="#475569" text-anchor="middle">—</text>
+
+  <!-- Legend -->
+  <rect x="20" y="305" width="12" height="12" rx="2" fill="#10b981" opacity="0.8"/>
+  <text x="36" y="315" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Filled</text>
+  <rect x="90" y="305" width="12" height="12" rx="2" fill="#f59e0b" opacity="0.7"/>
+  <text x="106" y="315" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Open Slots</text>
+  <rect x="180" y="305" width="12" height="12" rx="2" fill="#0176D3" opacity="0.7"/>
+  <text x="196" y="315" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Distribution Event</text>
+
+  <!-- Automated reminder notification -->
+  <rect x="480" y="298" width="300" height="72" rx="8" fill="rgba(6,182,212,0.12)" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="496" y="316" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#06b6d4">Automated Reminder Sent</text>
+  <text x="496" y="333" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">📅 Thu Mobile Pantry — 3 volunteers</text>
+  <text x="496" y="349" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">notified 24hrs before shift</text>
+  <text x="496" y="362" font-family="system-ui, sans-serif" font-size="10" fill="#10b981">2 confirmed · 1 pending reply</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="390" font-family="system-ui, sans-serif" font-size="10" fill="#475569" text-anchor="middle">food-n-force.com · Volunteer Management Platform</text>
+</svg>

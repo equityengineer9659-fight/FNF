@@ -1,0 +1,125 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Side-by-side comparison of Nonprofit Cloud versus Sales Cloud with feature rows showing built-in program management, constituent tracking, outcome measurement, pricing, customization, and implementation complexity">
+  <defs>
+    <linearGradient id="npc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="npc-col1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.25"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0.08"/>
+    </linearGradient>
+    <linearGradient id="npc-col2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#334155;stop-opacity:0.25"/>
+      <stop offset="100%" style="stop-color:#334155;stop-opacity:0.08"/>
+    </linearGradient>
+    <linearGradient id="npc-good" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="npc-mid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="npc-low" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.7"/>
+      <stop offset="100%" style="stop-color:#b91c1c;stop-opacity:0.7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#npc-bg)"/>
+
+  <!-- Table header row -->
+  <rect x="20" y="40" width="760" height="44" rx="6" fill="rgba(255,255,255,0.04)"/>
+
+  <!-- Feature label column header -->
+  <text x="180" y="67" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="rgba(255,255,255,0.4)" text-anchor="middle" letter-spacing="1">FEATURE</text>
+
+  <!-- Nonprofit Cloud column header -->
+  <rect x="370" y="42" width="185" height="40" rx="6" fill="url(#npc-col1)"/>
+  <text x="462" y="60" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="rgba(1,118,211,0.95)" text-anchor="middle" letter-spacing="1">NONPROFIT CLOUD</text>
+  <text x="462" y="74" font-family="system-ui,sans-serif" font-size="9" fill="rgba(14,165,233,0.7)" text-anchor="middle">incl. NPSP heritage</text>
+
+  <!-- Sales Cloud column header -->
+  <rect x="565" y="42" width="185" height="40" rx="6" fill="url(#npc-col2)"/>
+  <text x="657" y="60" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="rgba(255,255,255,0.6)" text-anchor="middle" letter-spacing="1">SALES CLOUD</text>
+  <text x="657" y="74" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">commercial CRM</text>
+
+  <!-- Row backgrounds alternating -->
+  <rect x="20" y="90" width="760" height="44" rx="0" fill="rgba(255,255,255,0.02)"/>
+  <rect x="20" y="134" width="760" height="44" rx="0" fill="rgba(255,255,255,0.00)"/>
+  <rect x="20" y="178" width="760" height="44" rx="0" fill="rgba(255,255,255,0.02)"/>
+  <rect x="20" y="222" width="760" height="44" rx="0" fill="rgba(255,255,255,0.00)"/>
+  <rect x="20" y="266" width="760" height="44" rx="0" fill="rgba(255,255,255,0.02)"/>
+  <rect x="20" y="310" width="760" height="44" rx="0" fill="rgba(255,255,255,0.00)"/>
+
+  <!-- Row dividers -->
+  <line x1="20" y1="134" x2="780" y2="134" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="20" y1="178" x2="780" y2="178" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="20" y1="222" x2="780" y2="222" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="20" y1="266" x2="780" y2="266" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="20" y1="310" x2="780" y2="310" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+  <!-- Column dividers -->
+  <line x1="370" y1="90" x2="370" y2="354" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <line x1="565" y1="90" x2="565" y2="354" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+  <!-- ROW 1: Built-in Program Management -->
+  <text x="180" y="110" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.75)" text-anchor="middle">Built-in Program Mgmt</text>
+  <text x="180" y="124" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle">Enrollment, services, outcomes</text>
+  <!-- NPC: Yes -->
+  <rect x="405" y="97" width="115" height="28" rx="14" fill="url(#npc-good)"/>
+  <text x="462" y="116" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">✓ Built In</text>
+  <!-- SC: No -->
+  <rect x="598" y="97" width="118" height="28" rx="14" fill="url(#npc-low)" opacity="0.7"/>
+  <text x="657" y="116" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="rgba(255,255,255,0.8)" text-anchor="middle">Requires Custom Dev</text>
+
+  <!-- ROW 2: Constituent Tracking -->
+  <text x="180" y="154" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.75)" text-anchor="middle">Constituent Tracking</text>
+  <text x="180" y="168" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle">Households, relationships</text>
+  <rect x="405" y="141" width="115" height="28" rx="14" fill="url(#npc-good)"/>
+  <text x="462" y="160" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">✓ Built In</text>
+  <rect x="598" y="141" width="118" height="28" rx="14" fill="url(#npc-mid)" opacity="0.8"/>
+  <text x="657" y="160" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Configurable</text>
+
+  <!-- ROW 3: Outcome Measurement -->
+  <text x="180" y="198" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.75)" text-anchor="middle">Outcome Measurement</text>
+  <text x="180" y="212" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle">Program-level reporting</text>
+  <rect x="405" y="185" width="115" height="28" rx="14" fill="url(#npc-good)"/>
+  <text x="462" y="204" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">✓ Built In</text>
+  <rect x="598" y="185" width="118" height="28" rx="14" fill="url(#npc-low)" opacity="0.7"/>
+  <text x="657" y="204" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="rgba(255,255,255,0.8)" text-anchor="middle">Requires Custom Dev</text>
+
+  <!-- ROW 4: Pricing (Power of Us) -->
+  <text x="180" y="242" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.75)" text-anchor="middle">Nonprofit Pricing</text>
+  <text x="180" y="256" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle">10 free licenses eligible</text>
+  <rect x="405" y="229" width="115" height="28" rx="14" fill="url(#npc-good)"/>
+  <text x="462" y="248" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">✓ Power of Us</text>
+  <rect x="598" y="229" width="118" height="28" rx="14" fill="url(#npc-mid)" opacity="0.8"/>
+  <text x="657" y="248" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Eligible w/ Discount</text>
+
+  <!-- ROW 5: Customization Flexibility -->
+  <text x="180" y="286" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.75)" text-anchor="middle">Customization Flexibility</text>
+  <text x="180" y="300" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle">Adapt to unique workflows</text>
+  <rect x="405" y="273" width="115" height="28" rx="14" fill="url(#npc-mid)" opacity="0.85"/>
+  <text x="462" y="292" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">High (constrained)</text>
+  <rect x="598" y="273" width="118" height="28" rx="14" fill="url(#npc-good)"/>
+  <text x="657" y="292" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">✓ Very High</text>
+
+  <!-- ROW 6: Implementation Complexity -->
+  <text x="180" y="330" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.75)" text-anchor="middle">Implementation Complexity</text>
+  <text x="180" y="344" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle">Time to go live</text>
+  <rect x="405" y="317" width="115" height="28" rx="14" fill="url(#npc-good)"/>
+  <text x="462" y="336" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">✓ Lower</text>
+  <rect x="598" y="317" width="118" height="28" rx="14" fill="url(#npc-mid)" opacity="0.8"/>
+  <text x="657" y="336" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">Higher</text>
+
+  <!-- Legend bottom -->
+  <rect x="20" y="362" width="12" height="12" rx="6" fill="url(#npc-good)"/>
+  <text x="37" y="372" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Advantage</text>
+  <rect x="120" y="362" width="12" height="12" rx="6" fill="url(#npc-mid)"/>
+  <text x="137" y="372" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Moderate</text>
+  <rect x="220" y="362" width="12" height="12" rx="6" fill="url(#npc-low)"/>
+  <text x="237" y="372" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Requires Extra Work</text>
+  <text x="780" y="372" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.2)" text-anchor="end">Salesforce Power of Us program provides 10 free licenses to qualifying nonprofits</text>
+</svg>

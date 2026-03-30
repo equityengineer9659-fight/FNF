@@ -1,0 +1,143 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hub-and-spoke network diagram showing a central Regional Hub connected to Urban, Rural, Mobile, and Partner Pantry nodes with data flow arrows">
+  <defs>
+    <linearGradient id="cfh-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="cfh-hub" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="cfh-urban" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cfh-rural" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cfh-mobile" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cfh-partner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.85"/>
+    </linearGradient>
+    <radialGradient id="cfh-hub-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="cfh-glow">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="cfh-arrow-out" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="rgba(14,165,233,0.6)"/>
+    </marker>
+    <marker id="cfh-arrow-in" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="rgba(16,185,129,0.6)"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#cfh-bg)"/>
+
+  <!-- Hub glow halo -->
+  <circle cx="400" cy="200" r="90" fill="url(#cfh-hub-glow)"/>
+
+  <!-- Title -->
+  <text x="400" y="24" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">REGIONAL FOOD HUB — NETWORK MODEL</text>
+
+  <!-- === SPOKE LINES (drawn behind nodes) === -->
+  <!-- Top node (Rural North) -->
+  <line x1="400" y1="155" x2="400" y2="72" stroke="rgba(16,185,129,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="397,66 400,58 403,66" fill="rgba(16,185,129,0.4)"/>
+
+  <!-- Top-right (Urban East) -->
+  <line x1="448" y1="168" x2="588" y2="96" stroke="rgba(14,165,233,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="586,89 593,95 584,100" fill="rgba(14,165,233,0.4)"/>
+
+  <!-- Right (Mobile) -->
+  <line x1="460" y1="200" x2="622" y2="200" stroke="rgba(139,92,246,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="619,197 628,200 619,203" fill="rgba(139,92,246,0.4)"/>
+
+  <!-- Bottom-right (Partner) -->
+  <line x1="448" y1="232" x2="588" y2="304" stroke="rgba(245,158,11,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="585,309 590,317 581,314" fill="rgba(245,158,11,0.4)"/>
+
+  <!-- Bottom (Urban South) -->
+  <line x1="400" y1="245" x2="400" y2="328" stroke="rgba(14,165,233,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="397,334 400,342 403,334" fill="rgba(14,165,233,0.4)"/>
+
+  <!-- Bottom-left (Rural West) -->
+  <line x1="352" y1="232" x2="212" y2="304" stroke="rgba(16,185,129,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="215,309 210,317 219,314" fill="rgba(16,185,129,0.4)"/>
+
+  <!-- Left (Partner Pantry) -->
+  <line x1="340" y1="200" x2="178" y2="200" stroke="rgba(245,158,11,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="181,197 172,200 181,203" fill="rgba(245,158,11,0.4)"/>
+
+  <!-- Top-left (Mobile North) -->
+  <line x1="352" y1="168" x2="212" y2="96" stroke="rgba(139,92,246,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="214,89 207,95 216,100" fill="rgba(139,92,246,0.4)"/>
+
+  <!-- === CENTRAL HUB === -->
+  <circle cx="400" cy="200" r="60" fill="url(#cfh-hub)" filter="url(#cfh-glow)"/>
+  <circle cx="400" cy="200" r="60" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+  <text x="400" y="190" font-family="system-ui,sans-serif" font-size="13" font-weight="800" fill="white" text-anchor="middle">REGIONAL</text>
+  <text x="400" y="206" font-family="system-ui,sans-serif" font-size="13" font-weight="800" fill="white" text-anchor="middle">HUB</text>
+  <text x="400" y="224" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.6)" text-anchor="middle">Aggregate · Sort · Store</text>
+
+  <!-- === SATELLITE NODES === -->
+  <!-- Top: Rural North -->
+  <circle cx="400" cy="52" r="28" fill="url(#cfh-rural)"/>
+  <text x="400" y="48" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Rural</text>
+  <text x="400" y="60" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">North</text>
+
+  <!-- Top-right: Urban East -->
+  <circle cx="600" cy="82" r="28" fill="url(#cfh-urban)"/>
+  <text x="600" y="78" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Urban</text>
+  <text x="600" y="90" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">East</text>
+
+  <!-- Right: Mobile -->
+  <circle cx="640" cy="200" r="28" fill="url(#cfh-mobile)"/>
+  <text x="640" y="196" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Mobile</text>
+  <text x="640" y="208" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">Route</text>
+
+  <!-- Bottom-right: Partner Pantry -->
+  <circle cx="600" cy="318" r="28" fill="url(#cfh-partner)"/>
+  <text x="600" y="314" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Partner</text>
+  <text x="600" y="326" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">Pantry</text>
+
+  <!-- Bottom: Urban South -->
+  <circle cx="400" cy="348" r="28" fill="url(#cfh-urban)"/>
+  <text x="400" y="344" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Urban</text>
+  <text x="400" y="356" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">South</text>
+
+  <!-- Bottom-left: Rural West -->
+  <circle cx="200" cy="318" r="28" fill="url(#cfh-rural)"/>
+  <text x="200" y="314" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Rural</text>
+  <text x="200" y="326" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">West</text>
+
+  <!-- Left: Partner Pantry -->
+  <circle cx="160" cy="200" r="28" fill="url(#cfh-partner)"/>
+  <text x="160" y="196" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Partner</text>
+  <text x="160" y="208" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">Pantry</text>
+
+  <!-- Top-left: Mobile North -->
+  <circle cx="200" cy="82" r="28" fill="url(#cfh-mobile)"/>
+  <text x="200" y="78" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Mobile</text>
+  <text x="200" y="90" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">North</text>
+
+  <!-- Legend -->
+  <circle cx="32" cy="378" r="7" fill="url(#cfh-urban)"/>
+  <text x="44" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Urban Sites</text>
+  <circle cx="120" cy="378" r="7" fill="url(#cfh-rural)"/>
+  <text x="132" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Rural Sites</text>
+  <circle cx="200" cy="378" r="7" fill="url(#cfh-mobile)"/>
+  <text x="212" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Mobile Routes</text>
+  <circle cx="300" cy="378" r="7" fill="url(#cfh-partner)"/>
+  <text x="312" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Partner Pantries</text>
+  <text x="780" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.2)" text-anchor="end">Dashed lines = food + data flow</text>
+</svg>

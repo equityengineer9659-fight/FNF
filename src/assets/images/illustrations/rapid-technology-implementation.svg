@@ -1,0 +1,130 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline comparison showing traditional waterfall implementation versus agile iterative implementation approach">
+  <defs>
+    <linearGradient id="rti-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="rti-red" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#dc2626;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="rti-green" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="rti-iter1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1d4ed8;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="rti-iter2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="rti-iter3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0284c7;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="rti-iter4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0891b2;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#rti-bg)" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="36" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="white" opacity="0.9" text-anchor="middle">Implementation Approach Comparison</text>
+
+  <!-- ===== TRADITIONAL (Top half) ===== -->
+  <text x="30" y="68" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#f87171">Traditional Waterfall</text>
+
+  <!-- Long waterfall bar -->
+  <rect x="30" y="76" width="560" height="32" rx="6" fill="url(#rti-red)" opacity="0.85"/>
+  <text x="40" y="97" font-family="system-ui, sans-serif" font-size="10" fill="white" opacity="0.9">Requirements → Design → Build → Test → Train → GO LIVE</text>
+
+  <!-- Phase labels beneath the bar -->
+  <text x="70" y="124" font-family="system-ui, sans-serif" font-size="9" fill="#f87171" text-anchor="middle">Months 1-2</text>
+  <text x="175" y="124" font-family="system-ui, sans-serif" font-size="9" fill="#f87171" text-anchor="middle">Months 3-4</text>
+  <text x="300" y="124" font-family="system-ui, sans-serif" font-size="9" fill="#f87171" text-anchor="middle">Months 5-9</text>
+  <text x="430" y="124" font-family="system-ui, sans-serif" font-size="9" fill="#f87171" text-anchor="middle">Months 10-11</text>
+  <text x="540" y="124" font-family="system-ui, sans-serif" font-size="9" fill="#f87171" text-anchor="middle">Month 12+</text>
+
+  <!-- Single launch marker -->
+  <line x1="590" y1="68" x2="590" y2="132" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,3"/>
+  <circle cx="590" cy="68" r="7" fill="#f59e0b"/>
+  <text x="590" y="72" font-family="system-ui, sans-serif" font-size="8" font-weight="700" fill="white" text-anchor="middle">!</text>
+  <text x="618" y="80" font-family="system-ui, sans-serif" font-size="10" fill="#f59e0b">Single</text>
+  <text x="618" y="93" font-family="system-ui, sans-serif" font-size="10" fill="#f59e0b">Launch</text>
+  <text x="618" y="106" font-family="system-ui, sans-serif" font-size="10" fill="#f59e0b">~12-18 mo</text>
+
+  <!-- Pain indicators -->
+  <text x="30" y="142" font-family="system-ui, sans-serif" font-size="10" fill="#f87171">✗ Requirements change during build</text>
+  <text x="260" y="142" font-family="system-ui, sans-serif" font-size="10" fill="#f87171">✗ Training forgotten before go-live</text>
+  <text x="30" y="158" font-family="system-ui, sans-serif" font-size="10" fill="#f87171">✗ No value until end</text>
+  <text x="260" y="158" font-family="system-ui, sans-serif" font-size="10" fill="#f87171">✗ Over budget · Over schedule</text>
+
+  <!-- Divider -->
+  <line x1="30" y1="174" x2="770" y2="174" stroke="#334155" stroke-width="1"/>
+
+  <!-- ===== AGILE (Bottom half) ===== -->
+  <text x="30" y="196" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#10b981">Agile Iterative Implementation</text>
+
+  <!-- Sprint 1 -->
+  <rect x="30" y="204" width="120" height="28" rx="6" fill="url(#rti-iter1)"/>
+  <text x="90" y="222" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">Sprint 1: MVP Core</text>
+
+  <!-- Arrow -->
+  <polygon points="156,218 168,213 168,223" fill="#10b981" opacity="0.7"/>
+  <circle cx="158" cy="204" r="7" fill="#10b981"/>
+  <text x="158" y="208" font-family="system-ui, sans-serif" font-size="7" font-weight="700" fill="white" text-anchor="middle">▲</text>
+  <text x="158" y="198" font-family="system-ui, sans-serif" font-size="8" fill="#10b981" text-anchor="middle">Launch 1</text>
+  <text x="158" y="188" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8" text-anchor="middle">Wk 8</text>
+
+  <!-- Sprint 2 -->
+  <rect x="174" y="204" width="120" height="28" rx="6" fill="url(#rti-iter2)"/>
+  <text x="234" y="222" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">Sprint 2: Workflows</text>
+
+  <!-- Arrow -->
+  <polygon points="300,218 312,213 312,223" fill="#10b981" opacity="0.7"/>
+  <circle cx="302" cy="204" r="7" fill="#10b981"/>
+  <text x="302" y="208" font-family="system-ui, sans-serif" font-size="7" font-weight="700" fill="white" text-anchor="middle">▲</text>
+  <text x="302" y="198" font-family="system-ui, sans-serif" font-size="8" fill="#10b981" text-anchor="middle">Launch 2</text>
+  <text x="302" y="188" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8" text-anchor="middle">Wk 16</text>
+
+  <!-- Sprint 3 -->
+  <rect x="318" y="204" width="120" height="28" rx="6" fill="url(#rti-iter3)"/>
+  <text x="378" y="222" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">Sprint 3: Reporting</text>
+
+  <!-- Arrow -->
+  <polygon points="444,218 456,213 456,223" fill="#10b981" opacity="0.7"/>
+  <circle cx="446" cy="204" r="7" fill="#10b981"/>
+  <text x="446" y="208" font-family="system-ui, sans-serif" font-size="7" font-weight="700" fill="white" text-anchor="middle">▲</text>
+  <text x="446" y="198" font-family="system-ui, sans-serif" font-size="8" fill="#10b981" text-anchor="middle">Launch 3</text>
+  <text x="446" y="188" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8" text-anchor="middle">Wk 24</text>
+
+  <!-- Sprint 4 -->
+  <rect x="462" y="204" width="140" height="28" rx="6" fill="url(#rti-iter4)"/>
+  <text x="532" y="222" font-family="system-ui, sans-serif" font-size="9" fill="white" text-anchor="middle">Sprint 4: Advanced Features</text>
+
+  <!-- Continuous improvement arrow -->
+  <path d="M 610 218 Q 680 200 750 218" stroke="#06b6d4" stroke-width="2" fill="none" stroke-dasharray="5,3"/>
+  <polygon points="745,214 755,218 745,222" fill="#06b6d4"/>
+  <text x="682" y="198" font-family="system-ui, sans-serif" font-size="9" fill="#06b6d4" text-anchor="middle">Continuous</text>
+  <text x="682" y="210" font-family="system-ui, sans-serif" font-size="9" fill="#06b6d4" text-anchor="middle">Improvement</text>
+
+  <!-- Win indicators -->
+  <text x="30" y="256" font-family="system-ui, sans-serif" font-size="10" fill="#10b981">✓ Value delivered at Week 8</text>
+  <text x="260" y="256" font-family="system-ui, sans-serif" font-size="10" fill="#10b981">✓ Feedback improves each sprint</text>
+  <text x="30" y="272" font-family="system-ui, sans-serif" font-size="10" fill="#10b981">✓ Staff adopt gradually, not all at once</text>
+  <text x="260" y="272" font-family="system-ui, sans-serif" font-size="10" fill="#10b981">✓ Requirements refined with real users</text>
+
+  <!-- MVP callout box -->
+  <rect x="30" y="292" width="740" height="72" rx="8" fill="rgba(1,118,211,0.1)" stroke="#0176D3" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="50" y="314" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#0ea5e9">MVP First: What to Include in Sprint 1</text>
+  <text x="50" y="332" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">Client intake records · Volunteer hour tracking · Basic distribution logs · Standard Salesforce reports</text>
+  <text x="50" y="350" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Defer: Custom dashboards · Automated workflows · External integrations · Advanced analytics · Custom UI</text>
+  <text x="50" y="356" font-family="system-ui, sans-serif" font-size="8" fill="transparent">spacer</text>
+
+  <text x="400" y="390" font-family="system-ui, sans-serif" font-size="10" fill="#475569" text-anchor="middle">food-n-force.com · Implementation Strategy</text>
+</svg>

@@ -11,7 +11,24 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Pages that should highlight "Resources" in navigation
-const resourcesSubpages = ['resources', 'blog', 'ai-reshaping-food-banks', 'salesforce-food-bank-operations', 'donor-relationships-nonprofit-cloud', 'data-driven-food-banks', 'food-bank-workflow-automation', 'securing-technology-grants', 'ai-inventory-management', 'case-studies', 'templates-tools'];
+const resourcesSubpages = [
+  'resources', 'blog',
+  // Original 7 articles
+  'ai-reshaping-food-banks', 'salesforce-food-bank-operations', 'donor-relationships-nonprofit-cloud',
+  'data-driven-food-banks', 'food-bank-workflow-automation', 'securing-technology-grants',
+  'ai-inventory-management', 'case-studies', 'templates-tools',
+  // 30 new articles
+  'agentforce-nonprofits-guide', 'ai-ethics-nonprofit-governance', 'centralized-food-hub-case-study',
+  'client-choice-food-pantry-technology', 'community-food-center-model', 'data-privacy-food-bank-clients',
+  'digital-transformation-small-food-banks', 'donor-prospecting-salesforce', 'food-bank-client-services-technology',
+  'food-bank-crisis-response-planning', 'food-bank-kitchen-operations', 'food-bank-strategic-partnerships',
+  'food-bank-technology-stack', 'food-banks-healthcare-social-determinants', 'food-is-medicine-food-banks',
+  'future-food-banking-trends', 'grant-management-food-banks', 'impact-measurement-food-banks',
+  'measuring-hunger-relief-outcomes', 'nonprofit-cloud-vs-sales-cloud', 'nutrition-first-food-bank-strategy',
+  'rapid-technology-implementation', 'salesforce-flow-builder-nonprofits', 'salesforce-reports-dashboards-food-banks',
+  'salesforce-security-nonprofits', 'salesforce-spring-2026-nonprofits', 'snap-policy-changes-food-banks',
+  'tax-policy-nonprofit-fundraising', 'volunteer-management-technology', 'volunteer-recruitment-retention-digital',
+];
 
 // Component definitions
 const components = {
@@ -136,22 +153,23 @@ function buildComponents() {
   console.log('🔨 Building HTML components...\n');
 
   const pages = [
-    'index',
-    'about',
-    'services',
-    'resources',
-    'impact',
-    'contact',
-    'blog',
-    'ai-reshaping-food-banks',
-    'salesforce-food-bank-operations',
-    'donor-relationships-nonprofit-cloud',
-    'data-driven-food-banks',
-    'food-bank-workflow-automation',
-    'securing-technology-grants',
-    'ai-inventory-management',
-    'case-studies',
-    'templates-tools'
+    // Core pages
+    'index', 'about', 'services', 'resources', 'impact', 'contact', 'blog',
+    // Original 7 articles
+    'ai-reshaping-food-banks', 'salesforce-food-bank-operations', 'donor-relationships-nonprofit-cloud',
+    'data-driven-food-banks', 'food-bank-workflow-automation', 'securing-technology-grants',
+    'ai-inventory-management', 'case-studies', 'templates-tools',
+    // 30 new articles
+    'agentforce-nonprofits-guide', 'ai-ethics-nonprofit-governance', 'centralized-food-hub-case-study',
+    'client-choice-food-pantry-technology', 'community-food-center-model', 'data-privacy-food-bank-clients',
+    'digital-transformation-small-food-banks', 'donor-prospecting-salesforce', 'food-bank-client-services-technology',
+    'food-bank-crisis-response-planning', 'food-bank-kitchen-operations', 'food-bank-strategic-partnerships',
+    'food-bank-technology-stack', 'food-banks-healthcare-social-determinants', 'food-is-medicine-food-banks',
+    'future-food-banking-trends', 'grant-management-food-banks', 'impact-measurement-food-banks',
+    'measuring-hunger-relief-outcomes', 'nonprofit-cloud-vs-sales-cloud', 'nutrition-first-food-bank-strategy',
+    'rapid-technology-implementation', 'salesforce-flow-builder-nonprofits', 'salesforce-reports-dashboards-food-banks',
+    'salesforce-security-nonprofits', 'salesforce-spring-2026-nonprofits', 'snap-policy-changes-food-banks',
+    'tax-policy-nonprofit-fundraising', 'volunteer-management-technology', 'volunteer-recruitment-retention-digital',
   ];
 
   pages.forEach(page => {

@@ -1,0 +1,100 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Donor pipeline funnel diagram showing stages from Prospects through Qualified, Cultivating, Solicitation, Donors, and Stewardship">
+  <defs>
+    <linearGradient id="dps-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a3a;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="dps-s1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1B4F72;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#1e3a5f;stop-opacity:0.75"/>
+    </linearGradient>
+    <linearGradient id="dps-s2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1d4ed8;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0.75"/>
+    </linearGradient>
+    <linearGradient id="dps-s3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0369a1;stop-opacity:0.75"/>
+    </linearGradient>
+    <linearGradient id="dps-s4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0284c7;stop-opacity:0.75"/>
+    </linearGradient>
+    <linearGradient id="dps-s5" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.75"/>
+    </linearGradient>
+    <linearGradient id="dps-s6" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.8"/>
+    </linearGradient>
+    <filter id="dps-glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#dps-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="35" font-family="system-ui" font-size="14" font-weight="700" fill="rgba(255,255,255,0.85)" text-anchor="middle" letter-spacing="1">DONOR CULTIVATION PIPELINE</text>
+
+  <!-- Funnel: 6 trapezoid stages stacked vertically, centering around x=400 -->
+  <!-- Each stage: top wider, bottom narrower — trapezoids centered at x=400 -->
+  <!-- Stage heights: 45px each, spacing 2px, starting y=55 -->
+
+  <!-- Stage 1: Prospects (widest) -->
+  <!-- Top width: 480, bottom width: 410 -->
+  <polygon points="160,55 640,55 615,100 185,100" fill="url(#dps-s1)"/>
+  <polygon points="160,55 640,55 615,100 185,100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="400" y="82" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Prospects</text>
+  <text x="643" y="82" font-family="system-ui" font-size="11" fill="rgba(255,255,255,0.55)" text-anchor="start">~2,400 contacts</text>
+
+  <!-- Stage 2: Qualified -->
+  <polygon points="185,103 615,103 588,148 212,148" fill="url(#dps-s2)"/>
+  <polygon points="185,103 615,103 588,148 212,148" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="400" y="130" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Qualified</text>
+  <text x="591" y="130" font-family="system-ui" font-size="11" fill="rgba(255,255,255,0.55)" text-anchor="start">~680 contacts</text>
+
+  <!-- Stage 3: Cultivating -->
+  <polygon points="212,151 588,151 560,196 240,196" fill="url(#dps-s3)"/>
+  <polygon points="212,151 588,151 560,196 240,196" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="400" y="178" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Cultivating</text>
+  <text x="563" y="178" font-family="system-ui" font-size="11" fill="rgba(255,255,255,0.55)" text-anchor="start">~220 prospects</text>
+
+  <!-- Stage 4: Solicitation -->
+  <polygon points="240,199 560,199 528,244 272,244" fill="url(#dps-s4)"/>
+  <polygon points="240,199 560,199 528,244 272,244" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="400" y="226" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Solicitation</text>
+  <text x="531" y="226" font-family="system-ui" font-size="11" fill="rgba(255,255,255,0.55)" text-anchor="start">~85 prospects</text>
+
+  <!-- Stage 5: Donors -->
+  <polygon points="272,247 528,247 498,292 302,292" fill="url(#dps-s5)"/>
+  <polygon points="272,247 528,247 498,292 302,292" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="400" y="274" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Donors</text>
+  <text x="501" y="274" font-family="system-ui" font-size="11" fill="rgba(255,255,255,0.55)" text-anchor="start">~42 new/yr</text>
+
+  <!-- Stage 6: Stewardship (narrowest) -->
+  <polygon points="302,295 498,295 468,340 332,340" fill="url(#dps-s6)" filter="url(#dps-glow)"/>
+  <polygon points="302,295 498,295 468,340 332,340" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="400" y="322" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Stewardship</text>
+  <text x="400" y="337" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.65)" text-anchor="middle">Retain &amp; deepen</text>
+
+  <!-- Left-side stage annotations -->
+  <text x="155" y="82" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="end">Identify</text>
+  <text x="180" y="130" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="end">Research</text>
+  <text x="207" y="178" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="end">Engage</text>
+  <text x="235" y="226" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="end">Ask</text>
+  <text x="267" y="274" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="end">Close</text>
+  <text x="297" y="317" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="end">Retain</text>
+
+  <!-- Salesforce badge -->
+  <rect x="600" y="285" width="170" height="60" rx="10" fill="rgba(1,118,211,0.25)" stroke="rgba(1,118,211,0.45)" stroke-width="1"/>
+  <text x="685" y="307" font-family="system-ui" font-size="10" font-weight="600" fill="rgba(255,255,255,0.65)" text-anchor="middle">Tracked in Salesforce</text>
+  <text x="685" y="322" font-family="system-ui" font-size="11" font-weight="700" fill="white" text-anchor="middle">Opportunity Records</text>
+  <text x="685" y="337" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle">+ Activity Logging</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="388" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.3)" text-anchor="middle">Donor Prospecting Pipeline — Salesforce-Driven Cultivation for Food Bank Development Teams</text>
+</svg>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Flow Builder for Nonprofits: Automate Without Code - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="A practical guide to Salesforce Flow Builder for nonprofit admins — five food bank automation examples and how to build your first flow without coding.">
+    <meta name="keywords" content="food bank technology, nonprofit Salesforce, food bank software, food relief">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/salesforce-flow-builder-nonprofits.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Salesforce Flow Builder for Nonprofits: Automate Without Code - Food-N-Force">
+    <meta property="og:description" content="A practical guide to Salesforce Flow Builder for nonprofit admins — five food bank automation examples and how to build your first flow without coding.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://foodnforce.com/salesforce-flow-builder-nonprofits.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2025-09-29">
+    <meta property="article:section" content="Implementation">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Salesforce Flow Builder for Nonprofits: Automate Without Code - Food-N-Force">
+    <meta name="twitter:description" content="A practical guide to Salesforce Flow Builder for nonprofit admins — five food bank automation examples and how to build your first flow without coding.">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Salesforce Flow Builder for Nonprofits: Automate Without Code",
+      "description": "A practical guide to Salesforce Flow Builder for nonprofit admins — five food bank automation examples and how to build your first flow without coding.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "datePublished": "2025-09-29",
+      "url": "https://foodnforce.com/salesforce-flow-builder-nonprofits.html",
+      "image": "https://foodnforce.com/og-image.png",
+      "articleSection": "Implementation",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--implementation">Implementation</span>
+                <h1 id="article-title" class="article-hero__title">Salesforce Flow Builder for Nonprofits: Automate Without Code</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2025-09-29">September 2025</time>
+                    <span>5 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+    Most food bank admins who use Salesforce have heard of Flow Builder, and many have tried to build their first flow — often after watching a tutorial that seemed straightforward until the actual interface appeared and looked nothing like expected. Flow Builder is genuinely powerful, and it is genuinely accessible to administrators without programming backgrounds. The learning curve is real, but it is shorter than it appears. The key is starting with the right kind of problem.
+</p>
+
+<p>
+    This guide is written for the nonprofit admin who manages Salesforce for a food bank, pantry, or hunger relief organization. It covers the fundamentals of Flow Builder, the types of flows most relevant to food bank operations, and five specific automations worth building first.
+</p>
+
+<h2>Flow Builder vs. Process Builder: What Changed and Why It Matters</h2>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="src/assets/images/illustrations/salesforce-flow-builder-nonprofits.svg" alt="Salesforce Flow Builder canvas showing a record-triggered flow with decision node branching to send welcome email and create task for new client records" width="800" height="400" loading="lazy">
+</figure>
+
+<p>
+    If you built automations in Salesforce before 2022, you may have used Process Builder. Process Builder is now retired — Salesforce has moved all automation into Flow Builder, which is significantly more capable. Everything Process Builder could do, Flow Builder can do, and Flow Builder can do much more: multi-step logic, screen-based forms for users, complex branching, and integrations with external systems.
+</p>
+
+<p>
+    The shift means that if your Salesforce org has existing Process Builder automations, they need to be migrated to flows. Salesforce provides a migration tool, but reviewing migrated flows before activating them is worthwhile — the migration tool creates functional flows, but not always the most efficient ones. If you are building new automations, build them as flows from the start.
+</p>
+
+<h2>The Four Types of Flows You Will Use Most</h2>
+
+<p>
+    Salesforce offers several flow types, each triggered differently. Understanding which type to use for which problem saves significant time and prevents frustration from building the right logic in the wrong container.
+</p>
+
+<p>
+    <strong>Record-Triggered Flows</strong> run automatically when a Salesforce record is created, updated, or deleted. These are the workhorses of food bank automation — most "when this happens, do that" use cases live here. <strong>Screen Flows</strong> present interactive pages to users during a guided process, useful for intake wizards or checklist workflows. <strong>Scheduled Flows</strong> run on a defined schedule (daily, weekly, hourly), useful for batch operations like sending reminder messages before upcoming shifts or flagging expiring food donations. <strong>Autolaunched Flows</strong> run without a user interface when triggered by another process, useful for complex logic called from other flows.
+</p>
+
+<h2>Five Practical Flows for Food Banks</h2>
+
+<p>
+    The best way to learn Flow Builder is by building flows that solve real problems. Here are five automations that provide immediate operational value:
+</p>
+
+<p>
+    <strong>1. Auto-assign case worker on new client record.</strong> When a new client is created in Salesforce, this record-triggered flow checks the client's zip code or program type and assigns the appropriate case worker or intake coordinator automatically. Without this flow, assignment happens manually — which means it sometimes happens late and sometimes happens inconsistently.
+</p>
+
+<p>
+    <strong>2. Volunteer shift reminder 24 hours before.</strong> A scheduled flow runs each morning, queries all volunteer shift records for the following day, and sends an email or SMS reminder to each assigned volunteer. This single automation reliably reduces no-show rates. The logic is straightforward: query records meeting the date condition, loop through the results, send the notification, update a "Reminder Sent" field to prevent duplicates.
+</p>
+
+<aside class="article-pullquote">
+    <blockquote>
+        <p>Flow Builder shifts the question from "can we afford to automate this?" to "how long will it take to build?" For most food bank operations, the answer to the second question is two to four hours for a first-time builder — and twenty minutes for the same flow the second time around.</p>
+    </blockquote>
+</aside>
+
+<p>
+    <strong>3. Create a grant report task when a milestone is marked complete.</strong> When a grant milestone record is updated to "Complete" in Salesforce, a record-triggered flow automatically creates a task for the development director to prepare the associated report, sets a due date seven days out, and sends a notification email. This ensures reporting obligations are never missed because of a handoff gap.
+</p>
+
+<p>
+    <strong>4. Flag expiring food donations.</strong> A scheduled flow runs daily, queries food donation or inventory records where the expiration date falls within the next five days, and creates an alert task for the warehouse coordinator. This automation alone can meaningfully reduce waste at food banks that track inventory in Salesforce — the value surfaces quickly.
+</p>
+
+<p>
+    <strong>5. Welcome email sequence for new donors.</strong> When a new contact's record is created with a "Donor" record type, a record-triggered flow queues a welcome email immediately, then uses a wait element to schedule a personal follow-up task for a development staff member three days later. This simple two-step sequence improves first-year donor retention without requiring any manual coordination.
+</p>
+
+<h2>How to Approach Building Your First Flow</h2>
+
+<p>
+    The most reliable way to succeed with your first flow is to start with a record-triggered flow that uses a single action — no decision branches, no loops, no complex conditions. Find a one-step automation that currently requires manual work: update a field when another field changes, create a task when a record is created, send an email when a status changes to a specific value. Build that first. Activate it in a sandbox, test it by creating records that should trigger the flow, verify the outcome, then deploy to production.
+</p>
+
+<p>
+    Testing is non-negotiable. A flow with a bug does not fail visibly — it processes records silently in the wrong way, which can create significant data cleanup work. Build every flow in a sandbox first. Use the Flow Debugger to trace individual record processing and verify that each element executes as intended. Check the flow's Fault Handling to ensure errors are logged rather than silently swallowed.
+</p>
+
+<h2>Debugging and When to Ask for Help</h2>
+
+<p>
+    Flow Builder's error messages improve with each Salesforce release, but they can still be cryptic. When a flow fails, the error message in Setup → Apex Jobs (for scheduled flows) or the Debug Log gives you the starting point. The most common beginner errors involve null values — a flow element that tries to use a variable that was never populated — and record access issues, where the flow's running user does not have permission to query or update the records it needs.
+</p>
+
+<p>
+    Flow Builder is a skill that compounds. Each flow you build teaches you a pattern that accelerates the next. Start simple, build confidence, and expand complexity as your fluency grows. The ceiling on what you can automate without writing a single line of code is higher than most admins initially believe.
+</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                                <a href="food-bank-workflow-automation.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Implementation</span>
+                    <span class="article-read-next__card-title">The Complete Guide to Food Bank Workflow Automation</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+                <a href="salesforce-spring-2026-nonprofits.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">Salesforce Spring 2026: Key Updates for Nonprofit Admins</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+                <a href="salesforce-reports-dashboards-food-banks.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Implementation</span>
+                    <span class="article-read-next__card-title">Salesforce Reports and Dashboards Every Food Bank Leader Needs</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Ready to Build Your First Flow?</h2>
+                <p class="article-cta__text">Food-N-Force helps nonprofit admins design and build Salesforce Flows that automate the work that slows your team down.</p>
+                <div class="article-cta__actions">
+                    <a href="contact.html" class="resource-action">Get in Touch</a>
+                    <a href="blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="src/js/main.js" defer></script>
+</body>
+</html>

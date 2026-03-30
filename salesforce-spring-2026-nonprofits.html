@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Spring 2026: Key Updates for Nonprofit Admins - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="A practical guide to the Salesforce Spring 2026 release for nonprofit admins — what to enable now, what to test first, and what to watch for in your org.">
+    <meta name="keywords" content="food bank technology, nonprofit Salesforce, food bank software, food relief">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/salesforce-spring-2026-nonprofits.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Salesforce Spring 2026: Key Updates for Nonprofit Admins - Food-N-Force">
+    <meta property="og:description" content="A practical guide to the Salesforce Spring 2026 release for nonprofit admins — what to enable now, what to test first, and what to watch for in your org.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://foodnforce.com/salesforce-spring-2026-nonprofits.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2026-01-28">
+    <meta property="article:section" content="Technology Strategy">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Salesforce Spring 2026: Key Updates for Nonprofit Admins - Food-N-Force">
+    <meta name="twitter:description" content="A practical guide to the Salesforce Spring 2026 release for nonprofit admins — what to enable now, what to test first, and what to watch for in your org.">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Salesforce Spring 2026: Key Updates for Nonprofit Admins",
+      "description": "A practical guide to the Salesforce Spring 2026 release for nonprofit admins — what to enable now, what to test first, and what to watch for in your org.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+      "datePublished": "2026-01-28",
+      "url": "https://foodnforce.com/salesforce-spring-2026-nonprofits.html",
+      "image": "https://foodnforce.com/og-image.png",
+      "articleSection": "Technology Strategy",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--tech">Technology Strategy</span>
+                <h1 id="article-title" class="article-hero__title">Salesforce Spring 2026: Key Updates for Nonprofit Admins</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2026-01-28">January 2026</time>
+                    <span>4 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+    Three times a year, Salesforce releases a wave of platform updates — some automatic, some opt-in, some requiring careful testing before activation. For nonprofit admins managing organizations with lean IT resources, figuring out which updates deserve attention and which can safely be deprioritized is itself a significant task. This guide cuts through the release notes to focus on what actually matters for nonprofit organizations running on Salesforce in Spring 2026.
+</p>
+
+<p>
+    The Spring 2026 release is notably rich for nonprofits, with meaningful advances across AI, automation, security, and reporting. Not all of these will apply equally to every organization, but several represent genuine opportunities to improve operations without additional development work. The key is knowing which ones to evaluate — and in what order.
+</p>
+
+<h2>Agentforce Availability Expands to Nonprofit Cloud</h2>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="src/assets/images/illustrations/salesforce-spring-2026-nonprofits.svg" alt="Dashboard-style illustration showing Spring 2026 feature cards for Agentforce, Flow Builder, Health Check, and Reports" width="800" height="400" loading="lazy">
+</figure>
+
+<p>
+    The most significant update for many nonprofits is the expanded availability of Agentforce within Nonprofit Cloud. AI-assisted case management, automated donor inquiry handling, and AI-generated report summaries are now accessible without requiring a separate AI add-on license for qualifying Nonprofit Cloud editions. This doesn't mean every organization should immediately deploy AI agents — but it does mean the barrier to experimentation has dropped substantially.
+</p>
+
+<p>
+    For admins, the practical starting point is the Agentforce setup menu in your org's Setup panel. Review what's enabled, understand what data the agents have access to, and configure appropriately for your security model. Before enabling any agentic features in production, test them in a full sandbox to verify behavior with your actual data. Agentforce is powerful; it's also worth treating with the same deliberate approach you'd apply to any significant workflow change.
+</p>
+
+<h2>Flow Builder: Screen Flow Enhancements</h2>
+
+<p>
+    Flow Builder continues to evolve as Salesforce's primary no-code automation tool, and Spring 2026 includes several screen flow enhancements that will directly benefit nonprofit intake, intake pre-screening, and program enrollment workflows. The most useful additions are improved conditional visibility for screen components — allowing admins to show or hide fields based on user input without requiring separate screen elements or complex branching logic — and a new table component that displays related records inline within a screen flow.
+</p>
+
+<p>
+    For food banks using screen flows to manage client intake or volunteer onboarding, the table component is a meaningful quality-of-life improvement. Instead of navigating away from a flow to review related records, staff can see relevant context — previous visits, open referrals, prior food preferences — directly within the intake interface. This reduces the number of tabs required during a client interaction and keeps the conversation flowing more naturally.
+</p>
+
+<aside class="article-pullquote">
+    <blockquote>
+        <p>The admins who get the most from each Salesforce release aren't the ones who enable everything — they're the ones who know exactly which updates solve their organization's real problems.</p>
+    </blockquote>
+</aside>
+
+<h2>Health Check: New Security Baselines</h2>
+
+<p>
+    Salesforce's Health Check tool now includes updated baseline security standards that align with current NIST cybersecurity framework recommendations. For nonprofits, this update is worth a deliberate review — not because your org is likely to have critical vulnerabilities, but because the new baseline surfaces configuration details that were previously below the detection threshold.
+</p>
+
+<p>
+    In particular, the updated Health Check flags overly permissive public site guest user profiles, legacy password policies that don't meet current minimum standards, and connected app permissions that exceed what those apps actually require. Run Health Check in your production org before the release upgrades your instance, note any new flags that appear post-release, and develop a prioritized remediation plan for anything in the medium or high risk categories. This is low-drama, high-value admin work that pays dividends in audit readiness and data protection.
+</p>
+
+<h2>Reports and Dashboards: Mission Impact Enhancements</h2>
+
+<p>
+    Spring 2026 includes several reporting improvements that are particularly valuable for nonprofits that need to communicate programmatic impact to board members, funders, and grant reviewers. Dynamic dashboard filters now support multi-value selection, meaning a single dashboard can be filtered to show data for a specific program, region, or time period without requiring separate dashboard components for each view.
+</p>
+
+<p>
+    Cross-object reporting has also been improved with support for additional relationship types, making it easier to build reports that connect donor giving history, program participation, and outcome data without custom report types. For organizations that have struggled to build the kinds of impact narratives funders want from Salesforce data alone, this is a meaningful step forward. Review your current reporting library and identify any cross-object reports you've been unable to build — the Spring 2026 enhancements may now make them possible.
+</p>
+
+<h2>Approval Workflows: New Flexibility for Complex Processes</h2>
+
+<p>
+    Approval process enhancements in Spring 2026 address a long-standing limitation: the inability to dynamically reassign approvals based on record content or the submitter's role. The new dynamic approver assignment feature allows approval processes to route to different approvers based on criteria you define, without requiring separate approval processes for each scenario.
+</p>
+
+<p>
+    For nonprofits managing grant-funded programs with different approval hierarchies, or organizations where procurement approvals vary by project or department, this removes a significant amount of administrative complexity. Admins who have been maintaining multiple parallel approval processes for different program areas should audit their current setup after the release and evaluate whether consolidation is now possible.
+</p>
+
+<h2>Your Post-Release Admin Checklist</h2>
+
+<p>
+    As with every release, the best approach is to review changes in your sandbox before they reach production, prioritize updates that address known operational pain points, and document what you've enabled and why. For Spring 2026 specifically, the Agentforce availability update and the Health Check baseline changes warrant immediate attention in every nonprofit org. Flow Builder and reporting improvements are worth scheduled review time rather than urgent action.
+</p>
+
+<p>
+    The organizations that extract the most value from Salesforce aren't those with the largest implementation budgets. They're the ones with admins who stay current, evaluate deliberately, and maintain clean, well-documented orgs that can absorb new capabilities without technical debt accumulating. Spring 2026 offers real tools for doing more with less — if you know where to look.
+</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                                <a href="salesforce-flow-builder-nonprofits.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Implementation</span>
+                    <span class="article-read-next__card-title">Salesforce Flow Builder for Nonprofits: Automate Without Code</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="salesforce-security-nonprofits.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">Salesforce Security Best Practices for Nonprofits</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+                <a href="salesforce-food-bank-operations.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">5 Ways Salesforce Transforms Food Bank Operations</span>
+                    <span class="article-read-next__card-meta">4 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Need Help Navigating Salesforce Updates?</h2>
+                <p class="article-cta__text">Food-N-Force keeps your Salesforce org running smoothly through every release cycle — so you can focus on your mission.</p>
+                <div class="article-cta__actions">
+                    <a href="contact.html" class="resource-action">Get in Touch</a>
+                    <a href="blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="src/js/main.js" defer></script>
+</body>
+</html>

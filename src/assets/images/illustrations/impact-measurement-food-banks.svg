@@ -1,0 +1,153 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logic model diagram showing Inputs, Activities, Outputs, Outcomes, and Impact with example metrics and funder versus operational view labels">
+  <defs>
+    <linearGradient id="im-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="im-box1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a5f;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0f2540;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="im-box2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0150a0;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="im-box3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0369a1;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="im-box4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="im-box5" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="im-arrow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.5"/>
+    </linearGradient>
+    <marker id="im-arrowhead" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="rgba(255,255,255,0.35)"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#im-bg)"/>
+
+  <!-- Title row -->
+  <text x="400" y="24" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">IMPACT MEASUREMENT — LOGIC MODEL FRAMEWORK</text>
+
+  <!-- View labels -->
+  <rect x="20" y="34" width="360" height="18" rx="3" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
+  <text x="200" y="46" font-family="system-ui,sans-serif" font-size="9" fill="rgba(245,158,11,0.7)" text-anchor="middle" letter-spacing="1" font-weight="600">OPERATIONAL VIEW — What we track</text>
+  <rect x="420" y="34" width="360" height="18" rx="3" fill="rgba(139,92,246,0.1)" stroke="rgba(139,92,246,0.2)" stroke-width="1"/>
+  <text x="600" y="46" font-family="system-ui,sans-serif" font-size="9" fill="rgba(139,92,246,0.7)" text-anchor="middle" letter-spacing="1" font-weight="600">FUNDER VIEW — What they want to see</text>
+
+  <!-- Progress bar (gradient across bottom of boxes) -->
+  <rect x="20" y="60" width="760" height="4" rx="2" fill="url(#im-arrow)" opacity="0.4"/>
+
+  <!-- === BOX 1: INPUTS === -->
+  <rect x="20" y="70" width="136" height="100" rx="8" fill="url(#im-box1)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="88" y="90" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="rgba(255,255,255,0.6)" text-anchor="middle" letter-spacing="1">INPUTS</text>
+  <line x1="34" y1="96" x2="142" y2="96" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="88" y="112" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle">Staff &amp; Volunteers</text>
+  <text x="88" y="124" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle">Funding</text>
+  <text x="88" y="136" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle">Food Supply</text>
+  <text x="88" y="148" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle">Facilities</text>
+  <text x="88" y="160" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.5)" text-anchor="middle">Technology</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="157" y1="120" x2="170" y2="120" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" marker-end="url(#im-arrowhead)"/>
+
+  <!-- === BOX 2: ACTIVITIES === -->
+  <rect x="172" y="70" width="136" height="100" rx="8" fill="url(#im-box2)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="240" y="90" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="white" text-anchor="middle" letter-spacing="1">ACTIVITIES</text>
+  <line x1="186" y1="96" x2="294" y2="96" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="240" y="112" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Pantry Distribution</text>
+  <text x="240" y="124" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Client Intake</text>
+  <text x="240" y="136" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Nutrition Programs</text>
+  <text x="240" y="148" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Partner Coordination</text>
+  <text x="240" y="160" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Case Management</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="309" y1="120" x2="322" y2="120" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" marker-end="url(#im-arrowhead)"/>
+
+  <!-- === BOX 3: OUTPUTS === -->
+  <rect x="324" y="70" width="136" height="100" rx="8" fill="url(#im-box3)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="392" y="90" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="white" text-anchor="middle" letter-spacing="1">OUTPUTS</text>
+  <line x1="338" y1="96" x2="446" y2="96" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="392" y="112" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Pounds Distributed</text>
+  <text x="392" y="124" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Households Served</text>
+  <text x="392" y="136" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Pantry Visits</text>
+  <text x="392" y="148" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Volunteer Hours</text>
+  <text x="392" y="160" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Screenings Completed</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="461" y1="120" x2="474" y2="120" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" marker-end="url(#im-arrowhead)"/>
+
+  <!-- === BOX 4: OUTCOMES === -->
+  <rect x="476" y="70" width="136" height="100" rx="8" fill="url(#im-box4)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="544" y="90" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="white" text-anchor="middle" letter-spacing="1">OUTCOMES</text>
+  <line x1="490" y1="96" x2="598" y2="96" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="544" y="112" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Reduced Food Insecurity</text>
+  <text x="544" y="124" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Improved Nutrition</text>
+  <text x="544" y="136" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Dietary Score Change</text>
+  <text x="544" y="148" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Financial Stress Relief</text>
+  <text x="544" y="160" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Health Self-Efficacy</text>
+
+  <!-- Arrow 4→5 -->
+  <line x1="613" y1="120" x2="626" y2="120" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" marker-end="url(#im-arrowhead)"/>
+
+  <!-- === BOX 5: IMPACT === -->
+  <rect x="628" y="70" width="152" height="100" rx="8" fill="url(#im-box5)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="704" y="90" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="white" text-anchor="middle" letter-spacing="1">IMPACT</text>
+  <line x1="642" y1="96" x2="766" y2="96" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="704" y="112" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Community Health</text>
+  <text x="704" y="124" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Poverty Reduction</text>
+  <text x="704" y="136" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">ED Visit Reduction</text>
+  <text x="704" y="148" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Economic Stability</text>
+  <text x="704" y="160" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Systemic Change</text>
+
+  <!-- === METRIC EXAMPLES ROW === -->
+  <text x="400" y="198" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="rgba(255,255,255,0.3)" text-anchor="middle" letter-spacing="2">EXAMPLE METRICS</text>
+
+  <!-- Metric boxes under each stage -->
+  <rect x="20" y="207" width="136" height="48" rx="5" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="88" y="221" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.35)" text-anchor="middle">$1.2M annual budget</text>
+  <text x="88" y="232" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.35)" text-anchor="middle">120 active volunteers</text>
+  <text x="88" y="243" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.35)" text-anchor="middle">480K lbs capacity</text>
+
+  <rect x="172" y="207" width="136" height="48" rx="5" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="240" y="221" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.45)" text-anchor="middle">18 pantry sessions/mo</text>
+  <text x="240" y="232" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.45)" text-anchor="middle">6 nutrition classes</text>
+  <text x="240" y="243" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.45)" text-anchor="middle">SNAP outreach weekly</text>
+
+  <rect x="324" y="207" width="136" height="48" rx="5" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="392" y="221" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.55)" text-anchor="middle">420K lbs distributed</text>
+  <text x="392" y="232" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.55)" text-anchor="middle">3,200 HH/month</text>
+  <text x="392" y="243" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.55)" text-anchor="middle">14,400 visits/year</text>
+
+  <rect x="476" y="207" width="136" height="48" rx="5" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="544" y="221" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.65)" text-anchor="middle">68% food secure at 6mo</text>
+  <text x="544" y="232" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.65)" text-anchor="middle">+1.8pt dietary score</text>
+  <text x="544" y="243" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.65)" text-anchor="middle">82% report less stress</text>
+
+  <rect x="628" y="207" width="152" height="48" rx="5" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="704" y="221" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)" text-anchor="middle">-12% local food insecurity</text>
+  <text x="704" y="232" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)" text-anchor="middle">Cost per meal: $0.28</text>
+  <text x="704" y="243" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.75)" text-anchor="middle">$3.2M economic value</text>
+
+  <!-- === FUNDER INTEREST BANDS === -->
+  <!-- Operational band -->
+  <rect x="20" y="266" width="440" height="22" rx="4" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
+  <text x="240" y="281" font-family="system-ui,sans-serif" font-size="9" fill="rgba(245,158,11,0.6)" text-anchor="middle">← Operational view: track daily for management</text>
+
+  <!-- Funder band -->
+  <rect x="324" y="296" width="456" height="22" rx="4" fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.2)" stroke-width="1"/>
+  <text x="552" y="311" font-family="system-ui,sans-serif" font-size="9" fill="rgba(139,92,246,0.6)" text-anchor="middle">Funder view: outcomes &amp; impact → what funders want to see →</text>
+
+  <!-- Bottom caption -->
+  <text x="400" y="358" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.25)" text-anchor="middle">Frameworks: IRIS+, Feeding America Network Metrics, USDA SNAP-Ed Impact Measures, Theory of Change</text>
+</svg>

@@ -2,8 +2,18 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import { fileURLToPath, URL } from 'url';
 import autoprefixer from 'autoprefixer';
+import { glob } from 'glob';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
+
+// Dynamically discover all root-level HTML pages so new articles are picked up automatically
+const htmlFiles = glob.sync('*.html', { cwd: __dirname, ignore: ['node_modules/**', 'dist/**'] });
+const rollupInput = Object.fromEntries(
+  htmlFiles.map(f => {
+    const name = f.replace('.html', '');
+    return [name === 'index' ? 'main' : name, resolve(__dirname, f)];
+  }),
+);
 
 export default defineConfig({
   root: '.',
@@ -15,25 +25,7 @@ export default defineConfig({
     sourcemap: false,
     minify: 'terser',
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        about: resolve(__dirname, 'about.html'),
-        services: resolve(__dirname, 'services.html'),
-        resources: resolve(__dirname, 'resources.html'),
-        impact: resolve(__dirname, 'impact.html'),
-        contact: resolve(__dirname, 'contact.html'),
-        blog: resolve(__dirname, 'blog.html'),
-        articleAiFoodBanks: resolve(__dirname, 'ai-reshaping-food-banks.html'),
-        articleSalesforce: resolve(__dirname, 'salesforce-food-bank-operations.html'),
-        articleDonor: resolve(__dirname, 'donor-relationships-nonprofit-cloud.html'),
-        articleDataDriven: resolve(__dirname, 'data-driven-food-banks.html'),
-        articleWorkflow: resolve(__dirname, 'food-bank-workflow-automation.html'),
-        articleGrants: resolve(__dirname, 'securing-technology-grants.html'),
-        articleAiInventory: resolve(__dirname, 'ai-inventory-management.html'),
-        caseStudies: resolve(__dirname, 'case-studies.html'),
-        templatesTools: resolve(__dirname, 'templates-tools.html'),
-        notfound: resolve(__dirname, '404.html')
-      },
+      input: rollupInput,
       output: {
         // Keep separate CSS and JS bundles for maintainability
         manualChunks: {

@@ -1,0 +1,99 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Partnership ecosystem map with food bank at center surrounded by partner type circles">
+  <defs>
+    <linearGradient id="sp-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1628;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0d1f3c;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="sp-center" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+    <radialGradient id="sp-pulse" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#sp-bg)"/>
+
+  <!-- Pulse rings around center -->
+  <circle cx="400" cy="195" r="80" fill="none" stroke="#0176D3" stroke-width="1" opacity="0.12"/>
+  <circle cx="400" cy="195" r="120" fill="none" stroke="#0176D3" stroke-width="1" opacity="0.08"/>
+  <circle cx="400" cy="195" r="160" fill="none" stroke="#0176D3" stroke-width="1" opacity="0.05"/>
+
+  <!-- Connection lines from center to partners -->
+  <!-- Retailers (top-right) -->
+  <line x1="400" y1="195" x2="570" y2="80" stroke="#10b981" stroke-width="1.5" opacity="0.4" stroke-dasharray="5,3"/>
+  <!-- Healthcare (right) -->
+  <line x1="400" y1="195" x2="625" y2="195" stroke="#0ea5e9" stroke-width="2" opacity="0.5"/>
+  <!-- Government (bottom-right) -->
+  <line x1="400" y1="195" x2="560" y2="320" stroke="#f59e0b" stroke-width="1.5" opacity="0.4" stroke-dasharray="5,3"/>
+  <!-- Schools (bottom-left) -->
+  <line x1="400" y1="195" x2="240" y2="320" stroke="#8b5cf6" stroke-width="1.5" opacity="0.4" stroke-dasharray="5,3"/>
+  <!-- Faith Orgs (left) -->
+  <line x1="400" y1="195" x2="175" y2="195" stroke="#06b6d4" stroke-width="2" opacity="0.5"/>
+  <!-- Funders (top-left) -->
+  <line x1="400" y1="195" x2="230" y2="80" stroke="#f59e0b" stroke-width="1.5" opacity="0.4" stroke-dasharray="5,3"/>
+  <!-- Volunteers (top) -->
+  <line x1="400" y1="195" x2="400" y2="48" stroke="#10b981" stroke-width="1.5" opacity="0.35" stroke-dasharray="5,3"/>
+
+  <!-- Center: Food Bank -->
+  <circle cx="400" cy="195" r="55" fill="url(#sp-center)" opacity="0.2"/>
+  <circle cx="400" cy="195" r="55" fill="none" stroke="#0176D3" stroke-width="2.5"/>
+  <circle cx="400" cy="195" r="42" fill="url(#sp-center)" opacity="0.25"/>
+  <!-- House icon (food bank) -->
+  <path d="M390 205 L390 218 L410 218 L410 205" stroke="#e0f2fe" stroke-width="2" fill="none"/>
+  <path d="M385 205 L400 192 L415 205" stroke="#e0f2fe" stroke-width="2" fill="none" stroke-linejoin="round"/>
+  <rect x="396" y="210" width="8" height="8" stroke="#e0f2fe" stroke-width="1.5" fill="none"/>
+  <text x="400" y="234" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#bae6fd" text-anchor="middle">Food Bank</text>
+
+  <!-- Partner node helper: circle + label + icon -->
+  <!-- Retailers (top-right) ~570, 80 -->
+  <circle cx="570" cy="80" r="38" fill="#10b981" opacity="0.12" stroke="#10b981" stroke-width="1.8"/>
+  <text x="570" y="68" font-family="Arial, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle">🏪</text>
+  <text x="570" y="82" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#6ee7b7" text-anchor="middle">Retailers</text>
+  <text x="570" y="95" font-family="Arial, sans-serif" font-size="8" fill="#34d399" text-anchor="middle">Food Donations</text>
+
+  <!-- Healthcare (right) ~625, 195 -->
+  <circle cx="628" cy="195" r="42" fill="#0ea5e9" opacity="0.12" stroke="#0ea5e9" stroke-width="2"/>
+  <text x="628" y="180" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#7dd3fc" text-anchor="middle">Healthcare</text>
+  <text x="628" y="196" font-family="Arial, sans-serif" font-size="8" fill="#38bdf8" text-anchor="middle">Referrals &amp;</text>
+  <text x="628" y="208" font-family="Arial, sans-serif" font-size="8" fill="#38bdf8" text-anchor="middle">Co-Funding</text>
+  <!-- Plus cross icon -->
+  <line x1="624" y1="168" x2="624" y2="176" stroke="#7dd3fc" stroke-width="2.5"/>
+  <line x1="620" y1="172" x2="628" y2="172" stroke="#7dd3fc" stroke-width="2.5"/>
+
+  <!-- Government (bottom-right) ~560, 320 -->
+  <circle cx="560" cy="320" r="38" fill="#f59e0b" opacity="0.12" stroke="#f59e0b" stroke-width="1.8"/>
+  <text x="560" y="312" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#fde68a" text-anchor="middle">Government</text>
+  <text x="560" y="326" font-family="Arial, sans-serif" font-size="8" fill="#fcd34d" text-anchor="middle">Funding &amp;</text>
+  <text x="560" y="337" font-family="Arial, sans-serif" font-size="8" fill="#fcd34d" text-anchor="middle">Policy Access</text>
+
+  <!-- Schools (bottom-left) ~240, 320 -->
+  <circle cx="240" cy="320" r="38" fill="#8b5cf6" opacity="0.12" stroke="#8b5cf6" stroke-width="1.8"/>
+  <text x="240" y="312" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#c4b5fd" text-anchor="middle">Schools</text>
+  <text x="240" y="326" font-family="Arial, sans-serif" font-size="8" fill="#a78bfa" text-anchor="middle">Sites &amp;</text>
+  <text x="240" y="337" font-family="Arial, sans-serif" font-size="8" fill="#a78bfa" text-anchor="middle">Family Access</text>
+
+  <!-- Faith Orgs (left) ~175, 195 -->
+  <circle cx="172" cy="195" r="42" fill="#06b6d4" opacity="0.12" stroke="#06b6d4" stroke-width="2"/>
+  <text x="172" y="184" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#67e8f9" text-anchor="middle">Faith</text>
+  <text x="172" y="198" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#67e8f9" text-anchor="middle">Orgs</text>
+  <text x="172" y="212" font-family="Arial, sans-serif" font-size="8" fill="#22d3ee" text-anchor="middle">Volunteers &amp; Space</text>
+
+  <!-- Funders (top-left) ~230, 80 -->
+  <circle cx="230" cy="80" r="38" fill="#f59e0b" opacity="0.10" stroke="#f59e0b" stroke-width="1.8"/>
+  <text x="230" y="73" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#fde68a" text-anchor="middle">Funders</text>
+  <text x="230" y="87" font-family="Arial, sans-serif" font-size="8" fill="#fcd34d" text-anchor="middle">Grants &amp;</text>
+  <text x="230" y="98" font-family="Arial, sans-serif" font-size="8" fill="#fcd34d" text-anchor="middle">Philanthropy</text>
+
+  <!-- Volunteers (top) ~400, 48 -->
+  <circle cx="400" cy="46" r="32" fill="#10b981" opacity="0.10" stroke="#10b981" stroke-width="1.5"/>
+  <text x="400" y="40" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#6ee7b7" text-anchor="middle">Volunteers</text>
+  <text x="400" y="53" font-family="Arial, sans-serif" font-size="8" fill="#34d399" text-anchor="middle">Capacity</text>
+
+  <!-- Legend -->
+  <text x="400" y="375" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#e0f2fe" text-anchor="middle">Partnership Ecosystem Map</text>
+  <text x="400" y="393" font-family="Arial, sans-serif" font-size="10" fill="#7ec8e8" text-anchor="middle">Solid lines = primary partnerships · Dashed lines = program partnerships</text>
+</svg>

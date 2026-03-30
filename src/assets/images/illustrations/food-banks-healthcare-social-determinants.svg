@@ -1,0 +1,112 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bridge diagram connecting Healthcare System and Food Bank Network through layers of Screening, Referral, Service, and Outcome Data">
+  <defs>
+    <linearGradient id="hc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="hc-health" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:0.95"/>
+    </linearGradient>
+    <linearGradient id="hc-food" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.95"/>
+    </linearGradient>
+    <linearGradient id="hc-screen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.7"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.7"/>
+    </linearGradient>
+    <linearGradient id="hc-referral" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.7"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.7"/>
+    </linearGradient>
+    <linearGradient id="hc-service" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.7"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.7"/>
+    </linearGradient>
+    <linearGradient id="hc-outcome" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.7"/>
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:0.7"/>
+    </linearGradient>
+    <filter id="hc-glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#hc-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="28" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.55)" text-anchor="middle" letter-spacing="2">HEALTHCARE + FOOD BANK PARTNERSHIP MODEL</text>
+
+  <!-- === LEFT CIRCLE: Healthcare System === -->
+  <circle cx="148" cy="200" r="100" fill="url(#hc-health)" opacity="0.15" stroke="rgba(1,118,211,0.4)" stroke-width="1.5"/>
+  <circle cx="148" cy="200" r="100" fill="none" stroke="rgba(1,118,211,0.2)" stroke-width="30"/>
+
+  <!-- Medical cross icon -->
+  <rect x="130" y="148" width="36" height="10" rx="3" fill="rgba(1,118,211,0.9)"/>
+  <rect x="139" y="139" width="10" height="28" rx="3" fill="rgba(1,118,211,0.9)"/>
+
+  <text x="148" y="185" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="white" text-anchor="middle">Healthcare</text>
+  <text x="148" y="202" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="white" text-anchor="middle">System</text>
+  <text x="148" y="222" font-family="system-ui,sans-serif" font-size="9" fill="rgba(14,165,233,0.8)" text-anchor="middle">Clinics · Hospitals</text>
+  <text x="148" y="234" font-family="system-ui,sans-serif" font-size="9" fill="rgba(14,165,233,0.8)" text-anchor="middle">FQHC · Managed Care</text>
+
+  <!-- === RIGHT CIRCLE: Food Bank Network === -->
+  <circle cx="652" cy="200" r="100" fill="url(#hc-food)" opacity="0.15" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
+  <circle cx="652" cy="200" r="100" fill="none" stroke="rgba(16,185,129,0.2)" stroke-width="30"/>
+
+  <!-- Box/food icon -->
+  <rect x="634" y="148" width="36" height="26" rx="3" fill="none" stroke="rgba(16,185,129,0.9)" stroke-width="2"/>
+  <line x1="634" y1="158" x2="670" y2="158" stroke="rgba(16,185,129,0.9)" stroke-width="2"/>
+  <line x1="652" y1="148" x2="652" y2="158" stroke="rgba(16,185,129,0.9)" stroke-width="2"/>
+
+  <text x="652" y="192" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="white" text-anchor="middle">Food Bank</text>
+  <text x="652" y="209" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="white" text-anchor="middle">Network</text>
+  <text x="652" y="229" font-family="system-ui,sans-serif" font-size="9" fill="rgba(16,185,129,0.8)" text-anchor="middle">Pantries · Programs</text>
+  <text x="652" y="241" font-family="system-ui,sans-serif" font-size="9" fill="rgba(16,185,129,0.8)" text-anchor="middle">Mobile · Community Sites</text>
+
+  <!-- === BRIDGE LAYERS === -->
+  <!-- Bridge background -->
+  <rect x="248" y="110" width="304" height="180" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <!-- Layer 1: Screening -->
+  <rect x="258" y="120" width="284" height="36" rx="6" fill="url(#hc-screen)" opacity="0.85"/>
+  <text x="400" y="140" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">SCREENING</text>
+  <text x="400" y="151" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Hunger Vital Sign · HRSN Screeners · Point-of-Care</text>
+
+  <!-- Layer 2: Referral -->
+  <rect x="258" y="163" width="284" height="36" rx="6" fill="url(#hc-referral)" opacity="0.85"/>
+  <text x="400" y="183" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">REFERRAL</text>
+  <text x="400" y="194" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Warm Handoffs · Electronic Referral Platforms · Direct Scheduling</text>
+
+  <!-- Layer 3: Service -->
+  <rect x="258" y="206" width="284" height="36" rx="6" fill="url(#hc-service)" opacity="0.85"/>
+  <text x="400" y="226" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">SERVICE</text>
+  <text x="400" y="237" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Nutrition Programs · Medically Tailored Boxes · Client Intake</text>
+
+  <!-- Layer 4: Outcome Data -->
+  <rect x="258" y="249" width="284" height="36" rx="6" fill="url(#hc-outcome)" opacity="0.85"/>
+  <text x="400" y="269" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="white" text-anchor="middle">OUTCOME DATA</text>
+  <text x="400" y="280" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Closed-Loop Confirmation · Health Metrics · ED Utilization</text>
+
+  <!-- Connection lines left -->
+  <line x1="248" y1="138" x2="248" y2="138" stroke="none"/>
+  <path d="M 248 138 L 200 172" stroke="rgba(1,118,211,0.4)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <path d="M 248 181 L 200 195" stroke="rgba(14,165,233,0.4)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <path d="M 248 224 L 200 214" stroke="rgba(6,182,212,0.4)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <path d="M 248 267 L 200 237" stroke="rgba(139,92,246,0.4)" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+  <!-- Connection lines right -->
+  <path d="M 542 138 L 552 172" stroke="rgba(16,185,129,0.4)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <path d="M 542 181 L 552 195" stroke="rgba(6,182,212,0.4)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <path d="M 542 224 L 552 214" stroke="rgba(16,185,129,0.4)" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <path d="M 542 267 L 552 237" stroke="rgba(139,92,246,0.4)" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+  <!-- Bidirectional arrow between circles -->
+  <path d="M 190 340 Q 400 370 610 340" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-dasharray="5,5"/>
+  <polygon points="607,336 614,341 606,345" fill="rgba(255,255,255,0.2)"/>
+  <polygon points="193,336 186,341 194,345" fill="rgba(255,255,255,0.2)"/>
+  <text x="400" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Bidirectional Data Relationship · Shared Accountability for Health Outcomes</text>
+</svg>

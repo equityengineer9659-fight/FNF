@@ -1,0 +1,120 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Governance framework wheel diagram showing five principles — Transparency, Fairness, Human Oversight, Data Privacy, and Mission Alignment — surrounding a central Responsible AI hub">
+  <defs>
+    <linearGradient id="aie-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1e1b4b;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="aie-seg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.75"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.65"/>
+    </linearGradient>
+    <linearGradient id="aie-seg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.75"/>
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:0.65"/>
+    </linearGradient>
+    <linearGradient id="aie-seg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.75"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.65"/>
+    </linearGradient>
+    <linearGradient id="aie-seg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.75"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.65"/>
+    </linearGradient>
+    <linearGradient id="aie-seg5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:0.75"/>
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.65"/>
+    </linearGradient>
+    <linearGradient id="aie-core" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4c1d95;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#1e1b4b;stop-opacity:0.95"/>
+    </linearGradient>
+    <radialGradient id="aie-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="aie-blur">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#aie-bg)"/>
+
+  <!-- Subtle outer rings -->
+  <circle cx="400" cy="200" r="195" fill="none" stroke="rgba(139,92,246,0.06)" stroke-width="1"/>
+  <circle cx="400" cy="200" r="170" fill="none" stroke="rgba(139,92,246,0.07)" stroke-width="1"/>
+
+  <!-- Glow behind wheel -->
+  <circle cx="400" cy="200" r="160" fill="url(#aie-glow)"/>
+
+  <!-- Wheel segments (pie slices for 5 sections, each 72 degrees) -->
+  <!-- Segment 1: Transparency (top, 270°→342°) -->
+  <!-- Using path arcs: center 400,200 radius 150 -->
+  <!-- Segment 1: from 270° to 342° (top-right area) -->
+  <path d="M400,200 L400,50 A150,150 0 0,1 543,153 Z" fill="url(#aie-seg1)" opacity="0.85"/>
+  <path d="M400,200 L400,50 A150,150 0 0,1 543,153 Z" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+
+  <!-- Segment 2: Fairness (342°→54°) -->
+  <path d="M400,200 L543,153 A150,150 0 0,1 543,247 Z" fill="url(#aie-seg2)" opacity="0.85"/>
+  <path d="M400,200 L543,153 A150,150 0 0,1 543,247 Z" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+
+  <!-- Segment 3: Human Oversight (54°→126°) -->
+  <path d="M400,200 L543,247 A150,150 0 0,1 400,350 Z" fill="url(#aie-seg3)" opacity="0.85"/>
+  <path d="M400,200 L543,247 A150,150 0 0,1 400,350 Z" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+
+  <!-- Segment 4: Data Privacy (126°→198°) -->
+  <path d="M400,200 L400,350 A150,150 0 0,1 257,247 Z" fill="url(#aie-seg4)" opacity="0.85"/>
+  <path d="M400,200 L400,350 A150,150 0 0,1 257,247 Z" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+
+  <!-- Segment 5: Mission Alignment (198°→270°) -->
+  <path d="M400,200 L257,247 A150,150 0 0,1 400,50 Z" fill="url(#aie-seg5)" opacity="0.85"/>
+  <path d="M400,200 L257,247 A150,150 0 0,1 400,50 Z" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+
+  <!-- Outer wheel border -->
+  <circle cx="400" cy="200" r="150" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+
+  <!-- Core circle -->
+  <circle cx="400" cy="200" r="70" fill="url(#aie-core)" filter="url(#aie-blur)"/>
+  <circle cx="400" cy="200" r="70" fill="none" stroke="rgba(139,92,246,0.5)" stroke-width="2"/>
+
+  <!-- Core text -->
+  <text x="400" y="188" font-family="system-ui" font-size="10" font-weight="600" fill="rgba(255,255,255,0.65)" text-anchor="middle">ETHICS</text>
+  <text x="400" y="203" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Responsible</text>
+  <text x="400" y="219" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">AI</text>
+  <text x="400" y="234" font-family="system-ui" font-size="9" fill="rgba(139,92,246,0.8)" text-anchor="middle">FIRST</text>
+
+  <!-- Segment labels (positioned outside the wheel) -->
+  <!-- Transparency label (top center) -->
+  <text x="475" y="100" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.9)" text-anchor="middle">Transparency</text>
+  <text x="475" y="115" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">Explainable decisions</text>
+
+  <!-- Fairness label (right) -->
+  <text x="590" y="200" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.9)" text-anchor="middle">Fairness</text>
+  <text x="590" y="215" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">Equity across groups</text>
+
+  <!-- Human Oversight label (bottom right) -->
+  <text x="510" y="308" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.9)" text-anchor="middle">Human</text>
+  <text x="510" y="322" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.9)" text-anchor="middle">Oversight</text>
+  <text x="510" y="337" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">People stay in control</text>
+
+  <!-- Data Privacy label (bottom left) -->
+  <text x="290" y="308" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.9)" text-anchor="middle">Data</text>
+  <text x="290" y="322" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.9)" text-anchor="middle">Privacy</text>
+  <text x="290" y="337" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">Minimize &amp; protect</text>
+
+  <!-- Mission Alignment label (left) -->
+  <text x="210" y="193" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.9)" text-anchor="middle">Mission</text>
+  <text x="210" y="207" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.9)" text-anchor="middle">Alignment</text>
+  <text x="210" y="222" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.55)" text-anchor="middle">Serve clients first</text>
+
+  <!-- Small divider dots between labels and wheel -->
+  <circle cx="441" cy="64" r="3" fill="rgba(139,92,246,0.7)"/>
+  <circle cx="565" cy="165" r="3" fill="rgba(1,118,211,0.7)"/>
+  <circle cx="530" cy="295" r="3" fill="rgba(14,165,233,0.7)"/>
+  <circle cx="271" cy="295" r="3" fill="rgba(16,185,129,0.7)"/>
+  <circle cx="238" cy="165" r="3" fill="rgba(167,139,250,0.7)"/>
+
+  <!-- Bottom label -->
+  <text x="400" y="388" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.3)" text-anchor="middle">AI Ethics Governance Framework — Responsible Technology Adoption for Nonprofits</text>
+</svg>

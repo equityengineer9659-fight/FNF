@@ -1,0 +1,93 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tiered pyramid showing nutrition priority levels with connected process steps for a nutrition-first food pantry">
+  <defs>
+    <linearGradient id="nfb-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#052e16;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="nfb-tier1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="nfb-tier2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="nfb-tier3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.8"/>
+    </linearGradient>
+    <linearGradient id="nfb-step" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.7"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.7"/>
+    </linearGradient>
+    <filter id="nfb-glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#nfb-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="28" font-family="system-ui" font-size="13" font-weight="700" fill="rgba(255,255,255,0.55)" text-anchor="middle" letter-spacing="1">NUTRITION PRIORITY FRAMEWORK</text>
+
+  <!-- PYRAMID (centered at x=310) -->
+  <!-- Tier 1: Fresh Produce (top / highest priority) -->
+  <polygon points="310,50 230,130 390,130" fill="url(#nfb-tier1)" opacity="0.95"/>
+  <text x="310" y="100" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="middle">Fresh Produce</text>
+  <text x="310" y="116" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.8)" text-anchor="middle">HIGHEST PRIORITY</text>
+  <!-- Leaf icon suggestion -->
+  <text x="310" y="75" font-family="system-ui" font-size="16" text-anchor="middle" fill="rgba(255,255,255,0.7)">🥬</text>
+
+  <!-- Tier 2: Proteins + Whole Grains (middle) -->
+  <polygon points="230,138 150,218 390,218 390,138" fill="url(#nfb-tier2)" opacity="0.9"/>
+  <line x1="230" y1="138" x2="390" y2="138" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="270" y="175" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="middle">Proteins &amp; Grains</text>
+  <text x="270" y="191" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Lean protein, whole grain,</text>
+  <text x="270" y="203" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">low-sodium canned goods</text>
+  <text x="350" y="175" font-family="system-ui" font-size="18" text-anchor="middle" fill="rgba(255,255,255,0.55)">🥚</text>
+
+  <!-- Tier 3: Shelf-Stable (base) -->
+  <polygon points="150,226 70,306 470,306 390,226" fill="url(#nfb-tier3)" opacity="0.85"/>
+  <line x1="150" y1="226" x2="390" y2="226" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="270" y="262" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="middle">Shelf-Stable / Processed</text>
+  <text x="270" y="278" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.7)" text-anchor="middle">Lower nutritional priority</text>
+  <text x="270" y="290" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.7)" text-anchor="middle">Accept with moderation policy</text>
+  <text x="380" y="268" font-family="system-ui" font-size="18" text-anchor="middle" fill="rgba(255,255,255,0.4)">🥫</text>
+
+  <!-- Pyramid base label -->
+  <text x="270" y="328" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle">Nutrition Priority Pyramid</text>
+
+  <!-- PROCESS STEPS (right side) -->
+  <!-- Step connector line -->
+  <line x1="520" y1="60" x2="520" y2="330" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+  <!-- Step 1: Procurement Policy -->
+  <rect x="540" y="48" width="200" height="56" rx="10" fill="url(#nfb-step)" opacity="0.85"/>
+  <text x="640" y="72" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="middle">Procurement Policy</text>
+  <text x="640" y="88" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Prioritize fresh &amp; nutritious</text>
+  <text x="640" y="99" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">vendor relationships</text>
+  <!-- Connector dot -->
+  <circle cx="520" cy="76" r="4" fill="rgba(14,165,233,0.8)" filter="url(#nfb-glow)"/>
+  <line x1="524" y1="76" x2="540" y2="76" stroke="rgba(14,165,233,0.5)" stroke-width="1.5"/>
+
+  <!-- Step 2: Client Choice -->
+  <rect x="540" y="152" width="200" height="56" rx="10" fill="url(#nfb-step)" opacity="0.85"/>
+  <text x="640" y="176" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="middle">Client Choice</text>
+  <text x="640" y="192" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Guide selections toward</text>
+  <text x="640" y="203" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">higher-nutrition items</text>
+  <circle cx="520" cy="180" r="4" fill="rgba(14,165,233,0.8)" filter="url(#nfb-glow)"/>
+  <line x1="524" y1="180" x2="540" y2="180" stroke="rgba(14,165,233,0.5)" stroke-width="1.5"/>
+
+  <!-- Step 3: Tracking System -->
+  <rect x="540" y="256" width="200" height="56" rx="10" fill="url(#nfb-step)" opacity="0.85"/>
+  <text x="640" y="280" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="middle">Tracking System</text>
+  <text x="640" y="296" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">Inventory by nutritional</text>
+  <text x="640" y="307" font-family="system-ui" font-size="9" fill="rgba(255,255,255,0.75)" text-anchor="middle">category, outcome metrics</text>
+  <circle cx="520" cy="284" r="4" fill="rgba(14,165,233,0.8)" filter="url(#nfb-glow)"/>
+  <line x1="524" y1="284" x2="540" y2="284" stroke="rgba(14,165,233,0.5)" stroke-width="1.5"/>
+
+  <!-- Bottom label -->
+  <text x="400" y="382" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.25)" text-anchor="middle">Nutrition-First Food Pantry — Priority Framework &amp; Implementation Steps</text>
+</svg>

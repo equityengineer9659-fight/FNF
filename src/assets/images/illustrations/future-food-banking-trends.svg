@@ -1,0 +1,168 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five trend cards showing Food as Healthcare, AI Operations, Policy Resilience, Client Choice, and Connected Networks">
+  <defs>
+    <linearGradient id="ft-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#080f1e;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0d1f3c;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="ft-card1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0.05"/>
+    </linearGradient>
+    <linearGradient id="ft-card2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.05"/>
+    </linearGradient>
+    <linearGradient id="ft-card3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.05"/>
+    </linearGradient>
+    <linearGradient id="ft-card4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.05"/>
+    </linearGradient>
+    <linearGradient id="ft-card5" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.05"/>
+    </linearGradient>
+    <linearGradient id="ft-icon1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3"/>
+      <stop offset="100%" style="stop-color:#0ea5e9"/>
+    </linearGradient>
+    <linearGradient id="ft-icon2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="ft-icon3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d97706"/>
+      <stop offset="100%" style="stop-color:#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="ft-icon4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669"/>
+      <stop offset="100%" style="stop-color:#34d399"/>
+    </linearGradient>
+    <linearGradient id="ft-icon5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0891b2"/>
+      <stop offset="100%" style="stop-color:#22d3ee"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#ft-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#e0f2fe" text-anchor="middle">Five Trends Shaping Food Banking's Next Decade</text>
+
+  <!-- Card dimensions: width=136, height=270, gap=10, start x=18 -->
+
+  <!-- Card 1: Food as Healthcare -->
+  <rect x="18" y="48" width="142" height="280" rx="10" fill="url(#ft-card1)" stroke="#0176D3" stroke-width="1.8"/>
+  <!-- Top accent bar -->
+  <rect x="18" y="48" width="142" height="5" rx="3" fill="url(#ft-icon1)"/>
+  <!-- Icon: heart + cross (health) -->
+  <circle cx="89" cy="100" r="28" fill="url(#ft-icon1)" opacity="0.15"/>
+  <path d="M89 112 Q75 102 75 93 Q75 85 83 85 Q86 85 89 88 Q92 85 95 85 Q103 85 103 93 Q103 102 89 112Z" fill="url(#ft-icon1)"/>
+  <rect x="85" y="95" width="8" height="3" fill="white" opacity="0.6"/>
+  <!-- Number badge -->
+  <circle cx="118" cy="58" r="10" fill="url(#ft-icon1)"/>
+  <text x="118" y="62" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">1</text>
+  <text x="89" y="145" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#bae6fd" text-anchor="middle">Food as</text>
+  <text x="89" y="161" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#bae6fd" text-anchor="middle">Healthcare</text>
+  <text x="89" y="185" font-family="Arial, sans-serif" font-size="9" fill="#7ec8e8" text-anchor="middle">Food banks integrating</text>
+  <text x="89" y="198" font-family="Arial, sans-serif" font-size="9" fill="#7ec8e8" text-anchor="middle">with health systems</text>
+  <text x="89" y="211" font-family="Arial, sans-serif" font-size="9" fill="#7ec8e8" text-anchor="middle">as standard practice</text>
+  <text x="89" y="235" font-family="Arial, sans-serif" font-size="9" fill="#38bdf8" text-anchor="middle" font-style="italic">Prepare now:</text>
+  <text x="89" y="249" font-family="Arial, sans-serif" font-size="8" fill="#7ec8e8" text-anchor="middle">Build HIPAA-ready</text>
+  <text x="89" y="261" font-family="Arial, sans-serif" font-size="8" fill="#7ec8e8" text-anchor="middle">data infrastructure</text>
+  <text x="89" y="273" font-family="Arial, sans-serif" font-size="8" fill="#7ec8e8" text-anchor="middle">and referral systems</text>
+
+  <!-- Card 2: AI Operations -->
+  <rect x="170" y="48" width="142" height="280" rx="10" fill="url(#ft-card2)" stroke="#8b5cf6" stroke-width="1.8"/>
+  <rect x="170" y="48" width="142" height="5" rx="3" fill="url(#ft-icon2)"/>
+  <!-- Icon: circuit/AI brain -->
+  <circle cx="241" cy="100" r="28" fill="url(#ft-icon2)" opacity="0.15"/>
+  <circle cx="241" cy="100" r="14" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+  <circle cx="241" cy="100" r="4" fill="#a78bfa"/>
+  <line x1="241" y1="86" x2="241" y2="80" stroke="#a78bfa" stroke-width="1.5"/>
+  <line x1="255" y1="100" x2="261" y2="100" stroke="#a78bfa" stroke-width="1.5"/>
+  <line x1="241" y1="114" x2="241" y2="120" stroke="#a78bfa" stroke-width="1.5"/>
+  <line x1="227" y1="100" x2="221" y2="100" stroke="#a78bfa" stroke-width="1.5"/>
+  <circle cx="270" cy="58" r="10" fill="url(#ft-icon2)"/>
+  <text x="270" y="62" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">2</text>
+  <text x="241" y="145" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#c4b5fd" text-anchor="middle">AI &amp;</text>
+  <text x="241" y="161" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#c4b5fd" text-anchor="middle">Predictive Ops</text>
+  <text x="241" y="185" font-family="Arial, sans-serif" font-size="9" fill="#a78bfa" text-anchor="middle">From reactive to</text>
+  <text x="241" y="198" font-family="Arial, sans-serif" font-size="9" fill="#a78bfa" text-anchor="middle">anticipatory: demand</text>
+  <text x="241" y="211" font-family="Arial, sans-serif" font-size="9" fill="#a78bfa" text-anchor="middle">forecasting &amp; routing</text>
+  <text x="241" y="235" font-family="Arial, sans-serif" font-size="9" fill="#c4b5fd" text-anchor="middle" font-style="italic">Prepare now:</text>
+  <text x="241" y="249" font-family="Arial, sans-serif" font-size="8" fill="#a78bfa" text-anchor="middle">Invest in clean,</text>
+  <text x="241" y="261" font-family="Arial, sans-serif" font-size="8" fill="#a78bfa" text-anchor="middle">consistent data</text>
+  <text x="241" y="273" font-family="Arial, sans-serif" font-size="8" fill="#a78bfa" text-anchor="middle">collection today</text>
+
+  <!-- Card 3: Policy Resilience -->
+  <rect x="322" y="48" width="156" height="280" rx="10" fill="url(#ft-card3)" stroke="#f59e0b" stroke-width="1.8"/>
+  <rect x="322" y="48" width="156" height="5" rx="3" fill="url(#ft-icon3)"/>
+  <!-- Icon: shield/fortress -->
+  <circle cx="400" cy="100" r="28" fill="url(#ft-icon3)" opacity="0.15"/>
+  <path d="M400 80 L416 87 L416 100 Q416 113 400 120 Q384 113 384 100 L384 87 Z" fill="none" stroke="#fbbf24" stroke-width="1.8"/>
+  <path d="M392 100 L398 106 L410 94" stroke="#fbbf24" stroke-width="2" fill="none"/>
+  <circle cx="452" cy="58" r="10" fill="url(#ft-icon3)"/>
+  <text x="452" y="62" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">3</text>
+  <text x="400" y="145" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#fde68a" text-anchor="middle">Policy</text>
+  <text x="400" y="161" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#fde68a" text-anchor="middle">Resilience</text>
+  <text x="400" y="185" font-family="Arial, sans-serif" font-size="9" fill="#fcd34d" text-anchor="middle">SNAP volatility as a</text>
+  <text x="400" y="198" font-family="Arial, sans-serif" font-size="9" fill="#fcd34d" text-anchor="middle">permanent condition,</text>
+  <text x="400" y="211" font-family="Arial, sans-serif" font-size="9" fill="#fcd34d" text-anchor="middle">not an exception</text>
+  <text x="400" y="235" font-family="Arial, sans-serif" font-size="9" fill="#fde68a" text-anchor="middle" font-style="italic">Prepare now:</text>
+  <text x="400" y="249" font-family="Arial, sans-serif" font-size="8" fill="#fcd34d" text-anchor="middle">Diversify funding,</text>
+  <text x="400" y="261" font-family="Arial, sans-serif" font-size="8" fill="#fcd34d" text-anchor="middle">build advocacy</text>
+  <text x="400" y="273" font-family="Arial, sans-serif" font-size="8" fill="#fcd34d" text-anchor="middle">capacity now</text>
+
+  <!-- Card 4: Client Choice -->
+  <rect x="490" y="48" width="142" height="280" rx="10" fill="url(#ft-card4)" stroke="#10b981" stroke-width="1.8"/>
+  <rect x="490" y="48" width="142" height="5" rx="3" fill="url(#ft-icon4)"/>
+  <!-- Icon: person choosing / shopping basket -->
+  <circle cx="561" cy="100" r="28" fill="url(#ft-icon4)" opacity="0.15"/>
+  <circle cx="561" cy="93" r="6" fill="none" stroke="#34d399" stroke-width="1.8"/>
+  <path d="M549 114 Q555 106 561 106 Q567 106 573 114" stroke="#34d399" stroke-width="1.8" fill="none"/>
+  <path d="M549 114 L553 122 L569 122 L573 114" stroke="#34d399" stroke-width="1.5" fill="none"/>
+  <circle cx="590" cy="58" r="10" fill="url(#ft-icon4)"/>
+  <text x="590" y="62" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">4</text>
+  <text x="561" y="145" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#6ee7b7" text-anchor="middle">Client</text>
+  <text x="561" y="161" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#6ee7b7" text-anchor="middle">Choice</text>
+  <text x="561" y="185" font-family="Arial, sans-serif" font-size="9" fill="#34d399" text-anchor="middle">Dignity-centered</text>
+  <text x="561" y="198" font-family="Arial, sans-serif" font-size="9" fill="#34d399" text-anchor="middle">service replacing</text>
+  <text x="561" y="211" font-family="Arial, sans-serif" font-size="9" fill="#34d399" text-anchor="middle">pre-packed boxes</text>
+  <text x="561" y="235" font-family="Arial, sans-serif" font-size="9" fill="#6ee7b7" text-anchor="middle" font-style="italic">Prepare now:</text>
+  <text x="561" y="249" font-family="Arial, sans-serif" font-size="8" fill="#34d399" text-anchor="middle">Invest in inventory</text>
+  <text x="561" y="261" font-family="Arial, sans-serif" font-size="8" fill="#34d399" text-anchor="middle">tech and digital</text>
+  <text x="561" y="273" font-family="Arial, sans-serif" font-size="8" fill="#34d399" text-anchor="middle">scheduling tools</text>
+
+  <!-- Card 5: Connected Networks -->
+  <rect x="642" y="48" width="140" height="280" rx="10" fill="url(#ft-card5)" stroke="#06b6d4" stroke-width="1.8"/>
+  <rect x="642" y="48" width="140" height="5" rx="3" fill="url(#ft-icon5)"/>
+  <!-- Icon: network nodes -->
+  <circle cx="712" cy="100" r="28" fill="url(#ft-icon5)" opacity="0.15"/>
+  <circle cx="712" cy="100" r="5" fill="#22d3ee"/>
+  <circle cx="695" cy="90" r="4" fill="#22d3ee" opacity="0.8"/>
+  <circle cx="729" cy="90" r="4" fill="#22d3ee" opacity="0.8"/>
+  <circle cx="698" cy="113" r="4" fill="#22d3ee" opacity="0.8"/>
+  <circle cx="726" cy="113" r="4" fill="#22d3ee" opacity="0.8"/>
+  <line x1="712" y1="100" x2="695" y2="90" stroke="#22d3ee" stroke-width="1.5"/>
+  <line x1="712" y1="100" x2="729" y2="90" stroke="#22d3ee" stroke-width="1.5"/>
+  <line x1="712" y1="100" x2="698" y2="113" stroke="#22d3ee" stroke-width="1.5"/>
+  <line x1="712" y1="100" x2="726" y2="113" stroke="#22d3ee" stroke-width="1.5"/>
+  <circle cx="770" cy="58" r="10" fill="url(#ft-icon5)"/>
+  <text x="770" y="62" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="white" text-anchor="middle">5</text>
+  <text x="712" y="145" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#67e8f9" text-anchor="middle">Connected</text>
+  <text x="712" y="161" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#67e8f9" text-anchor="middle">Networks</text>
+  <text x="712" y="185" font-family="Arial, sans-serif" font-size="9" fill="#22d3ee" text-anchor="middle">Regional data sharing</text>
+  <text x="712" y="198" font-family="Arial, sans-serif" font-size="9" fill="#22d3ee" text-anchor="middle">and coordination</text>
+  <text x="712" y="211" font-family="Arial, sans-serif" font-size="9" fill="#22d3ee" text-anchor="middle">across organizations</text>
+  <text x="712" y="235" font-family="Arial, sans-serif" font-size="9" fill="#67e8f9" text-anchor="middle" font-style="italic">Prepare now:</text>
+  <text x="712" y="249" font-family="Arial, sans-serif" font-size="8" fill="#22d3ee" text-anchor="middle">Join regional data</text>
+  <text x="712" y="261" font-family="Arial, sans-serif" font-size="8" fill="#22d3ee" text-anchor="middle">platforms; standardize</text>
+  <text x="712" y="273" font-family="Arial, sans-serif" font-size="8" fill="#22d3ee" text-anchor="middle">your data fields</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="360" font-family="Arial, sans-serif" font-size="11" fill="#7ec8e8" text-anchor="middle">The food banks leading in 2035 are making investments today that will determine their trajectory.</text>
+</svg>

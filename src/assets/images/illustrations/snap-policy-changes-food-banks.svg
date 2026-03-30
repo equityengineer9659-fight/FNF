@@ -1,0 +1,129 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Policy-to-community impact chain diagram showing SNAP changes leading to increased food bank demand and adaptive response">
+  <defs>
+    <linearGradient id="snp-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1e1b4b;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="snp-challenge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#b45309;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="snp-response" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="snp-node1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#b45309;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="snp-node2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#b91c1c;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="snp-node3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#c2410c;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="snp-node4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="snp-node5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.85"/>
+    </linearGradient>
+    <filter id="snp-glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#snp-bg)"/>
+
+  <!-- Section divider line -->
+  <line x1="400" y1="30" x2="400" y2="370" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="4,6"/>
+
+  <!-- Section labels -->
+  <text x="200" y="28" font-family="system-ui" font-size="11" fill="rgba(251,191,36,0.7)" text-anchor="middle" letter-spacing="2" font-weight="600">CHALLENGE</text>
+  <text x="600" y="28" font-family="system-ui" font-size="11" fill="rgba(52,211,153,0.7)" text-anchor="middle" letter-spacing="2" font-weight="600">ADAPTIVE RESPONSE</text>
+
+  <!-- Arrow connectors (challenge side) -->
+  <!-- Node 1 -> Node 2 -->
+  <path d="M 200 118 L 200 148" stroke="rgba(239,68,68,0.5)" stroke-width="2" marker-end="url(#snp-arrow-r)"/>
+  <!-- Node 2 -> Node 3 -->
+  <path d="M 200 218 L 200 248" stroke="rgba(239,68,68,0.5)" stroke-width="2" marker-end="url(#snp-arrow-r)"/>
+  <!-- Challenge side to divider -->
+  <path d="M 320 295 Q 400 295 400 295" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="4,4"/>
+
+  <!-- Arrow connectors (response side) -->
+  <!-- divider to response node 1 -->
+  <path d="M 400 295 Q 400 175 480 175" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="4,4"/>
+  <!-- Response node 1 -> node 2 -->
+  <path d="M 600 218 L 600 248" stroke="rgba(16,185,129,0.5)" stroke-width="2"/>
+
+  <!-- CHALLENGE NODES -->
+  <!-- Node 1: Policy Change -->
+  <rect x="110" y="55" width="180" height="63" rx="10" fill="url(#snp-node1)" opacity="0.9"/>
+  <text x="200" y="80" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Policy Change</text>
+  <text x="200" y="97" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">Expanded SNAP work</text>
+  <text x="200" y="110" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">requirements enacted</text>
+
+  <!-- Down arrow -->
+  <polygon points="196,126 204,126 200,136" fill="rgba(239,68,68,0.7)"/>
+
+  <!-- Node 2: Benefit Loss -->
+  <rect x="110" y="148" width="180" height="63" rx="10" fill="url(#snp-node2)" opacity="0.9"/>
+  <text x="200" y="172" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Benefit Reduction</text>
+  <text x="200" y="189" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">Millions of households</text>
+  <text x="200" y="202" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">lose or lose partial benefits</text>
+
+  <!-- Down arrow -->
+  <polygon points="196,220 204,220 200,230" fill="rgba(239,68,68,0.7)"/>
+
+  <!-- Node 3: Increased Demand -->
+  <rect x="110" y="248" width="180" height="63" rx="10" fill="url(#snp-node3)" opacity="0.9"/>
+  <text x="200" y="272" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Demand Surge</text>
+  <text x="200" y="289" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">Food banks see increased</text>
+  <text x="200" y="302" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">new and returning clients</text>
+
+  <!-- Horizontal arrow to center -->
+  <path d="M 295 279 L 390 279" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-dasharray="3,4"/>
+  <polygon points="386,275 396,279 386,283" fill="rgba(255,255,255,0.3)"/>
+
+  <!-- Center hub circle -->
+  <circle cx="400" cy="279" r="22" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+  <text x="400" y="275" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">Adaptive</text>
+  <text x="400" y="286" font-family="system-ui" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">Pivot</text>
+
+  <!-- Arrow from center to response -->
+  <path d="M 422 279 L 508 175" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-dasharray="3,4"/>
+
+  <!-- RESPONSE NODES -->
+  <!-- Node 4: Data Systems -->
+  <rect x="510" y="55" width="180" height="63" rx="10" fill="url(#snp-node4)" opacity="0.9"/>
+  <text x="600" y="80" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Data Systems</text>
+  <text x="600" y="97" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">Intake tracking &amp; demand</text>
+  <text x="600" y="110" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">forecasting tools</text>
+
+  <!-- Down arrow -->
+  <polygon points="596,126 604,126 600,136" fill="rgba(16,185,129,0.7)"/>
+
+  <!-- Node 5: Partnership Coordination -->
+  <rect x="510" y="148" width="180" height="63" rx="10" fill="url(#snp-node5)" opacity="0.9"/>
+  <text x="600" y="172" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Partner Network</text>
+  <text x="600" y="189" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">Social services, healthcare,</text>
+  <text x="600" y="202" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">legal aid coordination</text>
+
+  <!-- Down arrow -->
+  <polygon points="596,220 604,220 600,230" fill="rgba(16,185,129,0.7)"/>
+
+  <!-- Node 6: Surge Capacity -->
+  <rect x="510" y="248" width="180" height="63" rx="10" fill="url(#snp-response)" opacity="0.9"/>
+  <text x="600" y="272" font-family="system-ui" font-size="13" font-weight="700" fill="white" text-anchor="middle">Surge Capacity</text>
+  <text x="600" y="289" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">Scalable intake, digital</text>
+  <text x="600" y="302" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.85)" text-anchor="middle">systems, flexible sourcing</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="382" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.35)" text-anchor="middle">Policy Impact Chain &amp; Adaptive Response Framework</text>
+</svg>

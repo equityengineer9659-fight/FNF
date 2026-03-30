@@ -1,0 +1,99 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Operational resilience diagram with four quadrants: Prepare, Respond, Recover, and Learn surrounding a central Operational Resilience circle">
+  <defs>
+    <linearGradient id="fbc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="fbc-prepare" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0.25"/>
+    </linearGradient>
+    <linearGradient id="fbc-respond" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.25"/>
+    </linearGradient>
+    <linearGradient id="fbc-recover" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.25"/>
+    </linearGradient>
+    <linearGradient id="fbc-learn" x1="100%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#0891b2;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.25"/>
+    </linearGradient>
+    <linearGradient id="fbc-center" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8"/>
+    </linearGradient>
+    <filter id="fbc-glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#fbc-bg)" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="system-ui, sans-serif" font-size="15" font-weight="700" fill="white" opacity="0.9" text-anchor="middle">Food Bank Operational Resilience Framework</text>
+
+  <!-- Quadrant dividers (subtle) -->
+  <line x1="400" y1="55" x2="400" y2="375" stroke="#334155" stroke-width="1" opacity="0.5"/>
+  <line x1="50" y1="215" x2="750" y2="215" stroke="#334155" stroke-width="1" opacity="0.5"/>
+
+  <!-- ===== PREPARE (top-left) ===== -->
+  <rect x="50" y="55" width="330" height="145" rx="10" fill="url(#fbc-prepare)" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="215" y="85" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#93c5fd" text-anchor="middle">PREPARE</text>
+  <text x="215" y="100" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">(Before the crisis)</text>
+  <text x="72" y="122" font-family="system-ui, sans-serif" font-size="10" fill="#93c5fd">▸ Written crisis playbook with triggers</text>
+  <text x="72" y="138" font-family="system-ui, sans-serif" font-size="10" fill="#93c5fd">▸ Pre-positioned surge volunteer roster</text>
+  <text x="72" y="154" font-family="system-ui, sans-serif" font-size="10" fill="#93c5fd">▸ Partner MOUs (emergency mgmt, food hubs)</text>
+  <text x="72" y="170" font-family="system-ui, sans-serif" font-size="10" fill="#93c5fd">▸ Cloud-based data systems with mobile access</text>
+  <text x="72" y="186" font-family="system-ui, sans-serif" font-size="10" fill="#93c5fd">▸ Annual tabletop exercise with leadership team</text>
+
+  <!-- ===== RESPOND (top-right) ===== -->
+  <rect x="420" y="55" width="330" height="145" rx="10" fill="url(#fbc-respond)" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="585" y="85" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#fbbf24" text-anchor="middle">RESPOND</text>
+  <text x="585" y="100" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">(During the crisis)</text>
+  <text x="438" y="122" font-family="system-ui, sans-serif" font-size="10" fill="#fde68a">▸ Activate playbook — declare surge protocol</text>
+  <text x="438" y="138" font-family="system-ui, sans-serif" font-size="10" fill="#fde68a">▸ Stand up crisis communication tree</text>
+  <text x="438" y="154" font-family="system-ui, sans-serif" font-size="10" fill="#fde68a">▸ Deploy rapid-onboard volunteer surge roster</text>
+  <text x="438" y="170" font-family="system-ui, sans-serif" font-size="10" fill="#fde68a">▸ Real-time inventory and capacity monitoring</text>
+  <text x="438" y="186" font-family="system-ui, sans-serif" font-size="10" fill="#fde68a">▸ Partner activation for logistics and food supply</text>
+
+  <!-- ===== RECOVER (bottom-left) ===== -->
+  <rect x="50" y="225" width="330" height="145" rx="10" fill="url(#fbc-recover)" stroke="#10b981" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="215" y="255" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#6ee7b7" text-anchor="middle">RECOVER</text>
+  <text x="215" y="270" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">(After the crisis)</text>
+  <text x="72" y="292" font-family="system-ui, sans-serif" font-size="10" fill="#6ee7b7">▸ Follow up with new clients from surge period</text>
+  <text x="72" y="308" font-family="system-ui, sans-serif" font-size="10" fill="#6ee7b7">▸ Convert surge volunteers to regular program</text>
+  <text x="72" y="324" font-family="system-ui, sans-serif" font-size="10" fill="#6ee7b7">▸ Donor and funder reporting on response</text>
+  <text x="72" y="340" font-family="system-ui, sans-serif" font-size="10" fill="#6ee7b7">▸ Replenish inventory and restore partnerships</text>
+  <text x="72" y="356" font-family="system-ui, sans-serif" font-size="10" fill="#6ee7b7">▸ Staff debrief and rest period</text>
+
+  <!-- ===== LEARN (bottom-right) ===== -->
+  <rect x="420" y="225" width="330" height="145" rx="10" fill="url(#fbc-learn)" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="585" y="255" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#67e8f9" text-anchor="middle">LEARN</text>
+  <text x="585" y="270" font-family="system-ui, sans-serif" font-size="10" fill="#64748b" text-anchor="middle">(Continuous improvement)</text>
+  <text x="438" y="292" font-family="system-ui, sans-serif" font-size="10" fill="#a5f3fc">▸ Formal after-action review within 30 days</text>
+  <text x="438" y="308" font-family="system-ui, sans-serif" font-size="10" fill="#a5f3fc">▸ Update playbook with lessons learned</text>
+  <text x="438" y="324" font-family="system-ui, sans-serif" font-size="10" fill="#a5f3fc">▸ Identify gaps in systems, training, or resources</text>
+  <text x="438" y="340" font-family="system-ui, sans-serif" font-size="10" fill="#a5f3fc">▸ Share learnings with regional food bank network</text>
+  <text x="438" y="356" font-family="system-ui, sans-serif" font-size="10" fill="#a5f3fc">▸ Invest in capacity improvements for next cycle</text>
+
+  <!-- Central circle -->
+  <circle cx="400" cy="215" r="52" fill="url(#fbc-center)" filter="url(#fbc-glow)"/>
+  <circle cx="400" cy="215" r="52" fill="none" stroke="#67e8f9" stroke-width="1.5" stroke-opacity="0.6"/>
+  <text x="400" y="205" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Operational</text>
+  <text x="400" y="219" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Resilience</text>
+  <text x="400" y="233" font-family="system-ui, sans-serif" font-size="9" fill="#a5f3fc" text-anchor="middle">Cycle</text>
+
+  <!-- Circular arrows around center -->
+  <path d="M 360 170 Q 400 155 440 170" stroke="#93c5fd" stroke-width="1.5" fill="none"/>
+  <polygon points="436,166 444,172 436,178" fill="#93c5fd"/>
+  <path d="M 450 250 Q 465 215 450 180" stroke="#fbbf24" stroke-width="1.5" fill="none"/>
+  <polygon points="446,182 454,176 458,186" fill="#fbbf24"/>
+  <path d="M 440 260 Q 400 275 360 260" stroke="#6ee7b7" stroke-width="1.5" fill="none"/>
+  <polygon points="364,264 356,258 364,252" fill="#6ee7b7"/>
+  <path d="M 350 182 Q 335 215 350 248" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
+  <polygon points="354,246 346,252 342,242" fill="#06b6d4"/>
+</svg>

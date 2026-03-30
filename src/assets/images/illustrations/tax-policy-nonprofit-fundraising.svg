@@ -1,0 +1,130 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fundraising diversification pie chart showing proportional segments for Major Gifts, Corporate Giving, Government Grants, Individual Small Donors, and Planned Giving">
+  <defs>
+    <linearGradient id="tpn-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1a1200;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="tpn-seg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="tpn-seg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="tpn-seg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="tpn-seg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="tpn-seg5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.85"/>
+    </linearGradient>
+    <radialGradient id="tpn-center" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#1a1200;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:0.95"/>
+    </radialGradient>
+    <radialGradient id="tpn-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="tpn-shadow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#tpn-bg)"/>
+
+  <!-- Ambient glow -->
+  <ellipse cx="310" cy="205" rx="180" ry="180" fill="url(#tpn-glow)"/>
+
+  <!-- Title -->
+  <text x="400" y="32" font-family="system-ui" font-size="13" font-weight="700" fill="rgba(255,255,255,0.8)" text-anchor="middle" letter-spacing="1">FUNDRAISING DIVERSIFICATION STRATEGY</text>
+
+  <!-- PIE CHART centered at 310, 205, radius 145 -->
+  <!-- Segment angles (total 360°):
+       Major Gifts: 30% → 108°   (0° to 108°)       top-right
+       Corporate: 18% → 64.8°    (108° to 172.8°)    right
+       Gov/Foundation Grants: 25% → 90° (172.8° to 262.8°)  bottom
+       Individual Small: 20% → 72° (262.8° to 334.8°)  left-bottom
+       Planned Giving: 7% → 25.2° (334.8° to 360°)   top-left
+  -->
+  <!-- SVG arc formula: x = cx + r*cos(angle), y = cy + r*sin(angle), angle in radians, 0° = right (3 o'clock) -->
+  <!-- Shifting start to 270° (top): starting at -90° offset -->
+  <!-- Pre-computed: r=145, cx=310, cy=205 -->
+  <!-- Segment 1: Major Gifts, 0°→108° (adjusted from top: -90° to 18°) -->
+  <!-- Start: 310+145*cos(-90°)=310+0=310, 205+145*sin(-90°)=205-145=60 -->
+  <!-- End: 310+145*cos(18°)=310+137.9=447.9, 205+145*sin(18°)=205+44.8=249.8 -->
+  <path d="M310,205 L310,60 A145,145 0 0,1 447.9,249.8 Z" fill="url(#tpn-seg1)" filter="url(#tpn-shadow)"/>
+  <path d="M310,205 L310,60 A145,145 0 0,1 447.9,249.8 Z" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+
+  <!-- Segment 2: Corporate, 108°→172.8° (from top: 18° to 82.8°) -->
+  <!-- Start: as above end -->
+  <!-- End: 310+145*cos(82.8°)=310+18.0=328.0, 205+145*sin(82.8°)=205+143.9=348.9 -->
+  <path d="M310,205 L447.9,249.8 A145,145 0 0,1 328.0,348.9 Z" fill="url(#tpn-seg2)"/>
+  <path d="M310,205 L447.9,249.8 A145,145 0 0,1 328.0,348.9 Z" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+
+  <!-- Segment 3: Gov/Foundation, 172.8°→262.8° (82.8°→172.8°) -->
+  <!-- End: 310+145*cos(172.8°)=310-143.9=166.1, 205+145*sin(172.8°)=205+18.0=223.0 -->
+  <path d="M310,205 L328.0,348.9 A145,145 0 0,1 166.1,223.0 Z" fill="url(#tpn-seg3)"/>
+  <path d="M310,205 L328.0,348.9 A145,145 0 0,1 166.1,223.0 Z" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+
+  <!-- Segment 4: Individual Small, 262.8°→334.8° (172.8°→244.8°) -->
+  <!-- End: 310+145*cos(244.8°)=310-61.7=248.3, 205+145*sin(244.8°)=205-131.1=73.9 -->
+  <path d="M310,205 L166.1,223.0 A145,145 0 0,1 248.3,73.9 Z" fill="url(#tpn-seg4)"/>
+  <path d="M310,205 L166.1,223.0 A145,145 0 0,1 248.3,73.9 Z" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+
+  <!-- Segment 5: Planned Giving, 334.8°→360° (244.8°→270°) -->
+  <!-- End: back to 310,60 -->
+  <path d="M310,205 L248.3,73.9 A145,145 0 0,1 310,60 Z" fill="url(#tpn-seg5)"/>
+  <path d="M310,205 L248.3,73.9 A145,145 0 0,1 310,60 Z" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+
+  <!-- Center donut hole -->
+  <circle cx="310" cy="205" r="55" fill="url(#tpn-center)"/>
+  <circle cx="310" cy="205" r="55" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="310" y="198" font-family="system-ui" font-size="10" font-weight="600" fill="rgba(245,158,11,0.8)" text-anchor="middle">Revenue</text>
+  <text x="310" y="213" font-family="system-ui" font-size="10" font-weight="600" fill="rgba(245,158,11,0.8)" text-anchor="middle">Mix</text>
+
+  <!-- LEGEND on the right side -->
+  <text x="490" y="65" font-family="system-ui" font-size="12" font-weight="700" fill="rgba(255,255,255,0.7)" text-anchor="start">Revenue Streams</text>
+
+  <!-- Legend item 1: Major Gifts -->
+  <rect x="490" y="80" width="14" height="14" rx="3" fill="url(#tpn-seg1)"/>
+  <text x="512" y="92" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="start">Major Gifts</text>
+  <text x="512" y="107" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="start">30% — tax-sensitive, high impact</text>
+
+  <!-- Legend item 2: Corporate -->
+  <rect x="490" y="120" width="14" height="14" rx="3" fill="url(#tpn-seg2)"/>
+  <text x="512" y="132" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="start">Corporate Giving</text>
+  <text x="512" y="147" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="start">18% — partnerships &amp; sponsorships</text>
+
+  <!-- Legend item 3: Gov/Foundation Grants -->
+  <rect x="490" y="160" width="14" height="14" rx="3" fill="url(#tpn-seg3)"/>
+  <text x="512" y="172" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="start">Gov &amp; Foundation Grants</text>
+  <text x="512" y="187" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="start">25% — stable base, restricted</text>
+
+  <!-- Legend item 4: Individual Small -->
+  <rect x="490" y="200" width="14" height="14" rx="3" fill="url(#tpn-seg4)"/>
+  <text x="512" y="212" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="start">Individual Donors</text>
+  <text x="512" y="227" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="start">20% — broad base, resilient</text>
+
+  <!-- Legend item 5: Planned Giving -->
+  <rect x="490" y="240" width="14" height="14" rx="3" fill="url(#tpn-seg5)"/>
+  <text x="512" y="252" font-family="system-ui" font-size="12" font-weight="700" fill="white" text-anchor="start">Planned Giving</text>
+  <text x="512" y="267" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="start">7% — long-term investment</text>
+
+  <!-- Insight callout -->
+  <rect x="488" y="290" width="285" height="65" rx="10" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+  <text x="630" y="311" font-family="system-ui" font-size="10" fill="rgba(245,158,11,0.8)" text-anchor="middle" font-weight="600">KEY INSIGHT</text>
+  <text x="630" y="328" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">No single stream above 30%</text>
+  <text x="630" y="343" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.7)" text-anchor="middle">= resilient to policy changes</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="388" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.3)" text-anchor="middle">Nonprofit Fundraising Diversification — Tax-Resilient Revenue Strategy</text>
+</svg>

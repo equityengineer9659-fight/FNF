@@ -1,0 +1,143 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Side-by-side comparison of traditional food distribution model versus community food center model with multiple program areas">
+  <defs>
+    <linearGradient id="cfc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#042f2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="cfc-trad-box" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#334155;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:0.8"/>
+    </linearGradient>
+    <linearGradient id="cfc-hub" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="cfc-spoke1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cfc-spoke2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cfc-spoke3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cfc-spoke4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="cfc-spoke5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f43f5e;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#be123c;stop-opacity:0.9"/>
+    </linearGradient>
+    <radialGradient id="cfc-hub-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.25"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="cfc-glow">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#cfc-bg)"/>
+
+  <!-- Divider line -->
+  <line x1="400" y1="20" x2="400" y2="380" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="6,6"/>
+
+  <!-- Section labels -->
+  <text x="200" y="22" font-family="system-ui" font-size="11" fill="rgba(148,163,184,0.7)" text-anchor="middle" letter-spacing="2" font-weight="600">TRADITIONAL MODEL</text>
+  <text x="600" y="22" font-family="system-ui" font-size="11" fill="rgba(103,232,249,0.7)" text-anchor="middle" letter-spacing="2" font-weight="600">COMMUNITY FOOD CENTER</text>
+
+  <!-- === TRADITIONAL MODEL (left side) === -->
+
+  <!-- Supply box -->
+  <rect x="80" y="55" width="120" height="50" rx="8" fill="url(#cfc-trad-box)" stroke="rgba(148,163,184,0.3)" stroke-width="1.5"/>
+  <text x="140" y="77" font-family="system-ui" font-size="11" font-weight="600" fill="rgba(148,163,184,0.8)" text-anchor="middle">Food Supply</text>
+  <text x="140" y="93" font-family="system-ui" font-size="9" fill="rgba(148,163,184,0.5)" text-anchor="middle">Donations &amp; surplus</text>
+
+  <!-- Arrow down -->
+  <line x1="140" y1="105" x2="140" y2="165" stroke="rgba(148,163,184,0.4)" stroke-width="2"/>
+  <polygon points="135,160 145,160 140,172" fill="rgba(148,163,184,0.5)"/>
+
+  <!-- Distribution box -->
+  <rect x="80" y="172" width="120" height="50" rx="8" fill="url(#cfc-trad-box)" stroke="rgba(148,163,184,0.3)" stroke-width="1.5"/>
+  <text x="140" y="194" font-family="system-ui" font-size="11" font-weight="600" fill="rgba(148,163,184,0.8)" text-anchor="middle">Distribution</text>
+  <text x="140" y="210" font-family="system-ui" font-size="9" fill="rgba(148,163,184,0.5)" text-anchor="middle">One-way transaction</text>
+
+  <!-- Arrow down -->
+  <line x1="140" y1="222" x2="140" y2="282" stroke="rgba(148,163,184,0.4)" stroke-width="2"/>
+  <polygon points="135,277 145,277 140,289" fill="rgba(148,163,184,0.5)"/>
+
+  <!-- Client box -->
+  <rect x="80" y="289" width="120" height="50" rx="8" fill="url(#cfc-trad-box)" stroke="rgba(148,163,184,0.3)" stroke-width="1.5"/>
+  <text x="140" y="311" font-family="system-ui" font-size="11" font-weight="600" fill="rgba(148,163,184,0.8)" text-anchor="middle">Client</text>
+  <text x="140" y="327" font-family="system-ui" font-size="9" fill="rgba(148,163,184,0.5)" text-anchor="middle">Passive recipient</text>
+
+  <!-- Traditional model label -->
+  <text x="270" y="80" font-family="system-ui" font-size="9" fill="rgba(148,163,184,0.4)" text-anchor="middle">Linear, one-directional</text>
+  <text x="270" y="93" font-family="system-ui" font-size="9" fill="rgba(148,163,184,0.4)" text-anchor="middle">No integration of services</text>
+  <text x="270" y="106" font-family="system-ui" font-size="9" fill="rgba(148,163,184,0.4)" text-anchor="middle">Volume-focused metrics</text>
+
+  <!-- vs label -->
+  <circle cx="400" cy="200" r="22" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="400" y="205" font-family="system-ui" font-size="13" font-weight="700" fill="rgba(255,255,255,0.35)" text-anchor="middle">vs</text>
+
+  <!-- === COMMUNITY FOOD CENTER MODEL (right side) === -->
+
+  <!-- Hub glow -->
+  <circle cx="590" cy="200" r="65" fill="url(#cfc-hub-glow)"/>
+
+  <!-- Connection spokes -->
+  <!-- to Kitchen (top left) -->
+  <line x1="560" y1="172" x2="518" y2="112" stroke="rgba(16,185,129,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <!-- to Advocacy (top right) -->
+  <line x1="620" y1="172" x2="662" y2="112" stroke="rgba(139,92,246,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <!-- to Distribution (right) -->
+  <line x1="638" y1="200" x2="700" y2="200" stroke="rgba(245,158,11,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <!-- to Community (bottom right) -->
+  <line x1="620" y1="228" x2="662" y2="288" stroke="rgba(6,182,212,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <!-- to Skills (bottom left) -->
+  <line x1="560" y1="228" x2="518" y2="288" stroke="rgba(244,63,94,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+  <!-- Hub circle -->
+  <circle cx="590" cy="200" r="48" fill="url(#cfc-hub)" opacity="0.9" filter="url(#cfc-glow)"/>
+  <circle cx="590" cy="200" r="48" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+  <text x="590" y="193" font-family="system-ui" font-size="11" font-weight="700" fill="white" text-anchor="middle">Community</text>
+  <text x="590" y="208" font-family="system-ui" font-size="11" font-weight="700" fill="white" text-anchor="middle">Food Center</text>
+
+  <!-- Spoke nodes -->
+  <!-- Kitchen -->
+  <rect x="466" y="84" width="88" height="38" rx="8" fill="url(#cfc-spoke1)"/>
+  <text x="510" y="100" font-family="system-ui" font-size="10" font-weight="700" fill="white" text-anchor="middle">Community</text>
+  <text x="510" y="114" font-family="system-ui" font-size="10" font-weight="700" fill="white" text-anchor="middle">Kitchen 🍳</text>
+
+  <!-- Advocacy -->
+  <rect x="634" y="84" width="88" height="38" rx="8" fill="url(#cfc-spoke2)"/>
+  <text x="678" y="100" font-family="system-ui" font-size="10" font-weight="700" fill="white" text-anchor="middle">Advocacy</text>
+  <text x="678" y="114" font-family="system-ui" font-size="10" font-weight="700" fill="white" text-anchor="middle">&amp; Policy 📢</text>
+
+  <!-- Distribution -->
+  <rect x="710" y="181" width="70" height="38" rx="8" fill="url(#cfc-spoke3)"/>
+  <text x="745" y="197" font-family="system-ui" font-size="9" font-weight="700" fill="white" text-anchor="middle">Client Choice</text>
+  <text x="745" y="211" font-family="system-ui" font-size="9" font-weight="700" fill="white" text-anchor="middle">Distrib. 🛒</text>
+
+  <!-- Community -->
+  <rect x="634" y="278" width="88" height="38" rx="8" fill="url(#cfc-spoke4)"/>
+  <text x="678" y="294" font-family="system-ui" font-size="10" font-weight="700" fill="white" text-anchor="middle">Social</text>
+  <text x="678" y="308" font-family="system-ui" font-size="10" font-weight="700" fill="white" text-anchor="middle">Connection 🤝</text>
+
+  <!-- Skills -->
+  <rect x="432" y="278" width="88" height="38" rx="8" fill="url(#cfc-spoke5)"/>
+  <text x="476" y="294" font-family="system-ui" font-size="10" font-weight="700" fill="white" text-anchor="middle">Food Skills</text>
+  <text x="476" y="308" font-family="system-ui" font-size="10" font-weight="700" fill="white" text-anchor="middle">Programs 📚</text>
+
+  <!-- CFC descriptor -->
+  <text x="590" y="350" font-family="system-ui" font-size="9" fill="rgba(103,232,249,0.5)" text-anchor="middle">Participatory · Multi-program · Systemic impact focus</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="382" font-family="system-ui" font-size="10" fill="rgba(255,255,255,0.25)" text-anchor="middle">Community Food Center Model — Beyond Traditional Distribution</text>
+</svg>
