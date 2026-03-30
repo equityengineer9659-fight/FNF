@@ -1,7 +1,7 @@
 # Blog Content Pipeline
 
 **Last Updated**: 2026-03-30
-**Status**: Active — 30 sources (16 enabled / 14 disabled), fully parallel fetching (RSS + web search), stop button, 6-proxy CORS chain, word-boundary keyword matching, bidirectional dedup
+**Status**: Active — 30 sources (16 enabled / 14 disabled), fully parallel fetching (RSS + web search), stop button, 6-proxy CORS chain, word-boundary keyword matching, bidirectional dedup. Full multi-agent audit completed 2026-03-30; all Tier 1–4 findings fixed (commit `1ea03e3`).
 
 ## Overview
 
@@ -59,7 +59,7 @@ npm run admin
         ↓
 7. Click Generate & Download → {slug}.html downloads
         ↓
-8. Move {slug}.html to the project root
+8. Move {slug}.html to the blog/ folder
         ↓
 9. Write content in the HTML file (placeholder sections are marked)
         ↓
@@ -91,7 +91,7 @@ Generates a complete, ready-to-edit HTML article file from a form.
 
 **Load from scraper**: If the Results tab has articles from a scrape, a dropdown appears to pre-fill title, description, and category from a selected result.
 
-**Generate & Download**: Creates `{slug}.html` with full navigation, hero, placeholder content sections, Read Next cards, CTA, and footer. Place in project root. Build-components.js will inject the live nav/footer on the next build.
+**Generate & Download**: Creates `{slug}.html` with full navigation, hero, placeholder content sections, Read Next cards, CTA, and footer. Place in the `blog/` folder. Build-components.js will inject the live nav/footer on the next build. The generated canonical URL and og:url are correctly set to `foodnforce.com/blog/{slug}.html`.
 
 ---
 
@@ -315,6 +315,18 @@ The standalone HTML file runs entirely in the browser with no backend:
 **Empty feed logging**: When a feed is fetched successfully but returns 0 items for the date window, the Activity Log shows `"Feed OK but no articles in last X days"` — distinguishable from keyword filtering (`"X filtered by keywords"`) and fetch errors (`"Feed unreachable…"`).
 
 **localStorage key versioning**: The feed on/off state is stored under `fnf2_feeds_vN`. Bump `N` whenever default `on` states change in the `DF` array — the merge logic only adds new feeds, it does not update existing feeds' on/off state. Current key: `fnf2_feeds_v6`.
+
+**Custom date range validation**: `getLB()` returns `null` when custom From/To fields are empty or invalid (instead of silently returning NaN). `startScrape()` guards for null and exits cleanly. Any future caller of `getLB()` must also handle the null return.
+
+**Excel formula injection protection**: In `saveToExcel()`, article titles starting with `=`, `+`, `-`, or `@` are prefixed with a `'` character before writing. This prevents Excel from interpreting scraped titles as formula cells. The stored title string in `allResults` is unchanged — only the Excel row value is sanitized.
+
+**Blob URL memory management**: `downloadExcel()` and `generateArticle()` both call `URL.revokeObjectURL(href)` in a 100ms `setTimeout` after triggering the download click. Without revocation, each download creates a permanent memory leak in the browser session.
+
+**JSON-LD newline escaping in `j()`**: The `j()` function inside `buildArticleHTML()` now escapes `\n`, `\r`, `\t`, U+2028, and U+2029 in addition to `\` and `"`. Multi-line descriptions entered in the form no longer break the `<script type="application/ld+json">` structured data block.
+
+**Tab ARIA pattern**: The tabs use `role="tablist"` / `role="tab"` / `role="tabpanel"`. The `showTab()` function keeps `aria-selected` and `tabindex` in sync. The log panel has `aria-live="polite"` so new log entries are announced by screen readers. An additional hidden `role="alert" aria-live="assertive"` region (`#err-live`) announces errors immediately.
+
+**`saveLS()` quota handling**: `saveLS()` now logs a visible `[WARN]` entry in the Activity Log when `localStorage.setItem` throws a `QuotaExceededError`, instead of silently discarding the write.
 
 ---
 
