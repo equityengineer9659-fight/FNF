@@ -284,6 +284,22 @@
     .na-preview-bar { display:flex; align-items:center; gap:10px; padding:8px 14px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-shrink:0; }
     .na-preview-bar span { font-size:12px; color:var(--tm); flex:1; }
     .na-preview-frame { flex:1; border:none; background:#fff; }
+
+    /* ── Content Management ── */
+    .content-mgmt { flex:1; display:none; flex-direction:column; overflow:hidden; }
+    .content-mgmt.show { display:flex; }
+    .cm-toolbar { display:flex; align-items:center; gap:6px; padding:7px 13px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-shrink:0; font-size:12px; }
+    .cm-table-wrap { overflow-y:auto; flex:1; }
+    .cm-table-wrap table { width:100%; }
+    .cm-table-wrap th { position:sticky; top:0; background:var(--bg-card); z-index:1; }
+    .cm-table-wrap td { vertical-align:middle; }
+    .cm-table-wrap tr:hover td { background:rgba(255,255,255,.03); }
+    .cm-status { padding:8px 16px; font-size:12px; color:var(--tm); border-top:1px solid var(--border); flex-shrink:0; min-height:32px; }
+    .btn-red { background:rgba(248,81,73,.15); border-color:rgba(248,81,73,.4); color:var(--red); }
+    .btn-red:hover:not(:disabled) { background:rgba(248,81,73,.25); }
+    .btn-red:disabled { opacity:.45; cursor:not-allowed; }
+    .cm-cb { accent-color:var(--accent); cursor:pointer; }
+    .cm-cat { display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px; background:var(--border); color:var(--text); }
   </style>
 </head>
 <body>
@@ -470,6 +486,7 @@
         <div class="tab on" id="t-log" role="tab" aria-selected="true" aria-controls="log" tabindex="0" onclick="showTab('log')">Activity Log</div>
         <div class="tab" id="t-res" role="tab" aria-selected="false" aria-controls="results" tabindex="-1" onclick="showTab('res')">Results <span class="tbadge" id="rbadge" style="display:none">0</span></div>
         <div class="tab" id="t-new" role="tab" aria-selected="false" aria-controls="new-article" tabindex="-1" onclick="showTab('new')">New Article</div>
+        <div class="tab" id="t-cm" role="tab" aria-selected="false" aria-controls="content-mgmt" tabindex="-1" onclick="showTab('cm')">Content <span class="tbadge" id="cmbadge" style="display:none">0</span></div>
       </div>
 
       <div class="log" id="log" role="tabpanel" aria-labelledby="t-log" aria-live="polite">
@@ -639,6 +656,31 @@
 
           </div>
         </div>
+      </div>
+
+      <!-- ── Content Management panel ── -->
+      <div class="content-mgmt" id="content-mgmt" role="tabpanel" aria-labelledby="t-cm">
+        <div class="cm-toolbar">
+          <button class="btn btn-q btn-sm" onclick="cmSelectAll()">&#10003; Select All</button>
+          <button class="btn btn-q btn-sm" onclick="cmDeselectAll()">&#10005; Clear</button>
+          <button class="btn btn-red btn-sm" id="btn-cm-delete" onclick="cmDeleteSelected()" disabled>Delete Selected (0)</button>
+          <button class="btn btn-q btn-sm" onclick="cmRefresh()" title="Reload article list">&#8635; Refresh</button>
+          <span id="cm-count" style="margin-left:auto;color:var(--tf)"></span>
+        </div>
+        <div class="cm-table-wrap">
+          <table>
+            <thead><tr>
+              <th scope="col" style="width:28px"><input type="checkbox" class="cm-cb" id="cm-select-all-cb" onchange="cmToggleAll(this.checked)" title="Select all"></th>
+              <th scope="col">Title</th>
+              <th scope="col" style="width:130px">Category</th>
+              <th scope="col" style="width:100px">Published</th>
+              <th scope="col" style="width:100px">File Created</th>
+              <th scope="col" style="width:50px;text-align:center">SVG</th>
+            </tr></thead>
+            <tbody id="cm-tbody"></tbody>
+          </table>
+        </div>
+        <div class="cm-status" id="cm-status"></div>
       </div>
 
       <!-- Fullscreen article preview modal (outside tab panel) -->
@@ -1136,17 +1178,19 @@ function toggleSec(id) {
    TABS
 ───────────────────────────────────────── */
 function showTab(t) {
-  const log=t==='log', res=t==='res', nw=t==='new';
+  const log=t==='log', res=t==='res', nw=t==='new', cm=t==='cm';
   document.getElementById('log').classList.toggle('hide',!log);
   document.getElementById('results').classList.toggle('show',res);
   document.getElementById('new-article').classList.toggle('show',nw);
-  ['t-log','t-res','t-new'].forEach(id => {
+  document.getElementById('content-mgmt').classList.toggle('show',cm);
+  ['t-log','t-res','t-new','t-cm'].forEach(id => {
     const el=document.getElementById(id), active=el.id===`t-${t}`;
     el.classList.toggle('on',active);
     el.setAttribute('aria-selected', active);
     el.setAttribute('tabindex', active ? '0' : '-1');
   });
   if (nw) checkScraperResults();
+  if (cm) cmLoadArticles();
 }
 
 /* ─────────────────────────────────────────
@@ -2396,6 +2440,135 @@ ${relCards}
     <script type="module" src="src/js/main.js" defer><\/script>
 <\/body>
 <\/html>`;
+}
+
+/* ─────────────────────────────────────────
+   CONTENT MANAGEMENT
+───────────────────────────────────────── */
+let cmArticles = [];
+let cmSelected = new Set();
+let cmLoaded = false;
+
+async function cmLoadArticles() {
+  if (cmLoaded) return;
+  if (!serverMode) {
+    document.getElementById('cm-status').textContent =
+      'Content management requires the Express server. Run: npm run admin';
+    return;
+  }
+  document.getElementById('cm-status').textContent = 'Loading articles\u2026';
+  try {
+    const r = await fetch('/api/articles');
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Unknown error');
+    cmArticles = data.articles || [];
+    cmSelected.clear();
+    cmRender();
+    cmLoaded = true;
+    const badge = document.getElementById('cmbadge');
+    badge.textContent = cmArticles.length;
+    badge.style.display = cmArticles.length ? 'inline-block' : 'none';
+    document.getElementById('cm-status').textContent = '';
+  } catch (e) {
+    document.getElementById('cm-status').textContent = 'Error: ' + e.message;
+  }
+}
+
+function cmRender() {
+  const tbody = document.getElementById('cm-tbody');
+  if (!cmArticles.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--tf)">No articles found</td></tr>';
+    cmUpdateToolbar();
+    return;
+  }
+  tbody.innerHTML = cmArticles.map(a => {
+    const chk = cmSelected.has(a.slug) ? 'checked' : '';
+    const svgIcon = a.svgPath
+      ? '<span style="color:var(--green)" title="Has illustration">&#10003;</span>'
+      : '<span style="color:var(--tf)">&mdash;</span>';
+    return `<tr>
+      <td><input type="checkbox" class="cm-cb" ${chk} onchange="cmToggle('${esc(a.slug)}', this.checked)"></td>
+      <td title="${esc(a.slug)}">${esc(a.title)}</td>
+      <td><span class="cm-cat">${esc(a.category)}</span></td>
+      <td>${esc(a.publishedDate)}</td>
+      <td>${esc(a.fileCreated)}</td>
+      <td style="text-align:center">${svgIcon}</td>
+    </tr>`;
+  }).join('');
+  cmUpdateToolbar();
+}
+
+function cmToggle(slug, checked) {
+  if (checked) cmSelected.add(slug); else cmSelected.delete(slug);
+  cmUpdateToolbar();
+}
+
+function cmToggleAll(checked) {
+  cmArticles.forEach(a => { if (checked) cmSelected.add(a.slug); else cmSelected.delete(a.slug); });
+  cmRender();
+  document.getElementById('cm-select-all-cb').checked = checked;
+}
+function cmSelectAll() { cmToggleAll(true); }
+function cmDeselectAll() { cmToggleAll(false); }
+
+function cmUpdateToolbar() {
+  const n = cmSelected.size;
+  const btn = document.getElementById('btn-cm-delete');
+  btn.disabled = n === 0;
+  btn.textContent = `Delete Selected (${n})`;
+  document.getElementById('cm-count').textContent =
+    `${cmArticles.length} article${cmArticles.length !== 1 ? 's' : ''} total`;
+  const allCb = document.getElementById('cm-select-all-cb');
+  allCb.checked = cmArticles.length > 0 && n === cmArticles.length;
+  allCb.indeterminate = n > 0 && n < cmArticles.length;
+}
+
+async function cmDeleteSelected() {
+  const slugs = [...cmSelected];
+  if (!slugs.length) return;
+
+  const titles = slugs.map(s => { const a = cmArticles.find(x => x.slug === s); return a ? a.title : s; });
+  const msg = `DELETE ${slugs.length} article${slugs.length > 1 ? 's' : ''}?\n\n` +
+    titles.map(t => `  \u2022 ${t}`).join('\n') +
+    '\n\nThis will remove HTML files, SVG illustrations, config entries, ' +
+    'and repair Read Next links in remaining articles.\n\nThis cannot be undone.';
+  if (!confirm(msg)) return;
+
+  const btn = document.getElementById('btn-cm-delete');
+  btn.disabled = true;
+  btn.textContent = 'Deleting\u2026';
+  document.getElementById('cm-status').textContent = 'Deleting articles and cleaning up\u2026';
+
+  try {
+    const r = await fetch('/api/delete-articles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slugs })
+    });
+    const result = await r.json();
+    if (!r.ok) throw new Error(result.error || 'Unknown error');
+
+    const repairs = (result.readNextRepairs || []).length;
+    document.getElementById('cm-status').textContent =
+      `\u2713 Deleted ${result.deleted.length} article${result.deleted.length > 1 ? 's' : ''}. ` +
+      `Files removed: ${result.filesRemoved.html} HTML, ${result.filesRemoved.svg} SVG. ` +
+      (repairs ? `Read Next repairs: ${repairs} article${repairs > 1 ? 's' : ''} updated. ` : '') +
+      `Configs patched: ${result.configsPatched.join(', ')}.` +
+      (result.warnings && result.warnings.length ? ` Warnings: ${result.warnings.join('; ')}` : '');
+
+    cmSelected.clear();
+    cmLoaded = false;
+    cmLoadArticles();
+  } catch (e) {
+    document.getElementById('cm-status').textContent = 'Error: ' + e.message;
+    btn.disabled = false;
+    btn.textContent = `Delete Selected (${slugs.length})`;
+  }
+}
+
+function cmRefresh() {
+  cmLoaded = false;
+  cmLoadArticles();
 }
 </script>
 </body>

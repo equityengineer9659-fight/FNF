@@ -13,7 +13,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { execSync } from 'child_process';
 import Anthropic from '@anthropic-ai/sdk';
 import { scrapeFeeds, DEFAULT_CATEGORIES, getExcelRowCount } from '../scripts/scrape-sources.js';
@@ -322,6 +322,262 @@ app.post('/api/save-article', (req, res) => {
 
   } catch (err) {
     res.status(500).json({ error: `Save failed: ${err.message}` });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/articles — list all blog articles with metadata
+// ---------------------------------------------------------------------------
+app.get('/api/articles', (req, res) => {
+  try {
+    if (!existsSync(BLOG_DIR)) return res.json({ articles: [] });
+    const files = readdirSync(BLOG_DIR).filter(f => f.endsWith('.html'));
+    const articles = files.map(f => {
+      const slug = f.replace(/\.html$/, '');
+      const filePath = path.join(BLOG_DIR, f);
+      const html = readFileSync(filePath, 'utf-8');
+
+      const titleM = html.match(/<h1[^>]*(?:id="article-title"|class="[^"]*article-hero__title[^"]*")[^>]*>([\s\S]*?)<\/h1>/);
+      const title = titleM ? titleM[1].replace(/<[^>]+>/g, '').trim() : slug.replace(/-/g, ' ');
+
+      const dateM = html.match(/<time\s+datetime="([^"]+)"/);
+      const publishedDate = dateM ? dateM[1] : '';
+
+      const catM = html.match(/article-category-badge[^"]*"[^>]*>([\s\S]*?)<\/span>/);
+      const category = catM ? catM[1].replace(/<[^>]+>/g, '').trim() : '';
+
+      const svgM = html.match(/<img\s+[^>]*src="([^"]*illustrations\/[^"]+\.svg)"/);
+      const svgPath = svgM ? svgM[1] : null;
+
+      const rtM = html.match(/<\/time>\s*<span[^>]*>([\d]+ min read)<\/span>/);
+      const readTime = rtM ? rtM[1] : '';
+
+      let fileCreated = '';
+      try { fileCreated = statSync(filePath).birthtime.toISOString().slice(0, 10); } catch {}
+
+      return { slug, title, publishedDate, category, svgPath, readTime, fileCreated };
+    });
+
+    articles.sort((a, b) => (b.publishedDate || '').localeCompare(a.publishedDate || ''));
+    res.json({ articles });
+  } catch (err) {
+    res.status(500).json({ error: `Failed to list articles: ${err.message}` });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// POST /api/delete-articles — delete articles and clean up all references
+// Body: { slugs: ['slug1', 'slug2'] }
+// ---------------------------------------------------------------------------
+app.post('/api/delete-articles', (req, res) => {
+  const { slugs } = req.body;
+  if (!Array.isArray(slugs) || !slugs.length) {
+    return res.status(400).json({ error: 'slugs array is required.' });
+  }
+
+  const deletedSet = new Set(slugs);
+  const warnings = [];
+  let htmlRemoved = 0;
+  let svgRemoved = 0;
+
+  try {
+    // Phase 1 — Gather info before deleting
+    const doomedInfo = {};  // slug → { svgAbsPath, category, title, readTime }
+    for (const slug of slugs) {
+      const htmlPath = path.join(BLOG_DIR, `${slug}.html`);
+      if (!existsSync(htmlPath)) {
+        warnings.push(`${slug}.html not found — skipped`);
+        continue;
+      }
+      const html = readFileSync(htmlPath, 'utf-8');
+      const svgM = html.match(/<img\s+[^>]*src="([^"]*illustrations\/[^"]+\.svg)"/);
+      const svgRelPath = svgM ? svgM[1] : null;
+      const svgAbsPath = svgRelPath
+        ? path.join(PROJECT_ROOT, svgRelPath.replace(/^\//, ''))
+        : null;
+      const catM = html.match(/article-category-badge[^"]*"[^>]*>([\s\S]*?)<\/span>/);
+      const titleM = html.match(/<h1[^>]*(?:id="article-title"|class="[^"]*article-hero__title[^"]*")[^>]*>([\s\S]*?)<\/h1>/);
+      const rtM = html.match(/<\/time>\s*<span[^>]*>([\d]+ min read)<\/span>/);
+      doomedInfo[slug] = {
+        svgAbsPath,
+        category: catM ? catM[1].replace(/<[^>]+>/g, '').trim() : '',
+        title: titleM ? titleM[1].replace(/<[^>]+>/g, '').trim() : slug,
+        readTime: rtM ? rtM[1] : '4 min read'
+      };
+    }
+
+    // Build remaining-articles catalog (for Read Next repairs)
+    const remainingCatalog = [];
+    if (existsSync(BLOG_DIR)) {
+      for (const f of readdirSync(BLOG_DIR).filter(f => f.endsWith('.html'))) {
+        const s = f.replace(/\.html$/, '');
+        if (deletedSet.has(s)) continue;
+        const html = readFileSync(path.join(BLOG_DIR, f), 'utf-8');
+        const titleM = html.match(/<h1[^>]*(?:id="article-title"|class="[^"]*article-hero__title[^"]*")[^>]*>([\s\S]*?)<\/h1>/);
+        const catM = html.match(/article-category-badge[^"]*"[^>]*>([\s\S]*?)<\/span>/);
+        const rtM = html.match(/<\/time>\s*<span[^>]*>([\d]+ min read)<\/span>/);
+        remainingCatalog.push({
+          slug: s,
+          title: titleM ? titleM[1].replace(/<[^>]+>/g, '').trim() : s.replace(/-/g, ' '),
+          category: catM ? catM[1].replace(/<[^>]+>/g, '').trim() : 'Industry Insights',
+          readTime: rtM ? rtM[1] : '4 min read'
+        });
+      }
+    }
+
+    // Phase 2 — Delete files
+    for (const slug of slugs) {
+      const htmlPath = path.join(BLOG_DIR, `${slug}.html`);
+      try { unlinkSync(htmlPath); htmlRemoved++; } catch { warnings.push(`Could not delete ${slug}.html`); }
+
+      const info = doomedInfo[slug];
+      if (info && info.svgAbsPath && existsSync(info.svgAbsPath)) {
+        try { unlinkSync(info.svgAbsPath); svgRemoved++; } catch { warnings.push(`Could not delete SVG for ${slug}`); }
+      }
+    }
+
+    // Phase 2b — Deregister from config files
+    const configsPatched = [];
+
+    // Patch build-components.js
+    if (existsSync(BUILD_COMPONENTS_PATH)) {
+      let src = readFileSync(BUILD_COMPONENTS_PATH, 'utf-8');
+      let changed = false;
+      for (const slug of slugs) {
+        const re = new RegExp(`\\s*'${slug}',?\\n?`, 'g');
+        if (re.test(src)) { src = src.replace(re, '\n'); changed = true; }
+      }
+      if (changed) {
+        // Clean up any blank lines that result from removal
+        src = src.replace(/\n{3,}/g, '\n\n');
+        writeFileSync(BUILD_COMPONENTS_PATH, src, 'utf-8');
+        configsPatched.push('build-components.js');
+      }
+    }
+
+    // Patch generate-sitemap.js
+    if (existsSync(SITEMAP_SCRIPT_PATH)) {
+      let src = readFileSync(SITEMAP_SCRIPT_PATH, 'utf-8');
+      let changed = false;
+      for (const slug of slugs) {
+        const re = new RegExp(`\\s*\\{\\s*path:\\s*'blog/${slug}\\.html'[^}]*\\},?\\n?`);
+        if (re.test(src)) { src = src.replace(re, '\n'); changed = true; }
+      }
+      if (changed) {
+        src = src.replace(/\n{3,}/g, '\n\n');
+        writeFileSync(SITEMAP_SCRIPT_PATH, src, 'utf-8');
+        configsPatched.push('generate-sitemap.js');
+      }
+    }
+
+    // Patch .pa11yci.json
+    if (existsSync(PA11YCI_PATH)) {
+      const pa11y = JSON.parse(readFileSync(PA11YCI_PATH, 'utf-8'));
+      const before = pa11y.urls.length;
+      pa11y.urls = pa11y.urls.filter(u => {
+        for (const slug of slugs) {
+          if (u.includes(`/blog/${slug}.html`)) return false;
+        }
+        return true;
+      });
+      if (pa11y.urls.length < before) {
+        writeFileSync(PA11YCI_PATH, JSON.stringify(pa11y, null, 2) + '\n', 'utf-8');
+        configsPatched.push('.pa11yci.json');
+      }
+    }
+
+    // Phase 3 — Repair Read Next links in remaining articles
+    const readNextRepairs = [];
+
+    for (const f of readdirSync(BLOG_DIR).filter(f => f.endsWith('.html'))) {
+      const articleSlug = f.replace(/\.html$/, '');
+      const filePath = path.join(BLOG_DIR, f);
+      let html = readFileSync(filePath, 'utf-8');
+
+      // Find all Read Next hrefs in this article
+      const readNextRe = /<a\s+href="([^"]+\.html)"\s+class="article-read-next__card">([\s\S]*?)<\/a>/g;
+      let repairCount = 0;
+      const currentHrefs = new Set();
+      // First pass: collect current hrefs
+      let m;
+      const tempRe = /href="([^"]+\.html)"\s+class="article-read-next__card"/g;
+      while ((m = tempRe.exec(html)) !== null) {
+        currentHrefs.add(m[1].replace(/\.html$/, ''));
+      }
+
+      // Second pass: replace dead links
+      html = html.replace(readNextRe, (match, href) => {
+        const linkedSlug = href.replace(/\.html$/, '');
+        if (!deletedSet.has(linkedSlug)) return match;
+
+        // Find replacement: prefer same category
+        const deadCategory = match.match(/article-read-next__card-category">([\s\S]*?)<\/span>/);
+        const deadCat = deadCategory ? deadCategory[1].replace(/&amp;/g, '&').trim() : '';
+
+        let replacement = null;
+        // Same category, not already linked, not self
+        replacement = remainingCatalog.find(r =>
+          r.slug !== articleSlug &&
+          !currentHrefs.has(r.slug) &&
+          r.category === deadCat
+        );
+        // Fallback: any category, not already linked, not self
+        if (!replacement) {
+          replacement = remainingCatalog.find(r =>
+            r.slug !== articleSlug &&
+            !currentHrefs.has(r.slug)
+          );
+        }
+
+        if (replacement) {
+          currentHrefs.add(replacement.slug); // prevent duplicate in next replacement
+          repairCount++;
+          const catEsc = replacement.category.replace(/&/g, '&amp;');
+          return `<a href="${replacement.slug}.html" class="article-read-next__card">` +
+            `\n                    <span class="article-read-next__card-category">${catEsc}</span>` +
+            `\n                    <span class="article-read-next__card-title">${replacement.title}</span>` +
+            `\n                    <span class="article-read-next__card-meta">${replacement.readTime}</span>` +
+            `\n                </a>`;
+        }
+
+        // Last resort: link to blog listing
+        repairCount++;
+        return `<a href="../blog.html" class="article-read-next__card">` +
+          `\n                    <span class="article-read-next__card-category">All Articles</span>` +
+          `\n                    <span class="article-read-next__card-title">Explore More Articles</span>` +
+          `\n                    <span class="article-read-next__card-meta">Browse all</span>` +
+          `\n                </a>`;
+      });
+
+      if (repairCount > 0) {
+        writeFileSync(filePath, html, 'utf-8');
+        readNextRepairs.push({ article: articleSlug, replacements: repairCount });
+      }
+    }
+
+    // Phase 4 — Rebuild
+    const rebuilt = [];
+    try {
+      execSync('node build-components.js', { cwd: PROJECT_ROOT, stdio: 'pipe' });
+      rebuilt.push('build-components');
+    } catch (e) { warnings.push(`build-components.js failed: ${e.message}`); }
+
+    try {
+      execSync('node scripts/sync-blog.js', { cwd: PROJECT_ROOT, stdio: 'pipe' });
+      rebuilt.push('sync-blog');
+    } catch (e) { warnings.push(`sync-blog.js failed: ${e.message}`); }
+
+    res.json({
+      deleted: slugs,
+      filesRemoved: { html: htmlRemoved, svg: svgRemoved },
+      configsPatched,
+      readNextRepairs,
+      rebuilt,
+      warnings
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: `Delete failed: ${err.message}` });
   }
 });
 
