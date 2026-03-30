@@ -168,6 +168,7 @@
     .ll-new .lm { color:var(--green); }
     .ll-skip .lm { color:var(--tf); }
     .ll-done .lm { color:var(--green); font-weight:600; }
+    .ll-warn .lm { color:var(--yellow); }
     .ll-err .lm { color:var(--red); }
     hr.sep { border:none; border-top:1px solid var(--border); margin:5px 0; }
 
@@ -274,7 +275,7 @@
       </button>
       <input type="file" id="file-inp" accept=".xlsx" style="display:none" onchange="onFileInput(event)">
       <button class="btn btn-q btn-sm" onclick="clearLog()">Clear Log</button>
-      <button class="btn btn-g" id="btn-scrape" onclick="startScrape()">
+      <button class="btn btn-g" id="btn-scrape" onclick="isRunning ? stopScrape() : startScrape()">
         <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M6.27 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .27-.445z"/></svg>
         Start Scraping
       </button>
@@ -596,18 +597,37 @@ const DF = [
   { name:'Blue Avocado', url:'https://blueavocado.org/feed/', cat:'Industry Insights', on:true },
   { name:'Food Research & Action Center', url:'https://frac.org/feed', cat:'Industry Insights', on:true },
   { name:'Nonprofit Hub', url:'https://nonprofithub.org/feed/', cat:'Industry Insights', on:true },
-  { name:'Candid Blog', url:'https://blog.candid.org/feed/', cat:'Industry Insights', on:true },
+  { name:'Nonprofit Quarterly', url:'https://nonprofitquarterly.org/feed/', cat:'Industry Insights', on:true },
+  { name:'Food Bank News', url:'https://foodbanknews.org/feed/', cat:'Industry Insights', on:true },
+  { name:'Food Tank', url:'https://www.foodtank.com/feed/', cat:'Industry Insights', on:true },
+  { name:'WhyHunger', url:'https://whyhunger.org/feed/', cat:'Industry Insights', on:true },
+  { name:'Bonterra Social Good Blog', url:'https://www.bonterratech.com/blog/feed/', cat:'Technology Strategy', on:true },
+  { name:'Salesforce Ben', url:'https://www.salesforceben.com/feed/', cat:'Technology Strategy', on:true },
+  { name:'Bloomerang Blog', url:'https://bloomerang.com/blog/feed/', cat:'Technology Strategy', on:false },
+  { name:'Annie E. Casey Foundation', url:'https://www.aecf.org/blog/feed/', cat:'Industry Insights', on:false },
+  { name:'WildApricot Blog', url:'https://www.wildapricot.com/blog/feed/', cat:'Technology Strategy', on:false },
+  { name:'Candid Blog', url:'https://blog.candid.org/feed/', cat:'Industry Insights', on:false },
   { name:'Stanford Social Innovation Review', url:'https://ssir.org/articles/rss', cat:'Industry Insights', on:false },
   { name:'Idealist Blog', url:'https://www.idealist.org/en/feed', cat:'Industry Insights', on:false },
-  { name:'Charity Navigator Blog', url:'https://www.charitynavigator.org/blog/rss/', cat:'Industry Insights', on:false }
+  { name:'Charity Navigator Blog', url:'https://www.charitynavigator.org/blog/feed/', cat:'Industry Insights', on:false },
+  { name:'Feeding America', url:'https://www.feedingamerica.org/hunger-blog', cat:'Industry Insights', on:true, type:'html' },
+  { name:'TechSoup Blog', url:'https://blog.techsoup.org/', cat:'Technology Strategy', on:false, type:'html' },
+  { name:'Bread for the World', url:'https://www.bread.org/blog', cat:'Industry Insights', on:false, type:'html' },
+  { name:'Urban Institute: Food & Nutrition', url:'https://www.urban.org/urban-wire/topics/food-and-nutrition', cat:'Industry Insights', on:false, type:'html' },
+  { name:'Center for American Progress', url:'https://www.americanprogress.org/topic/food-and-nutrition-assistance/', cat:'Industry Insights', on:false, type:'html' },
+  { name:'Council of Nonprofits', url:'https://www.councilofnonprofits.org/nonprofit-news', cat:'Industry Insights', on:false, type:'html' },
+  { name:'Ctr on Budget & Policy Priorities', url:'https://www.cbpp.org/research/food-assistance', cat:'Industry Insights', on:false, type:'html' },
+  { name:'Salesforce Blog (via Google News)', url:'https://news.google.com/rss/search?q=site:salesforce.com+nonprofit+OR+%22food+bank%22+OR+%22Nonprofit+Cloud%22&hl=en-US&gl=US&ceid=US:en', cat:'Technology Strategy', on:true },
+  { name:'Salesforce.org (via Google News)', url:'https://news.google.com/rss/search?q=salesforce.org+nonprofit+OR+%22Nonprofit+Cloud%22+OR+%22food+bank%22&hl=en-US&gl=US&ceid=US:en', cat:'Technology Strategy', on:true },
+  { name:'AFP Global', url:'https://afpglobal.org/news', cat:'Industry Insights', on:false, type:'html' }
 ];
 
 const DC = {
-  'AI & Innovation': ['AI', 'artificial intelligence', 'machine learning', 'predictive', 'algorithm', 'ChatGPT', 'generative', 'LLM', 'deep learning', 'neural network'],
-  'Technology Strategy': ['Salesforce', 'CRM', 'cloud software', 'digital transformation', 'nonprofit technology', 'tech strategy', 'data management', 'Nonprofit Cloud', 'nonprofit tech', 'software platform'],
-  'Case Studies': ['case study', 'success story', 'client results', 'nonprofit achieved', 'impact story', 'lessons learned'],
-  'Implementation': ['implementation', 'workflow automation', 'system integration', 'deployment', 'onboarding', 'step-by-step', 'best practices for'],
-  'Industry Insights': ['food bank', 'food pantry', 'food insecurity', 'SNAP benefits', 'food distribution', 'food rescue', 'hunger relief', 'nonprofit fundraising', 'nonprofit trends', 'charitable giving']
+  'AI & Innovation': ['AI', 'artificial intelligence', 'machine learning', 'predictive', 'algorithm', 'ChatGPT', 'generative', 'LLM', 'deep learning', 'neural network', 'Agentforce', 'Einstein AI', 'Einstein Copilot', 'Einstein Predictions', 'Salesforce AI'],
+  'Technology Strategy': ['Salesforce', 'CRM', 'cloud software', 'digital transformation', 'nonprofit technology', 'tech strategy', 'data management', 'Nonprofit Cloud', 'software platform', 'donor database', 'constituent management', 'fundraising platform', 'CRM implementation'],
+  'Case Studies': ['case study', 'success story', 'client results', 'nonprofit achieved', 'impact story', 'lessons learned', 'nonprofit success', 'nonprofit benefited', 'real-world example', 'nonprofit improved'],
+  'Implementation': ['implementation', 'workflow automation', 'system integration', 'deployment', 'onboarding', 'step-by-step', 'best practices for', 'configuration', 'customization', 'nonprofit adoption', 'process automation', 'how-to'],
+  'Industry Insights': ['food bank', 'food pantry', 'food insecurity', 'SNAP benefits', 'food distribution', 'food rescue', 'hunger relief', 'nonprofit fundraising', 'nonprofit trends', 'charitable giving', 'food assistance', 'food shelf', 'emergency food', 'food access']
 };
 
 const CAT_ORDER = ['AI & Innovation', 'Technology Strategy', 'Case Studies', 'Implementation', 'Industry Insights'];
@@ -615,15 +635,15 @@ const HEADERS = ['Source URL','Title','Source Name','Published Date','Date Scrap
 
 const BUILTIN_PRESETS = [
   { id:'ai',    cls:'ai',   name:'AI & Innovation',    period:30, webOn:true,
-    kws:['food bank AI','predictive analytics nonprofit','machine learning hunger','Salesforce Einstein','generative AI nonprofit'], exkws:[], wskws:[] },
+    kws:['artificial intelligence','machine learning','Salesforce Einstein','Agentforce','Einstein AI','Einstein Copilot','generative AI','predictive analytics','AI nonprofit','automation nonprofit','LLM','ChatGPT'], exkws:[], wskws:[] },
   { id:'tech',  cls:'tech', name:'Tech Strategy',      period:30, webOn:true,
-    kws:['Salesforce nonprofit cloud','nonprofit CRM','food bank software','donor management system','nonprofit technology'], exkws:[], wskws:[] },
+    kws:['Salesforce','nonprofit CRM','nonprofit technology','donor management','Nonprofit Cloud','food bank technology','fundraising software','donor database','constituent management','fundraising platform','CRM implementation'], exkws:[], wskws:[] },
   { id:'cases', cls:'case', name:'Case Studies',       period:60, webOn:true,
-    kws:['food bank case study','nonprofit Salesforce success','food pantry technology results','nonprofit impact story'], exkws:[], wskws:[] },
+    kws:['food bank','food pantry','nonprofit Salesforce','nonprofit impact','case study','success story','implementation results','nonprofit success','nonprofit benefited','real-world example'], exkws:[], wskws:[] },
   { id:'impl',  cls:'impl', name:'Implementation',     period:30, webOn:false,
-    kws:['Salesforce implementation nonprofit','food bank workflow','volunteer management nonprofit','nonprofit onboarding','CRM setup food bank'], exkws:[], wskws:[] },
+    kws:['Salesforce implementation','food bank workflow','volunteer management','nonprofit onboarding','CRM setup','nonprofit operations','digital transformation','configuration','nonprofit adoption','process automation'], exkws:[], wskws:[] },
   { id:'ind',   cls:'ind',  name:'Industry Insights',  period:14, webOn:true,
-    kws:['food insecurity','food bank trends','hunger relief','SNAP benefits','food pantry statistics','charitable giving'], exkws:[], wskws:[] }
+    kws:['food insecurity','food bank','hunger relief','SNAP','food pantry','charitable giving','food security','food assistance','nonprofit trends','food shelf','emergency food','food access','food rescue','food distribution'], exkws:[], wskws:[] }
 ];
 
 const DEFAULT_BLOCKLIST = ['blogspot.com','tumblr.com','wix.com','weebly.com','sites.google.com'];
@@ -631,12 +651,15 @@ const DEFAULT_BLOCKLIST = ['blogspot.com','tumblr.com','wix.com','weebly.com','s
 /* ─────────────────────────────────────────
    STATE
 ───────────────────────────────────────── */
-let feeds = loadLS('fnf2_feeds_v4', DF);       if (!Array.isArray(feeds)) feeds = JSON.parse(JSON.stringify(DF));
+let feeds = loadLS('fnf2_feeds_v6', DF);       if (!Array.isArray(feeds)) feeds = JSON.parse(JSON.stringify(DF));
+// Merge any new default feeds not already in the saved list (by URL), preserving custom feeds and saved on/off states
+{ const savedUrls = new Set(feeds.map(f=>f.url)); const added = DF.filter(f=>!savedUrls.has(f.url)); if (added.length) { feeds = feeds.concat(added); saveLS('fnf2_feeds_v6', feeds); } }
 let cats = loadLS('fnf2_cats', DC);             if (typeof cats !== 'object' || cats === null) cats = JSON.parse(JSON.stringify(DC));
 let period = 30;
 let kwTags = [], exTags = [], wsTags = [];
-let maxResults = 50;
 let isRunning = false;
+let scrapeAbortCtrl = null;
+let _resultSeq = 0;
 let allResults = [], newArticles = [];
 let presets = loadLS('fnf2_presets', []);        if (!Array.isArray(presets)) presets = [];
 let activePreset = null;
@@ -793,9 +816,9 @@ function renderFeeds() {
   document.getElementById('flist').innerHTML = feeds.map((f,i) => `
     <div class="fitem">
       <input type="checkbox" class="tog" id="f${i}" ${f.on!==false?'checked':''}
-        onchange="feeds[${i}].on=this.checked; saveLS('fnf2_feeds_v4',feeds); updFct(); updatePrev()">
+        onchange="feeds[${i}].on=this.checked; saveLS('fnf2_feeds_v6',feeds); updFct(); updatePrev()">
       <div class="finfo">
-        <div class="fname">${esc(f.name)}</div>
+        <div class="fname">${esc(f.name)}${f.type==='html'?' <span style="font-size:9px;opacity:.6;font-weight:400;margin-left:4px">HTML</span>':''}</div>
         <div class="furl" title="${esc(f.url)}">${esc(f.url)}</div>
       </div>
       <span class="pill ${pc(f.cat)}">${sc(f.cat)}</span>
@@ -805,19 +828,20 @@ function renderFeeds() {
 function resetFeeds() {
   if (!confirm('Reset feed list to defaults? Your custom feeds will be removed.')) return;
   feeds = JSON.parse(JSON.stringify(DF));
-  saveLS('fnf2_feeds_v4', feeds);
+  saveLS('fnf2_feeds_v6', feeds);
   renderFeeds(); updatePrev();
 }
 function updFct() {
   const on = feeds.filter(f=>f.on!==false).length;
   document.getElementById('fct').textContent = `(${on}/${feeds.length})`;
 }
-function setAllF(v) { feeds.forEach((f,i)=>{ f.on=v; const c=document.getElementById(`f${i}`); if(c) c.checked=v; }); saveLS('fnf2_feeds_v4',feeds); updFct(); updatePrev(); }
+function setAllF(v) { feeds.forEach((f,i)=>{ f.on=v; const c=document.getElementById(`f${i}`); if(c) c.checked=v; }); saveLS('fnf2_feeds_v6',feeds); updFct(); updatePrev(); }
 function toggleAddf() { document.getElementById('addf').classList.toggle('show'); }
 function addFeed() {
   const nm=document.getElementById('n-nm').value.trim(), url=document.getElementById('n-url').value.trim(), cat=document.getElementById('n-cat').value;
   if (!nm||!url){alert('Enter both a name and URL.');return;}
-  feeds.push({name:nm,url,cat,on:true}); saveLS('fnf2_feeds_v4',feeds);
+  try { new URL(url); } catch { alert('Invalid URL — make sure it starts with https://'); return; }
+  feeds.push({name:nm,url,cat,on:true}); saveLS('fnf2_feeds_v6',feeds);
   document.getElementById('n-nm').value=''; document.getElementById('n-url').value='';
   document.getElementById('addf').classList.remove('show'); renderFeeds(); updatePrev();
 }
@@ -914,14 +938,26 @@ function isBlocked(url) {
   } catch { return false; }
 }
 
+// Single-word: substring match. Multi-word phrase: ALL words must appear (order-independent AND).
+// "food bank AI" matches "How AI Is Transforming Food Banks" because food+bank+ai are all present.
+function kwPhrase(searchLow, phrase) {
+  const p = phrase.toLowerCase();
+  if (!p.includes(' ')) {
+    // Use lightweight word boundary (non-alphanumeric delimiters) so "AI" matches "AI-powered"
+    // but not "availability"; "SNAP" matches "SNAP benefits" but not "snapshot"
+    const re = new RegExp('(?:^|[^a-z0-9])' + p.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '(?:[^a-z0-9]|$)');
+    return re.test(searchLow);
+  }
+  return p.split(/\s+/).filter(Boolean).every(w => searchLow.includes(w));
+}
+
 function scoreArticle(title, summary, kws) {
-  if (!kws || !kws.length) return 0;
+  if (!kws || !kws.length) return 3; // No keyword filter active — neutral score
   const tl=(title||'').toLowerCase(), sl=(summary||'').toLowerCase();
   let hits=0;
   for (const k of kws) {
-    const kl=k.toLowerCase();
-    if (tl.includes(kl)) hits+=2;
-    else if (sl.includes(kl)) hits+=1;
+    if (kwPhrase(tl, k)) hits+=2;
+    else if (kwPhrase(sl, k)) hits+=1;
   }
   if (!hits) return 1;
   const max=kws.length*2;
@@ -1031,6 +1067,12 @@ function addLog(type, msg) {
 function logSep(){ const h=document.createElement('hr'); h.className='sep'; document.getElementById('log').appendChild(h); }
 function setStat(s,t){ document.getElementById('dot').className=`dot ${s}`; document.getElementById('stxt').textContent=t; }
 function clearLog(){ document.getElementById('log').innerHTML=''; addLog('info','Log cleared.'); }
+function stopScrape() {
+  if (!isRunning) return;
+  scrapeAbortCtrl?.abort();
+  addLog('warn','Scrape stopped by user.');
+  setStat('idle','Stopped');
+}
 
 /* ─────────────────────────────────────────
    RESULTS TABLE
@@ -1038,12 +1080,12 @@ function clearLog(){ document.getElementById('log').innerHTML=''; addLog('info',
 function addRow(a) {
   const tr=document.createElement('tr');
   if (a.isNew) tr.classList.add('nr');
-  const pub=a.pubDate?new Date(a.pubDate).toLocaleDateString():'—';
+  const pub=a.pubDate?new Date(a.pubDate+'T00:00:00').toLocaleDateString():'—';
   const webBadge=a.isWeb?`<span class="pill p-web" style="font-size:10px;margin-right:3px">Web</span>`:'';
   const sc=a.score;
   const scoreBadge=sc?`<span class="score s${sc}">${sc}</span>`:`<span style="color:var(--tf);font-size:12px">—</span>`;
   const statusTxt=a.isNew?'<span style="color:var(--green);font-size:12px">New</span>':'<span style="color:var(--tf);font-size:12px">Dupe</span>';
-  const cbId=`cb_${btoa(a.url).slice(0,12)}`;
+  const cbId=`cb_${a._id}`;
   tr.innerHTML=`
     <td style="padding:6px 6px 6px 13px"><input type="checkbox" class="sel-cb" id="${cbId}" ${selectedUrls.has(a.url)?'checked':''}></td>
     <td><a class="rt" href="${esc(a.url)}" target="_blank" title="${esc(a.title)}" onclick="event.stopPropagation()">${esc(a.title)}</a></td>
@@ -1076,13 +1118,7 @@ function toggleDetail(tr, a) {
 }
 
 function selectAllNew() {
-  allResults.filter(r=>r.isNew).forEach(r=>selectedUrls.add(r.url));
-  document.querySelectorAll('.sel-cb').forEach(cb=>{
-    const url=allResults.find(r=>btoa(r.url).slice(0,12)===cb.id.replace('cb_',''))?.url;
-    if (url&&selectedUrls.has(url)) cb.checked=true;
-  });
-  // Simpler: re-check by iterating allResults
-  allResults.forEach(a=>{ if(a.isNew){ const el=document.getElementById(`cb_${btoa(a.url).slice(0,12)}`); if(el) el.checked=true; selectedUrls.add(a.url); } });
+  allResults.forEach(a=>{ if(a.isNew){ const el=document.getElementById(`cb_${a._id}`); if(el) el.checked=true; selectedUrls.add(a.url); } });
   updateSelCount();
 }
 
@@ -1098,10 +1134,13 @@ function updateSelCount() {
 }
 
 function sortByScore() {
-  // Close any open detail rows first
   document.querySelectorAll('.detail-row').forEach(r=>r.remove());
   allResults.sort((a,b)=>(b.score||0)-(a.score||0));
   const tbody=document.getElementById('tbody'); tbody.innerHTML='';
+  if (!allResults.length) {
+    tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;color:var(--tf);padding:32px 0;font-size:13px">No results matched. Try clearing keywords, expanding the date range, or enabling Web Search.</td></tr>`;
+    return;
+  }
   allResults.forEach(a=>addRow(a));
 }
 function updBadge() {
@@ -1119,6 +1158,12 @@ function mkTimeout(ms) {
   if (AbortSignal.timeout) return AbortSignal.timeout(ms);
   const c=new AbortController(); setTimeout(()=>c.abort(),ms); return c.signal;
 }
+// Combines a timeout with the current scrape's abort signal so Stop cancels in-flight fetches
+function mkFetchSignal(ms) {
+  const t=mkTimeout(ms);
+  if (scrapeAbortCtrl?.signal && typeof AbortSignal.any==='function') return AbortSignal.any([t, scrapeAbortCtrl.signal]);
+  return t;
+}
 
 function looksXML(s) {
   const t=(s||'').trim().slice(0,80).toLowerCase();
@@ -1128,13 +1173,13 @@ function looksXML(s) {
 async function fetchFeed(url) {
   // 1) Direct fetch (fast, works when the feed has CORS headers)
   try {
-    const r=await fetch(url,{signal:mkTimeout(7000)});
+    const r=await fetch(url,{signal:mkFetchSignal(7000)});
     if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; }
   } catch { /* CORS or timeout — fall through */ }
 
   // 2) allorigins JSON wrapper (gives us content-type + HTTP status)
   try {
-    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,{signal:mkTimeout(15000)});
+    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,{signal:mkFetchSignal(15000)});
     if (r.ok) {
       const data=await r.json();
       const { contents, status } = data;
@@ -1164,17 +1209,155 @@ async function fetchFeed(url) {
 
   // 3) corsproxy.io
   try {
-    const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`,{signal:mkTimeout(13000)});
-    if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; throw new Error(`corsproxy returned non-XML content`); }
-  } catch(e) { if (e.message.includes('non-XML')) throw e; }
+    const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`,{signal:mkFetchSignal(13000)});
+    if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; }
+  } catch { /* proxy unreachable or timeout — try next */ }
 
   // 4) codetabs proxy
   try {
-    const r=await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,{signal:mkTimeout(13000)});
-    if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; throw new Error(`codetabs returned non-XML content`); }
-  } catch(e) { if (e.message.includes('non-XML')) throw e; }
+    const r=await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,{signal:mkFetchSignal(13000)});
+    if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; }
+  } catch { /* proxy unreachable or timeout — try next */ }
 
-  throw new Error('Unreachable via direct fetch and three CORS proxies');
+  // 5) allorigins raw endpoint (different from the JSON wrapper used in proxy 2)
+  try {
+    const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,{signal:mkFetchSignal(13000)});
+    if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; }
+  } catch { /* proxy unreachable or timeout */ }
+
+  // 6) RSS2JSON — dedicated RSS service, bypasses Cloudflare/bot-protection that blocks generic proxies
+  try {
+    const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=100`,{signal:mkFetchSignal(15000)});
+    if (r.ok) {
+      const json=await r.json();
+      if (json.status==='ok' && json.items?.length) {
+        const ex=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const items=json.items.map(i=>`<item><title>${ex(i.title)}</title><link>${ex(i.link)}</link><pubDate>${ex(i.pubDate)}</pubDate><description>${ex(i.description||i.content||'')}</description></item>`).join('');
+        return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>${ex(json.feed?.title||'')}</title>${items}</channel></rss>`;
+      }
+    }
+  } catch { /* rss2json unreachable or rate-limited */ }
+
+  throw new Error('Feed unreachable — all CORS proxies failed or returned non-XML');
+}
+
+/* ─────────────────────────────────────────
+   HTML PAGE SCRAPER
+   Fetches a blog/news listing page via CORS proxy and extracts articles
+   using three strategies in order of reliability:
+     1. JSON-LD structured data (Article / ItemList / Blog types)
+     2. <article> HTML5 semantic elements
+     3. Heading + link pattern inside main content containers
+   Returns items in the same shape as parseXML() — {title,url,pubDate,description}
+───────────────────────────────────────── */
+async function fetchHTMLArticles(pageUrl) {
+  let html = null;
+
+  // 1) allorigins JSON wrapper (gives us HTTP status to detect 403/404 early)
+  try {
+    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(pageUrl)}`,{signal:mkFetchSignal(15000)});
+    if (r.ok) {
+      const data=await r.json();
+      if (data.status?.http_code >= 400) throw new Error(`Page returned HTTP ${data.status.http_code}`);
+      if (data.contents && !data.contents.startsWith('data:') && data.contents.includes('<')) html=data.contents;
+    }
+  } catch(e) {
+    if (e.message.startsWith('Page returned HTTP')) throw e;
+  }
+
+  // 2) corsproxy.io
+  if (!html) {
+    try {
+      const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(pageUrl)}`,{signal:mkFetchSignal(13000)});
+      if (r.ok) { const t=await r.text(); if (t.includes('<html')) html=t; }
+    } catch {}
+  }
+
+  // 3) codetabs
+  if (!html) {
+    try {
+      const r=await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(pageUrl)}`,{signal:mkFetchSignal(13000)});
+      if (r.ok) { const t=await r.text(); if (t.includes('<html')) html=t; }
+    } catch {}
+  }
+
+  // 4) allorigins raw
+  if (!html) {
+    try {
+      const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(pageUrl)}`,{signal:mkFetchSignal(13000)});
+      if (r.ok) { const t=await r.text(); if (t.includes('<html')) html=t; }
+    } catch {}
+  }
+
+  if (!html) throw new Error('Page unreachable — all CORS proxies failed');
+
+  const doc=new DOMParser().parseFromString(html,'text/html');
+  const items=[], seen=new Set();
+
+  function absUrl(u) {
+    if (!u) return '';
+    try { return new URL(u, pageUrl).href; } catch { return ''; }
+  }
+  function addItem(title, url, pubDate, description) {
+    const abs=absUrl(url);
+    if (!abs || !title || seen.has(abs)) return;
+    if (abs===pageUrl) return;  // skip the listing page itself
+    const t=title.trim();
+    if (t.length < 8) return;  // skip nav/footer noise
+    seen.add(abs);
+    // Accept pubDate only if it contains a year
+    const pd=pubDate && /\d{4}/.test(String(pubDate)) ? String(pubDate).trim() : '';
+    items.push({ title:t, url:abs, pubDate:pd, description:strip(String(description||'')).slice(0,500) });
+  }
+
+  // Strategy 1: JSON-LD structured data
+  doc.querySelectorAll('script[type="application/ld+json"]').forEach(el => {
+    try {
+      const nodes=[].concat(JSON.parse(el.textContent));
+      for (const node of nodes) {
+        const t=node['@type'];
+        if (['Article','NewsArticle','BlogPosting','TechArticle'].includes(t)) {
+          addItem(node.headline||node.name, node.url||node.mainEntityOfPage?.['@id'], node.datePublished, node.description);
+        }
+        const listItems = t==='ItemList' ? node.itemListElement :
+                          (t==='CollectionPage'||t==='Blog') ? node.mainEntity?.itemListElement : null;
+        if (listItems) {
+          [].concat(listItems).forEach(item => {
+            const a=item.item||item;
+            addItem(a.name||a.headline, a.url, a.datePublished, a.description);
+          });
+        }
+      }
+    } catch {}
+  });
+
+  // Strategy 2: <article> HTML5 elements
+  if (items.length < 3) {
+    doc.querySelectorAll('article').forEach(el => {
+      const link=el.querySelector('h1 a,h2 a,h3 a,h4 a')||el.querySelector('a[href]');
+      if (!link) return;
+      const title=el.querySelector('h1,h2,h3,h4')?.textContent||link.textContent;
+      if (!title?.trim()) return;
+      const time=el.querySelector('time');
+      addItem(title, link.getAttribute('href'), time?.getAttribute('datetime')||time?.textContent, el.querySelector('p')?.textContent);
+    });
+  }
+
+  // Strategy 3: heading + link inside main content container
+  if (items.length < 3) {
+    const root=doc.querySelector('main,[role="main"],#main,#content,.content,.posts,.blog-posts,.articles,.news-list,.article-list,article')||doc.body;
+    root.querySelectorAll('h2 a[href],h3 a[href]').forEach(a => {
+      const url=a.getAttribute('href');
+      if (!url||url.startsWith('#')||url.startsWith('mailto:')||url.startsWith('javascript:')) return;
+      if (a.textContent.trim().length < 8) return;
+      const card=a.closest('li,article,[class*="card"],[class*="post"],[class*="item"],div')||a.parentElement?.parentElement;
+      const time=card?.querySelector('time');
+      addItem(a.textContent, url, time?.getAttribute('datetime')||time?.textContent, card?.querySelector('p')?.textContent);
+    });
+  }
+
+  if (!items.length) throw new Error('No articles found — site structure may have changed or page is behind a login');
+  return items;
 }
 
 /* ─────────────────────────────────────────
@@ -1243,9 +1426,10 @@ async function searchGDELT(topicKws, extraKws, lookbackDays) {
   const allTerms=[...topicKws,...extraKws];
   let query;
   if (allTerms.length) {
-    query=allTerms.map(t=>t.includes(' ')?`"${t}"`:t).join(' OR ');
+    const parts=allTerms.map(t=>t.includes(' ')?`"${t}"`:t);
+    query=parts.length>1?`(${parts.join(' OR ')})`:parts[0];
   } else {
-    query='"food bank" OR "food pantry" OR "nonprofit technology" OR "food insecurity" OR "Salesforce nonprofit"';
+    query='("food bank" OR "food pantry" OR "nonprofit technology" OR "food insecurity" OR "Salesforce nonprofit")';
   }
 
   const timespan = lookbackDays<=7?'7d': lookbackDays<=30?'1m': lookbackDays<=60?'2m':'3m';
@@ -1254,34 +1438,41 @@ async function searchGDELT(topicKws, extraKws, lookbackDays) {
 
   let txt=null;
 
-  // 1) Direct fetch (works when browser allows it)
+  // 1) Direct fetch (GDELT has CORS headers — usually works)
   try {
-    const r=await fetch(apiUrl,{signal:mkTimeout(35000)});
+    const r=await fetch(apiUrl,{signal:mkFetchSignal(20000)});
     if (r.ok) txt=await r.text();
     else addLog('info','  GDELT direct: HTTP '+r.status+' — trying proxy…');
-  } catch { addLog('info','  GDELT direct blocked (CORS) — trying proxy…'); }
+  } catch { addLog('info','  GDELT direct blocked — trying proxy…'); }
 
-  // 2) allorigins proxy fallback
+  // 2) allorigins JSON wrapper
   if (!txt) {
     try {
-      const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`,{signal:mkTimeout(40000)});
+      const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`,{signal:mkFetchSignal(20000)});
       if (r.ok) {
         const wrapper=await r.json();
         if (wrapper.contents) txt=wrapper.contents;
-        else addLog('info','  GDELT proxy returned empty — trying corsproxy…');
       }
-    } catch { addLog('info','  allorigins proxy failed — trying corsproxy…'); }
+    } catch { }
   }
 
   // 3) corsproxy fallback
   if (!txt) {
     try {
-      const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`,{signal:mkTimeout(40000)});
+      const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`,{signal:mkFetchSignal(15000)});
       if (r.ok) txt=await r.text();
     } catch {}
   }
 
-  if (!txt) throw new Error('GDELT could not be reached via direct fetch or proxy');
+  // 4) allorigins raw fallback
+  if (!txt) {
+    try {
+      const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`,{signal:mkFetchSignal(15000)});
+      if (r.ok) txt=await r.text();
+    } catch {}
+  }
+
+  if (!txt) throw new Error('GDELT could not be reached — skipping');
 
   // GDELT sometimes returns plain-text error messages instead of JSON
   const trimmed=txt.trim();
@@ -1350,8 +1541,9 @@ function processItem(item, feedName, feedCat, cutoff, isWeb) {
   const searchTxt = title + ' ' + description;
   const searchLow = searchTxt.toLowerCase();
 
-  // Topic keyword filter — plain substring ("profit" matches "nonprofit")
-  if (kwTags.length && !kwTags.some(k => k && searchLow.includes(k.toLowerCase()))) return null;
+  // Topic keyword filter — multi-word phrases: all words must appear (order-independent).
+  // Web results (Google News / GDELT) are already pre-filtered by the search query, so skip re-filtering.
+  if (kwTags.length && !isWeb && !kwTags.some(k => k && kwPhrase(searchLow, k))) return null;
 
   // Exclude filter — word-boundary to avoid accidental over-exclusion
   if (exTags.length && exTags.some(k => kwMatch(searchTxt, k))) {
@@ -1364,7 +1556,7 @@ function processItem(item, feedName, feedCat, cutoff, isWeb) {
   const summary = description.slice(0, 400);
   const score = scoreArticle(title, summary, kwTags);
 
-  return { url, title, src: feedName, pubDate: pub ? fd(pub) : '', scraped: fd(new Date()), cat, kws, isNew, isWeb: !!isWeb, summary, score };
+  return { url, title, src: feedName, pubDate: pub ? fd(pub) : '', scraped: fd(new Date()), cat, kws, isNew, isWeb: !!isWeb, summary, score, _id: ++_resultSeq };
 }
 
 /* ─────────────────────────────────────────
@@ -1376,7 +1568,10 @@ async function startScrape() {
   const webOn = document.getElementById('web-tog').checked;
   if (!activeFd.length && !webOn) { alert('Please enable at least one feed or web search.'); return; }
 
-  isRunning=true; allResults=[]; newArticles=[]; selectedUrls.clear();
+  const btn=document.getElementById('btn-scrape');
+  try {
+  scrapeAbortCtrl=new AbortController();
+  isRunning=true; _resultSeq=0; allResults=[]; newArticles=[]; selectedUrls.clear();
   document.getElementById('tbody').innerHTML='';
   document.getElementById('rbadge').style.display='none';
   document.getElementById('sct').textContent='';
@@ -1386,28 +1581,45 @@ async function startScrape() {
   document.getElementById('prog').style.width='10%';
   setStat('run','Scraping…'); showTab('log');
 
-  const btn=document.getElementById('btn-scrape');
-  btn.disabled=true;
-  btn.innerHTML=`<svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor" style="animation:blink .8s infinite"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" fill="none"/></svg> Scraping…`;
+  btn.style.background='rgba(248,81,73,.2)'; btn.style.borderColor='rgba(248,81,73,.5)';
+  btn.innerHTML=`<svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="3" width="10" height="10" rx="1"/></svg> Stop`;
 
   logSep();
   const lb=getLB();
-  addLog('info',`▶ Starting — ${activeFd.length} RSS feed${activeFd.length!==1?'s':''}${webOn?` + GDELT web search`:''} · ${lb}-day lookback${kwTags.length?' · filter: '+kwTags.join(', '):''}`);
+  const rssFds=activeFd.filter(f=>f.type!=='html'), htmlFds=activeFd.filter(f=>f.type==='html');
+  const srcDesc=[rssFds.length?`${rssFds.length} RSS feed${rssFds.length!==1?'s':''}`:null, htmlFds.length?`${htmlFds.length} web source${htmlFds.length!==1?'s':''}`:null, webOn?'GDELT web search':null].filter(Boolean).join(' + ');
+  addLog('info',`▶ Starting — ${srcDesc} · ${lb}-day lookback${kwTags.length?' · filter: '+kwTags.join(', '):''}`);
   if (!xlHandle&&!xlFallback) addLog('info','No Excel file connected — dedup disabled (all results treated as new).');
 
   const cutoff=new Date(); cutoff.setDate(cutoff.getDate()-lb);
-  const total=activeFd.length+(webOn?1:0);
-  let done=0;
 
-  /* ── RSS feeds ── */
-  for (const f of activeFd) {
-    addLog('feed', `Fetching RSS: ${esc(f.name)}`);
-    await tick();
+  /* ── All feeds (RSS + HTML) + web search — all parallel ── */
+  addLog('info', `Fetching ${activeFd.length} source${activeFd.length!==1?'s':''}${webOn?' + web search':''} in parallel…`);
+
+  // Shared Set for bidirectional GN ↔ GDELT deduplication
+  const seenWebUrls = new Set();
+
+  const rssTask = Promise.all(activeFd.map(async f => {
+    addLog('feed', `  ▶ ${esc(f.name)}${f.type==='html'?' [HTML]':''}`);
     try {
-      const xml=await fetchFeed(f.url);
-      const items=parseXML(xml);
-      let n=0;
+      let items;
+      if (f.type==='html') {
+        items=await fetchHTMLArticles(f.url);
+      } else {
+        const xml=await fetchFeed(f.url);
+        if (scrapeAbortCtrl?.signal.aborted) return;
+        items=parseXML(xml);
+      }
+      if (scrapeAbortCtrl?.signal.aborted) return;
+      // Item 7: distinct log when feed is OK but empty for the date window
+      if (items.length === 0) {
+        addLog('info', `  └─ ${esc(f.name)}: Feed OK but no articles in last ${lb} day${lb!==1?'s':''}`);
+        return;
+      }
+      let n=0, rawTotal=0;
       for (const item of items) {
+        if (scrapeAbortCtrl?.signal.aborted) break;
+        rawTotal++;
         const a=processItem(item, f.name, f.cat, cutoff, false);
         if (!a) continue;
         n++;
@@ -1415,20 +1627,15 @@ async function startScrape() {
         addRow(a); updBadge();
         addLog(a.isNew?'new':'skip', `  ${a.isNew?'+':'~'} ${esc(a.title)} [${esc(a.cat)}]`);
       }
-      addLog('info', `  └─ ${esc(f.name)}: ${n} article${n!==1?'s':''} in date range`);
+      const filterNote = kwTags.length && n < rawTotal ? ` · ${rawTotal-n} filtered by keywords` : '';
+      addLog('info', `  └─ ${esc(f.name)}: ${n} article${n!==1?'s':''} matched${filterNote}`);
     } catch(e) {
-      addLog('err', `  └─ ${esc(f.name)}: ${e.message}`);
+      if (e.name!=='AbortError') addLog('err', `  └─ ${esc(f.name)}: ${e.message}`);
     }
-    done++;
-    document.getElementById('prog').style.width=`${10+Math.round((done/total)*75)}%`;
-    await tick();
-  }
+  }));
 
-  /* ── Web search: Google News + GDELT ── */
-  if (webOn) {
-    await tick();
-
-    // — Google News RSS —
+  // Items 5 & 6: Google News runs in parallel with RSS; seenWebUrls deduplicates against GDELT
+  const gnTask = webOn ? (async () => {
     addLog('web', `Searching Google News RSS…`);
     await tick();
     try {
@@ -1438,6 +1645,8 @@ async function startScrape() {
       for (const item of items) {
         const a=processItem(item, item.sourceName||'Google News', 'Industry Insights', cutoff, true);
         if (!a) continue;
+        if (seenWebUrls.has(a.url)) continue;
+        seenWebUrls.add(a.url);
         n++;
         allResults.push(a); if (a.isNew) newArticles.push(a);
         addRow(a); updBadge();
@@ -1445,11 +1654,12 @@ async function startScrape() {
       }
       addLog('info', `  └─ Google News: ${n} article${n!==1?'s':''} matched`);
     } catch(e) {
-      addLog('err', `  └─ Google News: ${e.message}`);
+      addLog('warn', `  └─ Google News unavailable: ${e.message}`);
     }
-    await tick();
+  })() : Promise.resolve();
 
-    // — GDELT —
+  // GDELT runs in parallel with RSS and Google News; deduplicates via seenWebUrls + allResults
+  const gdeltTask = webOn ? (async () => {
     addLog('web', `Searching GDELT global news index…`);
     await tick();
     try {
@@ -1459,8 +1669,8 @@ async function startScrape() {
       for (const item of articles) {
         const a=processItem(item, item.sourceName||'Web', 'Industry Insights', cutoff, true);
         if (!a) continue;
-        // Skip if already found via Google News (same URL)
-        if (allResults.some(r=>r.url===a.url)) continue;
+        if (seenWebUrls.has(a.url) || allResults.some(r=>r.url===a.url)) continue;
+        seenWebUrls.add(a.url);
         n++;
         allResults.push(a); if (a.isNew) newArticles.push(a);
         addRow(a); updBadge();
@@ -1468,13 +1678,13 @@ async function startScrape() {
       }
       addLog('info', `  └─ GDELT: ${n} article${n!==1?'s':''} matched`);
     } catch(e) {
-      addLog('err', `  └─ GDELT: ${e.message}`);
+      addLog('warn', `  └─ GDELT unavailable: ${e.message}`);
     }
+  })() : Promise.resolve();
 
-    done++;
-    document.getElementById('prog').style.width='85%';
-    await tick();
-  }
+  await Promise.all([rssTask, gnTask, gdeltTask]);
+  document.getElementById('prog').style.width='90%';
+  await tick();
 
   /* ── Save / offer download ── */
   const nw=newArticles.length;
@@ -1503,14 +1713,25 @@ async function startScrape() {
   /* ── Done ── */
   logSep();
   const dup=allResults.length-nw;
-  addLog('done', `Done — ${allResults.length} found · ${nw} new · ${dup} duplicate${dup!==1?'s':''}`);
-  setStat('done', `Complete — ${nw} new article${nw!==1?'s':''} added`);
+  if (allResults.length === 0 && kwTags.length) {
+    addLog('warn', `No articles matched your keyword filter (${kwTags.join(', ')}). Try clearing keywords or using broader terms.`);
+  }
+  const viewLink=allResults.length?` — <span onclick="sortByScore();showTab('res')" style="cursor:pointer;text-decoration:underline;opacity:.8">View ${allResults.length} result${allResults.length!==1?'s':''} →</span>`:'';
+  addLog('done', `Done — ${allResults.length} found · ${nw} new · ${dup} duplicate${dup!==1?'s':''}${viewLink}`);
+  setStat('done', `Complete — ${allResults.length} found · ${nw} new`);
   document.getElementById('sct').textContent=`${allResults.length} found · ${nw} new · ${dup} duplicates`;
   document.getElementById('prog').style.width='100%';
   setTimeout(()=>{ document.getElementById('prog').style.width='0'; }, 2500);
-  if (allResults.filter(r=>r.isNew).length) { sortByScore(); showTab('res'); }
+  sortByScore();
 
-  isRunning=false; btn.disabled=false;
+  isRunning=false; resetScrapeBtn(btn);
+  } catch(err) {
+    if (err.name!=='AbortError') { addLog('err', `Scrape failed: ${err.message}`); setStat('idle', 'Error — scrape failed'); }
+    isRunning=false; resetScrapeBtn(btn);
+  }
+}
+function resetScrapeBtn(btn) {
+  btn.style.background=''; btn.style.borderColor='';
   btn.innerHTML=`<svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M6.27 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .27-.445z"/></svg> Start Scraping`;
 }
 

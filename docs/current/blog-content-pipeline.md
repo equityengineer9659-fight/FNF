@@ -1,7 +1,7 @@
 # Blog Content Pipeline
 
 **Last Updated**: 2026-03-30
-**Status**: Active — tool is operational, New Article tab added
+**Status**: Active — 30 sources (16 enabled / 14 disabled), parallel fetching, stop button, 6-proxy CORS chain, broadened preset keywords
 
 ## Overview
 
@@ -101,11 +101,13 @@ Five presets are pre-configured for FNF's five content pillars. Click a preset p
 
 | Preset | Date Range | Web Search | Topic Keywords |
 |--------|-----------|------------|----------------|
-| **AI & Innovation** | 30 days | On | food bank AI · predictive analytics nonprofit · machine learning hunger · Salesforce Einstein · generative AI nonprofit |
-| **Tech Strategy** | 30 days | On | Salesforce nonprofit cloud · nonprofit CRM · food bank software · donor management system · nonprofit technology |
-| **Case Studies** | 60 days | On | food bank case study · nonprofit Salesforce success · food pantry technology results · nonprofit impact story |
-| **Implementation** | 30 days | Off | Salesforce implementation nonprofit · food bank workflow · volunteer management nonprofit · nonprofit onboarding · CRM setup food bank |
-| **Industry Insights** | 14 days | On | food insecurity · food bank trends · hunger relief · SNAP benefits · food pantry statistics · charitable giving |
+| **AI & Innovation** | 30 days | On | artificial intelligence · machine learning · Salesforce Einstein · generative AI · predictive analytics · AI nonprofit · automation nonprofit |
+| **Tech Strategy** | 30 days | On | Salesforce · nonprofit CRM · nonprofit technology · donor management · Nonprofit Cloud · food bank technology · fundraising software |
+| **Case Studies** | 60 days | On | food bank · food pantry · nonprofit Salesforce · nonprofit impact · case study · success story · implementation results |
+| **Implementation** | 30 days | Off | Salesforce implementation · food bank workflow · volunteer management · nonprofit onboarding · CRM setup · nonprofit operations · digital transformation |
+| **Industry Insights** | 14 days | On | food insecurity · food bank · hunger relief · SNAP · food pantry · charitable giving · food security · food assistance · nonprofit trends |
+
+**Note on preset keyword design**: Keywords use 1–2 word phrases to maximize recall. The `kwPhrase()` matcher requires ALL words in a phrase to appear in the article text, so long phrases like "food bank trends" (3 words required) would reject most articles. Shorter phrases like "food bank" (2 words) and "SNAP" (1 word) match much more broadly. Custom presets follow the same rules — prefer short phrases.
 
 Custom presets can be saved with the **"+ Save current as preset"** button.
 
@@ -114,7 +116,11 @@ Custom presets can be saved with the **"+ Save current as preset"** button.
 ## Configuration Options
 
 ### Topic Keywords
-Substring match — "nonprofit" matches "nonprofits". Press Enter or comma after each keyword. Leave empty to include all articles from the date range.
+Order-independent word matching via `kwPhrase()`:
+- **Single words** — substring match ("nonprofit" matches "nonprofits")
+- **Multi-word phrases** — all component words must appear anywhere in the text, order-independent. "food bank AI" matches an article containing "AI" and "food bank" anywhere in the title or description, not just as an adjacent phrase.
+
+Press Enter or comma after each keyword. Leave empty to include all articles from the date range.
 
 ### Exclude Keywords
 Word-boundary match — more precise to avoid over-exclusion.
@@ -127,24 +133,62 @@ When enabled, runs two searches in addition to RSS feeds:
 - **Google News RSS** — primary; uses the same CORS proxy chain as RSS feeds
 - **GDELT Project** — secondary global news index; deduplicates against Google News results
 
-### RSS Feeds
-Default enabled feeds (confirmed working):
+Web search results (`isWeb = true`) **skip the local keyword filter** — they are already pre-filtered by the search query, and re-filtering against sparse descriptions (GDELT returns `"From domain.com"` as description) would produce false negatives. Failures from Google News or GDELT are logged as warnings, not errors, since the RSS feeds already provide full coverage.
 
-| Feed | Category |
-|------|----------|
-| NonProfit PRO | Technology Strategy |
-| Nonprofit Tech for Good | Technology Strategy |
-| The Nonprofit Times | Industry Insights |
-| NTEN | Technology Strategy |
-| Blue Avocado | Industry Insights |
-| Food Research & Action Center | Industry Insights |
-| Nonprofit Hub | Industry Insights |
-| Candid Blog | Industry Insights |
+### Sources
 
-Default disabled (CORS-blocked or uncertain — enable to try):
-- Stanford Social Innovation Review
-- Idealist Blog
-- Charity Navigator Blog
+The scraper supports three source types:
+- **RSS** — standard RSS/Atom feed, fetched via the 6-proxy CORS chain
+- **HTML** — blog/news listing page scraped directly; articles extracted via JSON-LD → `<article>` elements → heading+link fallback
+- **Google News RSS** — targeted `site:` query against Google News RSS; bypasses bot protection by going through Google's index rather than the site directly
+
+Sources show an **HTML** label in the feeds panel for HTML-type sources. Both appear in the Activity Log with `[HTML]` tag.
+
+#### Default enabled (16 sources)
+
+| Source | Type | Category | Focus |
+|--------|------|----------|-------|
+| NonProfit PRO | RSS | Technology Strategy | Nonprofit technology and operations |
+| Nonprofit Tech for Good | RSS | Technology Strategy | Digital strategy for nonprofits |
+| The Nonprofit Times | RSS | Industry Insights | Sector-wide news and management |
+| NTEN | RSS | Technology Strategy | Nonprofit technology practitioners |
+| Blue Avocado | RSS | Industry Insights | Practical nonprofit management |
+| Food Research & Action Center | RSS | Industry Insights | Hunger policy and SNAP research |
+| Nonprofit Hub | RSS | Industry Insights | Nonprofit leadership and strategy |
+| Nonprofit Quarterly | RSS | Industry Insights | Sector news, social justice, governance |
+| Food Bank News | RSS | Industry Insights | Purpose-built trade pub for food bank professionals |
+| Food Tank | RSS | Industry Insights | Food systems, food security, SNAP policy, hunger relief innovation |
+| WhyHunger | RSS | Industry Insights | Hunger advocacy, food sovereignty, community food systems |
+| Bonterra Social Good Blog | RSS | Technology Strategy | Nonprofit CRM, case management, grant management, AI in nonprofits |
+| Salesforce Ben | RSS | Technology Strategy | Salesforce platform news, Flow Builder, Einstein AI, Agentforce |
+| Feeding America | HTML | Industry Insights | Hunger blog — food bank operations, food insecurity statistics |
+| Salesforce Blog (via Google News) | Google News RSS | Technology Strategy | Salesforce.com blog articles via `site:salesforce.com` query — bypasses bot protection |
+| Salesforce.org (via Google News) | Google News RSS | Technology Strategy | Salesforce nonprofit content via targeted brand query |
+
+#### Default disabled (14 sources — enable as needed)
+
+| Source | Type | Category | Notes |
+|--------|------|----------|-------|
+| Bloomerang Blog | RSS | Technology Strategy | Donor CRM, retention, fundraising data |
+| Annie E. Casey Foundation | RSS | Industry Insights | Child welfare, poverty research — low frequency |
+| WildApricot Blog | RSS | Technology Strategy | Membership/volunteer management |
+| Candid Blog | RSS | Industry Insights | Cloudflare-protected — RSS2JSON proxy handles it |
+| Stanford Social Innovation Review | RSS | Industry Insights | Cloudflare-protected — RSS2JSON proxy handles it |
+| Idealist Blog | RSS | Industry Insights | Cloudflare-protected — RSS2JSON proxy handles it |
+| Charity Navigator Blog | RSS | Industry Insights | Cloudflare-protected — RSS2JSON proxy handles it |
+| TechSoup Blog | HTML | Technology Strategy | **JS-rendered** — static proxy cannot extract article list; disabled by default |
+| Bread for the World | HTML | Industry Insights | Hunger policy and advocacy |
+| Urban Institute: Food & Nutrition | HTML | Industry Insights | **JS-rendered** — static proxy cannot extract article list; disabled by default |
+| Center for American Progress | HTML | Industry Insights | **JS-rendered** — static proxy cannot extract article list; disabled by default |
+| Council of Nonprofits | HTML | Industry Insights | **JS-rendered** — static proxy cannot extract article list; disabled by default |
+| Ctr on Budget & Policy Priorities | HTML | Industry Insights | **JS-rendered** — static proxy cannot extract article list; disabled by default |
+| AFP Global | HTML | Industry Insights | Association of Fundraising Professionals news |
+
+Cloudflare-protected RSS feeds are disabled by default to reduce scrape time, not because they are unreachable. The 6-proxy chain (RSS2JSON as proxy #6) fetches all four successfully when enabled.
+
+**JS-rendered HTML sources**: TechSoup, Urban Institute, Center for American Progress, Council of Nonprofits, and CBPP render their article listings via JavaScript — the static HTML returned by the CORS proxy is a bare shell with no article links. `fetchHTMLArticles()` returns 0 results for these sites. They are disabled by default; leave them off unless a headless-browser proxy becomes available.
+
+**New default feed merge**: When new default sources are added to `DF`, they are automatically merged into a user's saved feed list on the next page load (by URL match). On/off states for existing feeds are preserved; custom feeds are never removed.
 
 Custom feeds can be added via **"+ Add custom source"**.
 
@@ -170,6 +214,7 @@ Editable keyword lists for each category. Detection order: AI & Innovation → T
 
 **Click any row** to expand and see the full summary and article link.
 **↓ Relevance** sorts by score descending (also auto-sorts at scrape completion).
+**Empty state**: If a scrape completes with 0 results matching the keyword filter, a message is shown in the table ("No results matched. Try clearing keywords, expanding the date range, or enabling Web Search.") rather than a blank table.
 
 ---
 
@@ -228,18 +273,40 @@ The standalone HTML file runs entirely in the browser with no backend:
 
 | Concern | Solution |
 |---------|---------|
-| RSS fetching from browser | Three-tier CORS proxy fallback: direct → allorigins.win → corsproxy.io → codetabs.com |
-| RSS/Atom XML parsing | `DOMParser` (browser-native) |
+| RSS fetching from browser | 6-proxy CORS chain: direct → allorigins JSON → corsproxy.io → codetabs → allorigins raw → RSS2JSON |
+| Cloudflare-protected RSS feeds | RSS2JSON (proxy #6) — dedicated RSS service, bypasses bot protection |
+| Bot-protected sites with no RSS | Google News RSS with targeted `site:` queries — Google crawls the site normally; we query Google's index |
+| HTML page scraping | `fetchHTMLArticles()` — fetches via proxy chain, parses with DOMParser using 3-strategy fallback (JSON-LD → `<article>` → heading+link) |
+| Concurrent fetching | `Promise.all` over all active sources (RSS + HTML) — all start simultaneously, results stream into DOM as each completes |
+| Scrape cancellation | `AbortController` per scrape; `AbortSignal.any([timeout, scrapeSignal])` for per-request cancellation |
+| RSS/Atom XML parsing | `DOMParser` (browser-native); RSS2JSON responses synthesized into RSS XML before parsing |
 | Excel read/write | SheetJS 0.18.5 from cdnjs CDN |
 | File write-back | File System Access API (`showOpenFilePicker` + `createWritable()`) |
 | Settings persistence | `localStorage` (feeds, categories, blocklist, custom presets) |
 | Article generation | Template literal → Blob → `<a download>` click |
+| Result IDs | Sequential `_resultSeq` counter (`_id: ++_resultSeq`) — replaces `btoa(url)` which throws on non-ASCII URLs |
 
 ### Critical implementation notes for future development
 
 **`<\/body>` and `<\/html>` in template literals**: The `buildArticleHTML` function returns a full HTML page as a template literal. VS Code Live Server injects its livereload script by searching for the first `</body>` in the file. Raw `</body>` or `</html>` inside a template literal would be found first, corrupting the JavaScript. Always escape these as `<\/body>` and `<\/html>` inside template literals. Same applies to `<\/script>`.
 
+**Keyword filter bypassed for web results**: `processItem()` skips the local keyword filter when `isWeb === true`. Do not remove this bypass — Google News and GDELT results arrive pre-filtered by the query and often have no usable description text (GDELT returns `"From domain.com"`), making re-filtering unreliable.
+
+**RSS2JSON response synthesis**: `api.rss2json.com` returns JSON, not XML. The code synthesizes a minimal RSS XML string from the JSON response (escaping `&`, `<`, `>`) so the existing `parseXML()` (DOMParser-based) can handle it unchanged. If RSS2JSON's response shape changes, look for `json.items` and `json.feed`.
+
+**Stop button dispatcher pattern**: The scrape button uses a permanent HTML `onclick` attribute: `onclick="isRunning ? stopScrape() : startScrape()"`. Do NOT replace this with `btn.onclick = stopScrape` in JavaScript — the HTML attribute takes precedence and the JS assignment gets ignored, meaning the stop button never appears.
+
+**`AbortSignal.any()` availability**: `mkFetchSignal(ms)` falls back gracefully if `AbortSignal.any` is not available (Chrome < 116). In that case, only the per-request timeout applies; the Stop button still aborts via the `aborted` check in the feed loop.
+
+**Date timezone fix**: `new Date('YYYY-MM-DD')` parses as UTC midnight and displays one day early in US timezones. Always use `new Date(dateStr + 'T00:00:00')` to force local-time parsing when displaying dates.
+
 **Init pattern**: The init function (`_doInit`) uses `document.readyState !== 'loading'` check rather than `window.addEventListener('load', ...)`. The inline script is at the bottom of `<body>` so the DOM is ready, but `DOMContentLoaded` hasn't fired yet — the readyState pattern handles both cases reliably.
+
+**HTML scraper parsing strategies**: `fetchHTMLArticles()` tries three strategies in order — (1) JSON-LD `<script type="application/ld+json">` for `Article`, `NewsArticle`, `BlogPosting`, `ItemList`, and `CollectionPage` types; (2) `<article>` HTML5 semantic elements with heading + link + optional `<time>`; (3) `h2 a` / `h3 a` patterns inside `main`, `[role="main"]`, `#content`, or common class names. If all three return fewer than 3 items, the next strategy is tried. If the page returns 0 articles after all strategies, an error is logged for that source.
+
+**Google News RSS as bot-protection bypass**: For sites with no RSS and aggressive bot protection (Salesforce.com, Salesforce.org), targeted Google News RSS queries using `site:domain.com` operators are used. These are standard RSS feeds in the system — no special code path. Results may include articles *about* the site from other sources alongside the site's own content, but keyword filtering handles the noise.
+
+**HTML source type flag**: Feed entries with `type:'html'` call `fetchHTMLArticles()` instead of `fetchFeed()` + `parseXML()`. The feeds panel shows a small "HTML" label next to these source names. The Activity Log shows `[HTML]` for these sources. All other processing (keyword filter, date filter, dedup, scoring, Excel export) is identical to RSS sources.
 
 **`scraper-admin.html` is untracked in git** — changes are not versioned. Consider committing it if making significant improvements.
 
