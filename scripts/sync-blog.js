@@ -28,7 +28,7 @@ function extractMeta(html, slug) {
   // Title: <h1 id="article-title" ...>TEXT</h1>
   const titleM = html.match(/<h1[^>]*id="article-title"[^>]*>([\s\S]*?)<\/h1>/i);
   const title = titleM
-    ? titleM[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim()
+    ? titleM[1].trim() // keep HTML entities encoded for HTML output
     : slug.replace(/-/g, ' ');
 
   // Description: <meta name="description" content="...">
@@ -39,7 +39,7 @@ function extractMeta(html, slug) {
   // Category: <span class="article-category-badge article-category--SUFFIX">TEXT</span>
   const catM = html.match(/article-category-badge article-category--([\w-]+)"[^>]*>([\s\S]*?)<\/span>/i);
   const catClass = catM ? catM[1] : 'insights';
-  const catText  = catM ? catM[2].replace(/&amp;/g, '&').trim() : 'Industry Insights';
+  const catText  = catM ? catM[2].trim() : 'Industry Insights'; // keep &amp; encoded for HTML output
 
   // Date attribute: <time datetime="YYYY-MM-DD">
   const dateAttrM = html.match(/<time\s+datetime="([^"]+)"/i);
