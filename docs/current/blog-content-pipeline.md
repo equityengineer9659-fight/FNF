@@ -1,7 +1,7 @@
 # Blog Content Pipeline
 
 **Last Updated**: 2026-03-30
-**Status**: Active — 30 sources (16 enabled / 14 disabled), parallel fetching, stop button, 6-proxy CORS chain, broadened preset keywords
+**Status**: Active — 30 sources (16 enabled / 14 disabled), fully parallel fetching (RSS + web search), stop button, 6-proxy CORS chain, word-boundary keyword matching, bidirectional dedup
 
 ## Overview
 
@@ -277,7 +277,7 @@ The standalone HTML file runs entirely in the browser with no backend:
 | Cloudflare-protected RSS feeds | RSS2JSON (proxy #6) — dedicated RSS service, bypasses bot protection |
 | Bot-protected sites with no RSS | Google News RSS with targeted `site:` queries — Google crawls the site normally; we query Google's index |
 | HTML page scraping | `fetchHTMLArticles()` — fetches via proxy chain, parses with DOMParser using 3-strategy fallback (JSON-LD → `<article>` → heading+link) |
-| Concurrent fetching | `Promise.all` over all active sources (RSS + HTML) — all start simultaneously, results stream into DOM as each completes |
+| Concurrent fetching | `Promise.all` over all active sources (RSS + HTML + web search) — all start simultaneously, results stream into DOM as each completes |
 | Scrape cancellation | `AbortController` per scrape; `AbortSignal.any([timeout, scrapeSignal])` for per-request cancellation |
 | RSS/Atom XML parsing | `DOMParser` (browser-native); RSS2JSON responses synthesized into RSS XML before parsing |
 | Excel read/write | SheetJS 0.18.5 from cdnjs CDN |
@@ -302,13 +302,19 @@ The standalone HTML file runs entirely in the browser with no backend:
 
 **Init pattern**: The init function (`_doInit`) uses `document.readyState !== 'loading'` check rather than `window.addEventListener('load', ...)`. The inline script is at the bottom of `<body>` so the DOM is ready, but `DOMContentLoaded` hasn't fired yet — the readyState pattern handles both cases reliably.
 
-**HTML scraper parsing strategies**: `fetchHTMLArticles()` tries three strategies in order — (1) JSON-LD `<script type="application/ld+json">` for `Article`, `NewsArticle`, `BlogPosting`, `ItemList`, and `CollectionPage` types; (2) `<article>` HTML5 semantic elements with heading + link + optional `<time>`; (3) `h2 a` / `h3 a` patterns inside `main`, `[role="main"]`, `#content`, or common class names. If all three return fewer than 3 items, the next strategy is tried. If the page returns 0 articles after all strategies, an error is logged for that source.
+**HTML scraper parsing strategies**: `fetchHTMLArticles()` tries three strategies in order — (1) JSON-LD `<script type="application/ld+json">` for `Article`, `NewsArticle`, `BlogPosting`, `ItemList`, and `CollectionPage` types; (2) `<article>` HTML5 semantic elements with heading + link + optional `<time>`; (3) `h2 a` / `h3 a` patterns scoped to content containers (`main`, `[role="main"]`, `#content`, `.posts`, `.news-list`, `article`, etc.) — scoped to avoid nav/sidebar noise. If all three return fewer than 3 items, the next strategy is tried. If the page returns 0 articles after all strategies, an error is logged for that source.
 
 **Google News RSS as bot-protection bypass**: For sites with no RSS and aggressive bot protection (Salesforce.com, Salesforce.org), targeted Google News RSS queries using `site:domain.com` operators are used. These are standard RSS feeds in the system — no special code path. Results may include articles *about* the site from other sources alongside the site's own content, but keyword filtering handles the noise.
 
 **HTML source type flag**: Feed entries with `type:'html'` call `fetchHTMLArticles()` instead of `fetchFeed()` + `parseXML()`. The feeds panel shows a small "HTML" label next to these source names. The Activity Log shows `[HTML]` for these sources. All other processing (keyword filter, date filter, dedup, scoring, Excel export) is identical to RSS sources.
 
-**`scraper-admin.html` is untracked in git** — changes are not versioned. Consider committing it if making significant improvements.
+**`kwPhrase()` word boundary rule**: Single-word keywords use a non-alphanumeric boundary pattern (`(?:^|[^a-z0-9])word(?:[^a-z0-9]|$)`) rather than `String.includes()`. This means "SNAP" no longer matches "snapshot", but "AI" still matches "AI-powered". Multi-word phrases still use the all-words-present logic unchanged. Keep preset keywords short (1–2 words) — three-word phrases require all three words present, which is too strict for most articles.
+
+**Parallelization**: RSS feeds, Google News, and GDELT all run in a single `Promise.all([rssTask, gnTask, gdeltTask])`. Google News and GDELT no longer wait for RSS feeds to finish. The shared `seenWebUrls` Set provides bidirectional deduplication between Google News and GDELT results.
+
+**Empty feed logging**: When a feed is fetched successfully but returns 0 items for the date window, the Activity Log shows `"Feed OK but no articles in last X days"` — distinguishable from keyword filtering (`"X filtered by keywords"`) and fetch errors (`"Feed unreachable…"`).
+
+**localStorage key versioning**: The feed on/off state is stored under `fnf2_feeds_vN`. Bump `N` whenever default `on` states change in the `DF` array — the merge logic only adds new feeds, it does not update existing feeds' on/off state. Current key: `fnf2_feeds_v6`.
 
 ---
 
@@ -334,3 +340,50 @@ The scraper surfaces article candidates — it does not generate content. The in
 **What the scraper is NOT for**: Finding articles to republish or summarize. It's a research tool to understand what's being written so your original articles are better positioned.
 
 **Content angle that differentiates FNF**: Most nonprofit tech content is generic. FNF's edge is the intersection of food bank operations + Salesforce implementation specifics.
+
+---
+
+## Committing Scraper Improvements
+
+`scraper-admin.html` is tracked in git. Every meaningful improvement should be committed so you can iterate, compare versions, and roll back if something breaks.
+
+### What to commit after making changes
+
+```bash
+git add "Blog and Article Content/scraper-admin.html"
+git add docs/current/blog-content-pipeline.md   # if docs were updated
+git commit -m "Scraper: brief description of what changed"
+git push
+```
+
+### What counts as a commit-worthy change
+- Adding or removing a source from the `DF` array
+- Changing keyword presets (`BUILTIN_PRESETS`) or category detection rules (`DC`)
+- Any change to fetch logic, proxy chain, or parsing strategies
+- Bug fixes to keyword matching, dedup, scoring, or date handling
+- UI changes (new tabs, log improvements, result table columns)
+- Bumping the localStorage key (`fnf2_feeds_vN`)
+
+### What does NOT need a commit
+- Manually toggling sources on/off in the feeds panel (saved to localStorage, not the file)
+- Saving a custom preset via the UI (also localStorage only)
+- Connecting an Excel file
+
+### Rolling back to a previous version
+
+```bash
+# See recent scraper commits
+git log --oneline -- "Blog and Article Content/scraper-admin.html"
+
+# Restore a specific version (replace <hash> with the commit hash)
+git checkout <hash> -- "Blog and Article Content/scraper-admin.html"
+
+# Then commit the rollback
+git add "Blog and Article Content/scraper-admin.html"
+git commit -m "Scraper: roll back to <hash> — reason"
+git push
+```
+
+### Pushing to GitHub does NOT deploy to SiteGround
+
+The scraper tool (`Blog and Article Content/`) is never included in the Vite build output. Pushing to `master` triggers the CI/CD pipeline which deploys the public website — the scraper files are invisible to that process. Git is used here purely for version history.
