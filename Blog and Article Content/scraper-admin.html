@@ -1908,9 +1908,18 @@ let currentSvgPrompt = '';
 
 async function detectServerMode() {
   try {
-    const r = await fetch('/api/server-status', { signal: AbortSignal.timeout(1200) });
-    if (r.ok) { const d = await r.json(); serverMode = !!(d.ok && d.hasApiKey); }
-  } catch { serverMode = false; }
+    const r = await fetch('/api/server-status', { signal: AbortSignal.timeout(2500) });
+    if (r.ok) {
+      const d = await r.json();
+      serverMode = !!(d.ok && d.hasApiKey);
+      console.log('[FNF] server-status:', d, '→ serverMode:', serverMode);
+    } else {
+      console.warn('[FNF] server-status HTTP error:', r.status);
+    }
+  } catch (e) {
+    console.warn('[FNF] detectServerMode failed:', e.message);
+    serverMode = false;
+  }
   const notice = document.getElementById('na-ai-notice');
   const btnSave = document.getElementById('btn-save');
   if (!serverMode) {
@@ -1920,6 +1929,7 @@ async function detectServerMode() {
     notice.classList.add('hide');
     btnSave.classList.remove('hide');
   }
+  // Generate button enabled/disabled is controlled only by onSourceToggle (selection count)
 }
 
 /* ── Source cards ── */
@@ -1950,7 +1960,7 @@ function onSourceToggle() {
     chk.disabled = atMax;
   });
   const btn = document.getElementById('btn-gen-claude');
-  btn.disabled = count === 0 || !serverMode;
+  btn.disabled = count === 0;
 }
 
 function getSelectedSources() {
@@ -2032,7 +2042,7 @@ async function generateWithClaude(isRefinement = false) {
     status.textContent = err.name === 'AbortError' ? 'Cancelled' : `Error: ${err.message}`;
     if (err.name !== 'AbortError') addLog('err', `Article generation failed: ${esc(err.message)}`);
   } finally {
-    btn.disabled = getSelectedSources().length === 0 || !serverMode;
+    btn.disabled = getSelectedSources().length === 0;
     cancelBtn.classList.add('hide');
     setTimeout(() => {
       document.getElementById('na-gen-progress').classList.add('hide');
