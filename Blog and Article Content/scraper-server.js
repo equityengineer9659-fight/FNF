@@ -39,6 +39,7 @@ const anthropic = process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY
 const app = express();
 app.use(express.json({ limit: '2mb' }));
 app.use(express.static(__dirname));
+app.use(express.static(PROJECT_ROOT)); // Serve project root so /src/css/main.css resolves in preview iframe
 
 // Serve the admin page at root
 app.get('/', (req, res) => {
