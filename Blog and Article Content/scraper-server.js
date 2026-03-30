@@ -6,6 +6,9 @@
  * AI generation requires ANTHROPIC_API_KEY in .env at project root
  */
 
+import { setDefaultResultOrder } from 'dns';
+setDefaultResultOrder('ipv4first'); // Fixes APIConnectionError on Windows where IPv6 fails for api.anthropic.com
+
 import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
