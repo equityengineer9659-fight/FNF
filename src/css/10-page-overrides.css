@@ -195,6 +195,17 @@
   }
 }
 
+/* Blog Page: Load More */
+.blog-load-more-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0 1rem;
+}
+
+.blog-load-more {
+  min-width: 200px;
+}
+
 /* Blog Page: Mobile overrides */
 @media (width <= 768px) {
   .fnf-page--blog .blog-featured-article {

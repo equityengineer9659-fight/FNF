@@ -1,7 +1,10 @@
 /**
- * @fileoverview Blog category filter
- * @description Filters article cards by category when filter pills are clicked
+ * @fileoverview Blog category filter with load-more pagination
+ * @description Filters article cards by category; limits "All" view to PAGE_SIZE
+ *              cards with a Load More button to reveal subsequent batches.
  */
+
+const PAGE_SIZE = 12;
 
 export default class BlogFilter {
   constructor() {
@@ -10,7 +13,11 @@ export default class BlogFilter {
 
     this.pills = this.bar.querySelectorAll('.blog-category-pill');
     this.cards = document.querySelectorAll('.blog-card');
+    this.loadMoreBtn = document.querySelector('.blog-load-more');
     this.abortController = new AbortController();
+
+    this.visibleCount = PAGE_SIZE;
+    this.currentCategory = 'All';
 
     this.init();
   }
@@ -18,13 +25,49 @@ export default class BlogFilter {
   init() {
     const signal = this.abortController.signal;
 
+    // Apply initial pagination on All view
+    this.applyPagination();
+
+    // Load More button
+    if (this.loadMoreBtn) {
+      this.loadMoreBtn.addEventListener('click', () => {
+        this.visibleCount += PAGE_SIZE;
+        this.applyPagination();
+      }, { signal });
+    }
+
+    // Category pills
     this.pills.forEach(pill => {
       pill.addEventListener('click', () => this.filter(pill), { signal });
     });
   }
 
+  // Show first `visibleCount` cards, hide the rest, toggle Load More button
+  applyPagination() {
+    const cols = Array.from(this.cards)
+      .map(card => card.closest('.slds-col'))
+      .filter(Boolean);
+
+    let hasHidden = false;
+
+    cols.forEach((col, index) => {
+      if (index < this.visibleCount) {
+        col.style.display = '';
+      } else {
+        col.style.display = 'none';
+        hasHidden = true;
+      }
+    });
+
+    if (this.loadMoreBtn) {
+      this.loadMoreBtn.style.display = hasHidden ? '' : 'none';
+    }
+  }
+
   filter(activePill) {
     const category = activePill.textContent.trim();
+
+    this.currentCategory = category;
 
     // Update active state on pills
     this.pills.forEach(pill => {
@@ -33,21 +76,26 @@ export default class BlogFilter {
       pill.setAttribute('aria-pressed', String(isActive));
     });
 
-    // Show/hide cards
+    if (category === 'All') {
+      // Reset to first page and apply pagination
+      this.visibleCount = PAGE_SIZE;
+      this.applyPagination();
+      return;
+    }
+
+    // Category view: show all matching cards, no pagination
     this.cards.forEach(card => {
       const col = card.closest('.slds-col');
       if (!col) return;
-
-      if (category === 'All') {
-        col.style.display = '';
-        card.style.opacity = '1';
-        return;
-      }
-
       const cardCategory = card.querySelector('.blog-card__category');
       const matches = cardCategory && cardCategory.textContent.trim() === category;
       col.style.display = matches ? '' : 'none';
     });
+
+    // Hide Load More when a specific category is active
+    if (this.loadMoreBtn) {
+      this.loadMoreBtn.style.display = 'none';
+    }
   }
 
   destroy() {

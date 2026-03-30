@@ -797,15 +797,6 @@ h3::after,.fnf-page--index h3::after {display:none;content:none}
 
 .blog-category-pill--insights.blog-category-pill--active { background: linear-gradient(135deg, #059669, #10b981); border-color: transparent; box-shadow: 0 2px 12px rgba(5, 150, 105, 0.4); }
 
-/* Category-colored blog card badges */
-.blog-card__category--tech { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3); }
-
-.blog-card__category--insights { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3); }
-
-.blog-card__category--implementation { background: linear-gradient(135deg, #d97706, #f59e0b); box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3); }
-
-.blog-card__category--ai { background: linear-gradient(135deg, #0ea5e9, #06b6d4); box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3); }
-
 /* Article listing section */
 .blog-listing-section {background:var(--fnf-gradient-extended);color:#fff;position:relative;padding:4rem 2rem}
 
@@ -821,6 +812,18 @@ h3::after,.fnf-page--index h3::after {display:none;content:none}
 .blog-card:hover {transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
 
 .blog-card__category {background:var(--fnf-h2-underline-gradient);color:#fff;padding:0.25rem 0.75rem;border-radius:4px;font-size:0.75rem;font-weight:600;display:inline-block;margin-bottom:var(--slds-spacing-medium);box-shadow:0 2px 8px rgba(1,118,211,0.3);align-self:flex-start}
+
+/* Category-colored blog card badges — must come after base class to win the cascade */
+
+.blog-card__category--tech { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3); }
+
+.blog-card__category--insights { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3); }
+
+.blog-card__category--implementation { background: linear-gradient(135deg, #d97706, #f59e0b); box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3); }
+
+.blog-card__category--ai { background: linear-gradient(135deg, #0ea5e9, #06b6d4); box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3); }
+
+.blog-card__category--case-studies { background: linear-gradient(135deg, #7c3aed, #a78bfa); box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3); }
 
 .blog-card__title {color:#fff;font-size:1.15rem;font-weight:600;line-height:1.4;margin-bottom:var(--slds-spacing-medium)}
 
