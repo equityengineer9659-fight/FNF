@@ -29,6 +29,7 @@ const resourcesSubpages = [
   'rapid-technology-implementation', 'salesforce-flow-builder-nonprofits', 'salesforce-reports-dashboards-food-banks',
   'salesforce-security-nonprofits', 'salesforce-spring-2026-nonprofits', 'snap-policy-changes-food-banks',
   'tax-policy-nonprofit-fundraising', 'volunteer-management-technology', 'volunteer-recruitment-retention-digital',
+  'purpose-driven-ai-food-banks', 'salesforce-nonprofit-cloud-ai-automation',
 ];
 
 // Component definitions — all hrefs use absolute paths so they work from any subdirectory
@@ -174,6 +175,7 @@ function buildComponents() {
     'rapid-technology-implementation', 'salesforce-flow-builder-nonprofits', 'salesforce-reports-dashboards-food-banks',
     'salesforce-security-nonprofits', 'salesforce-spring-2026-nonprofits', 'snap-policy-changes-food-banks',
     'tax-policy-nonprofit-fundraising', 'volunteer-management-technology', 'volunteer-recruitment-retention-digital',
+    'purpose-driven-ai-food-banks', 'salesforce-nonprofit-cloud-ai-automation',
   ];
 
   [...corePages, ...hubPages].forEach(page => {
