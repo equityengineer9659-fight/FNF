@@ -51,7 +51,7 @@
     "restore:apply": "node scripts/apply-restore-point.cjs",
     "restore:list": "node -e \"console.log(require('fs').readdirSync('backups').filter(d => d.startsWith('restore_')).sort().reverse().slice(0, 10).join('\\n'))\"",
     "css:duplicates": "node scripts/detect-css-duplicates.cjs",
-    "admin": "node \"Blog and Article Content/scraper-server.js\""
+    "admin": "node --dns-result-order=ipv4first \"Blog and Article Content/scraper-server.js\""
   },
   "repository": {
     "type": "git",
