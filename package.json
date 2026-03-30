@@ -94,7 +94,7 @@
     "rss-parser": "^3.13.0",
     "stylelint": "^16.0.2",
     "stylelint-config-slds": "^1.0.0",
-    "stylelint-config-standard": "^36.0.0",
+    "stylelint-config-standard": "^40.0.0",
     "terser": "^5.44.0",
     "typescript": "^5.9.2",
     "vite": "^5.0.0",
