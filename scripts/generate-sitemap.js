@@ -63,6 +63,14 @@ const pages = [
   { path: 'blog/tax-policy-nonprofit-fundraising.html', priority: '0.7', changefreq: 'monthly' },
   { path: 'blog/volunteer-management-technology.html', priority: '0.7', changefreq: 'monthly' },
   { path: 'blog/volunteer-recruitment-retention-digital.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'blog/purpose-driven-ai-food-banks.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'blog/salesforce-nonprofit-cloud-ai-automation.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'blog/snap-cuts-ice-fears-food-bank-response.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'blog/grant-writing-nonprofit-sustainability.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'blog/ai-data-strategy-crm-food-banks.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'blog/data-migration-food-bank-modernization.html', priority: '0.7', changefreq: 'monthly' },
+  // Dashboards
+  { path: 'dashboards/food-insecurity.html', priority: '0.8', changefreq: 'monthly' },
 ];
 
 function generateSitemap() {

@@ -1,0 +1,218 @@
+/* ==========================================================================
+   Dashboard Styles
+   Glassmorphism cards, chart containers, hero stats, responsive layout
+   ========================================================================== */
+
+/* Hero Section */
+.dashboard-hero {
+  padding: 3rem 0 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.dashboard-hero__subtitle {
+  color: var(--fnf-text-secondary, rgba(255,255,255,0.7));
+  font-size: 1.15rem;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+/* Hero Stats Row */
+.dashboard-hero__stats {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.dashboard-stat {
+  background: var(--glass-bg-strong, rgba(255,255,255,0.1));
+  backdrop-filter: var(--glass-blur, blur(10px));
+  /* stylelint-disable-next-line property-no-vendor-prefix -- Safari requires -webkit prefix for backdrop-filter */
+  -webkit-backdrop-filter: var(--glass-blur, blur(10px));
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--fnf-border-radius-medium, 0.5rem);
+  padding: 1.25rem 1.75rem;
+  min-width: 160px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.dashboard-stat:hover {
+  transform: translateY(-2px);
+  border-color: var(--fnf-secondary, #00d4ff);
+}
+
+.dashboard-stat__number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--fnf-secondary, #00d4ff);
+  line-height: 1.2;
+}
+
+.dashboard-stat__label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--fnf-text-secondary, rgba(255,255,255,0.65));
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Dashboard Sections */
+.dashboard-section {
+  padding: 0.5rem 0;
+}
+
+/* Dashboard Cards — glassmorphism */
+.dashboard-card {
+  background: var(--glass-bg-light, rgba(255,255,255,0.06));
+  backdrop-filter: var(--glass-blur, blur(10px));
+  /* stylelint-disable-next-line property-no-vendor-prefix -- Safari requires -webkit prefix for backdrop-filter */
+  -webkit-backdrop-filter: var(--glass-blur, blur(10px));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--fnf-border-radius-medium, 0.5rem);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.dashboard-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.dashboard-card__header h2 {
+  color: var(--slds-c-text-default, #fff);
+  margin: 0;
+}
+
+/* Metric Selector */
+.dashboard-select {
+  background: rgba(255,255,255,0.08);
+  color: var(--slds-c-text-default, #fff);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 0.25rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.dashboard-select:hover,
+.dashboard-select:focus {
+  border-color: var(--fnf-secondary, #00d4ff);
+  outline: none;
+}
+
+.dashboard-select option {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+/* Chart Containers */
+.dashboard-chart {
+  width: 100%;
+  height: 400px;
+  min-height: 300px;
+}
+
+.dashboard-chart--map {
+  height: 500px;
+}
+
+/* Data Sources */
+.dashboard-sources__list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.dashboard-sources__list li {
+  color: var(--fnf-text-secondary, rgba(255,255,255,0.65));
+  font-size: 0.85rem;
+  padding: 0.3rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.dashboard-sources__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fnf-secondary, #00d4ff);
+  transform: translateY(-50%);
+}
+
+.dashboard-sources h3 {
+  color: var(--fnf-secondary, #00d4ff);
+}
+
+.dashboard-sources p {
+  color: var(--fnf-text-secondary, rgba(255,255,255,0.65));
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (width <= 768px) {
+  .dashboard-hero__stats {
+    gap: 0.75rem;
+  }
+
+  .dashboard-stat {
+    min-width: 130px;
+    padding: 1rem 1.25rem;
+  }
+
+  .dashboard-stat__number {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-chart {
+    height: 300px;
+    min-height: 250px;
+  }
+
+  .dashboard-chart--map {
+    height: 350px;
+  }
+
+  .dashboard-card {
+    padding: 1rem;
+  }
+
+  .dashboard-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (width <= 480px) {
+  .dashboard-hero__stats {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dashboard-stat {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .dashboard-chart {
+    height: 260px;
+    min-height: 220px;
+  }
+
+  .dashboard-chart--map {
+    height: 300px;
+  }
+}

@@ -33,6 +33,9 @@ const resourcesSubpages = [
   'snap-cuts-ice-fears-food-bank-response',
   'grant-writing-nonprofit-sustainability',
   'ai-data-strategy-crm-food-banks',
+  'data-migration-food-bank-modernization',
+  // Dashboard pages
+  'food-insecurity',
 ];
 
 // Component definitions — all hrefs use absolute paths so they work from any subdirectory
@@ -112,9 +115,14 @@ const components = {
         </div>
     </footer>`,
 
-  scripts: () => {
-    return `    <!-- JavaScript Modules - Deferred for performance -->
+  scripts: (pageName) => {
+    let scripts = `    <!-- JavaScript Modules - Deferred for performance -->
     <script type="module" src="/src/js/main.js" defer></script>`;
+    // Dashboard pages get their own entry point
+    if (pageName === 'food-insecurity') {
+      scripts += `\n    <script type="module" src="/src/js/dashboards/food-insecurity.js" defer></script>`;
+    }
+    return scripts;
   }
 };
 
@@ -201,6 +209,7 @@ function buildComponents() {
     'snap-cuts-ice-fears-food-bank-response',
   'grant-writing-nonprofit-sustainability',
   'ai-data-strategy-crm-food-banks',
+  'data-migration-food-bank-modernization',
 ];
 
   [...corePages, ...hubPages].forEach(page => {
@@ -218,6 +227,18 @@ function buildComponents() {
       processHtmlFile(filePath, page);
     } else {
       console.warn(`⚠️  File not found: blog/${page}.html`);
+    }
+  });
+
+  // Dashboard pages under dashboards/
+  const dashboardPages = ['food-insecurity'];
+
+  dashboardPages.forEach(page => {
+    const filePath = path.join(__dirname, 'dashboards', `${page}.html`);
+    if (fs.existsSync(filePath)) {
+      processHtmlFile(filePath, page);
+    } else {
+      console.warn(`⚠️  File not found: dashboards/${page}.html`);
     }
   });
 

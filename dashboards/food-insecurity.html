@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Insecurity Dashboard - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Interactive dashboard visualizing food insecurity across America. Explore state-level data, trends, and the meal gap with maps and charts powered by USDA and Feeding America data.">
+    <meta name="keywords" content="food insecurity dashboard, hunger map, food desert data, meal gap, SNAP participation, food bank data visualization">
+    <meta name="author" content="Food-N-Force">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/dashboards/food-insecurity.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Food Insecurity Dashboard - Food-N-Force">
+    <meta property="og:description" content="Interactive dashboard visualizing food insecurity across America. Explore state-level data, trends, and the meal gap.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/dashboards/food-insecurity.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Food Insecurity Dashboard - Food-N-Force">
+    <meta name="twitter:description" content="Interactive dashboard visualizing food insecurity across America with maps, charts, and trend data.">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Food Insecurity Dashboard",
+        "description": "Interactive dashboard visualizing food insecurity across America with state-level maps, trend charts, and meal gap data.",
+        "url": "https://foodnforce.com/dashboards/food-insecurity.html",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Food-N-Force",
+            "url": "https://foodnforce.com"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Food Insecurity in the United States"
+        }
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--dashboard" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="dashboard-hero">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="slds-text-align_center">
+                    <h1 class="slds-text-heading_large slds-m-bottom_small">Food Insecurity in America</h1>
+                    <p class="slds-text-body_regular dashboard-hero__subtitle">
+                        An interactive look at hunger across the United States
+                    </p>
+                    <div class="dashboard-hero__stats" aria-label="Key national statistics">
+                        <div class="dashboard-stat">
+                            <span class="dashboard-stat__number" data-target="44.2" data-suffix="M">0</span>
+                            <span class="dashboard-stat__label">Americans Food Insecure</span>
+                        </div>
+                        <div class="dashboard-stat">
+                            <span class="dashboard-stat__number" data-target="12.8" data-suffix="%">0</span>
+                            <span class="dashboard-stat__label">National Rate</span>
+                        </div>
+                        <div class="dashboard-stat">
+                            <span class="dashboard-stat__number" data-target="13" data-suffix="M">0</span>
+                            <span class="dashboard-stat__label">Children Affected</span>
+                        </div>
+                        <div class="dashboard-stat">
+                            <span class="dashboard-stat__number" data-target="9.5" data-suffix="B">0</span>
+                            <span class="dashboard-stat__label">Meals Missing Annually</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Choropleth Map Section -->
+        <section class="dashboard-section" aria-label="State food insecurity map">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Food Insecurity by State</h2>
+                        <div class="dashboard-card__controls">
+                            <label for="map-metric" class="slds-assistive-text">Select metric</label>
+                            <select id="map-metric" class="dashboard-select">
+                                <option value="rate">Food Insecurity Rate (%)</option>
+                                <option value="childRate">Child Food Insecurity (%)</option>
+                                <option value="persons">Food Insecure Persons</option>
+                                <option value="mealGap">Annual Meal Gap</option>
+                                <option value="mealCost">Average Meal Cost ($)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="chart-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map of food insecurity rates across US states">
+                        <noscript>
+                            <p>This interactive map requires JavaScript. See the data table below for state-level food insecurity statistics.</p>
+                        </noscript>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trend Chart Section -->
+        <section class="dashboard-section" aria-label="Food insecurity trends">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <!-- Trend Line Chart -->
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
+                        <div class="dashboard-card">
+                            <div class="dashboard-card__header">
+                                <h2 class="slds-text-heading_medium">National Trend (2013-2022)</h2>
+                            </div>
+                            <div id="chart-trend" class="dashboard-chart" role="img" aria-label="Line chart showing food insecurity rate trend from 2013 to 2022"></div>
+                        </div>
+                    </div>
+                    <!-- Top 10 Bar Chart -->
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-bottom_medium">
+                        <div class="dashboard-card">
+                            <div class="dashboard-card__header">
+                                <h2 class="slds-text-heading_medium">Most Affected States</h2>
+                            </div>
+                            <div id="chart-bar" class="dashboard-chart" role="img" aria-label="Horizontal bar chart of top 10 most food insecure states"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scatter Plot Section -->
+        <section class="dashboard-section" aria-label="Poverty and food insecurity correlation">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
+                        <div class="dashboard-card">
+                            <div class="dashboard-card__header">
+                                <h2 class="slds-text-heading_medium">Poverty vs. Food Insecurity</h2>
+                            </div>
+                            <div id="chart-scatter" class="dashboard-chart" role="img" aria-label="Scatter plot showing correlation between poverty rate and food insecurity rate by state"></div>
+                        </div>
+                    </div>
+                    <!-- Meal Cost Comparison -->
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-bottom_medium">
+                        <div class="dashboard-card">
+                            <div class="dashboard-card__header">
+                                <h2 class="slds-text-heading_medium">Average Meal Cost by State</h2>
+                            </div>
+                            <div id="chart-meal-cost" class="dashboard-chart" role="img" aria-label="Bar chart showing average meal cost variation across states"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Sources -->
+        <section class="dashboard-section dashboard-sources" aria-label="Data sources and methodology">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <h2 class="slds-text-heading_medium slds-m-bottom_small">Data Sources & Methodology</h2>
+                    <div class="slds-grid slds-wrap slds-gutters_small">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <h3 class="slds-text-heading_small">Primary Sources</h3>
+                            <ul class="dashboard-sources__list">
+                                <li>USDA Economic Research Service — Household Food Security in the United States</li>
+                                <li>Feeding America — Map the Meal Gap 2024</li>
+                                <li>U.S. Census Bureau — American Community Survey</li>
+                            </ul>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <h3 class="slds-text-heading_small">Data Year</h3>
+                            <p class="slds-text-body_regular">All data reflects 2022 estimates, the most recent year with comprehensive state-level data available from all sources.</p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <h3 class="slds-text-heading_small">About This Dashboard</h3>
+                            <p class="slds-text-body_regular">Built by Food-N-Force to help food banks, policymakers, and donors understand the scope of food insecurity. Data is refreshed annually.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accessible Data Table (hidden, for screen readers and SEO) -->
+        <section class="slds-assistive-text" aria-label="Food insecurity data table">
+            <h2>State-Level Food Insecurity Data (2022)</h2>
+            <p>This table provides the same data visualized in the interactive charts above.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>State</th>
+                        <th>Food Insecurity Rate</th>
+                        <th>Child Rate</th>
+                        <th>Persons Affected</th>
+                        <th>Annual Meal Gap</th>
+                    </tr>
+                </thead>
+                <tbody id="accessible-data-table"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+    <script type="module" src="/src/js/dashboards/food-insecurity.js" defer></script>
+</body>
+</html>

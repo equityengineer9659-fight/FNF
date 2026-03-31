@@ -10,10 +10,11 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const htmlFiles = [
   ...glob.sync('*.html', { cwd: __dirname, ignore: ['node_modules/**', 'dist/**'] }),
   ...glob.sync('blog/*.html', { cwd: __dirname }),
+  ...glob.sync('dashboards/*.html', { cwd: __dirname }),
 ];
 const rollupInput = Object.fromEntries(
   htmlFiles.map(f => {
-    const name = f.replace('.html', '').replace('/', '_');
+    const name = f.replace('.html', '').replace(/[\\/]/g, '_');
     return [name === 'index' ? 'main' : name, resolve(__dirname, f)];
   }),
 );
@@ -32,7 +33,8 @@ export default defineConfig({
       output: {
         // Keep separate CSS and JS bundles for maintainability
         manualChunks: {
-          effects: ['./src/js/effects/particles.js']
+          effects: ['./src/js/effects/particles.js'],
+          echarts: ['echarts/core', 'echarts/charts', 'echarts/components', 'echarts/renderers']
         },
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');
