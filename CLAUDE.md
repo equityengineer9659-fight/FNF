@@ -175,7 +175,7 @@ See `docs/current/blog-content-pipeline.md` for full usage guide.
 - **Bundle Optimization**: Minified production builds via Vite + CSSnano (~114KB, ~18KB gzipped)
 - **SLDS Compliance**: 89% baseline maintained with token mapping system
 - **Navigation**: Consolidated in `03-navigation.css` (single source of truth)
-- **Effects/Animations**: Card stagger delays, keyframes, particles in `06-effects.css`
+- **Effects/Animations**: Card stagger delays, keyframes, particles in `06-effects.css` (`will-change` limited to particles and buttons only — cards promoted by browser on hover)
 - **Gradients/Theming**: Section backgrounds, hero gradients, SLDS button overrides in `critical-gradients.css`
 - **Page Overrides**: Page-specific mobile/tablet responsive rules and expertise accordion in `10-page-overrides.css`
 - **Critical Inline**: Loading placeholder CSS in `critical-inline.css` (loaded before main.css in HTML)
@@ -188,12 +188,12 @@ See `docs/current/blog-content-pipeline.md` for full usage guide.
   - `config/environment.js` — feature flags and configuration
   - `effects/particles.js` — canvas-based network particle system
   - `effects/smart-scroll.js` — nav auto-hide, active link tracking, scroll-to-top
-  - `effects/counters.js` — animated number counters
-  - `effects/newsletter-popup.js` — scroll-triggered modal with focus trap (all styles in CSS, no inline styles for CSP compliance)
+  - `effects/counters.js` — animated number counters (aria-live announces final value)
+  - `effects/newsletter-popup.js` — scroll-triggered modal with focus trap, CSRF validation, visible form errors (all styles in CSS, no inline styles for CSP compliance)
   - `effects/gradient-icons.js` — SVG gradient icon system
-  - `effects/contact-form.js` — contact form submission with CSRF tokens
+  - `effects/contact-form.js` — contact form submission with CSRF token validation (blocks submit if token fetch fails)
   - `effects/article-enhancements.js` — article page reading enhancements
-  - `effects/blog-filter.js` — blog category filtering
+  - `effects/blog-filter.js` — blog category filtering (aria-pressed + aria-current on active pill)
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page expertise section
 - **Cleanup**: All modules use AbortController or explicit cleanup in destroy()
@@ -210,10 +210,12 @@ See `docs/current/blog-content-pipeline.md` for full usage guide.
   - `POST /api/newsletter.php` — newsletter subscription handler (validates email, sends notification)
   - `GET /api/csrf-token.php` — generates single-use CSRF tokens stored in PHP sessions
 - **Security layers**:
-  - CSRF token validation (session-based, single-use)
+  - Rate limiting (session-based, 60-second cooldown per endpoint — set on successful submission only)
+  - CSRF token validation (session-based, single-use, timing-safe `hash_equals()`)
   - Honeypot field (`bot-field`) — hidden input rejected server-side if filled
   - Input sanitization via `htmlspecialchars()`
   - Email validation via `filter_var(FILTER_VALIDATE_EMAIL)`
+  - Header injection prevention (CRLF stripping on all email header fields)
 - **Client integration**: `src/js/effects/contact-form.js` and `src/js/main.js` submit forms via `fetch()` to these endpoints
 - **Recipient**: All form emails sent to `hello@food-n-force.com`
 
@@ -243,6 +245,9 @@ Test ALL 47 pages at these configurations:
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: ≥89% baseline maintained
 - **Bundle Analysis**: Use `npm run analyze:bundle` for detailed reports
+- **Unit Test Coverage**: 65% threshold (lines, functions, branches, statements)
+- **HTML Validation**: Covers root pages AND `blog/*.html` articles
+- **Lighthouse Configs**: `lighthouse.config.js` (local, relaxed) vs `tools/testing/lighthouserc.json` (CI, strict)
 
 ### Special Effects Validation
 - Glassmorphism fallbacks work in all browsers
@@ -349,6 +354,8 @@ Custom agents in `.claude/agents/` tailored to this project:
 
 ### CSP and Inline Styles
 - **Policy**: `_headers` CSP forbids `unsafe-inline` for both scripts and styles
+- **SRI**: SLDS CDN stylesheet has Subresource Integrity hash (auto-added by `build-components.js`). Google Fonts cannot use SRI (content varies by browser).
+- **CSP Reporting**: Not yet configured — requires backend endpoint or third-party service (documented as future improvement in `_headers`)
 - **Newsletter popup**: Fully CSP-compliant (all styles in `07-components.css`)
 - **CSSOM style manipulation**: `particles.js` (canvas), `smart-scroll.js` (progress bar), `main.js` (live region) use `element.style` via JavaScript. This is CSP-compliant — CSSOM property assignment is not blocked by `style-src` directives (only HTML `style=""` attributes and `<style>` tags are affected).
 - **Sentry integration**: `error-tracker.js` imports `captureException` from `sentry.js` via ES module exports. The bridge is correctly wired — no `window.Sentry` dependency.

@@ -108,7 +108,7 @@ to {opacity:1;transform:translateY(0) rotateX(0deg)}}
 
 .value-card:nth-child(4) {animation-delay:0.4s}
 
-.fnf-particle,.fnf-button,.fnf-card,.fnf-icon{will-change:transform}
+.fnf-particle,.fnf-button{will-change:transform}
 
 @media (prefers-reduced-motion:reduce){.fnf-particle{animation:none}
 

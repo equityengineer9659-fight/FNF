@@ -61,6 +61,9 @@ class CounterAnimator {
       }
     };
 
+    // Suppress intermediate announcements; announce final value once
+    element.setAttribute('aria-live', 'off');
+
     const updateCounter = (currentTime) => {
       const elapsed = currentTime - start;
       const progress = Math.min(elapsed / duration, 1);
@@ -75,6 +78,8 @@ class CounterAnimator {
         this.activeAnimations.set(element, requestAnimationFrame(updateCounter));
       } else {
         element.textContent = formatNumber(target);
+        element.setAttribute('role', 'status');
+        element.setAttribute('aria-live', 'polite');
         this.activeAnimations.delete(element);
       }
     };

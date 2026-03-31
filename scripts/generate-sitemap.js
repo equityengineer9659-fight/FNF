@@ -81,7 +81,12 @@ function generateSitemap() {
 ${urlEntries}
 </urlset>`;
 
-  fs.writeFileSync(OUTPUT_FILE, sitemap.trim());
+  try {
+    fs.writeFileSync(OUTPUT_FILE, sitemap.trim());
+  } catch (err) {
+    console.error(`❌ ERROR writing sitemap: ${err.message}`);
+    process.exit(1);
+  }
   console.log(`✅ Sitemap generated successfully: ${OUTPUT_FILE}`);
   console.log(`📅 Last modified: ${now}`);
   console.log(`📄 Pages: ${pages.length}`);

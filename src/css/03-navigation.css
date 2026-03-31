@@ -194,8 +194,6 @@
 @media (width <= 768px) {
   .fnf-nav__menu {display:none;visibility:hidden;opacity:0}
 
-  .fnf-nav .fnf-nav__menu,.fnf-nav__container .fnf-nav__menu,nav .fnf-nav__menu {display:none;visibility:hidden;opacity:0}
-
   .fnf-nav::after {display:none}
 
   .fnf-nav__container {display:flex;justify-content:space-between;align-items:center;gap:1rem}

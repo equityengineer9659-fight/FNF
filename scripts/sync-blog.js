@@ -105,7 +105,13 @@ function syncBlog() {
 
   // Read blog.html and replace between markers
   const blogPath = path.join(ROOT, 'blog.html');
-  let blogHtml = fs.readFileSync(blogPath, 'utf-8');
+  let blogHtml;
+  try {
+    blogHtml = fs.readFileSync(blogPath, 'utf-8');
+  } catch (err) {
+    console.error(`sync-blog: ERROR reading blog.html — ${err.message}`);
+    process.exit(1);
+  }
 
   const startIdx = blogHtml.indexOf(START_MARKER);
   const endIdx   = blogHtml.indexOf(END_MARKER);
@@ -117,7 +123,12 @@ function syncBlog() {
 
   const before = blogHtml.slice(0, startIdx + START_MARKER.length);
   const after  = blogHtml.slice(endIdx);
-  fs.writeFileSync(blogPath, before + '\n' + cards + '\n' + CARD_INDENT + after, 'utf-8');
+  try {
+    fs.writeFileSync(blogPath, before + '\n' + cards + '\n' + CARD_INDENT + after, 'utf-8');
+  } catch (err) {
+    console.error(`sync-blog: ERROR writing blog.html — ${err.message}`);
+    process.exit(1);
+  }
 
   console.log(`sync-blog: ✓ wrote ${articles.length} article cards to blog.html`);
   for (const a of articles) {

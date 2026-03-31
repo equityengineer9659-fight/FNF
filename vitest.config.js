@@ -22,10 +22,10 @@ export default defineConfig({
       ],
       include: ['src/js/**/*.js'],
       all: true,
-      lines: 50,
-      functions: 50,
-      branches: 50,
-      statements: 50
+      lines: 65,
+      functions: 65,
+      branches: 65,
+      statements: 65
     },
     include: ['src/**/*.{test,spec}.{js,mjs,cjs}'],
     exclude: ['node_modules', 'dist', 'cypress', 'playwright-report'],

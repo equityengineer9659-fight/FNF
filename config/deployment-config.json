@@ -131,6 +131,7 @@
     
     "staging": {
       "url": "https://foodnforce.com",
+      "note": "SiteGround shared hosting — staging deploys to same domain via staging branch. No separate staging subdomain.",
       "auto_deploy": true,
       "validation_level": "comprehensive",
       "deploy_method": "github-actions-siteground"

@@ -120,7 +120,13 @@ const components = {
 
 // Process HTML files
 function processHtmlFile(filePath, pageName) {
-  let html = fs.readFileSync(filePath, 'utf-8');
+  let html;
+  try {
+    html = fs.readFileSync(filePath, 'utf-8');
+  } catch (err) {
+    console.error(`❌ ERROR reading ${pageName}: ${err.message}`);
+    return;
+  }
 
   // Replace navigation component
   const navPattern = /    <!-- Navigation -->[\s\S]*?<\/nav>/;
@@ -149,8 +155,21 @@ function processHtmlFile(filePath, pageName) {
     console.log(`✅ Updated scripts in ${pageName}`);
   }
 
+  // Ensure SLDS CDN link has correct SRI hash
+  const sldsUrl = 'https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css';
+  const sldsSri = 'sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG';
+  const sldsWithSri = `<link rel="stylesheet" href="${sldsUrl}" integrity="${sldsSri}" crossorigin="anonymous">`;
+  if (html.includes(sldsUrl)) {
+    // Replace any existing SLDS link (with or without SRI) with the correct version
+    html = html.replace(/<link rel="stylesheet" href="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/design-system\/2\.22\.2\/styles\/salesforce-lightning-design-system\.min\.css"[^>]*>/, sldsWithSri);
+  }
+
   // Write back the processed HTML
-  fs.writeFileSync(filePath, html);
+  try {
+    fs.writeFileSync(filePath, html);
+  } catch (err) {
+    console.error(`❌ ERROR writing ${pageName}: ${err.message}`);
+  }
 }
 
 // Main execution

@@ -16,8 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// CSRF validation
+// Rate limiting — 60-second cooldown per session (preserves CSRF token for retry)
 session_start();
+$rateKey = 'last_contact_submit';
+if (isset($_SESSION[$rateKey]) && (time() - $_SESSION[$rateKey]) < 60) {
+    http_response_code(429);
+    echo json_encode(['success' => false, 'error' => 'Please wait before submitting again.']);
+    exit;
+}
+
+// CSRF validation
 $csrfToken = $_POST['csrf_token'] ?? '';
 if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrfToken)) {
     http_response_code(403);
@@ -90,6 +98,7 @@ $headers .= "X-Mailer: FNF-Contact/1.0\r\n";
 $sent = mail($recipient, $subject, $body, $headers);
 
 if ($sent) {
+    $_SESSION['last_contact_submit'] = time();
     echo json_encode(['success' => true]);
 } else {
     http_response_code(500);

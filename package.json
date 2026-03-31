@@ -14,7 +14,7 @@
     "preview": "vite preview",
     "serve": "live-server --port=4173 --host=localhost",
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
-    "lint:html": "htmlhint \"*.html\" \"!playwright-report/**\" \"!lighthouse-reports/**\" \"!dist/**\" \"!tools/testing/playwright-report/**\"",
+    "lint:html": "htmlhint \"*.html\" \"blog/*.html\" \"!playwright-report/**\" \"!lighthouse-reports/**\" \"!dist/**\" \"!tools/testing/playwright-report/**\"",
     "lint:css": "stylelint \"src/css/**/*.css\"",
     "lint:js": "eslint \"src/js/**/*.js\"",
     "lint:fix": "stylelint \"src/css/**/*.css\" --fix && eslint \"src/js/**/*.js\" --fix",

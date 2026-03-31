@@ -34,10 +34,17 @@ The site uses PHP endpoints hosted on SiteGround for server-side form processing
 - `POST /api/newsletter.php` — newsletter subscriptions
 - `GET /api/csrf-token.php` — CSRF token generation
 
+### Rate Limiting
+- Session-based 60-second cooldown per endpoint (`last_contact_submit`, `last_newsletter_submit`)
+- Rate check runs BEFORE CSRF validation — rate-limited requests preserve the CSRF token for retry
+- Timestamp set only on successful submission (failed validations don't trigger cooldown)
+- Returns HTTP 429 with JSON error message
+
 ### CSRF Protection
 - All forms request a single-use CSRF token from `/api/csrf-token.php` before submission
 - Tokens are stored server-side in PHP `$_SESSION` and validated with `hash_equals()`
 - Tokens are invalidated after use (single-use via `unset()`)
+- **Client-side validation**: JS checks that the token was received before submitting — shows user-visible error if token fetch fails (prevents silent 403 rejections)
 
 ### Honeypot Spam Protection
 - Both contact and newsletter forms include a hidden `bot-field` input
@@ -48,11 +55,17 @@ The site uses PHP endpoints hosted on SiteGround for server-side form processing
 - Email addresses validated with `filter_var(FILTER_VALIDATE_EMAIL)`
 - All user input sanitized with `htmlspecialchars(ENT_QUOTES, 'UTF-8')` before use in email bodies
 - Required fields enforced server-side (returns HTTP 422 with specific error messages)
+- Length limits on all fields (firstName/lastName: 100, email: 254, organization: 200, message: 5000)
+
+### Header Injection Prevention
+- CRLF characters (`\r`, `\n`) stripped from all values used in email headers (From, Reply-To, Subject)
+- Prevents attackers from injecting additional email headers via form input
 
 ### Client-Side Integration
 - `src/js/effects/contact-form.js` handles contact form submission via `fetch()`
-- `src/js/main.js` handles newsletter form submission via `fetch()`
-- Both fetch CSRF tokens before submitting form data
+- `src/js/effects/newsletter-popup.js` handles newsletter form submission via `fetch()`
+- Both fetch CSRF tokens before submitting and validate the token was received — forms are blocked with a user-visible error if token fetch fails
+- Newsletter popup shows visible validation error for invalid email format
 
 ## Implementation Details
 
@@ -73,7 +86,7 @@ Security settings are documented in `config/security-config.json` for reference 
 - Set up security monitoring dashboard
 
 ### Priority 2: Additional Hardening
-- Implement Subresource Integrity (SRI) for external resources
+- ~~Implement Subresource Integrity (SRI) for external resources~~ ✅ Done — SLDS CDN has SRI via `build-components.js` (Google Fonts cannot use SRI — content varies by browser)
 - Add security.txt file
 - Implement CORS policies for API endpoints
 

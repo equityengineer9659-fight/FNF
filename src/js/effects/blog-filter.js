@@ -74,6 +74,7 @@ export default class BlogFilter {
       const isActive = pill === activePill;
       pill.classList.toggle('blog-category-pill--active', isActive);
       pill.setAttribute('aria-pressed', String(isActive));
+      pill.setAttribute('aria-current', isActive ? 'true' : 'false');
     });
 
     if (category === 'All') {

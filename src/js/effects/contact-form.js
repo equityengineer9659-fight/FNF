@@ -28,12 +28,19 @@ class ContactForm {
     try {
       const formData = new FormData(this.form);
 
-      // Fetch CSRF token
+      // Fetch CSRF token — abort submission if token unavailable
+      let csrfToken = null;
       try {
         const tokenRes = await fetch('/api/csrf-token.php');
         const tokenData = await tokenRes.json();
-        formData.append('csrf_token', tokenData.token);
-      } catch { /* server will reject if CSRF is enforced */ }
+        csrfToken = tokenData.token;
+      } catch { /* network failure */ }
+
+      if (!csrfToken) {
+        this.showError('Unable to verify security token. Please refresh the page and try again.');
+        return;
+      }
+      formData.append('csrf_token', csrfToken);
 
       const response = await fetch(this.form.action, {
         method: 'POST',

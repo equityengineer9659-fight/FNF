@@ -25,8 +25,12 @@ class NewsletterPopup {
     this.restoreFocus = null;
     this.injectedStyle = null;
 
-    if (this.shouldShowPopup()) {
-      this.initScrollListener();
+    try {
+      if (this.shouldShowPopup()) {
+        this.initScrollListener();
+      }
+    } catch {
+      // Popup initialization failed — degrade gracefully
     }
   }
 
@@ -142,7 +146,17 @@ class NewsletterPopup {
     const handleSubmit = async (event) => {
       event.preventDefault();
       const email = emailInput.value.trim();
+      // Clear any previous validation error
+      const prevErr = modalContent.querySelector('.fnf-newsletter-validation-error');
+      if (prevErr) prevErr.remove();
+
       if (!email || !emailInput.validity.valid) {
+        const errEl = document.createElement('p');
+        errEl.className = 'fnf-newsletter-validation-error';
+        errEl.setAttribute('role', 'alert');
+        errEl.style.cssText = 'color:#f85149;font-size:13px;margin:8px 0 0;';
+        errEl.textContent = 'Please enter a valid email address.';
+        emailInput.parentNode.insertAdjacentElement('afterend', errEl);
         emailInput.focus();
         return;
       }
@@ -150,12 +164,19 @@ class NewsletterPopup {
       const formData = new FormData();
       formData.append('email', email);
 
-      // Fetch CSRF token
+      // Fetch CSRF token — abort submission if token unavailable
+      let csrfToken = null;
       try {
         const tokenRes = await fetch('/api/csrf-token.php');
         const tokenData = await tokenRes.json();
-        formData.append('csrf_token', tokenData.token);
-      } catch { /* server will reject if CSRF is enforced */ }
+        csrfToken = tokenData.token;
+      } catch { /* network failure */ }
+
+      if (!csrfToken) {
+        this.showErrorState(modalContent);
+        return;
+      }
+      formData.append('csrf_token', csrfToken);
 
       try {
         const response = await fetch('/api/newsletter.php', { method: 'POST', body: formData });

@@ -1,6 +1,7 @@
 /**
- * Lighthouse CI Configuration
- * Performance testing setup for all 6 pages
+ * Lighthouse Configuration — LOCAL DEVELOPMENT
+ * Relaxed thresholds for iterative development. Uses production preview build.
+ * For CI/CD stricter thresholds, see: tools/testing/lighthouserc.json
  */
 
 export default {

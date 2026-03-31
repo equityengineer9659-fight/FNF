@@ -1,4 +1,5 @@
 {
+  "_comment": "Lighthouse CI config — STRICT thresholds for CI/CD pipeline. For local development, see lighthouse.config.js in project root.",
   "ci": {
     "collect": {
       "url": [
