@@ -5,6 +5,7 @@
  */
 
 const PAGE_SIZE = 12;
+const CATEGORY_PAGE_SIZE = 6;
 
 export default class BlogFilter {
   constructor() {
@@ -31,8 +32,13 @@ export default class BlogFilter {
     // Load More button
     if (this.loadMoreBtn) {
       this.loadMoreBtn.addEventListener('click', () => {
-        this.visibleCount += PAGE_SIZE;
-        this.applyPagination();
+        if (this.currentCategory === 'All') {
+          this.visibleCount += PAGE_SIZE;
+          this.applyPagination();
+        } else {
+          this.categoryVisibleCount = (this.categoryVisibleCount || CATEGORY_PAGE_SIZE) + CATEGORY_PAGE_SIZE;
+          this.filter(this.bar.querySelector('.blog-category-pill--active'), true);
+        }
       }, { signal });
     }
 
@@ -64,10 +70,11 @@ export default class BlogFilter {
     }
   }
 
-  filter(activePill) {
+  filter(activePill, isLoadMore = false) {
     const category = activePill.textContent.trim();
 
     this.currentCategory = category;
+    if (!isLoadMore) this.categoryVisibleCount = CATEGORY_PAGE_SIZE;
 
     // Update active state on pills
     this.pills.forEach(pill => {
@@ -84,18 +91,27 @@ export default class BlogFilter {
       return;
     }
 
-    // Category view: show all matching cards, no pagination
+    // Category view: show first CATEGORY_PAGE_SIZE matching cards, paginate the rest
+    let shown = 0;
+    let hasHidden = false;
     this.cards.forEach(card => {
       const col = card.closest('.slds-col');
       if (!col) return;
       const cardCategory = card.querySelector('.blog-card__category');
       const matches = cardCategory && cardCategory.textContent.trim() === category;
-      col.style.display = matches ? '' : 'none';
+      if (!matches) {
+        col.style.display = 'none';
+      } else if (shown < this.categoryVisibleCount) {
+        col.style.display = '';
+        shown++;
+      } else {
+        col.style.display = 'none';
+        hasHidden = true;
+      }
     });
 
-    // Hide Load More when a specific category is active
     if (this.loadMoreBtn) {
-      this.loadMoreBtn.style.display = 'none';
+      this.loadMoreBtn.style.display = hasHidden ? '' : 'none';
     }
   }
 
