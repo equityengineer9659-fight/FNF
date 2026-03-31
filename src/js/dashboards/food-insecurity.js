@@ -92,13 +92,17 @@ function createChart(containerId) {
   return chart;
 }
 
-// -- Map Chart --
+// -- Map Chart with County Drill-Down --
 function renderMap(geoJSON, data, metric = 'rate') {
   const chart = createChart('chart-map');
   if (!chart) return;
 
-  // Albers USA projection: coordinates are pre-projected pixel values (975x610 viewport)
-  // We must tell ECharts not to apply its own projection
+  // Albers projection identity (data is pre-projected)
+  const albersProjection = {
+    project: (point) => point,
+    unproject: (point) => point
+  };
+
   echarts.registerMap('USA', geoJSON);
 
   const metricConfig = {
@@ -109,93 +113,210 @@ function renderMap(geoJSON, data, metric = 'rate') {
     mealCost: { name: 'Average Meal Cost', suffix: '$', min: 3, max: 5.5 }
   };
 
-  const cfg = metricConfig[metric];
-  const mapData = data.states.map(s => ({ name: s.name, value: s[metric], ...s }));
+  // State for drill-down
+  let currentView = 'national';
+  let currentMetric = metric;
 
-  chart.setOption({
-    tooltip: {
-      trigger: 'item',
-      backgroundColor: 'rgba(10,10,30,0.92)',
-      borderColor: COLORS.secondary,
-      borderWidth: 1,
-      textStyle: { color: COLORS.text, fontSize: 13 },
-      formatter: params => {
-        const d = params.data;
-        if (!d) return '';
-        return `<strong style="font-size:14px">${d.name}</strong><br/>
-          <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.rate}%<br/>
-          <span style="color:${COLORS.accent}">Child Rate:</span> ${d.childRate}%<br/>
-          Persons: ${fmtNum(d.persons)}<br/>
-          Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
-          Avg Meal Cost: $${d.mealCost}<br/>
-          Poverty Rate: ${d.povertyRate}%<br/>
-          SNAP: ${fmtNum(d.snapParticipation)}`;
-      }
-    },
-    visualMap: {
-      left: 'right',
-      bottom: 20,
-      min: cfg.min,
-      max: cfg.max,
-      text: ['High', 'Low'],
-      calculable: true,
-      inRange: {
-        color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh]
+  // State tooltip formatter
+  function stateTooltip(params) {
+    const d = params.data;
+    if (!d) return '';
+    return `<strong style="font-size:14px">${d.name}</strong><br/>
+      <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.rate}%<br/>
+      <span style="color:${COLORS.accent}">Child Rate:</span> ${d.childRate}%<br/>
+      Persons: ${fmtNum(d.persons)}<br/>
+      Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
+      Avg Meal Cost: $${d.mealCost}<br/>
+      Poverty Rate: ${d.povertyRate}%<br/>
+      SNAP: ${fmtNum(d.snapParticipation)}<br/>
+      <span style="color:${COLORS.secondary};font-size:11px">Click to see counties</span>`;
+  }
+
+  // County tooltip formatter
+  function countyTooltip(params) {
+    const d = params.data;
+    if (!d) return '';
+    return `<strong style="font-size:14px">${d.name}</strong><br/>
+      Population: ${fmtNum(d.population || 0)}<br/>
+      <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.rate}%<br/>
+      <span style="color:${COLORS.accent}">Child Rate:</span> ${d.childRate}%<br/>
+      Poverty Rate: ${d.povertyRate}%<br/>
+      Persons: ${fmtNum(d.persons)}<br/>
+      Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
+      Avg Meal Cost: $${d.mealCost}`;
+  }
+
+  // Show national (state-level) view
+  function showNational() {
+    currentView = 'national';
+    const cfg = metricConfig[currentMetric];
+    const mapData = data.states.map(s => ({ name: s.name, value: s[currentMetric], ...s }));
+
+    // Hide back button
+    const backBtn = document.getElementById('map-back-btn');
+    if (backBtn) backBtn.style.display = 'none';
+    const mapLabel = document.getElementById('map-state-label');
+    if (mapLabel) mapLabel.textContent = '';
+
+    chart.setOption({
+      tooltip: {
+        trigger: 'item',
+        backgroundColor: 'rgba(10,10,30,0.92)',
+        borderColor: COLORS.secondary,
+        borderWidth: 1,
+        textStyle: { color: COLORS.text, fontSize: 13 },
+        formatter: stateTooltip
       },
-      textStyle: { color: COLORS.text }
-    },
-    series: [{
-      name: cfg.name,
-      type: 'map',
-      map: 'USA',
-      roam: false,
-      projection: {
-        // Identity projection — data is already Albers-projected
-        project: (point) => point,
-        unproject: (point) => point
+      visualMap: {
+        left: 'right',
+        bottom: 20,
+        min: cfg.min,
+        max: cfg.max,
+        text: ['High', 'Low'],
+        calculable: true,
+        inRange: { color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh] },
+        textStyle: { color: COLORS.text }
       },
-      aspectScale: 1,
-      zoom: 1.1,
-      top: 10,
-      left: 'center',
-      emphasis: {
-        label: {
-          show: true,
-          color: COLORS.text,
-          fontSize: 12,
-          fontWeight: 'bold'
+      series: [{
+        name: cfg.name,
+        type: 'map',
+        map: 'USA',
+        roam: false,
+        projection: albersProjection,
+        aspectScale: 1,
+        zoom: 1.1,
+        top: 10,
+        left: 'center',
+        emphasis: {
+          label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
+          itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
         },
         itemStyle: {
-          areaColor: COLORS.secondary,
-          borderColor: '#fff',
-          borderWidth: 1.5
-        }
-      },
-      select: {
-        label: { show: true, color: COLORS.text },
-        itemStyle: { areaColor: COLORS.primary }
-      },
-      itemStyle: {
-        borderColor: 'rgba(255,255,255,0.25)',
-        borderWidth: 0.8,
-        areaColor: 'rgba(255,255,255,0.08)'
-      },
-      label: { show: false },
-      data: mapData
-    }]
+          borderColor: 'rgba(255,255,255,0.25)',
+          borderWidth: 0.8,
+          areaColor: 'rgba(255,255,255,0.08)'
+        },
+        label: { show: false },
+        data: mapData,
+        animationDurationUpdate: 500
+      }]
+    }, true); // true = not merge, replace
+  }
+
+  // Drill down into a state's counties
+  async function drillDown(stateName, stateFips) {
+    // Show loading
+    chart.showLoading({ text: `Loading ${stateName} counties...`, color: COLORS.secondary, textColor: COLORS.text, maskColor: 'rgba(0,0,0,0.6)' });
+
+    try {
+      const res = await fetch(`/data/counties/${stateFips}.json`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const countyGeo = await res.json();
+
+      // Register county map for this state
+      const mapName = `state-${stateFips}`;
+      echarts.registerMap(mapName, countyGeo);
+
+      // Extract data from GeoJSON properties
+      const countyData = countyGeo.features
+        .filter(f => f.properties.rate)
+        .map(f => ({
+          name: f.properties.name,
+          value: f.properties[currentMetric] || f.properties.rate,
+          ...f.properties
+        }));
+
+      // Compute dynamic min/max for this state's counties
+      const vals = countyData.map(c => c.value).filter(v => typeof v === 'number');
+      const min = Math.floor(Math.min(...vals));
+      const max = Math.ceil(Math.max(...vals));
+
+      currentView = stateFips;
+
+      // Show back button
+      const backBtn = document.getElementById('map-back-btn');
+      if (backBtn) backBtn.style.display = '';
+      const mapLabel = document.getElementById('map-state-label');
+      if (mapLabel) mapLabel.textContent = stateName;
+
+      chart.hideLoading();
+
+      chart.setOption({
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: 'rgba(10,10,30,0.92)',
+          borderColor: COLORS.secondary,
+          borderWidth: 1,
+          textStyle: { color: COLORS.text, fontSize: 13 },
+          formatter: countyTooltip
+        },
+        visualMap: {
+          min,
+          max,
+          text: ['High', 'Low'],
+          calculable: true,
+          inRange: { color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh] },
+          textStyle: { color: COLORS.text }
+        },
+        series: [{
+          name: metricConfig[currentMetric].name,
+          type: 'map',
+          map: mapName,
+          roam: false,
+          projection: albersProjection,
+          aspectScale: 1,
+          zoom: 1,
+          top: 10,
+          left: 'center',
+          emphasis: {
+            label: { show: true, color: COLORS.text, fontSize: 11, fontWeight: 'bold' },
+            itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1 }
+          },
+          itemStyle: {
+            borderColor: 'rgba(255,255,255,0.15)',
+            borderWidth: 0.5,
+            areaColor: 'rgba(255,255,255,0.05)'
+          },
+          label: { show: false },
+          data: countyData,
+          animationDurationUpdate: 500
+        }]
+      }, true);
+    } catch {
+      chart.hideLoading();
+    }
+  }
+
+  // Initial render
+  showNational();
+
+  // Click handler: state click → drill down
+  chart.on('click', (params) => {
+    if (currentView === 'national' && params.data) {
+      const stateFips = params.data.fips;
+      const stateName = params.data.name;
+      if (stateFips) drillDown(stateName, stateFips);
+    }
   });
+
+  // Back button
+  const backBtn = document.getElementById('map-back-btn');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => showNational());
+  }
 
   // Metric selector
   const select = document.getElementById('map-metric');
   if (select) {
     select.addEventListener('change', () => {
-      const m = select.value;
-      const c = metricConfig[m];
-      const md = data.states.map(s => ({ name: s.name, value: s[m], ...s }));
-      chart.setOption({
-        visualMap: { min: c.min, max: c.max },
-        series: [{ name: c.name, data: md }]
-      });
+      currentMetric = select.value;
+      if (currentView === 'national') {
+        showNational();
+      } else {
+        // Re-drill into same state with new metric
+        const stateName = document.getElementById('map-state-label')?.textContent;
+        drillDown(stateName || '', currentView);
+      }
     });
   }
 

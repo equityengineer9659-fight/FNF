@@ -91,6 +91,36 @@
   margin: 0;
 }
 
+/* Map title row */
+.dashboard-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboard-map__state-label {
+  color: var(--fnf-secondary, #00d4ff);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Back button */
+.dashboard-back-btn {
+  background: rgba(255,255,255,0.08);
+  color: var(--fnf-secondary, #00d4ff);
+  border: 1px solid var(--fnf-secondary, #00d4ff);
+  border-radius: 0.25rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dashboard-back-btn:hover {
+  background: var(--fnf-secondary, #00d4ff);
+  color: #000;
+}
+
 /* Metric Selector */
 .dashboard-select {
   background: rgba(255,255,255,0.08);

@@ -173,8 +173,12 @@
             <div class="slds-container_large slds-container_center slds-p-around_large">
                 <div class="dashboard-card">
                     <div class="dashboard-card__header">
-                        <h2 class="slds-text-heading_medium">Food Insecurity by State</h2>
+                        <div class="dashboard-card__title-row">
+                            <h2 class="slds-text-heading_medium">Food Insecurity by State</h2>
+                            <span id="map-state-label" class="dashboard-map__state-label"></span>
+                        </div>
                         <div class="dashboard-card__controls">
+                            <button id="map-back-btn" class="dashboard-back-btn" style="display:none" aria-label="Back to national view">Back to National</button>
                             <label for="map-metric" class="slds-assistive-text">Select metric</label>
                             <select id="map-metric" class="dashboard-select">
                                 <option value="rate">Food Insecurity Rate (%)</option>
