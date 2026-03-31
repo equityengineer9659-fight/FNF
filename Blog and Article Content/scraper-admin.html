@@ -1448,25 +1448,25 @@ async function fetchFeed(url) {
 
   // 3) corsproxy.io
   try {
-    const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`,{signal:mkFetchSignal(13000)});
+    const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`,{signal:mkFetchSignal(8000)});
     if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; }
   } catch { /* proxy unreachable or timeout — try next */ }
 
   // 4) codetabs proxy
   try {
-    const r=await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,{signal:mkFetchSignal(13000)});
+    const r=await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,{signal:mkFetchSignal(8000)});
     if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; }
   } catch { /* proxy unreachable or timeout — try next */ }
 
   // 5) allorigins raw endpoint (different from the JSON wrapper used in proxy 2)
   try {
-    const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,{signal:mkFetchSignal(13000)});
+    const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,{signal:mkFetchSignal(8000)});
     if (r.ok) { const txt=await r.text(); if (looksXML(txt)) return txt; }
   } catch { /* proxy unreachable or timeout */ }
 
   // 6) RSS2JSON — dedicated RSS service, bypasses Cloudflare/bot-protection that blocks generic proxies
   try {
-    const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=100`,{signal:mkFetchSignal(15000)});
+    const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&count=100`,{signal:mkFetchSignal(10000)});
     if (r.ok) {
       const json=await r.json();
       if (json.status==='ok' && json.items?.length) {
@@ -1672,7 +1672,7 @@ async function searchGDELT(topicKws, extraKws, lookbackDays) {
   }
 
   const timespan = lookbackDays<=7?'7d': lookbackDays<=30?'1m': lookbackDays<=60?'2m':'3m';
-  const params=new URLSearchParams({ query, mode:'artlist', maxrecords:String(maxRes), format:'json', timespan });
+  const params=new URLSearchParams({ query, mode:'artlist', maxrecords:String(maxRes), format:'json', timespan, sourcelang:'eng' });
   const apiUrl=`https://api.gdeltproject.org/api/v2/doc/doc?${params}`;
 
   let txt=null;
@@ -1698,7 +1698,7 @@ async function searchGDELT(topicKws, extraKws, lookbackDays) {
   // 3) corsproxy fallback
   if (!txt) {
     try {
-      const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`,{signal:mkFetchSignal(15000)});
+      const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(apiUrl)}`,{signal:mkFetchSignal(10000)});
       if (r.ok) txt=await r.text();
     } catch {}
   }
@@ -1706,7 +1706,7 @@ async function searchGDELT(topicKws, extraKws, lookbackDays) {
   // 4) allorigins raw fallback
   if (!txt) {
     try {
-      const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`,{signal:mkFetchSignal(15000)});
+      const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`,{signal:mkFetchSignal(10000)});
       if (r.ok) txt=await r.text();
     } catch {}
   }
@@ -1777,6 +1777,10 @@ function processItem(item, feedName, feedCat, cutoff, isWeb) {
   const pub = pubDate ? new Date(pubDate) : null;
   if (pub && pub < cutoff) return null;
 
+  // Skip non-English articles — reject if >20% of title chars are non-Latin
+  const nonLatin = title.replace(/[\x00-\x7F\u00C0-\u024F]/g, '').length;
+  if (nonLatin / title.length > 0.2) return null;
+
   const searchTxt = title + ' ' + description;
   const searchLow = searchTxt.toLowerCase();
 
@@ -1842,6 +1846,15 @@ async function startScrape() {
   // Shared Set for bidirectional GN ↔ GDELT deduplication
   const seenWebUrls = new Set();
 
+  // Incremental progress — track completed tasks
+  const totalTasks = activeFd.length + (webOn ? 2 : 0); // feeds + GN + GDELT
+  let completedTasks = 0;
+  function advanceProgress() {
+    completedTasks++;
+    const pct = 10 + Math.round((completedTasks / totalTasks) * 80); // 10% → 90%
+    document.getElementById('prog').style.width = pct + '%';
+  }
+
   const rssTask = Promise.all(activeFd.map(async f => {
     addLog('feed', `  ▶ ${esc(f.name)}${f.type==='html'?' [HTML]':''}`);
     try {
@@ -1881,6 +1894,7 @@ async function startScrape() {
       if (e.name!=='AbortError') addLog('err', `  └─ ${esc(f.name)}: ${esc(e.message)}`);
       aTrackFeed(f.name, 0, 0, 0, 0, 0, e.message);
     }
+    advanceProgress();
   }));
 
   // Items 5 & 6: Google News runs in parallel with RSS; seenWebUrls deduplicates against GDELT
@@ -1906,6 +1920,7 @@ async function startScrape() {
     } catch(e) {
       addLog('warn', `  └─ Google News unavailable: ${esc(e.message)}`);
     }
+    advanceProgress();
   })() : Promise.resolve();
 
   // GDELT runs in parallel with RSS and Google News; deduplicates via seenWebUrls + allResults
@@ -1931,6 +1946,7 @@ async function startScrape() {
     } catch(e) {
       addLog('warn', `  └─ GDELT unavailable: ${esc(e.message)}`);
     }
+    advanceProgress();
   })() : Promise.resolve();
 
   await Promise.all([rssTask, gnTask, gdeltTask]);
