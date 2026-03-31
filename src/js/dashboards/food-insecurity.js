@@ -653,6 +653,102 @@ function populateAccessibleTable(data) {
   });
 }
 
+// -- SNAP Participation vs Food Insecurity --
+function renderSnap(data) {
+  const chart = createChart('chart-snap');
+  if (!chart) return;
+
+  // Top 15 states by food insecurity, showing SNAP participation alongside
+  const sorted = [...data.states].sort((a, b) => b.rate - a.rate).slice(0, 15);
+  const names = sorted.map(s => s.name);
+  const rates = sorted.map(s => s.rate);
+  const snapPer100k = sorted.map(s => Math.round((s.snapParticipation / (s.persons / (s.rate / 100))) * 100));
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(10,10,30,0.92)',
+      borderColor: COLORS.secondary,
+      borderWidth: 1,
+      textStyle: { color: COLORS.text }
+    },
+    legend: {
+      data: ['Food Insecurity Rate (%)', 'SNAP Coverage (%)'],
+      textStyle: { color: COLORS.text },
+      top: 5
+    },
+    grid: { left: 130, right: 30, top: 40, bottom: 30 },
+    xAxis: {
+      type: 'value',
+      axisLabel: { color: COLORS.textMuted },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'category',
+      data: names.reverse(),
+      axisLabel: { color: COLORS.text, fontSize: 11 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series: [
+      {
+        name: 'Food Insecurity Rate (%)',
+        type: 'bar',
+        data: rates.reverse(),
+        barWidth: '35%',
+        itemStyle: {
+          borderRadius: [0, 3, 3, 0],
+          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+            { offset: 0, color: COLORS.mapMid },
+            { offset: 1, color: COLORS.mapHigh }
+          ])
+        },
+        animationDuration: 1500
+      },
+      {
+        name: 'SNAP Coverage (%)',
+        type: 'bar',
+        data: snapPer100k.reverse(),
+        barWidth: '35%',
+        itemStyle: {
+          borderRadius: [0, 3, 3, 0],
+          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+            { offset: 0, color: COLORS.primary },
+            { offset: 1, color: COLORS.secondary }
+          ])
+        },
+        animationDuration: 1500,
+        animationDelay: 200
+      }
+    ]
+  });
+}
+
+// -- Scroll Reveal (IntersectionObserver) --
+function initScrollReveal() {
+  const elements = document.querySelectorAll('.scroll-reveal');
+  if (!elements.length) return;
+
+  // Respect reduced motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    elements.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target); // Only animate once
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  elements.forEach(el => observer.observe(el));
+}
+
 // -- Responsive resize --
 function handleResize() {
   charts.forEach(c => c.resize());
@@ -688,6 +784,12 @@ async function init() {
 
     // Accessible table
     populateAccessibleTable(data);
+
+    // SNAP chart
+    renderSnap(data);
+
+    // Scroll reveal
+    initScrollReveal();
 
     // Responsive
     window.addEventListener('resize', handleResize);
