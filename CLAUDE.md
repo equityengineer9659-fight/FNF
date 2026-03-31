@@ -76,9 +76,11 @@ npm run admin                   # Start Express server for scraper (http://local
 /
 ├── src/                    # Source files
 │   ├── css/               # CSS files with modular architecture (12 files)
-│   ├── js/                # JavaScript modules (main.js, effects/, config/, monitoring/)
+│   ├── js/                # JavaScript modules (main.js, effects/, dashboards/, config/, monitoring/)
+│   ├── data/              # Source data files (food insecurity JSON, GeoJSON)
 │   └── assets/            # Images, fonts, and other assets
 ├── *.html                  # 10 root pages (core + hub pages — see Page Inventory)
+├── dashboards/             # Interactive data dashboards (ECharts visualizations)
 ├── blog/                   # 41 article HTML pages (all at blog/slug.html)
 ├── Blog and Article Content/  # Editorial research tools — NOT part of the public website
 │   ├── scraper-admin.html     # Standalone scraper UI (open directly via VS Code Live Server)
@@ -93,21 +95,30 @@ npm run admin                   # Start Express server for scraper (http://local
 │   ├── rss-feeds.json         # Configurable RSS feed source list
 │   ├── generate-sitemap.js    # Sitemap generator
 │   ├── generate-pwa-icons.js  # PWA icon generator
+│   ├── build-dashboard-data.js # TopoJSON → GeoJSON converter for dashboard maps
+│   ├── fetch-county-data.js   # Fetches county poverty data from Census Bureau API
 │   ├── create-restore-point.cjs / apply-restore-point.cjs
 │   └── detect-css-duplicates.cjs
 ├── public/                # Static assets (favicon, PWA icons, manifest, PHP API endpoints)
 │   ├── manifest.json          # PWA web app manifest
-│   └── api/               # PHP backend (contact.php, newsletter.php, csrf-token.php)
+│   ├── data/              # Dashboard data files (state/county JSON, BLS CPI, county index)
+│   │   ├── food-insecurity-state.json  # State-level food insecurity data (51 states + DC)
+│   │   ├── bls-food-cpi.json          # BLS Consumer Price Index food prices
+│   │   ├── us-states-geo.json         # US state boundaries (Albers projection GeoJSON)
+│   │   ├── county-index.json          # County name search index (3,142 counties)
+│   │   └── counties/                  # Per-state county GeoJSON (51 files, lazy-loaded)
+│   └── api/               # PHP backend (contact, newsletter, csrf, dashboard proxies)
 ├── _archive/              # Archived outdated documentation
 ├── _audit/                # Historical backups and restore points
 ├── vite.config.js         # Vite build configuration
 └── package.json           # Root-level build configuration
 ```
 
-### Page Inventory (51 pages)
+### Page Inventory (52 pages)
 - **Core pages (7)**: index, about, services, resources, impact, contact, 404
 - **Blog hub (1)**: blog
 - **Hub pages at root (2)**: case-studies, templates-tools
+- **Dashboards under `dashboards/` (1)**: food-insecurity
 - **Articles under `blog/` (41)**: ai-reshaping-food-banks, salesforce-food-bank-operations, donor-relationships-nonprofit-cloud, data-driven-food-banks, food-bank-workflow-automation, securing-technology-grants, ai-inventory-management, agentforce-nonprofits-guide, ai-ethics-nonprofit-governance, centralized-food-hub-case-study, client-choice-food-pantry-technology, community-food-center-model, data-privacy-food-bank-clients, digital-transformation-small-food-banks, donor-prospecting-salesforce, food-bank-client-services-technology, food-bank-crisis-response-planning, food-bank-kitchen-operations, food-bank-strategic-partnerships, food-bank-technology-stack, food-banks-healthcare-social-determinants, food-is-medicine-food-banks, future-food-banking-trends, grant-management-food-banks, grant-writing-nonprofit-sustainability, impact-measurement-food-banks, measuring-hunger-relief-outcomes, nonprofit-cloud-vs-sales-cloud, nutrition-first-food-bank-strategy, purpose-driven-ai-food-banks, rapid-technology-implementation, salesforce-flow-builder-nonprofits, salesforce-nonprofit-cloud-ai-automation, salesforce-reports-dashboards-food-banks, salesforce-security-nonprofits, salesforce-spring-2026-nonprofits, snap-cuts-ice-fears-food-bank-response, snap-policy-changes-food-banks, tax-policy-nonprofit-fundraising, volunteer-management-technology, volunteer-recruitment-retention-digital
 
 **Adding new articles via scraper tool**: Use `npm run admin` → New Article tab → Generate with Claude → Save to blog/. The save-article endpoint automatically registers the slug in `build-components.js` (both `resourcesSubpages` and `articlePages` arrays), `scripts/generate-sitemap.js`, and `.pa11yci.json`, then runs `build-components.js` and `sync-blog.js` so the article is immediately available. After saving, ask Claude Code to create the illustration: *"Create the illustration for blog/{slug}.html"*.
@@ -117,10 +128,13 @@ npm run admin                   # Start Express server for scraper (http://local
 All pages processed by `build-components.js` (nav/footer injection), `scripts/generate-sitemap.js`, and `.pa11yci.json` (accessibility testing).
 
 ### Build Pipeline
-- `build-components.js` injects shared navigation, footer, and script tags into all 51 pages before Vite builds
+- `build-components.js` injects shared navigation, footer, and script tags into all 52 pages before Vite builds (including dashboard pages, which also get their own script entry points)
 - `scripts/sync-blog.js` rebuilds the blog card grid in blog.html from article metadata (runs automatically on build)
 - `scripts/generate-sitemap.js` generates sitemap.xml covering all public pages (excludes 404)
+- `scripts/build-dashboard-data.js` converts TopoJSON (us-atlas) to GeoJSON for ECharts map rendering
+- `scripts/fetch-county-data.js` fetches county poverty data from Census Bureau API and enriches county GeoJSON files
 - Vite handles bundling, minification, and asset hashing for production
+- ECharts is tree-shaken and code-split into a separate chunk (~645KB / 210KB gzipped) loaded only on dashboard pages
 
 ### Blog Content Pipeline
 A two-part tool: a scraper for finding article candidates and an AI-powered article generator. Separate from the public website build — never deployed by Vite.
@@ -170,7 +184,7 @@ See `docs/current/blog-content-pipeline.md` for full usage guide.
 
 ### CSS Architecture
 - **Location**: `src/css/` with modular organization (main.css imports all modules)
-- **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients → page-overrides
+- **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients → page-overrides → dashboards
 - **Design Tokens**: Centralized in `02-design-tokens.css` (colors, spacing, fonts, gradients, glass effects)
 - **Bundle Optimization**: Minified production builds via Vite + CSSnano (~114KB, ~18KB gzipped)
 - **SLDS Compliance**: 89% baseline maintained with token mapping system
@@ -196,6 +210,8 @@ See `docs/current/blog-content-pipeline.md` for full usage guide.
   - `effects/blog-filter.js` — blog category filtering (aria-pressed + aria-current on active pill)
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page expertise section
+  - `dashboards/food-insecurity.js` — ECharts dashboard: choropleth map with county drill-down, trend lines, bar charts, scatter plot, SNAP comparison, BLS food price CPI (separate entry point, code-split)
+- **Dashboard Visualization**: Apache ECharts (tree-shaken), registered as separate Vite chunk. Supports state→county drill-down, county search with autocomplete, scroll-reveal animations, and live BLS data via PHP proxy with static JSON fallback.
 - **Cleanup**: All modules use AbortController or explicit cleanup in destroy()
 - **Production**: Source maps disabled, no unguarded console.log in production code (ESLint `no-console` rule enforced; `console.warn`/`console.error` allowed, dev-gated `console.log` uses `eslint-disable` comments)
 - **Unit Tests**: ~161 tests across 9 test files (vitest)
@@ -209,6 +225,8 @@ See `docs/current/blog-content-pipeline.md` for full usage guide.
   - `POST /api/contact.php` — contact form handler (validates, sanitizes, sends email via `mail()`)
   - `POST /api/newsletter.php` — newsletter subscription handler (validates email, sends notification)
   - `GET /api/csrf-token.php` — generates single-use CSRF tokens stored in PHP sessions
+  - `GET /api/dashboard-census.php` — Census Bureau ACS proxy (state/county poverty data, 24hr file cache)
+  - `GET /api/dashboard-bls.php` — BLS CPI food price proxy (monthly data, 7-day file cache)
 - **Security layers**:
   - Rate limiting (session-based, 60-second cooldown per endpoint — set on successful submission only)
   - CSRF token validation (session-based, single-use, timing-safe `hash_equals()`)
@@ -232,16 +250,17 @@ See `docs/current/blog-content-pipeline.md` for full usage guide.
 ## Testing Requirements
 
 ### Multi-Page Protocol
-Test ALL 47 pages at these configurations:
+Test ALL 52 pages at these configurations:
 - **Pages**: All core pages, blog, and article subpages (see Page Inventory)
 - **Zoom Levels**: 100% (standard) and 25% (client requirement)  
 - **Breakpoints**: Mobile, tablet, desktop
 - **Browsers**: Chrome, Firefox, Safari minimum
 
 ### Performance Budgets
-- **CSS Bundle**: ~114KB minified (includes all modules, effects, and newsletter modal styles)
-- **JavaScript Bundle**: ~51KB total (46KB main + 5KB effects, tree-shaken & minified via Terser)
-- **Gzipped Sizes**: ~18KB CSS, ~15KB JS combined
+- **CSS Bundle**: ~118KB minified (includes all modules, effects, newsletter modal, and dashboard styles)
+- **JavaScript Bundle**: ~53KB total for core pages (47KB main + 5KB effects, tree-shaken & minified via Terser)
+- **Dashboard JS**: Additional ~15KB dashboard chunk + ~645KB ECharts chunk (loaded only on dashboard pages, code-split)
+- **Gzipped Sizes**: ~19KB CSS, ~15KB JS core, ~210KB ECharts (dashboard only)
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: ≥89% baseline maintained
 - **Bundle Analysis**: Use `npm run analyze:bundle` for detailed reports

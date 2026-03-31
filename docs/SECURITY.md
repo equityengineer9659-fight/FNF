@@ -33,6 +33,17 @@ The site uses PHP endpoints hosted on SiteGround for server-side form processing
 - `POST /api/contact.php` — contact form submissions
 - `POST /api/newsletter.php` — newsletter subscriptions
 - `GET /api/csrf-token.php` — CSRF token generation
+- `GET /api/dashboard-census.php` — Census Bureau ACS data proxy (state/county poverty data)
+- `GET /api/dashboard-bls.php` — BLS Consumer Price Index food price data proxy
+
+**Dashboard API proxy security:**
+- Read-only GET endpoints (no user input beyond query parameters)
+- Query parameters validated and sanitized (`type` must be `states` or `county`, `state` FIPS limited to 2 digits via regex)
+- File-based response caching (`_cache/dashboard/`) with TTL (24hr Census, 7-day BLS)
+- Stale cache served if upstream API is unavailable (graceful degradation)
+- No API keys stored server-side (Census API v1 and BLS API v1 are keyless)
+- User-Agent header identifies requests as `FoodNForce-Dashboard/1.0`
+- 15-second timeout on upstream API calls
 
 ### Rate Limiting
 - Session-based 60-second cooldown per endpoint (`last_contact_submit`, `last_newsletter_submit`)

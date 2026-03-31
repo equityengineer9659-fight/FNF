@@ -35,6 +35,9 @@ package-lock.json
 .playwright-mcp/
 tools/testing/baselines/
 
+# PHP API proxy cache (generated on SiteGround)
+_cache/
+
 # Archives (historical, not needed in repo)
 _archive/
 
