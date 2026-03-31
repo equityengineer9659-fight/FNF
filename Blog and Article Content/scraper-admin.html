@@ -254,15 +254,41 @@
     .na-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:14px 0 6px; border-top:1px solid var(--border); margin-top:4px; }
 
     /* Source selection cards */
-    .na-src-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
-    .na-src-card { display:flex; gap:8px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:9px 11px; cursor:pointer; transition:border-color .15s; }
+    /* Source selection — filter bar */
+    .na-filter-bar { display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-bottom:8px; padding:6px 0; }
+    .na-filter-pill { font-size:10px; padding:2px 8px; border-radius:10px; border:1px solid var(--border); background:transparent; color:var(--tm); cursor:pointer; transition:all .15s; white-space:nowrap; }
+    .na-filter-pill:hover { border-color:var(--accent); color:var(--text); }
+    .na-filter-pill.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .na-score-btn { font-size:10px; padding:2px 7px; border-radius:4px; border:1px solid var(--border); background:transparent; color:var(--tm); cursor:pointer; transition:all .15s; }
+    .na-score-btn:hover { border-color:var(--accent); color:var(--text); }
+    .na-score-btn.active { background:rgba(56,139,253,.15); border-color:var(--accent); color:var(--accent); }
+    .na-filter-sep { width:1px; height:16px; background:var(--border); margin:0 4px; flex-shrink:0; }
+    .na-src-count { font-size:10px; color:var(--tf); margin-left:auto; white-space:nowrap; }
+
+    /* Source selection — grid + cards */
+    .na-src-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; max-height:480px; overflow-y:auto; }
+    .na-src-card { display:flex; gap:8px; background:var(--bg-card); border:1px solid var(--border); border-left:3px solid var(--border); border-radius:6px; padding:9px 11px; cursor:pointer; transition:border-color .15s; }
     .na-src-card:hover { border-color:var(--bh); }
-    .na-src-card:has(input:checked) { border-color:var(--accent); background:var(--adim); }
+    .na-src-card:has(input:checked) { border-color:var(--accent); border-left-color:var(--accent); background:var(--adim); }
     .na-src-card.disabled { opacity:.4; pointer-events:none; }
+    .na-src-card.s5 { border-left-color:var(--green); }
+    .na-src-card.s4 { border-left-color:var(--accent); }
+    .na-src-card.s3 { border-left-color:var(--yellow); }
+    .na-src-card.s2 { border-left-color:var(--border); }
+    .na-src-card.s1 { border-left-color:var(--border); opacity:.7; }
     .na-src-card input[type=checkbox] { flex-shrink:0; margin-top:2px; accent-color:var(--accent); }
-    .na-src-body { min-width:0; }
+    .na-src-body { min-width:0; flex:1; }
+    .na-src-head { display:flex; align-items:center; gap:5px; margin-bottom:4px; }
+    .na-src-cat { font-size:9px; padding:1px 6px; border-radius:8px; white-space:nowrap; }
+    .na-src-score { font-size:10px; font-weight:700; margin-left:auto; padding:1px 5px; border-radius:3px; }
+    .na-src-score.sc5 { color:var(--green); background:rgba(63,185,80,.12); }
+    .na-src-score.sc4 { color:var(--accent); background:rgba(56,139,253,.12); }
+    .na-src-score.sc3 { color:var(--yellow); background:rgba(210,153,34,.12); }
+    .na-src-score.sc2 { color:var(--tf); }
+    .na-src-score.sc1 { color:var(--tf); opacity:.6; }
     .na-src-title { font-size:12px; color:var(--tb); line-height:1.4; margin-bottom:3px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
-    .na-src-meta { font-size:10px; color:var(--tf); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .na-src-meta { font-size:10px; color:var(--tf); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:2px; }
+    .na-src-summary { font-size:10px; color:var(--tf); opacity:.65; line-height:1.3; overflow:hidden; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; }
     .na-sel-count { font-size:10px; font-weight:400; color:var(--tm); text-transform:none; letter-spacing:0; margin-left:auto; }
     .na-no-results { font-size:12px; color:var(--tf); padding:14px; text-align:center; background:var(--bg-card); border:1px dashed var(--border); border-radius:6px; }
 
@@ -300,6 +326,29 @@
     .btn-red:disabled { opacity:.45; cursor:not-allowed; }
     .cm-cb { accent-color:var(--accent); cursor:pointer; }
     .cm-cat { display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px; background:var(--border); color:var(--text); }
+
+    /* ── Analytics ── */
+    .stats-panel { flex:1; display:none; flex-direction:column; overflow:hidden; }
+    .stats-panel.show { display:flex; }
+    .st-body { flex:1; overflow-y:auto; padding:12px 16px; }
+    .st-sec { margin-bottom:20px; }
+    .st-sh { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--tm); margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--border); }
+    .st-tbl { width:100%; font-size:12px; border-collapse:collapse; }
+    .st-tbl th { text-align:left; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--tf); padding:4px 8px; border-bottom:1px solid var(--border); }
+    .st-tbl td { padding:5px 8px; border-bottom:1px solid rgba(255,255,255,.04); }
+    .st-tbl tr:hover td { background:rgba(255,255,255,.03); }
+    .st-bar { height:14px; background:var(--accent); border-radius:2px; min-width:2px; }
+    .st-avg { font-size:11px; color:var(--tf); margin-top:6px; }
+    .st-rec { padding:8px 12px; border-radius:6px; font-size:12px; margin-bottom:6px; line-height:1.5; }
+    .st-warn { background:rgba(248,81,73,.1); border:1px solid rgba(248,81,73,.3); color:var(--red); }
+    .st-pos { background:rgba(63,185,80,.1); border:1px solid rgba(63,185,80,.3); color:var(--green); }
+    .st-info { background:rgba(56,139,253,.1); border:1px solid rgba(56,139,253,.25); color:var(--accent); }
+    .st-funnel { font-size:12px; }
+    .st-frow { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+    .st-fl { width:70px; text-align:right; color:var(--tm); font-size:11px; }
+    .st-fbar { height:16px; background:linear-gradient(90deg,var(--accent),var(--gbg)); border-radius:3px; min-width:2px; transition:width .3s; }
+    .st-fv { font-size:12px; font-weight:600; color:var(--text); min-width:32px; }
+    .st-fp { font-size:11px; color:var(--tf); }
   </style>
 </head>
 <body>
@@ -487,6 +536,7 @@
         <div class="tab" id="t-res" role="tab" aria-selected="false" aria-controls="results" tabindex="-1" onclick="showTab('res')">Results <span class="tbadge" id="rbadge" style="display:none">0</span></div>
         <div class="tab" id="t-new" role="tab" aria-selected="false" aria-controls="new-article" tabindex="-1" onclick="showTab('new')">New Article</div>
         <div class="tab" id="t-cm" role="tab" aria-selected="false" aria-controls="content-mgmt" tabindex="-1" onclick="showTab('cm')">Content <span class="tbadge" id="cmbadge" style="display:none">0</span></div>
+        <div class="tab" id="t-stats" role="tab" aria-selected="false" aria-controls="stats" tabindex="-1" onclick="showTab('stats')">Analytics</div>
       </div>
 
       <div class="log" id="log" role="tabpanel" aria-labelledby="t-log" aria-live="polite">
@@ -541,7 +591,16 @@
             <!-- Step 1: Source Selection -->
             <div class="na-sec">
               <div class="na-sh">Step 1 &mdash; Select Sources for Claude <span class="na-sel-count" id="na-sel-count">0 of 5 selected</span></div>
-              <div class="na-hint" style="margin-bottom:10px">Check up to 5 results from your scrape. Claude will synthesize an original professional article from these sources.</div>
+              <div class="na-hint" style="margin-bottom:6px">Check up to 5 results from your scrape. Claude will synthesize an original professional article from these sources.</div>
+              <div class="na-filter-bar" id="na-filter-bar" style="display:none">
+                <button class="na-filter-pill active" data-cat="all" onclick="naFilterCat(this)">All</button>
+                <span class="na-filter-sep"></span>
+                <button class="na-score-btn active" data-min="1" onclick="naFilterScore(this)">Any &#9733;</button>
+                <button class="na-score-btn" data-min="3" onclick="naFilterScore(this)">&#9733;3+</button>
+                <button class="na-score-btn" data-min="4" onclick="naFilterScore(this)">&#9733;4+</button>
+                <button class="na-score-btn" data-min="5" onclick="naFilterScore(this)">&#9733;5</button>
+                <span class="na-src-count" id="na-src-count"></span>
+              </div>
               <div class="na-src-grid" id="na-src-grid">
                 <div class="na-no-results">Run a scrape first &mdash; results will appear here as selectable sources.</div>
               </div>
@@ -683,6 +742,21 @@
         <div class="cm-status" id="cm-status"></div>
       </div>
 
+      <!-- ── Analytics panel ── -->
+      <div class="stats-panel" id="stats" role="tabpanel" aria-labelledby="t-stats">
+        <div class="cm-toolbar">
+          <select id="stats-days" onchange="loadAnalytics(true)" style="background:var(--bg-input);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:3px 8px;font-size:12px">
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="0">All time</option>
+          </select>
+          <button class="btn btn-q btn-sm" onclick="loadAnalytics(true)">&#8635; Refresh</button>
+          <span style="margin-left:auto;color:var(--tf);font-size:12px">Data from scrape sessions</span>
+        </div>
+        <div class="st-body" id="stats-body"></div>
+      </div>
+
       <!-- Fullscreen article preview modal (outside tab panel) -->
       <div class="na-preview-modal hide" id="na-preview-modal" role="dialog" aria-modal="true" aria-label="Article preview">
         <div class="na-preview-bar">
@@ -750,15 +824,15 @@ const HEADERS = ['Source URL','Title','Source Name','Published Date','Date Scrap
 
 const BUILTIN_PRESETS = [
   { id:'ai',    cls:'ai',   name:'AI & Innovation',    period:30, webOn:true,
-    kws:['artificial intelligence','machine learning','Salesforce Einstein','Agentforce','Einstein AI','Einstein Copilot','generative AI','predictive analytics','AI nonprofit','automation nonprofit','LLM','ChatGPT'], exkws:[], wskws:[] },
+    kws:['AI nonprofit','generative AI','Einstein AI','artificial intelligence','machine learning','Agentforce','ChatGPT','Salesforce Einstein'], exkws:[], wskws:['food bank AI','nonprofit artificial intelligence','Agentforce nonprofit','generative AI nonprofit sector'] },
   { id:'tech',  cls:'tech', name:'Tech Strategy',      period:30, webOn:true,
-    kws:['Salesforce','nonprofit CRM','nonprofit technology','donor management','Nonprofit Cloud','food bank technology','fundraising software','donor database','constituent management','fundraising platform','CRM implementation'], exkws:[], wskws:[] },
+    kws:['Salesforce nonprofit','Nonprofit Cloud','nonprofit technology','digital transformation','fundraising platform','donor management','volunteer management'], exkws:[], wskws:['Salesforce nonprofit cloud','food bank CRM strategy','nonprofit digital transformation','donor management platform'] },
   { id:'cases', cls:'case', name:'Case Studies',       period:60, webOn:true,
-    kws:['food bank','food pantry','nonprofit Salesforce','nonprofit impact','case study','success story','implementation results','nonprofit success','nonprofit benefited','real-world example'], exkws:[], wskws:[] },
-  { id:'impl',  cls:'impl', name:'Implementation',     period:30, webOn:false,
-    kws:['Salesforce implementation','food bank workflow','volunteer management','nonprofit onboarding','CRM setup','nonprofit operations','digital transformation','configuration','nonprofit adoption','process automation'], exkws:[], wskws:[] },
-  { id:'ind',   cls:'ind',  name:'Industry Insights',  period:14, webOn:true,
-    kws:['food insecurity','food bank','hunger relief','SNAP','food pantry','charitable giving','food security','food assistance','nonprofit trends','food shelf','emergency food','food access','food rescue','food distribution'], exkws:[], wskws:[] }
+    kws:['nonprofit impact','nonprofit success','case study','food bank','food pantry','nonprofit Salesforce'], exkws:[], wskws:['food bank case study','nonprofit Salesforce success story','pantry technology results','food bank impact outcomes'] },
+  { id:'impl',  cls:'impl', name:'Implementation',     period:30, webOn:true,
+    kws:['process automation','volunteer management','digital transformation','Salesforce nonprofit','donor management'], exkws:[], wskws:['Salesforce implementation nonprofit','food bank workflow automation','nonprofit CRM onboarding','volunteer management software'] },
+  { id:'ind',   cls:'ind',  name:'Industry Insights',  period:30, webOn:true,
+    kws:['SNAP','food bank','food pantry','food insecurity','hunger relief','charitable giving','food security'], exkws:[], wskws:['SNAP benefits food bank','food insecurity trends 2026','hunger relief nonprofit','food bank funding policy'] }
 ];
 
 const DEFAULT_BLOCKLIST = ['blogspot.com','tumblr.com','wix.com','weebly.com','sites.google.com'];
@@ -907,6 +981,7 @@ async function saveToExcel(articles) {
       await readXL(refreshed, refreshed.name);
       addLog('done', `✓ Saved ${articles.length} new row${articles.length>1?'s':''} back to Excel`);
       document.getElementById('save-banner').classList.remove('show');
+      logAction('excel-save', { articles: articles.map(a => ({ url: a.url, source: a.src, score: a.score, category: a.cat, keywords: a.kws })) });
     } catch(e) {
       addLog('err', `Save failed (is the file open in Excel?): ${esc(e.message)}`);
       offerDownload(blob);
@@ -1069,31 +1144,41 @@ function isBlocked(url) {
   } catch { return false; }
 }
 
-// Single-word: substring match. Multi-word phrase: ALL words must appear (order-independent AND).
-// "food bank AI" matches "How AI Is Transforming Food Banks" because food+bank+ai are all present.
+// Single-word: word-boundary match. Multi-word: returns fraction of words found (0-1).
+// kwPhrase("how ai is transforming food banks", "food bank AI") → 1.0 (all 3 words present)
+// kwPhrase("digital transformation in nonprofits", "nonprofit digital transformation 2026") → 0.75 (3 of 4)
 function kwPhrase(searchLow, phrase) {
   const p = phrase.toLowerCase();
   if (!p.includes(' ')) {
-    // Use lightweight word boundary (non-alphanumeric delimiters) so "AI" matches "AI-powered"
-    // but not "availability"; "SNAP" matches "SNAP benefits" but not "snapshot"
     const re = new RegExp('(?:^|[^a-z0-9])' + p.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '(?:[^a-z0-9]|$)');
-    return re.test(searchLow);
+    return re.test(searchLow) ? 1 : 0;
   }
-  return p.split(/\s+/).filter(Boolean).every(w => searchLow.includes(w));
+  const words = p.split(/\s+/).filter(Boolean);
+  const found = words.filter(w => searchLow.includes(w)).length;
+  return found / words.length;
 }
+// Backward-compat: filter uses >= 0.5 threshold (at least half the words must match)
+function kwMatch_filter(searchLow, phrase) { return kwPhrase(searchLow, phrase) >= 0.5; }
 
 function scoreArticle(title, summary, kws) {
   if (!kws || !kws.length) return 3; // No keyword filter active — neutral score
   const tl=(title||'').toLowerCase(), sl=(summary||'').toLowerCase();
-  let hits=0;
+  let bestKwScore = 0; // Best single-keyword match (0-2)
+  let totalHits = 0;   // Count of keywords with any match
   for (const k of kws) {
-    if (kwPhrase(tl, k)) hits+=2;
-    else if (kwPhrase(sl, k)) hits+=1;
+    const titleMatch = kwPhrase(tl, k);   // 0-1 fractional match
+    const summaryMatch = kwPhrase(sl, k); // 0-1 fractional match
+    const kwScore = Math.max(titleMatch * 2, summaryMatch); // 0-2 per keyword
+    if (kwScore > 0) totalHits++;
+    if (kwScore > bestKwScore) bestKwScore = kwScore;
   }
-  if (!hits) return 1;
-  const max=kws.length*2;
-  const r=hits/max;
-  return r>=.8?5 : r>=.55?4 : r>=.3?3 : r>=.1?2 : 1;
+  if (bestKwScore === 0) return 1;
+  // Score based on best keyword match quality + breadth bonus for multiple hits
+  // bestKwScore: 0-2 (2 = perfect title match on best keyword)
+  // breadth: 0-1 bonus for matching multiple keywords
+  const breadth = Math.min(totalHits / 3, 1); // caps at 3 keyword hits
+  const r = (bestKwScore + breadth) / 3; // 0-1 scale
+  return r>=.75?5 : r>=.55?4 : r>=.35?3 : r>=.15?2 : 1;
 }
 
 /* ─────────────────────────────────────────
@@ -1178,12 +1263,13 @@ function toggleSec(id) {
    TABS
 ───────────────────────────────────────── */
 function showTab(t) {
-  const log=t==='log', res=t==='res', nw=t==='new', cm=t==='cm';
+  const log=t==='log', res=t==='res', nw=t==='new', cm=t==='cm', st=t==='stats';
   document.getElementById('log').classList.toggle('hide',!log);
   document.getElementById('results').classList.toggle('show',res);
   document.getElementById('new-article').classList.toggle('show',nw);
   document.getElementById('content-mgmt').classList.toggle('show',cm);
-  ['t-log','t-res','t-new','t-cm'].forEach(id => {
+  document.getElementById('stats').classList.toggle('show',st);
+  ['t-log','t-res','t-new','t-cm','t-stats'].forEach(id => {
     const el=document.getElementById(id), active=el.id===`t-${t}`;
     el.classList.toggle('on',active);
     el.setAttribute('aria-selected', active);
@@ -1191,6 +1277,7 @@ function showTab(t) {
   });
   if (nw) checkScraperResults();
   if (cm) cmLoadArticles();
+  if (st) loadAnalytics();
 }
 
 /* ─────────────────────────────────────────
@@ -1693,9 +1780,9 @@ function processItem(item, feedName, feedCat, cutoff, isWeb) {
   const searchTxt = title + ' ' + description;
   const searchLow = searchTxt.toLowerCase();
 
-  // Topic keyword filter — multi-word phrases: all words must appear (order-independent).
+  // Topic keyword filter — at least half the words in any keyword phrase must appear.
   // Web results (Google News / GDELT) are already pre-filtered by the search query, so skip re-filtering.
-  if (kwTags.length && !isWeb && !kwTags.some(k => k && kwPhrase(searchLow, k))) return null;
+  if (kwTags.length && !isWeb && !kwTags.some(k => k && kwMatch_filter(searchLow, k))) return null;
 
   // Exclude filter — word-boundary to avoid accidental over-exclusion
   if (exTags.length && exTags.some(k => kwMatch(searchTxt, k))) {
@@ -1708,7 +1795,9 @@ function processItem(item, feedName, feedCat, cutoff, isWeb) {
   const summary = description.slice(0, 400);
   const score = scoreArticle(title, summary, kwTags);
 
-  return { url, title, src: feedName, pubDate: pub ? fd(pub) : '', scraped: fd(new Date()), cat, kws, isNew, isWeb: !!isWeb, summary, score, _id: ++_resultSeq };
+  const result = { url, title, src: feedName, pubDate: pub ? fd(pub) : '', scraped: fd(new Date()), cat, kws, isNew, isWeb: !!isWeb, summary, score, _id: ++_resultSeq };
+  aTrackResult(result, feedName);
+  return result;
 }
 
 /* ─────────────────────────────────────────
@@ -1723,7 +1812,8 @@ async function startScrape() {
   const btn=document.getElementById('btn-scrape');
   try {
   scrapeAbortCtrl=new AbortController();
-  isRunning=true; _resultSeq=0; allResults=[]; newArticles=[]; selectedUrls.clear();
+  isRunning=true; _resultSeq=0; allResults=[]; newArticles=[]; selectedUrls.clear(); _naSelectedIdx.clear(); _naFilterCat='all'; _naFilterMinScore=1;
+  aResetTracking();
   document.getElementById('tbody').innerHTML='';
   document.getElementById('rbadge').style.display='none';
   document.getElementById('sct').textContent='';
@@ -1784,8 +1874,12 @@ async function startScrape() {
       }
       const filterNote = kwTags.length && n < rawTotal ? ` · ${rawTotal-n} filtered by keywords` : '';
       addLog('info', `  └─ ${esc(f.name)}: ${n} article${n!==1?'s':''} matched${filterNote}`);
+      const feedNew = allResults.filter(a => a.src === f.name && a.isNew).length;
+      const feedTotalScore = allResults.filter(a => a.src === f.name).reduce((s, a) => s + a.score, 0);
+      aTrackFeed(f.name, rawTotal, n, feedNew, n - feedNew, feedTotalScore, null);
     } catch(e) {
       if (e.name!=='AbortError') addLog('err', `  └─ ${esc(f.name)}: ${esc(e.message)}`);
+      aTrackFeed(f.name, 0, 0, 0, 0, 0, e.message);
     }
   }));
 
@@ -1808,6 +1902,7 @@ async function startScrape() {
         addLog(a.isNew?'new':'skip', `  ${a.isNew?'+':'~'} [news] ${esc(a.title)} — ${esc(a.src)}`);
       }
       addLog('info', `  └─ Google News: ${n} article${n!==1?'s':''} matched`);
+      _aGnStats = { raw: items.length, matched: n, new: allResults.filter(a => a.src === 'Google News' && a.isNew).length };
     } catch(e) {
       addLog('warn', `  └─ Google News unavailable: ${esc(e.message)}`);
     }
@@ -1832,6 +1927,7 @@ async function startScrape() {
         addLog(a.isNew?'new':'skip', `  ${a.isNew?'+':'~'} [gdelt] ${esc(a.title)} — ${esc(a.src)}`);
       }
       addLog('info', `  └─ GDELT: ${n} article${n!==1?'s':''} matched`);
+      _aGdeltStats = { raw: articles.length, matched: n, new: n };
     } catch(e) {
       addLog('warn', `  └─ GDELT unavailable: ${esc(e.message)}`);
     }
@@ -1878,6 +1974,7 @@ async function startScrape() {
   document.getElementById('prog').style.width='100%';
   setTimeout(()=>{ document.getElementById('prog').style.width='0'; }, 2500);
   sortByScore();
+  aPostSession();
 
   isRunning=false; scrapeAbortCtrl=null; resetScrapeBtn(btn);
   } catch(err) {
@@ -1958,26 +2055,101 @@ async function detectServerMode() {
   // Generate button enabled/disabled is controlled only by onSourceToggle (selection count)
 }
 
-/* ── Source cards ── */
+/* ── Source cards (with filter bar) ── */
+let _naFilterCat = 'all';
+let _naFilterMinScore = 1;
+let _naSelectedIdx = new Set(); // track selected indices across filter changes
+
 function checkScraperResults() {
   const grid = document.getElementById('na-src-grid');
+  const bar = document.getElementById('na-filter-bar');
   if (!allResults.length) {
     grid.innerHTML = '<div class="na-no-results">Run a scrape first &mdash; results will appear here as selectable sources.</div>';
+    bar.style.display = 'none';
     return;
   }
-  grid.innerHTML = allResults.map((a, i) => `
-    <label class="na-src-card" id="na-src-${i}">
-      <input type="checkbox" class="na-src-chk" value="${i}" onchange="onSourceToggle()" aria-label="${esc(a.title.slice(0,90))}">
+  // Build dynamic category pills
+  const cats = [...new Set(allResults.map(a => a.cat).filter(Boolean))].sort();
+  const existingPills = bar.querySelectorAll('.na-filter-pill[data-cat]:not([data-cat="all"])');
+  existingPills.forEach(p => p.remove());
+  const allBtn = bar.querySelector('[data-cat="all"]');
+  cats.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'na-filter-pill' + (_naFilterCat === cat ? ' active' : '');
+    btn.dataset.cat = cat;
+    btn.onclick = function() { naFilterCat(this); };
+    btn.textContent = sc(cat);
+    allBtn.after(btn);
+  });
+  bar.style.display = 'flex';
+  naRenderSources();
+}
+
+function naRenderSources() {
+  const grid = document.getElementById('na-src-grid');
+  const filtered = allResults.filter((a, i) => {
+    if (_naFilterCat !== 'all' && a.cat !== _naFilterCat) return false;
+    if (a.score < _naFilterMinScore) return false;
+    return true;
+  });
+  document.getElementById('na-src-count').textContent = `Showing ${filtered.length} of ${allResults.length}`;
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="na-no-results">No results match your filters. Try broadening the category or lowering the minimum score.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(a => {
+    const i = allResults.indexOf(a);
+    const chk = _naSelectedIdx.has(i) ? 'checked' : '';
+    const dateFmt = a.pubDate ? new Date(a.pubDate + 'T00:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' }) : '';
+    const webBadge = a.isWeb ? ' <span class="pill p-web" style="font-size:9px">Web</span>' : '';
+    const scoreNum = a.score || 0;
+    return `<label class="na-src-card s${scoreNum}" id="na-src-${i}">
+      <input type="checkbox" class="na-src-chk" value="${i}" ${chk} onchange="onSourceToggle()" aria-label="${esc(a.title.slice(0,90))}">
       <div class="na-src-body">
-        <div class="na-src-title">${esc(a.title.slice(0,90))}</div>
-        <div class="na-src-meta">${esc(a.src)} &middot; ${esc(a.pubDate)} &middot; ${'&#9733;'.repeat(Math.min(5,a.score))}${'&#9734;'.repeat(Math.max(0,5-a.score))}</div>
+        <div class="na-src-head">
+          <span class="na-src-cat pill ${pc(a.cat)}">${esc(sc(a.cat))}</span>${webBadge}
+          <span class="na-src-score sc${scoreNum}">${'\u2605'.repeat(Math.min(5,scoreNum))}</span>
+        </div>
+        <div class="na-src-title">${esc(a.title)}</div>
+        <div class="na-src-meta">${esc(a.src)} \u00b7 ${dateFmt}</div>
+        ${a.summary ? `<div class="na-src-summary">${esc(a.summary.slice(0,150))}</div>` : ''}
       </div>
-    </label>`).join('');
+    </label>`;
+  }).join('');
+
+  // Apply disabled state if already at max
+  onSourceToggle();
+}
+
+function naFilterCat(btn) {
+  const cat = btn.dataset.cat;
+  if (cat === 'all') {
+    _naFilterCat = 'all';
+    document.querySelectorAll('.na-filter-pill').forEach(p => p.classList.toggle('active', p.dataset.cat === 'all'));
+  } else {
+    _naFilterCat = (_naFilterCat === cat) ? 'all' : cat;
+    document.querySelectorAll('.na-filter-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.cat === _naFilterCat || (_naFilterCat === 'all' && p.dataset.cat === 'all'));
+    });
+  }
+  naRenderSources();
+}
+
+function naFilterScore(btn) {
+  _naFilterMinScore = parseInt(btn.dataset.min) || 1;
+  document.querySelectorAll('.na-score-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.min) === _naFilterMinScore));
+  naRenderSources();
 }
 
 function onSourceToggle() {
-  const checked = [...document.querySelectorAll('.na-src-chk:checked')];
-  const count = checked.length;
+  // Sync _naSelectedIdx with current checkboxes
+  document.querySelectorAll('.na-src-chk').forEach(chk => {
+    const idx = parseInt(chk.value);
+    if (chk.checked) _naSelectedIdx.add(idx); else _naSelectedIdx.delete(idx);
+  });
+  const count = _naSelectedIdx.size;
   document.getElementById('na-sel-count').textContent = `${count} of 5 selected`;
   document.querySelectorAll('.na-src-chk').forEach(chk => {
     const card = chk.closest('.na-src-card');
@@ -1990,8 +2162,7 @@ function onSourceToggle() {
 }
 
 function getSelectedSources() {
-  return [...document.querySelectorAll('.na-src-chk:checked')]
-    .map(chk => allResults[parseInt(chk.value)]).filter(Boolean);
+  return [..._naSelectedIdx].map(i => allResults[i]).filter(Boolean);
 }
 
 /* ── Claude generation ── */
@@ -2056,6 +2227,8 @@ async function generateWithClaude(isRefinement = false) {
 
     document.getElementById('na-feedback-sec').classList.remove('hide');
     addLog('done', `\u2713 Article draft ready: "${esc(data.title)}" \u2014 review, edit, then save or download`);
+    const srcs = getSelectedSources();
+    logAction('generate', { sources: srcs.map(s => ({ url: s.url, source: s.src, score: s.score, category: s.cat, keywords: s.kws })), slug: data.slug || '' });
 
   } catch (err) {
     status.textContent = err.name === 'AbortError' ? 'Cancelled' : `Error: ${err.message}`;
@@ -2170,6 +2343,7 @@ async function saveArticleToBlog() {
     btn.textContent = '\u2713 Saved!';
     const regNote = result.registered?.length ? ` Auto-registered in: ${result.registered.join(', ')}.` : '';
     addLog('done', `\u2713 Saved blog/${esc(data.slug)}.html \u2014 nav injected, blog listing updated.${regNote} Ask Claude Code to create the illustration next.`);
+    logAction('publish', { slug: data.slug, category: data.category });
   } catch (err) {
     btn.disabled = false; btn.textContent = 'Save to blog/';
     addLog('err', `Save failed: ${esc(err.message)}`);
@@ -2574,6 +2748,195 @@ async function cmDeleteSelected() {
 function cmRefresh() {
   cmLoaded = false;
   cmLoadArticles();
+}
+
+/* ─────────────────────────────────────────
+   ANALYTICS — session tracking + action logging
+───────────────────────────────────────── */
+let _aFeedStats = {};   // feed name → { raw, matched, new, duplicate, totalScore, errors }
+let _aKwHits = {};      // keyword → { title, summary }
+let _aScores = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+let _aCats = {};        // category → count
+let _aSessionId = '';
+let _aScrapeStart = 0;
+let _aGnStats = { raw:0, matched:0, new:0 };
+let _aGdeltStats = { raw:0, matched:0, new:0 };
+
+function aResetTracking() {
+  _aFeedStats = {}; _aKwHits = {}; _aScores = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+  _aCats = {}; _aSessionId = 's_' + Date.now(); _aScrapeStart = Date.now();
+  _aGnStats = { raw:0, matched:0, new:0 }; _aGdeltStats = { raw:0, matched:0, new:0 };
+}
+
+function aTrackResult(a, feedName) {
+  // Score distribution
+  if (a.score >= 1 && a.score <= 5) _aScores[a.score]++;
+  // Category
+  _aCats[a.cat] = (_aCats[a.cat] || 0) + 1;
+  // Keyword hits — check which keywords matched title vs summary
+  for (const kw of kwTags) {
+    if (!_aKwHits[kw]) _aKwHits[kw] = { title: 0, summary: 0 };
+    const tl = (a.title || '').toLowerCase(), sl = (a.summary || '').toLowerCase();
+    if (kwPhrase(tl, kw) >= 0.5) _aKwHits[kw].title++;
+    else if (kwPhrase(sl, kw) >= 0.5) _aKwHits[kw].summary++;
+  }
+}
+
+function aTrackFeed(feedName, raw, matched, newCount, dup, totalScore, error) {
+  _aFeedStats[feedName] = {
+    raw, matched, new: newCount, duplicate: dup,
+    avgScore: matched > 0 ? Math.round((totalScore / matched) * 10) / 10 : 0,
+    error: error || null
+  };
+}
+
+async function aPostSession() {
+  const webOn = document.getElementById('web-tog').checked;
+  const payload = {
+    id: _aSessionId,
+    ts: new Date(_aScrapeStart).toISOString(),
+    durationMs: Date.now() - _aScrapeStart,
+    config: {
+      preset: activePreset || '\u2014',
+      period: getLB() || period,
+      keywords: [...kwTags],
+      excludeKeywords: [...exTags],
+      webSearchEnabled: webOn,
+      feedsEnabled: feeds.filter(f => f.on !== false).map(f => f.name),
+      feedCount: feeds.filter(f => f.on !== false).length
+    },
+    feeds: Object.entries(_aFeedStats).map(([name, s]) => ({ name, ...s })),
+    webSearch: { googleNews: _aGnStats, gdelt: _aGdeltStats },
+    totals: {
+      raw: Object.values(_aFeedStats).reduce((s, f) => s + f.raw, 0) + _aGnStats.raw + _aGdeltStats.raw,
+      matched: allResults.length,
+      new: newArticles.length,
+      duplicate: allResults.length - newArticles.length,
+      errors: Object.values(_aFeedStats).filter(f => f.error).length
+    },
+    scores: { ..._aScores },
+    keywordHits: { ..._aKwHits },
+    categories: { ..._aCats }
+  };
+  try {
+    await fetch('/api/analytics/session', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch { /* fire-and-forget */ }
+}
+
+async function logAction(type, extra) {
+  const payload = { type, ts: new Date().toISOString(), sessionId: _aSessionId, ...extra };
+  try {
+    await fetch('/api/analytics/action', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch { /* fire-and-forget */ }
+}
+
+/* ─────────────────────────────────────────
+   ANALYTICS TAB — dashboard renderer
+───────────────────────────────────────── */
+let statsLoaded = false;
+
+async function loadAnalytics(force) {
+  if (statsLoaded && !force) return;
+  const days = document.getElementById('stats-days')?.value || 30;
+  document.getElementById('stats-body').innerHTML = '<div style="padding:16px;color:var(--tm)">Loading analytics\u2026</div>';
+  try {
+    const r = await fetch(`/api/analytics/summary?days=${days}`);
+    if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.error || `HTTP ${r.status}`); }
+    const d = await r.json();
+    statsLoaded = true;
+    renderAnalytics(d);
+  } catch (e) {
+    statsLoaded = false;
+    const isNetwork = e.message === 'Failed to fetch' || e.name === 'TypeError';
+    document.getElementById('stats-body').innerHTML = isNetwork
+      ? '<div style="padding:24px;color:var(--tf);text-align:center">Analytics requires the Express server.<br>Run: <code style="background:var(--bg-input);padding:2px 6px;border-radius:3px">npm run admin</code></div>'
+      : `<div style="padding:16px;color:var(--red)">Error: ${esc(e.message)}</div>`;
+  }
+}
+
+function renderAnalytics(d) {
+  const el = document.getElementById('stats-body');
+  if (!d.sessions?.length && !d.feedLeaderboard?.length) {
+    el.innerHTML = '<div style="padding:24px;color:var(--tf);text-align:center">No analytics data yet. Run a few scrapes to start seeing insights.</div>';
+    return;
+  }
+
+  let html = '';
+
+  // Recommendations
+  if (d.recommendations?.length) {
+    html += '<div class="st-sec">';
+    for (const r of d.recommendations) {
+      const cls = r.severity === 'warning' ? 'st-warn' : r.severity === 'positive' ? 'st-pos' : 'st-info';
+      html += `<div class="st-rec ${cls}">${esc(r.message)}</div>`;
+    }
+    html += '</div>';
+  }
+
+  // Funnel
+  const f = d.funnel || {};
+  html += '<div class="st-sec"><div class="st-sh">Content Funnel</div><div class="st-funnel">';
+  const fRows = [
+    ['Scraped', f.scraped, ''],
+    ['New', f.new, f.scraped ? Math.round(f.new / f.scraped * 100) + '%' : ''],
+    ['Selected', f.selected, f.new ? Math.round(f.selected / f.new * 100) + '%' : ''],
+    ['Generated', f.generated, f.selected ? Math.round(f.generated / f.selected * 100) + '%' : ''],
+    ['Published', f.published, f.generated ? Math.round(f.published / f.generated * 100) + '%' : '']
+  ];
+  for (const [label, val, pct] of fRows) {
+    const bar = f.scraped > 0 ? Math.max(2, Math.round((val || 0) / f.scraped * 100)) : 0;
+    html += `<div class="st-frow"><span class="st-fl">${label}</span><span class="st-fbar" style="width:${bar}%"></span><span class="st-fv">${val || 0}</span><span class="st-fp">${pct}</span></div>`;
+  }
+  html += '</div></div>';
+
+  // Score distribution
+  const sc = d.scores || {};
+  const maxSc = Math.max(sc[1]||0, sc[2]||0, sc[3]||0, sc[4]||0, sc[5]||0, 1);
+  html += '<div class="st-sec"><div class="st-sh">Score Distribution</div><table class="st-tbl"><thead><tr><th>\u2605</th><th>Count</th><th style="width:40%">Distribution</th><th>Pick Rate</th></tr></thead><tbody>';
+  for (let i = 5; i >= 1; i--) {
+    const n = sc[i] || 0;
+    const w = Math.round(n / maxSc * 100);
+    const pr = sc.pickRates?.[i] != null ? Math.round(sc.pickRates[i] * 100) + '%' : '\u2014';
+    html += `<tr><td>${i}</td><td>${n}</td><td><div class="st-bar" style="width:${w}%"></div></td><td>${pr}</td></tr>`;
+  }
+  html += `</tbody></table><div class="st-avg">Average: ${sc.avg || '\u2014'}</div></div>`;
+
+  // Feed leaderboard
+  if (d.feedLeaderboard?.length) {
+    html += '<div class="st-sec"><div class="st-sh">Feed Leaderboard</div><table class="st-tbl"><thead><tr><th>Feed</th><th>Yield</th><th>New</th><th>Picked</th><th>Pick%</th><th>Avg\u2605</th><th>Errors</th></tr></thead><tbody>';
+    for (const f of d.feedLeaderboard) {
+      html += `<tr><td>${esc(f.name)}</td><td>${f.yield}</td><td>${f.new}</td><td>${f.picked}</td><td>${f.pickRate ? Math.round(f.pickRate * 100) + '%' : '\u2014'}</td><td>${f.avgScore || '\u2014'}</td><td>${f.errors || ''}</td></tr>`;
+    }
+    html += '</tbody></table></div>';
+  }
+
+  // Keyword report
+  if (d.keywordReport?.length) {
+    html += '<div class="st-sec"><div class="st-sh">Keyword Effectiveness</div><table class="st-tbl"><thead><tr><th>Keyword</th><th>Matches</th><th>Title Hits</th><th>Picked</th><th>Pick%</th></tr></thead><tbody>';
+    for (const k of d.keywordReport.slice(0, 20)) {
+      const flag = k.matches >= 20 && k.pickRate < 0.1 ? ' <span style="color:var(--yellow)">\u2190 noisy</span>' : '';
+      html += `<tr><td>${esc(k.keyword)}${flag}</td><td>${k.matches}</td><td>${k.titleHits}</td><td>${k.picked}</td><td>${k.pickRate ? Math.round(k.pickRate * 100) + '%' : '\u2014'}</td></tr>`;
+    }
+    html += '</tbody></table></div>';
+  }
+
+  // Session history
+  if (d.sessions?.length) {
+    html += '<div class="st-sec"><div class="st-sh">Recent Sessions</div><table class="st-tbl"><thead><tr><th>Date</th><th>Preset</th><th>Found</th><th>New</th><th>Avg\u2605</th></tr></thead><tbody>';
+    for (const s of d.sessions) {
+      const dt = s.ts ? new Date(s.ts).toLocaleDateString('en-US', { month:'short', day:'numeric' }) : '\u2014';
+      html += `<tr><td>${esc(dt)}</td><td>${esc(s.preset)}</td><td>${s.found}</td><td>${s.new}</td><td>${s.avgScore || '\u2014'}</td></tr>`;
+    }
+    html += '</tbody></table></div>';
+  }
+
+  el.innerHTML = html;
 }
 </script>
 </body>

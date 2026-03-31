@@ -32,6 +32,7 @@ const ILLUSTRATIONS_DIR = path.join(PROJECT_ROOT, 'src', 'assets', 'images', 'il
 const BUILD_COMPONENTS_PATH = path.join(PROJECT_ROOT, 'build-components.js');
 const SITEMAP_SCRIPT_PATH = path.join(PROJECT_ROOT, 'scripts', 'generate-sitemap.js');
 const PA11YCI_PATH = path.join(PROJECT_ROOT, '.pa11yci.json');
+const ANALYTICS_PATH = path.join(__dirname, 'scraper-analytics.json');
 
 let anthropic = null;
 try {
@@ -587,6 +588,180 @@ app.post('/api/delete-articles', (req, res) => {
 
   } catch (err) {
     res.status(500).json({ error: `Delete failed: ${err.message}` });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// ANALYTICS — session logging, action tracking, and summary computation
+// ---------------------------------------------------------------------------
+function readAnalytics() {
+  try {
+    if (existsSync(ANALYTICS_PATH)) return JSON.parse(readFileSync(ANALYTICS_PATH, 'utf-8'));
+  } catch { /* corrupt file — start fresh */ }
+  return { sessions: [], actions: [] };
+}
+function writeAnalytics(data) {
+  writeFileSync(ANALYTICS_PATH, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+app.post('/api/analytics/session', (req, res) => {
+  try {
+    const data = readAnalytics();
+    data.sessions.push(req.body);
+    writeAnalytics(data);
+    res.json({ ok: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/analytics/action', (req, res) => {
+  try {
+    const data = readAnalytics();
+    data.actions.push(req.body);
+    writeAnalytics(data);
+    res.json({ ok: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/api/analytics/summary', (req, res) => {
+  try {
+    const data = readAnalytics();
+    const days = parseInt(req.query.days) || 30;
+    const cutoff = days > 0 ? new Date(Date.now() - days * 86400000).toISOString() : '';
+    const sessions = cutoff ? data.sessions.filter(s => s.ts >= cutoff) : data.sessions;
+    const actions = cutoff ? data.actions.filter(a => a.ts >= cutoff) : data.actions;
+
+    // Build picked-article index: source name → count, keyword → count, score → count
+    const pickedBySource = {};
+    const pickedByKeyword = {};
+    const pickedByScore = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    let totalPicked = 0;
+    for (const a of actions) {
+      const arts = a.articles || a.sources || [];
+      for (const art of arts) {
+        totalPicked++;
+        const src = art.source || '';
+        pickedBySource[src] = (pickedBySource[src] || 0) + 1;
+        if (art.score >= 1 && art.score <= 5) pickedByScore[art.score]++;
+        for (const kw of (art.keywords || [])) {
+          pickedByKeyword[kw] = (pickedByKeyword[kw] || 0) + 1;
+        }
+      }
+    }
+
+    // Feed leaderboard
+    const feedAgg = {};
+    for (const s of sessions) {
+      for (const f of (s.feeds || [])) {
+        if (!feedAgg[f.name]) feedAgg[f.name] = { yield: 0, new: 0, totalScore: 0, scored: 0, errors: 0, sessions: 0 };
+        const fa = feedAgg[f.name];
+        fa.yield += (f.matched || 0);
+        fa.new += (f.new || 0);
+        if (f.avgScore && f.matched) { fa.totalScore += f.avgScore * f.matched; fa.scored += f.matched; }
+        if (f.error) fa.errors++;
+        fa.sessions++;
+      }
+    }
+    const feedLeaderboard = Object.entries(feedAgg).map(([name, fa]) => ({
+      name,
+      yield: fa.yield,
+      new: fa.new,
+      picked: pickedBySource[name] || 0,
+      pickRate: fa.new > 0 ? Math.round(((pickedBySource[name] || 0) / fa.new) * 100) / 100 : 0,
+      avgScore: fa.scored > 0 ? Math.round((fa.totalScore / fa.scored) * 10) / 10 : 0,
+      errors: fa.errors,
+      sessions: fa.sessions
+    })).sort((a, b) => b.pickRate - a.pickRate || b.yield - a.yield);
+
+    // Keyword report
+    const kwAgg = {};
+    for (const s of sessions) {
+      for (const [kw, hits] of Object.entries(s.keywordHits || {})) {
+        if (!kwAgg[kw]) kwAgg[kw] = { matches: 0, titleHits: 0, summaryHits: 0 };
+        kwAgg[kw].matches += (hits.title || 0) + (hits.summary || 0);
+        kwAgg[kw].titleHits += (hits.title || 0);
+        kwAgg[kw].summaryHits += (hits.summary || 0);
+      }
+    }
+    const keywordReport = Object.entries(kwAgg).map(([keyword, ka]) => ({
+      keyword,
+      matches: ka.matches,
+      titleHits: ka.titleHits,
+      picked: pickedByKeyword[keyword] || 0,
+      pickRate: ka.matches > 0 ? Math.round(((pickedByKeyword[keyword] || 0) / ka.matches) * 100) / 100 : 0,
+    })).sort((a, b) => b.pickRate - a.pickRate || b.matches - a.matches);
+
+    // Score distribution
+    const scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    let scoreTotal = 0, scoreCount = 0;
+    for (const s of sessions) {
+      for (const [sc, n] of Object.entries(s.scores || {})) {
+        const k = parseInt(sc);
+        if (k >= 1 && k <= 5) { scores[k] += n; scoreTotal += k * n; scoreCount += n; }
+      }
+    }
+    const scorePickRates = {};
+    for (let i = 1; i <= 5; i++) {
+      scorePickRates[i] = scores[i] > 0 ? Math.round((pickedByScore[i] / scores[i]) * 100) / 100 : 0;
+    }
+
+    // Funnel
+    let scraped = 0, newCount = 0;
+    for (const s of sessions) {
+      scraped += (s.totals?.matched || 0);
+      newCount += (s.totals?.new || 0);
+    }
+    const generated = actions.filter(a => a.type === 'generate').length;
+    const published = actions.filter(a => a.type === 'publish').length;
+
+    // Session history
+    const sessionHistory = sessions.slice(-20).reverse().map(s => ({
+      ts: s.ts,
+      preset: s.config?.preset || '—',
+      found: s.totals?.matched || 0,
+      new: s.totals?.new || 0,
+      avgScore: (() => {
+        let t = 0, c = 0;
+        for (const [sc, n] of Object.entries(s.scores || {})) { t += parseInt(sc) * n; c += n; }
+        return c > 0 ? Math.round((t / c) * 10) / 10 : 0;
+      })()
+    }));
+
+    // Recommendations
+    const recommendations = [];
+    for (const fl of feedLeaderboard) {
+      if (fl.sessions >= 5 && fl.yield === 0) {
+        recommendations.push({ severity: 'warning', message: `Feed "${fl.name}" hasn't produced results in ${fl.sessions} sessions \u2014 consider disabling` });
+      }
+      if (fl.sessions >= 3 && fl.errors / fl.sessions > 0.5) {
+        recommendations.push({ severity: 'warning', message: `Feed "${fl.name}" fails in ${Math.round(fl.errors / fl.sessions * 100)}% of sessions \u2014 URL may have changed` });
+      }
+    }
+    for (const kr of keywordReport) {
+      if (kr.matches >= 10 && kr.pickRate >= 0.6) {
+        recommendations.push({ severity: 'positive', message: `Keyword "${kr.keyword}" has a ${Math.round(kr.pickRate * 100)}% pick rate \u2014 promote to other presets` });
+      }
+      if (kr.matches >= 20 && kr.pickRate < 0.1) {
+        recommendations.push({ severity: 'info', message: `Keyword "${kr.keyword}" produces many matches but is rarely picked \u2014 consider narrowing` });
+      }
+    }
+    if (sessions.length >= 5 && scoreCount > 0 && scoreTotal / scoreCount < 2.5) {
+      recommendations.push({ severity: 'info', message: `Average score is ${(scoreTotal / scoreCount).toFixed(1)} \u2014 try more specific keywords` });
+    }
+    if (totalPicked > 0 && (pickedByScore[1] + pickedByScore[2]) / totalPicked > 0.4) {
+      recommendations.push({ severity: 'info', message: `${Math.round((pickedByScore[1] + pickedByScore[2]) / totalPicked * 100)}% of your picks are low-scoring \u2014 scoring algorithm may need tuning` });
+    }
+
+    res.json({
+      period: { days, sessions: sessions.length },
+      feedLeaderboard,
+      keywordReport,
+      scores: { ...scores, avg: scoreCount > 0 ? Math.round((scoreTotal / scoreCount) * 10) / 10 : 0, pickRates: scorePickRates },
+      funnel: { scraped, new: newCount, selected: totalPicked, generated, published },
+      sessions: sessionHistory,
+      recommendations
+    });
+  } catch (err) {
+    res.status(500).json({ error: `Analytics failed: ${err.message}` });
   }
 });
 

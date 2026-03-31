@@ -3,6 +3,7 @@ dist/
 .env
 .env.*
 !.env.example
+Blog and Article Content/scraper-analytics.json
 *.log
 .DS_Store
 Thumbs.db

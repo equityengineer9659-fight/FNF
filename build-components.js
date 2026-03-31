@@ -32,6 +32,7 @@ const resourcesSubpages = [
   'purpose-driven-ai-food-banks', 'salesforce-nonprofit-cloud-ai-automation',
   'snap-cuts-ice-fears-food-bank-response',
   'grant-writing-nonprofit-sustainability',
+  'ai-data-strategy-crm-food-banks',
 ];
 
 // Component definitions — all hrefs use absolute paths so they work from any subdirectory
@@ -180,6 +181,7 @@ function buildComponents() {
     'purpose-driven-ai-food-banks', 'salesforce-nonprofit-cloud-ai-automation',
     'snap-cuts-ice-fears-food-bank-response',
   'grant-writing-nonprofit-sustainability',
+  'ai-data-strategy-crm-food-banks',
 ];
 
   [...corePages, ...hubPages].forEach(page => {

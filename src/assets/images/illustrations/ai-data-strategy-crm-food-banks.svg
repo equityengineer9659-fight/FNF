@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="AI and data strategy transforming food bank CRM: from fragmented legacy systems to a unified AI-powered platform">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f1923"/>
+      <stop offset="100%" stop-color="#1a1040"/>
+    </linearGradient>
+    <linearGradient id="aiGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="dataGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <linearGradient id="crmGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="outGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bg)"/>
+  <g opacity="0.03" stroke="#fff" stroke-width="0.5">
+    <line x1="0" y1="80" x2="800" y2="80"/><line x1="0" y1="160" x2="800" y2="160"/>
+    <line x1="0" y1="240" x2="800" y2="240"/><line x1="0" y1="320" x2="800" y2="320"/>
+    <line x1="160" y1="0" x2="160" y2="400"/><line x1="320" y1="0" x2="320" y2="400"/>
+    <line x1="480" y1="0" x2="480" y2="400"/><line x1="640" y1="0" x2="640" y2="400"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-size="13" font-weight="700" letter-spacing="0.08em" opacity="0.9">THE NEW CRM FRONTIER</text>
+  <line x1="300" y1="38" x2="500" y2="38" stroke="#fff" stroke-width="0.5" opacity="0.15"/>
+
+  <!-- ═══════ LEFT: Legacy Fragmented Systems ═══════ -->
+  <g transform="translate(105,80)">
+    <text x="0" y="0" text-anchor="middle" fill="#ef4444" font-family="system-ui,sans-serif" font-size="9" font-weight="600" letter-spacing="0.06em" opacity="0.6">LEGACY SILOS</text>
+
+    <!-- Silo 1: Donor spreadsheet -->
+    <rect x="-48" y="14" width="96" height="52" rx="4" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"/>
+    <text x="0" y="36" text-anchor="middle" fill="#fca5a5" font-family="system-ui,sans-serif" font-size="9" opacity="0.7">Donor</text>
+    <text x="0" y="48" text-anchor="middle" fill="#fca5a5" font-family="system-ui,sans-serif" font-size="8" opacity="0.5">Spreadsheet</text>
+
+    <!-- Silo 2: Client DB -->
+    <rect x="-48" y="76" width="96" height="52" rx="4" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"/>
+    <text x="0" y="98" text-anchor="middle" fill="#fca5a5" font-family="system-ui,sans-serif" font-size="9" opacity="0.7">Client</text>
+    <text x="0" y="110" text-anchor="middle" fill="#fca5a5" font-family="system-ui,sans-serif" font-size="8" opacity="0.5">Database</text>
+
+    <!-- Silo 3: Volunteer tracker -->
+    <rect x="-48" y="138" width="96" height="52" rx="4" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"/>
+    <text x="0" y="160" text-anchor="middle" fill="#fca5a5" font-family="system-ui,sans-serif" font-size="9" opacity="0.7">Volunteer</text>
+    <text x="0" y="172" text-anchor="middle" fill="#fca5a5" font-family="system-ui,sans-serif" font-size="8" opacity="0.5">Tracker</text>
+
+    <!-- Silo 4: Grant reports -->
+    <rect x="-48" y="200" width="96" height="52" rx="4" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,3" opacity="0.35"/>
+    <text x="0" y="222" text-anchor="middle" fill="#fca5a5" font-family="system-ui,sans-serif" font-size="9" opacity="0.7">Grant</text>
+    <text x="0" y="234" text-anchor="middle" fill="#fca5a5" font-family="system-ui,sans-serif" font-size="8" opacity="0.5">Reports</text>
+
+    <!-- Broken connection symbols -->
+    <line x1="-8" y1="69" x2="8" y2="73" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/>
+    <line x1="-8" y1="73" x2="8" y2="69" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/>
+    <line x1="-8" y1="131" x2="8" y2="135" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/>
+    <line x1="-8" y1="135" x2="8" y2="131" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/>
+    <line x1="-8" y1="193" x2="8" y2="197" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/>
+    <line x1="-8" y1="197" x2="8" y2="193" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/>
+  </g>
+
+  <!-- ═══════ TRANSFORMATION ARROW ═══════ -->
+  <g transform="translate(230,200)">
+    <path d="M0,0 L60,0" stroke="#3b82f6" stroke-width="2" opacity="0.4" stroke-dasharray="6,4"/>
+    <path d="M52,-6 L64,0 L52,6" fill="#3b82f6" opacity="0.5"/>
+    <text x="32" y="-10" text-anchor="middle" fill="#93c5fd" font-family="system-ui,sans-serif" font-size="7" opacity="0.6">DATA 360</text>
+  </g>
+
+  <!-- ═══════ CENTER: Unified CRM Hub ═══════ -->
+  <g transform="translate(400,195)">
+    <!-- Outer glow -->
+    <circle r="72" fill="url(#crmGrad)" opacity="0.08"/>
+    <circle r="64" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.5"/>
+    <circle r="56" fill="url(#crmGrad)" opacity="0.1"/>
+
+    <!-- CRM database icon -->
+    <ellipse cx="0" cy="-18" rx="18" ry="7" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <path d="M-18,-18 v24 c0,3.9 8,7 18,7 s18-3.1 18-7 v-24" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <path d="M-18,-7 c0,3.9 8,7 18,7 s18-3.1 18-7" fill="none" stroke="#93c5fd" stroke-width="1" opacity="0.6"/>
+    <path d="M-18,4 c0,3.9 8,7 18,7 s18-3.1 18-7" fill="none" stroke="#93c5fd" stroke-width="1" opacity="0.4"/>
+
+    <text x="0" y="30" text-anchor="middle" fill="#93c5fd" font-family="system-ui,sans-serif" font-size="8" font-weight="600" letter-spacing="0.06em">UNIFIED CRM</text>
+    <text x="0" y="42" text-anchor="middle" fill="#60a5fa" font-family="system-ui,sans-serif" font-size="7" opacity="0.7">Salesforce Data 360</text>
+
+    <!-- Data streams flowing in from left (dashed) -->
+    <line x1="-95" y1="-75" x2="-64" y2="-30" stroke="#3b82f6" stroke-width="1" opacity="0.25" stroke-dasharray="3,3"/>
+    <line x1="-95" y1="-15" x2="-64" y2="-5" stroke="#3b82f6" stroke-width="1" opacity="0.25" stroke-dasharray="3,3"/>
+    <line x1="-95" y1="45" x2="-64" y2="10" stroke="#3b82f6" stroke-width="1" opacity="0.25" stroke-dasharray="3,3"/>
+    <line x1="-95" y1="105" x2="-64" y2="25" stroke="#3b82f6" stroke-width="1" opacity="0.25" stroke-dasharray="3,3"/>
+  </g>
+
+  <!-- ═══════ TOP: AI Layer ═══════ -->
+  <g transform="translate(400,68)">
+    <rect x="-130" y="-14" width="260" height="28" rx="14" fill="url(#aiGrad)" fill-opacity="0.15" stroke="#8b5cf6" stroke-width="1" opacity="0.6"/>
+    <!-- Sparkle icon -->
+    <path d="M-110,0 l3,-8 l3,8 l-8,-3 l8,0 l-8,3 z" fill="#c4b5fd" opacity="0.8" transform="scale(0.6) translate(-183,-1)"/>
+    <text x="0" y="4" text-anchor="middle" fill="#c4b5fd" font-family="system-ui,sans-serif" font-size="9" font-weight="600" letter-spacing="0.06em">AI INTELLIGENCE LAYER</text>
+  </g>
+
+  <!-- Dashed lines from AI layer to hub -->
+  <line x1="400" y1="82" x2="400" y2="130" stroke="#8b5cf6" stroke-width="1" opacity="0.25" stroke-dasharray="3,3"/>
+
+  <!-- ═══════ RIGHT: AI-Powered Outputs ═══════ -->
+  <g transform="translate(620,90)">
+    <!-- Output 1: Predictive Donor Scoring -->
+    <rect x="-70" y="0" width="140" height="42" rx="5" fill="#10b981" fill-opacity="0.08" stroke="#10b981" stroke-width="1" opacity="0.4"/>
+    <!-- Chart up icon -->
+    <rect x="-56" y="12" width="4" height="12" rx="1" fill="#6ee7b7" opacity="0.5"/>
+    <rect x="-48" y="8" width="4" height="16" rx="1" fill="#6ee7b7" opacity="0.7"/>
+    <rect x="-40" y="4" width="4" height="20" rx="1" fill="#6ee7b7" opacity="0.9"/>
+    <text x="12" y="18" text-anchor="middle" fill="#6ee7b7" font-family="system-ui,sans-serif" font-size="8.5" font-weight="600">Predictive</text>
+    <text x="12" y="30" text-anchor="middle" fill="#6ee7b7" font-family="system-ui,sans-serif" font-size="8" opacity="0.7">Donor Scoring</text>
+  </g>
+
+  <g transform="translate(620,148)">
+    <!-- Output 2: Smart Client Intake -->
+    <rect x="-70" y="0" width="140" height="42" rx="5" fill="#06b6d4" fill-opacity="0.08" stroke="#06b6d4" stroke-width="1" opacity="0.4"/>
+    <!-- Person + gear icon -->
+    <circle cx="-48" cy="14" r="6" fill="none" stroke="#67e8f9" stroke-width="1.2" opacity="0.7"/>
+    <path d="M-56,28 c0,-5 3.5,-8 8,-8 s8,3 8,8" fill="none" stroke="#67e8f9" stroke-width="1.2" opacity="0.5"/>
+    <text x="12" y="18" text-anchor="middle" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="8.5" font-weight="600">Smart Client</text>
+    <text x="12" y="30" text-anchor="middle" fill="#67e8f9" font-family="system-ui,sans-serif" font-size="8" opacity="0.7">Intake Workflows</text>
+  </g>
+
+  <g transform="translate(620,206)">
+    <!-- Output 3: Inventory Forecast -->
+    <rect x="-70" y="0" width="140" height="42" rx="5" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-width="1" opacity="0.4"/>
+    <!-- Box/package icon -->
+    <rect x="-56" y="8" width="16" height="14" rx="2" fill="none" stroke="#fcd34d" stroke-width="1.2" opacity="0.7"/>
+    <line x1="-56" y1="14" x2="-40" y2="14" stroke="#fcd34d" stroke-width="1" opacity="0.5"/>
+    <line x1="-48" y1="8" x2="-48" y2="22" stroke="#fcd34d" stroke-width="1" opacity="0.5"/>
+    <text x="12" y="18" text-anchor="middle" fill="#fcd34d" font-family="system-ui,sans-serif" font-size="8.5" font-weight="600">Inventory</text>
+    <text x="12" y="30" text-anchor="middle" fill="#fcd34d" font-family="system-ui,sans-serif" font-size="8" opacity="0.7">Forecasting</text>
+  </g>
+
+  <g transform="translate(620,264)">
+    <!-- Output 4: Impact Reports -->
+    <rect x="-70" y="0" width="140" height="42" rx="5" fill="#8b5cf6" fill-opacity="0.08" stroke="#8b5cf6" stroke-width="1" opacity="0.4"/>
+    <!-- Document icon -->
+    <rect x="-56" y="6" width="14" height="18" rx="2" fill="none" stroke="#c4b5fd" stroke-width="1.2" opacity="0.7"/>
+    <line x1="-52" y1="12" x2="-46" y2="12" stroke="#c4b5fd" stroke-width="0.8" opacity="0.5"/>
+    <line x1="-52" y1="16" x2="-46" y2="16" stroke="#c4b5fd" stroke-width="0.8" opacity="0.5"/>
+    <line x1="-52" y1="20" x2="-49" y2="20" stroke="#c4b5fd" stroke-width="0.8" opacity="0.5"/>
+    <text x="12" y="18" text-anchor="middle" fill="#c4b5fd" font-family="system-ui,sans-serif" font-size="8.5" font-weight="600">Auto Impact</text>
+    <text x="12" y="30" text-anchor="middle" fill="#c4b5fd" font-family="system-ui,sans-serif" font-size="8" opacity="0.7">Reports</text>
+  </g>
+
+  <!-- Output flow lines from hub to outputs -->
+  <line x1="464" y1="170" x2="550" y2="120" stroke="#10b981" stroke-width="1" opacity="0.2" stroke-dasharray="3,3"/>
+  <line x1="464" y1="185" x2="550" y2="175" stroke="#06b6d4" stroke-width="1" opacity="0.2" stroke-dasharray="3,3"/>
+  <line x1="464" y1="205" x2="550" y2="230" stroke="#f59e0b" stroke-width="1" opacity="0.2" stroke-dasharray="3,3"/>
+  <line x1="464" y1="220" x2="550" y2="285" stroke="#8b5cf6" stroke-width="1" opacity="0.2" stroke-dasharray="3,3"/>
+
+  <!-- ═══════ BOTTOM: Foundation Bar ═══════ -->
+  <g transform="translate(400,365)">
+    <rect x="-160" y="-12" width="320" height="24" rx="4" fill="#10b981" fill-opacity="0.06" stroke="#10b981" stroke-width="0.8" opacity="0.3"/>
+    <text x="-110" y="4" fill="#6ee7b7" font-family="system-ui,sans-serif" font-size="8" opacity="0.7">&#10003; Clean Data</text>
+    <text x="-20" y="4" fill="#6ee7b7" font-family="system-ui,sans-serif" font-size="8" opacity="0.7">&#10003; Governance</text>
+    <text x="72" y="4" fill="#6ee7b7" font-family="system-ui,sans-serif" font-size="8" opacity="0.7">&#10003; Integration</text>
+  </g>
+  <text x="400" y="396" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-size="7" opacity="0.25" letter-spacing="0.04em">DATA FOUNDATION &#x2192; AI INTELLIGENCE &#x2192; MISSION IMPACT</text>
+</svg>
