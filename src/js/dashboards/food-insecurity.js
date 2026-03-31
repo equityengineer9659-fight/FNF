@@ -934,16 +934,28 @@ async function init() {
   }
 }
 
-// Non-blocking: fetch BLS food price data and render chart
+// Load BLS food price data: static JSON first, then try live PHP proxy for fresher data
 async function fetchBLSData() {
+  // 1. Load static JSON (always available)
+  try {
+    const res = await fetch('/data/bls-food-cpi.json');
+    if (res.ok) {
+      const data = await res.json();
+      renderFoodPrices(data);
+      updateFreshness('bls', { _cached: true, _cachedAt: data.fetchedAt });
+    }
+  } catch { /* static file missing */ }
+
+  // 2. Try live PHP proxy for fresher data (non-blocking upgrade)
   try {
     const res = await fetch('/api/dashboard-bls.php');
     if (!res.ok) return;
-    const blsData = await res.json();
-    if (blsData.error) return;
-    renderFoodPrices(blsData);
-    updateFreshness('bls', blsData);
-  } catch { /* BLS data unavailable — chart simply won't render */ }
+    const liveData = await res.json();
+    if (liveData.error || !liveData.series) return;
+    // Re-render with live data
+    renderFoodPrices(liveData);
+    updateFreshness('bls', liveData);
+  } catch { /* PHP proxy unavailable — static data already rendered */ }
 }
 
 // Start when DOM ready
