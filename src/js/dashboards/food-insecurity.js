@@ -723,6 +723,119 @@ function renderSnap(data) {
   });
 }
 
+// -- Food Price Trend (BLS CPI data) --
+function renderFoodPrices(blsData) {
+  const chart = createChart('chart-food-prices');
+  if (!chart || !blsData || !blsData.series) return;
+
+  // Find each series
+  const foodHome = blsData.series.find(s => s.name === 'Food at Home');
+  const foodAway = blsData.series.find(s => s.name === 'Food Away from Home');
+  const allItems = blsData.series.find(s => s.name === 'All Items');
+
+  if (!foodHome) return;
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(10,10,30,0.92)',
+      borderColor: COLORS.secondary,
+      borderWidth: 1,
+      textStyle: { color: COLORS.text },
+      formatter: params => {
+        let tip = `<strong>${params[0].axisValue}</strong><br/>`;
+        params.forEach(p => {
+          tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`;
+        });
+        return tip;
+      }
+    },
+    legend: {
+      data: ['Food at Home', 'Food Away from Home', 'All Items'],
+      textStyle: { color: COLORS.text },
+      top: 5
+    },
+    grid: { left: 50, right: 20, top: 45, bottom: 60 },
+    dataZoom: [{
+      type: 'inside',
+      start: 50,
+      end: 100
+    }, {
+      type: 'slider',
+      start: 50,
+      end: 100,
+      height: 20,
+      bottom: 10,
+      textStyle: { color: COLORS.textMuted },
+      borderColor: COLORS.gridLine,
+      fillerColor: 'rgba(0,212,255,0.1)'
+    }],
+    xAxis: {
+      type: 'category',
+      data: foodHome.data.map(d => d.date),
+      axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'value',
+      name: 'CPI Index',
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series: [
+      {
+        name: 'Food at Home',
+        type: 'line',
+        data: foodHome.data.map(d => d.value),
+        smooth: true,
+        lineStyle: { width: 2.5, color: COLORS.accent },
+        itemStyle: { color: COLORS.accent },
+        symbol: 'none',
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(255,107,53,0.2)' },
+            { offset: 1, color: 'rgba(255,107,53,0.01)' }
+          ])
+        }
+      },
+      ...(foodAway ? [{
+        name: 'Food Away from Home',
+        type: 'line',
+        data: foodAway.data.map(d => d.value),
+        smooth: true,
+        lineStyle: { width: 2, color: COLORS.secondary },
+        itemStyle: { color: COLORS.secondary },
+        symbol: 'none'
+      }] : []),
+      ...(allItems ? [{
+        name: 'All Items',
+        type: 'line',
+        data: allItems.data.map(d => d.value),
+        smooth: true,
+        lineStyle: { width: 1.5, color: 'rgba(255,255,255,0.3)', type: 'dashed' },
+        itemStyle: { color: 'rgba(255,255,255,0.3)' },
+        symbol: 'none'
+      }] : [])
+    ]
+  });
+}
+
+// -- Update data freshness indicator --
+function updateFreshness(source, info) {
+  const el = document.getElementById(`freshness-${source}`);
+  if (!el) return;
+  if (info._cached) {
+    const cachedDate = new Date(info._cachedAt || info.fetchedAt);
+    const age = Math.round((Date.now() - cachedDate.getTime()) / 3600000);
+    el.textContent = `Cached ${age}h ago`;
+    el.classList.add('freshness--cached');
+  } else {
+    el.textContent = 'Live';
+    el.classList.add('freshness--live');
+  }
+}
+
 // -- Scroll Reveal (IntersectionObserver) --
 function initScrollReveal() {
   const elements = document.querySelectorAll('.scroll-reveal');
@@ -754,10 +867,26 @@ function handleResize() {
   charts.forEach(c => c.resize());
 }
 
+// -- Fetch with fallback: try live API, fall back to static JSON --
+async function fetchWithFallback(liveUrl, staticUrl) {
+  try {
+    const res = await fetch(liveUrl);
+    if (res.ok) {
+      const data = await res.json();
+      if (!data.error) return { data, source: 'live' };
+    }
+  } catch { /* live API unavailable */ }
+
+  // Fallback to static
+  const res = await fetch(staticUrl);
+  if (!res.ok) throw new Error(`Failed to load ${staticUrl}`);
+  return { data: await res.json(), source: 'static' };
+}
+
 // -- Init --
 async function init() {
   try {
-    // Load data in parallel
+    // Load core data (static JSON — always available)
     const [dataRes, geoRes] = await Promise.all([
       fetch('/data/food-insecurity-state.json'),
       fetch('/data/us-states-geo.json')
@@ -793,12 +922,28 @@ async function init() {
 
     // Responsive
     window.addEventListener('resize', handleResize);
+
+    // Live data: BLS food prices (non-blocking, enhances dashboard if available)
+    fetchBLSData();
+
   } catch (err) {
     // Show error in chart containers
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
     });
   }
+}
+
+// Non-blocking: fetch BLS food price data and render chart
+async function fetchBLSData() {
+  try {
+    const res = await fetch('/api/dashboard-bls.php');
+    if (!res.ok) return;
+    const blsData = await res.json();
+    if (blsData.error) return;
+    renderFoodPrices(blsData);
+    updateFreshness('bls', blsData);
+  } catch { /* BLS data unavailable — chart simply won't render */ }
 }
 
 // Start when DOM ready
