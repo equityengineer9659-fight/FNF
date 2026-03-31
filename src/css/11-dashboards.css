@@ -79,16 +79,44 @@
 
 .dashboard-card__header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   margin-bottom: 1rem;
-  flex-wrap: wrap;
   gap: 0.75rem;
 }
 
 .dashboard-card__header h2 {
   color: var(--slds-c-text-default, #fff);
   margin: 0;
+  text-align: center;
+}
+
+/* Remove the global ::after gradient bar on dashboard — replace with border-bottom
+   which always aligns to the element regardless of positioning context */
+.fnf-page--dashboard section h2::after,
+.fnf-page--dashboard .dashboard-narrative__heading::after {
+  display: none !important;
+}
+
+.fnf-page--dashboard h2.slds-text-heading_medium,
+.fnf-page--dashboard .dashboard-narrative__heading {
+  position: relative;
+  padding-bottom: 1rem;
+  text-align: center;
+}
+
+/* Short centered gradient bar using a background on the element itself */
+.fnf-page--dashboard h2.slds-text-heading_medium::before,
+.fnf-page--dashboard .dashboard-narrative__heading::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: var(--fnf-h2-underline-gradient, linear-gradient(135deg, #0176d3, #00d4ff));
+  border-radius: 2px;
 }
 
 /* Map title row */
