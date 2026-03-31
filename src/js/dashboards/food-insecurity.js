@@ -204,7 +204,7 @@ function renderMap(geoJSON, data, metric = 'rate') {
   }
 
   // Drill down into a state's counties
-  async function drillDown(stateName, stateFips) {
+  async function drillDown(stateName, stateFips, highlightCounty) {
     // Show loading
     chart.showLoading({ text: `Loading ${stateName} counties...`, color: COLORS.secondary, textColor: COLORS.text, maskColor: 'rgba(0,0,0,0.6)' });
 
@@ -282,6 +282,17 @@ function renderMap(geoJSON, data, metric = 'rate') {
           animationDurationUpdate: 500
         }]
       }, true);
+
+      // Highlight specific county if requested (from search)
+      if (highlightCounty) {
+        setTimeout(() => {
+          const idx = countyData.findIndex(c => c.name === highlightCounty);
+          if (idx >= 0) {
+            chart.dispatchAction({ type: 'showTip', seriesIndex: 0, dataIndex: idx });
+            chart.dispatchAction({ type: 'highlight', seriesIndex: 0, dataIndex: idx });
+          }
+        }, 600);
+      }
     } catch {
       chart.hideLoading();
     }
@@ -376,9 +387,10 @@ function initCountySearch(mapController) {
       li.addEventListener('click', () => {
         const sFips = li.dataset.fips;
         const sName = li.dataset.state;
-        input.value = `${li.dataset.county}, ${sName}`;
+        const countyName = li.dataset.county;
+        input.value = `${countyName}, ${sName}`;
         resultsList.setAttribute('data-visible', 'false');
-        if (mapController) mapController.drillDown(sName, sFips);
+        if (mapController) mapController.drillDown(sName, sFips, countyName);
       });
     });
   });

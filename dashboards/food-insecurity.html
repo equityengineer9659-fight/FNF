@@ -182,25 +182,13 @@
             </div>
         </section>
 
-        <!-- Narrative: The Scale -->
-        <section class="dashboard-narrative scroll-reveal" aria-label="The scale of food insecurity">
-            <div class="slds-container_large slds-container_center slds-p-around_large">
-                <div class="dashboard-narrative__content">
-                    <h2 class="dashboard-narrative__heading">The Scale of the Problem</h2>
-                    <p class="dashboard-narrative__text">In 2022, food insecurity surged to its highest level in nearly a decade. More than <strong>44 million Americans</strong> — including <strong>13 million children</strong> — didn't know where their next meal would come from. That's roughly 1 in 8 people across the country.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Choropleth Map Section -->
+        <!-- 1. Choropleth Map + Description -->
         <section class="dashboard-section scroll-reveal" aria-label="State food insecurity map">
             <div class="slds-container_large slds-container_center slds-p-around_large">
                 <div class="dashboard-card">
                     <div class="dashboard-card__header">
-                        <div class="dashboard-card__title-row">
-                            <h2 class="slds-text-heading_medium">Food Insecurity by State</h2>
-                            <span id="map-state-label" class="dashboard-map__state-label"></span>
-                        </div>
+                        <h2 class="slds-text-heading_medium">Food Insecurity by State</h2>
+                        <span id="map-state-label" class="dashboard-map__state-label"></span>
                         <div class="dashboard-card__controls">
                             <button id="map-back-btn" class="dashboard-back-btn" style="display:none" aria-label="Back to national view">Back to National</button>
                             <label for="map-metric" class="slds-assistive-text">Select metric</label>
@@ -213,120 +201,184 @@
                             </select>
                         </div>
                     </div>
-                    <div id="chart-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map of food insecurity rates across US states">
-                        <noscript>
-                            <p>This interactive map requires JavaScript. See the data table below for state-level food insecurity statistics.</p>
-                        </noscript>
+                    <div class="dashboard-chart-row">
+                        <div class="dashboard-chart-row__chart">
+                            <div id="chart-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map of food insecurity rates across US states">
+                                <noscript><p>This interactive map requires JavaScript.</p></noscript>
+                            </div>
+                        </div>
+                        <div class="dashboard-chart-row__info">
+                            <h3 class="dashboard-info__title">The Scale of the Problem</h3>
+                            <p class="dashboard-info__text">In 2022, food insecurity surged to its highest level in nearly a decade. More than <strong>44 million Americans</strong> — including <strong>13 million children</strong> — didn't know where their next meal would come from.</p>
+                            <p class="dashboard-info__text">The Deep South faces rates nearly <strong>double</strong> the national average. Click any state to see county-level data.</p>
+                            <div class="dashboard-info__meta">
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA ERS &amp; Feeding America Map the Meal Gap 2024</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> USDA report discontinued after 2024 edition. Feeding America continues annually (next: Spring 2026)</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Granularity</span> State &amp; county level</div>
+                            </div>
+                            <div class="dashboard-info__insight">Mississippi leads the nation at 18.7% — nearly 1 in 5 residents.</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Narrative: Geography -->
-        <section class="dashboard-narrative scroll-reveal" aria-label="Geographic patterns">
-            <div class="slds-container_large slds-container_center slds-p-around_large">
-                <div class="dashboard-narrative__content">
-                    <h2 class="dashboard-narrative__heading">Where Hunger Hits Hardest</h2>
-                    <p class="dashboard-narrative__text">Food insecurity isn't evenly distributed. The Deep South — Mississippi, Louisiana, Arkansas, and New Mexico — faces rates nearly <strong>double</strong> the national average. But even wealthy states have pockets of severe need. Click any state above to see the county-level picture.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Trend Chart Section -->
+        <!-- 2. National Trend + Description -->
         <section class="dashboard-section scroll-reveal" aria-label="Food insecurity trends">
             <div class="slds-container_large slds-container_center slds-p-around_large">
-                <div class="slds-grid slds-wrap slds-gutters_small">
-                    <!-- Trend Line Chart -->
-                    <div class="slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
-                        <div class="dashboard-card">
-                            <div class="dashboard-card__header">
-                                <h2 class="slds-text-heading_medium">National Trend (2013-2022)</h2>
-                            </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">National Trend (2013-2022)</h2>
+                    </div>
+                    <div class="dashboard-chart-row">
+                        <div class="dashboard-chart-row__chart">
                             <div id="chart-trend" class="dashboard-chart" role="img" aria-label="Line chart showing food insecurity rate trend from 2013 to 2022"></div>
                         </div>
-                    </div>
-                    <!-- Top 10 Bar Chart -->
-                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-bottom_medium">
-                        <div class="dashboard-card">
-                            <div class="dashboard-card__header">
-                                <h2 class="slds-text-heading_medium">Most Affected States</h2>
+                        <div class="dashboard-chart-row__info">
+                            <h3 class="dashboard-info__title">A Decade of Progress — Then Reversal</h3>
+                            <p class="dashboard-info__text">From 2013 to 2021, the nation made steady progress — food insecurity dropped from 14.3% to 10.2%. Then in 2022, rising food prices, expiring pandemic-era benefits, and inflation pushed millions back into hunger.</p>
+                            <p class="dashboard-info__text">The child food insecurity rate jumped from 12.5% to <strong>17.9%</strong> in a single year.</p>
+                            <div class="dashboard-info__meta">
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA ERS, Current Population Survey Food Security Supplement</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> USDA report was annual (September). Discontinued after Dec 2025 release. Last available: 2024 data</div>
                             </div>
+                            <div class="dashboard-info__insight">2022 reversed nearly a decade of progress in a single year.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Most Affected States + Description -->
+        <section class="dashboard-section scroll-reveal" aria-label="Most affected states">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Most Affected States</h2>
+                    </div>
+                    <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                        <div class="dashboard-chart-row__chart">
                             <div id="chart-bar" class="dashboard-chart" role="img" aria-label="Horizontal bar chart of top 10 most food insecure states"></div>
                         </div>
+                        <div class="dashboard-chart-row__info">
+                            <h3 class="dashboard-info__title">Where Hunger Hits Hardest</h3>
+                            <p class="dashboard-info__text">The top 10 most food-insecure states are concentrated in the South and Southwest. These states share common challenges: higher poverty rates, fewer grocery stores per capita, and lower SNAP enrollment relative to need.</p>
+                            <div class="dashboard-info__meta">
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Feeding America, Map the Meal Gap 2024</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually, spring release (next: Spring 2026 with 2024 data)</div>
+                            </div>
+                            <div class="dashboard-info__insight">8 of the top 10 states are in the South — a persistent geographic pattern.</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Narrative: Reversal -->
-        <section class="dashboard-narrative scroll-reveal" aria-label="The trend reversal">
-            <div class="slds-container_large slds-container_center slds-p-around_large">
-                <div class="dashboard-narrative__content">
-                    <h2 class="dashboard-narrative__heading">A Decade of Progress — Then Reversal</h2>
-                    <p class="dashboard-narrative__text">From 2013 to 2021, the nation made steady progress — food insecurity dropped from 14.3% to 10.2%. Then in 2022, rising food prices, expiring pandemic-era benefits, and inflation pushed millions back into hunger. The child food insecurity rate jumped from 12.5% to <strong>17.9%</strong> in a single year.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Scatter Plot Section -->
+        <!-- 4. Poverty vs Food Insecurity + Meal Cost -->
         <section class="dashboard-section scroll-reveal" aria-label="Poverty and food insecurity correlation">
             <div class="slds-container_large slds-container_center slds-p-around_large">
-                <div class="slds-grid slds-wrap slds-gutters_small">
-                    <div class="slds-col slds-size_1-of-1 slds-large-size_7-of-12 slds-m-bottom_medium">
-                        <div class="dashboard-card">
-                            <div class="dashboard-card__header">
-                                <h2 class="slds-text-heading_medium">Poverty vs. Food Insecurity</h2>
-                            </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Poverty vs. Food Insecurity</h2>
+                    </div>
+                    <div class="dashboard-chart-row">
+                        <div class="dashboard-chart-row__chart">
                             <div id="chart-scatter" class="dashboard-chart" role="img" aria-label="Scatter plot showing correlation between poverty rate and food insecurity rate by state"></div>
                         </div>
-                    </div>
-                    <!-- Meal Cost Comparison -->
-                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12 slds-m-bottom_medium">
-                        <div class="dashboard-card">
-                            <div class="dashboard-card__header">
-                                <h2 class="slds-text-heading_medium">Average Meal Cost by State</h2>
+                        <div class="dashboard-chart-row__info">
+                            <h3 class="dashboard-info__title">Poverty Drives Hunger</h3>
+                            <p class="dashboard-info__text">Where poverty is high, food insecurity follows — but the relationship isn't one-to-one. States with higher meal costs can have food insecurity rates that exceed what poverty alone would predict. <strong>The cost of eating matters as much as income.</strong></p>
+                            <p class="dashboard-info__text">Each dot represents one state. Dot size reflects the number of food-insecure persons.</p>
+                            <div class="dashboard-info__meta">
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census Bureau ACS (poverty) &amp; USDA ERS (food insecurity)</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022 (5-year ACS estimates)</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> ACS: annually each December (next: Dec 2026). USDA ERS: discontinued after 2024 data</div>
                             </div>
-                            <div id="chart-meal-cost" class="dashboard-chart" role="img" aria-label="Bar chart showing average meal cost variation across states"></div>
+                            <div class="dashboard-info__insight">Strong positive correlation (r &asymp; 0.85) — poverty is the #1 predictor of food insecurity.</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Food Price Trend (BLS live data) -->
+        <!-- 5. Meal Cost + Description -->
+        <section class="dashboard-section scroll-reveal" aria-label="Average meal cost by state">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Average Meal Cost by State</h2>
+                    </div>
+                    <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                        <div class="dashboard-chart-row__chart">
+                            <div id="chart-meal-cost" class="dashboard-chart" role="img" aria-label="Bar chart showing average meal cost variation across states"></div>
+                        </div>
+                        <div class="dashboard-chart-row__info">
+                            <h3 class="dashboard-info__title">The Cost of a Meal</h3>
+                            <p class="dashboard-info__text">The average cost of a meal varies by nearly <strong>60%</strong> across states — from $3.18 in Mississippi to $5.12 in Hawaii. Higher meal costs mean food bank dollars stretch less, and families need more income to avoid food insecurity.</p>
+                            <div class="dashboard-info__meta">
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Feeding America, Map the Meal Gap 2024</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Methodology</span> Weighted average of USDA Thrifty Food Plan costs</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually with Map the Meal Gap (next: Spring 2026 with 2024 data)</div>
+                            </div>
+                            <div class="dashboard-info__insight">Hawaii's $5.12/meal means food banks there need 60% more funding per person served.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Food Price Trends (CPI) + Description -->
         <section class="dashboard-section scroll-reveal" aria-label="Food price trends">
             <div class="slds-container_large slds-container_center slds-p-around_large">
                 <div class="dashboard-card">
                     <div class="dashboard-card__header">
                         <h2 class="slds-text-heading_medium">Food Price Trends (CPI)</h2>
-                        <div class="dashboard-card__controls">
-                            <span id="freshness-bls" class="dashboard-freshness"></span>
+                        <span id="freshness-bls" class="dashboard-freshness"></span>
+                    </div>
+                    <div class="dashboard-chart-row">
+                        <div class="dashboard-chart-row__chart">
+                            <div id="chart-food-prices" class="dashboard-chart" role="img" aria-label="Line chart showing Consumer Price Index trends for food at home and food away from home"></div>
+                        </div>
+                        <div class="dashboard-chart-row__info">
+                            <h3 class="dashboard-info__title">Rising Food Prices</h3>
+                            <p class="dashboard-info__text">The Consumer Price Index for food has risen sharply since 2022. "Food at Home" prices surged fastest, directly impacting families who cook to save money. Restaurant prices ("Food Away from Home") have climbed even higher.</p>
+                            <p class="dashboard-info__text">Use the slider below the chart to zoom into specific time periods.</p>
+                            <div class="dashboard-info__meta">
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Bureau of Labor Statistics, Consumer Price Index</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Monthly (live data via BLS API)</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Baseline</span> CPI Index (1982-84 = 100)</div>
+                            </div>
+                            <div class="dashboard-info__insight">Food-at-home prices rose 25% from 2020-2024 — outpacing general inflation.</div>
                         </div>
                     </div>
-                    <div id="chart-food-prices" class="dashboard-chart" role="img" aria-label="Line chart showing Consumer Price Index trends for food at home and food away from home"></div>
-                    <p class="dashboard-chart__note">Source: Bureau of Labor Statistics, Consumer Price Index. Drag slider to adjust time range.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Narrative: Connection -->
-        <section class="dashboard-narrative scroll-reveal" aria-label="The poverty connection">
-            <div class="slds-container_large slds-container_center slds-p-around_large">
-                <div class="dashboard-narrative__content">
-                    <h2 class="dashboard-narrative__heading">Poverty Drives Hunger</h2>
-                    <p class="dashboard-narrative__text">The scatter plot above tells a clear story: where poverty is high, food insecurity follows. But the relationship isn't one-to-one — states with higher meal costs can have food insecurity rates that exceed what poverty alone would predict. <strong>The cost of eating matters as much as income.</strong></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SNAP Participation Section -->
+        <!-- 7. SNAP Participation + Description -->
         <section class="dashboard-section scroll-reveal" aria-label="SNAP participation data">
             <div class="slds-container_large slds-container_center slds-p-around_large">
                 <div class="dashboard-card">
                     <div class="dashboard-card__header">
                         <h2 class="slds-text-heading_medium">SNAP Participation vs. Food Insecurity</h2>
                     </div>
-                    <div id="chart-snap" class="dashboard-chart" role="img" aria-label="Bar chart comparing SNAP participation and food insecurity by state"></div>
+                    <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                        <div class="dashboard-chart-row__chart">
+                            <div id="chart-snap" class="dashboard-chart" role="img" aria-label="Bar chart comparing SNAP participation and food insecurity by state"></div>
+                        </div>
+                        <div class="dashboard-chart-row__info">
+                            <h3 class="dashboard-info__title">Is SNAP Reaching Those in Need?</h3>
+                            <p class="dashboard-info__text">SNAP (Supplemental Nutrition Assistance Program) is the largest federal anti-hunger program. This chart compares each state's food insecurity rate against its SNAP coverage — revealing where the safety net is strong and where gaps remain.</p>
+                            <p class="dashboard-info__text">States where SNAP coverage exceeds the food insecurity rate have stronger safety nets.</p>
+                            <div class="dashboard-info__meta">
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA FNS SNAP Data Tables &amp; Feeding America</div>
+                                <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> SNAP participation: monthly from USDA FNS. Insecurity rates: annually from Feeding America (next: Spring 2026)</div>
+                            </div>
+                            <div class="dashboard-info__insight">Alabama and West Virginia show SNAP coverage exceeding insecurity — a sign of effective outreach.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -345,27 +397,75 @@
             </div>
         </section>
 
-        <!-- Data Sources -->
-        <section class="dashboard-section dashboard-sources scroll-reveal" aria-label="Data sources and methodology">
+        <!-- Methodology & Sources -->
+        <section class="dashboard-section dashboard-sources scroll-reveal" aria-label="Methodology and data sources">
             <div class="slds-container_large slds-container_center slds-p-around_large">
                 <div class="dashboard-card">
-                    <h2 class="slds-text-heading_medium slds-m-bottom_small">Data Sources & Methodology</h2>
-                    <div class="slds-grid slds-wrap slds-gutters_small">
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
-                            <h3 class="slds-text-heading_small">Primary Sources</h3>
-                            <ul class="dashboard-sources__list">
-                                <li>USDA Economic Research Service — Household Food Security in the United States</li>
-                                <li>Feeding America — Map the Meal Gap 2024</li>
-                                <li>U.S. Census Bureau — American Community Survey</li>
-                            </ul>
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Methodology & Data Sources</h2>
+                    </div>
+
+                    <!-- Source Cards Grid -->
+                    <div class="dashboard-source-grid">
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">USDA</div>
+                            <h3 class="dashboard-source-card__name">USDA Economic Research Service</h3>
+                            <p class="dashboard-source-card__desc">Household Food Security in the United States — the authoritative federal survey measuring food insecurity through the Current Population Survey Food Security Supplement.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual release</span>
+                                <span>State &amp; national</span>
+                            </div>
                         </div>
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
-                            <h3 class="slds-text-heading_small">Data Year</h3>
-                            <p class="slds-text-body_regular">All data reflects 2022 estimates, the most recent year with comprehensive state-level data available from all sources.</p>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">FA</div>
+                            <h3 class="dashboard-source-card__name">Feeding America</h3>
+                            <p class="dashboard-source-card__desc">Map the Meal Gap 2024 — the only study providing county-level food insecurity estimates, meal gaps, and meal costs for every US county and congressional district.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual release</span>
+                                <span>County level</span>
+                            </div>
                         </div>
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
-                            <h3 class="slds-text-heading_small">About This Dashboard</h3>
-                            <p class="slds-text-body_regular">Built by Food-N-Force to help food banks, policymakers, and donors understand the scope of food insecurity. Data is refreshed annually.</p>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">ACS</div>
+                            <h3 class="dashboard-source-card__name">U.S. Census Bureau</h3>
+                            <p class="dashboard-source-card__desc">American Community Survey 5-Year Estimates — providing poverty rates, income, and demographic data at county and census tract granularity via the Census API.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual (5-yr rolling)</span>
+                                <span>County &amp; tract</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">BLS</div>
+                            <h3 class="dashboard-source-card__name">Bureau of Labor Statistics</h3>
+                            <p class="dashboard-source-card__desc">Consumer Price Index — monthly food price tracking for "Food at Home" and "Food Away from Home" categories, delivered via the BLS Public Data API.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Monthly (live API)</span>
+                                <span>National &amp; regional</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Methodology Notes -->
+                    <div class="dashboard-methodology">
+                        <div class="dashboard-methodology__row">
+                            <div class="dashboard-methodology__item">
+                                <h3>How We Define Food Insecurity</h3>
+                                <p>A household is food insecure when it lacks consistent access to enough food for every person to live an active, healthy life. The USDA measures this through an 18-question survey module administered annually. "Low food security" and "very low food security" are both counted.</p>
+                            </div>
+                            <div class="dashboard-methodology__item">
+                                <h3>County-Level Modeling</h3>
+                                <p>County food insecurity rates are modeled from Census Bureau poverty data using a regression model (food insecurity &asymp; 0.75 &times; poverty rate + 2.5), validated against Feeding America's published county estimates. Child rates use a 1.3-1.6x multiplier based on state-level child-to-overall ratios.</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-methodology__row">
+                            <div class="dashboard-methodology__item">
+                                <h3>Data Currency</h3>
+                                <p>State-level food insecurity data reflects <strong>2022</strong>. The USDA discontinued its annual food security report after the 2024 edition (released Dec 2025). Feeding America's Map the Meal Gap continues annually. BLS food prices update monthly via live API. Census ACS 5-year estimates release each December.</p>
+                            </div>
+                            <div class="dashboard-methodology__item">
+                                <h3>About This Dashboard</h3>
+                                <p>Built by <strong>Food-N-Force</strong> to help food banks, policymakers, donors, and the public understand the scope and geography of food insecurity. All data sources are authoritative, free, and publicly accessible. This dashboard is open for use in presentations, grant applications, and community planning.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
