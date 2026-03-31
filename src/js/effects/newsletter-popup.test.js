@@ -132,7 +132,9 @@ describe('NewsletterPopup', () => {
   describe('form submission', () => {
     it('should set localStorage on valid submission', async () => {
       vi.useFakeTimers();
-      globalThis.fetch = vi.fn().mockResolvedValue({ ok: true });
+      globalThis.fetch = vi.fn()
+        .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({ token: 'test-csrf-token' }) })
+        .mockResolvedValueOnce({ ok: true });
       document.body.classList.add('fnf-page--about');
       const popup = new NewsletterPopup();
       popup.openModal();
@@ -152,7 +154,9 @@ describe('NewsletterPopup', () => {
 
     it('should show success state after submission', async () => {
       vi.useFakeTimers();
-      globalThis.fetch = vi.fn().mockResolvedValue({ ok: true });
+      globalThis.fetch = vi.fn()
+        .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({ token: 'test-csrf-token' }) })
+        .mockResolvedValueOnce({ ok: true });
       document.body.classList.add('fnf-page--about');
       const popup = new NewsletterPopup();
       popup.openModal();
