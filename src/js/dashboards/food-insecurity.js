@@ -320,7 +320,101 @@ function renderMap(geoJSON, data, metric = 'rate') {
     });
   }
 
-  return chart;
+  return { chart, drillDown, showNational };
+}
+
+// -- County Search --
+function initCountySearch(mapController) {
+  const input = document.getElementById('county-search');
+  const resultsList = document.getElementById('county-search-results');
+  if (!input || !resultsList) return;
+
+  let countyIndex = null; // lazy-loaded
+  let selectedIdx = -1;
+
+  // Lazy-load county index on first focus
+  input.addEventListener('focus', async () => {
+    if (countyIndex) return;
+    try {
+      const res = await fetch('/data/county-index.json');
+      if (res.ok) countyIndex = await res.json();
+    } catch { /* ignore */ }
+  });
+
+  input.addEventListener('input', () => {
+    const query = input.value.trim().toLowerCase();
+    selectedIdx = -1;
+
+    if (!countyIndex || query.length < 2) {
+      resultsList.setAttribute('data-visible', 'false');
+      resultsList.innerHTML = '';
+      return;
+    }
+
+    // Search: match county name, limit to 8 results
+    const matches = [];
+    for (let i = 0; i < countyIndex.length && matches.length < 8; i++) {
+      const [name, sFips, sName] = countyIndex[i];
+      if (name.toLowerCase().includes(query)) {
+        matches.push({ name, stateFips: sFips, stateName: sName });
+      }
+    }
+
+    if (matches.length === 0) {
+      resultsList.innerHTML = '<li style="color:rgba(255,255,255,0.4)">No counties found</li>';
+      resultsList.setAttribute('data-visible', 'true');
+      return;
+    }
+
+    resultsList.innerHTML = matches.map((m, i) =>
+      `<li role="option" data-fips="${m.stateFips}" data-county="${m.name}" data-state="${m.stateName}" id="search-opt-${i}">${m.name}<span class="search-state">${m.stateName}</span></li>`
+    ).join('');
+    resultsList.setAttribute('data-visible', 'true');
+
+    // Click handler for results
+    resultsList.querySelectorAll('li[role="option"]').forEach(li => {
+      li.addEventListener('click', () => {
+        const sFips = li.dataset.fips;
+        const sName = li.dataset.state;
+        input.value = `${li.dataset.county}, ${sName}`;
+        resultsList.setAttribute('data-visible', 'false');
+        if (mapController) mapController.drillDown(sName, sFips);
+      });
+    });
+  });
+
+  // Keyboard navigation
+  input.addEventListener('keydown', (e) => {
+    const items = resultsList.querySelectorAll('li[role="option"]');
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedIdx = Math.min(selectedIdx + 1, items.length - 1);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedIdx = Math.max(selectedIdx - 1, 0);
+    } else if (e.key === 'Enter' && selectedIdx >= 0) {
+      e.preventDefault();
+      items[selectedIdx].click();
+      return;
+    } else if (e.key === 'Escape') {
+      resultsList.setAttribute('data-visible', 'false');
+      return;
+    } else {
+      return;
+    }
+
+    items.forEach((li, i) => li.setAttribute('aria-selected', i === selectedIdx ? 'true' : 'false'));
+    items[selectedIdx]?.scrollIntoView({ block: 'nearest' });
+  });
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dashboard-search__wrapper')) {
+      resultsList.setAttribute('data-visible', 'false');
+    }
+  });
 }
 
 // -- Trend Line Chart --
@@ -583,7 +677,10 @@ async function init() {
     animateCounters();
 
     // Render all charts
-    renderMap(geoJSON, data);
+    const mapCtrl = renderMap(geoJSON, data);
+
+    // County search
+    initCountySearch(mapCtrl);
     renderTrend(data);
     renderBar(data);
     renderScatter(data);

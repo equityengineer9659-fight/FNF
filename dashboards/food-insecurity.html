@@ -168,6 +168,20 @@
             </div>
         </section>
 
+        <!-- County Search -->
+        <section class="dashboard-section" aria-label="Search for your county">
+            <div class="slds-container_large slds-container_center slds-p-horizontal_large">
+                <div class="dashboard-search">
+                    <label for="county-search" class="dashboard-search__label">Find Your County</label>
+                    <div class="dashboard-search__wrapper">
+                        <input type="text" id="county-search" class="dashboard-search__input" placeholder="Type a county name..." autocomplete="off" aria-describedby="search-hint">
+                        <span id="search-hint" class="slds-assistive-text">Type at least 2 characters to search 3,100+ US counties</span>
+                        <ul id="county-search-results" class="dashboard-search__results" role="listbox" aria-label="County search results"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Choropleth Map Section -->
         <section class="dashboard-section" aria-label="State food insecurity map">
             <div class="slds-container_large slds-container_center slds-p-around_large">

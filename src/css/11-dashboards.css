@@ -144,6 +144,88 @@
   color: #fff;
 }
 
+/* County Search */
+.dashboard-search {
+  text-align: center;
+}
+
+.dashboard-search__label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--slds-c-text-default, #fff);
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-search__wrapper {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+  z-index: 100;
+}
+
+.dashboard-search__input {
+  width: 100%;
+  background: rgba(255,255,255,0.08);
+  color: var(--slds-c-text-default, #fff);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-search__input::placeholder {
+  color: rgba(255,255,255,0.4);
+}
+
+.dashboard-search__input:focus {
+  outline: none;
+  border-color: var(--fnf-secondary, #00d4ff);
+  box-shadow: 0 0 0 2px rgba(0,212,255,0.2);
+}
+
+.dashboard-search__results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(10,10,30,0.95);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 0 0 0.5rem 0.5rem;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 100;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+}
+
+.dashboard-search__results[data-visible="true"] {
+  display: block;
+}
+
+.dashboard-search__results li {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--slds-c-text-default, #fff);
+  transition: background 0.15s ease;
+  text-align: left;
+}
+
+.dashboard-search__results li:hover,
+.dashboard-search__results li[aria-selected="true"] {
+  background: rgba(0,212,255,0.15);
+}
+
+.dashboard-search__results li .search-state {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
 /* Chart Containers */
 .dashboard-chart {
   width: 100%;
