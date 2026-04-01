@@ -109,7 +109,6 @@ npm run admin                   # Start Express server for scraper (http://local
 │   │   └── counties/                  # Per-state county GeoJSON (51 files, lazy-loaded)
 │   └── api/               # PHP backend (contact, newsletter, csrf, dashboard proxies)
 ├── _archive/              # Archived outdated documentation
-├── _audit/                # Historical backups and restore points
 ├── vite.config.js         # Vite build configuration
 └── package.json           # Root-level build configuration
 ```
@@ -315,7 +314,6 @@ Custom agents in `.claude/agents/` tailored to this project:
 - **business-analyst** — CTA clarity, value proposition, service alignment, and conversion paths; use when modifying service pages or consulting-oriented content
 
 ### Project Coordination References
-- `docs/project/raci.md` - Role responsibilities matrix
 - `docs/current/governance/agent-coordination/` - Coordination protocols
 - `docs/current/emergency/15min-response-playbook.md` - Emergency procedures
 
@@ -422,7 +420,7 @@ The `.mcp.json` file with 11 MCP servers was previously used but has been remove
 ### Essential Documentation
 - `docs/README.md` - Documentation navigation and quick access guide
 - `docs/project/plan.md` - 4-phase strategic refactoring plan
-- `docs/project/raci.md` - Agent responsibilities and coordination matrix
+- `docs/project/risks.md` - Risk register
 - `docs/current/emergency/15min-response-playbook.md` - Emergency response procedures
 - `docs/CICD_SETUP.md` - CI/CD pipeline configuration
 - `docs/SECURITY.md` - Security procedures
@@ -444,9 +442,9 @@ Historical docs moved to `_archive/` during 2026-03-24 audit:
 - `_archive/docs-project/` - Completed requirements, old CSS deconfliction plans, legacy Netlify deployment guides
 - `_archive/github-workflows/` - 11 legacy CI/CD workflows (only ci-cd.yml and dependency-update.yml are active)
 
-### Cleanup Completed (2026-03-24)
-All files from `_proposed-deletion/` have been reviewed and deleted:
-- Dead JS (animations.js, sw.js), unused fallback scripts removed from HTML
+### Cleanup History
+- **2026-03-24**: All files from `_proposed-deletion/` reviewed and deleted (dead JS, unused fallback scripts)
+- **2026-04-01**: Deleted `_audit/` (81MB historical snapshots), 10 stale `.claude/` session files, 7 governance-era docs from `docs/project/`
 - 11 legacy test specs deleted
 - 9 unused tool scripts deleted
 - Backup files and duplicate configs removed

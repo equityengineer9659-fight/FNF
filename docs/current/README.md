@@ -39,7 +39,7 @@
 - [Decision Authority Matrix](governance/) - Emergency/Standard/Strategic decision hierarchy
 - [Cross-Cluster Communication](governance/) - Multi-agent coordination optimization
 
-**Enhancement**: Builds on existing [RACI matrix](../project/raci.md) with operational protocols
+**Enhancement**: Adds operational protocols for agent coordination
 
 ### **🚨 Emergency (Crisis Response)**
 - [15-Minute Response Playbook](../emergency/15min-response-playbook.md) - Technical architect emergency authority

@@ -7,7 +7,6 @@
 
 ### Most Frequently Accessed
 - [Project Plan](project/plan.md) - Strategic refactoring phases
-- [RACI Matrix](project/raci.md) - Agent coordination and responsibilities
 - [Technical Architecture](../CLAUDE.md) - Complete technical architecture and build system
 - [ADRs](technical/adr/) - Architecture Decision Records
 - [Blog Content Pipeline](current/blog-content-pipeline.md) - Scraper tool, editorial workflow, search presets
@@ -37,14 +36,7 @@ docs/
 ├── SECURITY.md            # Security procedures
 ├── project/               # Project management
 │   ├── plan.md            # Strategic refactoring plan
-│   ├── raci.md            # Agent responsibilities matrix
-│   ├── risks.md           # Risk register
-│   ├── backlog.md         # Project backlog
-│   ├── daily.md           # Daily standup template
-│   ├── safety-protocols.md
-│   ├── coordination-protocols.md
-│   ├── workspace-setup-protocols.md
-│   └── multi-page-testing-protocol.md
+│   └── risks.md           # Risk register
 ├── current/               # Enhanced active documentation
 │   ├── blog-content-pipeline.md  # Scraper tool + editorial workflow
 │   ├── emergency/         # Emergency response procedures
@@ -78,13 +70,7 @@ Legacy workflows have been archived to `_archive/github-workflows/`.
 ### Agents
 - **7 built-in Claude Code subagents** (general-purpose, Explore, Plan, etc.)
 - **10 project-specific agents** in `.claude/agents/` (slds-compliance-checker, accessibility-auditor, cross-page-consistency, performance-budget-monitor, php-security-reviewer, uiux-reviewer, seo-auditor, content-reviewer, technical-architect, business-analyst)
-- [RACI Matrix](project/raci.md) - Coordination
 - [Agent Coordination Hub](current/governance/agent-coordination/)
-
-### Key Authority Matrix
-- **Emergency (0-15 min)**: technical-architect
-- **Standard (15 min-4 hrs)**: Domain experts
-- **Strategic (4-24 hrs)**: project-manager-proj + stakeholders
 
 ## Archived Documentation
 
@@ -92,4 +78,3 @@ Historical and outdated documentation has been moved to:
 - `_archive/docs-technical/` - Resolved mobile navigation crisis docs, old phase reports
 - `_archive/docs-project/` - Completed requirements, old CSS deconfliction plans, legacy Netlify deployment guides
 - `_archive/github-workflows/` - Legacy CI/CD workflow files
-- `_audit/` - Full historical snapshots and restore points

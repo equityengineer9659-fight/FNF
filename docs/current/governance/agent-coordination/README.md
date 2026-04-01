@@ -13,7 +13,7 @@
 - [17+ Agent Registry](agent-registry.md) - All specialized agents and responsibilities
 - [Emergency Response Protocols](../emergency/) - Technical architect 15-minute authority  
 - [Phase Transition Procedures](phase-transitions.md) - Phase 1→2→3→4 coordination
-- [RACI Master Matrix (Current)](../../project/raci.md) - Existing coordination framework
+- [Project Plan](../../project/plan.md) - Strategic refactoring phases and coordination
 
 ### **Daily Operations**
 - [Communication Protocols](communication-protocols.md) - Agent interaction standards
