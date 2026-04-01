@@ -1,6 +1,6 @@
 # Food-N-Force Documentation Navigation
 
-**Last Updated**: 2026-03-30
+**Last Updated**: 2026-04-01
 **Current Phase**: Production + Blog Content Pipeline active
 
 ## Quick Navigation
@@ -20,8 +20,7 @@
 - [Dependencies](DEPENDENCIES.md) - Dependency management
 - [Environment](ENVIRONMENT.md) - Environment variables
 - [Security](SECURITY.md) - Security procedures
-- [Monitoring](MONITORING.md) - Performance monitoring
-- [Monitoring Setup](MONITORING_SETUP.md) - Monitoring configuration
+- [Monitoring](MONITORING.md) - Error tracking (Sentry) and analytics (GA4)
 
 ## Documentation Structure
 
@@ -31,8 +30,7 @@ docs/
 ├── CICD_SETUP.md          # CI/CD pipeline configuration
 ├── DEPENDENCIES.md        # Dependency management
 ├── ENVIRONMENT.md         # Environment variables
-├── MONITORING.md          # Performance monitoring
-├── MONITORING_SETUP.md    # Monitoring setup guide
+├── MONITORING.md          # Error tracking and analytics setup
 ├── SECURITY.md            # Security procedures
 ├── project/               # Project management
 │   ├── plan.md            # Strategic refactoring plan
@@ -45,15 +43,14 @@ docs/
 │   └── operations/        # Quality gates
 └── technical/             # Technical architecture
     ├── adr/               # 16 Architecture Decision Records
-    ├── TECHNICAL_ARCHITECTURE_REVIEW.md
-    └── PROJECT_DOCUMENTATION.md
+    └── TECHNICAL_ARCHITECTURE_REVIEW.md
 ```
 
 ## Current Performance Metrics
 
-- **CSS Bundle**: ~114KB (minified, all modules including newsletter modal)
-- **JavaScript Bundle**: ~51KB total (46KB main + 5KB effects, tree-shaken & minified via Terser)
-- **Gzipped**: ~18KB CSS, ~15KB JS combined
+- **CSS Bundle**: ~125KB minified (~20KB gzipped)
+- **JavaScript Bundle**: ~53KB total (47KB main + 5KB effects, ~16KB gzipped)
+- **Dashboard**: +15KB dashboard + ~645KB ECharts (~210KB gzipped, loaded only on dashboard pages)
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: 89% baseline maintained
 
@@ -67,9 +64,10 @@ Legacy workflows have been archived to `_archive/github-workflows/`.
 
 ## Agent Coordination
 
-### Agents
+### Agents & Skills
 - **7 built-in Claude Code subagents** (general-purpose, Explore, Plan, etc.)
 - **10 project-specific agents** in `.claude/agents/` (slds-compliance-checker, accessibility-auditor, cross-page-consistency, performance-budget-monitor, php-security-reviewer, uiux-reviewer, seo-auditor, content-reviewer, technical-architect, business-analyst)
+- **3 skills** in `.claude/skills/`: `/create-illustration`, `/register-article`, `/quality-sweep`
 - [Agent Coordination Hub](current/governance/agent-coordination/)
 
 ## Archived Documentation

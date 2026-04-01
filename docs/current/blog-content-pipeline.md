@@ -79,8 +79,8 @@ npm run admin
    • Runs build-components.js — injects nav, footer, and scripts into the article
    • Runs sync-blog.js — adds the article card to blog.html listing
         ↓
-9. Ask Claude Code to create the illustration:
-   "Create the illustration for blog/{slug}.html"
+9. Create the illustration using the skill:
+   /create-illustration {slug}
    Claude Code reads the full article and creates a purpose-built SVG that
    directly reflects the article's specific content and arguments.
         ↓
@@ -113,7 +113,7 @@ All fields are pre-populated by Claude and fully editable:
 | Related Articles (×3) | Claude picks 3 topically relevant existing articles; all editable |
 
 **Illustration**
-SVG illustrations are created separately by Claude Code after the article is saved. The article HTML includes the correct `<figure>` tag with the illustration path already set — the image slot is ready and waiting. After saving, ask Claude Code: *"Create the illustration for blog/{slug}.html"* — it reads the full article and builds an illustration that directly reflects the content.
+SVG illustrations are created separately by Claude Code after the article is saved. The article HTML includes the correct `<figure>` tag with the illustration path already set — the image slot is ready and waiting. After saving, run `/create-illustration {slug}` — it reads the full article and builds an illustration that directly reflects the content.
 
 **Refine with Claude**
 After generation, type feedback ("make it more technical", "add a SNAP policy section") and click **Regenerate Article** for a revised draft. Repeat as needed.

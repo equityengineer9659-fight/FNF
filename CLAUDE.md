@@ -44,7 +44,7 @@ npm run admin                   # Start Express server for scraper + AI article 
 ### File Structure
 ```
 /
-├── src/css/               # 12 CSS modules (main.css imports all)
+├── src/css/               # 13 CSS files (main.css imports all modules)
 ├── src/js/                # JS modules (main.js, effects/, dashboards/, config/, monitoring/)
 ├── src/data/              # Source data files (food insecurity JSON, GeoJSON)
 ├── src/assets/            # Images, fonts
@@ -70,9 +70,9 @@ npm run admin                   # Start Express server for scraper + AI article 
 - **Dashboards (1)**: dashboards/food-insecurity
 - **Articles (41)**: all in `blog/` directory (run `ls blog/` for full list)
 
-**Adding new articles via scraper tool**: `npm run admin` → New Article tab → Generate with Claude → Save to blog/. Auto-registers in `build-components.js`, `generate-sitemap.js`, and `.pa11yci.json`, then runs `build-components.js` and `sync-blog.js`. After saving, ask Claude Code: *"Create the illustration for blog/{slug}.html"*.
+**Adding new articles via scraper tool**: `npm run admin` → New Article tab → Generate with Claude → Save to blog/. Auto-registers in `build-components.js`, `generate-sitemap.js`, and `.pa11yci.json`, then runs `build-components.js` and `sync-blog.js`. After saving, run `/create-illustration {slug}` to generate the SVG illustration.
 
-**Adding new articles manually**: Place HTML in `blog/`, register slug in both arrays of `build-components.js`, `scripts/generate-sitemap.js`, and `.pa11yci.json`, then run `node build-components.js && node scripts/sync-blog.js`.
+**Adding new articles manually**: Place HTML in `blog/`, then run `/register-article {slug}` to register in all required files and run sync scripts. Or manually: register slug in both arrays of `build-components.js`, `scripts/generate-sitemap.js`, and `.pa11yci.json`, then run `node build-components.js && node scripts/sync-blog.js`.
 
 ### Build Pipeline
 - `build-components.js` injects shared nav, footer, and script tags into all 52 pages before Vite builds
@@ -132,8 +132,8 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
 ## Testing & Performance
 
 ### Performance Budgets
-- **CSS**: ~118KB minified (~19KB gzipped)
-- **JS Core**: ~53KB total (47KB main + 5KB effects, ~15KB gzipped)
+- **CSS**: ~125KB minified (~20KB gzipped)
+- **JS Core**: ~53KB total (47KB main + 5KB effects, ~16KB gzipped)
 - **Dashboard**: +15KB dashboard chunk + ~645KB ECharts chunk (~210KB gzipped, loaded only on dashboard pages)
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **Unit Test Coverage**: 65% threshold
@@ -146,6 +146,12 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
 - Reduced motion preferences respected
 
 ## Agent Framework
+
+### Skills (3)
+Reusable slash-command workflows in `.claude/skills/`:
+- **`/create-illustration {slug}`** — reads a blog article and creates a matching SVG illustration following the project style guide
+- **`/register-article {slug}`** — registers a manually added article in all required files (`build-components.js`, `generate-sitemap.js`, `.pa11yci.json`) and runs sync scripts
+- **`/quality-sweep [scope]`** — launches validation agents in parallel (`all`, `content`, `css`, `deploy`) and presents a unified pass/fail summary
 
 ### Project-Specific Agents (10)
 Custom agents in `.claude/agents/` tailored to this project:
@@ -185,6 +191,7 @@ Custom agents in `.claude/agents/` tailored to this project:
 - `docs/project/plan.md` — Strategic refactoring plan
 - `docs/project/risks.md` — Risk register
 - `docs/SECURITY.md` — Security procedures
+- `docs/MONITORING.md` — Error tracking (Sentry) and analytics (GA4) setup
 - `docs/CICD_SETUP.md` — CI/CD pipeline configuration
 - `docs/current/blog-content-pipeline.md` — Full scraper + article generator guide
 - `docs/current/emergency/15min-response-playbook.md` — Emergency response
