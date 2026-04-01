@@ -1,4 +1,5 @@
 ---
+name: register-article
 description: Register a blog article in all required files and run sync scripts. Usage: /register-article {slug}
 user_invocable: true
 ---

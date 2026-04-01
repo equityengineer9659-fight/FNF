@@ -1,4 +1,5 @@
 ---
+name: create-illustration
 description: Create an SVG illustration for a blog article. Usage: /create-illustration {slug}
 user_invocable: true
 ---

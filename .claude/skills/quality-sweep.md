@@ -1,4 +1,5 @@
 ---
+name: quality-sweep
 description: Run validation agents in parallel for pre-deploy quality checks. Usage: /quality-sweep [scope]
 user_invocable: true
 ---
