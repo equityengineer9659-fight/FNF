@@ -50,7 +50,7 @@ docs/
 
 - **CSS Bundle**: ~125KB minified (~20KB gzipped)
 - **JavaScript Bundle**: ~53KB total (47KB main + 5KB effects, ~16KB gzipped)
-- **Dashboard**: +15KB dashboard + ~645KB ECharts (~210KB gzipped, loaded only on dashboard pages)
+- **Dashboard**: ~15-25KB per dashboard JS + ~645KB ECharts (~210KB gzipped, shared across all 5 dashboard pages)
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **SLDS Compliance**: 89% baseline maintained
 
