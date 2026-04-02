@@ -5,7 +5,10 @@
 
 // Tree-shaken ECharts imports
 import * as echarts from 'echarts/core';
-import { MapChart, BarChart, LineChart, ScatterChart } from 'echarts/charts';
+import {
+  MapChart, BarChart, LineChart, ScatterChart,
+  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart
+} from 'echarts/charts';
 import {
   TitleComponent,
   TooltipComponent,
@@ -13,15 +16,20 @@ import {
   GeoComponent,
   GridComponent,
   LegendComponent,
-  DataZoomComponent
+  DataZoomComponent,
+  RadarComponent,
+  MarkLineComponent,
+  MarkAreaComponent
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 
-// Register only what we need
+// Register all needed components
 echarts.use([
   MapChart, BarChart, LineChart, ScatterChart,
+  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart,
   TitleComponent, TooltipComponent, VisualMapComponent,
   GeoComponent, GridComponent, LegendComponent, DataZoomComponent,
+  RadarComponent, MarkLineComponent, MarkAreaComponent,
   CanvasRenderer
 ]);
 
@@ -50,6 +58,28 @@ export const TOOLTIP_STYLE = {
   borderWidth: 1,
   textStyle: { color: COLORS.text, fontSize: 13 }
 };
+
+// US Census region mapping
+export const REGIONS = {
+  Northeast: ['Connecticut','Maine','Massachusetts','New Hampshire','New Jersey','New York','Pennsylvania','Rhode Island','Vermont'],
+  Midwest: ['Illinois','Indiana','Iowa','Kansas','Michigan','Minnesota','Missouri','Nebraska','North Dakota','Ohio','South Dakota','Wisconsin'],
+  South: ['Alabama','Arkansas','Delaware','District of Columbia','Florida','Georgia','Kentucky','Louisiana','Maryland','Mississippi','North Carolina','Oklahoma','South Carolina','Tennessee','Texas','Virginia','West Virginia'],
+  West: ['Alaska','Arizona','California','Colorado','Hawaii','Idaho','Montana','Nevada','New Mexico','Oregon','Utah','Washington','Wyoming']
+};
+
+export const REGION_COLORS = {
+  Northeast: '#60a5fa',
+  Midwest: '#f59e0b',
+  South: '#f87171',
+  West: '#34d399'
+};
+
+export function getRegion(stateName) {
+  for (const [region, states] of Object.entries(REGIONS)) {
+    if (states.includes(stateName)) return region;
+  }
+  return 'South';
+}
 
 // Chart instances for cleanup
 const charts = [];

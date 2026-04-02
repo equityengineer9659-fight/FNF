@@ -10,77 +10,36 @@ import {
   updateFreshness, initScrollReveal, handleResize, fetchWithFallback
 } from './shared/dashboard-utils.js';
 
-// -- Chart 1: Food Prices by Category (multi-line) --
+// -- Chart 1: Food Prices by Category (Gradient Stacked Area) --
 function renderCategories(data) {
   const chart = createChart('chart-categories');
   if (!chart || !data.series) return;
 
-  const allFood = data.series.find(s => s.name === 'All Food at Home');
-  const dates = allFood ? allFood.data.map(d => d.date) : data.series[0].data.map(d => d.date);
-
-  const seriesColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', COLORS.primary];
+  const series = data.series;
+  const dates = series[0].data.map(d => d.date);
+  const areaColors = [
+    ['rgba(255,107,53,0.7)', 'rgba(255,107,53,0.1)'],
+    ['rgba(0,212,255,0.6)', 'rgba(0,212,255,0.1)'],
+    ['rgba(167,139,250,0.6)', 'rgba(167,139,250,0.1)'],
+    ['rgba(52,211,153,0.6)', 'rgba(52,211,153,0.1)'],
+    ['rgba(1,118,211,0.5)', 'rgba(1,118,211,0.1)']
+  ];
 
   chart.setOption({
     tooltip: {
-      trigger: 'axis',
-      ...TOOLTIP_STYLE,
-      formatter: params => {
-        let tip = `<strong>${params[0].axisValue}</strong><br/>`;
-        params.forEach(p => {
-          tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`;
-        });
-        return tip;
-      }
+      trigger: 'axis', ...TOOLTIP_STYLE,
+      formatter: params => { let tip = `<strong>${params[0].axisValue}</strong><br/>`; params.forEach(p => { tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`; }); return tip; }
     },
-    legend: {
-      data: data.series.map(s => s.name),
-      textStyle: { color: COLORS.text, fontSize: 11 },
-      top: 5
-    },
-    grid: { left: 50, right: 20, top: 50, bottom: 60 },
-    dataZoom: [{
-      type: 'inside',
-      start: 0,
-      end: 100
-    }, {
-      type: 'slider',
-      start: 0,
-      end: 100,
-      height: 20,
-      bottom: 10,
-      textStyle: { color: COLORS.textMuted },
-      borderColor: COLORS.gridLine,
-      fillerColor: 'rgba(0,212,255,0.1)'
-    }],
-    xAxis: {
-      type: 'category',
-      data: dates,
-      axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'value',
-      name: 'CPI Index',
-      nameTextStyle: { color: COLORS.textMuted },
-      axisLabel: { color: COLORS.textMuted },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    series: data.series.map((s, i) => ({
-      name: s.name,
-      type: 'line',
-      data: s.data.map(d => d.value),
-      smooth: true,
-      lineStyle: { width: s.name === 'All Food at Home' ? 3 : 2, color: seriesColors[i] },
-      itemStyle: { color: seriesColors[i] },
-      symbol: 'none',
-      ...(s.name === 'All Food at Home' ? {
-        areaStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(1,118,211,0.15)' },
-            { offset: 1, color: 'rgba(1,118,211,0.01)' }
-          ])
-        }
-      } : {})
+    legend: { data: series.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 }, top: 5 },
+    grid: { left: 50, right: 20, top: 45, bottom: 30 },
+    xAxis: { type: 'category', data: dates, boundaryGap: false, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
+    yAxis: { type: 'value', name: 'CPI Index', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
+    series: series.map((s, i) => ({
+      name: s.name, type: 'line', stack: 'Total', smooth: true, symbol: 'none',
+      lineStyle: { width: 0 },
+      areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: areaColors[i][0] }, { offset: 1, color: areaColors[i][1] }]) },
+      emphasis: { focus: 'series' },
+      data: s.data.map(d => d.value), animationDuration: 2000
     }))
   });
 }
@@ -235,67 +194,36 @@ function renderAffordabilityMap(geoJSON, stateData) {
   }, true);
 }
 
-// -- Chart 4: Cost Burden by Income Bracket (bar) --
+// -- Chart 4: Cost Burden by Income (Sunburst) --
 function renderBurden(quintiles) {
   const chart = createChart('chart-burden');
   if (!chart) return;
 
-  const labels = quintiles.map(q => q.label);
-  const shares = quintiles.map(q => q.foodSharePct);
-  const monthlyCosts = quintiles.map(q => q.monthlyFoodCost);
+  const sunburstColors = [COLORS.mapHigh, COLORS.mapMid, '#f59e0b', COLORS.primary, COLORS.mapLow];
+  const data = quintiles.map((qi, i) => ({
+    name: qi.label, value: qi.foodSharePct,
+    itemStyle: { color: sunburstColors[i] },
+    children: [
+      { name: `$${qi.monthlyFoodCost}/mo`, value: qi.foodSharePct * 0.6, itemStyle: { color: sunburstColors[i] } },
+      { name: qi.income, value: qi.foodSharePct * 0.4, itemStyle: { color: sunburstColors[i], opacity: 0.6 } }
+    ]
+  }));
 
   chart.setOption({
     tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'shadow' },
       ...TOOLTIP_STYLE,
-      formatter: params => {
-        const idx = params[0].dataIndex;
-        const q = quintiles[idx];
-        return `<strong>${q.label}</strong><br/>
-          Median Income: ${q.income}<br/>
-          <span style="color:${COLORS.accent}">Food Share:</span> <strong>${q.foodSharePct}%</strong> of income<br/>
-          Monthly Food Cost: $${q.monthlyFoodCost}`;
+      formatter: p => {
+        const parent = p.treePathInfo && p.treePathInfo.length > 1 ? p.treePathInfo[1].name : '';
+        return `<strong>${p.name}</strong>${parent ? `<br/>(${parent})` : ''}<br/>Food Share: ${p.value.toFixed(1)}%`;
       }
     },
-    grid: { left: 120, right: 50, top: 20, bottom: 40 },
-    xAxis: {
-      type: 'value',
-      name: '% of Income on Food',
-      nameLocation: 'center',
-      nameGap: 25,
-      nameTextStyle: { color: COLORS.textMuted },
-      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
-      splitLine: { lineStyle: { color: COLORS.gridLine } },
-      max: 35
-    },
-    yAxis: {
-      type: 'category',
-      data: labels.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 11 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
-    },
     series: [{
-      type: 'bar',
-      data: shares.reverse(),
-      barWidth: '55%',
-      label: {
-        show: true,
-        position: 'right',
-        color: COLORS.text,
-        formatter: '{c}%'
-      },
-      itemStyle: {
-        borderRadius: [0, 4, 4, 0],
-        color: (params) => {
-          const val = params.value;
-          if (val > 25) return COLORS.mapHigh;
-          if (val > 15) return COLORS.mapMid;
-          return COLORS.mapLow;
-        }
-      },
-      animationDuration: 1500,
-      animationDelay: (idx) => idx * 150
+      type: 'sunburst', data: data, radius: ['15%', '80%'],
+      label: { show: true, color: '#fff', fontSize: 10, rotate: 'tangential' },
+      itemStyle: { borderColor: 'rgba(0,0,0,0.4)', borderWidth: 1.5 },
+      emphasis: { focus: 'ancestor' },
+      levels: [{}, { r0: '15%', r: '50%', label: { fontSize: 11, fontWeight: 'bold' } }, { r0: '50%', r: '80%', label: { fontSize: 9 } }],
+      animationDuration: 2000
     }]
   });
 }

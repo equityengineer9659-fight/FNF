@@ -7,7 +7,8 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE,
   fmtNum, animateCounters, createChart,
-  updateFreshness, initScrollReveal, handleResize, fetchWithFallback
+  updateFreshness, initScrollReveal, handleResize, fetchWithFallback,
+  REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
 
 // -- Map Chart with County Drill-Down --
@@ -408,50 +409,54 @@ function renderTrend(data) {
   });
 }
 
-// -- Top 10 Bar Chart --
+// -- Radar: Top 5 vs Bottom 5 States --
 function renderBar(data) {
   const chart = createChart('chart-bar');
   if (!chart) return;
 
-  const sorted = [...data.states].sort((a, b) => b.rate - a.rate).slice(0, 10);
-  const names = sorted.map(s => s.name);
-  const rates = sorted.map(s => s.rate);
+  const sorted = [...data.states].sort((a, b) => b.rate - a.rate);
+  const top5 = sorted.slice(0, 5);
+  const bottom5 = sorted.slice(-5).reverse();
+
+  const maxRate = 20, maxChild = 28, maxPoverty = 20, maxMeal = 5.5, maxSnap = 900000;
+  function normalize(states) {
+    return states.map(s => [
+      (s.rate / maxRate * 100).toFixed(0),
+      (s.childRate / maxChild * 100).toFixed(0),
+      (s.povertyRate / maxPoverty * 100).toFixed(0),
+      (s.mealCost / maxMeal * 100).toFixed(0),
+      (s.snapParticipation / maxSnap * 100).toFixed(0)
+    ].map(Number));
+  }
+  const top5Avg = normalize(top5).reduce((acc, v) => acc.map((a, i) => a + v[i]), [0,0,0,0,0]).map(v => Math.round(v / 5));
+  const bot5Avg = normalize(bottom5).reduce((acc, v) => acc.map((a, i) => a + v[i]), [0,0,0,0,0]).map(v => Math.round(v / 5));
 
   chart.setOption({
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'shadow' },
-      ...TOOLTIP_STYLE,
-      formatter: params => {
-        const d = params[0];
-        return `<strong>${d.name}</strong><br/>Rate: ${d.value}%`;
-      }
+    tooltip: { ...TOOLTIP_STYLE },
+    legend: {
+      data: [`Top 5 (${top5.map(s => s.name).join(', ')})`, `Bottom 5 (${bottom5.map(s => s.name).join(', ')})`],
+      textStyle: { color: COLORS.text, fontSize: 10 }, bottom: 0
     },
-    grid: { left: 130, right: 20, top: 10, bottom: 30 },
-    xAxis: {
-      type: 'value',
-      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'category',
-      data: names.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 11 },
+    radar: {
+      indicator: [
+        { name: 'Food Insecurity', max: 100 },
+        { name: 'Child Rate', max: 100 },
+        { name: 'Poverty', max: 100 },
+        { name: 'Meal Cost', max: 100 },
+        { name: 'SNAP Usage', max: 100 }
+      ],
+      shape: 'polygon', splitNumber: 4,
+      axisName: { color: COLORS.text, fontSize: 11 },
+      splitLine: { lineStyle: { color: COLORS.gridLine } },
+      splitArea: { areaStyle: { color: ['rgba(0,212,255,0.02)', 'rgba(0,212,255,0.05)'] } },
       axisLine: { lineStyle: { color: COLORS.gridLine } }
     },
     series: [{
-      type: 'bar',
-      data: rates.reverse(),
-      barWidth: '60%',
-      itemStyle: {
-        borderRadius: [0, 4, 4, 0],
-        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          { offset: 0, color: COLORS.mapMid },
-          { offset: 1, color: COLORS.mapHigh }
-        ])
-      },
-      animationDuration: 1500,
-      animationDelay: (idx) => idx * 100
+      type: 'radar',
+      data: [
+        { value: top5Avg, name: `Top 5 (${top5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(231,76,60,0.25)' }, lineStyle: { color: COLORS.mapHigh, width: 2 }, itemStyle: { color: COLORS.mapHigh } },
+        { value: bot5Avg, name: `Bottom 5 (${bottom5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(46,204,113,0.25)' }, lineStyle: { color: COLORS.mapLow, width: 2 }, itemStyle: { color: COLORS.mapLow } }
+      ]
     }]
   });
 }
@@ -509,47 +514,27 @@ function renderScatter(data) {
   });
 }
 
-// -- Meal Cost Bar Chart --
+// -- Nightingale: Meal Cost by State --
 function renderMealCost(data) {
   const chart = createChart('chart-meal-cost');
   if (!chart) return;
 
-  const sorted = [...data.states].sort((a, b) => b.mealCost - a.mealCost).slice(0, 10);
-  const names = sorted.map(s => s.name);
-  const costs = sorted.map(s => s.mealCost);
+  const sorted = [...data.states].sort((a, b) => b.mealCost - a.mealCost);
+  const pieData = sorted.map(s => ({
+    name: s.name, value: s.mealCost,
+    itemStyle: { color: REGION_COLORS[getRegion(s.name)] }
+  }));
 
   chart.setOption({
     tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'shadow' },
       ...TOOLTIP_STYLE,
-      formatter: params => `<strong>${params[0].name}</strong><br/>$${params[0].value.toFixed(2)} per meal`
-    },
-    grid: { left: 130, right: 20, top: 10, bottom: 30 },
-    xAxis: {
-      type: 'value',
-      axisLabel: { color: COLORS.textMuted, formatter: '${value}' },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'category',
-      data: names.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 11 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
+      formatter: p => `<strong>${p.name}</strong><br/>Meal Cost: <strong>$${p.value}</strong><br/>Region: ${getRegion(p.name)}`
     },
     series: [{
-      type: 'bar',
-      data: costs.reverse(),
-      barWidth: '60%',
-      itemStyle: {
-        borderRadius: [0, 4, 4, 0],
-        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          { offset: 0, color: COLORS.primary },
-          { offset: 1, color: COLORS.secondary }
-        ])
-      },
-      animationDuration: 1500,
-      animationDelay: (idx) => idx * 100
+      type: 'pie', roseType: 'area', radius: ['15%', '70%'], center: ['50%', '50%'],
+      itemStyle: { borderRadius: 4, borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1 },
+      label: { show: true, formatter: p => p.value >= 4.0 ? `${p.name}\n$${p.value}` : '', color: COLORS.text, fontSize: 10 },
+      data: pieData, animationDuration: 2000
     }]
   });
 }

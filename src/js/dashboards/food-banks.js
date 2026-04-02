@@ -7,7 +7,8 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE,
   fmtNum, animateCounters, createChart,
-  initScrollReveal, handleResize
+  initScrollReveal, handleResize,
+  REGIONS, REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
 
 // -- Chart 1: Food Bank Density Map (choropleth) --
@@ -100,90 +101,85 @@ function renderVsInsecurity(states) {
   });
 }
 
-// -- Chart 3: Revenue by State (bar) --
+// -- Chart 3: Revenue by State (Treemap) --
 function renderRevenue(states) {
   const chart = createChart('chart-revenue');
   if (!chart) return;
 
-  const sorted = [...states].sort((a, b) => b.totalRevenue - a.totalRevenue).slice(0, 15);
-  const names = sorted.map(s => s.name);
-  const revenues = sorted.map(s => s.totalRevenue);
+  const regionData = Object.entries(REGIONS).map(([region, stateNames]) => {
+    const children = states
+      .filter(s => stateNames.includes(s.name))
+      .map(s => ({ name: s.name, value: s.totalRevenue, efficiency: s.programExpenseRatio, orgCount: s.orgCount }))
+      .sort((a, b) => b.value - a.value);
+    return { name: region, children, itemStyle: { borderColor: REGION_COLORS[region] } };
+  });
 
   chart.setOption({
     tooltip: {
-      trigger: 'axis', axisPointer: { type: 'shadow' }, ...TOOLTIP_STYLE,
-      formatter: params => {
-        const idx = params[0].dataIndex;
-        const s = sorted[sorted.length - 1 - idx];
-        return `<strong>${s.name}</strong><br/>Revenue: <strong>$${fmtNum(s.totalRevenue)}</strong><br/>Organizations: ${fmtNum(s.orgCount)}<br/>Efficiency: ${s.programExpenseRatio}%`;
+      ...TOOLTIP_STYLE,
+      formatter: p => {
+        if (p.data.children) return `<strong>${p.name}</strong><br/>Total Revenue: $${fmtNum(p.value)}`;
+        return `<strong>${p.name}</strong><br/>Revenue: <strong>$${fmtNum(p.value)}</strong><br/>Efficiency: ${p.data.efficiency}%<br/>Organizations: ${fmtNum(p.data.orgCount)}`;
       }
     },
-    grid: { left: 120, right: 30, top: 10, bottom: 30 },
-    xAxis: {
-      type: 'value',
-      axisLabel: { color: COLORS.textMuted, formatter: val => '$' + fmtNum(val) },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'category', data: names.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 11 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
-    },
     series: [{
-      type: 'bar', data: revenues.reverse(), barWidth: '55%',
-      itemStyle: {
-        borderRadius: [0, 4, 4, 0],
-        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          { offset: 0, color: COLORS.primary }, { offset: 1, color: COLORS.secondary }
-        ])
-      },
-      animationDuration: 1500, animationDelay: (idx) => idx * 80
+      type: 'treemap', data: regionData, leafDepth: 1, roam: false,
+      width: '95%', height: '90%', top: 10,
+      label: { show: true, formatter: p => p.data.children ? '' : `${p.name}\n$${fmtNum(p.value)}`, fontSize: 9, color: '#fff' },
+      upperLabel: { show: true, height: 24, color: '#fff', fontSize: 12, fontWeight: 'bold', backgroundColor: 'transparent' },
+      itemStyle: { borderColor: 'rgba(0,0,0,0.5)', borderWidth: 1, gapWidth: 2 },
+      levels: [
+        { itemStyle: { borderColor: 'rgba(255,255,255,0.2)', borderWidth: 3, gapWidth: 3 }, upperLabel: { show: true } },
+        { colorSaturation: [0.3, 0.7], itemStyle: { borderColorSaturation: 0.5, gapWidth: 1, borderWidth: 1 } }
+      ],
+      color: [COLORS.primary, COLORS.secondary, '#a78bfa', '#34d399', COLORS.accent],
+      animationDuration: 1500
     }]
   });
 }
 
-// -- Chart 4: Program Efficiency (horizontal bar) --
+// -- Chart 4: Regional Comparison (Radar) --
 function renderEfficiency(states) {
   const chart = createChart('chart-efficiency');
   if (!chart) return;
 
-  // Show all states sorted by efficiency, top 20
-  const sorted = [...states].sort((a, b) => b.programExpenseRatio - a.programExpenseRatio).slice(0, 20);
-  const names = sorted.map(s => s.name);
-  const ratios = sorted.map(s => s.programExpenseRatio);
-  const nationalAvg = 82.4;
+  const regionAvgs = Object.entries(REGIONS).map(([region, stateNames]) => {
+    const rs = states.filter(s => stateNames.includes(s.name));
+    const n = rs.length;
+    return {
+      name: region,
+      efficiency: (rs.reduce((s, st) => s + st.programExpenseRatio, 0) / n).toFixed(1),
+      density: (rs.reduce((s, st) => s + st.perCapitaOrgs, 0) / n).toFixed(1),
+      avgRevPerOrg: (rs.reduce((s, st) => s + st.totalRevenue / st.orgCount, 0) / n / 1000000).toFixed(2),
+      insecurity: (rs.reduce((s, st) => s + st.foodInsecurityRate, 0) / n).toFixed(1),
+      orgCount: Math.round(rs.reduce((s, st) => s + st.orgCount, 0) / n)
+    };
+  });
 
   chart.setOption({
-    tooltip: {
-      trigger: 'axis', axisPointer: { type: 'shadow' }, ...TOOLTIP_STYLE,
-      formatter: params => `<strong>${params[0].name}</strong><br/>Program Efficiency: <strong>${params[0].value}%</strong>`
-    },
-    grid: { left: 130, right: 30, top: 10, bottom: 30 },
-    xAxis: {
-      type: 'value', min: 78, max: 88,
-      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'category', data: names.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 10 },
+    tooltip: { ...TOOLTIP_STYLE },
+    legend: { data: regionAvgs.map(r => r.name), textStyle: { color: COLORS.text }, bottom: 0 },
+    radar: {
+      indicator: [
+        { name: 'Efficiency (%)', max: 90 }, { name: 'Density\n(per 100K)', max: 22 },
+        { name: 'Avg Rev/Org\n($M)', max: 1.5 }, { name: 'Insecurity (%)', max: 18 },
+        { name: 'Avg Org Count', max: 2000 }
+      ],
+      shape: 'polygon', splitNumber: 4,
+      axisName: { color: COLORS.text, fontSize: 10 },
+      splitLine: { lineStyle: { color: COLORS.gridLine } },
+      splitArea: { areaStyle: { color: ['rgba(0,212,255,0.02)', 'rgba(0,212,255,0.05)'] } },
       axisLine: { lineStyle: { color: COLORS.gridLine } }
     },
     series: [{
-      type: 'bar', data: ratios.reverse(), barWidth: '50%',
-      markLine: {
-        symbol: 'none',
-        data: [{ xAxis: nationalAvg, label: { formatter: `Avg: ${nationalAvg}%`, color: COLORS.secondary, fontSize: 10 }, lineStyle: { color: COLORS.secondary, type: 'dashed' } }]
-      },
-      itemStyle: {
-        borderRadius: [0, 4, 4, 0],
-        color: (params) => {
-          if (params.value >= 85) return COLORS.mapLow;
-          if (params.value >= 82) return COLORS.mapMid;
-          return COLORS.mapHigh;
-        }
-      },
-      animationDuration: 1500, animationDelay: (idx) => idx * 60
+      type: 'radar',
+      data: regionAvgs.map(r => ({
+        name: r.name,
+        value: [r.efficiency, r.density, r.avgRevPerOrg, r.insecurity, r.orgCount],
+        areaStyle: { color: REGION_COLORS[r.name].replace(')', ',0.2)').replace('rgb', 'rgba') },
+        lineStyle: { color: REGION_COLORS[r.name], width: 2 },
+        itemStyle: { color: REGION_COLORS[r.name] }
+      }))
     }]
   });
 }

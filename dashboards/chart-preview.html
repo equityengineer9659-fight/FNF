@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Type Preview - Food-N-Force Dashboards</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <link rel="stylesheet" href="/src/css/main.css">
+    <style>
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        .preview-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        .preview-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .preview-card__title {
+            color: #00d4ff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .preview-card__meta {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+        }
+        .preview-chart {
+            height: 420px;
+            min-height: 350px;
+        }
+        .preview-hero {
+            text-align: center;
+            padding: 3rem 1.5rem 1rem;
+        }
+        .preview-hero h1 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .preview-hero p {
+            color: rgba(255,255,255,0.6);
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body class="fnf-page--dashboard" id="page-top">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation"></nav>
+
+    <main id="main-content" tabindex="-1">
+        <div class="preview-hero">
+            <h1>Chart Type Preview</h1>
+            <p>12 proposed replacements for repetitive horizontal bars. Review before we apply to dashboards.</p>
+        </div>
+
+        <div class="preview-grid">
+            <!-- 1. Radar — Food Insecurity Overview: Top 5 vs Bottom 5 states -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">1. Radar — State Comparison (Overview)</span>
+                    <span class="preview-card__meta">Replaces: Top 10 States bar chart</span>
+                </div>
+                <div id="preview-radar-states" class="preview-chart"></div>
+            </div>
+
+            <!-- 2. Nightingale — Meal Cost Distribution (Overview) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">2. Nightingale — Meal Cost by State (Overview)</span>
+                    <span class="preview-card__meta">Replaces: Meal Cost bar chart</span>
+                </div>
+                <div id="preview-nightingale-meal" class="preview-chart"></div>
+            </div>
+
+            <!-- 3. Donut — Urban vs Rural (Food Access) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">3. Donut — Urban vs Rural Food Deserts (Food Access)</span>
+                    <span class="preview-card__meta">Replaces: Urban/Rural stacked bar</span>
+                </div>
+                <div id="preview-donut-urban" class="preview-chart"></div>
+            </div>
+
+            <!-- 4. Gradient Area — Distance Distribution (Food Access) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">4. Gradient Area — Distance to Store (Food Access)</span>
+                    <span class="preview-card__meta">Replaces: Distance bar chart</span>
+                </div>
+                <div id="preview-area-distance" class="preview-chart"></div>
+            </div>
+
+            <!-- 5. Treemap — Double Burden (Food Access) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">5. Treemap — Low-Income + Low-Access Population (Food Access)</span>
+                    <span class="preview-card__meta">Replaces: Double Burden bar chart</span>
+                </div>
+                <div id="preview-treemap-burden" class="preview-chart"></div>
+            </div>
+
+            <!-- 6. Area with Zones — SNAP Trend (SNAP) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">6. Area with Policy Zones — SNAP Trend (SNAP)</span>
+                    <span class="preview-card__meta">Replaces: SNAP trend line</span>
+                </div>
+                <div id="preview-area-snap" class="preview-chart"></div>
+            </div>
+
+            <!-- 7. Sankey — Coverage Flow (SNAP) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">7. Sankey — Safety Net Coverage Flow (SNAP)</span>
+                    <span class="preview-card__meta">Replaces: Coverage Gap grouped bar</span>
+                </div>
+                <div id="preview-sankey-snap" class="preview-chart"></div>
+            </div>
+
+            <!-- 8. Nightingale — School Lunch (SNAP) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">8. Nightingale — School Lunch Rates (SNAP)</span>
+                    <span class="preview-card__meta">Replaces: School Lunch bar chart</span>
+                </div>
+                <div id="preview-nightingale-lunch" class="preview-chart"></div>
+            </div>
+
+            <!-- 9. Gradient Stacked Area — Food Prices by Category -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">9. Gradient Stacked Area — Food Prices by Category (Prices)</span>
+                    <span class="preview-card__meta">Replaces: Multi-line category chart</span>
+                </div>
+                <div id="preview-stacked-area" class="preview-chart"></div>
+            </div>
+
+            <!-- 10. Sunburst — Income Burden (Prices) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">10. Sunburst — Food Cost Burden by Income (Prices)</span>
+                    <span class="preview-card__meta">Replaces: Income burden bar chart</span>
+                </div>
+                <div id="preview-sunburst-burden" class="preview-chart"></div>
+            </div>
+
+            <!-- 11. Treemap — Food Bank Revenue (Food Banks) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">11. Treemap — Food Bank Revenue by State (Food Banks)</span>
+                    <span class="preview-card__meta">Replaces: Revenue bar chart</span>
+                </div>
+                <div id="preview-treemap-revenue" class="preview-chart"></div>
+            </div>
+
+            <!-- 12. Radar — Regional Efficiency (Food Banks) -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">12. Radar — Regional Comparison (Food Banks)</span>
+                    <span class="preview-card__meta">Replaces: Efficiency bar chart</span>
+                </div>
+                <div id="preview-radar-regions" class="preview-chart"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="fnf-footer"></footer>
+
+    <script type="module" src="/src/js/main.js" defer></script>
+    <script type="module" src="/src/js/dashboards/chart-preview.js" defer></script>
+</body>
+</html>

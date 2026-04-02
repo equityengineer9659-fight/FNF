@@ -7,7 +7,8 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE,
   fmtNum, animateCounters, createChart,
-  initScrollReveal, handleResize
+  initScrollReveal, handleResize,
+  REGIONS, REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
 
 // -- Chart 1: Food Desert Map (choropleth) --
@@ -57,105 +58,57 @@ function renderDesertMap(geoJSON, states) {
   }, true);
 }
 
-// -- Chart 2: Urban vs Rural (stacked bar) --
+// -- Chart 2: Urban vs Rural (Donut) --
 function renderUrbanRural(states) {
   const chart = createChart('chart-urban-rural');
   if (!chart) return;
 
-  // Top 15 by total low-access tracts
-  const sorted = [...states]
-    .sort((a, b) => (b.urbanLowAccess + b.ruralLowAccess) - (a.urbanLowAccess + a.ruralLowAccess))
-    .slice(0, 15);
-  const names = sorted.map(s => s.name);
-  const urban = sorted.map(s => s.urbanLowAccess);
-  const rural = sorted.map(s => s.ruralLowAccess);
+  const totalUrban = states.reduce((s, st) => s + st.urbanLowAccess, 0);
+  const totalRural = states.reduce((s, st) => s + st.ruralLowAccess, 0);
 
   chart.setOption({
-    tooltip: {
-      trigger: 'axis', ...TOOLTIP_STYLE,
-      formatter: params => {
-        let tip = `<strong>${params[0].name}</strong><br/>`;
-        params.forEach(p => { tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong> tracts<br/>`; });
-        const total = params.reduce((s, p) => s + p.value, 0);
-        tip += `Total: <strong>${total}</strong> tracts`;
-        return tip;
-      }
-    },
-    legend: {
-      data: ['Urban Low-Access', 'Rural Low-Access'],
-      textStyle: { color: COLORS.text }, top: 5
-    },
-    grid: { left: 120, right: 20, top: 40, bottom: 30 },
-    xAxis: {
-      type: 'value',
-      axisLabel: { color: COLORS.textMuted },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'category', data: names.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 11 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    series: [
-      {
-        name: 'Urban Low-Access', type: 'bar', stack: 'total',
-        data: urban.reverse(), barWidth: '55%',
-        itemStyle: { color: COLORS.primary, borderRadius: [0, 0, 0, 0] },
-        animationDuration: 1500
-      },
-      {
-        name: 'Rural Low-Access', type: 'bar', stack: 'total',
-        data: rural.reverse(), barWidth: '55%',
-        itemStyle: { color: COLORS.accent, borderRadius: [0, 4, 4, 0] },
-        animationDuration: 1500, animationDelay: 200
-      }
-    ]
+    tooltip: { ...TOOLTIP_STYLE, formatter: p => `${p.name}: <strong>${fmtNum(p.value)}</strong> tracts (${p.percent.toFixed(1)}%)` },
+    legend: { data: ['Urban Low-Access', 'Rural Low-Access'], textStyle: { color: COLORS.text }, bottom: 0 },
+    series: [{
+      type: 'pie', radius: ['40%', '70%'], center: ['50%', '45%'],
+      label: { show: true, color: COLORS.text, formatter: '{b}\n{d}%', fontSize: 12 },
+      itemStyle: { borderRadius: 6, borderColor: 'rgba(0,0,0,0.4)', borderWidth: 2 },
+      data: [
+        { name: 'Urban Low-Access', value: totalUrban, itemStyle: { color: COLORS.primary } },
+        { name: 'Rural Low-Access', value: totalRural, itemStyle: { color: COLORS.accent } }
+      ],
+      emphasis: { itemStyle: { shadowBlur: 20, shadowColor: 'rgba(0,212,255,0.3)' } },
+      animationType: 'scale', animationDuration: 2000
+    }]
   });
 }
 
-// -- Chart 3: Distance to Nearest Supermarket (bar) --
+// -- Chart 3: Distance to Store (Gradient Area) --
 function renderDistance(states) {
   const chart = createChart('chart-distance');
   if (!chart) return;
 
-  const sorted = [...states].sort((a, b) => b.avgDistance - a.avgDistance).slice(0, 15);
+  const sorted = [...states].sort((a, b) => a.avgDistance - b.avgDistance);
   const names = sorted.map(s => s.name);
   const distances = sorted.map(s => s.avgDistance);
 
   chart.setOption({
-    tooltip: {
-      trigger: 'axis', axisPointer: { type: 'shadow' }, ...TOOLTIP_STYLE,
-      formatter: params => `<strong>${params[0].name}</strong><br/>Avg Distance: <strong>${params[0].value} miles</strong>`
-    },
-    grid: { left: 130, right: 30, top: 10, bottom: 30 },
-    xAxis: {
-      type: 'value', name: 'Miles',
-      nameTextStyle: { color: COLORS.textMuted },
-      axisLabel: { color: COLORS.textMuted },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'category', data: names.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 11 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
-    },
+    tooltip: { trigger: 'axis', ...TOOLTIP_STYLE, formatter: p => `<strong>${p[0].name}</strong><br/>Avg Distance: <strong>${p[0].value} mi</strong>` },
+    grid: { left: 50, right: 20, top: 20, bottom: 40 },
+    xAxis: { type: 'category', data: names, axisLabel: { color: COLORS.textMuted, rotate: 60, fontSize: 8 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
+    yAxis: { type: 'value', name: 'Miles', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
     series: [{
-      type: 'bar', data: distances.reverse(), barWidth: '55%',
-      markLine: {
-        symbol: 'none',
-        data: [
-          { xAxis: 1, label: { formatter: 'Urban threshold (1mi)', color: COLORS.secondary, fontSize: 10 }, lineStyle: { color: COLORS.secondary, type: 'dashed' } },
-        ]
+      type: 'line', data: distances, smooth: true, symbol: 'none',
+      lineStyle: { width: 2.5, color: COLORS.secondary },
+      areaStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: 'rgba(0,212,255,0.35)' },
+          { offset: 0.5, color: 'rgba(0,212,255,0.12)' },
+          { offset: 1, color: 'rgba(0,212,255,0.01)' }
+        ])
       },
-      itemStyle: {
-        borderRadius: [0, 4, 4, 0],
-        color: (params) => {
-          if (params.value > 4) return COLORS.mapHigh;
-          if (params.value > 2) return COLORS.mapMid;
-          return COLORS.mapLow;
-        }
-      },
-      animationDuration: 1500, animationDelay: (idx) => idx * 80
+      markLine: { symbol: 'none', data: [{ yAxis: 1, label: { formatter: 'Urban threshold (1mi)', color: COLORS.secondary, fontSize: 10 }, lineStyle: { color: COLORS.secondary, type: 'dashed' } }] },
+      animationDuration: 2000
     }]
   });
 }
@@ -204,45 +157,40 @@ function renderVehicle(states) {
   });
 }
 
-// -- Chart 5: Low-Income + Low-Access Overlap (bar) --
+// -- Chart 5: Low-Income + Low-Access (Treemap) --
 function renderDoubleBurden(states) {
   const chart = createChart('chart-double-burden');
   if (!chart) return;
 
-  const sorted = [...states].sort((a, b) => b.lowIncomeLowAccessPop - a.lowIncomeLowAccessPop).slice(0, 15);
-  const names = sorted.map(s => s.name);
-  const pops = sorted.map(s => s.lowIncomeLowAccessPop);
+  const regionData = Object.entries(REGIONS).map(([region, stateNames]) => {
+    const children = states
+      .filter(s => stateNames.includes(s.name))
+      .map(s => ({ name: s.name, value: s.lowIncomeLowAccessPop, pctOfPop: ((s.lowIncomeLowAccessPop / s.population) * 100).toFixed(1) }))
+      .sort((a, b) => b.value - a.value);
+    return { name: region, children, itemStyle: { borderColor: REGION_COLORS[region] } };
+  });
 
   chart.setOption({
     tooltip: {
-      trigger: 'axis', axisPointer: { type: 'shadow' }, ...TOOLTIP_STYLE,
-      formatter: params => {
-        const idx = params[0].dataIndex;
-        const s = sorted[sorted.length - 1 - idx];
-        const pct = ((s.lowIncomeLowAccessPop / s.population) * 100).toFixed(1);
-        return `<strong>${s.name}</strong><br/>Low-Income + Low-Access: <strong>${fmtNum(s.lowIncomeLowAccessPop)}</strong><br/>Share of Population: ${pct}%`;
+      ...TOOLTIP_STYLE,
+      formatter: p => {
+        if (p.data.children) return `<strong>${p.name}</strong><br/>Total: ${fmtNum(p.value)}`;
+        return `<strong>${p.name}</strong><br/>Low-Income + Low-Access: <strong>${fmtNum(p.value)}</strong><br/>${p.data.pctOfPop}% of state population`;
       }
     },
-    grid: { left: 120, right: 30, top: 10, bottom: 30 },
-    xAxis: {
-      type: 'value',
-      axisLabel: { color: COLORS.textMuted, formatter: val => fmtNum(val) },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'category', data: names.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 11 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
-    },
     series: [{
-      type: 'bar', data: pops.reverse(), barWidth: '55%',
-      itemStyle: {
-        borderRadius: [0, 4, 4, 0],
-        color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          { offset: 0, color: COLORS.mapMid }, { offset: 1, color: COLORS.mapHigh }
-        ])
-      },
-      animationDuration: 1500, animationDelay: (idx) => idx * 80
+      type: 'treemap', data: regionData, leafDepth: 1, roam: false,
+      width: '95%', height: '90%', top: 10,
+      label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff' },
+      upperLabel: { show: true, height: 24, color: '#fff', fontSize: 12, fontWeight: 'bold', backgroundColor: 'transparent' },
+      itemStyle: { borderColor: 'rgba(0,0,0,0.5)', borderWidth: 1, gapWidth: 2 },
+      levels: [
+        { itemStyle: { borderColor: 'rgba(255,255,255,0.2)', borderWidth: 3, gapWidth: 3 }, upperLabel: { show: true } },
+        { colorSaturation: [0.3, 0.7], itemStyle: { borderColorSaturation: 0.5, gapWidth: 1, borderWidth: 1 } }
+      ],
+      colorMappingBy: 'value', visualMin: 30000, visualMax: 1700000,
+      color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh],
+      animationDuration: 1500
     }]
   });
 }

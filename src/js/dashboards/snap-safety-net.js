@@ -10,7 +10,7 @@ import {
   initScrollReveal, handleResize
 } from './shared/dashboard-utils.js';
 
-// -- Chart 1: SNAP Participation Trend (line with policy markers) --
+// -- Chart 1: SNAP Trend with Policy Zones (Area) --
 function renderSnapTrend(trendData) {
   const chart = createChart('chart-snap-trend');
   if (!chart) return;
@@ -18,70 +18,22 @@ function renderSnapTrend(trendData) {
   const dates = trendData.data.map(d => d.date);
   const values = trendData.data.map(d => d.value);
 
-  // Build markLine data from policy events
-  const markLines = (trendData.events || []).map(evt => ({
-    xAxis: evt.date,
-    label: {
-      formatter: evt.label,
-      position: 'insideEndTop',
-      color: COLORS.secondary,
-      fontSize: 10,
-      backgroundColor: 'rgba(10,10,30,0.8)',
-      padding: [2, 6],
-      borderRadius: 3
-    },
-    lineStyle: { color: COLORS.secondary, type: 'dashed', width: 1.5 }
-  }));
-
   chart.setOption({
-    tooltip: {
-      trigger: 'axis',
-      ...TOOLTIP_STYLE,
-      formatter: params => {
-        const p = params[0];
-        return `<strong>${p.axisValue}</strong><br/>${p.marker} SNAP Enrollment: <strong>${p.value}M</strong>`;
-      }
-    },
+    tooltip: { trigger: 'axis', ...TOOLTIP_STYLE, formatter: p => `<strong>${p[0].axisValue}</strong><br/>SNAP: <strong>${p[0].value}M</strong>` },
     grid: { left: 55, right: 20, top: 20, bottom: 60 },
-    dataZoom: [{
-      type: 'inside', start: 0, end: 100
-    }, {
-      type: 'slider', start: 0, end: 100, height: 20, bottom: 10,
-      textStyle: { color: COLORS.textMuted }, borderColor: COLORS.gridLine,
-      fillerColor: 'rgba(0,212,255,0.1)'
-    }],
-    xAxis: {
-      type: 'category',
-      data: dates,
-      axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'value',
-      name: 'Participants (M)',
-      nameTextStyle: { color: COLORS.textMuted },
-      axisLabel: { color: COLORS.textMuted, formatter: '{value}M' },
-      splitLine: { lineStyle: { color: COLORS.gridLine } },
-      min: 34, max: 48
-    },
+    dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 20, bottom: 10, textStyle: { color: COLORS.textMuted }, borderColor: COLORS.gridLine, fillerColor: 'rgba(0,212,255,0.1)' }],
+    xAxis: { type: 'category', data: dates, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
+    yAxis: { type: 'value', name: 'Participants (M)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted, formatter: '{value}M' }, splitLine: { lineStyle: { color: COLORS.gridLine } }, min: 34, max: 48 },
     series: [{
-      type: 'line',
-      data: values,
-      smooth: true,
-      symbol: 'circle',
-      symbolSize: 6,
+      type: 'line', data: values, smooth: true, symbol: 'none',
       lineStyle: { width: 3, color: COLORS.primary },
-      itemStyle: { color: COLORS.primary },
-      areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: 'rgba(1,118,211,0.25)' },
-          { offset: 1, color: 'rgba(1,118,211,0.02)' }
-        ])
-      },
-      markLine: {
-        symbol: 'none',
-        data: markLines,
-        animationDuration: 500
+      areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(1,118,211,0.4)' }, { offset: 1, color: 'rgba(1,118,211,0.02)' }]) },
+      markArea: {
+        silent: true,
+        data: [
+          [{ xAxis: '2020-03', itemStyle: { color: 'rgba(231,76,60,0.12)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: COLORS.mapHigh, fontSize: 9, position: 'insideTop' } }, { xAxis: '2023-03' }],
+          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(243,156,18,0.08)' }, label: { show: true, formatter: 'Post-Emergency', color: COLORS.mapMid, fontSize: 9, position: 'insideTop' } }, { xAxis: '2025-01' }]
+        ]
       },
       animationDuration: 2000
     }]
@@ -145,125 +97,61 @@ function renderSnapMap(geoJSON, states) {
   }, true);
 }
 
-// -- Chart 3: Coverage Gap (grouped bar) --
+// -- Chart 3: Safety Net Coverage Flow (Sankey) --
 function renderCoverageGap(states) {
   const chart = createChart('chart-coverage-gap');
   if (!chart) return;
 
-  // Top 15 states by food insecurity — show gap
-  const sorted = [...states].sort((a, b) => b.foodInsecure - a.foodInsecure).slice(0, 15);
-  const names = sorted.map(s => s.name);
-  const insecure = sorted.map(s => s.foodInsecure);
-  const snap = sorted.map(s => s.snapParticipants);
+  const totalInsecure = 44200000;
+  const snapCovered = 42100000;
+  const schoolLunchCovered = 30000000;
+  const overlap = 18000000;
+  const snapOnly = snapCovered - overlap;
+  const lunchOnly = schoolLunchCovered - overlap;
+  const uncovered = Math.max(0, totalInsecure - snapOnly - lunchOnly - overlap);
 
   chart.setOption({
-    tooltip: {
-      trigger: 'axis',
-      ...TOOLTIP_STYLE,
-      formatter: params => {
-        const idx = params[0].dataIndex;
-        const s = sorted[sorted.length - 1 - idx]; // reversed
-        const gap = s.foodInsecure - s.snapParticipants;
-        return `<strong>${s.name}</strong><br/>
-          Food Insecure: ${fmtNum(s.foodInsecure)}<br/>
-          SNAP Enrolled: ${fmtNum(s.snapParticipants)}<br/>
-          <span style="color:${gap > 0 ? COLORS.mapHigh : COLORS.mapLow}">Gap: ${gap > 0 ? fmtNum(gap) + ' uncovered' : 'Fully covered'}</span>`;
-      }
-    },
-    legend: {
-      data: ['Food Insecure', 'SNAP Enrolled'],
-      textStyle: { color: COLORS.text }, top: 5
-    },
-    grid: { left: 120, right: 30, top: 40, bottom: 30 },
-    xAxis: {
-      type: 'value',
-      axisLabel: { color: COLORS.textMuted, formatter: val => fmtNum(val) },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    yAxis: {
-      type: 'category',
-      data: names.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 11 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
-    },
-    series: [
-      {
-        name: 'Food Insecure', type: 'bar',
-        data: insecure.reverse(), barWidth: '35%',
-        itemStyle: {
-          borderRadius: [0, 3, 3, 0],
-          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            { offset: 0, color: COLORS.mapMid }, { offset: 1, color: COLORS.mapHigh }
-          ])
-        },
-        animationDuration: 1500
-      },
-      {
-        name: 'SNAP Enrolled', type: 'bar',
-        data: snap.reverse(), barWidth: '35%',
-        itemStyle: {
-          borderRadius: [0, 3, 3, 0],
-          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            { offset: 0, color: COLORS.primary }, { offset: 1, color: COLORS.secondary }
-          ])
-        },
-        animationDuration: 1500, animationDelay: 200
-      }
-    ]
+    tooltip: { ...TOOLTIP_STYLE, formatter: p => p.dataType === 'edge' ? `${p.data.source} → ${p.data.target}: <strong>${fmtNum(p.data.value)}</strong>` : `<strong>${p.name}</strong>: ${fmtNum(p.value)}` },
+    series: [{
+      type: 'sankey', layout: 'none', emphasis: { focus: 'adjacency' }, nodeAlign: 'left',
+      lineStyle: { color: 'gradient', curveness: 0.5, opacity: 0.4 },
+      label: { color: COLORS.text, fontSize: 12 }, itemStyle: { borderWidth: 0 },
+      data: [
+        { name: 'Food Insecure\n(44.2M)', itemStyle: { color: COLORS.mapHigh } },
+        { name: 'SNAP\n(42.1M)', itemStyle: { color: COLORS.primary } },
+        { name: 'School Lunch\n(30M)', itemStyle: { color: COLORS.secondary } },
+        { name: 'Both Programs', itemStyle: { color: '#a78bfa' } },
+        { name: 'Uncovered\n(~8M)', itemStyle: { color: 'rgba(255,255,255,0.3)' } }
+      ],
+      links: [
+        { source: 'Food Insecure\n(44.2M)', target: 'SNAP\n(42.1M)', value: snapOnly },
+        { source: 'Food Insecure\n(44.2M)', target: 'School Lunch\n(30M)', value: lunchOnly },
+        { source: 'Food Insecure\n(44.2M)', target: 'Both Programs', value: overlap },
+        { source: 'Food Insecure\n(44.2M)', target: 'Uncovered\n(~8M)', value: uncovered }
+      ],
+      animationDuration: 2000
+    }]
   });
 }
 
-// -- Chart 4: School Lunch Reach (horizontal bar) --
+// -- Chart 4: School Lunch (Nightingale) --
 function renderSchoolLunch(lunchData) {
   const chart = createChart('chart-school-lunch');
   if (!chart) return;
 
-  // Top 20 states by free/reduced lunch rate
-  const sorted = lunchData.slice(0, 20);
-  const names = sorted.map(s => s.name);
-  const pcts = sorted.map(s => s.pct);
-  const nationalAvg = 52.1;
+  const top15 = lunchData.slice(0, 15);
+  const pieData = top15.map(s => ({
+    name: s.name, value: s.pct,
+    itemStyle: { color: s.pct > 65 ? COLORS.mapHigh : s.pct > 55 ? COLORS.mapMid : COLORS.primary }
+  }));
 
   chart.setOption({
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'shadow' },
-      ...TOOLTIP_STYLE,
-      formatter: params => `<strong>${params[0].name}</strong><br/>Free/Reduced Lunch: <strong>${params[0].value}%</strong>`
-    },
-    grid: { left: 130, right: 30, top: 10, bottom: 30 },
-    xAxis: {
-      type: 'value',
-      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
-      splitLine: { lineStyle: { color: COLORS.gridLine } },
-      max: 80
-    },
-    yAxis: {
-      type: 'category',
-      data: names.reverse(),
-      axisLabel: { color: COLORS.text, fontSize: 11 },
-      axisLine: { lineStyle: { color: COLORS.gridLine } }
-    },
+    tooltip: { ...TOOLTIP_STYLE, formatter: p => `<strong>${p.name}</strong><br/>Free/Reduced Lunch: <strong>${p.value}%</strong>` },
     series: [{
-      type: 'bar',
-      data: pcts.reverse(),
-      barWidth: '55%',
-      markLine: {
-        symbol: 'none',
-        data: [{ xAxis: nationalAvg, label: { formatter: `National Avg: ${nationalAvg}%`, color: COLORS.secondary, fontSize: 11 }, lineStyle: { color: COLORS.secondary, type: 'dashed' } }],
-        animationDuration: 500
-      },
-      itemStyle: {
-        borderRadius: [0, 4, 4, 0],
-        color: (params) => {
-          const val = params.value;
-          if (val > 65) return COLORS.mapHigh;
-          if (val > 52) return COLORS.mapMid;
-          return COLORS.primary;
-        }
-      },
-      animationDuration: 1500,
-      animationDelay: (idx) => idx * 80
+      type: 'pie', roseType: 'radius', radius: ['20%', '70%'], center: ['50%', '50%'],
+      label: { show: true, formatter: '{b}\n{c}%', color: COLORS.text, fontSize: 9 },
+      itemStyle: { borderRadius: 5, borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1 },
+      data: pieData, animationDuration: 2000
     }]
   });
 }
