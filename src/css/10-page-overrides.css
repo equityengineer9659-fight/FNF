@@ -30,6 +30,19 @@
     gap: 1.5rem;
   }
 
+  .fnf-page--impact .dashboard-callout__inner {
+    padding: 2rem 1.5rem;
+  }
+
+  .fnf-page--impact .dashboard-callout__description {
+    font-size: 0.95rem;
+  }
+
+  .fnf-page--impact .dashboard-callout__btn {
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+  }
+
   /* Contact Page: Grid and form layout */
   .fnf-page--contact .contact-section .slds-grid {
     grid-template-columns: 1fr;
