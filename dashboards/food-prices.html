@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Prices & Affordability Dashboard - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Interactive dashboard exploring food price trends, regional CPI differences, affordability by income, and the cost burden of feeding a family in America.">
+    <meta name="keywords" content="food prices, CPI food index, food affordability, grocery inflation, food cost burden, food insecurity economics">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/dashboards/food-prices.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Food Prices & Affordability Dashboard - Food-N-Force">
+    <meta property="og:description" content="Interactive dashboard exploring food price trends, regional differences, and affordability across America.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/dashboards/food-prices.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Food Prices & Affordability Dashboard - Food-N-Force">
+    <meta name="twitter:description" content="Interactive dashboard exploring food price trends, regional differences, and affordability across America.">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Food Prices & Affordability Dashboard",
+        "description": "Interactive dashboard exploring food price trends, regional CPI differences, and food affordability across income levels in America.",
+        "url": "https://foodnforce.com/dashboards/food-prices.html",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Food-N-Force",
+            "url": "https://foodnforce.com"
+        },
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "Food-N-Force",
+            "url": "https://foodnforce.com"
+        }
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--dashboard" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Tabs -->
+    <nav class="dashboard-tabs" aria-label="Dashboard navigation">
+        <div class="dashboard-tabs__container">
+            <ul class="dashboard-tabs__list" role="tablist">
+            <li role="presentation"><a href="/dashboards/food-insecurity.html" class="dashboard-tabs__tab" role="tab">Overview</a></li>
+            <li role="presentation"><a href="/dashboards/food-access.html" class="dashboard-tabs__tab" role="tab">Food Access</a></li>
+            <li role="presentation"><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab" role="tab">SNAP & Safety Net</a></li>
+            <li role="presentation"><a href="/dashboards/food-prices.html" class="dashboard-tabs__tab" role="tab" aria-current="page">Food Prices</a></li>
+            <li role="presentation"><a href="/dashboards/food-banks.html" class="dashboard-tabs__tab" role="tab">Food Banks</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Hero Section -->
+        <section class="dashboard-hero" aria-label="Food prices key statistics">
+            <h1 class="slds-text-heading_large">Food Prices &amp; Affordability</h1>
+            <p class="dashboard-hero__subtitle">How much does food really cost — and who can afford it?</p>
+            <div class="dashboard-hero__stats" aria-label="Key national statistics">
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="25.3" data-suffix="%">25.3%</span>
+                    <p class="dashboard-stat__label">Food Inflation Since 2020</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="3.99" data-suffix="">$3.99</span>
+                    <p class="dashboard-stat__label">Avg Meal Cost</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="5.12" data-suffix="">$5.12</span>
+                    <p class="dashboard-stat__label">Most Expensive State</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="31.2" data-suffix="%">31.2%</span>
+                    <p class="dashboard-stat__label">Income on Food (Lowest 20%)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 1: Food Prices by Category -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food price trends by category">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Food Prices by Category</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-categories" class="dashboard-chart" role="img" aria-label="Multi-line chart showing food price trends by category since 2018"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Not All Prices Rise Equally</h3>
+                        <p class="dashboard-info__text">
+                            Since 2020, food prices have surged unevenly across categories. <strong>Cereals and bakery</strong> products led the spike, rising over 24% in just two years. <strong>Dairy</strong> prices were the most volatile, swinging wildly before stabilizing at elevated levels.
+                        </p>
+                        <p class="dashboard-info__text">
+                            Meanwhile, <strong>fruits and vegetables</strong> — the foods nutritionists recommend most — have consistently been the most expensive category, putting healthy diets further out of reach for low-income families.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> Bureau of Labor Statistics, Consumer Price Index</span>
+                            <span class="meta-item"><strong>Updated</strong> Monthly (live data via BLS API)</span>
+                            <span class="meta-item"><strong>Baseline</strong> CPI Index (1982-84 = 100)</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            Cereals & bakery products saw the steepest single-year increase: 12% from Jan 2022 to Jan 2023.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 2: Regional Price Comparison -->
+        <section class="dashboard-section scroll-reveal" aria-label="Regional food price comparison">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Regional Price Comparison</h2>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-regions" class="dashboard-chart" role="img" aria-label="Grouped bar chart comparing food prices across US regions"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Where You Live Determines What You Pay</h3>
+                        <p class="dashboard-info__text">
+                            The <strong>West</strong> and <strong>Northeast</strong> consistently have the highest food-at-home prices, driven by higher housing costs, transportation expenses, and labor markets. The <strong>South</strong> has the lowest prices — but also the lowest median incomes, making food no more affordable.
+                        </p>
+                        <p class="dashboard-info__text">
+                            Regional CPI differences have widened since 2020, with the West pulling further ahead.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> BLS CPI, Regional Food at Home indexes</span>
+                            <span class="meta-item"><strong>Data Range</strong> 2020-2025 (semi-annual)</span>
+                            <span class="meta-item"><strong>Regions</strong> Northeast, Midwest, South, West</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            The West pays 8.6% more for food at home than the South — a gap that has grown by 2 percentage points since 2020.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 3: Affordability Index Map -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food affordability by state">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Food Affordability by State</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-affordability-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food affordability index across US states"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Price vs. What You Earn</h3>
+                        <p class="dashboard-info__text">
+                            Affordability is not just about price — it is about price relative to income. This map shows a <strong>food affordability index</strong>: higher values mean food costs consume a larger share of the state's median income.
+                        </p>
+                        <p class="dashboard-info__text">
+                            Southern states with low food prices still rank poorly because of <strong>low median incomes</strong>. Meanwhile, states like Maryland and New Hampshire combine moderate prices with high incomes for the best affordability.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> Feeding America meal costs + Census ACS median household income</span>
+                            <span class="meta-item"><strong>Data Year</strong> 2022</span>
+                            <span class="meta-item"><strong>Index</strong> (Meal cost / Median income) x 1,000,000 — higher = less affordable</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            Louisiana, West Virginia, and Mississippi are the least affordable despite having the lowest raw food prices in the country.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 4: Cost Burden by Income Bracket -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food cost burden by income">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Cost Burden by Income</h2>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-burden" class="dashboard-chart" role="img" aria-label="Bar chart showing percentage of income spent on food by income quintile"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">The Poorest Pay the Most</h3>
+                        <p class="dashboard-info__text">
+                            The lowest-income 20% of American households spend <strong>31.2% of their income on food</strong> — more than four times the rate of the wealthiest quintile. When food prices rise, these families have nowhere to cut. They are already spending the minimum needed to eat.
+                        </p>
+                        <p class="dashboard-info__text">
+                            A 10% increase in food prices costs a low-income family an extra $40/month — the equivalent of 10 missed meals at the average meal cost of $3.99.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> USDA ERS, Food Expenditure Series</span>
+                            <span class="meta-item"><strong>Data Year</strong> 2022</span>
+                            <span class="meta-item"><strong>Metric</strong> % of pre-tax income spent on food at home + away</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            The bottom quintile spends $407/month on food — compared to $1,028 for the top quintile. Less money, worse nutrition.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 5: Food at Home vs Away Trends -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food at home versus away from home price trends">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Food at Home vs. Away Trends</h2>
+                    <span id="freshness-bls-regional" class="dashboard-freshness"></span>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-home-vs-away" class="dashboard-chart" role="img" aria-label="Line chart comparing food at home and food away from home CPI trends"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Cooking at Home: Still the Budget Option?</h3>
+                        <p class="dashboard-info__text">
+                            For decades, cooking at home was the clear budget choice. The 2022-2023 inflation surge changed that — <strong>food-at-home prices spiked faster than restaurant prices</strong> for the first time in modern history. The gap has since narrowed, but grocery bills remain elevated.
+                        </p>
+                        <p class="dashboard-info__text">
+                            Use the slider below the chart to zoom into specific time periods. The "All Items" dashed line shows general inflation for comparison.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> Bureau of Labor Statistics, CPI</span>
+                            <span class="meta-item"><strong>Updated</strong> Monthly (live data via BLS API)</span>
+                            <span class="meta-item"><strong>Baseline</strong> CPI Index (1982-84 = 100)</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            Food-at-home prices rose 25% from 2020-2024 — outpacing general inflation by 5 percentage points.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-narrative__content dashboard-narrative__content--cta">
+                    <h2 class="dashboard-narrative__heading">What This Means for Food Banks</h2>
+                    <p class="dashboard-narrative__text">
+                        When food prices rise, food banks face a double squeeze: more families need help while every donated dollar buys less food. Technology-driven operations help food banks stretch their budgets further — optimizing procurement, reducing waste, and forecasting demand. Food-N-Force helps food relief organizations modernize with Salesforce solutions designed for this mission.
+                    </p>
+                    <div class="dashboard-cta__buttons">
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--primary">See Our Services</a>
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">Get in Touch</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology -->
+        <section class="dashboard-section dashboard-sources scroll-reveal" aria-label="Methodology and data sources">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Data Sources</h2>
+                    </div>
+                    <div class="dashboard-source-grid">
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">BLS</div>
+                            <h3 class="dashboard-source-card__name">Bureau of Labor Statistics</h3>
+                            <p class="dashboard-source-card__desc">Consumer Price Index — monthly food price tracking for national, regional, and sub-category food indexes delivered via the BLS Public Data API.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Monthly (live API)</span>
+                                <span>National &amp; regional</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">FA</div>
+                            <h3 class="dashboard-source-card__name">Feeding America</h3>
+                            <p class="dashboard-source-card__desc">Map the Meal Gap 2024 — state-level average meal costs used to compute the affordability index alongside Census income data.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual release</span>
+                                <span>State level</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">ACS</div>
+                            <h3 class="dashboard-source-card__name">U.S. Census Bureau</h3>
+                            <p class="dashboard-source-card__desc">American Community Survey — median household income estimates by state used for affordability calculations.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual (5-yr rolling)</span>
+                                <span>State level</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">ERS</div>
+                            <h3 class="dashboard-source-card__name">USDA Economic Research Service</h3>
+                            <p class="dashboard-source-card__desc">Food Expenditure Series — household food spending patterns across income quintiles, tracking the share of income devoted to food.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual</span>
+                                <span>National</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+    <script type="module" src="/src/js/dashboards/food-prices.js" defer></script>
+</body>
+</html>

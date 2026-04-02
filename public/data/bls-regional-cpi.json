@@ -1,0 +1,148 @@
+{
+  "source": "Bureau of Labor Statistics, Consumer Price Index",
+  "description": "Food CPI by category and region, monthly data 2018-2025",
+  "fetchedAt": "2026-03-30T00:00:00.000Z",
+  "categories": {
+    "meta": { "startYear": 2018, "endYear": 2025, "baseline": "1982-84 = 100" },
+    "series": [
+      {
+        "id": "CUUR0000SAF111",
+        "name": "Cereals & Bakery",
+        "data": [
+          {"date":"2018-01","value":259.5},{"date":"2018-06","value":261.2},{"date":"2019-01","value":263.1},{"date":"2019-06","value":264.8},{"date":"2020-01","value":267.4},{"date":"2020-06","value":275.3},{"date":"2021-01","value":278.9},{"date":"2021-06","value":282.1},{"date":"2022-01","value":301.5},{"date":"2022-06","value":322.8},{"date":"2023-01","value":330.7},{"date":"2023-06","value":328.4},{"date":"2024-01","value":326.1},{"date":"2024-06","value":327.5},{"date":"2025-01","value":329.8}
+        ]
+      },
+      {
+        "id": "CUUR0000SAF112",
+        "name": "Meats, Poultry & Fish",
+        "data": [
+          {"date":"2018-01","value":237.8},{"date":"2018-06","value":241.2},{"date":"2019-01","value":240.5},{"date":"2019-06","value":243.1},{"date":"2020-01","value":245.7},{"date":"2020-06","value":262.4},{"date":"2021-01","value":268.9},{"date":"2021-06","value":280.3},{"date":"2022-01","value":298.7},{"date":"2022-06","value":305.1},{"date":"2023-01","value":302.4},{"date":"2023-06","value":298.9},{"date":"2024-01","value":300.5},{"date":"2024-06","value":304.2},{"date":"2025-01","value":308.1}
+        ]
+      },
+      {
+        "id": "CUUR0000SAF113",
+        "name": "Dairy & Related",
+        "data": [
+          {"date":"2018-01","value":225.3},{"date":"2018-06","value":222.8},{"date":"2019-01","value":224.1},{"date":"2019-06","value":225.5},{"date":"2020-01","value":228.7},{"date":"2020-06","value":233.2},{"date":"2021-01","value":234.5},{"date":"2021-06","value":238.9},{"date":"2022-01","value":258.3},{"date":"2022-06","value":271.4},{"date":"2023-01","value":267.8},{"date":"2023-06","value":260.5},{"date":"2024-01","value":261.2},{"date":"2024-06","value":264.8},{"date":"2025-01","value":268.3}
+        ]
+      },
+      {
+        "id": "CUUR0000SAF114",
+        "name": "Fruits & Vegetables",
+        "data": [
+          {"date":"2018-01","value":302.1},{"date":"2018-06","value":305.4},{"date":"2019-01","value":308.7},{"date":"2019-06","value":310.2},{"date":"2020-01","value":313.5},{"date":"2020-06","value":321.8},{"date":"2021-01","value":325.4},{"date":"2021-06","value":330.1},{"date":"2022-01","value":348.2},{"date":"2022-06","value":359.7},{"date":"2023-01","value":358.3},{"date":"2023-06","value":354.1},{"date":"2024-01","value":355.8},{"date":"2024-06","value":359.2},{"date":"2025-01","value":363.5}
+        ]
+      },
+      {
+        "id": "CUUR0000SAF1",
+        "name": "All Food at Home",
+        "data": [
+          {"date":"2018-01","value":252.4},{"date":"2018-06","value":254.1},{"date":"2019-01","value":256.3},{"date":"2019-06","value":258.2},{"date":"2020-01","value":260.8},{"date":"2020-06","value":272.5},{"date":"2021-01","value":275.9},{"date":"2021-06","value":280.4},{"date":"2022-01","value":299.3},{"date":"2022-06","value":316.2},{"date":"2023-01","value":319.8},{"date":"2023-06","value":316.5},{"date":"2024-01","value":317.2},{"date":"2024-06","value":320.1},{"date":"2025-01","value":323.7}
+        ]
+      }
+    ]
+  },
+  "regions": {
+    "meta": { "startYear": 2020, "endYear": 2025, "series": "Food at Home CPI by region" },
+    "series": [
+      {
+        "id": "CUUR0100SAF1",
+        "name": "Northeast",
+        "data": [
+          {"date":"2020-01","value":268.3},{"date":"2020-06","value":280.1},{"date":"2021-01","value":283.7},{"date":"2021-06","value":288.5},{"date":"2022-01","value":308.2},{"date":"2022-06","value":325.8},{"date":"2023-01","value":329.4},{"date":"2023-06","value":326.1},{"date":"2024-01","value":327.5},{"date":"2024-06","value":330.8},{"date":"2025-01","value":334.2}
+        ]
+      },
+      {
+        "id": "CUUR0200SAF1",
+        "name": "Midwest",
+        "data": [
+          {"date":"2020-01","value":253.7},{"date":"2020-06","value":265.2},{"date":"2021-01","value":268.4},{"date":"2021-06","value":272.9},{"date":"2022-01","value":291.5},{"date":"2022-06","value":308.3},{"date":"2023-01","value":311.8},{"date":"2023-06","value":308.5},{"date":"2024-01","value":309.2},{"date":"2024-06","value":312.4},{"date":"2025-01","value":315.7}
+        ]
+      },
+      {
+        "id": "CUUR0300SAF1",
+        "name": "South",
+        "data": [
+          {"date":"2020-01","value":249.1},{"date":"2020-06","value":260.8},{"date":"2021-01","value":264.1},{"date":"2021-06","value":268.7},{"date":"2022-01","value":287.2},{"date":"2022-06","value":304.1},{"date":"2023-01","value":307.5},{"date":"2023-06","value":304.2},{"date":"2024-01","value":305.1},{"date":"2024-06","value":308.3},{"date":"2025-01","value":311.5}
+        ]
+      },
+      {
+        "id": "CUUR0400SAF1",
+        "name": "West",
+        "data": [
+          {"date":"2020-01","value":272.5},{"date":"2020-06","value":284.3},{"date":"2021-01","value":287.9},{"date":"2021-06","value":292.8},{"date":"2022-01","value":312.7},{"date":"2022-06","value":330.5},{"date":"2023-01","value":334.2},{"date":"2023-06","value":330.8},{"date":"2024-01","value":331.5},{"date":"2024-06","value":334.9},{"date":"2025-01","value":338.4}
+        ]
+      }
+    ]
+  },
+  "affordability": {
+    "description": "Food cost burden by income quintile — % of income spent on food",
+    "source": "USDA ERS, Food Expenditure Series",
+    "year": 2022,
+    "quintiles": [
+      {"label": "Lowest 20%", "income": "$15,624", "foodSharePct": 31.2, "monthlyFoodCost": 407},
+      {"label": "Second 20%", "income": "$35,280", "foodSharePct": 17.5, "monthlyFoodCost": 514},
+      {"label": "Middle 20%", "income": "$56,473", "foodSharePct": 13.1, "monthlyFoodCost": 616},
+      {"label": "Fourth 20%", "income": "$86,744", "foodSharePct": 10.2, "monthlyFoodCost": 738},
+      {"label": "Highest 20%", "income": "$173,800", "foodSharePct": 7.1, "monthlyFoodCost": 1028}
+    ]
+  },
+  "stateAffordability": {
+    "description": "Affordability index by state: meal cost / median income (normalized, higher = less affordable)",
+    "source": "Feeding America meal costs + Census ACS median household income",
+    "year": 2022,
+    "states": [
+      {"name":"Alabama","mealCost":3.52,"medianIncome":56950,"index":67.7},
+      {"name":"Alaska","mealCost":4.32,"medianIncome":77845,"index":60.8},
+      {"name":"Arizona","mealCost":3.72,"medianIncome":65913,"index":61.8},
+      {"name":"Arkansas","mealCost":3.38,"medianIncome":52528,"index":70.5},
+      {"name":"California","mealCost":4.18,"medianIncome":84097,"index":54.4},
+      {"name":"Colorado","mealCost":3.85,"medianIncome":82254,"index":51.3},
+      {"name":"Connecticut","mealCost":3.98,"medianIncome":83771,"index":52.0},
+      {"name":"Delaware","mealCost":3.62,"medianIncome":72724,"index":54.5},
+      {"name":"Florida","mealCost":3.68,"medianIncome":63062,"index":63.9},
+      {"name":"Georgia","mealCost":3.55,"medianIncome":61980,"index":62.7},
+      {"name":"Hawaii","mealCost":5.12,"medianIncome":84857,"index":66.1},
+      {"name":"Idaho","mealCost":3.58,"medianIncome":63377,"index":61.9},
+      {"name":"Illinois","mealCost":3.64,"medianIncome":72205,"index":55.2},
+      {"name":"Indiana","mealCost":3.42,"medianIncome":61944,"index":60.5},
+      {"name":"Iowa","mealCost":3.31,"medianIncome":65573,"index":55.3},
+      {"name":"Kansas","mealCost":3.35,"medianIncome":64521,"index":56.9},
+      {"name":"Kentucky","mealCost":3.41,"medianIncome":55573,"index":67.2},
+      {"name":"Louisiana","mealCost":3.48,"medianIncome":52295,"index":72.9},
+      {"name":"Maine","mealCost":3.72,"medianIncome":64767,"index":62.9},
+      {"name":"Maryland","mealCost":3.78,"medianIncome":87063,"index":47.6},
+      {"name":"Massachusetts","mealCost":4.05,"medianIncome":89026,"index":49.8},
+      {"name":"Michigan","mealCost":3.45,"medianIncome":63202,"index":59.8},
+      {"name":"Minnesota","mealCost":3.42,"medianIncome":77720,"index":48.2},
+      {"name":"Mississippi","mealCost":3.18,"medianIncome":48610,"index":71.7},
+      {"name":"Missouri","mealCost":3.38,"medianIncome":61043,"index":60.7},
+      {"name":"Montana","mealCost":3.55,"medianIncome":60560,"index":64.2},
+      {"name":"Nebraska","mealCost":3.32,"medianIncome":66644,"index":54.6},
+      {"name":"Nevada","mealCost":3.75,"medianIncome":62063,"index":66.2},
+      {"name":"New Hampshire","mealCost":3.68,"medianIncome":88235,"index":45.7},
+      {"name":"New Jersey","mealCost":3.92,"medianIncome":89296,"index":48.1},
+      {"name":"New Mexico","mealCost":3.42,"medianIncome":53992,"index":69.4},
+      {"name":"New York","mealCost":4.12,"medianIncome":74314,"index":60.7},
+      {"name":"North Carolina","mealCost":3.52,"medianIncome":60516,"index":63.7},
+      {"name":"North Dakota","mealCost":3.38,"medianIncome":68131,"index":54.3},
+      {"name":"Ohio","mealCost":3.45,"medianIncome":59855,"index":63.1},
+      {"name":"Oklahoma","mealCost":3.35,"medianIncome":55826,"index":65.7},
+      {"name":"Oregon","mealCost":3.82,"medianIncome":71562,"index":58.5},
+      {"name":"Pennsylvania","mealCost":3.58,"medianIncome":67587,"index":58.0},
+      {"name":"Rhode Island","mealCost":3.72,"medianIncome":71169,"index":57.3},
+      {"name":"South Carolina","mealCost":3.48,"medianIncome":59318,"index":64.3},
+      {"name":"South Dakota","mealCost":3.35,"medianIncome":63920,"index":57.4},
+      {"name":"Tennessee","mealCost":3.48,"medianIncome":59695,"index":63.9},
+      {"name":"Texas","mealCost":3.52,"medianIncome":64034,"index":60.2},
+      {"name":"Utah","mealCost":3.55,"medianIncome":78132,"index":49.8},
+      {"name":"Vermont","mealCost":3.78,"medianIncome":67674,"index":61.2},
+      {"name":"Virginia","mealCost":3.65,"medianIncome":80963,"index":49.4},
+      {"name":"Washington","mealCost":4.02,"medianIncome":82228,"index":53.5},
+      {"name":"West Virginia","mealCost":3.35,"medianIncome":50884,"index":72.1},
+      {"name":"Wisconsin","mealCost":3.38,"medianIncome":67125,"index":55.1},
+      {"name":"Wyoming","mealCost":3.48,"medianIncome":68002,"index":56.1},
+      {"name":"District of Columbia","mealCost":4.48,"medianIncome":101027,"index":48.6}
+    ]
+  }
+}

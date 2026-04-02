@@ -60,14 +60,14 @@ npm run admin                   # Start Express server for scraper + AI article 
 ├── docs/                  # Active documentation
 ├── tools/                 # Testing, deployment, governance utilities
 ├── vite.config.js         # Vite build config (auto-discovers *.html and blog/*.html)
-└── build-components.js    # Injects nav/footer/scripts into all 52 pages before Vite builds
+└── build-components.js    # Injects nav/footer/dashboard-tabs/scripts into all 56 pages before Vite builds
 ```
 
-### Page Inventory (52 pages)
+### Page Inventory (56 pages)
 - **Core pages (7)**: index, about, services, resources, impact, contact, 404
 - **Blog hub (1)**: blog
 - **Hub pages at root (2)**: case-studies, templates-tools
-- **Dashboards (1)**: dashboards/food-insecurity
+- **Dashboards (5)**: dashboards/food-insecurity (Overview), dashboards/food-access, dashboards/snap-safety-net, dashboards/food-prices, dashboards/food-banks — linked by shared tab navigation
 - **Articles (41)**: all in `blog/` directory (run `ls blog/` for full list)
 
 **Adding new articles via scraper tool**: `npm run admin` → New Article tab → Generate with Claude → Save to blog/. Auto-registers in `build-components.js`, `generate-sitemap.js`, and `.pa11yci.json`, then runs `build-components.js` and `sync-blog.js`. After saving, run `/create-illustration {slug}` to generate the SVG illustration.
@@ -75,7 +75,7 @@ npm run admin                   # Start Express server for scraper + AI article 
 **Adding new articles manually**: Place HTML in `blog/`, then run `/register-article {slug}` to register in all required files and run sync scripts. Or manually: register slug in both arrays of `build-components.js`, `scripts/generate-sitemap.js`, and `.pa11yci.json`, then run `node build-components.js && node scripts/sync-blog.js`.
 
 ### Build Pipeline
-- `build-components.js` injects shared nav, footer, and script tags into all 52 pages before Vite builds
+- `build-components.js` injects shared nav, footer, dashboard tabs, and script tags into all 56 pages before Vite builds
 - `scripts/sync-blog.js` rebuilds blog.html card grid from article metadata (auto-run on build)
 - `scripts/generate-sitemap.js` generates sitemap.xml covering all public pages
 - ECharts is tree-shaken and code-split into a separate chunk loaded only on dashboard pages
@@ -105,7 +105,12 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `effects/blog-filter.js` — category filtering (aria-pressed + aria-current)
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page
-  - `dashboards/food-insecurity.js` — ECharts dashboard (separate entry point, code-split)
+  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup, colors, formatters, scroll reveal
+  - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (separate entry point)
+  - `dashboards/food-access.js` — Food Access & Deserts dashboard
+  - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard
+  - `dashboards/food-prices.js` — Food Prices & Affordability dashboard
+  - `dashboards/food-banks.js` — Food Bank Landscape dashboard
 - **Production**: Source maps disabled, ESLint `no-console` rule enforced
 - **Unit Tests**: ~161 tests across 9 test files (vitest)
 
@@ -134,7 +139,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
 ### Performance Budgets
 - **CSS**: ~125KB minified (~20KB gzipped)
 - **JS Core**: ~53KB total (47KB main + 5KB effects, ~16KB gzipped)
-- **Dashboard**: +15KB dashboard chunk + ~645KB ECharts chunk (~210KB gzipped, loaded only on dashboard pages)
+- **Dashboard**: ~15-25KB per dashboard JS + ~645KB ECharts chunk (~210KB gzipped, shared across all 5 dashboard pages)
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **Unit Test Coverage**: 65% threshold
 - **Lighthouse Configs**: `lighthouse.config.js` (local) vs `tools/testing/lighthouserc.json` (CI)

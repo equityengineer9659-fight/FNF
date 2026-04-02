@@ -3,6 +3,82 @@
    Glassmorphism cards, chart containers, hero stats, responsive layout
    ========================================================================== */
 
+/* ==========================================================================
+   Dashboard Tab Navigation
+   Sticky tab bar linking all dashboard pages, glassmorphism styling
+   ========================================================================== */
+
+.dashboard-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  background: linear-gradient(180deg, rgba(10, 25, 47, 0.95) 0%, rgba(10, 25, 47, 0.88) 100%);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-tabs__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.dashboard-tabs__list {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dashboard-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.85rem 1.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.dashboard-tabs__tab:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 212, 255, 0.05);
+  border-bottom-color: rgba(0, 212, 255, 0.3);
+}
+
+.dashboard-tabs__tab[aria-current="page"] {
+  color: #fff;
+  font-weight: 600;
+  border-bottom-color: var(--fnf-secondary, #00d4ff);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+/* Mobile: horizontal scroll */
+@media (width <= 768px) {
+  .dashboard-tabs__list {
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .dashboard-tabs__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dashboard-tabs__tab {
+    padding: 0.75rem 1.15rem;
+    font-size: 0.82rem;
+    min-height: 44px;
+  }
+}
+
 /* Hero Section */
 .dashboard-hero {
   padding: 3rem 0 2rem;

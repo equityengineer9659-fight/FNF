@@ -35,7 +35,7 @@ const resourcesSubpages = [
   'ai-data-strategy-crm-food-banks',
   'data-migration-food-bank-modernization',
   // Dashboard pages
-  'food-insecurity',
+  'food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks',
 ];
 
 // Component definitions — all hrefs use absolute paths so they work from any subdirectory
@@ -119,10 +119,38 @@ const components = {
     let scripts = `    <!-- JavaScript Modules - Deferred for performance -->
     <script type="module" src="/src/js/main.js" defer></script>`;
     // Dashboard pages get their own entry point
-    if (pageName === 'food-insecurity') {
-      scripts += `\n    <script type="module" src="/src/js/dashboards/food-insecurity.js" defer></script>`;
+    const dashboardJsMap = {
+      'food-insecurity': 'food-insecurity',
+      'food-access': 'food-access',
+      'snap-safety-net': 'snap-safety-net',
+      'food-prices': 'food-prices',
+      'food-banks': 'food-banks',
+    };
+    if (dashboardJsMap[pageName]) {
+      scripts += `\n    <script type="module" src="/src/js/dashboards/${dashboardJsMap[pageName]}.js" defer></script>`;
     }
     return scripts;
+  },
+
+  dashboardTabs: (currentPage) => {
+    const tabs = [
+      { slug: 'food-insecurity', label: 'Overview' },
+      { slug: 'food-access', label: 'Food Access' },
+      { slug: 'snap-safety-net', label: 'SNAP & Safety Net' },
+      { slug: 'food-prices', label: 'Food Prices' },
+      { slug: 'food-banks', label: 'Food Banks' },
+    ];
+    const items = tabs.map(t =>
+      `            <li role="presentation"><a href="/dashboards/${t.slug}.html" class="dashboard-tabs__tab" role="tab"${t.slug === currentPage ? ' aria-current="page"' : ''}>${t.label}</a></li>`
+    ).join('\n');
+    return `    <!-- Dashboard Tabs -->
+    <nav class="dashboard-tabs" aria-label="Dashboard navigation">
+        <div class="dashboard-tabs__container">
+            <ul class="dashboard-tabs__list" role="tablist">
+${items}
+            </ul>
+        </div>
+    </nav>`;
   }
 };
 
@@ -141,6 +169,19 @@ function processHtmlFile(filePath, pageName) {
   if (navPattern.test(html)) {
     html = html.replace(navPattern, components.navigation(pageName));
     console.log(`✅ Updated navigation in ${pageName}`);
+  }
+
+  // Inject or replace dashboard tabs on dashboard pages (between </nav> and <main>)
+  const dashboardSlugs = ['food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks'];
+  if (dashboardSlugs.includes(pageName)) {
+    const existingTabsPattern = /    <!-- Dashboard Tabs -->[\s\S]*?<\/nav>\n?/;
+    if (existingTabsPattern.test(html)) {
+      html = html.replace(existingTabsPattern, components.dashboardTabs(pageName) + '\n');
+    } else {
+      // First injection: insert after main nav closing tag, before <main>
+      html = html.replace(/(    <\/nav>\n)(\n    <!-- Main Content -->)/, `$1\n${components.dashboardTabs(pageName)}\n$2`);
+    }
+    console.log(`✅ Updated dashboard tabs in ${pageName}`);
   }
 
   // Replace footer component
@@ -231,7 +272,7 @@ function buildComponents() {
   });
 
   // Dashboard pages under dashboards/
-  const dashboardPages = ['food-insecurity'];
+  const dashboardPages = ['food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks'];
 
   dashboardPages.forEach(page => {
     const filePath = path.join(__dirname, 'dashboards', `${page}.html`);

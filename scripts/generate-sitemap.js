@@ -71,6 +71,10 @@ const pages = [
   { path: 'blog/data-migration-food-bank-modernization.html', priority: '0.7', changefreq: 'monthly' },
   // Dashboards
   { path: 'dashboards/food-insecurity.html', priority: '0.8', changefreq: 'monthly' },
+  { path: 'dashboards/food-access.html', priority: '0.8', changefreq: 'monthly' },
+  { path: 'dashboards/snap-safety-net.html', priority: '0.8', changefreq: 'monthly' },
+  { path: 'dashboards/food-prices.html', priority: '0.8', changefreq: 'monthly' },
+  { path: 'dashboards/food-banks.html', priority: '0.8', changefreq: 'monthly' },
 ];
 
 function generateSitemap() {

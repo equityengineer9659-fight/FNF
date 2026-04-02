@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Bank Landscape Dashboard - Food-N-Force</title>
+
+    <meta name="description" content="Interactive dashboard exploring America's food bank network — density, financials, program efficiency, and how resources align with need.">
+    <meta name="keywords" content="food bank data, nonprofit financials, food bank density, program efficiency, IRS 990, food bank map">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/dashboards/food-banks.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <meta property="og:title" content="Food Bank Landscape Dashboard - Food-N-Force">
+    <meta property="og:description" content="How many food banks does America have — and are they where the need is? Interactive data on food bank density, financials, and efficiency.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/dashboards/food-banks.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Food Bank Landscape Dashboard - Food-N-Force">
+    <meta name="twitter:description" content="How many food banks does America have — and are they where the need is?">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org", "@type": "WebPage",
+        "name": "Food Bank Landscape Dashboard",
+        "description": "Interactive dashboard exploring America's food bank network — density, financials, program efficiency, and alignment with need.",
+        "url": "https://foodnforce.com/dashboards/food-banks.html",
+        "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://foodnforce.com" }
+    }
+    </script>
+
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--dashboard" id="page-top">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Tabs -->
+    <nav class="dashboard-tabs" aria-label="Dashboard navigation">
+        <div class="dashboard-tabs__container">
+            <ul class="dashboard-tabs__list" role="tablist">
+            <li role="presentation"><a href="/dashboards/food-insecurity.html" class="dashboard-tabs__tab" role="tab">Overview</a></li>
+            <li role="presentation"><a href="/dashboards/food-access.html" class="dashboard-tabs__tab" role="tab">Food Access</a></li>
+            <li role="presentation"><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab" role="tab">SNAP & Safety Net</a></li>
+            <li role="presentation"><a href="/dashboards/food-prices.html" class="dashboard-tabs__tab" role="tab">Food Prices</a></li>
+            <li role="presentation"><a href="/dashboards/food-banks.html" class="dashboard-tabs__tab" role="tab" aria-current="page">Food Banks</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <section class="dashboard-hero" aria-label="Food bank landscape key statistics">
+            <h1 class="slds-text-heading_large">Food Bank Landscape</h1>
+            <p class="dashboard-hero__subtitle">Over 60,000 organizations fighting hunger — but are they where the need is?</p>
+            <div class="dashboard-hero__stats" aria-label="Key national statistics">
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="61284" data-suffix="">61,284</span>
+                    <p class="dashboard-stat__label">Food Assistance Orgs</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="48.2" data-suffix="B">$48.2B</span>
+                    <p class="dashboard-stat__label">Combined Revenue</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="82.4" data-suffix="%">82.4%</span>
+                    <p class="dashboard-stat__label">Avg Efficiency Ratio</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="8" data-suffix=" states">8 states</span>
+                    <p class="dashboard-stat__label">Under 100 Food Banks</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 1: Food Bank Density Map -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food bank density by state">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Food Bank Density</h2></div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-density-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food banks per 100,000 residents by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Where Are the Food Banks?</h3>
+                        <p class="dashboard-info__text">This map shows <strong>food assistance organizations per 100,000 residents</strong> — a measure of infrastructure density. States with higher density have more organizations available to serve their population.</p>
+                        <p class="dashboard-info__text"><strong>Vermont and Maine</strong> lead with over 20 organizations per 100K, while <strong>Nevada and Utah</strong> have among the fewest. High density does not always mean adequate capacity — small pantries count the same as large regional food banks.</p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> ProPublica Nonprofit Explorer (IRS 990 filings, NTEE K31)</span>
+                            <span class="meta-item"><strong>Data Year</strong> 2023 filing year</span>
+                            <span class="meta-item"><strong>Metric</strong> Organizations per 100,000 residents</span>
+                        </div>
+                        <div class="dashboard-info__insight">DC has the highest density (35.9 per 100K) but is an outlier due to its small population and high number of national headquarters.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 2: Food Banks vs Food Insecurity -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food banks versus food insecurity">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Resources vs. Need</h2></div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-vs-insecurity" class="dashboard-chart" role="img" aria-label="Scatter plot showing food bank density versus food insecurity rate"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Do Resources Match Need?</h3>
+                        <p class="dashboard-info__text">In an ideal world, states with more food insecurity would have more food banks per capita. This scatter plot tests that assumption — and reveals <strong>surprising gaps</strong>.</p>
+                        <p class="dashboard-info__text">Some of the most food-insecure states (Mississippi, Louisiana) have <strong>below-average food bank density</strong>. Meanwhile, well-resourced states like Minnesota and Vermont have dense networks despite lower insecurity rates.</p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> ProPublica (orgs) + Feeding America (insecurity)</span>
+                            <span class="meta-item"><strong>Bubble Size</strong> Total revenue of food assistance orgs</span>
+                        </div>
+                        <div class="dashboard-info__insight">The correlation between need and resources is weak — infrastructure often follows wealth, not hunger.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 3: Revenue Top 20 -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food bank revenue by state">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue by State</h2></div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-revenue" class="dashboard-chart" role="img" aria-label="Bar chart showing total food bank revenue by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Following the Money</h3>
+                        <p class="dashboard-info__text">Food assistance is a <strong>$48 billion industry</strong>. California, Texas, and New York alone account for over $15 billion in combined revenue. These numbers include all food assistance nonprofits classified under IRS NTEE code K31.</p>
+                        <p class="dashboard-info__text">Revenue comes from government grants, private donations, corporate partnerships, and program fees. Larger organizations benefit from economies of scale — but smaller pantries often serve the hardest-to-reach communities.</p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> ProPublica Nonprofit Explorer, IRS 990 filings</span>
+                            <span class="meta-item"><strong>Data Year</strong> Most recent filing (2022-2023)</span>
+                        </div>
+                        <div class="dashboard-info__insight">The top 5 states by revenue handle 41% of all food assistance funding nationally.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 4: Program Efficiency -->
+        <section class="dashboard-section scroll-reveal" aria-label="Program efficiency by state">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Program Efficiency</h2></div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-efficiency" class="dashboard-chart" role="img" aria-label="Horizontal bar chart showing program expense ratio by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Dollars to Meals</h3>
+                        <p class="dashboard-info__text">The <strong>program expense ratio</strong> measures how much of every dollar goes directly to feeding people (vs. overhead and fundraising). The national average is 82.4% — meaning 82 cents of every dollar reaches programs.</p>
+                        <p class="dashboard-info__text">States like <strong>New York, Minnesota, and DC</strong> exceed 86% efficiency. Lower ratios in states like <strong>Mississippi and New Mexico</strong> may reflect the higher cost of operating in rural, low-density areas where logistics are expensive.</p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> IRS 990 filings via ProPublica</span>
+                            <span class="meta-item"><strong>Metric</strong> Program expenses / total expenses x 100</span>
+                        </div>
+                        <div class="dashboard-info__insight">A 1% improvement in efficiency across all food banks would redirect $480 million more toward feeding people.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 5: Distribution vs Need -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food bank distribution versus need">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Distribution vs. Need</h2></div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-distribution" class="dashboard-chart" role="img" aria-label="Paired bar chart comparing food insecurity rate and food bank density by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">The Mismatch</h3>
+                        <p class="dashboard-info__text">This chart compares the <strong>food insecurity rate</strong> (the need) with <strong>food bank density</strong> (the supply) for the top 15 most food-insecure states. The gaps reveal where the infrastructure is weakest relative to demand.</p>
+                        <p class="dashboard-info__text">States where the orange bar (insecurity) far exceeds the blue bar (density) are the ones where food banks are most stretched — and where technology-driven efficiency matters most.</p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> ProPublica + Feeding America</span>
+                            <span class="meta-item"><strong>Data Year</strong> 2022-2023</span>
+                        </div>
+                        <div class="dashboard-info__insight">Mississippi has the highest insecurity rate (18.7%) but below-average food bank density — a clear infrastructure gap.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-narrative__content dashboard-narrative__content--cta">
+                    <h2 class="dashboard-narrative__heading">Modernizing Food Bank Operations</h2>
+                    <p class="dashboard-narrative__text">Every food bank — from a volunteer-run church pantry to a multi-site regional operation — can benefit from better technology. Food-N-Force specializes in Salesforce implementations for food relief organizations, helping them track inventory, manage volunteers, report to funders, and serve more families with the same resources.</p>
+                    <div class="dashboard-cta__buttons">
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--primary">See Our Services</a>
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">Get in Touch</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sources -->
+        <section class="dashboard-section dashboard-sources scroll-reveal" aria-label="Data sources">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Data Sources</h2>
+                    </div>
+                    <div class="dashboard-source-grid">
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">990</div>
+                            <h3 class="dashboard-source-card__name">ProPublica Nonprofit Explorer</h3>
+                            <p class="dashboard-source-card__desc">IRS Form 990 data for all nonprofits classified under NTEE code K31 (Food Programs, Food Banks, Food Pantries). Revenue, expenses, and program ratios.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Continuous (filing lag: 3-12mo)</span>
+                                <span>Organization level</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">FA</div>
+                            <h3 class="dashboard-source-card__name">Feeding America</h3>
+                            <p class="dashboard-source-card__desc">Map the Meal Gap 2024 — food insecurity rates used as the "need" metric for comparing against food bank infrastructure density.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual release</span>
+                                <span>State &amp; county</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">ACS</div>
+                            <h3 class="dashboard-source-card__name">U.S. Census Bureau</h3>
+                            <p class="dashboard-source-card__desc">Population estimates used to compute per-capita food bank density and normalize comparisons across states of different sizes.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual</span>
+                                <span>State level</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+    <script type="module" src="/src/js/dashboards/food-banks.js" defer></script>
+</body>
+</html>

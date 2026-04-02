@@ -62,6 +62,10 @@
     "http://localhost:4173/blog/grant-writing-nonprofit-sustainability.html",
     "http://localhost:4173/blog/ai-data-strategy-crm-food-banks.html",
     "http://localhost:4173/blog/data-migration-food-bank-modernization.html",
-    "http://localhost:4173/dashboards/food-insecurity.html"
+    "http://localhost:4173/dashboards/food-insecurity.html",
+    "http://localhost:4173/dashboards/food-access.html",
+    "http://localhost:4173/dashboards/snap-safety-net.html",
+    "http://localhost:4173/dashboards/food-prices.html",
+    "http://localhost:4173/dashboards/food-banks.html"
   ]
 }

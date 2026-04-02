@@ -4,93 +4,11 @@
  *              scatter plot, and meal cost comparison. Tree-shaken ECharts imports.
  */
 
-// Tree-shaken ECharts imports
-import * as echarts from 'echarts/core';
-import { MapChart, BarChart, LineChart, ScatterChart } from 'echarts/charts';
 import {
-  TitleComponent,
-  TooltipComponent,
-  VisualMapComponent,
-  GeoComponent,
-  GridComponent,
-  LegendComponent,
-  DataZoomComponent
-} from 'echarts/components';
-import { CanvasRenderer } from 'echarts/renderers';
-
-// Register only what we need
-echarts.use([
-  MapChart, BarChart, LineChart, ScatterChart,
-  TitleComponent, TooltipComponent, VisualMapComponent,
-  GeoComponent, GridComponent, LegendComponent, DataZoomComponent,
-  CanvasRenderer
-]);
-
-// -- Theme colors matching FNF design tokens --
-const COLORS = {
-  primary: '#0176d3',
-  secondary: '#00d4ff',
-  accent: '#ff6b35',
-  text: '#ffffff',
-  textMuted: 'rgba(255,255,255,0.65)',
-  cardBg: 'rgba(255,255,255,0.06)',
-  gridLine: 'rgba(255,255,255,0.08)',
-  // Choropleth gradient (green = low insecurity → red = high)
-  mapLow: '#2ecc71',
-  mapMid: '#f39c12',
-  mapHigh: '#e74c3c'
-};
-
-// Chart instances for cleanup
-const charts = [];
-
-// Format large numbers
-function fmtNum(n) {
-  if (n >= 1e9) return (n / 1e9).toFixed(1) + 'B';
-  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
-  if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
-  return n.toLocaleString();
-}
-
-// -- Animated hero counters --
-function animateCounters() {
-  const counters = document.querySelectorAll('.dashboard-stat__number');
-  counters.forEach(el => {
-    const target = parseFloat(el.dataset.target);
-    const suffix = el.dataset.suffix || '';
-    const duration = 2000;
-    const start = performance.now();
-
-    el.setAttribute('aria-live', 'off');
-
-    function tick(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      // Ease-out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = (target * eased).toFixed(1);
-      el.textContent = current + suffix;
-
-      if (progress < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        el.textContent = target + suffix;
-        el.setAttribute('role', 'status');
-        el.setAttribute('aria-live', 'polite');
-      }
-    }
-    requestAnimationFrame(tick);
-  });
-}
-
-// -- Create chart with shared defaults --
-function createChart(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return null;
-  const chart = echarts.init(container, null, { renderer: 'canvas' });
-  charts.push(chart);
-  return chart;
-}
+  echarts, COLORS, TOOLTIP_STYLE,
+  fmtNum, animateCounters, createChart,
+  updateFreshness, initScrollReveal, handleResize, fetchWithFallback
+} from './shared/dashboard-utils.js';
 
 // -- Map Chart with County Drill-Down --
 function renderMap(geoJSON, data, metric = 'rate') {
@@ -161,10 +79,7 @@ function renderMap(geoJSON, data, metric = 'rate') {
     chart.setOption({
       tooltip: {
         trigger: 'item',
-        backgroundColor: 'rgba(10,10,30,0.92)',
-        borderColor: COLORS.secondary,
-        borderWidth: 1,
-        textStyle: { color: COLORS.text, fontSize: 13 },
+        ...TOOLTIP_STYLE,
         formatter: stateTooltip
       },
       visualMap: {
@@ -244,10 +159,7 @@ function renderMap(geoJSON, data, metric = 'rate') {
       chart.setOption({
         tooltip: {
           trigger: 'item',
-          backgroundColor: 'rgba(10,10,30,0.92)',
-          borderColor: COLORS.secondary,
-          borderWidth: 1,
-          textStyle: { color: COLORS.text, fontSize: 13 },
+          ...TOOLTIP_STYLE,
           formatter: countyTooltip
         },
         visualMap: {
@@ -441,10 +353,7 @@ function renderTrend(data) {
   chart.setOption({
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(10,10,30,0.92)',
-      borderColor: COLORS.secondary,
-      borderWidth: 1,
-      textStyle: { color: COLORS.text }
+      ...TOOLTIP_STYLE
     },
     legend: {
       data: ['Overall Rate', 'Child Rate'],
@@ -512,10 +421,7 @@ function renderBar(data) {
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
-      backgroundColor: 'rgba(10,10,30,0.92)',
-      borderColor: COLORS.secondary,
-      borderWidth: 1,
-      textStyle: { color: COLORS.text },
+      ...TOOLTIP_STYLE,
       formatter: params => {
         const d = params[0];
         return `<strong>${d.name}</strong><br/>Rate: ${d.value}%`;
@@ -563,10 +469,7 @@ function renderScatter(data) {
 
   chart.setOption({
     tooltip: {
-      backgroundColor: 'rgba(10,10,30,0.92)',
-      borderColor: COLORS.secondary,
-      borderWidth: 1,
-      textStyle: { color: COLORS.text },
+      ...TOOLTIP_STYLE,
       formatter: params => {
         const d = params.data;
         return `<strong>${d.name}</strong><br/>Poverty: ${d.value[0]}%<br/>Food Insecurity: ${d.value[1]}%`;
@@ -619,10 +522,7 @@ function renderMealCost(data) {
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
-      backgroundColor: 'rgba(10,10,30,0.92)',
-      borderColor: COLORS.secondary,
-      borderWidth: 1,
-      textStyle: { color: COLORS.text },
+      ...TOOLTIP_STYLE,
       formatter: params => `<strong>${params[0].name}</strong><br/>$${params[0].value.toFixed(2)} per meal`
     },
     grid: { left: 130, right: 20, top: 10, bottom: 30 },
@@ -679,10 +579,7 @@ function renderSnap(data) {
   chart.setOption({
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(10,10,30,0.92)',
-      borderColor: COLORS.secondary,
-      borderWidth: 1,
-      textStyle: { color: COLORS.text }
+      ...TOOLTIP_STYLE
     },
     legend: {
       data: ['Food Insecurity Rate (%)', 'SNAP Coverage (%)'],
@@ -750,10 +647,7 @@ function renderFoodPrices(blsData) {
   chart.setOption({
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(10,10,30,0.92)',
-      borderColor: COLORS.secondary,
-      borderWidth: 1,
-      textStyle: { color: COLORS.text },
+      ...TOOLTIP_STYLE,
       formatter: params => {
         let tip = `<strong>${params[0].axisValue}</strong><br/>`;
         params.forEach(p => {
@@ -831,68 +725,6 @@ function renderFoodPrices(blsData) {
       }] : [])
     ]
   });
-}
-
-// -- Update data freshness indicator --
-function updateFreshness(source, info) {
-  const el = document.getElementById(`freshness-${source}`);
-  if (!el) return;
-  if (info._cached) {
-    const cachedDate = new Date(info._cachedAt || info.fetchedAt);
-    const age = Math.round((Date.now() - cachedDate.getTime()) / 3600000);
-    el.textContent = `Cached ${age}h ago`;
-    el.classList.add('freshness--cached');
-  } else {
-    el.textContent = 'Live';
-    el.classList.add('freshness--live');
-  }
-}
-
-// -- Scroll Reveal (IntersectionObserver) --
-function initScrollReveal() {
-  const elements = document.querySelectorAll('.scroll-reveal');
-  if (!elements.length) return;
-
-  // Respect reduced motion
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    elements.forEach(el => el.classList.add('is-visible'));
-    return;
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target); // Only animate once
-      }
-    });
-  }, {
-    threshold: 0.15,
-    rootMargin: '0px 0px -50px 0px'
-  });
-
-  elements.forEach(el => observer.observe(el));
-}
-
-// -- Responsive resize --
-function handleResize() {
-  charts.forEach(c => c.resize());
-}
-
-// -- Fetch with fallback: try live API, fall back to static JSON --
-async function fetchWithFallback(liveUrl, staticUrl) {
-  try {
-    const res = await fetch(liveUrl);
-    if (res.ok) {
-      const data = await res.json();
-      if (!data.error) return { data, source: 'live' };
-    }
-  } catch { /* live API unavailable */ }
-
-  // Fallback to static
-  const res = await fetch(staticUrl);
-  if (!res.ok) throw new Error(`Failed to load ${staticUrl}`);
-  return { data: await res.json(), source: 'static' };
 }
 
 // -- Init --

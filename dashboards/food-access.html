@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Access &amp; Deserts Dashboard - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Interactive dashboard mapping food deserts across America — where grocery stores are scarce, transportation is limited, and healthy food is out of reach.">
+    <meta name="keywords" content="food deserts, food access, grocery store access, low-income food access, USDA food atlas, food desert map">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foodnforce.com/dashboards/food-access.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Food Access &amp; Deserts Dashboard - Food-N-Force">
+    <meta property="og:description" content="Where is food hard to reach? Interactive maps and data on food deserts, store access, and transportation barriers.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foodnforce.com/dashboards/food-access.html">
+    <meta property="og:image" content="https://foodnforce.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Food Access &amp; Deserts Dashboard - Food-N-Force">
+    <meta name="twitter:description" content="Where is food hard to reach? Interactive maps and data on food deserts, store access, and transportation barriers.">
+    <meta name="twitter:image" content="https://foodnforce.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Food Access & Deserts Dashboard",
+        "description": "Interactive dashboard mapping food deserts across America — where grocery stores are scarce, transportation is limited, and healthy food is out of reach.",
+        "url": "https://foodnforce.com/dashboards/food-access.html",
+        "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://foodnforce.com" },
+        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://foodnforce.com" }
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--dashboard" id="page-top">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Tabs -->
+    <nav class="dashboard-tabs" aria-label="Dashboard navigation">
+        <div class="dashboard-tabs__container">
+            <ul class="dashboard-tabs__list" role="tablist">
+            <li role="presentation"><a href="/dashboards/food-insecurity.html" class="dashboard-tabs__tab" role="tab">Overview</a></li>
+            <li role="presentation"><a href="/dashboards/food-access.html" class="dashboard-tabs__tab" role="tab" aria-current="page">Food Access</a></li>
+            <li role="presentation"><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab" role="tab">SNAP & Safety Net</a></li>
+            <li role="presentation"><a href="/dashboards/food-prices.html" class="dashboard-tabs__tab" role="tab">Food Prices</a></li>
+            <li role="presentation"><a href="/dashboards/food-banks.html" class="dashboard-tabs__tab" role="tab">Food Banks</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <section class="dashboard-hero" aria-label="Food access key statistics">
+            <h1 class="slds-text-heading_large">Food Access &amp; Deserts</h1>
+            <p class="dashboard-hero__subtitle">Where is food hard to reach in America?</p>
+            <div class="dashboard-hero__stats" aria-label="Key national statistics">
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="23.5" data-suffix="M">23.5M</span>
+                    <p class="dashboard-stat__label">Low-Access Population</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="6529" data-suffix="">6,529</span>
+                    <p class="dashboard-stat__label">Food Desert Tracts</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="1.8" data-suffix=" mi">1.8 mi</span>
+                    <p class="dashboard-stat__label">Avg Distance to Store</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="6.7" data-suffix="M">6.7M</span>
+                    <p class="dashboard-stat__label">Children in Deserts</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 1: Food Desert Map -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food desert map by state">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Food Desert Map</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-desert-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food desert prevalence across US states"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Mapping the Food Deserts</h3>
+                        <p class="dashboard-info__text">
+                            A <strong>food desert</strong> is a census tract where a significant share of residents live far from a supermarket — more than 1 mile in urban areas or 10 miles in rural areas. This map shows the percentage of each state's census tracts classified as low-access.
+                        </p>
+                        <p class="dashboard-info__text">
+                            <strong>Mississippi, West Virginia, and Alaska</strong> have the highest rates — over 20% of their tracts are food deserts. Dense northeastern states fare better due to proximity, not necessarily affordability.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> USDA ERS, Food Access Research Atlas</span>
+                            <span class="meta-item"><strong>Data Year</strong> 2019 (most recent atlas)</span>
+                            <span class="meta-item"><strong>Definition</strong> Low-access: &gt;1mi urban / &gt;10mi rural to supermarket</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            23.5 million Americans live in food deserts — including 6.7 million children.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 2: Urban vs Rural -->
+        <section class="dashboard-section scroll-reveal" aria-label="Urban versus rural food access">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Urban vs. Rural Food Access</h2>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-urban-rural" class="dashboard-chart" role="img" aria-label="Stacked bar chart comparing urban and rural low-access tracts by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Different Barriers, Same Outcome</h3>
+                        <p class="dashboard-info__text">
+                            Urban food deserts are about <strong>density</strong> — too many people, too few stores. Rural food deserts are about <strong>distance</strong> — the nearest grocery may be 20+ miles away. Both leave families without consistent access to fresh, healthy food.
+                        </p>
+                        <p class="dashboard-info__text">
+                            States like <strong>Kentucky and Arkansas</strong> are dominated by rural deserts, while <strong>California and Texas</strong> have more urban low-access tracts simply due to population size.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> USDA ERS, Food Access Research Atlas</span>
+                            <span class="meta-item"><strong>Metric</strong> Count of low-access census tracts (urban vs rural)</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            Rural food deserts often get overlooked — but they affect some of the poorest communities in America.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 3: Distance to Nearest Supermarket -->
+        <section class="dashboard-section scroll-reveal" aria-label="Average distance to supermarket">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Distance to Nearest Supermarket</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-distance" class="dashboard-chart" role="img" aria-label="Bar chart showing average distance to nearest supermarket by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">How Far Is Too Far?</h3>
+                        <p class="dashboard-info__text">
+                            The USDA defines food deserts differently for urban (&gt;1 mile) and rural (&gt;10 miles) areas. But even the average distance tells a story: in <strong>Wyoming and Montana</strong>, residents travel over 5 miles on average to reach a supermarket.
+                        </p>
+                        <p class="dashboard-info__text">
+                            For families without reliable transportation, even 2 miles can be an insurmountable barrier — especially when carrying groceries home on foot or by bus.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> USDA ERS, Food Access Research Atlas</span>
+                            <span class="meta-item"><strong>Metric</strong> Average distance to nearest supermarket (miles)</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            Wyoming residents travel an average of 5.5 miles to the nearest grocery store — 5x the distance in New Jersey.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 4: Vehicle Access -->
+        <section class="dashboard-section scroll-reveal" aria-label="Vehicle access and food deserts">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Vehicle Access &amp; Food Deserts</h2>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-vehicle" class="dashboard-chart" role="img" aria-label="Scatter plot showing vehicle access versus food desert prevalence"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">No Car, No Food?</h3>
+                        <p class="dashboard-info__text">
+                            Transportation is the invisible barrier. In <strong>New York City</strong>, 28% of households lack a car — but dense transit networks mitigate the impact. In <strong>rural Mississippi</strong>, 8% lack vehicles and there is no public transit at all.
+                        </p>
+                        <p class="dashboard-info__text">
+                            This scatter plot reveals that the worst outcomes occur where <strong>both</strong> vehicle access is low and food desert prevalence is high — a combination concentrated in the rural South.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> Census ACS (vehicle access) + USDA ERS (food deserts)</span>
+                            <span class="meta-item"><strong>Data Year</strong> 2019-2022</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            Mississippi has both the highest food desert rate (23.4%) and one of the highest no-vehicle rates (8.2%) outside of cities.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 5: Low-Income + Low-Access Overlap -->
+        <section class="dashboard-section scroll-reveal" aria-label="Low-income and low-access overlap">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">The Double Burden</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-double-burden" class="dashboard-chart" role="img" aria-label="Bar chart showing population in both low-income and low-access tracts by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Where Poverty and Food Deserts Overlap</h3>
+                        <p class="dashboard-info__text">
+                            Living in a food desert is hard. Living in a food desert <strong>while also being low-income</strong> is a crisis. These families cannot afford to drive farther, pay delivery fees, or shop at premium stores. They are trapped.
+                        </p>
+                        <p class="dashboard-info__text">
+                            <strong>Texas</strong> leads with 1.7 million people in this overlap, followed by California and Florida. But as a share of population, states like <strong>Mississippi and West Virginia</strong> are most severely affected.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> USDA ERS, Food Access Research Atlas</span>
+                            <span class="meta-item"><strong>Metric</strong> Population in low-income + low-access census tracts</span>
+                        </div>
+                        <div class="dashboard-info__insight">
+                            Over 12 million Americans live at the intersection of poverty and food deserts — the hardest communities to reach.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-narrative__content dashboard-narrative__content--cta">
+                    <h2 class="dashboard-narrative__heading">Bridging the Access Gap</h2>
+                    <p class="dashboard-narrative__text">
+                        Food banks and mobile pantries are the frontline response to food deserts. Technology helps them optimize delivery routes, identify underserved areas, and coordinate with SNAP outreach teams. Food-N-Force builds these systems on Salesforce — turning data into action.
+                    </p>
+                    <div class="dashboard-cta__buttons">
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--primary">See Our Services</a>
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">Get in Touch</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sources -->
+        <section class="dashboard-section dashboard-sources scroll-reveal" aria-label="Data sources">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Data Sources</h2>
+                    </div>
+                    <div class="dashboard-source-grid">
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">ERS</div>
+                            <h3 class="dashboard-source-card__name">USDA Economic Research Service</h3>
+                            <p class="dashboard-source-card__desc">Food Access Research Atlas — the definitive dataset on food deserts, mapping low-access census tracts at urban and rural thresholds nationwide.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Periodic updates</span>
+                                <span>Census tract level</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">ACS</div>
+                            <h3 class="dashboard-source-card__name">U.S. Census Bureau</h3>
+                            <p class="dashboard-source-card__desc">American Community Survey — vehicle access, income, and demographic data at the census tract level used for food desert classification.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual (5-yr rolling)</span>
+                                <span>Census tract</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+    <script type="module" src="/src/js/dashboards/food-access.js" defer></script>
+</body>
+</html>
