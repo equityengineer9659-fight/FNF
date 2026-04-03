@@ -122,7 +122,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `effects/blog-filter.js` — category filtering (aria-pressed + aria-current)
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page
-  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup, colors, MAP_PALETTES (per-dashboard map colors), formatters, linearRegression, scroll reveal
+  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup (incl. GaugeChart, ThemeRiverChart, SingleAxisComponent), colors, MAP_PALETTES, formatters, linearRegression, NTEE_MAP, US_STATES, getNteeName, scroll reveal
   - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (separate entry point)
   - `dashboards/food-access.js` — Food Access & Deserts dashboard
   - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard

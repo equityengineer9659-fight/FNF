@@ -458,6 +458,10 @@
   height: 520px;
 }
 
+#chart-meal-cost {
+  height: 520px;
+}
+
 /* Treemap / Chart region legend */
 .dashboard-chart__legend {
   display: flex;

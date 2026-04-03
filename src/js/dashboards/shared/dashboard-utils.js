@@ -7,7 +7,7 @@
 import * as echarts from 'echarts/core';
 import {
   MapChart, BarChart, LineChart, ScatterChart,
-  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart
+  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart, GaugeChart, ThemeRiverChart
 } from 'echarts/charts';
 import {
   TitleComponent,
@@ -19,17 +19,18 @@ import {
   DataZoomComponent,
   RadarComponent,
   MarkLineComponent,
-  MarkAreaComponent
+  MarkAreaComponent,
+  SingleAxisComponent
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 
 // Register all needed components
 echarts.use([
   MapChart, BarChart, LineChart, ScatterChart,
-  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart,
+  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart, GaugeChart, ThemeRiverChart,
   TitleComponent, TooltipComponent, VisualMapComponent,
   GeoComponent, GridComponent, LegendComponent, DataZoomComponent,
-  RadarComponent, MarkLineComponent, MarkAreaComponent,
+  RadarComponent, MarkLineComponent, MarkAreaComponent, SingleAxisComponent,
   CanvasRenderer
 ]);
 
@@ -224,3 +225,54 @@ export async function fetchWithFallback(liveUrl, staticUrl) {
   if (!res.ok) throw new Error(`Failed to load ${staticUrl}`);
   return { data: await res.json(), source: 'static' };
 }
+
+// -- NTEE code descriptions (for nonprofit directory/profile) --
+export const NTEE_MAP = {
+  K: 'Food, Agriculture & Nutrition',
+  K20: 'Agricultural Programs',
+  K25: 'Farmland Preservation',
+  K26: 'Community Gardens',
+  K30: 'Food Programs',
+  K31: 'Food Banks & Food Pantries',
+  K34: 'Congregate Meals',
+  K35: 'Soup Kitchens',
+  K36: 'Meals on Wheels',
+  K40: 'Nutrition Programs',
+  P: 'Human Services',
+  P20: 'Human Service Organizations',
+  P60: 'Emergency Assistance',
+  P600: 'Emergency Assistance',
+  T: 'Philanthropy & Voluntarism',
+  T70: 'Federated Giving Programs',
+  X: 'Religion-Related',
+  X20: 'Christian',
+  X21: 'Protestant'
+};
+
+export function getNteeName(code) {
+  if (!code) return 'Nonprofit';
+  const clean = code.replace(/Z$/, '');
+  if (NTEE_MAP[clean]) return NTEE_MAP[clean];
+  const prefix = clean.charAt(0);
+  if (NTEE_MAP[prefix]) return NTEE_MAP[prefix];
+  return code;
+}
+
+export function isFoodRelated(code) {
+  if (!code) return false;
+  return code.startsWith('K');
+}
+
+export const US_STATES = [
+  ['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],
+  ['CO','Colorado'],['CT','Connecticut'],['DE','Delaware'],['DC','District of Columbia'],
+  ['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],
+  ['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],
+  ['ME','Maine'],['MD','Maryland'],['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],
+  ['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],['NV','Nevada'],
+  ['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],
+  ['NC','North Carolina'],['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],
+  ['PA','Pennsylvania'],['RI','Rhode Island'],['SC','South Carolina'],['SD','South Dakota'],
+  ['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],
+  ['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']
+];

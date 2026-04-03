@@ -146,11 +146,11 @@
             <p class="dashboard-hero__positioning">Empowering food banks, funders, and policymakers with transparent financial data to benchmark performance and identify partnership opportunities.</p>
             <div class="dashboard-hero__stats" aria-label="Directory statistics">
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number">60,000+</span>
+                    <span class="dashboard-stat__number" data-target="60" data-format="thousand">60K+</span>
                     <p class="dashboard-stat__label">Organizations</p>
                 </div>
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number">50</span>
+                    <span class="dashboard-stat__number" data-target="50" data-format="plus">50+</span>
                     <p class="dashboard-stat__label">States + DC</p>
                 </div>
                 <div class="dashboard-stat">
@@ -175,6 +175,13 @@
                     </select>
                     <button id="directory-search-btn" class="directory-search-bar__btn">Search</button>
                 </div>
+                <div class="directory-search-chips" aria-label="Popular searches">
+                    <button class="directory-chip" data-query="Food Bank">Food Bank</button>
+                    <button class="directory-chip" data-query="Food Pantry">Food Pantry</button>
+                    <button class="directory-chip" data-query="Meals on Wheels">Meals on Wheels</button>
+                    <button class="directory-chip" data-query="Feeding America">Feeding America</button>
+                    <button class="directory-chip" data-query="Hunger Relief">Hunger Relief</button>
+                </div>
                 <div id="directory-results-count" class="directory-results-count" aria-live="polite"></div>
             </div>
         </section>
@@ -189,48 +196,78 @@
             </div>
         </section>
 
-        <!-- Data Source -->
-        <section class="dashboard-section" aria-label="Data source information">
-            <div class="dashboard-card">
-                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Data Source</h2></div>
-                <div class="dashboard-chart-row__info">
-                    <p class="dashboard-info__text">Organization data is sourced from the <strong>ProPublica Nonprofit Explorer</strong>, which aggregates IRS Form 990 filings for tax-exempt organizations. Financial data is updated as new filings become available (typically 6-18 months after fiscal year end).</p>
-                    <div class="dashboard-info__meta">
-                        <span class="meta-item"><strong>Source</strong> ProPublica Nonprofit Explorer API</span>
-                        <span class="meta-item"><strong>Data</strong> IRS Form 990, 990-EZ filings</span>
-                        <span class="meta-item"><strong>Coverage</strong> All registered 501(c)(3) organizations</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- How Organizations Use This Data -->
-        <section class="dashboard-section scroll-reveal" aria-label="How organizations use this data">
-            <div class="dashboard-insights">
-                <h2 class="dashboard-insights__title">How Organizations Use This Data</h2>
+        <section class="dashboard-section dashboard-insights scroll-reveal" aria-label="How organizations use this data">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <h2 class="dashboard-narrative__heading">How Organizations Use This Data</h2>
                 <div class="dashboard-insights__grid">
                     <div class="dashboard-insights__card">
-                        <h3>Benchmark Performance</h3>
-                        <p>Compare your organization's financials against peers in your state or nationally.</p>
+                        <div class="dashboard-insights__card-title">Who This Helps</div>
+                        <p class="dashboard-insights__card-text">Executive directors, funders, grant managers, and board members who need transparent financial data to make informed decisions about food relief organizations.</p>
                     </div>
                     <div class="dashboard-insights__card">
-                        <h3>Identify Partners</h3>
-                        <p>Find complementary organizations in your region for collaboration and resource sharing.</p>
+                        <div class="dashboard-insights__card-title">Decisions It Supports</div>
+                        <p class="dashboard-insights__card-text">Benchmarking against peers, identifying partnership opportunities, evaluating grantees, assessing organizational health, and planning strategic investments.</p>
                     </div>
                     <div class="dashboard-insights__card">
-                        <h3>Grant Intelligence</h3>
-                        <p>Research potential grantees with transparent financial data before making funding decisions.</p>
+                        <div class="dashboard-insights__card-title">How Food-N-Force Helps</div>
+                        <p class="dashboard-insights__card-text">Salesforce dashboards, CRM integrations, automated financial reporting, and data-driven strategy — built specifically for food relief organizations.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- CTA -->
-        <section class="dashboard-cta" aria-label="Call to action">
-            <div class="dashboard-cta__content">
-                <h2 class="dashboard-cta__title">Turn Data Into Action</h2>
-                <p class="dashboard-cta__text">Food-N-Force helps organizations leverage data for strategic planning, grant applications, and operational improvement.</p>
-                <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--primary">Talk With Us About Your Data Strategy</a>
+        <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-narrative__content dashboard-narrative__content--cta">
+                    <h2 class="dashboard-narrative__heading">Turn Data Into Action</h2>
+                    <p class="dashboard-narrative__text">Food-N-Force helps organizations leverage data for strategic planning, grant applications, and operational improvement.</p>
+                    <div class="dashboard-cta__buttons">
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--primary">Talk With Us About Your Data Strategy</a>
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">See Our Services</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Sources -->
+        <section class="dashboard-section dashboard-sources scroll-reveal" aria-label="Data sources">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Data Sources</h2>
+                    </div>
+                    <div class="dashboard-source-grid">
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">990</div>
+                            <h3 class="dashboard-source-card__name">IRS Form 990</h3>
+                            <p class="dashboard-source-card__desc">Annual information return filed by tax-exempt organizations. Includes revenue, expenses, assets, liabilities, compensation, and program service accomplishments.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual filings</span>
+                                <span>6-18 month lag</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">PP</div>
+                            <h3 class="dashboard-source-card__name">ProPublica Nonprofit Explorer</h3>
+                            <p class="dashboard-source-card__desc">Aggregates IRS Exempt Organizations Business Master File and annual financial extracts into a searchable API covering every registered 501(c)(3) organization.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Live API</span>
+                                <span>All 501(c)(3) orgs</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">BMF</div>
+                            <h3 class="dashboard-source-card__name">IRS EO Business Master File</h3>
+                            <p class="dashboard-source-card__desc">The authoritative registry of tax-exempt organizations — provides EIN, name, address, NTEE classification, ruling date, and current exempt status.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Monthly updates</span>
+                                <span>Organization registry</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>

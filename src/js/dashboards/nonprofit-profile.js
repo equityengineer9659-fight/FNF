@@ -6,7 +6,8 @@
 
 import {
   echarts, COLORS, TOOLTIP_STYLE,
-  createChart, initScrollReveal, handleResize
+  createChart, initScrollReveal, handleResize, linearRegression,
+  getNteeName
 } from './shared/dashboard-utils.js';
 
 // -- Currency formatter for display --
@@ -16,36 +17,6 @@ function fmtCurrency(value) {
   if (Math.abs(value) >= 1e6) return '$' + (value / 1e6).toFixed(1) + 'M';
   if (Math.abs(value) >= 1e3) return '$' + (value / 1e3).toFixed(0) + 'K';
   return '$' + value.toLocaleString();
-}
-
-// -- NTEE code lookup --
-const NTEE_CODES = {
-  'K':   'Food, Agriculture and Nutrition',
-  'K20': 'Agricultural Programs',
-  'K30': 'Food Programs',
-  'K31': 'Food Banks, Food Pantries',
-  'K34': 'Congregate Meals',
-  'K35': 'Soup Kitchens, Meals on Wheels',
-  'K36': 'Meals on Wheels',
-  'P':   'Human Services',
-  'P20': 'Human Service Organizations',
-  'P60': 'Emergency Assistance',
-  'P70': 'Residential Care & Adult Day Programs',
-  'S':   'Community Improvement',
-  'T':   'Philanthropy & Grantmaking',
-  'B':   'Education',
-  'E':   'Health Care',
-  'L':   'Housing & Shelter'
-};
-
-function getNteeName(code) {
-  if (!code) return 'General Nonprofit';
-  const upper = code.toUpperCase().trim();
-  if (NTEE_CODES[upper]) return NTEE_CODES[upper];
-  // Try just the letter prefix
-  const prefix = upper.charAt(0);
-  if (NTEE_CODES[prefix]) return NTEE_CODES[prefix];
-  return code;
 }
 
 // -- Title case helper --
@@ -74,6 +45,8 @@ function populateHeader(org) {
       ? '501(c)(3)'
       : `501(c)(${org.subsection_code})`;
   }
+
+  document.title = `${toTitleCase(org.name)} — Nonprofit Profile | Food-N-Force`;
 }
 
 // -- Populate key stats from most recent filing --
@@ -95,6 +68,28 @@ function populateStats(filings) {
 
   const statContributions = document.getElementById('stat-contributions');
   if (statContributions) statContributions.textContent = fmtCurrency(filing.totcntrbgfts);
+
+  // YoY change badges
+  if (filings.length >= 2) {
+    const current = sorted[0];
+    const prior = sorted[1];
+
+    const changes = [
+      { id: 'stat-revenue-change', curr: current.totrevenue, prev: prior.totrevenue },
+      { id: 'stat-expenses-change', curr: current.totfuncexpns, prev: prior.totfuncexpns },
+      { id: 'stat-assets-change', curr: current.totnetassetend, prev: prior.totnetassetend },
+      { id: 'stat-contributions-change', curr: current.totcntrbgfts, prev: prior.totcntrbgfts }
+    ];
+
+    changes.forEach(({ id, curr, prev }) => {
+      const el = document.getElementById(id);
+      if (!el || !prev || prev === 0) return;
+      const pct = ((curr - prev) / Math.abs(prev) * 100).toFixed(1);
+      const arrow = pct >= 0 ? '\u25B2' : '\u25BC';
+      el.textContent = `${arrow} ${Math.abs(pct)}%`;
+      el.style.color = pct >= 0 ? '#22c55e' : '#ef4444';
+    });
+  }
 }
 
 // -- Prepare filing data arrays sorted by year --
@@ -224,6 +219,37 @@ function renderRevenueTrend(data) {
   }
 
   chart.setOption(option);
+
+  if (data.years.length > 2) {
+    const points = data.years.map((_, i) => [i, data.revenue[i]]);
+    const reg = linearRegression(points);
+    const mean = data.revenue.reduce((s, v) => s + v, 0) / data.revenue.length;
+    const stdDev = Math.sqrt(data.revenue.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / data.revenue.length);
+
+    // Add regression line and volatility band via merge option
+    chart.setOption({
+      series: [{
+        markLine: {
+          silent: true,
+          symbol: 'none',
+          lineStyle: { color: 'rgba(255,255,255,0.3)', type: 'dashed', width: 1.5 },
+          data: [[
+            { coord: [0, reg.intercept], symbol: 'none' },
+            { coord: [data.years.length - 1, reg.slope * (data.years.length - 1) + reg.intercept], symbol: 'none' }
+          ]],
+          label: { show: true, formatter: 'Trend', color: 'rgba(255,255,255,0.4)', fontSize: 10, position: 'end' }
+        },
+        markArea: {
+          silent: true,
+          data: [[
+            { yAxis: mean + stdDev, itemStyle: { color: 'rgba(1,118,211,0.06)' } },
+            { yAxis: Math.max(0, mean - stdDev) }
+          ]],
+          label: { show: false }
+        }
+      }]
+    });
+  }
 }
 
 // -- Chart 2: Revenue Composition (stacked bar or donut) --
@@ -232,19 +258,19 @@ function renderRevenueComposition(data) {
   if (!chart) return;
 
   if (data.years.length > 1) {
-    // Stacked bar chart
+    // Stacked bar chart — shows revenue growth + composition over time
     chart.setOption({
       tooltip: {
         trigger: 'axis',
         ...TOOLTIP_STYLE,
         formatter: params => {
+          const total = params.reduce((s, p) => s + Math.max(0, p.value || 0), 0);
           let tip = `<strong>${params[0].name}</strong><br/>`;
-          const total = params.reduce((s, p) => s + (p.value || 0), 0);
           params.forEach(p => {
-            const pct = total > 0 ? (p.value / total * 100).toFixed(1) : '0.0';
+            const pct = total > 0 ? (Math.max(0, p.value) / total * 100).toFixed(1) : '0.0';
             tip += `${p.marker} ${p.seriesName}: <strong>${fmtCurrency(p.value)}</strong> (${pct}%)<br/>`;
           });
-          tip += `<br/>Total: <strong>${fmtCurrency(total)}</strong>`;
+          tip += `Total: <strong>${fmtCurrency(total)}</strong>`;
           return tip;
         }
       },
@@ -269,19 +295,38 @@ function renderRevenueComposition(data) {
         {
           name: 'Contributions', type: 'bar', stack: 'revenue',
           data: data.contributions,
-          itemStyle: { color: COLORS.primary },
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: '#3b82f6' },
+              { offset: 1, color: '#0176d3' }
+            ])
+          },
+          emphasis: { focus: 'series' },
           animationDuration: 1500
         },
         {
           name: 'Program Revenue', type: 'bar', stack: 'revenue',
           data: data.programRevenue,
-          itemStyle: { color: COLORS.secondary },
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: '#34d399' },
+              { offset: 1, color: '#10b981' }
+            ])
+          },
+          emphasis: { focus: 'series' },
           animationDuration: 1500
         },
         {
           name: 'Investment Income', type: 'bar', stack: 'revenue',
-          data: data.investmentIncome,
-          itemStyle: { color: COLORS.accent },
+          data: data.investmentIncome.map(v => Math.max(0, v)),
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: '#fbbf24' },
+              { offset: 1, color: '#f59e0b' }
+            ]),
+            borderRadius: [3, 3, 0, 0]
+          },
+          emphasis: { focus: 'series' },
           animationDuration: 1500
         }
       ]
@@ -321,32 +366,33 @@ function renderRevenueComposition(data) {
   }
 }
 
-// -- Chart 3: Expenses vs Revenue (grouped bar) --
+// -- Chart 3: Expenses vs Revenue (waterfall with surplus/deficit line) --
 function renderExpensesVsRevenue(data) {
   const chart = showAndCreateChart('section-expenses-vs-revenue', 'chart-expenses-vs-revenue');
   if (!chart) return;
+
+  // Build waterfall: for each year show revenue and expense bars + surplus/deficit line
+  const surplus = data.years.map((_, i) => data.revenue[i] - data.expenses[i]);
 
   chart.setOption({
     tooltip: {
       trigger: 'axis',
       ...TOOLTIP_STYLE,
       formatter: params => {
-        let tip = `<strong>${params[0].name}</strong><br/>`;
-        let rev = 0, exp = 0;
-        params.forEach(p => {
-          tip += `${p.marker} ${p.seriesName}: <strong>${fmtCurrency(p.value)}</strong><br/>`;
-          if (p.seriesName === 'Revenue') rev = p.value;
-          if (p.seriesName === 'Expenses') exp = p.value;
-        });
+        const idx = params[0].dataIndex;
+        const rev = data.revenue[idx];
+        const exp = data.expenses[idx];
         const diff = rev - exp;
         const label = diff >= 0 ? 'Surplus' : 'Deficit';
         const color = diff >= 0 ? '#22c55e' : '#ef4444';
-        tip += `<span style="color:${color}">${label}: <strong>${fmtCurrency(Math.abs(diff))}</strong></span>`;
-        return tip;
+        return `<strong>${data.years[idx]}</strong><br/>` +
+          `Revenue: <strong>${fmtCurrency(rev)}</strong><br/>` +
+          `Expenses: <strong>${fmtCurrency(exp)}</strong><br/>` +
+          `<span style="color:${color}">${label}: <strong>${fmtCurrency(Math.abs(diff))}</strong></span>`;
       }
     },
     legend: {
-      data: ['Revenue', 'Expenses'],
+      data: ['Revenue', 'Expenses', 'Surplus', 'Deficit'],
       textStyle: { color: COLORS.text },
       top: 0
     },
@@ -366,16 +412,50 @@ function renderExpensesVsRevenue(data) {
       {
         name: 'Revenue', type: 'bar',
         data: data.revenue,
-        barWidth: '30%',
-        itemStyle: { color: COLORS.secondary, borderRadius: [3, 3, 0, 0] },
+        barWidth: '35%',
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: COLORS.secondary },
+            { offset: 1, color: COLORS.primary }
+          ]),
+          borderRadius: [3, 3, 0, 0]
+        },
         animationDuration: 1500
       },
       {
         name: 'Expenses', type: 'bar',
         data: data.expenses,
-        barWidth: '30%',
-        itemStyle: { color: '#ef4444', borderRadius: [3, 3, 0, 0] },
+        barWidth: '35%',
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: '#fb7185' },
+            { offset: 1, color: '#ef4444' }
+          ]),
+          borderRadius: [3, 3, 0, 0]
+        },
         animationDuration: 1500
+      },
+      {
+        name: 'Surplus', type: 'line',
+        data: surplus.map(v => v >= 0 ? v : null),
+        smooth: true,
+        lineStyle: { width: 2.5, color: '#22c55e' },
+        itemStyle: { color: '#22c55e' },
+        showSymbol: true,
+        symbolSize: 8,
+        animationDuration: 2000,
+        animationDelay: 500
+      },
+      {
+        name: 'Deficit', type: 'line',
+        data: surplus.map(v => v < 0 ? v : null),
+        smooth: true,
+        lineStyle: { width: 2.5, color: '#ef4444', type: 'dashed' },
+        itemStyle: { color: '#ef4444' },
+        showSymbol: true,
+        symbolSize: 8,
+        animationDuration: 2000,
+        animationDelay: 500
       }
     ]
   });
@@ -593,6 +673,53 @@ function renderCompensation(data) {
       }
     ]
   });
+
+  // Compensation gauge (most recent year)
+  const gaugeContainer = document.getElementById('chart-compensation-gauge');
+  if (gaugeContainer) {
+    gaugeContainer.style.display = '';
+    const gaugeChart = echarts.init(gaugeContainer, null, { renderer: 'canvas' });
+
+    const compPct = compPctOfExpenses[compPctOfExpenses.length - 1];
+    const compPctNum = parseFloat(compPct);
+    const gaugeColor = compPctNum < 40 ? '#22c55e' : compPctNum <= 60 ? '#fbbf24' : '#ef4444';
+
+    gaugeChart.setOption({
+      series: [{
+        type: 'gauge',
+        radius: '90%',
+        startAngle: 200,
+        endAngle: -20,
+        min: 0,
+        max: 100,
+        splitNumber: 5,
+        axisLine: {
+          lineStyle: {
+            width: 15,
+            color: [
+              [0.4, '#22c55e'],
+              [0.6, '#fbbf24'],
+              [1, '#ef4444']
+            ]
+          }
+        },
+        pointer: { width: 4, length: '60%', itemStyle: { color: '#ffffff' } },
+        axisTick: { show: false },
+        splitLine: { show: false },
+        axisLabel: { show: false },
+        title: { show: true, offsetCenter: [0, '70%'], color: COLORS.textMuted, fontSize: 10 },
+        detail: {
+          valueAnimation: true,
+          formatter: '{value}%',
+          fontSize: 20,
+          fontWeight: 'bold',
+          color: gaugeColor,
+          offsetCenter: [0, '40%']
+        },
+        data: [{ value: compPctNum, name: '% of Expenses' }]
+      }]
+    });
+  }
 }
 
 // -- Chart 6: Fundraising Efficiency Radar --
@@ -663,29 +790,46 @@ function renderFundraising(data) {
       },
       axisLine: { lineStyle: { color: COLORS.gridLine } }
     },
+    legend: {
+      data: ['Efficiency', 'Benchmark (70%)'],
+      textStyle: { color: COLORS.text },
+      bottom: 0
+    },
     series: [{
       type: 'radar',
-      data: [{
-        value: [
-          parseFloat(programExpenseRatio.toFixed(1)),
-          parseFloat(revenueStability.toFixed(1)),
-          parseFloat(assetReserve.toFixed(1)),
-          parseFloat(fundraisingEfficiency.toFixed(1))
-        ],
-        name: 'Efficiency',
-        areaStyle: { color: 'rgba(1,118,211,0.3)' },
-        lineStyle: { color: COLORS.primary, width: 2, opacity: 0.8 },
-        itemStyle: { color: COLORS.primary },
-        label: {
-          show: true,
-          color: COLORS.text,
-          fontSize: 11,
-          formatter: params => {
-            const val = params.value;
-            return typeof val === 'number' ? val.toFixed(1) : val;
+      data: [
+        {
+          value: [
+            parseFloat(programExpenseRatio.toFixed(1)),
+            parseFloat(revenueStability.toFixed(1)),
+            parseFloat(assetReserve.toFixed(1)),
+            parseFloat(fundraisingEfficiency.toFixed(1))
+          ],
+          name: 'Efficiency',
+          areaStyle: { color: 'rgba(1,118,211,0.3)' },
+          lineStyle: { color: COLORS.primary, width: 2, opacity: 0.8 },
+          itemStyle: { color: COLORS.primary },
+          label: {
+            show: true,
+            color: COLORS.text,
+            fontSize: 11,
+            formatter: params => {
+              const val = params.value;
+              return typeof val === 'number' ? val.toFixed(1) : val;
+            }
           }
+        },
+        {
+          value: [70, 70, 70, 70],
+          name: 'Benchmark (70%)',
+          lineStyle: { color: '#fbbf24', width: 1.5, type: 'dashed', opacity: 0.6 },
+          areaStyle: { color: 'rgba(251,191,36,0.05)' },
+          itemStyle: { color: '#fbbf24', opacity: 0.6 },
+          symbol: 'diamond',
+          symbolSize: 4,
+          label: { show: false }
         }
-      }],
+      ],
       animationDuration: 2000
     }]
   });
@@ -706,6 +850,139 @@ function showInsight(id, text) {
     el.textContent = text;
     el.style.display = '';
   }
+}
+
+// -- Profile Summary (top-level org description) --
+function describeProfile(org, data, orgName) {
+  const section = document.getElementById('profile-summary');
+  if (!section) return;
+  section.style.display = '';
+
+  const n = data.years.length;
+  const i = n - 1;
+  const location = [org.city, org.state].filter(Boolean).join(', ');
+  const ntee = getNteeName(org.ntee_code);
+  const status = org.subsection_code === 3 ? '501(c)(3) tax-exempt' : `501(c)(${org.subsection_code})`;
+  const rulingYear = org.ruling_date ? org.ruling_date.substring(0, 4) : null;
+
+  // Populate contact info panel
+  if (org.careofname) {
+    const cleaned = org.careofname.replace(/^%\s*/, '');
+    if (cleaned) {
+      setText('contact-person-value', toTitleCase(cleaned));
+      const personEl = document.getElementById('contact-person');
+      if (personEl) personEl.style.display = '';
+    }
+  }
+  setText('contact-address-value', org.address ? toTitleCase(org.address) : '\u2014');
+  setText('contact-location-value', [org.city, org.state, org.zipcode].filter(Boolean).join(', '));
+  setText('contact-ein-value', org.ein ? String(org.ein).replace(/(\d{2})(\d{7})/, '$1-$2') : '\u2014');
+  setText('contact-ruling-value', rulingYear && rulingYear !== '0000' ? rulingYear : '\u2014');
+  setText('contact-ntee-value', ntee !== 'Nonprofit' ? `${ntee} (${org.ntee_code || 'N/A'})` : status);
+  const ppLink = document.getElementById('contact-propublica-link');
+  if (ppLink) ppLink.href = `https://projects.propublica.org/nonprofits/organizations/${org.ein}`;
+
+  // Build the summary paragraph
+  const parts = [];
+
+  // Opening — who they are
+  let opener = `${orgName} is a ${status} nonprofit`;
+  if (ntee !== 'Nonprofit' && ntee !== org.ntee_code) {
+    opener += ` classified under ${ntee}`;
+  }
+  if (location) opener += `, based in ${location}`;
+  if (rulingYear && rulingYear !== '0000') {
+    opener += `. The organization has held tax-exempt status since ${rulingYear}`;
+  }
+  opener += '.';
+  parts.push(opener);
+
+  // Financial snapshot
+  if (n >= 1) {
+    const rev = data.revenue[i];
+    const exp = data.expenses[i];
+    const net = data.netAssets[i];
+    const yr = data.years[i];
+    const surplus = rev - exp;
+
+    let financial = `In its most recent filing (${yr}), the organization reported ${fmtCurrency(rev)} in total revenue and ${fmtCurrency(exp)} in total expenses`;
+    if (surplus >= 0) {
+      financial += `, resulting in a ${fmtCurrency(surplus)} operating surplus`;
+    } else {
+      financial += `, resulting in a ${fmtCurrency(Math.abs(surplus))} operating deficit`;
+    }
+    financial += `. Net assets stand at ${fmtCurrency(net)}.`;
+    parts.push(financial);
+  }
+
+  // Multi-year trajectory
+  if (n >= 3) {
+    const firstRev = data.revenue[0];
+    const lastRev = data.revenue[i];
+    const growth = firstRev > 0 ? ((lastRev - firstRev) / firstRev * 100).toFixed(0) : 0;
+    const peakRev = Math.max(...data.revenue);
+    const peakYr = data.years[data.revenue.indexOf(peakRev)];
+    const deficitCount = data.years.filter((_, j) => data.expenses[j] > data.revenue[j]).length;
+
+    let trajectory = `Over ${n} years of available data (${data.years[0]}–${data.years[i]}), revenue has `;
+    if (growth > 20) {
+      trajectory += `grown ${growth}%`;
+    } else if (growth < -20) {
+      trajectory += `declined ${Math.abs(growth)}%`;
+    } else {
+      trajectory += 'remained relatively stable';
+    }
+    if (peakYr !== data.years[i]) {
+      trajectory += `, peaking at ${fmtCurrency(peakRev)} in ${peakYr}`;
+    }
+    trajectory += '. ';
+    if (deficitCount === 0) {
+      trajectory += `The organization has maintained a surplus in all ${n} filing years.`;
+    } else if (deficitCount <= 2) {
+      trajectory += `The organization ran a deficit in ${deficitCount} of ${n} years — generally maintaining financial discipline.`;
+    } else {
+      trajectory += `The organization ran a deficit in ${deficitCount} of ${n} years, suggesting recurring financial pressure.`;
+    }
+    parts.push(trajectory);
+  }
+
+  // Composition insight
+  if (n >= 1) {
+    const contrib = data.contributions[i];
+    const total = contrib + data.programRevenue[i] + Math.max(0, data.investmentIncome[i]);
+    const contribPct = total > 0 ? (contrib / total * 100).toFixed(0) : 0;
+    if (contribPct > 90) {
+      parts.push(`Revenue is heavily concentrated in contributions and grants (${contribPct}%), with minimal program or investment income.`);
+    } else if (contribPct > 60) {
+      parts.push(`The organization draws ${contribPct}% of revenue from contributions, supplemented by program services and other sources.`);
+    }
+  }
+
+  setText('profile-summary-text', parts.join(' '));
+
+  // Insight — overall health assessment
+  let insight;
+  if (n >= 3) {
+    const exp = data.expenses[i];
+    const net = data.netAssets[i];
+    const reserveMonths = exp > 0 ? net / (exp / 12) : 0;
+    const officer = data.officerComp[i];
+    const sal = data.salaries[i];
+    const payroll = data.payrollTax[i];
+    const compPct = exp > 0 ? (officer + sal + payroll) / exp * 100 : 0;
+    const deficitCount = data.years.filter((_, j) => data.expenses[j] > data.revenue[j]).length;
+
+    if (reserveMonths > 6 && deficitCount <= 1 && compPct < 50) {
+      insight = `Overall financial health appears strong: ${reserveMonths.toFixed(0)} months of reserves, consistent surpluses, and personnel costs at ${compPct.toFixed(0)}% of expenses.`;
+    } else if (reserveMonths < 3 || deficitCount > n * 0.4) {
+      insight = `Financial indicators suggest areas for attention: ${reserveMonths.toFixed(0)} months of reserves and ${deficitCount} deficit years out of ${n}. Strategic planning and reserve building may strengthen long-term sustainability.`;
+    } else {
+      insight = `The organization shows moderate financial health with ${reserveMonths.toFixed(0)} months of reserves. Review the charts below for detailed analysis of revenue trends, expenses, and operational efficiency.`;
+    }
+  } else {
+    insight = 'Limited filing history is available. The charts below show the financial data from available filings.';
+  }
+  showInsight('profile-summary-insight', insight);
 }
 
 // -- Describe Chart 1: Revenue Trend --
@@ -1041,31 +1318,36 @@ async function init() {
     populateStats(filings);
     const orgName = toTitleCase(json.organization.name);
 
-    // Render charts + dynamic descriptions
-    if (hasData(data.revenue)) {
+    // Profile summary — top-level org description
+    describeProfile(json.organization, data, orgName);
+
+    // Render charts + dynamic descriptions (each isolated so one failure doesn't kill the page)
+    const safeRender = (fn) => { try { fn(); } catch { /* chart render failed */ } };
+
+    if (hasData(data.revenue)) safeRender(() => {
       renderRevenueTrend(data);
       describeRevenueTrend(data, orgName);
-    }
-    if (hasData(data.contributions) || hasData(data.programRevenue) || hasData(data.investmentIncome)) {
+    });
+    if (hasData(data.contributions) || hasData(data.programRevenue) || hasData(data.investmentIncome)) safeRender(() => {
       renderRevenueComposition(data);
       describeRevenueComposition(data, orgName);
-    }
-    if (hasData(data.revenue) || hasData(data.expenses)) {
+    });
+    if (hasData(data.revenue) || hasData(data.expenses)) safeRender(() => {
       renderExpensesVsRevenue(data);
       describeExpenses(data, orgName);
-    }
-    if (hasData(data.assets) || hasData(data.liabilities)) {
+    });
+    if (hasData(data.assets) || hasData(data.liabilities)) safeRender(() => {
       renderAssetsLiabilities(data);
       describeAssets(data, orgName);
-    }
-    if (hasData(data.officerComp) || hasData(data.salaries) || hasData(data.payrollTax)) {
+    });
+    if (hasData(data.officerComp) || hasData(data.salaries) || hasData(data.payrollTax)) safeRender(() => {
       renderCompensation(data);
       describeCompensation(data, orgName);
-    }
-    if (hasData(data.expenses)) {
+    });
+    if (hasData(data.expenses)) safeRender(() => {
       renderFundraising(data);
       describeEfficiency(data, orgName);
-    }
+    });
 
     initScrollReveal();
     window.addEventListener('resize', handleResize);

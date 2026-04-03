@@ -156,19 +156,64 @@
             <div class="dashboard-hero__stats" aria-label="Key financial statistics">
                 <div class="dashboard-stat">
                     <span id="stat-revenue" class="dashboard-stat__number">&mdash;</span>
+                    <span id="stat-revenue-change" class="profile-stat-change"></span>
                     <p class="dashboard-stat__label">Total Revenue</p>
                 </div>
                 <div class="dashboard-stat">
                     <span id="stat-expenses" class="dashboard-stat__number">&mdash;</span>
+                    <span id="stat-expenses-change" class="profile-stat-change"></span>
                     <p class="dashboard-stat__label">Total Expenses</p>
                 </div>
                 <div class="dashboard-stat">
                     <span id="stat-assets" class="dashboard-stat__number">&mdash;</span>
+                    <span id="stat-assets-change" class="profile-stat-change"></span>
                     <p class="dashboard-stat__label">Net Assets</p>
                 </div>
                 <div class="dashboard-stat">
                     <span id="stat-contributions" class="dashboard-stat__number">&mdash;</span>
+                    <span id="stat-contributions-change" class="profile-stat-change"></span>
                     <p class="dashboard-stat__label">Contributions</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Summary (populated dynamically by JS) -->
+        <section id="profile-summary" class="dashboard-section" style="display:none" aria-label="Organization summary">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Organization Profile</h2></div>
+                <div class="profile-summary__layout">
+                    <div class="profile-summary__description">
+                        <p class="dashboard-info__text" id="profile-summary-text">Loading summary...</p>
+                        <div class="dashboard-info__insight" id="profile-summary-insight" style="display:none"></div>
+                    </div>
+                    <div class="profile-summary__contact" id="profile-contact">
+                        <h3 class="profile-contact__heading">Contact Information</h3>
+                        <div class="profile-contact__item" id="contact-person" style="display:none">
+                            <span class="profile-contact__label">Contact</span>
+                            <span class="profile-contact__value" id="contact-person-value"></span>
+                        </div>
+                        <div class="profile-contact__item">
+                            <span class="profile-contact__label">Address</span>
+                            <span class="profile-contact__value" id="contact-address-value">&mdash;</span>
+                        </div>
+                        <div class="profile-contact__item">
+                            <span class="profile-contact__label">Location</span>
+                            <span class="profile-contact__value" id="contact-location-value">&mdash;</span>
+                        </div>
+                        <div class="profile-contact__item">
+                            <span class="profile-contact__label">EIN</span>
+                            <span class="profile-contact__value" id="contact-ein-value">&mdash;</span>
+                        </div>
+                        <div class="profile-contact__item">
+                            <span class="profile-contact__label">Tax-Exempt Since</span>
+                            <span class="profile-contact__value" id="contact-ruling-value">&mdash;</span>
+                        </div>
+                        <div class="profile-contact__item">
+                            <span class="profile-contact__label">Classification</span>
+                            <span class="profile-contact__value" id="contact-ntee-value">&mdash;</span>
+                        </div>
+                        <a id="contact-propublica-link" class="profile-contact__link" href="#" target="_blank" rel="noopener">View on ProPublica &rarr;</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -212,7 +257,7 @@
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue Composition</h2></div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-revenue-composition" class="dashboard-chart" role="img" aria-label="Stacked bar chart showing revenue sources across filing years"></div>
+                        <div id="chart-revenue-composition" class="dashboard-chart" role="img" aria-label="Stacked bar chart showing contributions, program revenue, and investment income across filing years"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Where the Money Comes From</h3>
@@ -233,7 +278,7 @@
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Expenses vs Revenue</h2></div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-expenses-vs-revenue" class="dashboard-chart" role="img" aria-label="Grouped bar chart comparing total revenue and expenses by year"></div>
+                        <div id="chart-expenses-vs-revenue" class="dashboard-chart" role="img" aria-label="Bar chart comparing total revenue and expenses by year with surplus and deficit line overlay"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Operating Surplus or Deficit</h3>
@@ -279,6 +324,7 @@
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">People Costs</h3>
+                        <div id="chart-compensation-gauge" class="profile-gauge" style="display:none;width:160px;height:120px;margin:0 auto 0.75rem"></div>
                         <p class="dashboard-info__text" id="info-text-compensation">Loading analysis...</p>
                         <div class="dashboard-info__insight" id="info-insight-compensation" style="display:none"></div>
                         <div class="dashboard-info__meta">
@@ -296,7 +342,7 @@
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Operational Efficiency</h2></div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-fundraising" class="dashboard-chart" role="img" aria-label="Radar chart showing operational efficiency metrics"></div>
+                        <div id="chart-fundraising" class="dashboard-chart" role="img" aria-label="Radar chart showing operational efficiency metrics with 70% benchmark overlay"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">How Efficiently Does It Operate?</h3>

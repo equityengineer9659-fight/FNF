@@ -543,7 +543,7 @@ function renderMealCost(data) {
   const chart = createChart('chart-meal-cost');
   if (!chart) return;
 
-  const sorted = [...data.states].sort((a, b) => b.mealCost - a.mealCost);
+  const sorted = [...data.states].sort((a, b) => b.mealCost - a.mealCost).slice(0, 25);
   const pieData = sorted.map(s => ({
     name: s.name, value: s.mealCost,
     itemStyle: { color: REGION_COLORS[getRegion(s.name)] }
@@ -555,16 +555,16 @@ function renderMealCost(data) {
       formatter: p => `<strong>${p.name}</strong><br/>Meal Cost: <strong>$${p.value}</strong><br/>Region: ${getRegion(p.name)}`
     },
     series: [{
-      type: 'pie', roseType: 'area', radius: ['15%', '65%'], center: ['50%', '50%'],
+      type: 'pie', roseType: 'area', radius: ['15%', '60%'], center: ['50%', '50%'],
       itemStyle: { borderRadius: 4, borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1 },
       label: {
-        show: true, color: COLORS.text, fontSize: 9,
+        show: true, color: COLORS.text, fontSize: 10,
         formatter: p => `${p.name}\n$${p.value}`,
         alignTo: 'labelLine',
         overflow: 'truncate',
         minMargin: 5
       },
-      labelLine: { length: 8, length2: 12, smooth: true },
+      labelLine: { length: 12, length2: 18, smooth: true },
       emphasis: { label: { show: true, fontSize: 12, fontWeight: 'bold', formatter: p => `${p.name}\n$${p.value}` } },
       data: pieData, animationDuration: 2000
     }]

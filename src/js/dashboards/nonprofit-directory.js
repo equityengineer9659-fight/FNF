@@ -3,60 +3,14 @@
  * @description Searchable directory powered by ProPublica Nonprofit Explorer API
  */
 
-import { initScrollReveal, handleResize } from './shared/dashboard-utils.js';
-
-// NTEE code descriptions (common food/human service codes)
-const NTEE_MAP = {
-  K: 'Food, Agriculture & Nutrition',
-  K20: 'Agricultural Programs',
-  K25: 'Farmland Preservation',
-  K26: 'Community Gardens',
-  K30: 'Food Programs',
-  K31: 'Food Banks & Food Pantries',
-  K34: 'Congregate Meals',
-  K35: 'Soup Kitchens',
-  K36: 'Meals on Wheels',
-  K40: 'Nutrition Programs',
-  P: 'Human Services',
-  P20: 'Human Service Organizations',
-  P60: 'Emergency Assistance',
-  P600: 'Emergency Assistance',
-  T: 'Philanthropy & Voluntarism',
-  T70: 'Federated Giving Programs',
-  X: 'Religion-Related',
-  X20: 'Christian',
-  X21: 'Protestant'
-};
-
-function getNteeName(code) {
-  if (!code) return 'Nonprofit';
-  const clean = code.replace(/Z$/, '');
-  if (NTEE_MAP[clean]) return NTEE_MAP[clean];
-  const prefix = clean.charAt(0);
-  if (NTEE_MAP[prefix]) return NTEE_MAP[prefix];
-  return code;
-}
-
-function isFoodRelated(code) {
-  if (!code) return false;
-  return code.startsWith('K');
-}
-
-const US_STATES = [
-  ['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],
-  ['CO','Colorado'],['CT','Connecticut'],['DE','Delaware'],['DC','District of Columbia'],
-  ['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],
-  ['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],
-  ['ME','Maine'],['MD','Maryland'],['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],
-  ['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],['NV','Nevada'],
-  ['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],
-  ['NC','North Carolina'],['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],
-  ['PA','Pennsylvania'],['RI','Rhode Island'],['SC','South Carolina'],['SD','South Dakota'],
-  ['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],
-  ['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']
-];
+import {
+  initScrollReveal, handleResize,
+  getNteeName, isFoodRelated, US_STATES
+} from './shared/dashboard-utils.js';
 
 let searchTimeout = null;
+let currentQuery = '';
+let currentState = '';
 
 function populateStateDropdown() {
   const select = document.getElementById('directory-state-select');
@@ -75,6 +29,9 @@ async function handleSearch(query, state, page) {
   const paginationEl = document.getElementById('directory-pagination');
 
   if (!resultsGrid) return;
+
+  currentQuery = query;
+  currentState = state;
 
   // Show loading
   resultsGrid.innerHTML = '<div class="directory-empty-state">Searching...</div>';
@@ -103,16 +60,61 @@ async function handleSearch(query, state, page) {
     if (data.error) throw new Error(data.error);
 
     renderResults(data, resultsGrid);
-    renderPagination(data, paginationEl, query, state);
+    renderPagination(data, paginationEl);
 
     if (countEl) {
+      const queryLabel = query ? ` for "${query}"` : '';
+      const stateLabel = state ? ` in ${state}` : '';
       countEl.textContent = data.total_results > 0
-        ? `${data.total_results.toLocaleString()} organizations found`
+        ? `${data.total_results.toLocaleString()} organizations found${queryLabel}${stateLabel}`
         : '';
     }
   } catch {
     resultsGrid.innerHTML = '<div class="directory-empty-state">Unable to search organizations. Please try again.</div>';
   }
+}
+
+function fmtRevenue(val) {
+  if (!val || val === 0) return '';
+  if (val >= 1e9) return '$' + (val / 1e9).toFixed(1) + 'B';
+  if (val >= 1e6) return '$' + (val / 1e6).toFixed(1) + 'M';
+  if (val >= 1e3) return '$' + (val / 1e3).toFixed(0) + 'K';
+  return '$' + val.toLocaleString();
+}
+
+// Categorize org by NTEE code + name keywords
+function getOrgCategory(nteeCode, name) {
+  const code = (nteeCode || '').toUpperCase().replace(/Z$/, '');
+  const n = (name || '').toLowerCase();
+
+  // Specific NTEE codes first
+  if (code === 'K31') {
+    if (n.includes('pantry') || n.includes('pantries')) return { label: 'Food Pantry', css: 'pantry' };
+    return { label: 'Food Bank', css: 'foodbank' };
+  }
+  if (code === 'K34') return { label: 'Congregate Meals', css: 'meals' };
+  if (code === 'K35') return { label: 'Soup Kitchen', css: 'kitchen' };
+  if (code === 'K36') return { label: 'Meals on Wheels', css: 'meals' };
+  if (code === 'K30') return { label: 'Food Programs', css: 'food' };
+  if (code === 'K40') return { label: 'Nutrition', css: 'nutrition' };
+  if (code.startsWith('K')) return { label: 'Food & Nutrition', css: 'food' };
+
+  // Name-based detection for orgs without K-code
+  if (n.includes('food bank')) return { label: 'Food Bank', css: 'foodbank' };
+  if (n.includes('food pantry') || n.includes('pantry')) return { label: 'Food Pantry', css: 'pantry' };
+  if (n.includes('soup kitchen')) return { label: 'Soup Kitchen', css: 'kitchen' };
+  if (n.includes('meals on wheels')) return { label: 'Meals on Wheels', css: 'meals' };
+  if (n.includes('hunger') || n.includes('feeding') || n.includes('food rescue') || n.includes('food recovery')) return { label: 'Hunger Relief', css: 'hunger' };
+  if (n.includes('food')) return { label: 'Food Programs', css: 'food' };
+
+  // Non-food NTEE categories
+  if (code.startsWith('P')) return { label: 'Human Services', css: 'services' };
+  if (code.startsWith('T')) return { label: 'Philanthropy', css: 'philanthropy' };
+  if (code.startsWith('X')) return { label: 'Faith-Based', css: 'faith' };
+  if (code.startsWith('E')) return { label: 'Healthcare', css: 'healthcare' };
+  if (code.startsWith('B')) return { label: 'Education', css: 'education' };
+
+  return { label: 'Nonprofit', css: 'default' };
 }
 
 function renderResults(data, container) {
@@ -123,33 +125,34 @@ function renderResults(data, container) {
 
   container.innerHTML = data.organizations.map(org => {
     const ntee = getNteeName(org.ntee_code);
-    const foodBadge = isFoodRelated(org.ntee_code)
-      ? '<span class="directory-org-card__badge directory-org-card__badge--food">Food & Nutrition</span>'
-      : '';
+    const category = getOrgCategory(org.ntee_code, org.name);
+    const categoryBadge = `<span class="directory-org-card__badge directory-org-card__badge--${category.css}">${category.label}</span>`;
     const nteeBadge = org.ntee_code
-      ? `<span class="directory-org-card__badge">${org.ntee_code}</span>`
+      ? `<span class="directory-org-card__badge">${escapeHtml(org.ntee_code)}</span>`
+      : '';
+    const revBadge = org.income_amount
+      ? `<span class="directory-org-card__badge directory-org-card__badge--revenue">${fmtRevenue(org.income_amount)}</span>`
       : '';
 
     return `<article class="directory-org-card">
       <a href="/dashboards/nonprofit-profile.html?ein=${org.ein}" class="directory-org-card__name">${escapeHtml(org.name)}</a>
       <span class="directory-org-card__location">${escapeHtml(org.city || '')}, ${org.state || ''}</span>
-      <span class="directory-org-card__location" style="font-size:0.78rem;color:rgba(255,255,255,0.4)">${ntee}</span>
-      <div class="directory-org-card__badges">${foodBadge}${nteeBadge}</div>
+      <span class="directory-org-card__location" style="font-size:0.78rem;color:rgba(255,255,255,0.4)">${escapeHtml(ntee)}</span>
+      <div class="directory-org-card__badges">${categoryBadge}${revBadge}${nteeBadge}</div>
     </article>`;
   }).join('');
 }
 
-function renderPagination(data, container, query, state) {
+// Event delegation for pagination (prevents memory leak from per-button listeners)
+function renderPagination(data, container) {
   if (!container || data.num_pages <= 1) return;
 
   const current = data.cur_page;
-  const total = Math.min(data.num_pages, 40); // Cap at 1000 results (40 pages x 25)
+  const total = Math.min(data.num_pages, 40);
   const buttons = [];
 
-  // Previous
   buttons.push(`<button class="directory-pagination__btn" ${current === 0 ? 'disabled' : ''} data-page="${current - 1}">&laquo; Prev</button>`);
 
-  // Page numbers with ellipsis
   const range = buildPageRange(current, total);
   range.forEach(p => {
     if (p === '...') {
@@ -159,21 +162,9 @@ function renderPagination(data, container, query, state) {
     }
   });
 
-  // Next
   buttons.push(`<button class="directory-pagination__btn" ${current >= total - 1 ? 'disabled' : ''} data-page="${current + 1}">Next &raquo;</button>`);
 
   container.innerHTML = buttons.join('');
-
-  // Bind click handlers
-  container.querySelectorAll('button[data-page]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const page = parseInt(btn.dataset.page, 10);
-      if (!isNaN(page) && page >= 0) {
-        handleSearch(query, state, page);
-        document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
 }
 
 function buildPageRange(current, total) {
@@ -181,15 +172,11 @@ function buildPageRange(current, total) {
 
   const pages = [];
   pages.push(0);
-
   if (current > 3) pages.push('...');
-
   const start = Math.max(1, current - 1);
   const end = Math.min(total - 2, current + 1);
   for (let i = start; i <= end; i++) pages.push(i);
-
   if (current < total - 4) pages.push('...');
-
   pages.push(total - 1);
   return pages;
 }
@@ -206,6 +193,7 @@ function init() {
   const input = document.getElementById('directory-search-input');
   const select = document.getElementById('directory-state-select');
   const btn = document.getElementById('directory-search-btn');
+  const paginationEl = document.getElementById('directory-pagination');
 
   // Read URL params for initial state
   const params = new URLSearchParams(window.location.search);
@@ -251,6 +239,28 @@ function init() {
   if (select) {
     select.addEventListener('change', () => {
       handleSearch(input?.value || '', select.value, 0);
+    });
+  }
+
+  // Popular search chips
+  document.querySelectorAll('.directory-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const query = chip.dataset.query;
+      if (input) input.value = query;
+      handleSearch(query, select?.value || '', 0);
+    });
+  });
+
+  // Pagination — event delegation (single listener, no memory leak)
+  if (paginationEl) {
+    paginationEl.addEventListener('click', (e) => {
+      const btn2 = e.target.closest('button[data-page]');
+      if (!btn2 || btn2.disabled) return;
+      const page = parseInt(btn2.dataset.page, 10);
+      if (!isNaN(page) && page >= 0) {
+        handleSearch(currentQuery, currentState, page);
+        document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' });
+      }
     });
   }
 
