@@ -171,6 +171,28 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
 - Logo effects readable at all zoom levels (including 25% — client requirement)
 - Reduced motion preferences respected
 
+## Development Workflow (Jira + GitHub)
+
+All development work follows this branch-based workflow tied to Jira stories:
+
+1. **Pick a story** — user specifies the Jira issue key (e.g. "let's work on KAN-82")
+2. **Move to In Progress** — Claude transitions the story to In Progress in Jira before touching any code
+3. **Create branch** — named `KAN-XX-short-description` (e.g. `KAN-82-newsletter-notification`)
+4. **Do the work** — all commits reference the issue key: `KAN-82 Add admin notification to newsletter.php`
+5. **Push branch** — Claude pushes the branch to GitHub
+6. **Open PR** — PR title includes the issue key; GitHub Actions automatically moves the story to In Review
+7. **User merges PR** — the only step the user handles manually
+8. **GitHub Actions** — automatically moves the story to Done on merge
+
+### Jira Project
+- **Board**: KAN project at foodnforce.atlassian.net (Kanban)
+- **Transition IDs**: 21 = In Progress, 31 = In Review, 41 = Done
+- **MCP**: mcp-atlassian configured in `.mcp.json` (gitignored)
+- **GitHub integration**: GitHub for Atlassian app connected; commits/PRs with KAN keys appear on issue Development panel
+
+### Key Rule
+Never commit directly to master for story work — always use a branch and PR so the GitHub Actions workflow can update Jira automatically and the CI/CD pipeline runs before merge.
+
 ## Agent Framework
 
 ### Skills (3)
