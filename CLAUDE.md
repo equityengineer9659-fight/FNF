@@ -60,14 +60,14 @@ npm run admin                   # Start Express server for scraper + AI article 
 ├── docs/                  # Active documentation
 ├── tools/                 # Testing, deployment, governance utilities
 ├── vite.config.js         # Vite build config (auto-discovers *.html and blog/*.html)
-└── build-components.js    # Injects nav/footer/dashboard-tabs/scripts into all 66 pages before Vite builds
+└── build-components.js    # Injects nav/footer/dashboard-tabs/scripts into all 68 pages before Vite builds
 ```
 
-### Page Inventory (66 pages)
+### Page Inventory (68 pages)
 - **Core pages (7)**: index, about, services, resources, impact, contact, 404
 - **Blog hub (1)**: blog
 - **Hub pages at root (2)**: case-studies, templates-tools
-- **Dashboards (5)**: dashboards/food-insecurity (Overview), dashboards/food-access, dashboards/snap-safety-net, dashboards/food-prices, dashboards/food-banks — linked by shared tab navigation
+- **Dashboards (7)**: dashboards/food-insecurity (Overview), dashboards/food-access, dashboards/snap-safety-net, dashboards/food-prices, dashboards/food-banks, dashboards/nonprofit-directory, dashboards/nonprofit-profile — linked by shared tab navigation (6 tabs; profile shares the Directory tab)
 - **Articles (53)**: all in `blog/` directory (run `ls blog/` for full list)
 
 ### Case Studies
@@ -92,7 +92,7 @@ Case study cards also appear on `blog.html` and testimonials on `impact.html`.
 - Navigation arrays in `build-components.js`: `dashboardSubpages`, `blogSubpages`, `resourcesSubpages`
 
 ### Build Pipeline
-- `build-components.js` injects shared nav, footer, dashboard tabs, and script tags into all 66 pages before Vite builds
+- `build-components.js` injects shared nav, footer, dashboard tabs, and script tags into all 68 pages before Vite builds
 - `scripts/sync-blog.js` rebuilds blog.html card grid from article metadata (auto-run on build)
 - `scripts/generate-sitemap.js` generates sitemap.xml covering all public pages
 - ECharts is tree-shaken and code-split into a separate chunk loaded only on dashboard pages
@@ -101,7 +101,7 @@ Case study cards also appear on `blog.html` and testimonials on `impact.html`.
 AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHROPIC_API_KEY` in `.env`. Full workflow: Scraper tab → select sources → New Article tab → Generate with Claude → Preview → Save to blog/. Illustrations created separately by Claude Code for better quality. See `docs/current/blog-content-pipeline.md` for full guide.
 
 ### CSS Architecture
-- **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients → page-overrides → dashboards
+- **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients → page-overrides → dashboards → nonprofit-directory
 - **Design Tokens**: Centralized in `02-design-tokens.css` (colors, spacing, fonts, gradients, glass effects)
 - **Navigation**: Single source of truth in `03-navigation.css`
 - **Note**: `@layer` declarations NOT used — blocked by SLDS CDN dependency (un-layered SLDS overrides layered custom CSS)
@@ -128,6 +128,8 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard
   - `dashboards/food-prices.js` — Food Prices & Affordability dashboard
   - `dashboards/food-banks.js` — Food Bank Landscape dashboard
+  - `dashboards/nonprofit-directory.js` — Nonprofit Directory search (ProPublica API, debounced search, state filter, pagination)
+  - `dashboards/nonprofit-profile.js` — Nonprofit Profile with 6 ECharts (revenue trend, composition, expenses vs revenue, assets/liabilities, compensation, efficiency radar) + dynamic data-driven descriptions with conditional insights
 - **Production**: Source maps disabled, ESLint `no-console` rule enforced
 - **Unit Tests**: ~161 tests across 9 test files (vitest)
 
@@ -140,6 +142,8 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `GET /api/csrf-token.php` — single-use CSRF tokens (session-based)
   - `GET /api/dashboard-census.php` — Census Bureau ACS proxy (24hr file cache)
   - `GET /api/dashboard-bls.php` — BLS CPI food price proxy (7-day file cache)
+  - `GET /api/nonprofit-search.php` — ProPublica nonprofit search proxy (24hr file cache, params: q, state, page)
+  - `GET /api/nonprofit-org.php` — ProPublica org detail proxy (7-day file cache, param: ein)
 - **Security**: Rate limiting (60s cooldown), CSRF validation (`hash_equals()`), honeypot field, input sanitization (`htmlspecialchars()`), email validation (`FILTER_VALIDATE_EMAIL`), CRLF header injection prevention
 - **Recipient**: All form emails to `hello@food-n-force.com`
 

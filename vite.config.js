@@ -1,8 +1,12 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import { fileURLToPath, URL } from 'url';
+import dns from 'node:dns';
 import autoprefixer from 'autoprefixer';
 import { glob } from 'glob';
+
+// Force IPv4 for outbound connections (fixes ECONNRESET on this machine)
+dns.setDefaultResultOrder('ipv4first');
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -74,7 +78,33 @@ export default defineConfig({
     host: 'localhost',
     strictPort: true,
     open: false,
-    clearScreen: false
+    clearScreen: false,
+    proxy: {
+      '/api/nonprofit-search.php': {
+        target: 'https://projects.propublica.org',
+        changeOrigin: true,
+        rewrite: (path) => {
+          const url = new URL(path, 'http://localhost');
+          const q = url.searchParams.get('q') || '';
+          const state = url.searchParams.get('state') || '';
+          const page = url.searchParams.get('page') || '0';
+          const params = new URLSearchParams();
+          if (q) params.set('q', q);
+          if (state) params.set('state[id]', state);
+          params.set('page', page);
+          return `/nonprofits/api/v2/search.json?${params.toString()}`;
+        }
+      },
+      '/api/nonprofit-org.php': {
+        target: 'https://projects.propublica.org',
+        changeOrigin: true,
+        rewrite: (path) => {
+          const url = new URL(path, 'http://localhost');
+          const ein = url.searchParams.get('ein') || '';
+          return `/nonprofits/api/v2/organizations/${ein}.json`;
+        }
+      }
+    }
   },
 
   preview: {

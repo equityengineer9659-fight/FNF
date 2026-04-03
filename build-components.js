@@ -13,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Pages that should highlight "Dashboards" in navigation
 const dashboardSubpages = [
   'food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks',
+  'nonprofit-directory', 'nonprofit-profile',
 ];
 
 // Pages that should highlight "Blog" in navigation
@@ -151,6 +152,8 @@ const components = {
       'snap-safety-net': 'snap-safety-net',
       'food-prices': 'food-prices',
       'food-banks': 'food-banks',
+      'nonprofit-directory': 'nonprofit-directory',
+      'nonprofit-profile': 'nonprofit-profile',
     };
     if (dashboardJsMap[pageName]) {
       scripts += `\n    <script type="module" src="/src/js/dashboards/${dashboardJsMap[pageName]}.js" defer></script>`;
@@ -165,9 +168,12 @@ const components = {
       { slug: 'snap-safety-net', label: 'SNAP & Safety Net' },
       { slug: 'food-prices', label: 'Food Prices' },
       { slug: 'food-banks', label: 'Food Banks' },
+      { slug: 'nonprofit-directory', label: 'Nonprofit Directory' },
     ];
+    // Profile page highlights the Directory tab
+    const activeTab = currentPage === 'nonprofit-profile' ? 'nonprofit-directory' : currentPage;
     const items = tabs.map(t =>
-      `            <li role="presentation"><a href="/dashboards/${t.slug}.html" class="dashboard-tabs__tab" role="tab"${t.slug === currentPage ? ' aria-current="page"' : ''}>${t.label}</a></li>`
+      `            <li role="presentation"><a href="/dashboards/${t.slug}.html" class="dashboard-tabs__tab" role="tab"${t.slug === activeTab ? ' aria-current="page"' : ''}>${t.label}</a></li>`
     ).join('\n');
     return `    <!-- Dashboard Tabs -->
     <nav class="dashboard-tabs" aria-label="Dashboard navigation">
@@ -198,7 +204,7 @@ function processHtmlFile(filePath, pageName) {
   }
 
   // Inject or replace dashboard tabs on dashboard pages (between </nav> and <main>)
-  const dashboardSlugs = ['food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks'];
+  const dashboardSlugs = ['food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks', 'nonprofit-directory', 'nonprofit-profile'];
   if (dashboardSlugs.includes(pageName)) {
     const existingTabsPattern = /    <!-- Dashboard Tabs -->[\s\S]*?<\/nav>\n?/;
     if (existingTabsPattern.test(html)) {
@@ -308,7 +314,7 @@ function buildComponents() {
   });
 
   // Dashboard pages under dashboards/
-  const dashboardPages = ['food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks'];
+  const dashboardPages = ['food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks', 'nonprofit-directory', 'nonprofit-profile'];
 
   dashboardPages.forEach(page => {
     const filePath = path.join(__dirname, 'dashboards', `${page}.html`);

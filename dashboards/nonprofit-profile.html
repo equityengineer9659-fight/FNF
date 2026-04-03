@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Profile - Food-N-Force</title>
+
+    <meta name="description" content="Detailed nonprofit profile with IRS 990 financial analytics — revenue trends, expense breakdowns, asset growth, and efficiency metrics.">
+    <meta name="keywords" content="nonprofit profile, IRS 990, financial analytics, revenue trends, expense breakdown, asset growth, efficiency metrics, food bank">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://food-n-force.com/dashboards/nonprofit-profile.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <meta property="og:title" content="Organization Profile - Food-N-Force">
+    <meta property="og:description" content="Detailed nonprofit profile with IRS 990 financial analytics — revenue trends, expense breakdowns, asset growth, and efficiency metrics.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://food-n-force.com/dashboards/nonprofit-profile.html">
+    <meta property="og:image" content="https://food-n-force.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Organization Profile - Food-N-Force">
+    <meta name="twitter:description" content="Detailed nonprofit profile with IRS 990 financial analytics — revenue trends, expense breakdowns, asset growth, and efficiency metrics.">
+    <meta name="twitter:image" content="https://food-n-force.com/og-image.png">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org", "@type": "WebPage",
+        "name": "Organization Profile",
+        "description": "Detailed nonprofit profile with IRS 990 financial analytics — revenue trends, expense breakdowns, asset growth, and efficiency metrics.",
+        "url": "https://food-n-force.com/dashboards/nonprofit-profile.html",
+        "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://food-n-force.com" }
+    }
+    </script>
+
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--dashboard" id="page-top">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link">Blog</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">Dashboards</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link">Blog</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Tabs -->
+    <nav class="dashboard-tabs" aria-label="Dashboard navigation">
+        <div class="dashboard-tabs__container">
+            <ul class="dashboard-tabs__list" role="tablist">
+            <li role="presentation"><a href="/dashboards/food-insecurity.html" class="dashboard-tabs__tab" role="tab">Overview</a></li>
+            <li role="presentation"><a href="/dashboards/food-access.html" class="dashboard-tabs__tab" role="tab">Food Access</a></li>
+            <li role="presentation"><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab" role="tab">SNAP & Safety Net</a></li>
+            <li role="presentation"><a href="/dashboards/food-prices.html" class="dashboard-tabs__tab" role="tab">Food Prices</a></li>
+            <li role="presentation"><a href="/dashboards/food-banks.html" class="dashboard-tabs__tab" role="tab">Food Banks</a></li>
+            <li role="presentation"><a href="/dashboards/nonprofit-directory.html" class="dashboard-tabs__tab" role="tab" aria-current="page">Nonprofit Directory</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+
+        <!-- Hero Section (populated dynamically by JS) -->
+        <section class="dashboard-hero profile-hero" aria-label="Organization profile">
+            <div class="profile-hero__back">
+                <a href="/dashboards/nonprofit-directory.html" class="dashboard-back-link">&larr; Back to Directory</a>
+            </div>
+            <h1 id="org-name" class="slds-text-heading_large">Loading organization...</h1>
+            <div id="org-meta" class="profile-header__meta">
+                <span id="org-location" class="profile-header__meta-badge">&mdash;</span>
+                <span id="org-ein" class="profile-header__meta-badge">&mdash;</span>
+                <span id="org-ntee" class="profile-header__meta-badge">&mdash;</span>
+                <span id="org-status" class="profile-header__meta-badge">&mdash;</span>
+            </div>
+            <div class="dashboard-hero__stats" aria-label="Key financial statistics">
+                <div class="dashboard-stat">
+                    <span id="stat-revenue" class="dashboard-stat__number">&mdash;</span>
+                    <p class="dashboard-stat__label">Total Revenue</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span id="stat-expenses" class="dashboard-stat__number">&mdash;</span>
+                    <p class="dashboard-stat__label">Total Expenses</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span id="stat-assets" class="dashboard-stat__number">&mdash;</span>
+                    <p class="dashboard-stat__label">Net Assets</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span id="stat-contributions" class="dashboard-stat__number">&mdash;</span>
+                    <p class="dashboard-stat__label">Contributions</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <div id="profile-loading" class="directory-skeleton" aria-label="Loading organization data">
+            <div class="directory-skeleton-card"></div>
+            <div class="directory-skeleton-card"></div>
+            <div class="directory-skeleton-card"></div>
+        </div>
+
+        <!-- Error State -->
+        <div id="profile-error" class="directory-empty-state" style="display:none">
+            <p>Unable to load organization data. <a href="/dashboards/nonprofit-directory.html">Return to directory</a></p>
+        </div>
+
+        <!-- Chart 1: Revenue Trend -->
+        <section class="dashboard-section scroll-reveal" aria-label="Revenue over time" id="section-revenue-trend" style="display:none">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue Trend</h2></div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-revenue-trend" class="dashboard-chart" role="img" aria-label="Area chart showing total revenue over multiple filing years"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Revenue Over Time</h3>
+                        <p class="dashboard-info__text" id="info-text-revenue-trend">Loading analysis...</p>
+                        <div class="dashboard-info__insight" id="info-insight-revenue-trend" style="display:none"></div>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
+                            <span class="meta-item" id="info-meta-revenue-trend"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 2: Revenue Composition -->
+        <section class="dashboard-section scroll-reveal" aria-label="Revenue composition" id="section-revenue-composition" style="display:none">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue Composition</h2></div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-revenue-composition" class="dashboard-chart" role="img" aria-label="Stacked bar chart showing revenue sources across filing years"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Where the Money Comes From</h3>
+                        <p class="dashboard-info__text" id="info-text-revenue-composition">Loading analysis...</p>
+                        <div class="dashboard-info__insight" id="info-insight-revenue-composition" style="display:none"></div>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
+                            <span class="meta-item" id="info-meta-revenue-composition"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 3: Expenses vs Revenue -->
+        <section class="dashboard-section scroll-reveal" aria-label="Expenses versus revenue" id="section-expenses-vs-revenue" style="display:none">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Expenses vs Revenue</h2></div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-expenses-vs-revenue" class="dashboard-chart" role="img" aria-label="Grouped bar chart comparing total revenue and expenses by year"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Operating Surplus or Deficit</h3>
+                        <p class="dashboard-info__text" id="info-text-expenses">Loading analysis...</p>
+                        <div class="dashboard-info__insight" id="info-insight-expenses" style="display:none"></div>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
+                            <span class="meta-item" id="info-meta-expenses"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 4: Asset & Liability Growth -->
+        <section class="dashboard-section scroll-reveal" aria-label="Assets and liabilities over time" id="section-assets-liabilities" style="display:none">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Assets &amp; Liabilities</h2></div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-assets-liabilities" class="dashboard-chart" role="img" aria-label="Area chart showing total assets, liabilities, and net assets over time"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Balance Sheet Growth</h3>
+                        <p class="dashboard-info__text" id="info-text-assets">Loading analysis...</p>
+                        <div class="dashboard-info__insight" id="info-insight-assets" style="display:none"></div>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
+                            <span class="meta-item" id="info-meta-assets"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 5: Compensation Analysis -->
+        <section class="dashboard-section scroll-reveal" aria-label="Compensation analysis" id="section-compensation" style="display:none">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Compensation Analysis</h2></div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-compensation" class="dashboard-chart" role="img" aria-label="Stacked bar chart showing officer compensation, salaries, and payroll taxes"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">People Costs</h3>
+                        <p class="dashboard-info__text" id="info-text-compensation">Loading analysis...</p>
+                        <div class="dashboard-info__insight" id="info-insight-compensation" style="display:none"></div>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
+                            <span class="meta-item" id="info-meta-compensation"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 6: Operational Efficiency -->
+        <section class="dashboard-section scroll-reveal" aria-label="Operational efficiency metrics" id="section-fundraising" style="display:none">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Operational Efficiency</h2></div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-fundraising" class="dashboard-chart" role="img" aria-label="Radar chart showing operational efficiency metrics"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">How Efficiently Does It Operate?</h3>
+                        <p class="dashboard-info__text" id="info-text-efficiency">Loading analysis...</p>
+                        <div class="dashboard-info__insight" id="info-insight-efficiency" style="display:none"></div>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
+                            <span class="meta-item" id="info-meta-efficiency"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology & Data Sources -->
+        <section class="dashboard-narrative scroll-reveal" aria-label="Methodology and data sources">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Methodology & Data Sources</h2>
+                    </div>
+
+                    <div class="dashboard-source-grid">
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">IRS</div>
+                            <h3 class="dashboard-source-card__name">IRS Form 990</h3>
+                            <p class="dashboard-source-card__desc">Annual information return filed by tax-exempt organizations. Includes revenue, expenses, assets, liabilities, compensation, and program service accomplishments.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual filings</span>
+                                <span>6-18 month lag</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">PP</div>
+                            <h3 class="dashboard-source-card__name">ProPublica Nonprofit Explorer</h3>
+                            <p class="dashboard-source-card__desc">Aggregates IRS Exempt Organizations Business Master File and annual financial extracts into a searchable API covering every registered 501(c)(3) organization.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Live API</span>
+                                <span>All 501(c)(3) orgs</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">BMF</div>
+                            <h3 class="dashboard-source-card__name">IRS EO Business Master File</h3>
+                            <p class="dashboard-source-card__desc">The authoritative registry of tax-exempt organizations — provides EIN, name, address, NTEE classification, ruling date, and current exempt status.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Monthly updates</span>
+                                <span>Organization registry</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-methodology">
+                        <div class="dashboard-methodology__row">
+                            <div class="dashboard-methodology__item">
+                                <h3>What This Profile Shows</h3>
+                                <p>Financial data is extracted from IRS Form 990 filings across all available years. Revenue, expenses, assets, liabilities, and compensation figures come directly from the filed returns. Efficiency ratios are calculated from these reported values — not estimated or modeled.</p>
+                            </div>
+                            <div class="dashboard-methodology__item">
+                                <h3>Data Limitations</h3>
+                                <p>Not all organizations file Form 990 with detailed financial data — some file 990-EZ or 990-N (e-Postcard) which contain fewer fields. Filing data typically becomes available 6-18 months after an organization's fiscal year end. Charts display only years with available data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-narrative__content dashboard-narrative__content--cta">
+                    <h2 class="dashboard-narrative__heading">Turn Data Into Action</h2>
+                    <p class="dashboard-narrative__text">Every food bank can benefit from better technology. Food-N-Force specializes in Salesforce implementations for food relief — inventory tracking, volunteer management, funder reporting, and operational modernization.</p>
+                    <div class="dashboard-cta__buttons">
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--primary">Talk With Us About Dashboard Strategy</a>
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">See Our Services</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+    <script type="module" src="/src/js/dashboards/nonprofit-profile.js" defer></script>
+</body>
+</html>

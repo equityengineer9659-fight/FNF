@@ -79,6 +79,7 @@ const pages = [
   { path: 'blog/roadrunner-food-bank-salesforce.html', priority: '0.7', changefreq: 'monthly' },
   { path: 'blog/food-bank-salesforce-use-cases.html', priority: '0.7', changefreq: 'monthly' },
   { path: 'blog/food-bank-digital-supply-chain.html', priority: '0.7', changefreq: 'monthly' },
+  { path: 'dashboards/nonprofit-directory.html', priority: '0.8', changefreq: 'monthly' },
   // Dashboards
   { path: 'dashboards/food-insecurity.html', priority: '0.8', changefreq: 'monthly' },
   { path: 'dashboards/food-access.html', priority: '0.8', changefreq: 'monthly' },
