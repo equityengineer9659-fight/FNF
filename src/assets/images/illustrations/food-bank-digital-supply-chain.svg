@@ -1,0 +1,146 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Digital supply chain flow showing warehouse management, IoT cold chain monitoring, route optimization, and delivery tracking">
+  <defs>
+    <linearGradient id="sc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="sc-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="sc-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="sc-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="sc-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="sc-flow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.5"/>
+      <stop offset="33%" style="stop-color:#0ea5e9;stop-opacity:0.5"/>
+      <stop offset="66%" style="stop-color:#10b981;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.5"/>
+    </linearGradient>
+    <radialGradient id="sc-blue-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="sc-cyan-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="sc-green-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="sc-amber-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="sc-glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#sc-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="24" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">DIGITAL SUPPLY CHAIN — END-TO-END VISIBILITY</text>
+
+  <!-- === FLOW ARROW (thick gradient line behind stages) === -->
+  <line x1="155" y1="185" x2="695" y2="185" stroke="url(#sc-flow)" stroke-width="4" stroke-linecap="round"/>
+  <!-- Arrow head -->
+  <polygon points="692,178 705,185 692,192" fill="rgba(245,158,11,0.5)"/>
+
+  <!-- Data pulse dots along the arrow -->
+  <circle cx="215" cy="185" r="3" fill="rgba(1,118,211,0.6)"/>
+  <circle cx="280" cy="185" r="2.5" fill="rgba(14,165,233,0.5)"/>
+  <circle cx="345" cy="185" r="3" fill="rgba(14,165,233,0.6)"/>
+  <circle cx="410" cy="185" r="2.5" fill="rgba(16,185,129,0.5)"/>
+  <circle cx="475" cy="185" r="3" fill="rgba(16,185,129,0.6)"/>
+  <circle cx="540" cy="185" r="2.5" fill="rgba(245,158,11,0.4)"/>
+  <circle cx="605" cy="185" r="3" fill="rgba(245,158,11,0.5)"/>
+
+  <!-- === STAGE 1: WAREHOUSE (blue) === -->
+  <circle cx="120" cy="165" r="65" fill="url(#sc-blue-glow)"/>
+  <rect x="55" y="85" rx="14" ry="14" width="130" height="160" fill="rgba(1,118,211,0.1)" stroke="rgba(1,118,211,0.4)" stroke-width="1.5"/>
+  <!-- Inventory/box icon -->
+  <rect x="97" y="105" width="46" height="35" rx="3" fill="none" stroke="url(#sc-blue)" stroke-width="2"/>
+  <line x1="97" y1="118" x2="143" y2="118" stroke="url(#sc-blue)" stroke-width="1.5"/>
+  <line x1="120" y1="118" x2="120" y2="140" stroke="url(#sc-blue)" stroke-width="1.5"/>
+  <text x="120" y="163" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="rgba(1,118,211,0.9)" text-anchor="middle">Warehouse</text>
+  <text x="120" y="180" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Inventory Mgmt</text>
+  <text x="120" y="225" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.3)" text-anchor="middle">Real-time Stock</text>
+
+  <!-- === STAGE 2: COLD CHAIN (cyan) === -->
+  <circle cx="310" cy="165" r="65" fill="url(#sc-cyan-glow)"/>
+  <rect x="245" y="85" rx="14" ry="14" width="130" height="160" fill="rgba(14,165,233,0.1)" stroke="rgba(14,165,233,0.4)" stroke-width="1.5"/>
+  <!-- Snowflake/thermometer icon -->
+  <line x1="310" y1="100" x2="310" y2="130" stroke="url(#sc-cyan)" stroke-width="2"/>
+  <line x1="302" y1="108" x2="318" y2="108" stroke="url(#sc-cyan)" stroke-width="1.5"/>
+  <line x1="304" y1="115" x2="316" y2="115" stroke="url(#sc-cyan)" stroke-width="1.5"/>
+  <line x1="302" y1="122" x2="318" y2="122" stroke="url(#sc-cyan)" stroke-width="1.5"/>
+  <circle cx="310" cy="133" r="5" fill="url(#sc-cyan)"/>
+  <text x="310" y="163" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="rgba(14,165,233,0.9)" text-anchor="middle">Cold Chain</text>
+  <text x="310" y="180" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Temp Monitoring</text>
+  <!-- IoT badge -->
+  <rect x="334" y="92" rx="6" ry="6" width="32" height="16" fill="rgba(14,165,233,0.25)" stroke="rgba(14,165,233,0.5)" stroke-width="1"/>
+  <text x="350" y="103" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(14,165,233,0.9)" text-anchor="middle">IoT</text>
+  <text x="310" y="225" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.3)" text-anchor="middle">Sensor Alerts</text>
+
+  <!-- === STAGE 3: ROUTES (green) === -->
+  <circle cx="500" cy="165" r="65" fill="url(#sc-green-glow)"/>
+  <rect x="435" y="85" rx="14" ry="14" width="130" height="160" fill="rgba(16,185,129,0.1)" stroke="rgba(16,185,129,0.4)" stroke-width="1.5"/>
+  <!-- Map/path icon -->
+  <path d="M480,110 L490,100 L510,120 L530,105" fill="none" stroke="url(#sc-green)" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="480" cy="110" r="3" fill="url(#sc-green)"/>
+  <circle cx="530" cy="105" r="3" fill="url(#sc-green)"/>
+  <circle cx="500" cy="125" r="2" fill="rgba(16,185,129,0.6)"/>
+  <text x="500" y="163" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="rgba(16,185,129,0.9)" text-anchor="middle">Routes</text>
+  <text x="500" y="180" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Optimization</text>
+  <!-- 50% Faster badge -->
+  <rect x="524" y="92" rx="6" ry="6" width="36" height="16" fill="rgba(16,185,129,0.25)" stroke="rgba(16,185,129,0.5)" stroke-width="1"/>
+  <text x="542" y="103" font-family="system-ui,sans-serif" font-size="7" font-weight="700" fill="rgba(16,185,129,0.9)" text-anchor="middle">50%↑</text>
+  <text x="500" y="225" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.3)" text-anchor="middle">AI-Optimized</text>
+
+  <!-- === STAGE 4: DELIVERY (amber) === -->
+  <circle cx="690" cy="165" r="65" fill="url(#sc-amber-glow)"/>
+  <rect x="625" y="85" rx="14" ry="14" width="130" height="160" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/>
+  <!-- Truck + checkmark icon -->
+  <rect x="665" y="108" width="30" height="20" rx="3" fill="none" stroke="url(#sc-amber)" stroke-width="1.5"/>
+  <rect x="695" y="115" width="15" height="13" rx="2" fill="none" stroke="url(#sc-amber)" stroke-width="1.5"/>
+  <circle cx="675" cy="130" r="4" fill="none" stroke="url(#sc-amber)" stroke-width="1.5"/>
+  <circle cx="700" cy="130" r="4" fill="none" stroke="url(#sc-amber)" stroke-width="1.5"/>
+  <!-- Checkmark -->
+  <polyline points="682,100 686,105 694,96" fill="none" stroke="rgba(16,185,129,0.8)" stroke-width="2" stroke-linecap="round"/>
+  <text x="690" y="163" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="rgba(245,158,11,0.9)" text-anchor="middle">Delivery</text>
+  <text x="690" y="180" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Last Mile</text>
+  <text x="690" y="225" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.3)" text-anchor="middle">Proof of Delivery</text>
+
+  <!-- Dashed stage connectors (above flow line, between stage rectangles) -->
+  <line x1="185" y1="165" x2="245" y2="165" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="375" y1="165" x2="435" y2="165" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="565" y1="165" x2="625" y2="165" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Bottom metric -->
+  <text x="400" y="310" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="rgba(14,165,233,0.6)" text-anchor="middle">60% Less Compliance Reporting</text>
+
+  <!-- Decorative horizontal rule -->
+  <line x1="200" y1="330" x2="600" y2="330" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <!-- Legend -->
+  <circle cx="200" cy="360" r="4" fill="url(#sc-blue)"/>
+  <text x="210" y="364" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Cloud Platform</text>
+  <circle cx="330" cy="360" r="4" fill="url(#sc-cyan)"/>
+  <text x="340" y="364" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">IoT Sensors</text>
+  <circle cx="440" cy="360" r="4" fill="url(#sc-green)"/>
+  <text x="450" y="364" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Mobile Apps</text>
+  <text x="780" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.2)" text-anchor="end">Gradient arrow = real-time data flow</text>
+</svg>

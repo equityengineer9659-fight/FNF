@@ -1,0 +1,109 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Growth chart showing San Antonio Food Bank scaling fundraising and volunteer operations during demand surge">
+  <defs>
+    <linearGradient id="safb-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="safb-demand" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="safb-demand-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.02"/>
+    </linearGradient>
+    <linearGradient id="safb-fund" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="safb-vol" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="safb-milestone" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+    <radialGradient id="safb-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="safb-blur">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#safb-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="24" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">SAN ANTONIO FOOD BANK — SCALING UNDER PRESSURE</text>
+
+  <!-- Grid lines -->
+  <line x1="120" y1="60" x2="120" y2="320" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <line x1="120" y1="320" x2="720" y2="320" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <line x1="120" y1="240" x2="720" y2="240" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,6"/>
+  <line x1="120" y1="160" x2="720" y2="160" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,6"/>
+  <line x1="120" y1="80" x2="720" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,6"/>
+
+  <!-- Glow behind demand curve peak -->
+  <ellipse cx="520" cy="140" rx="120" ry="80" fill="url(#safb-glow)"/>
+
+  <!-- Demand growth curve (green) — area fill -->
+  <path d="M120,300 C200,295 280,280 340,240 C400,200 440,120 500,80 C560,60 620,55 720,50 L720,320 L120,320 Z" fill="url(#safb-demand-fill)"/>
+
+  <!-- Demand growth curve (green) — stroke -->
+  <path d="M120,300 C200,295 280,280 340,240 C400,200 440,120 500,80 C560,60 620,55 720,50" fill="none" stroke="url(#safb-demand)" stroke-width="3" filter="url(#safb-blur)"/>
+  <text x="730" y="52" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="rgba(16,185,129,0.8)" text-anchor="start">Demand</text>
+
+  <!-- Fundraising track (amber) -->
+  <path d="M120,310 C200,308 280,300 340,275 C400,250 440,190 500,155 C560,135 620,125 720,118" fill="none" stroke="url(#safb-fund)" stroke-width="2.5" stroke-dasharray="8,4"/>
+  <text x="730" y="120" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="rgba(245,158,11,0.8)" text-anchor="start">Fundraising</text>
+
+  <!-- Volunteers track (purple) -->
+  <path d="M120,315 C200,312 280,308 340,290 C400,268 440,215 500,185 C560,168 620,160 720,155" fill="none" stroke="url(#safb-vol)" stroke-width="2.5" stroke-dasharray="8,4"/>
+  <text x="730" y="157" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="rgba(139,92,246,0.8)" text-anchor="start">Volunteers</text>
+
+  <!-- Milestone markers — vertical dashed lines -->
+  <!-- Pre-Crisis -->
+  <line x1="200" y1="40" x2="200" y2="330" stroke="rgba(1,118,211,0.2)" stroke-width="1" stroke-dasharray="4,4"/>
+  <rect x="168" y="333" width="64" height="18" rx="4" fill="url(#safb-milestone)" opacity="0.7"/>
+  <text x="200" y="345" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="white" text-anchor="middle">Pre-Crisis</text>
+
+  <!-- Crisis Peak -->
+  <line x1="440" y1="40" x2="440" y2="330" stroke="rgba(1,118,211,0.2)" stroke-width="1" stroke-dasharray="4,4"/>
+  <rect x="405" y="333" width="70" height="18" rx="4" fill="url(#safb-milestone)" opacity="0.7"/>
+  <text x="440" y="345" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="white" text-anchor="middle">Crisis Peak</text>
+
+  <!-- Sustained Scale -->
+  <line x1="640" y1="40" x2="640" y2="330" stroke="rgba(1,118,211,0.2)" stroke-width="1" stroke-dasharray="4,4"/>
+  <rect x="596" y="333" width="88" height="18" rx="4" fill="url(#safb-milestone)" opacity="0.7"/>
+  <text x="640" y="345" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="white" text-anchor="middle">Sustained Scale</text>
+
+  <!-- Metric callout badges -->
+  <!-- Rapid Campaigns -->
+  <rect x="240" y="170" width="100" height="30" rx="6" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+  <text x="290" y="183" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(245,158,11,0.9)" text-anchor="middle">Rapid</text>
+  <text x="290" y="194" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(245,158,11,0.9)" text-anchor="middle">Campaigns</text>
+
+  <!-- Donor Engagement -->
+  <rect x="430" y="85" width="108" height="30" rx="6" fill="rgba(14,165,233,0.12)" stroke="rgba(14,165,233,0.3)" stroke-width="1"/>
+  <text x="484" y="98" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(14,165,233,0.9)" text-anchor="middle">Donor</text>
+  <text x="484" y="109" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(14,165,233,0.9)" text-anchor="middle">Engagement</text>
+
+  <!-- Scaled Ops -->
+  <rect x="610" y="70" width="88" height="30" rx="6" fill="rgba(139,92,246,0.12)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="654" y="83" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(139,92,246,0.9)" text-anchor="middle">Scaled</text>
+  <text x="654" y="94" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(139,92,246,0.9)" text-anchor="middle">Ops</text>
+
+  <!-- Legend -->
+  <line x1="20" y1="382" x2="40" y2="382" stroke="#10b981" stroke-width="2.5"/>
+  <text x="46" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Demand Growth</text>
+  <line x1="148" y1="382" x2="168" y2="382" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="174" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Fundraising Scale</text>
+  <line x1="290" y1="382" x2="310" y2="382" stroke="#8b5cf6" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="316" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Volunteer Scale</text>
+  <circle cx="430" cy="382" r="5" fill="url(#safb-milestone)" opacity="0.7"/>
+  <text x="440" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Milestone Markers</text>
+</svg>

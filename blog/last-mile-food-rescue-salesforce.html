@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last Mile Food Rescue: Real-Time Logistics on Salesforce - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="How Last Mile Food Rescue built geolocation-powered logistics, donor tracking, and volunteer dispatch on Salesforce to optimize food rescue coordination.">
+    <meta name="keywords" content="food bank technology, nonprofit Salesforce, food rescue logistics, volunteer dispatch, food bank software">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://food-n-force.com/blog/last-mile-food-rescue-salesforce.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Last Mile Food Rescue: Real-Time Logistics on Salesforce - Food-N-Force">
+    <meta property="og:description" content="How Last Mile Food Rescue built geolocation-powered logistics, donor tracking, and volunteer dispatch on Salesforce to optimize food rescue coordination.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://food-n-force.com/blog/last-mile-food-rescue-salesforce.html">
+    <meta property="og:image" content="https://food-n-force.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2025-05-13">
+    <meta property="article:section" content="Case Studies">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Last Mile Food Rescue: Real-Time Logistics on Salesforce - Food-N-Force">
+    <meta name="twitter:description" content="How Last Mile Food Rescue built geolocation-powered logistics, donor tracking, and volunteer dispatch on Salesforce to optimize food rescue coordination.">
+    <meta name="twitter:image" content="https://food-n-force.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Last Mile Food Rescue: Real-Time Logistics on Salesforce",
+      "description": "How Last Mile Food Rescue built geolocation-powered logistics, donor tracking, and volunteer dispatch on Salesforce to optimize food rescue coordination.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "datePublished": "2025-05-13",
+      "url": "https://food-n-force.com/blog/last-mile-food-rescue-salesforce.html",
+      "image": "https://food-n-force.com/og-image.png",
+      "articleSection": "Case Studies",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link">Dashboards</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link" aria-current="page">Blog</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link">Dashboards</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link" aria-current="page">Blog</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="/blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--case-studies">Case Studies</span>
+                <h1 id="article-title" class="article-hero__title">Last Mile Food Rescue: Real-Time Logistics on Salesforce</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2025-05-13">May 2025</time>
+                    <span>5 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+    Food rescue operates on a fundamentally different clock than food banking. When a grocery store has 200 pounds of produce that will expire tomorrow, the window between "available" and "wasted" is measured in hours, not days. Last Mile Food Rescue was founded to solve exactly this problem: connecting food donors with volunteer drivers who can transport perishable surplus to community organizations before it spoils. The challenge was building a logistics platform fast enough to match the urgency of the food itself. They built it on Salesforce.
+</p>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="/src/assets/images/illustrations/last-mile-food-rescue-salesforce.svg" alt="Geolocation-based food rescue matching showing donors, drivers, and recipients connected in real-time" width="800" height="400" loading="lazy">
+</figure>
+
+<h2>The Challenge: Perishable Food Demands Real-Time Coordination</h2>
+
+<p>
+    Traditional food banking operates on warehouse logistics — food arrives at a central facility, is sorted and stored, and is distributed on a scheduled basis. Food rescue inverts this model. There is no warehouse. Food moves directly from donor to recipient, and the volunteer driver is the only link in the chain. If a driver is not available when a donation is posted, the food does not get rescued. If a driver picks up the food but there is no recipient organization ready to receive it, the food still goes to waste.
+</p>
+
+<p>
+    Before building their Salesforce-based platform, Last Mile Food Rescue coordinated rescues through a combination of group text messages, phone calls, and a shared Google Sheet. A staff coordinator would receive a call from a donor — typically a grocery store, restaurant, or caterer — and then manually work through a list of available drivers to find someone who could make the pickup. The coordinator would simultaneously contact recipient organizations to confirm they could accept the donation. On a busy day, a single coordinator might be managing five or six active rescues simultaneously, each requiring real-time communication with three parties.
+</p>
+
+<p>
+    The manual approach worked when Last Mile operated in a single city with a small pool of donors and drivers. As the organization expanded to multiple metro areas, the coordination complexity exceeded what any individual could manage through phone and text. Rescues were being missed not because drivers were unavailable, but because the coordinator could not process the matching fast enough. Food was expiring while the logistics coordination was still in progress.
+</p>
+
+<h2>The Solution: Geolocation-Powered Dispatch on Salesforce</h2>
+
+<p>
+    Last Mile Food Rescue built its logistics platform on Salesforce, integrating geolocation services, automated workflow rules, and a mobile-first volunteer interface. The system was designed around a single principle: minimize the time between a donor posting a rescue and a driver accepting it.
+</p>
+
+<p>
+    When a food donor reports available surplus — either through a Salesforce Experience Cloud portal or a simple SMS interface — the system creates a rescue record with the donor's location, the type and estimated weight of food, and the pickup window. Salesforce immediately queries the volunteer driver database, filtering by geographic proximity, current availability status, and vehicle capacity. Drivers within a configurable radius receive a push notification with the rescue details and a one-tap accept button.
+</p>
+
+<aside class="article-pullquote">
+    <blockquote>
+        <p>In food rescue, twenty minutes is the difference between feeding a family and filling a dumpster. Our entire platform is built around compressing that response window.</p>
+    </blockquote>
+</aside>
+
+<p>
+    Once a driver accepts, the system generates an optimized route from the driver's current location to the donor, and then from the donor to the nearest available recipient organization. Recipient matching runs in parallel with driver matching — the system identifies organizations within delivery range that have posted current capacity to receive the food category being rescued. The driver sees the complete route, estimated times, and contact information for both the donor and recipient on their mobile device.
+</p>
+
+<p>
+    Real-time tracking allows the coordination team to monitor all active rescues on a single dashboard. Each rescue shows its current status — posted, driver matched, en route to donor, food picked up, en route to recipient, delivered — with automatic status updates triggered by the driver's GPS location. If a rescue stalls at any stage — a driver who accepted but has not moved toward the donor within 15 minutes, for example — the system automatically escalates to a coordinator and begins querying backup drivers.
+</p>
+
+<h2>The Technology Stack</h2>
+
+<p>
+    The platform leverages several Salesforce capabilities in combination. Custom objects model the core entities: Donors, Drivers, Recipients, and Rescues. Each Rescue record is a junction connecting a Donor, a Driver, and a Recipient, with fields tracking food type, weight, pickup and delivery timestamps, and status. Flow automations handle the matching logic, notification dispatch, and escalation rules. Salesforce Maps provides the geolocation layer for proximity calculations and route optimization.
+</p>
+
+<p>
+    The volunteer-facing interface was built on Salesforce Experience Cloud, optimized for mobile browsers. Drivers do not need to install a native app — they access the platform through a mobile-responsive web portal. This design decision was intentional: reducing friction for volunteer onboarding. A new driver can register, complete a brief orientation module, and accept their first rescue within 20 minutes of signing up.
+</p>
+
+<p>
+    The donor interface is even simpler. Repeat donors — grocery stores and restaurants that post rescues regularly — have portal accounts where they can submit a rescue request in under 60 seconds. First-time or infrequent donors can submit a rescue via SMS, which a Salesforce integration parses into a rescue record with minimal coordinator intervention.
+</p>
+
+<h2>The Results: Speed and Scale</h2>
+
+<div class="article-stats-block">
+    <div class="article-stat">
+        <span class="article-stat__number">8min</span>
+        <span class="article-stat__label">Average time from posting to driver match</span>
+    </div>
+    <div class="article-stat">
+        <span class="article-stat__number">92%</span>
+        <span class="article-stat__label">Rescue completion rate</span>
+    </div>
+    <div class="article-stat">
+        <span class="article-stat__number">3x</span>
+        <span class="article-stat__label">Increase in monthly rescues after platform launch</span>
+    </div>
+</div>
+
+<p>
+    The most critical metric is response time. Before the platform, the average time from a donor call to a confirmed driver was 45 minutes to an hour, with many rescues taking longer. After launch, the average dropped to eight minutes. For perishable food rescue, this compression is not incremental improvement — it is the difference between a viable operation and an aspirational one.
+</p>
+
+<p>
+    The rescue completion rate — the percentage of posted rescues that result in successful food delivery to a recipient — increased from approximately 65% under the manual system to 92% on the platform. The improvement came from two sources: faster driver matching reduced the number of rescues that expired before a driver could be found, and automated recipient matching eliminated the bottleneck of coordinators manually calling organizations to confirm availability.
+</p>
+
+<p>
+    Overall rescue volume tripled within six months of platform launch, without a proportional increase in coordination staff. The automation handled the scaling — more donors, more drivers, more recipients, more concurrent rescues — while the coordination team shifted from manually managing each rescue to monitoring the system and intervening only when escalations occurred.
+</p>
+
+<h2>Lessons for Food Rescue Organizations</h2>
+
+<p>
+    Last Mile Food Rescue's experience highlights a principle that applies across the food relief sector: the organizations that benefit most from technology are those whose operational constraints are fundamentally about time and coordination rather than capacity. Last Mile did not lack drivers or recipient organizations. It lacked the ability to connect them fast enough. The technology solved a coordination problem, not a resource problem.
+</p>
+
+<p>
+    The decision to build on Salesforce rather than a custom application was driven by long-term sustainability. A custom-built logistics app would have required dedicated engineering staff to maintain and evolve. By building on Salesforce's platform, Last Mile gains access to ongoing platform updates, a large ecosystem of integrations, and the ability to find Salesforce-skilled administrators and developers when staff turns over. For a nonprofit that needs its technology to outlast any individual team member, platform sustainability matters as much as feature capability.
+</p>
+
+<p>
+    Food rescue is one of the fastest-growing segments of the food relief ecosystem, and the organizations leading it are the ones that treat logistics technology as core infrastructure rather than a back-office convenience. Last Mile Food Rescue's Salesforce-powered platform demonstrates what becomes possible when the technology matches the urgency of the mission.
+</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                <a href="second-harvest-process-automation.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">Second Harvest: Scaling Through Process Automation</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="food-bank-workflow-automation.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Implementation</span>
+                    <span class="article-read-next__card-title">The Complete Guide to Food Bank Workflow Automation</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="volunteer-management-technology.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">Volunteer Management Technology That Actually Works</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Ready to Optimize Your Food Rescue Operations?</h2>
+                <p class="article-cta__text">Food-N-Force helps food rescue organizations build real-time logistics platforms that connect donors, drivers, and recipients faster.</p>
+                <div class="article-cta__actions">
+                    <a href="/contact.html" class="resource-action">Get in Touch</a>
+                    <a href="/blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+</body>
+</html>

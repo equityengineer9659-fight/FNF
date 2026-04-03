@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Bank of Alaska: Managing SNAP Programs at Scale - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="How Food Bank of Alaska implemented Salesforce for SNAP program management, improving client intake, case tracking, and service alignment across the state.">
+    <meta name="keywords" content="food bank technology, nonprofit Salesforce, SNAP program management, food bank software, food relief, Alaska food bank">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://food-n-force.com/blog/food-bank-of-alaska-snap-management.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Food Bank of Alaska: Managing SNAP Programs at Scale - Food-N-Force">
+    <meta property="og:description" content="How Food Bank of Alaska implemented Salesforce for SNAP program management, improving client intake, case tracking, and service alignment across the state.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://food-n-force.com/blog/food-bank-of-alaska-snap-management.html">
+    <meta property="og:image" content="https://food-n-force.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2025-08-05">
+    <meta property="article:section" content="Case Studies">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Food Bank of Alaska: Managing SNAP Programs at Scale - Food-N-Force">
+    <meta name="twitter:description" content="How Food Bank of Alaska implemented Salesforce for SNAP program management, improving client intake, case tracking, and service alignment across the state.">
+    <meta name="twitter:image" content="https://food-n-force.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Food Bank of Alaska: Managing SNAP Programs at Scale",
+      "description": "How Food Bank of Alaska implemented Salesforce for SNAP program management, improving client intake, case tracking, and service alignment across the state.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "datePublished": "2025-08-05",
+      "url": "https://food-n-force.com/blog/food-bank-of-alaska-snap-management.html",
+      "image": "https://food-n-force.com/og-image.png",
+      "articleSection": "Case Studies",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link">Dashboards</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link" aria-current="page">Blog</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link">Dashboards</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link" aria-current="page">Blog</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="/blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--case-studies">Case Studies</span>
+                <h1 id="article-title" class="article-hero__title">Food Bank of Alaska: Managing SNAP Programs at Scale</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2025-08-05">August 2025</time>
+                    <span>5 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+    Alaska is not like other states. Its 663,000 square miles make it more than twice the size of Texas, yet much of that territory is accessible only by bush plane or seasonal road. For the Food Bank of Alaska, serving communities spread across this vast landscape means confronting logistical challenges that food banks in the lower 48 rarely encounter. When the organization decided to modernize its SNAP program management with Salesforce, the project was not just a technology upgrade — it was a fundamental rethinking of how to deliver benefits administration across one of the most geographically challenging service areas in the country.
+</p>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="/src/assets/images/illustrations/food-bank-of-alaska-snap-management.svg" alt="Alaska map showing SNAP service distribution from central hub to remote communities" width="800" height="400" loading="lazy">
+</figure>
+
+<h2>The Challenge: Geography as a Barrier to Service</h2>
+
+<p>
+    The Supplemental Nutrition Assistance Program is the largest federal nutrition safety net, and in Alaska, it serves a critical role. Food costs in rural Alaskan communities can be two to three times higher than in Anchorage, and many villages have no road access to major supply chains. SNAP benefits are often the difference between adequate nutrition and food insecurity for families in these communities.
+</p>
+
+<p>
+    Before the Salesforce implementation, the Food Bank of Alaska managed SNAP intake and case tracking through a patchwork of spreadsheets, paper forms, and disconnected databases. Field staff in remote offices would collect client information on paper, then transmit it to the Anchorage headquarters by fax or email — sometimes days after the initial intake. Case notes lived in individual staff members' files. Follow-up tracking depended on personal memory and informal communication.
+</p>
+
+<p>
+    The consequences were predictable. Clients fell through the cracks between intake and enrollment. Staff in different offices duplicated effort on the same cases without knowing it. Reporting to state and federal agencies required manual data compilation that consumed weeks of staff time each quarter. And the organization had no reliable way to measure whether its SNAP outreach efforts were actually reaching the communities with the greatest need.
+</p>
+
+<h2>The Solution: Centralized Intake on Salesforce</h2>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="/src/assets/images/illustrations/food-bank-of-alaska-snap-management.svg" alt="Map of Alaska showing connected service points across the state with data flowing to a centralized Salesforce system" width="800" height="400" loading="lazy">
+</figure>
+
+<p>
+    The Food Bank of Alaska chose Salesforce as the platform for its SNAP program management transformation. The implementation centered on three core capabilities: centralized client intake, case tracking with milestone management, and service alignment reporting.
+</p>
+
+<p>
+    Centralized intake meant that every client interaction — whether it occurred at the Anchorage office, a partner agency in Fairbanks, or a mobile outreach event in a rural village — entered the same system. Field staff used Salesforce mobile forms that could capture intake data even without internet connectivity, syncing automatically when a connection became available. This offline-first design was essential for Alaska, where many service locations have intermittent or no internet access.
+</p>
+
+<p>
+    Case tracking introduced structured workflows that replaced the informal follow-up methods staff had relied on previously. Each SNAP application moved through defined stages — initial intake, documentation gathering, application submission, determination, and enrollment — with automated reminders when cases stalled at any stage. Supervisors gained visibility into their team's caseloads across the entire state, allowing them to identify bottlenecks and redistribute work without waiting for monthly reports.
+</p>
+
+<aside class="article-pullquote">
+    <blockquote>
+        <p>In Alaska, the distance between a client's first contact and their SNAP enrollment can be measured not just in days but in hundreds of miles. Closing that gap required technology that worked as reliably in a village of 300 as in a city of 300,000.</p>
+    </blockquote>
+</aside>
+
+<h2>Bridging the Distance with Data</h2>
+
+<p>
+    One of the most significant outcomes of the Salesforce implementation was the organization's ability to see, for the first time, a complete picture of SNAP service delivery across Alaska. Before the system, each regional office operated with its own data. Anchorage knew its numbers. Fairbanks knew its numbers. But nobody had a unified view of statewide activity, client demographics, or service gaps.
+</p>
+
+<p>
+    With all intake and case data flowing into a single Salesforce instance, the Food Bank of Alaska could generate statewide dashboards showing application volumes by region, approval rates, average time from intake to enrollment, and demographic breakdowns of the populations being served. These dashboards transformed strategic planning conversations. Instead of debating anecdotally about which communities needed more outreach, leadership could point to specific data showing where SNAP participation rates were lowest relative to estimated need.
+</p>
+
+<p>
+    The data also revealed operational patterns that had been invisible before. Seasonal variations in SNAP applications correlated with fishing and subsistence hunting seasons in rural communities. Application completion rates varied significantly between regions, suggesting that some offices needed additional training or process support. And the average time from intake to enrollment — a metric the organization had never been able to measure accurately — showed wide variation that drove targeted process improvements.
+</p>
+
+<h2>Aligning Services Across the Organization</h2>
+
+<p>
+    SNAP program management does not exist in isolation at the Food Bank of Alaska. The organization also runs emergency food distribution, nutrition education programs, and community partnerships with tribal organizations and local agencies. Before Salesforce, these programs operated in silos — a client receiving emergency food boxes might not be connected to SNAP outreach, and a family enrolled in nutrition education might not know about other available services.
+</p>
+
+<p>
+    The Salesforce implementation created a shared client record that linked interactions across all programs. When a client came in for emergency food assistance, staff could see whether they were already enrolled in SNAP, had been referred for benefits but not yet applied, or had never been screened. This cross-program visibility enabled warm handoffs between services rather than cold referrals that clients often failed to follow up on.
+</p>
+
+<p>
+    For tribal communities in particular, this integrated approach was transformative. Many Alaska Native communities access multiple Food Bank of Alaska programs but had previously experienced each one as a separate interaction with separate paperwork. The unified client record reduced redundant data collection and allowed staff to present a coordinated service plan rather than a menu of disconnected programs.
+</p>
+
+<h2>Results and Lessons Learned</h2>
+
+<p>
+    The implementation delivered measurable improvements across multiple dimensions. Client intake processing time decreased as automated workflows replaced manual data transmission. Case tracking accuracy improved with structured milestone management replacing informal follow-up. Quarterly reporting to state and federal agencies shifted from a multi-week manual compilation to a near-real-time dashboard export.
+</p>
+
+<p>
+    Perhaps more importantly, the organization gained the ability to demonstrate the relationship between its outreach investments and SNAP enrollment outcomes — a critical capability for grant reporting and strategic planning. When the Food Bank of Alaska invested in mobile outreach to a remote region, it could track whether that investment translated into new SNAP enrollments within a measurable timeframe.
+</p>
+
+<p>
+    The lessons from Alaska's experience extend beyond its unique geography. Any food bank managing SNAP programs across multiple locations faces similar challenges of data fragmentation, inconsistent case tracking, and limited cross-program visibility. Alaska's extreme conditions simply made these challenges impossible to ignore. The organization that builds its SNAP infrastructure for the hardest case — the village accessible only by bush plane in winter — builds a system that works everywhere.
+</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                <a href="central-pennsylvania-food-bank-salesforce.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">Central Pennsylvania Food Bank: Salesforce Implementation</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="roadrunner-food-bank-salesforce.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">Roadrunner Food Bank: Salesforce Transformation</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="snap-policy-changes-food-banks.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Industry Insights</span>
+                    <span class="article-read-next__card-title">SNAP Policy Changes: How Food Banks Are Adapting</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Ready to Modernize Your SNAP Operations?</h2>
+                <p class="article-cta__text">Food-N-Force helps food banks implement Salesforce solutions for SNAP program management, client intake, and cross-program service coordination.</p>
+                <div class="article-cta__actions">
+                    <a href="/contact.html" class="resource-action">Get in Touch</a>
+                    <a href="/blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+</body>
+</html>

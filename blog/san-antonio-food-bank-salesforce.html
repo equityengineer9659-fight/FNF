@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Antonio Food Bank: Scaling Fundraising and Volunteer Management - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="How San Antonio Food Bank used Salesforce NPSP to scale fundraising campaigns and volunteer management during surging demand.">
+    <meta name="keywords" content="food bank technology, nonprofit Salesforce, NPSP, fundraising, volunteer management, food bank software, food relief">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://food-n-force.com/blog/san-antonio-food-bank-salesforce.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="San Antonio Food Bank: Scaling Fundraising and Volunteer Management - Food-N-Force">
+    <meta property="og:description" content="How San Antonio Food Bank used Salesforce NPSP to scale fundraising campaigns and volunteer management during surging demand.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://food-n-force.com/blog/san-antonio-food-bank-salesforce.html">
+    <meta property="og:image" content="https://food-n-force.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2024-01-18">
+    <meta property="article:section" content="Case Studies">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="San Antonio Food Bank: Scaling Fundraising and Volunteer Management - Food-N-Force">
+    <meta name="twitter:description" content="How San Antonio Food Bank used Salesforce NPSP to scale fundraising campaigns and volunteer management during surging demand.">
+    <meta name="twitter:image" content="https://food-n-force.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "San Antonio Food Bank: Scaling Fundraising and Volunteer Management",
+      "description": "How San Antonio Food Bank used Salesforce NPSP to scale fundraising campaigns and volunteer management during surging demand.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "datePublished": "2024-01-18",
+      "url": "https://food-n-force.com/blog/san-antonio-food-bank-salesforce.html",
+      "image": "https://food-n-force.com/og-image.png",
+      "articleSection": "Case Studies",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link">Dashboards</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link" aria-current="page">Blog</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link">Dashboards</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link" aria-current="page">Blog</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="/blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--case-studies">Case Studies</span>
+                <h1 id="article-title" class="article-hero__title">San Antonio Food Bank: Scaling Fundraising and Volunteer Management</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2024-01-18">January 2024</time>
+                    <span>5 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+    When demand for food assistance in San Antonio surged during the COVID-19 pandemic, the San Antonio Food Bank found itself distributing food to lines of cars that stretched for miles. The images went viral — thousands of vehicles waiting at a single distribution event. Behind those images was an organization scrambling to scale every dimension of its operations simultaneously: food sourcing, distribution logistics, fundraising, and volunteer coordination. The systems that had served the food bank adequately during normal operations buckled under the weight of crisis-level demand. The Salesforce NPSP implementation that followed was not a planned digital transformation — it was a survival response that became a foundation for long-term growth.
+</p>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="/src/assets/images/illustrations/san-antonio-food-bank-salesforce.svg" alt="Growth chart showing San Antonio Food Bank scaling fundraising and volunteer operations during demand surge" width="800" height="400" loading="lazy">
+</figure>
+
+<h2>The Challenge: When Everything Must Scale at Once</h2>
+
+<p>
+    Before the demand surge, the San Antonio Food Bank managed fundraising through a combination of a legacy donor database and spreadsheet-based campaign tracking. Volunteer scheduling happened through a separate system that did not communicate with the donor database. When a major donor also volunteered regularly — a common pattern at food banks — the organization had no unified view of that relationship. The development team knew one version of the person; the volunteer coordinator knew another.
+</p>
+
+<p>
+    This fragmentation was manageable at steady-state volumes. The food bank had established rhythms for its annual campaigns, recurring volunteer shifts, and corporate partnership events. Staff knew their regular donors and volunteers by name. Institutional knowledge compensated for system limitations.
+</p>
+
+<p>
+    The crisis changed everything. Donation volumes increased dramatically as national media coverage drove an outpouring of giving. New donors who had never given before needed onboarding, acknowledgment, and stewardship at a pace the existing systems could not support. Simultaneously, volunteer applications surged — but many existing volunteer roles required physical presence in warehouse operations where social distancing protocols had reduced capacity. The organization needed to rapidly create new volunteer roles, screen applicants, and match skills to needs, all while its core operations were being redesigned on the fly.
+</p>
+
+<h2>The Solution: Salesforce NPSP as the Unified Platform</h2>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="/src/assets/images/illustrations/san-antonio-food-bank-salesforce.svg" alt="Diagram showing Salesforce NPSP connecting fundraising campaigns, volunteer management, and donor engagement systems" width="800" height="400" loading="lazy">
+</figure>
+
+<p>
+    The San Antonio Food Bank implemented Salesforce Nonprofit Success Pack as the foundation for both its fundraising and volunteer management operations. NPSP provided the donor management, gift processing, and campaign tracking capabilities that the legacy database lacked. But the critical decision was to build volunteer management on the same platform rather than maintaining a separate system.
+</p>
+
+<p>
+    This integration meant that every contact in the system — donor, volunteer, or both — had a single record that captured the full relationship. A corporate partner that provided both financial support and employee volunteer hours appeared as one entity with a complete engagement history. A first-time donor who later signed up to volunteer was recognized as an existing contact, not a new record in a separate system.
+</p>
+
+<p>
+    The fundraising capabilities were built around NPSP's campaign hierarchy structure. Major fundraising initiatives — the annual gala, emergency appeals, corporate matching programs, and planned giving — each operated as campaigns with trackable goals, donor segments, and communication cadences. When the organization needed to launch a rapid emergency appeal, the campaign infrastructure was already in place. Staff could create a new campaign, define its target audience from existing donor segments, and execute the appeal within hours rather than days.
+</p>
+
+<aside class="article-pullquote">
+    <blockquote>
+        <p>The food banks that scaled fastest during the crisis were not the ones with the most resources — they were the ones whose systems allowed them to mobilize resources they already had but could not previously see or coordinate.</p>
+    </blockquote>
+</aside>
+
+<h2>Volunteer Management at Crisis Scale</h2>
+
+<p>
+    Volunteer management during the surge required capabilities that went far beyond shift scheduling. The San Antonio Food Bank needed to screen new volunteers rapidly, match them to roles based on skills and availability, communicate schedule changes in real time, and track hours for reporting to corporate partners whose employees participated. All of this had to happen while volunteer roles themselves were being redesigned to accommodate new safety protocols.
+</p>
+
+<p>
+    On the Salesforce platform, volunteer management was implemented with custom objects that tracked volunteer profiles, certifications, availability windows, and assignment history. Automated workflows handled the screening and onboarding process — when a new volunteer application was submitted, the system triggered a background check request, sent orientation materials, and queued the volunteer for role matching once cleared. What had previously required manual coordination by a volunteer manager now flowed through the system with minimal staff intervention.
+</p>
+
+<p>
+    Corporate volunteer programs benefited particularly from the integration with fundraising. When a company committed to both a financial gift and employee volunteer hours, the relationship manager could see both commitments on the same account record. Impact reporting for corporate partners — showing the combined value of their financial and volunteer contributions — became a straightforward report rather than a manual reconciliation between two systems.
+</p>
+
+<h2>Scaling Fundraising Campaigns</h2>
+
+<p>
+    The fundraising transformation extended beyond donor record management. NPSP's engagement plan functionality allowed the development team to create structured stewardship sequences for different donor segments. A first-time crisis donor received a different communication cadence than a lapsed donor who re-engaged during the emergency. Major gift prospects received personalized cultivation tracks with automatic task creation for relationship managers.
+</p>
+
+<p>
+    Recurring giving — a critical revenue stream for food banks that provides predictable monthly income — was managed through NPSP's recurring donation tracking. The system identified donors whose giving patterns suggested readiness for a recurring gift ask, and automated the conversion process when donors opted in. Monthly donor retention, a metric that directly affects financial sustainability, became visible and manageable for the first time.
+</p>
+
+<p>
+    Campaign analytics provided the development team with real-time visibility into fundraising performance. Instead of waiting for end-of-month reports to understand how a campaign was performing, staff could see daily donation totals, donor acquisition rates, average gift sizes, and campaign ROI on live dashboards. This visibility enabled mid-campaign adjustments — shifting messaging, reallocating outreach resources, or escalating appeals — that would have been impossible with the previous reporting lag.
+</p>
+
+<h2>Results and Ongoing Impact</h2>
+
+<p>
+    The integrated Salesforce NPSP implementation enabled the San Antonio Food Bank to scale its fundraising and volunteer operations in pace with the dramatic increase in service demand. Donor acknowledgment processing time decreased from days to hours with automated gift receipting. Volunteer onboarding time compressed from weeks to days with systematic screening workflows. Campaign launch cycles shortened from weeks of preparation to rapid deployment using established templates and donor segments.
+</p>
+
+<p>
+    Beyond the crisis response, the platform created lasting operational capabilities. The unified donor-volunteer view revealed engagement patterns that drive long-term retention — volunteers who also donate have significantly higher lifetime value and lower attrition rates than donors who only give financially. This insight reshaped the organization's engagement strategy, with deliberate programs to convert donors into volunteers and volunteers into donors.
+</p>
+
+<p>
+    The San Antonio Food Bank's experience demonstrates a pattern that extends beyond any single crisis. Food banks operate in an environment of perpetual demand variability — seasonal surges, economic disruptions, natural disasters, and policy changes all create sudden spikes in need. The organizations that weather these spikes are not necessarily the largest or best-funded. They are the ones whose operational infrastructure can flex to meet demand without breaking. A unified platform for fundraising and volunteer management is not a luxury for large food banks — it is the infrastructure that makes scaling possible when scaling becomes non-optional.
+</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                <a href="barrie-food-bank-crm-transformation.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">Barrie Food Bank: CRM Transformation</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="donor-prospecting-salesforce.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">Donor Prospecting with Salesforce: Data-Driven Fundraising</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="volunteer-recruitment-retention-digital.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Implementation</span>
+                    <span class="article-read-next__card-title">Recruiting and Retaining Volunteers in the Digital Age</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Ready to Scale Your Fundraising Operations?</h2>
+                <p class="article-cta__text">Food-N-Force helps food banks implement Salesforce NPSP for integrated fundraising, volunteer management, and donor engagement at any scale.</p>
+                <div class="article-cta__actions">
+                    <a href="/contact.html" class="resource-action">Get in Touch</a>
+                    <a href="/blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+</body>
+</html>

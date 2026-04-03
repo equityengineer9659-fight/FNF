@@ -50,7 +50,7 @@ npm run admin                   # Start Express server for scraper + AI article 
 ├── src/assets/            # Images, fonts
 ├── *.html                 # 10 root pages (index, about, services, resources, impact, contact, 404, blog, case-studies, templates-tools)
 ├── dashboards/            # Interactive ECharts dashboards
-├── blog/                  # 41 article HTML pages
+├── blog/                  # 53 article HTML pages
 ├── Blog and Article Content/  # Editorial tools (scraper + AI generator) — NOT deployed
 ├── scripts/               # Build scripts, scraper engine, sitemap/blog generators
 ├── public/                # Static assets, PWA manifest, PHP API endpoints, dashboard data files
@@ -60,15 +60,25 @@ npm run admin                   # Start Express server for scraper + AI article 
 ├── docs/                  # Active documentation
 ├── tools/                 # Testing, deployment, governance utilities
 ├── vite.config.js         # Vite build config (auto-discovers *.html and blog/*.html)
-└── build-components.js    # Injects nav/footer/dashboard-tabs/scripts into all 56 pages before Vite builds
+└── build-components.js    # Injects nav/footer/dashboard-tabs/scripts into all 66 pages before Vite builds
 ```
 
-### Page Inventory (56 pages)
+### Page Inventory (66 pages)
 - **Core pages (7)**: index, about, services, resources, impact, contact, 404
 - **Blog hub (1)**: blog
 - **Hub pages at root (2)**: case-studies, templates-tools
 - **Dashboards (5)**: dashboards/food-insecurity (Overview), dashboards/food-access, dashboards/snap-safety-net, dashboards/food-prices, dashboards/food-banks — linked by shared tab navigation
-- **Articles (43)**: all in `blog/` directory (run `ls blog/` for full list)
+- **Articles (53)**: all in `blog/` directory (run `ls blog/` for full list)
+
+### Case Studies
+4 featured case studies on `case-studies.html` (real Salesforce implementations):
+1. Second Harvest Food Bank of Central Florida — 250K meals/month, ~100 partner sites
+2. Feeding America — 2B+ pounds recovered, 200 food banks, MealConnect
+3. Midwest Food Bank — 400hrs saved/chapter/year, 95%+ email capture
+4. National Food Bank Supply Chain — 50% faster delivery, 60% less compliance time
+
+Case study cards also appear on `blog.html` and testimonials on `impact.html`.
+10 additional case studies published as individual blog articles (category: Case Studies).
 
 **Adding new articles via scraper tool**: `npm run admin` → New Article tab → Generate with Claude → Save to blog/. Auto-registers in `build-components.js`, `generate-sitemap.js`, and `.pa11yci.json`, then runs `build-components.js` and `sync-blog.js`. After saving, run `/create-illustration {slug}` to generate the SVG illustration.
 
@@ -82,7 +92,7 @@ npm run admin                   # Start Express server for scraper + AI article 
 - Navigation arrays in `build-components.js`: `dashboardSubpages`, `blogSubpages`, `resourcesSubpages`
 
 ### Build Pipeline
-- `build-components.js` injects shared nav, footer, dashboard tabs, and script tags into all 56 pages before Vite builds
+- `build-components.js` injects shared nav, footer, dashboard tabs, and script tags into all 66 pages before Vite builds
 - `scripts/sync-blog.js` rebuilds blog.html card grid from article metadata (auto-run on build)
 - `scripts/generate-sitemap.js` generates sitemap.xml covering all public pages
 - ECharts is tree-shaken and code-split into a separate chunk loaded only on dashboard pages
@@ -104,7 +114,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `config/environment.js` — feature flags
   - `effects/particles.js` — canvas particle system
   - `effects/smart-scroll.js` — nav auto-hide, active links, scroll-to-top
-  - `effects/counters.js` — animated counters (aria-live announces final value)
+  - `effects/counters.js` — animated counters (aria-live announces final value, formats: percentage, plus, thousand, million, billion)
   - `effects/newsletter-popup.js` — scroll-triggered modal with focus trap, CSRF validation
   - `effects/gradient-icons.js` — SVG gradient icons
   - `effects/contact-form.js` — form submission with CSRF token validation

@@ -1,0 +1,134 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Enterprise CRM blueprint showing four departments connected through centralized Salesforce platform">
+  <defs>
+    <linearGradient id="shsv-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="shsv-crm" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="shsv-finance" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="shsv-programs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="shsv-volunteers" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="shsv-sourcing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+    </linearGradient>
+    <radialGradient id="shsv-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="shsv-blur">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#shsv-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="24" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">SECOND HARVEST — ENTERPRISE CRM TRANSFORMATION</text>
+
+  <!-- Central glow -->
+  <circle cx="400" cy="195" r="110" fill="url(#shsv-glow)"/>
+
+  <!-- Connection lines (behind nodes) -->
+  <!-- Finance (top-left) -->
+  <line x1="340" y1="165" x2="195" y2="95" stroke="rgba(245,158,11,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="193,88 188,96 197,99" fill="rgba(245,158,11,0.4)"/>
+
+  <!-- Programs (top-right) -->
+  <line x1="460" y1="165" x2="605" y2="95" stroke="rgba(16,185,129,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="607,88 612,96 603,99" fill="rgba(16,185,129,0.4)"/>
+
+  <!-- Volunteers (bottom-left) -->
+  <line x1="340" y1="225" x2="195" y2="295" stroke="rgba(139,92,246,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="193,302 188,294 197,291" fill="rgba(139,92,246,0.4)"/>
+
+  <!-- Sourcing (bottom-right) -->
+  <line x1="460" y1="225" x2="605" y2="295" stroke="rgba(14,165,233,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="607,302 612,294 603,291" fill="rgba(14,165,233,0.4)"/>
+
+  <!-- Central CRM hub -->
+  <circle cx="400" cy="195" r="70" fill="url(#shsv-crm)" filter="url(#shsv-blur)"/>
+  <circle cx="400" cy="195" r="70" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+  <text x="400" y="183" font-family="system-ui,sans-serif" font-size="14" font-weight="800" fill="white" text-anchor="middle">Salesforce</text>
+  <text x="400" y="200" font-family="system-ui,sans-serif" font-size="14" font-weight="800" fill="white" text-anchor="middle">CRM</text>
+  <text x="400" y="218" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.6)" text-anchor="middle">Unified Platform</text>
+
+  <!-- === SATELLITE: Finance (top-left) === -->
+  <circle cx="180" cy="82" r="35" fill="url(#shsv-finance)"/>
+  <text x="180" y="78" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Finance</text>
+  <text x="180" y="92" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Department</text>
+  <!-- 200+ label -->
+  <rect x="204" y="56" width="36" height="16" rx="8" fill="rgba(245,158,11,0.2)" stroke="rgba(245,158,11,0.5)" stroke-width="1"/>
+  <text x="222" y="67" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(245,158,11,0.9)" text-anchor="middle">200+</text>
+  <!-- Data silo X -->
+  <rect x="120" y="54" width="24" height="18" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="132" y="66" font-family="system-ui,sans-serif" font-size="7" fill="rgba(255,255,255,0.25)" text-anchor="middle">Silo</text>
+  <line x1="120" y1="54" x2="144" y2="72" stroke="rgba(239,68,68,0.5)" stroke-width="1.5"/>
+  <line x1="144" y1="54" x2="120" y2="72" stroke="rgba(239,68,68,0.5)" stroke-width="1.5"/>
+
+  <!-- === SATELLITE: Programs (top-right) === -->
+  <circle cx="620" cy="82" r="35" fill="url(#shsv-programs)"/>
+  <text x="620" y="78" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Programs</text>
+  <text x="620" y="92" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Department</text>
+  <!-- 200+ label -->
+  <rect x="644" y="56" width="36" height="16" rx="8" fill="rgba(16,185,129,0.2)" stroke="rgba(16,185,129,0.5)" stroke-width="1"/>
+  <text x="662" y="67" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(16,185,129,0.9)" text-anchor="middle">200+</text>
+  <!-- Data silo X -->
+  <rect x="636" y="114" width="24" height="18" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="648" y="126" font-family="system-ui,sans-serif" font-size="7" fill="rgba(255,255,255,0.25)" text-anchor="middle">Silo</text>
+  <line x1="636" y1="114" x2="660" y2="132" stroke="rgba(239,68,68,0.5)" stroke-width="1.5"/>
+  <line x1="660" y1="114" x2="636" y2="132" stroke="rgba(239,68,68,0.5)" stroke-width="1.5"/>
+
+  <!-- === SATELLITE: Volunteers (bottom-left) === -->
+  <circle cx="180" cy="308" r="35" fill="url(#shsv-volunteers)"/>
+  <text x="180" y="304" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Volunteers</text>
+  <text x="180" y="318" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Department</text>
+  <!-- 200+ label -->
+  <rect x="204" y="282" width="36" height="16" rx="8" fill="rgba(139,92,246,0.2)" stroke="rgba(139,92,246,0.5)" stroke-width="1"/>
+  <text x="222" y="293" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(139,92,246,0.9)" text-anchor="middle">200+</text>
+  <!-- Data silo X -->
+  <rect x="120" y="300" width="24" height="18" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="132" y="312" font-family="system-ui,sans-serif" font-size="7" fill="rgba(255,255,255,0.25)" text-anchor="middle">Silo</text>
+  <line x1="120" y1="300" x2="144" y2="318" stroke="rgba(239,68,68,0.5)" stroke-width="1.5"/>
+  <line x1="144" y1="300" x2="120" y2="318" stroke="rgba(239,68,68,0.5)" stroke-width="1.5"/>
+
+  <!-- === SATELLITE: Sourcing (bottom-right) === -->
+  <circle cx="620" cy="308" r="35" fill="url(#shsv-sourcing)"/>
+  <text x="620" y="304" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">Sourcing</text>
+  <text x="620" y="318" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Department</text>
+  <!-- 200+ label -->
+  <rect x="644" y="282" width="36" height="16" rx="8" fill="rgba(14,165,233,0.2)" stroke="rgba(14,165,233,0.5)" stroke-width="1"/>
+  <text x="662" y="293" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="rgba(14,165,233,0.9)" text-anchor="middle">200+</text>
+  <!-- Data silo X -->
+  <rect x="636" y="340" width="24" height="18" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="648" y="352" font-family="system-ui,sans-serif" font-size="7" fill="rgba(255,255,255,0.25)" text-anchor="middle">Silo</text>
+  <line x1="636" y1="340" x2="660" y2="358" stroke="rgba(239,68,68,0.5)" stroke-width="1.5"/>
+  <line x1="660" y1="340" x2="636" y2="358" stroke="rgba(239,68,68,0.5)" stroke-width="1.5"/>
+
+  <!-- Legend -->
+  <circle cx="32" cy="382" r="7" fill="url(#shsv-finance)"/>
+  <text x="44" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Finance</text>
+  <circle cx="100" cy="382" r="7" fill="url(#shsv-programs)"/>
+  <text x="112" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Programs</text>
+  <circle cx="180" cy="382" r="7" fill="url(#shsv-volunteers)"/>
+  <text x="192" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Volunteers</text>
+  <circle cx="268" cy="382" r="7" fill="url(#shsv-sourcing)"/>
+  <text x="280" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Sourcing</text>
+  <rect x="340" y="376" width="20" height="12" rx="6" fill="rgba(139,92,246,0.2)" stroke="rgba(139,92,246,0.5)" stroke-width="1"/>
+  <text x="366" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">200+ User Stories Captured</text>
+  <text x="780" y="386" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.2)" text-anchor="end">Data silos eliminated</text>
+</svg>

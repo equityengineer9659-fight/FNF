@@ -1,0 +1,155 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Before and after transformation showing manual processes replaced by unified Salesforce CRM">
+  <defs>
+    <linearGradient id="bfb-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="bfb-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="bfb-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="bfb-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="bfb-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="bfb-muted" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6b7280;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#4b5563;stop-opacity:0.5"/>
+    </linearGradient>
+    <linearGradient id="bfb-red-muted" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.35"/>
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0.35"/>
+    </linearGradient>
+    <radialGradient id="bfb-hub-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="bfb-glow">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bfb-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="24" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">CRM TRANSFORMATION — FROM MANUAL TO UNIFIED</text>
+
+  <!-- BEFORE label -->
+  <text x="195" y="56" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="rgba(239,68,68,0.5)" text-anchor="middle" letter-spacing="1.5">BEFORE</text>
+
+  <!-- AFTER label -->
+  <text x="600" y="56" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="rgba(16,185,129,0.5)" text-anchor="middle" letter-spacing="1.5">AFTER</text>
+
+  <!-- Center divider -->
+  <line x1="400" y1="45" x2="400" y2="355" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <!-- Arrow on divider -->
+  <polygon points="396,195 408,200 396,205" fill="rgba(255,255,255,0.15)"/>
+  <line x1="393" y1="200" x2="407" y2="200" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+
+  <!-- === BEFORE SIDE: Disconnected elements === -->
+
+  <!-- Scattered disconnected lines (showing fragmentation) -->
+  <line x1="120" y1="130" x2="180" y2="170" stroke="rgba(239,68,68,0.1)" stroke-width="1" stroke-dasharray="3,6"/>
+  <line x1="270" y1="110" x2="200" y2="200" stroke="rgba(239,68,68,0.1)" stroke-width="1" stroke-dasharray="3,6"/>
+  <line x1="100" y1="260" x2="160" y2="200" stroke="rgba(239,68,68,0.1)" stroke-width="1" stroke-dasharray="3,6"/>
+  <line x1="290" y1="280" x2="250" y2="210" stroke="rgba(239,68,68,0.1)" stroke-width="1" stroke-dasharray="3,6"/>
+
+  <!-- Paper/document icon node -->
+  <circle cx="110" cy="120" r="30" fill="url(#bfb-red-muted)"/>
+  <circle cx="110" cy="120" r="30" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <!-- Paper icon -->
+  <rect x="98" y="107" width="18" height="24" rx="1" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+  <line x1="102" y1="114" x2="112" y2="114" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <line x1="102" y1="118" x2="112" y2="118" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <line x1="102" y1="122" x2="108" y2="122" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <text x="110" y="164" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.35)" text-anchor="middle">Paper Files</text>
+
+  <!-- Phone icon node -->
+  <circle cx="280" cy="105" r="30" fill="url(#bfb-red-muted)"/>
+  <circle cx="280" cy="105" r="30" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <!-- Phone icon -->
+  <rect x="272" y="91" width="16" height="26" rx="3" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+  <line x1="277" y1="112" x2="283" y2="112" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <text x="280" y="149" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.35)" text-anchor="middle">Phone Logs</text>
+
+  <!-- Spreadsheet icon node -->
+  <circle cx="195" cy="220" r="30" fill="url(#bfb-red-muted)"/>
+  <circle cx="195" cy="220" r="30" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <!-- Grid/spreadsheet icon -->
+  <rect x="182" y="208" width="26" height="20" rx="1" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+  <line x1="182" y1="214" x2="208" y2="214" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <line x1="182" y1="220" x2="208" y2="220" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <line x1="191" y1="208" x2="191" y2="228" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <line x1="200" y1="208" x2="200" y2="228" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <text x="195" y="264" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.35)" text-anchor="middle">Spreadsheets</text>
+
+  <!-- "X" marks showing disconnection -->
+  <text x="155" y="175" font-family="system-ui,sans-serif" font-size="14" fill="rgba(239,68,68,0.25)" text-anchor="middle">&#10005;</text>
+  <text x="240" y="165" font-family="system-ui,sans-serif" font-size="14" fill="rgba(239,68,68,0.25)" text-anchor="middle">&#10005;</text>
+  <text x="145" y="240" font-family="system-ui,sans-serif" font-size="14" fill="rgba(239,68,68,0.25)" text-anchor="middle">&#10005;</text>
+
+  <!-- BEFORE side subtitle -->
+  <text x="195" y="310" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.25)" text-anchor="middle">Data silos, lost records, manual errors</text>
+
+  <!-- === AFTER SIDE: Unified Hub === -->
+
+  <!-- Hub glow -->
+  <circle cx="600" cy="190" r="80" fill="url(#bfb-hub-glow)"/>
+
+  <!-- Connection lines from hub to satellites -->
+  <line x1="556" y1="158" x2="500" y2="105" stroke="rgba(14,165,233,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="500,101 495,109 503,109" fill="rgba(14,165,233,0.4)"/>
+
+  <line x1="644" y1="158" x2="715" y2="105" stroke="rgba(16,185,129,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="712,101 720,109 712,109" fill="rgba(16,185,129,0.4)"/>
+
+  <line x1="556" y1="222" x2="490" y2="280" stroke="rgba(245,158,11,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="490,276 485,284 493,284" fill="rgba(245,158,11,0.4)"/>
+
+  <line x1="644" y1="222" x2="720" y2="280" stroke="rgba(139,92,246,0.25)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="720,276 725,284 717,284" fill="rgba(139,92,246,0.4)"/>
+
+  <!-- Central Salesforce hub -->
+  <circle cx="600" cy="190" r="50" fill="url(#bfb-blue)" filter="url(#bfb-glow)"/>
+  <circle cx="600" cy="190" r="50" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+  <text x="600" y="183" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="white" text-anchor="middle">SALESFORCE</text>
+  <text x="600" y="197" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="white" text-anchor="middle">CRM</text>
+  <text x="600" y="212" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">Unified Platform</text>
+
+  <!-- Satellite: Donors -->
+  <circle cx="488" cy="92" r="26" fill="url(#bfb-cyan)"/>
+  <text x="488" y="89" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Donors</text>
+  <text x="488" y="101" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Tracked</text>
+
+  <!-- Satellite: Volunteers -->
+  <circle cx="726" cy="92" r="26" fill="url(#bfb-green)"/>
+  <text x="726" y="89" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Volunteers</text>
+  <text x="726" y="101" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Managed</text>
+
+  <!-- Satellite: Operations -->
+  <circle cx="478" cy="292" r="26" fill="url(#bfb-amber)"/>
+  <text x="478" y="289" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Operations</text>
+  <text x="478" y="301" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Streamlined</text>
+
+  <!-- Satellite: Reporting -->
+  <circle cx="730" cy="292" r="26" fill="rgba(139,92,246,0.8)"/>
+  <text x="730" y="289" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Reporting</text>
+  <text x="730" y="301" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" text-anchor="middle">Automated</text>
+
+  <!-- Legend -->
+  <circle cx="32" cy="378" r="7" fill="url(#bfb-red-muted)"/>
+  <text x="44" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Disconnected Systems</text>
+  <circle cx="180" cy="378" r="7" fill="url(#bfb-blue)"/>
+  <text x="192" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Unified CRM</text>
+  <text x="780" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.2)" text-anchor="end">Dashed lines = integrated data flow</text>
+</svg>

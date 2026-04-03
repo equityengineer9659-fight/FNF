@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadrunner Food Bank: SNAP Workflows and Partner Coordination at Scale - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="How Roadrunner Food Bank, New Mexico's largest hunger relief organization, expanded Salesforce into partner management, call center operations, and SNAP benefits workflows.">
+    <meta name="keywords" content="food bank Salesforce, SNAP benefits, partner management, call center operations, nonprofit CRM">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://food-n-force.com/blog/roadrunner-food-bank-salesforce.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Roadrunner Food Bank: SNAP Workflows and Partner Coordination at Scale - Food-N-Force">
+    <meta property="og:description" content="How Roadrunner Food Bank, New Mexico's largest hunger relief organization, expanded Salesforce into partner management, call center operations, and SNAP benefits workflows.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://food-n-force.com/blog/roadrunner-food-bank-salesforce.html">
+    <meta property="og:image" content="https://food-n-force.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2024-04-23">
+    <meta property="article:section" content="Case Studies">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Roadrunner Food Bank: SNAP Workflows and Partner Coordination at Scale - Food-N-Force">
+    <meta name="twitter:description" content="How Roadrunner Food Bank, New Mexico's largest hunger relief organization, expanded Salesforce into partner management, call center operations, and SNAP benefits workflows.">
+    <meta name="twitter:image" content="https://food-n-force.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Roadrunner Food Bank: SNAP Workflows and Partner Coordination at Scale",
+      "description": "How Roadrunner Food Bank, New Mexico's largest hunger relief organization, expanded Salesforce into partner management, call center operations, and SNAP benefits workflows.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "datePublished": "2024-04-23",
+      "url": "https://food-n-force.com/blog/roadrunner-food-bank-salesforce.html",
+      "image": "https://food-n-force.com/og-image.png",
+      "articleSection": "Case Studies",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link">Dashboards</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link" aria-current="page">Blog</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link">Dashboards</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link" aria-current="page">Blog</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="/blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--case-studies">Case Studies</span>
+                <h1 id="article-title" class="article-hero__title">Roadrunner Food Bank: SNAP Workflows and Partner Coordination at Scale</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2024-04-23">April 2024</time>
+                    <span>5 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+    Roadrunner Food Bank is the largest hunger relief organization in New Mexico, distributing nearly 60 million pounds of food annually across a state that spans 121,590 square miles with some of the highest food insecurity rates in the nation. At that scale, the challenge is not just moving food — it is coordinating hundreds of partner agencies, managing a high-volume call center, and integrating SNAP benefits assistance into an already complex operation. Roadrunner's Salesforce expansion addressed all three simultaneously.
+</p>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="/src/assets/images/illustrations/roadrunner-food-bank-salesforce.svg" alt="Unified operations diagram showing SNAP workflows, partner management, and call center connected through Salesforce" width="800" height="400" loading="lazy">
+</figure>
+
+<h2>The Data Duplication Problem</h2>
+
+<p>
+    Before the Salesforce expansion, Roadrunner operated with data spread across multiple disconnected systems. Partner agency information lived in one database. Client intake records existed in another. Call center staff accessed a separate system for inquiries, and SNAP benefits caseworkers maintained their own tracking spreadsheets. The result was predictable: duplicate records for the same individuals appearing across systems, conflicting information about partner agency capacity, and no reliable way to understand the full picture of services a household was receiving.
+</p>
+
+<p>
+    A family calling the Roadrunner help line might be seeking food assistance, SNAP application help, and information about a mobile pantry schedule in their area. Under the old system, the call center agent would need to check three different systems to answer those questions — and the information gathered during that call would not automatically flow to the teams managing each of those programs. The family might receive a callback from the SNAP team asking for information they had already provided to the call center.
+</p>
+
+<p>
+    For an organization distributing 60 million pounds of food annually, these inefficiencies were not minor annoyances. They translated into delayed services, frustrated clients, and staff time consumed by redundant data entry rather than mission-focused work.
+</p>
+
+<h2>Unifying Partner Management</h2>
+
+<p>
+    Roadrunner's partner network includes food pantries, soup kitchens, shelters, after-school programs, and senior centers across New Mexico. Each partner has different storage capabilities, distribution schedules, population demographics, and reporting requirements. Managing this diversity through spreadsheets and email had created a communication pattern where the most responsive partners received the most attention and the least connected partners — often in rural communities with the greatest need — received the least.
+</p>
+
+<p>
+    The Salesforce partner management module created a structured profile for each partner agency that captures operational capacity, storage infrastructure, service area demographics, distribution schedules, and compliance status. Partner coordinators at Roadrunner can now view the entire network through filtered dashboards that surface which partners need attention rather than relying on which partners happen to call.
+</p>
+
+<aside class="article-pullquote">
+    <blockquote>
+        <p>At 60 million pounds annually, the difference between a coordinated partner network and a fragmented one is measured in thousands of families served — or missed.</p>
+    </blockquote>
+</aside>
+
+<p>
+    Partner agencies access a portal where they submit food orders, report distribution data, update their operating schedules, and communicate needs to Roadrunner staff. This structured communication channel replaced the email-and-phone approach that had made it nearly impossible to track commitments, follow up on requests, or identify patterns across the network. When a rural partner in southern New Mexico reports declining distribution numbers, that signal now surfaces in the system rather than sitting in someone's email inbox.
+</p>
+
+<h2>Standardizing Call Center Operations</h2>
+
+<p>
+    Roadrunner's call center handles thousands of calls monthly from individuals seeking food assistance, SNAP benefits information, volunteer opportunities, and partner agency inquiries. Before the Salesforce integration, call center agents worked from printed scripts and manually logged call outcomes in a basic database. There was no standardized workflow for different call types, no automatic routing based on caller needs, and no connection between call center data and program delivery systems.
+</p>
+
+<p>
+    The new system provides call center agents with guided workflows that adapt based on the caller's needs. A caller seeking food assistance triggers a workflow that checks the caller's location against nearby partner agencies, verifies current distribution schedules, and offers to connect the caller with SNAP benefits assistance if they are not already enrolled. A partner agency calling about a delivery issue triggers a different workflow that pulls up the agency's profile, recent delivery history, and open cases.
+</p>
+
+<p>
+    Each call creates a case record that links to the caller's household profile, the programs discussed, any referrals made, and follow-up actions required. Supervisors can review call patterns to identify training needs, common questions that might be addressed through proactive communication, and service gaps where callers are asking for help that Roadrunner does not currently provide in their area.
+</p>
+
+<h2>Integrating SNAP Benefits Workflows</h2>
+
+<p>
+    SNAP benefits assistance is a critical complement to direct food distribution. Many of the families Roadrunner serves are eligible for SNAP but have not applied — either because they do not know they qualify, the application process is intimidating, or they lack the documentation required. Roadrunner's SNAP outreach team helps families navigate the application process, gather required documentation, and follow up on pending applications.
+</p>
+
+<p>
+    Before the Salesforce integration, SNAP casework was tracked in spreadsheets that were disconnected from Roadrunner's client intake system. A family receiving food from a Roadrunner partner agency might be a strong candidate for SNAP assistance, but there was no automated mechanism to identify that opportunity. The SNAP team relied on referrals from call center agents who remembered to mention the program, or on families who happened to ask about it.
+</p>
+
+<p>
+    The integrated system now flags households that are receiving food assistance but are not currently enrolled in SNAP, based on household size and income data collected during intake. SNAP caseworkers receive a prioritized queue of potential clients rather than waiting for referrals. The system tracks each case through the application lifecycle — initial screening, document gathering, application submission, pending review, approval or denial, and recertification dates. Automated reminders notify caseworkers when a client's SNAP recertification is approaching, preventing lapses that force families back into emergency food assistance.
+</p>
+
+<h2>Results and Operational Impact</h2>
+
+<p>
+    The unified Salesforce platform eliminated the data duplication that had plagued Roadrunner's operations. Client records that previously existed in three or four disconnected systems were consolidated into a single household profile that all teams access. Partner agency communication moved from email threads to structured portal interactions with accountability and tracking. Call center agents reduced average call handling time by accessing all relevant information from a single screen rather than switching between systems.
+</p>
+
+<p>
+    The SNAP integration produced the most measurable impact on families served. By systematically identifying food assistance recipients who were likely SNAP-eligible, Roadrunner increased SNAP application submissions significantly in the first year after implementation. Each successful SNAP enrollment represents ongoing monthly food purchasing power for a family — a multiplier effect that extends far beyond the value of any single food bank distribution.
+</p>
+
+<p>
+    For food banks operating at Roadrunner's scale — where the logistics of moving tens of millions of pounds of food must coexist with direct client services, public benefits navigation, and partner network coordination — the lesson is clear. These functions cannot operate in silos. The families being served do not experience them as separate programs. They experience them as one organization that either has its information together or does not. Unifying the data infrastructure is not a technology project. It is a service quality project with technology as the mechanism.
+</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                <a href="central-pennsylvania-food-bank-salesforce.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">Central Pennsylvania Food Bank Salesforce Implementation</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="food-bank-of-alaska-snap-management.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">Food Bank of Alaska SNAP Management</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="snap-policy-changes-food-banks.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Industry Insights</span>
+                    <span class="article-read-next__card-title">SNAP Policy Changes: How Food Banks Are Adapting</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Ready to Unify Your SNAP and Distribution Operations?</h2>
+                <p class="article-cta__text">Food-N-Force helps food banks integrate SNAP benefits workflows with food distribution operations on a unified Salesforce platform.</p>
+                <div class="article-cta__actions">
+                    <a href="/contact.html" class="resource-action">Get in Touch</a>
+                    <a href="/blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+</body>
+</html>

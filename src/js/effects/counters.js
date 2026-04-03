@@ -52,6 +52,8 @@ class CounterAnimator {
         return value + '%';
       case 'plus':
         return value + '+';
+      case 'billion':
+        return value + 'B+';
       case 'million':
         return value + 'M+';
       case 'thousand':

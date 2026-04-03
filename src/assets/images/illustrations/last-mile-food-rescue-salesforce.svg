@@ -1,0 +1,155 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Geolocation-based food rescue matching showing donors, drivers, and recipients connected in real-time">
+  <defs>
+    <linearGradient id="lmf-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="lmf-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="lmf-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="lmf-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="lmf-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="lmf-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.9"/>
+    </linearGradient>
+    <radialGradient id="lmf-hub-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#0176D3;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="lmf-glow">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#lmf-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="24" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">LAST MILE FOOD RESCUE — REAL-TIME LOGISTICS</text>
+
+  <!-- Column labels -->
+  <text x="140" y="56" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="rgba(245,158,11,0.5)" text-anchor="middle" letter-spacing="1">DONORS</text>
+  <text x="400" y="56" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="rgba(1,118,211,0.5)" text-anchor="middle" letter-spacing="1">DISPATCH HUB</text>
+  <text x="660" y="56" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="rgba(16,185,129,0.5)" text-anchor="middle" letter-spacing="1">RECIPIENTS</text>
+
+  <!-- Hub glow -->
+  <circle cx="400" cy="195" r="90" fill="url(#lmf-hub-glow)"/>
+
+  <!-- === Connection lines: Donors to Hub === -->
+  <line x1="180" y1="110" x2="342" y2="175" stroke="rgba(245,158,11,0.2)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="340,171 348,177 338,178" fill="rgba(245,158,11,0.35)"/>
+
+  <line x1="180" y1="195" x2="342" y2="195" stroke="rgba(245,158,11,0.2)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="340,192 348,195 340,198" fill="rgba(245,158,11,0.35)"/>
+
+  <line x1="180" y1="280" x2="342" y2="215" stroke="rgba(245,158,11,0.2)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="340,212 348,213 340,219" fill="rgba(245,158,11,0.35)"/>
+
+  <!-- === Connection lines: Hub to Recipients === -->
+  <line x1="458" y1="175" x2="614" y2="110" stroke="rgba(16,185,129,0.2)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="612,106 620,112 610,114" fill="rgba(16,185,129,0.35)"/>
+
+  <line x1="458" y1="195" x2="614" y2="195" stroke="rgba(16,185,129,0.2)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="614,192 622,195 614,198" fill="rgba(16,185,129,0.35)"/>
+
+  <line x1="458" y1="215" x2="614" y2="280" stroke="rgba(16,185,129,0.2)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="612,283 620,282 614,276" fill="rgba(16,185,129,0.35)"/>
+
+  <line x1="458" y1="200" x2="614" y2="230" stroke="rgba(16,185,129,0.2)" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <polygon points="612,227 622,231 614,234" fill="rgba(16,185,129,0.35)"/>
+
+  <!-- === DONOR NODES (left column, amber) === -->
+  <circle cx="140" cy="110" r="32" fill="url(#lmf-amber)"/>
+  <circle cx="140" cy="110" r="32" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <!-- Store icon -->
+  <rect x="128" y="103" width="24" height="14" rx="1" fill="none" stroke="white" stroke-width="1.2"/>
+  <line x1="128" y1="103" x2="140" y2="96" stroke="white" stroke-width="1.2"/>
+  <line x1="140" y1="96" x2="152" y2="103" stroke="white" stroke-width="1.2"/>
+  <text x="140" y="128" font-family="system-ui,sans-serif" font-size="8" font-weight="600" fill="white" text-anchor="middle">Restaurant</text>
+
+  <circle cx="140" cy="195" r="32" fill="url(#lmf-amber)"/>
+  <circle cx="140" cy="195" r="32" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <!-- Box icon -->
+  <rect x="129" y="185" width="22" height="16" rx="1" fill="none" stroke="white" stroke-width="1.2"/>
+  <line x1="129" y1="191" x2="151" y2="191" stroke="white" stroke-width="1"/>
+  <text x="140" y="214" font-family="system-ui,sans-serif" font-size="8" font-weight="600" fill="white" text-anchor="middle">Grocery</text>
+
+  <circle cx="140" cy="280" r="32" fill="url(#lmf-amber)"/>
+  <circle cx="140" cy="280" r="32" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <!-- Plate icon -->
+  <circle cx="140" cy="273" r="10" fill="none" stroke="white" stroke-width="1.2"/>
+  <line x1="133" y1="273" x2="147" y2="273" stroke="white" stroke-width="1"/>
+  <text x="140" y="297" font-family="system-ui,sans-serif" font-size="8" font-weight="600" fill="white" text-anchor="middle">Catering</text>
+
+  <!-- === CENTRAL DISPATCH HUB === -->
+  <circle cx="400" cy="195" r="58" fill="url(#lmf-blue)" filter="url(#lmf-glow)"/>
+  <circle cx="400" cy="195" r="58" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+  <text x="400" y="186" font-family="system-ui,sans-serif" font-size="12" font-weight="800" fill="white" text-anchor="middle">MATCH</text>
+  <text x="400" y="200" font-family="system-ui,sans-serif" font-size="12" font-weight="800" fill="white" text-anchor="middle">ENGINE</text>
+  <text x="400" y="216" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">GPS + Availability</text>
+
+  <!-- Clock + timing indicator -->
+  <circle cx="400" cy="275" r="16" fill="rgba(139,92,246,0.6)"/>
+  <circle cx="400" cy="275" r="16" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <!-- Clock hands -->
+  <circle cx="400" cy="275" r="1.5" fill="white"/>
+  <line x1="400" y1="275" x2="400" y2="267" stroke="white" stroke-width="1.2"/>
+  <line x1="400" y1="275" x2="406" y2="275" stroke="white" stroke-width="1.2"/>
+  <text x="400" y="302" font-family="system-ui,sans-serif" font-size="9" font-weight="600" fill="rgba(139,92,246,0.8)" text-anchor="middle">8 min avg match</text>
+
+  <!-- Mobile/GPS indicators near hub -->
+  <!-- GPS pin left -->
+  <circle cx="328" cy="145" r="10" fill="rgba(139,92,246,0.5)"/>
+  <path d="M325,143 Q325,138 328,138 Q331,138 331,143 L328,149 Z" fill="none" stroke="white" stroke-width="1"/>
+  <circle cx="328" cy="142" r="2" fill="white"/>
+
+  <!-- GPS pin right -->
+  <circle cx="472" cy="145" r="10" fill="rgba(139,92,246,0.5)"/>
+  <path d="M469,143 Q469,138 472,138 Q475,138 475,143 L472,149 Z" fill="none" stroke="white" stroke-width="1"/>
+  <circle cx="472" cy="142" r="2" fill="white"/>
+
+  <!-- === RECIPIENT NODES (right column, green) === -->
+  <circle cx="660" cy="110" r="28" fill="url(#lmf-green)"/>
+  <circle cx="660" cy="110" r="28" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="660" y="107" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="white" text-anchor="middle">Shelter</text>
+  <text x="660" y="118" font-family="system-ui,sans-serif" font-size="7" fill="rgba(255,255,255,0.7)" text-anchor="middle">North</text>
+
+  <circle cx="660" cy="195" r="28" fill="url(#lmf-green)"/>
+  <circle cx="660" cy="195" r="28" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="660" y="192" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="white" text-anchor="middle">Pantry</text>
+  <text x="660" y="203" font-family="system-ui,sans-serif" font-size="7" fill="rgba(255,255,255,0.7)" text-anchor="middle">Central</text>
+
+  <circle cx="660" cy="235" r="22" fill="url(#lmf-green)"/>
+  <circle cx="660" cy="235" r="22" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="660" y="233" font-family="system-ui,sans-serif" font-size="7" font-weight="700" fill="white" text-anchor="middle">Community</text>
+  <text x="660" y="242" font-family="system-ui,sans-serif" font-size="7" fill="rgba(255,255,255,0.7)" text-anchor="middle">Center</text>
+
+  <circle cx="660" cy="290" r="28" fill="url(#lmf-green)"/>
+  <circle cx="660" cy="290" r="28" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="660" y="287" font-family="system-ui,sans-serif" font-size="8" font-weight="700" fill="white" text-anchor="middle">Pantry</text>
+  <text x="660" y="298" font-family="system-ui,sans-serif" font-size="7" fill="rgba(255,255,255,0.7)" text-anchor="middle">South</text>
+
+  <!-- Legend -->
+  <circle cx="32" cy="378" r="7" fill="url(#lmf-amber)"/>
+  <text x="44" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Food Donors</text>
+  <circle cx="130" cy="378" r="7" fill="url(#lmf-blue)"/>
+  <text x="142" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Dispatch Hub</text>
+  <circle cx="232" cy="378" r="7" fill="url(#lmf-green)"/>
+  <text x="244" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">Recipients</text>
+  <circle cx="320" cy="378" r="7" fill="rgba(139,92,246,0.7)"/>
+  <text x="332" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.4)">GPS / Timing</text>
+  <text x="780" y="382" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.2)" text-anchor="end">Dashed lines = real-time rescue routes</text>
+</svg>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Pennsylvania Food Bank: Transforming SNAP Outreach with Salesforce - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="How Central Pennsylvania Food Bank migrated SNAP outreach and case management to Salesforce Nonprofit Cloud, achieving a 60% reduction in client follow-up time.">
+    <meta name="keywords" content="food bank technology, nonprofit Salesforce, SNAP outreach, case management, food bank software">
+    <meta name="author" content="Food-N-Force Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://food-n-force.com/blog/central-pennsylvania-food-bank-salesforce.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Central Pennsylvania Food Bank: Transforming SNAP Outreach with Salesforce - Food-N-Force">
+    <meta property="og:description" content="How Central Pennsylvania Food Bank migrated SNAP outreach and case management to Salesforce Nonprofit Cloud, achieving a 60% reduction in client follow-up time.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://food-n-force.com/blog/central-pennsylvania-food-bank-salesforce.html">
+    <meta property="og:image" content="https://food-n-force.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2024-05-30">
+    <meta property="article:section" content="Case Studies">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Central Pennsylvania Food Bank: Transforming SNAP Outreach with Salesforce - Food-N-Force">
+    <meta name="twitter:description" content="How Central Pennsylvania Food Bank migrated SNAP outreach and case management to Salesforce Nonprofit Cloud, achieving a 60% reduction in client follow-up time.">
+    <meta name="twitter:image" content="https://food-n-force.com/og-image.png">
+
+    <!-- Structured Data -->
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Central Pennsylvania Food Bank: Transforming SNAP Outreach with Salesforce",
+      "description": "How Central Pennsylvania Food Bank migrated SNAP outreach and case management to Salesforce Nonprofit Cloud, achieving a 60% reduction in client follow-up time.",
+      "author": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+      "datePublished": "2024-05-30",
+      "url": "https://food-n-force.com/blog/central-pennsylvania-food-bank-salesforce.html",
+      "image": "https://food-n-force.com/og-image.png",
+      "articleSection": "Case Studies",
+      "inLanguage": "en-US"
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS for fastest above-fold rendering (single source: src/css/critical-inline.css) -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--article" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link">Dashboards</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link" aria-current="page">Blog</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link">Dashboards</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link" aria-current="page">Blog</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" tabindex="-1">
+        <!-- Article Hero -->
+        <header class="article-hero" aria-labelledby="article-title">
+            <div class="article-hero__overlay"></div>
+            <div class="article-hero__content">
+                <a href="/blog.html" class="article-back-link">&larr; Back to Blog</a>
+                <span class="article-category-badge article-category--case-studies">Case Studies</span>
+                <h1 id="article-title" class="article-hero__title">Central Pennsylvania Food Bank: Transforming SNAP Outreach with Salesforce</h1>
+                <div class="article-hero__meta">
+                    <span class="article-hero__author">Food-N-Force Team</span>
+                    <time datetime="2024-05-30">May 2024</time>
+                    <span>5 min read</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Article Body -->
+        <article class="article-body-section">
+            <div class="article-prose">
+                <p class="article-lead">
+    Central Pennsylvania Food Bank serves 27 counties across central Pennsylvania, distributing more than 80 million pounds of food annually and operating one of the largest SNAP outreach programs in the state. When the organization recognized that its case management infrastructure could not keep pace with growing client demand, it made the decision to migrate its entire SNAP outreach operation to Salesforce Nonprofit Cloud. The results reshaped how the food bank connects vulnerable households with federal nutrition benefits.
+</p>
+
+<figure class="article-illustration article-illustration--breakout">
+    <img src="/src/assets/images/illustrations/central-pennsylvania-food-bank-salesforce.svg" alt="SNAP case management pipeline showing client intake flowing through case tracking to outcomes on Salesforce Nonprofit Cloud" width="800" height="400" loading="lazy">
+</figure>
+
+<h2>The Challenge: Fragmented Data, Slow Follow-Ups</h2>
+
+<p>
+    Before the migration, Central Pennsylvania Food Bank's SNAP outreach team operated with a patchwork of tools. Client intake information lived in spreadsheets maintained by individual case workers. Follow-up schedules were tracked through personal calendars and email reminders. When a client called back to check on the status of their SNAP application, whichever staff member answered the phone had to track down the original case worker to get an update. There was no single system of record.
+</p>
+
+<p>
+    The fragmentation created three compounding problems. First, client follow-up times stretched to days instead of hours. A case worker returning from a day off would find a backlog of client inquiries that no one else could answer, because the relevant case notes existed only on that worker's local files. Second, reporting to funders required manual compilation from multiple data sources, consuming staff time that should have been spent serving clients. Third, supervisors had no real-time visibility into caseload distribution, making it impossible to identify bottlenecks or reallocate resources when one team member was overwhelmed.
+</p>
+
+<p>
+    The SNAP application process is time-sensitive. Clients who miss follow-up deadlines or fail to submit required documentation within narrow windows lose their applications and must restart the process. Every day of delayed follow-up represents a real risk that a family loses access to nutrition benefits they qualify for. The stakes of slow case management are not abstract.
+</p>
+
+<h2>The Solution: Salesforce Nonprofit Cloud</h2>
+
+<p>
+    Central Pennsylvania Food Bank selected Salesforce Nonprofit Cloud as its centralized case management platform. The implementation focused on three core capabilities: unified client records, automated follow-up workflows, and real-time reporting dashboards.
+</p>
+
+<p>
+    The unified client record was the foundation. Every interaction with a client — initial intake, document submission, application status updates, follow-up calls, outcome tracking — was captured in a single Salesforce contact record. Any staff member could pull up a client's complete history in seconds. When a client called back, the person answering the phone could see exactly where the case stood, what documents were still needed, and what the next follow-up date was.
+</p>
+
+<p>
+    Automated workflows eliminated the manual tracking that had consumed case worker time. When a new client was entered into the system, Salesforce automatically generated a follow-up task sequence: initial application review at 48 hours, document reminder at one week, status check at two weeks, and outcome recording at 30 days. If a task went uncompleted, the system escalated it to a supervisor. No case fell through the cracks because a staff member was out sick or on vacation.
+</p>
+
+<aside class="article-pullquote">
+    <blockquote>
+        <p>When every case worker can see every client's full history, the concept of "my caseload" transforms into "our caseload." That shift alone cut our average follow-up time by more than half.</p>
+    </blockquote>
+</aside>
+
+<p>
+    Real-time dashboards gave leadership the operational visibility they had never had. Supervisors could see at a glance how many active cases each worker was managing, which cases were approaching deadline, and what the current approval rate was across the program. Monthly reports to funders that previously required two days of manual data compilation could now be generated in minutes.
+</p>
+
+<h2>The Results: Measurable Impact</h2>
+
+<div class="article-stats-block">
+    <div class="article-stat">
+        <span class="article-stat__number">60%</span>
+        <span class="article-stat__label">Reduction in client follow-up time</span>
+    </div>
+    <div class="article-stat">
+        <span class="article-stat__number">100%</span>
+        <span class="article-stat__label">Client data unified across all staff</span>
+    </div>
+    <div class="article-stat">
+        <span class="article-stat__number">75%</span>
+        <span class="article-stat__label">Reduction in funder reporting time</span>
+    </div>
+</div>
+
+<p>
+    The most significant measurable outcome was the 60% reduction in average client follow-up time. Cases that previously waited three to five business days for a response were now being addressed within 24 hours. The automated task system ensured that no client inquiry sat unanswered simply because their assigned case worker was unavailable.
+</p>
+
+<p>
+    The unified data model also revealed patterns that had been invisible under the old system. Leadership discovered that a disproportionate number of SNAP applications were stalling at the document-submission stage — not because clients lacked the documents, but because the instructions provided during intake were unclear. A simple revision to the intake checklist, informed by data that only became visible through centralized tracking, improved the document-submission rate by 22%.
+</p>
+
+<p>
+    Staff satisfaction improved as well. Case workers reported spending less time on administrative tasks and more time in direct client interaction. The elimination of duplicative data entry — entering the same client information into spreadsheets, email templates, and reporting forms — freed an estimated four hours per case worker per week.
+</p>
+
+<h2>Lessons for Other Food Banks</h2>
+
+<p>
+    Central Pennsylvania Food Bank's experience offers several transferable lessons for food banks considering a similar migration. First, the implementation succeeded because it was scoped tightly around a single program — SNAP outreach — rather than attempting to migrate every organizational function simultaneously. Starting with one high-impact program allowed the team to learn the platform, refine workflows, and demonstrate value before expanding.
+</p>
+
+<p>
+    Second, the automated follow-up workflows were more valuable than the reporting capabilities, despite leadership initially prioritizing reporting. The workflows directly improved client outcomes by preventing missed deadlines. The reporting was valuable for organizational management but did not directly affect the families being served. Prioritizing client-facing automation over internal reporting is a lesson that applies broadly.
+</p>
+
+<p>
+    Third, data migration from the old system required more effort than anticipated. Client records spread across multiple spreadsheets with inconsistent formatting required significant cleaning before import. Organizations planning a similar migration should budget dedicated time for data preparation — it is not a task that can be compressed into the final week before launch.
+</p>
+
+<p>
+    Central Pennsylvania Food Bank's transformation demonstrates that the right technology platform, implemented with discipline and focused on measurable client outcomes, can fundamentally change how food banks deliver critical services. The 60% reduction in follow-up time is not just an operational metric — it represents thousands of families who received faster access to nutrition benefits they were entitled to.
+</p>
+            </div>
+        </article>
+
+        <!-- Read Next -->
+        <section class="article-read-next" aria-label="Related articles">
+            <h2 class="article-read-next__title">Read Next</h2>
+            <div class="article-read-next__grid">
+                <a href="food-bank-of-alaska-snap-management.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">Food Bank of Alaska: Modernizing SNAP Case Management</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="roadrunner-food-bank-salesforce.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Case Studies</span>
+                    <span class="article-read-next__card-title">Roadrunner Food Bank: Scaling Operations with Salesforce</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+                <a href="salesforce-food-bank-operations.html" class="article-read-next__card">
+                    <span class="article-read-next__card-category">Technology Strategy</span>
+                    <span class="article-read-next__card-title">5 Ways Salesforce Transforms Food Bank Operations</span>
+                    <span class="article-read-next__card-meta">5 min read</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">Ready to Transform Your SNAP Operations?</h2>
+                <p class="article-cta__text">Food-N-Force helps food banks implement Salesforce solutions that streamline SNAP outreach, case management, and client services.</p>
+                <div class="article-cta__actions">
+                    <a href="/contact.html" class="resource-action">Get in Touch</a>
+                    <a href="/blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-around_large">
+            <div class="slds-text-align_center">
+                <p class="slds-text-body_small slds-text-color_inverse">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+</body>
+</html>

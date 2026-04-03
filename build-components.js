@@ -36,6 +36,16 @@ const blogSubpages = [
   'grant-writing-nonprofit-sustainability',
   'ai-data-strategy-crm-food-banks',
   'data-migration-food-bank-modernization',
+  'central-pennsylvania-food-bank-salesforce',
+  'barrie-food-bank-crm-transformation',
+  'last-mile-food-rescue-salesforce',
+  'food-bank-of-alaska-snap-management',
+  'san-antonio-food-bank-salesforce',
+  'second-harvest-silicon-valley-crm',
+  'second-harvest-process-automation',
+  'roadrunner-food-bank-salesforce',
+  'food-bank-salesforce-use-cases',
+  'food-bank-digital-supply-chain',
 ];
 
 // Pages that should highlight "Resources" in navigation
@@ -267,6 +277,16 @@ function buildComponents() {
   'grant-writing-nonprofit-sustainability',
   'ai-data-strategy-crm-food-banks',
   'data-migration-food-bank-modernization',
+  'central-pennsylvania-food-bank-salesforce',
+  'barrie-food-bank-crm-transformation',
+  'last-mile-food-rescue-salesforce',
+  'food-bank-of-alaska-snap-management',
+  'san-antonio-food-bank-salesforce',
+  'second-harvest-silicon-valley-crm',
+  'second-harvest-process-automation',
+  'roadrunner-food-bank-salesforce',
+  'food-bank-salesforce-use-cases',
+  'food-bank-digital-supply-chain',
 ];
 
   [...corePages, ...hubPages].forEach(page => {

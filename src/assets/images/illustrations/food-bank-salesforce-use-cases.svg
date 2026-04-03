@@ -1,0 +1,128 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Six Salesforce use cases for food banks: program management, volunteer scheduling, donor tracking, partner coordination, communications, and analytics">
+  <defs>
+    <linearGradient id="uc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0c1a2e;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="uc-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="uc-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="uc-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.85"/>
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.85"/>
+    </linearGradient>
+    <linearGradient id="uc-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.9"/>
+    </linearGradient>
+    <linearGradient id="uc-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0176D3;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="uc-teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0.9"/>
+    </linearGradient>
+    <filter id="uc-glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#uc-bg)"/>
+
+  <!-- Title -->
+  <text x="400" y="24" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(255,255,255,0.5)" text-anchor="middle" letter-spacing="2">SALESFORCE USE CASES — ACROSS THE ORGANIZATION</text>
+
+  <!-- Subtle connecting lines between all 6 boxes -->
+  <!-- Row 1 horizontal -->
+  <line x1="232" y1="140" x2="308" y2="140" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,4"/>
+  <line x1="492" y1="140" x2="568" y2="140" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,4"/>
+  <!-- Row 2 horizontal -->
+  <line x1="232" y1="290" x2="308" y2="290" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,4"/>
+  <line x1="492" y1="290" x2="568" y2="290" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,4"/>
+  <!-- Vertical connections -->
+  <line x1="140" y1="195" x2="140" y2="235" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,4"/>
+  <line x1="400" y1="195" x2="400" y2="235" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,4"/>
+  <line x1="660" y1="195" x2="660" y2="235" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,4"/>
+  <!-- Diagonal connections -->
+  <line x1="232" y1="180" x2="308" y2="250" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,5"/>
+  <line x1="492" y1="180" x2="568" y2="250" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,5"/>
+  <line x1="232" y1="250" x2="308" y2="180" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,5"/>
+  <line x1="492" y1="250" x2="568" y2="180" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,5"/>
+
+  <!-- === ROW 1 === -->
+
+  <!-- 1. Programs (cyan) -->
+  <rect x="50" y="55" rx="12" ry="12" width="180" height="170" fill="rgba(14,165,233,0.08)" stroke="rgba(14,165,233,0.3)" stroke-width="1.5"/>
+  <!-- Person icon -->
+  <circle cx="140" cy="110" r="12" fill="none" stroke="url(#uc-cyan)" stroke-width="2"/>
+  <circle cx="140" cy="103" r="5" fill="url(#uc-cyan)"/>
+  <path d="M127,122 Q127,113 140,113 Q153,113 153,122" fill="none" stroke="url(#uc-cyan)" stroke-width="2"/>
+  <text x="140" y="150" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="rgba(14,165,233,0.9)" text-anchor="middle">Programs</text>
+  <text x="140" y="168" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Intake · Eligibility · Outcomes</text>
+  <text x="140" y="205" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Program Management</text>
+
+  <!-- 2. Volunteers (green) -->
+  <rect x="310" y="55" rx="12" ry="12" width="180" height="170" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.3)" stroke-width="1.5"/>
+  <!-- People icon (3 circles) -->
+  <circle cx="380" cy="102" r="5" fill="url(#uc-green)"/>
+  <circle cx="400" cy="100" r="6" fill="url(#uc-green)"/>
+  <circle cx="420" cy="102" r="5" fill="url(#uc-green)"/>
+  <path d="M370,118 Q370,110 380,110 Q390,110 390,118" fill="none" stroke="url(#uc-green)" stroke-width="1.5"/>
+  <path d="M387,116 Q387,108 400,108 Q413,108 413,116" fill="none" stroke="url(#uc-green)" stroke-width="1.5"/>
+  <path d="M410,118 Q410,110 420,110 Q430,110 430,118" fill="none" stroke="url(#uc-green)" stroke-width="1.5"/>
+  <text x="400" y="150" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="rgba(16,185,129,0.9)" text-anchor="middle">Volunteers</text>
+  <text x="400" y="168" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Scheduling · Hours · Skills</text>
+  <text x="400" y="205" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Volunteer Scheduling</text>
+
+  <!-- 3. Donors (amber) -->
+  <rect x="570" y="55" rx="12" ry="12" width="180" height="170" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.3)" stroke-width="1.5"/>
+  <!-- Heart icon -->
+  <path d="M648,100 C648,95 653,90 658,90 C663,90 668,95 668,100 L658,115 L648,100 Z" fill="none" stroke="url(#uc-amber)" stroke-width="2"/>
+  <path d="M668,100 C668,95 673,90 678,90 C683,90 688,95 688,100 L678,115 L668,100 Z" fill="none" stroke="url(#uc-amber)" stroke-width="2" transform="scale(-1,1) translate(-1336,0)"/>
+  <text x="660" y="150" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="rgba(245,158,11,0.9)" text-anchor="middle">Donors</text>
+  <text x="660" y="168" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Gifts · Cultivation · Stewardship</text>
+  <text x="660" y="205" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Donor Tracking</text>
+
+  <!-- === ROW 2 === -->
+
+  <!-- 4. Partners (purple) -->
+  <rect x="50" y="245" rx="12" ry="12" width="180" height="120" fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5"/>
+  <!-- Link/handshake icon -->
+  <circle cx="130" cy="282" r="8" fill="none" stroke="url(#uc-purple)" stroke-width="1.5"/>
+  <circle cx="150" cy="282" r="8" fill="none" stroke="url(#uc-purple)" stroke-width="1.5"/>
+  <line x1="138" y1="282" x2="142" y2="282" stroke="url(#uc-purple)" stroke-width="2"/>
+  <text x="140" y="310" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="rgba(139,92,246,0.9)" text-anchor="middle">Partners</text>
+  <text x="140" y="328" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Agencies · Compliance · Capacity</text>
+  <text x="140" y="350" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Partner Coordination</text>
+
+  <!-- 5. Communications (blue) -->
+  <rect x="310" y="245" rx="12" ry="12" width="180" height="120" fill="rgba(1,118,211,0.08)" stroke="rgba(1,118,211,0.3)" stroke-width="1.5"/>
+  <!-- Envelope icon -->
+  <rect x="382" y="272" rx="2" ry="2" width="36" height="24" fill="none" stroke="url(#uc-blue)" stroke-width="1.5"/>
+  <polyline points="382,272 400,288 418,272" fill="none" stroke="url(#uc-blue)" stroke-width="1.5"/>
+  <text x="400" y="310" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="rgba(1,118,211,0.9)" text-anchor="middle">Communications</text>
+  <text x="400" y="328" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Email · SMS · Marketing Cloud</text>
+  <text x="400" y="350" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Outreach Campaigns</text>
+
+  <!-- 6. Analytics (cyan-green) -->
+  <rect x="570" y="245" rx="12" ry="12" width="180" height="120" fill="rgba(14,165,233,0.06)" stroke="rgba(14,165,233,0.2)" stroke-width="1.5"/>
+  <!-- Bar chart icon -->
+  <rect x="640" y="285" width="8" height="12" rx="1" fill="url(#uc-teal)"/>
+  <rect x="652" y="278" width="8" height="19" rx="1" fill="url(#uc-teal)"/>
+  <rect x="664" y="272" width="8" height="25" rx="1" fill="url(#uc-teal)"/>
+  <rect x="676" y="280" width="8" height="17" rx="1" fill="url(#uc-teal)"/>
+  <text x="660" y="310" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="rgba(14,165,233,0.9)" text-anchor="middle">Analytics</text>
+  <text x="660" y="328" font-family="system-ui,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)" text-anchor="middle">Dashboards · Reports · AI</text>
+  <text x="660" y="350" font-family="system-ui,sans-serif" font-size="9" fill="rgba(255,255,255,0.3)" text-anchor="middle">Data-Driven Decisions</text>
+
+  <!-- Legend -->
+  <text x="400" y="390" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.35)" text-anchor="middle" letter-spacing="1">Unified Platform — One System, Many Functions</text>
+</svg>
