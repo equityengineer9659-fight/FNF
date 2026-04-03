@@ -88,31 +88,37 @@ jobs:
           SSH_USER: ${{ secrets.SITEGROUND_USER }}
           SSH_PORT: ${{ secrets.SITEGROUND_PORT }}
         run: |
-          sudo apt-get install -y expect
-
           mkdir -p ~/.ssh
           echo "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
-          # Use expect to handle passphrase for ssh-add
           eval "$(ssh-agent -s)"
-          expect <<EOF
-          spawn ssh-add /home/runner/.ssh/deploy_key
-          expect "Enter passphrase"
-          send "$SSH_PASS\r"
-          expect eof
-          EOF
+
+          # Load SSH key — handle passphrase-protected key or plain key
+          if [ -n "$SSH_PASS" ]; then
+            PASS_FILE=$(mktemp)
+            echo "$SSH_PASS" > "$PASS_FILE"
+            chmod 600 "$PASS_FILE"
+            ASKPASS=$(mktemp /tmp/askpass.XXXXXX)
+            chmod 700 "$ASKPASS"
+            printf '#!/bin/sh\ncat "%s"\n' "$PASS_FILE" > "$ASKPASS"
+            DISPLAY=:0 SSH_ASKPASS_REQUIRE=force SSH_ASKPASS="$ASKPASS" \
+              ssh-add ~/.ssh/deploy_key < /dev/null
+            rm -f "$PASS_FILE" "$ASKPASS"
+          else
+            ssh-add ~/.ssh/deploy_key
+          fi
 
           # Deploy to www path (what the web server reads)
           rsync -avz --delete -e "ssh -p $SSH_PORT" \
             dist/ \
-            ${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/
+            "${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/"
 
           # Flush SiteGround caches after deploy
-          ssh -p $SSH_PORT ${SSH_USER}@${SSH_HOST} "cd www/food-n-force.com/public_html && find . -name '*.html' -exec touch {} + 2>/dev/null; echo 'Cache touch complete'" || true
+          ssh -p "$SSH_PORT" "${SSH_USER}@${SSH_HOST}" "cd www/food-n-force.com/public_html && find . -name '*.html' -exec touch {} + 2>/dev/null; echo 'Cache touch complete'" || true
           # Flush Memcached if available (SiteGround managed cache)
-          ssh -p $SSH_PORT ${SSH_USER}@${SSH_HOST} "echo 'flush_all' | nc -q1 localhost 11211 2>/dev/null && echo 'Memcached flushed' || echo 'Memcached flush skipped (not available via CLI)'"
+          ssh -p "$SSH_PORT" "${SSH_USER}@${SSH_HOST}" "echo 'flush_all' | nc -q1 localhost 11211 2>/dev/null && echo 'Memcached flushed' || echo 'Memcached flush skipped (not available via CLI)'" || true
 
           echo "✅ Files deployed to SiteGround"
 
