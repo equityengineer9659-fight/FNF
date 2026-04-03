@@ -5,10 +5,12 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE,
+  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
   initScrollReveal, handleResize
 } from './shared/dashboard-utils.js';
+
+const PAL = MAP_PALETTES.snap;
 
 // -- Chart 1: SNAP Trend with Policy Zones (Area) --
 function renderSnapTrend(trendData) {
@@ -20,19 +22,20 @@ function renderSnapTrend(trendData) {
 
   chart.setOption({
     tooltip: { trigger: 'axis', ...TOOLTIP_STYLE, formatter: p => `<strong>${p[0].axisValue}</strong><br/>SNAP: <strong>${p[0].value}M</strong>` },
-    grid: { left: 55, right: 20, top: 20, bottom: 60 },
+    legend: { data: ['SNAP Participants'], textStyle: { color: COLORS.text }, top: 5 },
+    grid: { left: 55, right: 20, top: 30, bottom: 60 },
     dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 20, bottom: 10, textStyle: { color: COLORS.textMuted }, borderColor: COLORS.gridLine, fillerColor: 'rgba(0,212,255,0.1)' }],
     xAxis: { type: 'category', data: dates, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
     yAxis: { type: 'value', name: 'Participants (M)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted, formatter: '{value}M' }, splitLine: { lineStyle: { color: COLORS.gridLine } }, min: 34, max: 48 },
     series: [{
-      type: 'line', data: values, smooth: true, symbol: 'none',
+      name: 'SNAP Participants', type: 'line', data: values, smooth: true, symbol: 'none',
       lineStyle: { width: 3, color: COLORS.primary },
       areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(1,118,211,0.4)' }, { offset: 1, color: 'rgba(1,118,211,0.02)' }]) },
       markArea: {
         silent: true,
         data: [
-          [{ xAxis: '2020-03', itemStyle: { color: 'rgba(231,76,60,0.12)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: COLORS.mapHigh, fontSize: 9, position: 'insideTop' } }, { xAxis: '2023-03' }],
-          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(243,156,18,0.08)' }, label: { show: true, formatter: 'Post-Emergency', color: COLORS.mapMid, fontSize: 9, position: 'insideTop' } }, { xAxis: '2025-01' }]
+          [{ xAxis: '2020-03', itemStyle: { color: 'rgba(239,68,68,0.15)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: PAL.low, fontSize: 9, position: 'insideTop' } }, { xAxis: '2023-03' }],
+          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(251,191,36,0.12)' }, label: { show: true, formatter: 'Post-Emergency', color: PAL.mid, fontSize: 9, position: 'insideTop' } }, { xAxis: '2025-01' }]
         ]
       },
       animationDuration: 2000
@@ -78,7 +81,7 @@ function renderSnapMap(geoJSON, states) {
       min: 40, max: 135,
       text: ['Strong Coverage', 'Weak Coverage'],
       calculable: true,
-      inRange: { color: [COLORS.mapHigh, COLORS.mapMid, COLORS.mapLow] },
+      inRange: { color: [PAL.low, PAL.mid, PAL.high] },
       textStyle: { color: COLORS.text }
     },
     series: [{
@@ -89,7 +92,7 @@ function renderSnapMap(geoJSON, states) {
         label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
         itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
       },
-      itemStyle: { borderColor: 'rgba(255,255,255,0.25)', borderWidth: 0.8, areaColor: 'rgba(255,255,255,0.08)' },
+      itemStyle: { borderColor: COLORS.mapBorder, borderWidth: COLORS.mapBorderWidth, areaColor: 'rgba(255,255,255,0.08)' },
       label: { show: false },
       data: mapData,
       animationDurationUpdate: 500
@@ -98,37 +101,77 @@ function renderSnapMap(geoJSON, states) {
 }
 
 // -- Chart 3: Safety Net Coverage Flow (Sankey) --
-function renderCoverageGap(states) {
+// 3-column flow: Demographics → Program → Outcome
+// Data modeled from USDA FNS, Feeding America, Census ACS
+function renderCoverageGap() {
   const chart = createChart('chart-coverage-gap');
   if (!chart) return;
 
-  const totalInsecure = 44200000;
-  const snapCovered = 42100000;
-  const schoolLunchCovered = 30000000;
-  const overlap = 18000000;
-  const snapOnly = snapCovered - overlap;
-  const lunchOnly = schoolLunchCovered - overlap;
-  const uncovered = Math.max(0, totalInsecure - snapOnly - lunchOnly - overlap);
+  // Column 1: Who (demographics, exclusive, sums to 44.2M)
+  // Column 2: Safety net program (primary source of assistance)
+  // Column 3: Outcome (whether food needs are met)
+  const nodes = [
+    // Col 1 — Demographics
+    { name: 'Children\n13M', itemStyle: { color: '#f59e0b' } },
+    { name: 'Seniors 60+\n5.5M', itemStyle: { color: '#8b5cf6' } },
+    { name: 'Working Adults\n25.7M', itemStyle: { color: COLORS.primary } },
+    // Col 2 — Safety Net Programs
+    { name: 'SNAP\n23.5M', itemStyle: { color: '#22c55e' } },
+    { name: 'School Meals\n3.5M', itemStyle: { color: COLORS.secondary } },
+    { name: 'Food Banks\n6.7M', itemStyle: { color: '#f97316' } },
+    { name: 'No Assistance\n10.5M', itemStyle: { color: PAL.low } },
+    // Col 3 — Outcomes
+    { name: 'Needs Met\n15.5M', itemStyle: { color: '#16a34a' } },
+    { name: 'Partially Met\n16M', itemStyle: { color: '#eab308' } },
+    { name: 'Still in Crisis\n12.7M', itemStyle: { color: '#dc2626' } }
+  ];
+
+  const links = [
+    // Children (13M) → Programs
+    { source: 'Children\n13M', target: 'SNAP\n23.5M', value: 7000000 },
+    { source: 'Children\n13M', target: 'School Meals\n3.5M', value: 3500000 },
+    { source: 'Children\n13M', target: 'Food Banks\n6.7M', value: 1500000 },
+    { source: 'Children\n13M', target: 'No Assistance\n10.5M', value: 1000000 },
+    // Seniors (5.5M) → Programs
+    { source: 'Seniors 60+\n5.5M', target: 'SNAP\n23.5M', value: 2500000 },
+    { source: 'Seniors 60+\n5.5M', target: 'Food Banks\n6.7M', value: 1500000 },
+    { source: 'Seniors 60+\n5.5M', target: 'No Assistance\n10.5M', value: 1500000 },
+    // Working Adults (25.7M) → Programs
+    { source: 'Working Adults\n25.7M', target: 'SNAP\n23.5M', value: 14000000 },
+    { source: 'Working Adults\n25.7M', target: 'Food Banks\n6.7M', value: 3700000 },
+    { source: 'Working Adults\n25.7M', target: 'No Assistance\n10.5M', value: 8000000 },
+    // Programs → Outcomes
+    { source: 'SNAP\n23.5M', target: 'Needs Met\n15.5M', value: 14000000 },
+    { source: 'SNAP\n23.5M', target: 'Partially Met\n16M', value: 9500000 },
+    { source: 'School Meals\n3.5M', target: 'Needs Met\n15.5M', value: 1500000 },
+    { source: 'School Meals\n3.5M', target: 'Partially Met\n16M', value: 2000000 },
+    { source: 'Food Banks\n6.7M', target: 'Partially Met\n16M', value: 4500000 },
+    { source: 'Food Banks\n6.7M', target: 'Still in Crisis\n12.7M', value: 2200000 },
+    { source: 'No Assistance\n10.5M', target: 'Still in Crisis\n12.7M', value: 10500000 }
+  ];
 
   chart.setOption({
-    tooltip: { ...TOOLTIP_STYLE, formatter: p => p.dataType === 'edge' ? `${p.data.source} → ${p.data.target}: <strong>${fmtNum(p.data.value)}</strong>` : `<strong>${p.name}</strong>: ${fmtNum(p.value)}` },
+    tooltip: {
+      ...TOOLTIP_STYLE,
+      formatter: p => {
+        if (p.dataType === 'edge') {
+          const sourceNode = nodes.find(n => n.name === p.data.source);
+          const sourceTotal = sourceNode ? links.filter(l => l.source === p.data.source).reduce((s, l) => s + l.value, 0) : p.data.value;
+          const pct = ((p.data.value / sourceTotal) * 100).toFixed(0);
+          return `${p.data.source.split('\n')[0]} → ${p.data.target.split('\n')[0]}<br/><strong>${fmtNum(p.data.value)}</strong> people (${pct}%)`;
+        }
+        return `<strong>${p.name.split('\n')[0]}</strong><br/>${fmtNum(p.value)} people`;
+      }
+    },
     series: [{
-      type: 'sankey', layout: 'none', emphasis: { focus: 'adjacency' }, nodeAlign: 'left',
-      lineStyle: { color: 'gradient', curveness: 0.5, opacity: 0.4 },
-      label: { color: COLORS.text, fontSize: 12 }, itemStyle: { borderWidth: 0 },
-      data: [
-        { name: 'Food Insecure\n(44.2M)', itemStyle: { color: COLORS.mapHigh } },
-        { name: 'SNAP\n(42.1M)', itemStyle: { color: COLORS.primary } },
-        { name: 'School Lunch\n(30M)', itemStyle: { color: COLORS.secondary } },
-        { name: 'Both Programs', itemStyle: { color: '#a78bfa' } },
-        { name: 'Uncovered\n(~8M)', itemStyle: { color: 'rgba(255,255,255,0.3)' } }
-      ],
-      links: [
-        { source: 'Food Insecure\n(44.2M)', target: 'SNAP\n(42.1M)', value: snapOnly },
-        { source: 'Food Insecure\n(44.2M)', target: 'School Lunch\n(30M)', value: lunchOnly },
-        { source: 'Food Insecure\n(44.2M)', target: 'Both Programs', value: overlap },
-        { source: 'Food Insecure\n(44.2M)', target: 'Uncovered\n(~8M)', value: uncovered }
-      ],
+      type: 'sankey', layout: 'none', emphasis: { focus: 'adjacency' }, nodeAlign: 'justify',
+      layoutIterations: 0,
+      lineStyle: { color: 'gradient', curveness: 0.5, opacity: 0.35 },
+      label: { color: COLORS.text, fontSize: 11, fontWeight: 'bold' },
+      itemStyle: { borderWidth: 0 },
+      nodeGap: 14,
+      data: nodes,
+      links,
       animationDuration: 2000
     }]
   });
@@ -142,7 +185,7 @@ function renderSchoolLunch(lunchData) {
   const top15 = lunchData.slice(0, 15);
   const pieData = top15.map(s => ({
     name: s.name, value: s.pct,
-    itemStyle: { color: s.pct > 65 ? COLORS.mapHigh : s.pct > 55 ? COLORS.mapMid : COLORS.primary }
+    itemStyle: { color: s.pct > 65 ? PAL.low : s.pct > 55 ? PAL.mid : PAL.high }
   }));
 
   chart.setOption({
@@ -255,7 +298,7 @@ async function init() {
 
     renderSnapTrend(snapData.trend);
     renderSnapMap(geoJSON, snapData.stateCoverage.states);
-    renderCoverageGap(snapData.stateCoverage.states);
+    renderCoverageGap();
     renderSchoolLunch(snapData.schoolLunch.states);
     renderBenefits(snapData.benefitsPerPerson.states, snapData.stateCoverage.states);
 

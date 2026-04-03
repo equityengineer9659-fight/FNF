@@ -89,13 +89,19 @@
                 <a href="/services.html" class="fnf-nav__link">Services</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/impact.html" class="fnf-nav__link">Impact</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link">Blog</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/about.html" class="fnf-nav__link">About Us</a>
@@ -108,9 +114,11 @@
             <ul class="fnf-nav__mobile-menu">
                 <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
                 <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
-                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">Dashboards</a></li>
                 <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
                 <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link">Blog</a></li>
                 <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
             </ul>
         </div>
@@ -134,6 +142,7 @@
         <section class="dashboard-hero" aria-label="Food bank landscape key statistics">
             <h1 class="slds-text-heading_large">Food Bank Landscape</h1>
             <p class="dashboard-hero__subtitle">Over 60,000 organizations fighting hunger — but are they where the need is?</p>
+            <p class="dashboard-hero__positioning">Mapping food bank density, revenue, and efficiency across the country — so organizations can benchmark performance and funders can direct resources where they matter most.</p>
             <div class="dashboard-hero__stats" aria-label="Key national statistics">
                 <div class="dashboard-stat">
                     <span class="dashboard-stat__number" data-target="61284" data-suffix="">61,284</span>
@@ -161,6 +170,7 @@
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
                         <div id="chart-density-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food banks per 100,000 residents by state"></div>
+                        <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Where Are the Food Banks?</h3>
@@ -203,9 +213,11 @@
         <section class="dashboard-section scroll-reveal" aria-label="Food bank revenue by state">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue by State</h2></div>
-                <div class="dashboard-chart-row">
+                <div class="dashboard-chart-row dashboard-chart-row--stacked">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-revenue" class="dashboard-chart" role="img" aria-label="Bar chart showing total food bank revenue by state"></div>
+                        <div id="chart-revenue" class="dashboard-chart" role="img" aria-label="Treemap showing food bank revenue by state, sized by revenue and colored by program efficiency"></div>
+                        <div id="treemap-legend-banks" class="dashboard-chart__legend"></div>
+                        <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Following the Money</h3>
@@ -227,12 +239,12 @@
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Program Efficiency</h2></div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-efficiency" class="dashboard-chart" role="img" aria-label="Horizontal bar chart showing program expense ratio by state"></div>
+                        <div id="chart-efficiency" class="dashboard-chart" role="img" aria-label="Radar chart comparing food bank efficiency, density, revenue, insecurity rate, and organization count across four US regions"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Dollars to Meals</h3>
                         <p class="dashboard-info__text">The <strong>program expense ratio</strong> measures how much of every dollar goes directly to feeding people (vs. overhead and fundraising). The national average is 82.4% — meaning 82 cents of every dollar reaches programs.</p>
-                        <p class="dashboard-info__text">States like <strong>New York, Minnesota, and DC</strong> exceed 86% efficiency. Lower ratios in states like <strong>Mississippi and New Mexico</strong> may reflect the higher cost of operating in rural, low-density areas where logistics are expensive.</p>
+                        <p class="dashboard-info__text">This radar compares four US regions across five dimensions: efficiency, density, average revenue per org, food insecurity rate, and organization count. The <strong>Midwest</strong> leads in efficiency, while the <strong>South</strong> faces the highest need with fewer resources per capita.</p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> IRS 990 filings via ProPublica</span>
                             <span class="meta-item"><strong>Metric</strong> Program expenses / total expenses x 100</span>
@@ -265,15 +277,36 @@
             </div>
         </section>
 
+        <!-- How Organizations Use These Insights -->
+        <section class="dashboard-section dashboard-insights scroll-reveal" aria-label="How organizations use these insights">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <h2 class="dashboard-narrative__heading">How Organizations Use These Insights</h2>
+                <div class="dashboard-insights__grid">
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Who This Helps</div>
+                        <p class="dashboard-insights__card-text">Executive directors, operations leaders, development teams, and community partnerships staff at food banks, pantries, and hunger-relief nonprofits.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Decisions It Supports</div>
+                        <p class="dashboard-insights__card-text">Outreach targeting, grant strategy, site planning, funder reporting, demand forecasting, and resource allocation across service areas.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">How Food-N-Force Helps</div>
+                        <p class="dashboard-insights__card-text">Salesforce dashboards, data integration, funder reporting, automated workflows, and inventory/volunteer/client tracking — built for food relief.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA -->
         <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
             <div class="slds-container_large slds-container_center slds-p-around_large">
                 <div class="dashboard-narrative__content dashboard-narrative__content--cta">
-                    <h2 class="dashboard-narrative__heading">Modernizing Food Bank Operations</h2>
-                    <p class="dashboard-narrative__text">Every food bank — from a volunteer-run church pantry to a multi-site regional operation — can benefit from better technology. Food-N-Force specializes in Salesforce implementations for food relief organizations, helping them track inventory, manage volunteers, report to funders, and serve more families with the same resources.</p>
+                    <h2 class="dashboard-narrative__heading">Turn Data Into Action</h2>
+                    <p class="dashboard-narrative__text">Every food bank can benefit from better technology. Food-N-Force specializes in Salesforce implementations for food relief — inventory tracking, volunteer management, funder reporting, and operational modernization.</p>
                     <div class="dashboard-cta__buttons">
-                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--primary">See Our Services</a>
-                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">Get in Touch</a>
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--primary">Talk With Us About Dashboard Strategy</a>
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">See Our Services</a>
                     </div>
                 </div>
             </div>

@@ -46,11 +46,11 @@
 /* --- Desktop menu --- */
 .fnf-nav__menu {position:absolute;bottom:0;left:50%;transform:translateX(-50%);display:flex;flex-flow:row nowrap;align-items:center;justify-content:center;width:auto;z-index:10;order:2;list-style:none;box-shadow:none;white-space:nowrap}
 
-.fnf-nav__item {display:inline-block;margin:0 1.5rem;background:transparent;border:none;padding:0}
+.fnf-nav__item {display:inline-block;margin:0 0.75rem;background:transparent;border:none;padding:0}
 
 .fnf-nav__link,
 .fnf-nav__link:link,
-.fnf-nav__link:visited {color:var(--fnf-color-white);text-decoration:none;font-size:1rem;font-weight:500;padding:0.5rem 1rem;position:relative;transition:color 0.3s ease;white-space:nowrap}
+.fnf-nav__link:visited {color:var(--fnf-color-white);text-decoration:none;font-size:1rem;font-weight:500;padding:0.5rem 0.6rem;position:relative;transition:color 0.3s ease;white-space:nowrap}
 
 .fnf-nav__link:hover {color:#00d4ff}
 

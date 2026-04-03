@@ -5,11 +5,13 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE,
-  fmtNum, animateCounters, createChart,
+  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
+  fmtNum, animateCounters, createChart, linearRegression,
   updateFreshness, initScrollReveal, handleResize, fetchWithFallback,
   REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
+
+const PAL = MAP_PALETTES.insecurity;
 
 // -- Map Chart with County Drill-Down --
 function renderMap(geoJSON, data, metric = 'rate') {
@@ -90,7 +92,7 @@ function renderMap(geoJSON, data, metric = 'rate') {
         max: cfg.max,
         text: ['High', 'Low'],
         calculable: true,
-        inRange: { color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh] },
+        inRange: { color: [PAL.low, PAL.mid, PAL.high] },
         textStyle: { color: COLORS.text }
       },
       series: [{
@@ -108,8 +110,8 @@ function renderMap(geoJSON, data, metric = 'rate') {
           itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
         },
         itemStyle: {
-          borderColor: 'rgba(255,255,255,0.25)',
-          borderWidth: 0.8,
+          borderColor: COLORS.mapBorder,
+          borderWidth: COLORS.mapBorderWidth,
           areaColor: 'rgba(255,255,255,0.08)'
         },
         label: { show: false },
@@ -168,7 +170,7 @@ function renderMap(geoJSON, data, metric = 'rate') {
           max,
           text: ['High', 'Low'],
           calculable: true,
-          inRange: { color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh] },
+          inRange: { color: [PAL.low, PAL.mid, PAL.high] },
           textStyle: { color: COLORS.text }
         },
         series: [{
@@ -186,8 +188,8 @@ function renderMap(geoJSON, data, metric = 'rate') {
             itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1 }
           },
           itemStyle: {
-            borderColor: 'rgba(255,255,255,0.15)',
-            borderWidth: 0.5,
+            borderColor: COLORS.countyBorder,
+            borderWidth: COLORS.countyBorderWidth,
             areaColor: 'rgba(255,255,255,0.05)'
           },
           label: { show: false },
@@ -354,7 +356,18 @@ function renderTrend(data) {
   chart.setOption({
     tooltip: {
       trigger: 'axis',
-      ...TOOLTIP_STYLE
+      ...TOOLTIP_STYLE,
+      formatter: params => {
+        const idx = params[0].dataIndex;
+        let tip = `<strong>${params[0].axisValue}</strong><br/>`;
+        params.forEach(p => {
+          const arr = p.seriesName === 'Overall Rate' ? rates : childRates;
+          const yoy = idx > 0 ? (p.value - arr[idx - 1]).toFixed(1) : null;
+          const yoyStr = yoy !== null ? ` (<span style="color:${yoy >= 0 ? COLORS.accent : '#22c55e'}">${yoy >= 0 ? '+' : ''}${yoy}pp</span>)` : '';
+          tip += `${p.marker} ${p.seriesName}: <strong>${p.value}%</strong>${yoyStr}<br/>`;
+        });
+        return tip;
+      }
     },
     legend: {
       data: ['Overall Rate', 'Child Rate'],
@@ -454,8 +467,8 @@ function renderBar(data) {
     series: [{
       type: 'radar',
       data: [
-        { value: top5Avg, name: `Top 5 (${top5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(231,76,60,0.25)' }, lineStyle: { color: COLORS.mapHigh, width: 2 }, itemStyle: { color: COLORS.mapHigh } },
-        { value: bot5Avg, name: `Bottom 5 (${bottom5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(46,204,113,0.25)' }, lineStyle: { color: COLORS.mapLow, width: 2 }, itemStyle: { color: COLORS.mapLow } }
+        { value: top5Avg, name: `Top 5 (${top5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(239,68,68,0.25)' }, lineStyle: { color: PAL.high, width: 2 }, itemStyle: { color: PAL.high } },
+        { value: bot5Avg, name: `Bottom 5 (${bottom5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(96,165,250,0.25)' }, lineStyle: { color: PAL.low, width: 2 }, itemStyle: { color: PAL.low } }
       ]
     }]
   });
@@ -509,6 +522,17 @@ function renderScatter(data) {
       emphasis: {
         itemStyle: { color: COLORS.accent, opacity: 1 }
       },
+      markLine: (() => {
+        const reg = linearRegression(points.map(p => p.value));
+        const xs = points.map(p => p.value[0]);
+        const xMin = Math.min(...xs), xMax = Math.max(...xs);
+        return {
+          symbol: 'none', silent: true,
+          lineStyle: { color: 'rgba(255,255,255,0.35)', type: 'dashed', width: 1.5 },
+          data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
+          label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
+        };
+      })(),
       animationDuration: 2000
     }]
   });
@@ -533,7 +557,9 @@ function renderMealCost(data) {
     series: [{
       type: 'pie', roseType: 'area', radius: ['15%', '70%'], center: ['50%', '50%'],
       itemStyle: { borderRadius: 4, borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1 },
-      label: { show: true, formatter: p => p.value >= 4.0 ? `${p.name}\n$${p.value}` : '', color: COLORS.text, fontSize: 10 },
+      label: { show: true, formatter: p => `${p.name}\n$${p.value}`, color: COLORS.text, fontSize: 9 },
+      labelLayout: { hideOverlap: true },
+      emphasis: { label: { show: true, fontSize: 12, fontWeight: 'bold', formatter: p => `${p.name}\n$${p.value}` } },
       data: pieData, animationDuration: 2000
     }]
   });
@@ -592,8 +618,8 @@ function renderSnap(data) {
         itemStyle: {
           borderRadius: [0, 3, 3, 0],
           color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            { offset: 0, color: COLORS.mapMid },
-            { offset: 1, color: COLORS.mapHigh }
+            { offset: 0, color: PAL.mid },
+            { offset: 1, color: PAL.high }
           ])
         },
         animationDuration: 1500

@@ -96,13 +96,19 @@
                 <a href="/services.html" class="fnf-nav__link">Services</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/impact.html" class="fnf-nav__link">Impact</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link">Blog</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/about.html" class="fnf-nav__link">About Us</a>
@@ -115,9 +121,11 @@
             <ul class="fnf-nav__mobile-menu">
                 <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
                 <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
-                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">Dashboards</a></li>
                 <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
                 <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link">Blog</a></li>
                 <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
             </ul>
         </div>
@@ -141,6 +149,7 @@
         <section class="dashboard-hero" aria-label="Food access key statistics">
             <h1 class="slds-text-heading_large">Food Access &amp; Deserts</h1>
             <p class="dashboard-hero__subtitle">Where is food hard to reach in America?</p>
+            <p class="dashboard-hero__positioning">Mapping the gap between where people live and where food is available — so organizations can plan smarter outreach and mobile distribution.</p>
             <div class="dashboard-hero__stats" aria-label="Key national statistics">
                 <div class="dashboard-stat">
                     <span class="dashboard-stat__number" data-target="23.5" data-suffix="M">23.5M</span>
@@ -170,6 +179,7 @@
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
                         <div id="chart-desert-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food desert prevalence across US states"></div>
+                        <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Mapping the Food Deserts</h3>
@@ -200,7 +210,7 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-urban-rural" class="dashboard-chart" role="img" aria-label="Stacked bar chart comparing urban and rural low-access tracts by state"></div>
+                        <div id="chart-urban-rural" class="dashboard-chart" role="img" aria-label="Donut chart showing national split between urban and rural low-access census tracts"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Different Barriers, Same Outcome</h3>
@@ -208,7 +218,7 @@
                             Urban food deserts are about <strong>density</strong> — too many people, too few stores. Rural food deserts are about <strong>distance</strong> — the nearest grocery may be 20+ miles away. Both leave families without consistent access to fresh, healthy food.
                         </p>
                         <p class="dashboard-info__text">
-                            States like <strong>Kentucky and Arkansas</strong> are dominated by rural deserts, while <strong>California and Texas</strong> have more urban low-access tracts simply due to population size.
+                            Nationally, the split is roughly even — but the <strong>barriers are different</strong>. Urban tracts need more stores; rural tracts need shorter distances. Hover for the exact breakdown.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> USDA ERS, Food Access Research Atlas</span>
@@ -230,7 +240,7 @@
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-distance" class="dashboard-chart" role="img" aria-label="Bar chart showing average distance to nearest supermarket by state"></div>
+                        <div id="chart-distance" class="dashboard-chart" role="img" aria-label="Gradient area chart showing average distance to nearest supermarket by state, sorted shortest to longest"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">How Far Is Too Far?</h3>
@@ -288,9 +298,11 @@
                 <div class="dashboard-card__header">
                     <h2 class="dashboard-card__title">The Double Burden</h2>
                 </div>
-                <div class="dashboard-chart-row">
+                <div class="dashboard-chart-row dashboard-chart-row--stacked">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-double-burden" class="dashboard-chart" role="img" aria-label="Bar chart showing population in both low-income and low-access tracts by state"></div>
+                        <div id="chart-double-burden" class="dashboard-chart" role="img" aria-label="Treemap showing population in low-income and low-access tracts, sized by population and colored by severity"></div>
+                        <div id="treemap-legend-access" class="dashboard-chart__legend"></div>
+                        <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Where Poverty and Food Deserts Overlap</h3>
@@ -312,17 +324,56 @@
             </div>
         </section>
 
+        <!-- Accessible Data Table (hidden, for screen readers and SEO) -->
+        <section class="slds-assistive-text" aria-label="Food access data table">
+            <h2>State-Level Food Access Data (2019)</h2>
+            <p>This table provides the same data visualized in the interactive charts above.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>State</th>
+                        <th>Low-Access Tracts (%)</th>
+                        <th>Urban Low-Access</th>
+                        <th>Rural Low-Access</th>
+                        <th>Avg Distance (mi)</th>
+                        <th>No Vehicle (%)</th>
+                        <th>Low-Income + Low-Access Pop</th>
+                    </tr>
+                </thead>
+                <tbody id="accessible-access-table"></tbody>
+            </table>
+        </section>
+
+        <!-- How Organizations Use These Insights -->
+        <section class="dashboard-section dashboard-insights scroll-reveal" aria-label="How organizations use these insights">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <h2 class="dashboard-narrative__heading">How Organizations Use These Insights</h2>
+                <div class="dashboard-insights__grid">
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Who This Helps</div>
+                        <p class="dashboard-insights__card-text">Executive directors, operations leaders, development teams, and community partnerships staff at food banks, pantries, and hunger-relief nonprofits.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Decisions It Supports</div>
+                        <p class="dashboard-insights__card-text">Outreach targeting, grant strategy, site planning, funder reporting, demand forecasting, and resource allocation across service areas.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">How Food-N-Force Helps</div>
+                        <p class="dashboard-insights__card-text">Salesforce dashboards, data integration, funder reporting, automated workflows, and inventory/volunteer/client tracking — built for food relief.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA -->
         <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
             <div class="slds-container_large slds-container_center slds-p-around_large">
                 <div class="dashboard-narrative__content dashboard-narrative__content--cta">
-                    <h2 class="dashboard-narrative__heading">Bridging the Access Gap</h2>
-                    <p class="dashboard-narrative__text">
-                        Food banks and mobile pantries are the frontline response to food deserts. Technology helps them optimize delivery routes, identify underserved areas, and coordinate with SNAP outreach teams. Food-N-Force builds these systems on Salesforce — turning data into action.
-                    </p>
+                    <h2 class="dashboard-narrative__heading">Turn Data Into Action</h2>
+                    <p class="dashboard-narrative__text">These dashboards show where the gaps are. Food-N-Force helps you build the operational systems to close them — Salesforce reporting, route optimization, and mobile distribution planning designed for food relief.</p>
                     <div class="dashboard-cta__buttons">
-                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--primary">See Our Services</a>
-                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">Get in Touch</a>
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--primary">Talk With Us About Dashboard Strategy</a>
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">See Our Services</a>
                     </div>
                 </div>
             </div>

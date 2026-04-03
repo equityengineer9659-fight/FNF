@@ -102,13 +102,19 @@
                 <a href="/services.html" class="fnf-nav__link">Services</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/impact.html" class="fnf-nav__link">Impact</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link">Blog</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/about.html" class="fnf-nav__link">About Us</a>
@@ -121,9 +127,11 @@
             <ul class="fnf-nav__mobile-menu">
                 <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
                 <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
-                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">Dashboards</a></li>
                 <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
                 <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link">Blog</a></li>
                 <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
             </ul>
         </div>
@@ -148,6 +156,7 @@
         <section class="dashboard-hero" aria-label="SNAP and safety net key statistics">
             <h1 class="slds-text-heading_large">SNAP &amp; Safety Net</h1>
             <p class="dashboard-hero__subtitle">Are government programs reaching those who need them?</p>
+            <p class="dashboard-hero__positioning">Tracking SNAP enrollment, school lunch coverage, and safety net gaps — so organizations know where outreach is working and where people are falling through.</p>
             <div class="dashboard-hero__stats" aria-label="Key national statistics">
                 <div class="dashboard-stat">
                     <span class="dashboard-stat__number" data-target="42.1" data-suffix="M">42.1M</span>
@@ -208,6 +217,7 @@
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
                         <div id="chart-snap-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing SNAP coverage ratio across US states"></div>
+                        <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Where Is the Safety Net Strongest?</h3>
@@ -230,30 +240,31 @@
             </div>
         </section>
 
-        <!-- Chart 3: Coverage Gap Analysis -->
-        <section class="dashboard-section scroll-reveal" aria-label="SNAP coverage gap analysis">
+        <!-- Chart 3: Safety Net Coverage Flow -->
+        <section class="dashboard-section scroll-reveal" aria-label="Safety net coverage flow analysis">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
-                    <h2 class="dashboard-card__title">Coverage Gap Analysis</h2>
+                    <h2 class="dashboard-card__title">Safety Net Coverage Flow</h2>
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-coverage-gap" class="dashboard-chart" role="img" aria-label="Grouped bar chart showing food insecure population versus SNAP enrollment by state"></div>
+                        <div id="chart-coverage-gap" class="dashboard-chart" role="img" aria-label="Sankey diagram showing how 44.2 million food-insecure Americans flow through safety net programs to coverage outcomes"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
-                        <h3 class="dashboard-info__title">Millions Falling Through the Cracks</h3>
+                        <h3 class="dashboard-info__title">Who Falls Through the Cracks?</h3>
                         <p class="dashboard-info__text">
-                            Across the top 15 states by food insecurity, <strong>millions of people are food insecure but not receiving SNAP</strong>. The gap is driven by eligibility thresholds, application barriers, stigma, and lack of awareness.
+                            This flow diagram traces <strong>44.2 million food-insecure Americans</strong> from who they are (children, seniors, working adults), through which safety net program catches them, to whether their food needs are actually met.
                         </p>
                         <p class="dashboard-info__text">
-                            Texas has the largest absolute coverage gap: 4.5 million food-insecure residents but only 3.5 million SNAP participants. That is <strong>over 1 million people</strong> without safety net coverage.
+                            <strong>10.5 million people receive no assistance at all</strong> — and nearly all of them remain in crisis. Even among those enrolled in SNAP, only 60% have their food needs fully met. Working-age adults are the most underserved: 8 million have zero safety net coverage.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> USDA FNS + Feeding America Map the Meal Gap</span>
+                            <span class="meta-item"><strong>Source</strong> USDA FNS, Feeding America, Census ACS (modeled estimates)</span>
                             <span class="meta-item"><strong>Data Year</strong> 2022</span>
+                            <span class="meta-item"><strong>Read as</strong> Left → Middle → Right: who they are → what helps them → whether it's enough</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            Texas, Indiana, and Virginia have the largest gaps between food-insecure populations and SNAP enrollment.
+                            12.7 million Americans remain in food crisis — and 83% of them either have no program or rely solely on food banks.
                         </div>
                     </div>
                 </div>
@@ -268,7 +279,7 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-school-lunch" class="dashboard-chart" role="img" aria-label="Horizontal bar chart showing free/reduced lunch rates by state"></div>
+                        <div id="chart-school-lunch" class="dashboard-chart" role="img" aria-label="Nightingale rose chart showing free and reduced lunch rates for the top 15 states"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">School Lunch: The Most Reliable Meal</h3>
@@ -276,7 +287,7 @@
                             For <strong>30 million children</strong>, the school lunch program may be the most reliable meal of the day. In Mississippi, over 75% of students qualify for free or reduced-price lunch. Nationally, more than half of all students depend on this program.
                         </p>
                         <p class="dashboard-info__text">
-                            The national average line shows the dividing point: states above it have higher child poverty and food insecurity. Summer months, when school is out, create a dangerous gap.
+                            The top 15 states are shown as petals — larger petals mean higher free/reduced lunch rates. Color shifts from green (lower) through amber to red (highest) to highlight severity. Summer months, when school is out, create a dangerous gap.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> USDA FNS, National School Lunch Program + KIDS COUNT</span>
@@ -322,17 +333,36 @@
             </div>
         </section>
 
+        <!-- How Organizations Use These Insights -->
+        <section class="dashboard-section dashboard-insights scroll-reveal" aria-label="How organizations use these insights">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <h2 class="dashboard-narrative__heading">How Organizations Use These Insights</h2>
+                <div class="dashboard-insights__grid">
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Who This Helps</div>
+                        <p class="dashboard-insights__card-text">Executive directors, operations leaders, development teams, and community partnerships staff at food banks, pantries, and hunger-relief nonprofits.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Decisions It Supports</div>
+                        <p class="dashboard-insights__card-text">Outreach targeting, grant strategy, site planning, funder reporting, demand forecasting, and resource allocation across service areas.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">How Food-N-Force Helps</div>
+                        <p class="dashboard-insights__card-text">Salesforce dashboards, data integration, funder reporting, automated workflows, and inventory/volunteer/client tracking — built for food relief.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA Section -->
         <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
             <div class="slds-container_large slds-container_center slds-p-around_large">
                 <div class="dashboard-narrative__content dashboard-narrative__content--cta">
-                    <h2 class="dashboard-narrative__heading">Strengthening the Safety Net</h2>
-                    <p class="dashboard-narrative__text">
-                        Technology plays a critical role in closing coverage gaps. Food banks that connect their operations with SNAP outreach, school lunch coordination, and community referrals can help more families access the benefits they qualify for. Food-N-Force builds these integrations on Salesforce — helping organizations bridge the gap between need and access.
-                    </p>
+                    <h2 class="dashboard-narrative__heading">Turn Data Into Action</h2>
+                    <p class="dashboard-narrative__text">These dashboards reveal the coverage gaps. Food-N-Force helps you connect SNAP outreach, school lunch coordination, and community referrals through Salesforce — closing the gap between need and access.</p>
                     <div class="dashboard-cta__buttons">
-                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--primary">See Our Services</a>
-                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">Get in Touch</a>
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--primary">Talk With Us About Dashboard Strategy</a>
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">See Our Services</a>
                     </div>
                 </div>
             </div>

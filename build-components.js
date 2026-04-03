@@ -10,12 +10,14 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Pages that should highlight "Resources" in navigation
-const resourcesSubpages = [
-  'resources', 'blog',
-  // Hub pages
-  'case-studies', 'templates-tools',
-  // Articles (all live under blog/)
+// Pages that should highlight "Dashboards" in navigation
+const dashboardSubpages = [
+  'food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks',
+];
+
+// Pages that should highlight "Blog" in navigation
+const blogSubpages = [
+  'blog',
   'ai-reshaping-food-banks', 'salesforce-food-bank-operations', 'donor-relationships-nonprofit-cloud',
   'data-driven-food-banks', 'food-bank-workflow-automation', 'securing-technology-grants',
   'ai-inventory-management',
@@ -34,8 +36,14 @@ const resourcesSubpages = [
   'grant-writing-nonprofit-sustainability',
   'ai-data-strategy-crm-food-banks',
   'data-migration-food-bank-modernization',
-  // Dashboard pages
-  'food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks',
+];
+
+// Pages that should highlight "Resources" in navigation
+// Only the resources page itself and hub pages — NOT blog articles or dashboards
+const resourcesSubpages = [
+  'resources',
+  // Hub pages
+  'case-studies', 'templates-tools',
 ];
 
 // Component definitions — all hrefs use absolute paths so they work from any subdirectory
@@ -82,10 +90,16 @@ const components = {
                 <a href="/resources.html" class="fnf-nav__link"${resourcesSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Resources</a>
             </li>
             <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link"${dashboardSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Dashboards</a>
+            </li>
+            <li class="fnf-nav__item">
                 <a href="/impact.html" class="fnf-nav__link"${currentPage === 'impact' ? ' aria-current="page"' : ''}>Impact</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/contact.html" class="fnf-nav__link"${currentPage === 'contact' ? ' aria-current="page"' : ''}>Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link"${blogSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Blog</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/about.html" class="fnf-nav__link"${currentPage === 'about' ? ' aria-current="page"' : ''}>About Us</a>
@@ -99,8 +113,10 @@ const components = {
                 <li><a href="/index.html" class="fnf-nav__mobile-link"${currentPage === 'index' ? ' aria-current="page"' : ''}>Home</a></li>
                 <li><a href="/services.html" class="fnf-nav__mobile-link"${currentPage === 'services' ? ' aria-current="page"' : ''}>Services</a></li>
                 <li><a href="/resources.html" class="fnf-nav__mobile-link"${resourcesSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link"${dashboardSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Dashboards</a></li>
                 <li><a href="/impact.html" class="fnf-nav__mobile-link"${currentPage === 'impact' ? ' aria-current="page"' : ''}>Impact</a></li>
                 <li><a href="/contact.html" class="fnf-nav__mobile-link"${currentPage === 'contact' ? ' aria-current="page"' : ''}>Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link"${blogSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Blog</a></li>
                 <li><a href="/about.html" class="fnf-nav__mobile-link"${currentPage === 'about' ? ' aria-current="page"' : ''}>About Us</a></li>
             </ul>
         </div>

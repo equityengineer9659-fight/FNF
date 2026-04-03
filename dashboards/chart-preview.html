@@ -147,13 +147,22 @@
                 <div id="preview-nightingale-lunch" class="preview-chart"></div>
             </div>
 
-            <!-- 9. Gradient Stacked Area — Food Prices by Category -->
+            <!-- 9. CURRENT: Stacked Area — Food Prices (BROKEN — stacking is meaningless) -->
             <div class="preview-card">
                 <div class="preview-card__header">
-                    <span class="preview-card__title">9. Gradient Stacked Area — Food Prices by Category (Prices)</span>
-                    <span class="preview-card__meta">Replaces: Multi-line category chart</span>
+                    <span class="preview-card__title">9a. CURRENT: Stacked Area — Food Prices (Broken)</span>
+                    <span class="preview-card__meta">Problem: Independent CPI indexes stacked additively</span>
                 </div>
                 <div id="preview-stacked-area" class="preview-chart"></div>
+            </div>
+
+            <!-- 9b. FIXED: Overlapping Lines with Area — Food Prices -->
+            <div class="preview-card">
+                <div class="preview-card__header">
+                    <span class="preview-card__title">9b. FIXED: Overlapping Lines — Food Prices by Category</span>
+                    <span class="preview-card__meta">Each category shown independently with visible lines + subtle fills</span>
+                </div>
+                <div id="preview-unstacked-area" class="preview-chart"></div>
             </div>
 
             <!-- 10. Sunburst — Income Burden (Prices) -->

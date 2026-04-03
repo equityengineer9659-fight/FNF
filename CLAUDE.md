@@ -68,11 +68,18 @@ npm run admin                   # Start Express server for scraper + AI article 
 - **Blog hub (1)**: blog
 - **Hub pages at root (2)**: case-studies, templates-tools
 - **Dashboards (5)**: dashboards/food-insecurity (Overview), dashboards/food-access, dashboards/snap-safety-net, dashboards/food-prices, dashboards/food-banks — linked by shared tab navigation
-- **Articles (41)**: all in `blog/` directory (run `ls blog/` for full list)
+- **Articles (43)**: all in `blog/` directory (run `ls blog/` for full list)
 
 **Adding new articles via scraper tool**: `npm run admin` → New Article tab → Generate with Claude → Save to blog/. Auto-registers in `build-components.js`, `generate-sitemap.js`, and `.pa11yci.json`, then runs `build-components.js` and `sync-blog.js`. After saving, run `/create-illustration {slug}` to generate the SVG illustration.
 
 **Adding new articles manually**: Place HTML in `blog/`, then run `/register-article {slug}` to register in all required files and run sync scripts. Or manually: register slug in both arrays of `build-components.js`, `scripts/generate-sitemap.js`, and `.pa11yci.json`, then run `node build-components.js && node scripts/sync-blog.js`.
+
+### Navigation
+8 links: Home | Services | Resources | Dashboards | Impact | Contact | Blog | About Us
+- **Dashboards** highlights only when on a dashboard page (not Resources)
+- **Blog** highlights only when on blog hub or any article page (not Resources)
+- **Resources** highlights only for resources.html, case-studies, templates-tools
+- Navigation arrays in `build-components.js`: `dashboardSubpages`, `blogSubpages`, `resourcesSubpages`
 
 ### Build Pipeline
 - `build-components.js` injects shared nav, footer, dashboard tabs, and script tags into all 56 pages before Vite builds
@@ -105,7 +112,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `effects/blog-filter.js` — category filtering (aria-pressed + aria-current)
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page
-  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup, colors, formatters, scroll reveal
+  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup, colors, MAP_PALETTES (per-dashboard map colors), formatters, linearRegression, scroll reveal
   - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (separate entry point)
   - `dashboards/food-access.js` — Food Access & Deserts dashboard
   - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard

@@ -4,7 +4,7 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE,
+  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, createChart, REGIONS, REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
 
@@ -62,16 +62,16 @@ function renderRadarStates(data) {
         {
           value: top5Avg,
           name: `Top 5 (${top5.map(s => s.name).join(', ')})`,
-          areaStyle: { color: 'rgba(231,76,60,0.25)' },
-          lineStyle: { color: COLORS.mapHigh, width: 2 },
-          itemStyle: { color: COLORS.mapHigh }
+          areaStyle: { color: 'rgba(239,68,68,0.25)' },
+          lineStyle: { color: MAP_PALETTES.insecurity.high, width: 2 },
+          itemStyle: { color: MAP_PALETTES.insecurity.high }
         },
         {
           value: bot5Avg,
           name: `Bottom 5 (${bottom5.map(s => s.name).join(', ')})`,
-          areaStyle: { color: 'rgba(46,204,113,0.25)' },
-          lineStyle: { color: COLORS.mapLow, width: 2 },
-          itemStyle: { color: COLORS.mapLow }
+          areaStyle: { color: 'rgba(96,165,250,0.25)' },
+          lineStyle: { color: MAP_PALETTES.insecurity.low, width: 2 },
+          itemStyle: { color: MAP_PALETTES.insecurity.low }
         }
       ]
     }]
@@ -239,7 +239,7 @@ function renderTreemapBurden(accessData) {
       colorMappingBy: 'value',
       visualMin: 30000,
       visualMax: 1700000,
-      color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh],
+      color: [MAP_PALETTES.access.low, MAP_PALETTES.access.mid, MAP_PALETTES.access.high],
       animationDuration: 1500
     }]
   });
@@ -280,8 +280,8 @@ function renderAreaSnap(snapData) {
       markArea: {
         silent: true,
         data: [
-          [{ xAxis: '2020-03', itemStyle: { color: 'rgba(231,76,60,0.12)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: COLORS.mapHigh, fontSize: 9, position: 'insideTop' } }, { xAxis: '2023-03' }],
-          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(243,156,18,0.08)' }, label: { show: true, formatter: 'Post-Emergency', color: COLORS.mapMid, fontSize: 9, position: 'insideTop' } }, { xAxis: '2025-01' }]
+          [{ xAxis: '2020-03', itemStyle: { color: 'rgba(239,68,68,0.15)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: MAP_PALETTES.snap.low, fontSize: 9, position: 'insideTop' } }, { xAxis: '2023-03' }],
+          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(251,191,36,0.12)' }, label: { show: true, formatter: 'Post-Emergency', color: MAP_PALETTES.snap.mid, fontSize: 9, position: 'insideTop' } }, { xAxis: '2025-01' }]
         ]
       },
       animationDuration: 2000
@@ -315,7 +315,7 @@ function renderSankeySnap(snapData) {
       label: { color: COLORS.text, fontSize: 12 },
       itemStyle: { borderWidth: 0 },
       data: [
-        { name: 'Food Insecure\n(44.2M)', itemStyle: { color: COLORS.mapHigh } },
+        { name: 'Food Insecure\n(44.2M)', itemStyle: { color: MAP_PALETTES.snap.low } },
         { name: 'SNAP\n(42.1M)', itemStyle: { color: COLORS.primary } },
         { name: 'School Lunch\n(30M)', itemStyle: { color: COLORS.secondary } },
         { name: 'Both Programs', itemStyle: { color: '#a78bfa' } },
@@ -343,7 +343,7 @@ function renderNightingaleLunch(snapData) {
   const pieData = top15.map(s => ({
     name: s.name, value: s.pct,
     itemStyle: {
-      color: s.pct > 65 ? COLORS.mapHigh : s.pct > 55 ? COLORS.mapMid : COLORS.primary
+      color: s.pct > 65 ? MAP_PALETTES.snap.low : s.pct > 55 ? MAP_PALETTES.snap.mid : MAP_PALETTES.snap.high
     }
   }));
 
@@ -413,6 +413,60 @@ function renderStackedArea(priceData) {
 }
 
 // ============================================================
+// 9b. FIXED: Overlapping Lines with Area — Food Prices
+// ============================================================
+function renderUnstackedArea(priceData) {
+  const chart = createChart('preview-unstacked-area');
+  if (!chart) return;
+
+  const series = priceData.categories.series;
+  const dates = series[0].data.map(d => d.date);
+  const lineColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', COLORS.primary];
+  const areaColors = [
+    ['rgba(255,107,53,0.2)', 'rgba(255,107,53,0.02)'],
+    ['rgba(0,212,255,0.2)', 'rgba(0,212,255,0.02)'],
+    ['rgba(167,139,250,0.2)', 'rgba(167,139,250,0.02)'],
+    ['rgba(52,211,153,0.2)', 'rgba(52,211,153,0.02)'],
+    ['rgba(1,118,211,0.15)', 'rgba(1,118,211,0.02)']
+  ];
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'axis', ...TOOLTIP_STYLE,
+      formatter: params => {
+        let tip = `<strong>${params[0].axisValue}</strong><br/>`;
+        params.forEach(p => { tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`; });
+        return tip;
+      }
+    },
+    legend: { data: series.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 }, top: 5 },
+    grid: { left: 50, right: 20, top: 45, bottom: 30 },
+    xAxis: {
+      type: 'category', data: dates, boundaryGap: false,
+      axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'value', name: 'CPI Index', nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series: series.map((s, i) => ({
+      name: s.name, type: 'line', smooth: true, symbol: 'none',
+      lineStyle: { width: 2, color: lineColors[i] },
+      areaStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: areaColors[i][0] },
+          { offset: 1, color: areaColors[i][1] }
+        ])
+      },
+      emphasis: { focus: 'series' },
+      data: s.data.map(d => d.value),
+      animationDuration: 2000
+    }))
+  });
+}
+
+// ============================================================
 // 10. SUNBURST — Food Cost Burden by Income
 // ============================================================
 function renderSunburstBurden(priceData) {
@@ -420,7 +474,7 @@ function renderSunburstBurden(priceData) {
   if (!chart) return;
 
   const q = priceData.affordability.quintiles;
-  const sunburstColors = [COLORS.mapHigh, COLORS.mapMid, '#f59e0b', COLORS.primary, COLORS.mapLow];
+  const sunburstColors = [MAP_PALETTES.prices.high, '#f97316', MAP_PALETTES.prices.mid, '#60a5fa', MAP_PALETTES.prices.low];
 
   const data = q.map((qi, i) => ({
     name: qi.label,
@@ -580,7 +634,8 @@ async function init() {
     renderAreaSnap(snapData);           // 6
     renderSankeySnap(snapData);         // 7
     renderNightingaleLunch(snapData);   // 8
-    renderStackedArea(priceData);       // 9
+    renderStackedArea(priceData);       // 9a (current - broken)
+    renderUnstackedArea(priceData);     // 9b (fixed - overlapping)
     renderSunburstBurden(priceData);    // 10
     renderTreemapRevenue(bankData);     // 11
     renderRadarRegions(bankData);       // 12

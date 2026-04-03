@@ -45,10 +45,23 @@ export const COLORS = {
   textMuted: 'rgba(255,255,255,0.65)',
   cardBg: 'rgba(255,255,255,0.06)',
   gridLine: 'rgba(255,255,255,0.08)',
-  // Choropleth gradient (green = low insecurity → red = high)
+  mapBorder: 'rgba(255,255,255,0.7)',
+  mapBorderWidth: 1.5,
+  countyBorder: 'rgba(255,255,255,0.55)',
+  countyBorderWidth: 1,
+  // Legacy map colors (kept for backward compat)
   mapLow: '#2ecc71',
   mapMid: '#f39c12',
   mapHigh: '#e74c3c'
+};
+
+// Per-dashboard map palettes — each dashboard gets a unique color identity
+export const MAP_PALETTES = {
+  insecurity: { low: '#60a5fa', mid: '#fbbf24', high: '#ef4444' },  // blue → amber → red
+  access:     { low: '#2dd4bf', mid: '#fcd34d', high: '#ea580c' },  // teal → gold → burnt orange
+  snap:       { low: '#ef4444', mid: '#fbbf24', high: '#22c55e' },  // red → amber → green (danger to safe)
+  prices:     { low: '#3b82f6', mid: '#fbbf24', high: '#ef4444' },  // blue → amber → red (affordable to expensive)
+  banks:      { low: '#f59e0b', mid: '#0d9488', high: '#2563eb' }   // amber → teal → blue (sparse to dense)
 };
 
 // Shared tooltip styling
@@ -79,6 +92,24 @@ export function getRegion(stateName) {
     if (states.includes(stateName)) return region;
   }
   return 'South';
+}
+
+// -- Linear regression + correlation for scatter plots --
+export function linearRegression(points) {
+  const n = points.length;
+  if (n < 2) return { slope: 0, intercept: 0, r: 0 };
+  const sumX = points.reduce((s, p) => s + p[0], 0);
+  const sumY = points.reduce((s, p) => s + p[1], 0);
+  const sumXY = points.reduce((s, p) => s + p[0] * p[1], 0);
+  const sumXX = points.reduce((s, p) => s + p[0] * p[0], 0);
+  const sumYY = points.reduce((s, p) => s + p[1] * p[1], 0);
+  const denom = n * sumXX - sumX * sumX;
+  const slope = denom ? (n * sumXY - sumX * sumY) / denom : 0;
+  const intercept = (sumY - slope * sumX) / n;
+  const rNum = n * sumXY - sumX * sumY;
+  const rDen = Math.sqrt((n * sumXX - sumX * sumX) * (n * sumYY - sumY * sumY));
+  const r = rDen ? rNum / rDen : 0;
+  return { slope, intercept, r };
 }
 
 // Chart instances for cleanup

@@ -5,24 +5,27 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE,
+  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
   updateFreshness, initScrollReveal, handleResize, fetchWithFallback
 } from './shared/dashboard-utils.js';
 
-// -- Chart 1: Food Prices by Category (Gradient Stacked Area) --
+const PAL = MAP_PALETTES.prices;
+
+// -- Chart 1: Food Prices by Category (Overlapping Lines with Area) --
 function renderCategories(data) {
   const chart = createChart('chart-categories');
   if (!chart || !data.series) return;
 
   const series = data.series;
   const dates = series[0].data.map(d => d.date);
+  const lineColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', COLORS.primary];
   const areaColors = [
-    ['rgba(255,107,53,0.7)', 'rgba(255,107,53,0.1)'],
-    ['rgba(0,212,255,0.6)', 'rgba(0,212,255,0.1)'],
-    ['rgba(167,139,250,0.6)', 'rgba(167,139,250,0.1)'],
-    ['rgba(52,211,153,0.6)', 'rgba(52,211,153,0.1)'],
-    ['rgba(1,118,211,0.5)', 'rgba(1,118,211,0.1)']
+    ['rgba(255,107,53,0.2)', 'rgba(255,107,53,0.02)'],
+    ['rgba(0,212,255,0.2)', 'rgba(0,212,255,0.02)'],
+    ['rgba(167,139,250,0.2)', 'rgba(167,139,250,0.02)'],
+    ['rgba(52,211,153,0.2)', 'rgba(52,211,153,0.02)'],
+    ['rgba(1,118,211,0.15)', 'rgba(1,118,211,0.02)']
   ];
 
   chart.setOption({
@@ -35,8 +38,8 @@ function renderCategories(data) {
     xAxis: { type: 'category', data: dates, boundaryGap: false, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
     yAxis: { type: 'value', name: 'CPI Index', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
     series: series.map((s, i) => ({
-      name: s.name, type: 'line', stack: 'Total', smooth: true, symbol: 'none',
-      lineStyle: { width: 0 },
+      name: s.name, type: 'line', smooth: true, symbol: 'none',
+      lineStyle: { width: 2, color: lineColors[i] },
       areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: areaColors[i][0] }, { offset: 1, color: areaColors[i][1] }]) },
       emphasis: { focus: 'series' },
       data: s.data.map(d => d.value), animationDuration: 2000
@@ -64,10 +67,18 @@ function renderRegions(data) {
       axisPointer: { type: 'shadow' },
       ...TOOLTIP_STYLE,
       formatter: params => {
-        let tip = `<strong>${params[0].name}</strong><br/>`;
+        const region = params[0].name;
+        const idx = regions.indexOf(region);
+        let tip = `<strong>${region}</strong><br/>`;
         params.forEach(p => {
           tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`;
         });
+        if (idx >= 0) {
+          const baseMealCost = 3.99;
+          const dollarImpact = (baseMealCost * changesPct[idx] / 100).toFixed(2);
+          tip += `<span style="color:${COLORS.secondary}">Change: +${changesPct[idx]}%</span><br/>`;
+          tip += `<span style="color:${COLORS.accent}">Impact: +$${dollarImpact}/meal since 2020</span>`;
+        }
         return tip;
       }
     },
@@ -98,7 +109,7 @@ function renderRegions(data) {
         barWidth: '30%',
         itemStyle: {
           borderRadius: [0, 3, 3, 0],
-          color: 'rgba(255,255,255,0.15)'
+          color: 'rgba(255,255,255,0.35)'
         },
         animationDuration: 1500
       },
@@ -165,7 +176,7 @@ function renderAffordabilityMap(geoJSON, stateData) {
       max: 75,
       text: ['Less Affordable', 'More Affordable'],
       calculable: true,
-      inRange: { color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh] },
+      inRange: { color: [PAL.low, PAL.mid, PAL.high] },
       textStyle: { color: COLORS.text }
     },
     series: [{
@@ -183,8 +194,8 @@ function renderAffordabilityMap(geoJSON, stateData) {
         itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
       },
       itemStyle: {
-        borderColor: 'rgba(255,255,255,0.25)',
-        borderWidth: 0.8,
+        borderColor: COLORS.mapBorder,
+        borderWidth: COLORS.mapBorderWidth,
         areaColor: 'rgba(255,255,255,0.08)'
       },
       label: { show: false },
@@ -199,7 +210,7 @@ function renderBurden(quintiles) {
   const chart = createChart('chart-burden');
   if (!chart) return;
 
-  const sunburstColors = [COLORS.mapHigh, COLORS.mapMid, '#f59e0b', COLORS.primary, COLORS.mapLow];
+  const sunburstColors = [PAL.high, '#f97316', PAL.mid, '#60a5fa', PAL.low];
   const data = quintiles.map((qi, i) => ({
     name: qi.label, value: qi.foodSharePct,
     itemStyle: { color: sunburstColors[i] },
@@ -219,10 +230,14 @@ function renderBurden(quintiles) {
     },
     series: [{
       type: 'sunburst', data: data, radius: ['15%', '80%'],
-      label: { show: true, color: '#fff', fontSize: 10, rotate: 'tangential' },
+      label: { show: true, color: '#fff', fontSize: 10 },
       itemStyle: { borderColor: 'rgba(0,0,0,0.4)', borderWidth: 1.5 },
       emphasis: { focus: 'ancestor' },
-      levels: [{}, { r0: '15%', r: '50%', label: { fontSize: 11, fontWeight: 'bold' } }, { r0: '50%', r: '80%', label: { fontSize: 9 } }],
+      levels: [
+        {},
+        { r0: '15%', r: '50%', label: { fontSize: 12, fontWeight: 'bold', rotate: 'radial' } },
+        { r0: '50%', r: '80%', label: { fontSize: 9, rotate: 'tangential' } }
+      ],
       animationDuration: 2000
     }]
   });
@@ -239,6 +254,9 @@ function renderHomeVsAway(blsData) {
 
   if (!foodHome) return;
 
+  // Build lookup for YoY calculation
+  const seriesMap = { 'Food at Home': foodHome, 'Food Away from Home': foodAway, 'All Items': allItems };
+
   chart.setOption({
     tooltip: {
       trigger: 'axis',
@@ -246,7 +264,14 @@ function renderHomeVsAway(blsData) {
       formatter: params => {
         let tip = `<strong>${params[0].axisValue}</strong><br/>`;
         params.forEach(p => {
-          tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`;
+          let yoyStr = '';
+          const src = seriesMap[p.seriesName];
+          if (src && p.dataIndex >= 12) {
+            const priorVal = src.data[p.dataIndex - 12].value;
+            const yoyPct = ((p.value - priorVal) / priorVal * 100).toFixed(1);
+            yoyStr = ` <span style="color:${Number(yoyPct) >= 0 ? COLORS.accent : '#22c55e'}">(${Number(yoyPct) >= 0 ? '+' : ''}${yoyPct}% YoY)</span>`;
+          }
+          tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong>${yoyStr}<br/>`;
         });
         return tip;
       }

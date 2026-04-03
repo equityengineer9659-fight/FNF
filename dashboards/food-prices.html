@@ -110,13 +110,19 @@
                 <a href="/services.html" class="fnf-nav__link">Services</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/impact.html" class="fnf-nav__link">Impact</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link">Blog</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/about.html" class="fnf-nav__link">About Us</a>
@@ -129,9 +135,11 @@
             <ul class="fnf-nav__mobile-menu">
                 <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
                 <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
-                <li><a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">Dashboards</a></li>
                 <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
                 <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link">Blog</a></li>
                 <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
             </ul>
         </div>
@@ -156,6 +164,7 @@
         <section class="dashboard-hero" aria-label="Food prices key statistics">
             <h1 class="slds-text-heading_large">Food Prices &amp; Affordability</h1>
             <p class="dashboard-hero__subtitle">How much does food really cost — and who can afford it?</p>
+            <p class="dashboard-hero__positioning">Tracking food price inflation, regional cost differences, and affordability by income — so food banks can anticipate demand and advocate for their communities.</p>
             <div class="dashboard-hero__stats" aria-label="Key national statistics">
                 <div class="dashboard-stat">
                     <span class="dashboard-stat__number" data-target="25.3" data-suffix="%">25.3%</span>
@@ -184,7 +193,7 @@
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-categories" class="dashboard-chart" role="img" aria-label="Multi-line chart showing food price trends by category since 2018"></div>
+                        <div id="chart-categories" class="dashboard-chart" role="img" aria-label="Area chart showing food price trends by category since 2018"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Not All Prices Rise Equally</h3>
@@ -247,6 +256,7 @@
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
                         <div id="chart-affordability-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food affordability index across US states"></div>
+                        <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Price vs. What You Earn</h3>
@@ -277,7 +287,7 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-burden" class="dashboard-chart" role="img" aria-label="Bar chart showing percentage of income spent on food by income quintile"></div>
+                        <div id="chart-burden" class="dashboard-chart" role="img" aria-label="Sunburst chart showing percentage of income spent on food by income quintile, with monthly costs in the outer ring"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">The Poorest Pay the Most</h3>
@@ -333,16 +343,35 @@
         </section>
 
         <!-- CTA Section -->
+        <!-- How Organizations Use These Insights -->
+        <section class="dashboard-section dashboard-insights scroll-reveal" aria-label="How organizations use these insights">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <h2 class="dashboard-narrative__heading">How Organizations Use These Insights</h2>
+                <div class="dashboard-insights__grid">
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Who This Helps</div>
+                        <p class="dashboard-insights__card-text">Executive directors, operations leaders, development teams, and community partnerships staff at food banks, pantries, and hunger-relief nonprofits.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Decisions It Supports</div>
+                        <p class="dashboard-insights__card-text">Outreach targeting, grant strategy, site planning, funder reporting, demand forecasting, and resource allocation across service areas.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">How Food-N-Force Helps</div>
+                        <p class="dashboard-insights__card-text">Salesforce dashboards, data integration, funder reporting, automated workflows, and inventory/volunteer/client tracking — built for food relief.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
             <div class="slds-container_large slds-container_center slds-p-around_large">
                 <div class="dashboard-narrative__content dashboard-narrative__content--cta">
-                    <h2 class="dashboard-narrative__heading">What This Means for Food Banks</h2>
-                    <p class="dashboard-narrative__text">
-                        When food prices rise, food banks face a double squeeze: more families need help while every donated dollar buys less food. Technology-driven operations help food banks stretch their budgets further — optimizing procurement, reducing waste, and forecasting demand. Food-N-Force helps food relief organizations modernize with Salesforce solutions designed for this mission.
-                    </p>
+                    <h2 class="dashboard-narrative__heading">Turn Data Into Action</h2>
+                    <p class="dashboard-narrative__text">When food prices rise, food banks face a double squeeze. Food-N-Force helps you stretch every dollar further — Salesforce procurement tracking, demand forecasting, and operational reporting designed for food relief.</p>
                     <div class="dashboard-cta__buttons">
-                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--primary">See Our Services</a>
-                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">Get in Touch</a>
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--primary">Talk With Us About Dashboard Strategy</a>
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">See Our Services</a>
                     </div>
                 </div>
             </div>

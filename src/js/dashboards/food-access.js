@@ -5,11 +5,13 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE,
-  fmtNum, animateCounters, createChart,
+  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
+  fmtNum, animateCounters, createChart, linearRegression,
   initScrollReveal, handleResize,
   REGIONS, REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
+
+const PAL = MAP_PALETTES.access;
 
 // -- Chart 1: Food Desert Map (choropleth) --
 function renderDesertMap(geoJSON, states) {
@@ -42,7 +44,7 @@ function renderDesertMap(geoJSON, states) {
     visualMap: {
       left: 'right', bottom: 20, min: 7, max: 24,
       text: ['More Deserts', 'Fewer Deserts'], calculable: true,
-      inRange: { color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh] },
+      inRange: { color: [PAL.low, PAL.mid, PAL.high] },
       textStyle: { color: COLORS.text }
     },
     series: [{
@@ -52,7 +54,7 @@ function renderDesertMap(geoJSON, states) {
         label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
         itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
       },
-      itemStyle: { borderColor: 'rgba(255,255,255,0.25)', borderWidth: 0.8, areaColor: 'rgba(255,255,255,0.08)' },
+      itemStyle: { borderColor: COLORS.mapBorder, borderWidth: COLORS.mapBorderWidth, areaColor: 'rgba(255,255,255,0.08)' },
       label: { show: false }, data: mapData, animationDurationUpdate: 500
     }]
   }, true);
@@ -152,6 +154,17 @@ function renderVehicle(states) {
       },
       itemStyle: { color: COLORS.secondary, opacity: 0.75 },
       emphasis: { itemStyle: { color: COLORS.accent, opacity: 1 } },
+      markLine: (() => {
+        const reg = linearRegression(points.map(p => p.value));
+        const xs = points.map(p => p.value[0]);
+        const xMin = Math.min(...xs), xMax = Math.max(...xs);
+        return {
+          symbol: 'none', silent: true,
+          lineStyle: { color: 'rgba(255,255,255,0.35)', type: 'dashed', width: 1.5 },
+          data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
+          label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
+        };
+      })(),
       animationDuration: 2000
     }]
   });
@@ -162,36 +175,85 @@ function renderDoubleBurden(states) {
   const chart = createChart('chart-double-burden');
   if (!chart) return;
 
-  const regionData = Object.entries(REGIONS).map(([region, stateNames]) => {
-    const children = states
+  // Color states by severity — darker shades so white labels are always readable
+  function severityColor(pct) {
+    if (pct >= 10) return '#9f1239';   // severe — deep rose
+    if (pct >= 8) return '#b45309';    // high — dark amber
+    if (pct >= 6) return '#a16207';    // moderate — dark gold
+    if (pct >= 4) return '#166534';    // mild — dark green
+    return '#115e59';                  // low — dark teal
+  }
+
+  // Flatten into a single level — region identity shown via border color + label
+  const flatData = [];
+  Object.entries(REGIONS).forEach(([region, stateNames]) => {
+    states
       .filter(s => stateNames.includes(s.name))
-      .map(s => ({ name: s.name, value: s.lowIncomeLowAccessPop, pctOfPop: ((s.lowIncomeLowAccessPop / s.population) * 100).toFixed(1) }))
-      .sort((a, b) => b.value - a.value);
-    return { name: region, children, itemStyle: { borderColor: REGION_COLORS[region] } };
+      .forEach(s => {
+        const pct = (s.lowIncomeLowAccessPop / s.population) * 100;
+        flatData.push({
+          name: s.name, value: s.lowIncomeLowAccessPop,
+          pctOfPop: pct.toFixed(1),
+          population: s.population,
+          lowAccessPct: s.lowAccessPct,
+          region,
+          itemStyle: {
+            color: severityColor(pct),
+            borderColor: REGION_COLORS[region],
+            borderWidth: 1.5
+          }
+        });
+      });
   });
+  flatData.sort((a, b) => b.value - a.value);
 
   chart.setOption({
     tooltip: {
       ...TOOLTIP_STYLE,
       formatter: p => {
-        if (p.data.children) return `<strong>${p.name}</strong><br/>Total: ${fmtNum(p.value)}`;
-        return `<strong>${p.name}</strong><br/>Low-Income + Low-Access: <strong>${fmtNum(p.value)}</strong><br/>${p.data.pctOfPop}% of state population`;
+        const d = p.data;
+        return `<strong>${p.name}</strong> <span style="color:${REGION_COLORS[d.region]}">(${d.region})</span><br/>
+          <span style="color:${COLORS.secondary}">Double Burden:</span> <strong>${fmtNum(p.value)}</strong><br/>
+          Share of State Pop: <strong>${d.pctOfPop}%</strong><br/>
+          State Population: ${fmtNum(d.population)}<br/>
+          Low-Access Tracts: ${d.lowAccessPct}%`;
       }
     },
     series: [{
-      type: 'treemap', data: regionData, leafDepth: 1, roam: false,
-      width: '95%', height: '90%', top: 10,
-      label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff' },
-      upperLabel: { show: true, height: 24, color: '#fff', fontSize: 12, fontWeight: 'bold', backgroundColor: 'transparent' },
-      itemStyle: { borderColor: 'rgba(0,0,0,0.5)', borderWidth: 1, gapWidth: 2 },
-      levels: [
-        { itemStyle: { borderColor: 'rgba(255,255,255,0.2)', borderWidth: 3, gapWidth: 3 }, upperLabel: { show: true } },
-        { colorSaturation: [0.3, 0.7], itemStyle: { borderColorSaturation: 0.5, gapWidth: 1, borderWidth: 1 } }
-      ],
-      colorMappingBy: 'value', visualMin: 30000, visualMax: 1700000,
-      color: [COLORS.mapLow, COLORS.mapMid, COLORS.mapHigh],
+      type: 'treemap', data: flatData, roam: false,
+      width: '98%', height: '95%', top: 5, left: '1%',
+      label: {
+        show: true, color: '#fff',
+        formatter: p => `{name|${p.name}}\n{val|${fmtNum(p.value)}  ${p.data.pctOfPop}%}`,
+        rich: {
+          name: { fontSize: 12, fontWeight: 'bold', color: '#fff', lineHeight: 16 },
+          val: { fontSize: 10, color: 'rgba(255,255,255,0.8)', lineHeight: 14 }
+        },
+        overflow: 'truncate',
+        ellipsis: '..'
+      },
+      itemStyle: { borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1, gapWidth: 1 },
       animationDuration: 1500
     }]
+  });
+
+  // Populate region legend
+  const legendEl = document.getElementById('treemap-legend-access');
+  if (legendEl) {
+    legendEl.innerHTML = Object.entries(REGION_COLORS).map(([region, color]) =>
+      `<span><span class="legend-swatch" style="background:${color}"></span>${region}</span>`
+    ).join('');
+  }
+}
+
+// -- Accessible Data Table --
+function populateAccessibleTable(states) {
+  const tbody = document.getElementById('accessible-access-table');
+  if (!tbody) return;
+  states.forEach(s => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${s.name}</td><td>${s.lowAccessPct}%</td><td>${s.urbanLowAccess}</td><td>${s.ruralLowAccess}</td><td>${s.avgDistance}</td><td>${s.noVehiclePct}%</td><td>${fmtNum(s.lowIncomeLowAccessPop)}</td>`;
+    tbody.appendChild(tr);
   });
 }
 
@@ -211,6 +273,7 @@ async function init() {
     renderDistance(accessData.states);
     renderVehicle(accessData.states);
     renderDoubleBurden(accessData.states);
+    populateAccessibleTable(accessData.states);
     initScrollReveal();
     window.addEventListener('resize', handleResize);
   } catch {
