@@ -10,7 +10,7 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const BASE_URL = 'https://foodnforce.com';
+const BASE_URL = 'https://food-n-force.com';
 const OUTPUT_FILE = join(__dirname, '..', 'sitemap.xml');
 
 const pages = [

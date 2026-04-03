@@ -6,7 +6,7 @@ Allow: /
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://foodnforce.com/sitemap.xml
+Sitemap: https://food-n-force.com/sitemap.xml
 
 # Disallow admin or private areas (if any)
 # Disallow: /admin/

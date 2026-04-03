@@ -48,6 +48,12 @@
 
 .fnf-footer::before,footer::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg, transparent, #00d4ff 20%, #0ea5e9 50%, #00d4ff 80%, transparent);z-index:20}
 
+.fnf-footer__link{color:rgba(255,255,255,0.8);text-decoration:none;font-size:0.9rem;transition:color 0.2s}
+
+.fnf-footer__link:hover{color:#00d4ff;text-decoration:underline}
+
+.fnf-footer__separator{color:rgba(255,255,255,0.3);margin:0 0.5rem}
+
 .expertise-list{list-style:none;padding:0;margin:0}
 
 .expertise-list li{padding:var(--slds-spacing-x-small) 0;color:rgba(255,255,255,.9);position:relative;padding-left:var(--slds-spacing-medium)}
