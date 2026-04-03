@@ -555,10 +555,16 @@ function renderMealCost(data) {
       formatter: p => `<strong>${p.name}</strong><br/>Meal Cost: <strong>$${p.value}</strong><br/>Region: ${getRegion(p.name)}`
     },
     series: [{
-      type: 'pie', roseType: 'area', radius: ['15%', '70%'], center: ['50%', '50%'],
+      type: 'pie', roseType: 'area', radius: ['15%', '65%'], center: ['50%', '50%'],
       itemStyle: { borderRadius: 4, borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1 },
-      label: { show: true, formatter: p => `${p.name}\n$${p.value}`, color: COLORS.text, fontSize: 9 },
-      labelLayout: { hideOverlap: true },
+      label: {
+        show: true, color: COLORS.text, fontSize: 9,
+        formatter: p => `${p.name}\n$${p.value}`,
+        alignTo: 'labelLine',
+        overflow: 'truncate',
+        minMargin: 5
+      },
+      labelLine: { length: 8, length2: 12, smooth: true },
       emphasis: { label: { show: true, fontSize: 12, fontWeight: 'bold', formatter: p => `${p.name}\n$${p.value}` } },
       data: pieData, animationDuration: 2000
     }]
