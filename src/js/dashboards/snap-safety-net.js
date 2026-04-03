@@ -191,9 +191,14 @@ function renderSchoolLunch(lunchData) {
   chart.setOption({
     tooltip: { ...TOOLTIP_STYLE, formatter: p => `<strong>${p.name}</strong><br/>Free/Reduced Lunch: <strong>${p.value}%</strong>` },
     series: [{
-      type: 'pie', roseType: 'radius', radius: ['20%', '70%'], center: ['50%', '50%'],
-      label: { show: true, formatter: '{b}\n{c}%', color: COLORS.text, fontSize: 9 },
+      type: 'pie', roseType: 'radius', radius: ['20%', '65%'], center: ['50%', '50%'],
+      label: {
+        show: true, formatter: '{b}\n{c}%', color: COLORS.text, fontSize: 9,
+        alignTo: 'labelLine', minMargin: 5, overflow: 'truncate'
+      },
+      labelLine: { length: 8, length2: 12, smooth: true },
       itemStyle: { borderRadius: 5, borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1 },
+      emphasis: { label: { show: true, fontSize: 12, fontWeight: 'bold' } },
       data: pieData, animationDuration: 2000
     }]
   });
