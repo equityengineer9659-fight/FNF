@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Extract Jira keys and transition
+        continue-on-error: true
         run: |
           KEYS=$(echo "${{ github.ref_name }}" | grep -oE 'KAN-[0-9]+' | sort -u)
           if [ -z "$KEYS" ]; then
@@ -23,11 +24,16 @@ jobs:
           AUTH=$(echo -n "${{ secrets.JIRA_USER }}:${{ secrets.JIRA_API_TOKEN }}" | base64)
           for KEY in $KEYS; do
             echo "Moving $KEY to In Progress..."
-            curl -s -X POST \
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
               "https://foodnforce.atlassian.net/rest/api/2/issue/$KEY/transitions" \
               -H "Authorization: Basic $AUTH" \
               -H "Content-Type: application/json" \
-              -d '{"transition":{"id":"21"}}'
+              -d '{"transition":{"id":"21"}}')
+            if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+              echo "✅ $KEY → In Progress (HTTP $HTTP_STATUS)"
+            else
+              echo "⚠️ $KEY transition failed (HTTP $HTTP_STATUS)"
+            fi
           done
 
   in-review:
@@ -36,6 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Extract Jira keys and transition
+        continue-on-error: true
         run: |
           KEYS=$(echo "${{ github.event.pull_request.title }} ${{ github.event.pull_request.head.ref }}" | grep -oE 'KAN-[0-9]+' | sort -u)
           if [ -z "$KEYS" ]; then
@@ -45,11 +52,16 @@ jobs:
           AUTH=$(echo -n "${{ secrets.JIRA_USER }}:${{ secrets.JIRA_API_TOKEN }}" | base64)
           for KEY in $KEYS; do
             echo "Moving $KEY to In Review..."
-            curl -s -X POST \
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
               "https://foodnforce.atlassian.net/rest/api/2/issue/$KEY/transitions" \
               -H "Authorization: Basic $AUTH" \
               -H "Content-Type: application/json" \
-              -d '{"transition":{"id":"31"}}'
+              -d '{"transition":{"id":"31"}}')
+            if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+              echo "✅ $KEY → In Review (HTTP $HTTP_STATUS)"
+            else
+              echo "⚠️ $KEY transition failed (HTTP $HTTP_STATUS)"
+            fi
           done
 
   done:
@@ -58,6 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Extract Jira keys and transition
+        continue-on-error: true
         run: |
           KEYS=$(echo "${{ github.event.pull_request.title }} ${{ github.event.pull_request.head.ref }}" | grep -oE 'KAN-[0-9]+' | sort -u)
           if [ -z "$KEYS" ]; then
@@ -67,9 +80,14 @@ jobs:
           AUTH=$(echo -n "${{ secrets.JIRA_USER }}:${{ secrets.JIRA_API_TOKEN }}" | base64)
           for KEY in $KEYS; do
             echo "Moving $KEY to Done..."
-            curl -s -X POST \
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
               "https://foodnforce.atlassian.net/rest/api/2/issue/$KEY/transitions" \
               -H "Authorization: Basic $AUTH" \
               -H "Content-Type: application/json" \
-              -d '{"transition":{"id":"41"}}'
+              -d '{"transition":{"id":"41"}}')
+            if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+              echo "✅ $KEY → Done (HTTP $HTTP_STATUS)"
+            else
+              echo "⚠️ $KEY transition failed (HTTP $HTTP_STATUS)"
+            fi
           done
