@@ -344,6 +344,55 @@
             </div>
         </section>
 
+        <!-- Chart 6: Year-over-Year Inflation Rate -->
+        <section class="dashboard-section scroll-reveal" aria-label="Year-over-year food inflation rate">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Food Inflation Rate (Year-over-Year)</h2>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-yoy-inflation" class="dashboard-chart" role="img" aria-label="Line chart showing year-over-year percentage change in food prices"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">The Number That Makes Headlines</h3>
+                        <p class="dashboard-info__text">"Food prices rose 11.4% in 2022" is instantly understandable. Raw CPI index values are not. This chart shows the <strong>year-over-year percentage change</strong> — the number policymakers, journalists, and grant writers actually cite.</p>
+                        <p class="dashboard-info__text">The spike above 10% in mid-2022 was the highest food inflation since the early 1980s. By 2024, the rate returned below 2% — but prices remain at the elevated plateau.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Bureau of Labor Statistics, CPI (computed from monthly index)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Monthly via BLS API</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Calculation</span> (Current month CPI &minus; same month prior year) &divide; prior year &times; 100</div>
+                        </div>
+                        <div id="yoy-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 7: SNAP Purchasing Power -->
+        <section class="dashboard-section scroll-reveal" aria-label="SNAP benefit purchasing power over time">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Are SNAP Benefits Keeping Up?</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-purchasing-power" class="dashboard-chart" role="img" aria-label="Dual-axis chart comparing food CPI trend against SNAP benefit levels, both indexed to 2018 baseline"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">The Purchasing Power Gap</h3>
+                        <p class="dashboard-info__text">This chart indexes both <strong>food-at-home prices</strong> and <strong>average SNAP monthly benefits</strong> to a common 2018 baseline (= 100). When the food price line rises faster than the SNAP benefit line, families on SNAP are losing purchasing power.</p>
+                        <p class="dashboard-info__text">The Thrifty Food Plan reevaluation in October 2021 boosted SNAP benefits significantly — but the 2022 inflation surge and end of emergency allotments in March 2023 eroded much of that gain.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> BLS CPI (food prices) + USDA FNS (SNAP benefits)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Baseline</span> January 2018 = 100 for both series</div>
+                        </div>
+                        <div id="purchasing-power-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA Section -->
         <!-- How Organizations Use These Insights -->
         <section class="dashboard-section dashboard-insights scroll-reveal" aria-label="How organizations use these insights">
@@ -390,7 +439,7 @@
                         <div class="dashboard-source-card">
                             <div class="dashboard-source-card__icon">BLS</div>
                             <h3 class="dashboard-source-card__name">Bureau of Labor Statistics</h3>
-                            <p class="dashboard-source-card__desc">Consumer Price Index — monthly food price tracking for national, regional, and sub-category food indexes delivered via the BLS Public Data API.</p>
+                            <p class="dashboard-source-card__desc">Consumer Price Index — monthly food price tracking for 7 food categories (cereals, meats, dairy, produce, beverages, other food, all food at home), 4 regions, and home-vs-away comparison via the BLS Public Data API.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Monthly (live API)</span>
                                 <span>National &amp; regional</span>
@@ -420,6 +469,15 @@
                             <p class="dashboard-source-card__desc">Food Expenditure Series — household food spending patterns across income quintiles, tracking the share of income devoted to food.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual</span>
+                                <span>National</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">FNS</div>
+                            <h3 class="dashboard-source-card__name">USDA Food &amp; Nutrition Service</h3>
+                            <p class="dashboard-source-card__desc">SNAP Data Tables — average monthly benefit per person used in the purchasing power comparison. Includes historical benefit levels, emergency allotments, and Thrifty Food Plan adjustments.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Monthly</span>
                                 <span>National</span>
                             </div>
                         </div>

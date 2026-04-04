@@ -147,7 +147,7 @@ if ($type === 'regional') {
     }
 
     // Series IDs
-    $categoryIds = ['CUUR0000SAF111', 'CUUR0000SAF112', 'CUUR0000SAF113', 'CUUR0000SAF114', 'CUUR0000SAF1'];
+    $categoryIds = ['CUUR0000SAF111', 'CUUR0000SAF112', 'CUUR0000SAF113', 'CUUR0000SAF114', 'CUUR0000SAF115', 'CUUR0000SAF116', 'CUUR0000SAF1'];
     $regionIds = ['CUUR0100SAF1', 'CUUR0200SAF1', 'CUUR0300SAF1', 'CUUR0400SAF1'];
     $allIds = array_merge($categoryIds, $regionIds);
 
@@ -164,6 +164,8 @@ if ($type === 'regional') {
         'CUUR0000SAF112' => 'Meats, Poultry & Fish',
         'CUUR0000SAF113' => 'Dairy & Related',
         'CUUR0000SAF114' => 'Fruits & Vegetables',
+        'CUUR0000SAF115' => 'Nonalcoholic Beverages',
+        'CUUR0000SAF116' => 'Other Food at Home',
         'CUUR0000SAF1'   => 'All Food at Home',
         'CUUR0100SAF1'   => 'Northeast',
         'CUUR0200SAF1'   => 'Midwest',

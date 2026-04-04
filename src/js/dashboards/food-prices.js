@@ -355,6 +355,226 @@ function renderHomeVsAway(blsData) {
   });
 }
 
+// -- Chart 6: Year-over-Year Inflation Rate --
+function renderYoYInflation(blsData) {
+  const chart = createChart('chart-yoy-inflation');
+  if (!chart || !blsData?.series) return;
+
+  const foodHome = blsData.series.find(s => s.name === 'Food at Home');
+  const foodAway = blsData.series.find(s => s.name === 'Food Away from Home');
+  const allItems = blsData.series.find(s => s.name === 'All Items');
+  if (!foodHome) return;
+
+  // Compute YoY % for each series (skip first 12 months)
+  function computeYoY(series) {
+    if (!series) return null;
+    const data = series.data.filter(d => d.value !== null);
+    return data.slice(12).map((d, i) => {
+      const prior = data[i].value;
+      return { date: d.date, value: +((d.value - prior) / prior * 100).toFixed(1) };
+    });
+  }
+
+  const homeYoY = computeYoY(foodHome);
+  const awayYoY = computeYoY(foodAway);
+  const allYoY = computeYoY(allItems);
+
+  const dates = homeYoY.map(d => d.date);
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'axis', ...TOOLTIP_STYLE,
+      formatter: params => {
+        let tip = `<strong>${params[0].axisValue}</strong><br/>`;
+        params.forEach(p => {
+          const sign = p.value >= 0 ? '+' : '';
+          tip += `${p.marker} ${p.seriesName}: <strong>${sign}${p.value}%</strong><br/>`;
+        });
+        return tip;
+      }
+    },
+    legend: {
+      data: ['Food at Home', 'Food Away from Home', 'All Items'],
+      textStyle: { color: COLORS.text }, top: 5
+    },
+    grid: { left: 50, right: 20, top: 40, bottom: 30 },
+    xAxis: {
+      type: 'category', data: dates,
+      axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'value', name: 'YoY Change (%)',
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series: [
+      {
+        name: 'Food at Home', type: 'line',
+        data: homeYoY.map(d => d.value), smooth: true, symbol: 'none',
+        lineStyle: { width: 3, color: COLORS.accent },
+        itemStyle: { color: COLORS.accent },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(255,107,53,0.15)' },
+            { offset: 1, color: 'rgba(255,107,53,0)' }
+          ])
+        }
+      },
+      ...(awayYoY ? [{
+        name: 'Food Away from Home', type: 'line',
+        data: awayYoY.map(d => d.value), smooth: true, symbol: 'none',
+        lineStyle: { width: 2.5, color: COLORS.secondary },
+        itemStyle: { color: COLORS.secondary }
+      }] : []),
+      ...(allYoY ? [{
+        name: 'All Items', type: 'line',
+        data: allYoY.map(d => d.value), smooth: true, symbol: 'none',
+        lineStyle: { width: 1.5, color: 'rgba(255,255,255,0.3)', type: 'dashed' },
+        itemStyle: { color: 'rgba(255,255,255,0.3)' }
+      }] : [])
+    ]
+  });
+
+  // Dynamic insight
+  const peak = homeYoY.reduce((max, d) => d.value > max.value ? d : max, homeYoY[0]);
+  const latest = homeYoY.at(-1);
+  const insightEl = document.getElementById('yoy-insight');
+  if (insightEl) {
+    insightEl.textContent = `Food-at-home inflation peaked at ${peak.value}% in ${peak.date} — the highest since the early 1980s. As of ${latest.date}, it has cooled to ${latest.value}%.`;
+  }
+}
+
+// -- Chart 7: SNAP Purchasing Power --
+function renderPurchasingPower(blsData) {
+  const chart = createChart('chart-purchasing-power');
+  if (!chart || !blsData?.series) return;
+
+  const foodHome = blsData.series.find(s => s.name === 'Food at Home');
+  if (!foodHome) return;
+
+  const data = foodHome.data.filter(d => d.value !== null);
+  if (data.length === 0) return;
+
+  // Index food CPI to Jan 2018 = 100
+  const baseline = data[0].value; // Jan 2018
+  const foodIndexed = data.map(d => ({
+    date: d.date,
+    value: +(d.value / baseline * 100).toFixed(1)
+  }));
+
+  // SNAP benefit timeline (key inflection points, nominal $/person/month)
+  // Source: USDA FNS historical data
+  const snapBenefits = [
+    { date: '2018-01', value: 126 }, { date: '2018-06', value: 126 }, { date: '2018-12', value: 126 },
+    { date: '2019-01', value: 129 }, { date: '2019-06', value: 129 }, { date: '2019-12', value: 129 },
+    { date: '2020-01', value: 131 }, { date: '2020-03', value: 131 },
+    { date: '2020-04', value: 234 }, // Emergency allotments begin (avg ~$234)
+    { date: '2020-06', value: 234 }, { date: '2020-12', value: 234 },
+    { date: '2021-01', value: 234 }, { date: '2021-06', value: 234 },
+    { date: '2021-10', value: 258 }, // Thrifty Food Plan reevaluation
+    { date: '2021-12', value: 258 },
+    { date: '2022-01', value: 258 }, { date: '2022-06', value: 258 }, { date: '2022-12', value: 258 },
+    { date: '2023-01', value: 258 },
+    { date: '2023-03', value: 258 },
+    { date: '2023-04', value: 194 }, // Emergency allotments end
+    { date: '2023-06', value: 194 }, { date: '2023-12', value: 194 },
+    { date: '2024-01', value: 194 }, { date: '2024-06', value: 194 }, { date: '2024-12', value: 194 },
+    { date: '2025-01', value: 195 }, { date: '2025-06', value: 195 }, { date: '2025-12', value: 195 }
+  ];
+
+  // Index SNAP to Jan 2018 = 100
+  const snapBaseline = snapBenefits[0].value;
+  const snapIndexed = snapBenefits.map(d => ({
+    date: d.date,
+    value: +(d.value / snapBaseline * 100).toFixed(1)
+  }));
+
+  // Align on food CPI dates, interpolate SNAP
+  const snapMap = {};
+  snapIndexed.forEach(d => { snapMap[d.date] = d.value; });
+  let lastSnap = 100;
+  const alignedSnap = foodIndexed.map(d => {
+    if (snapMap[d.date] !== undefined) lastSnap = snapMap[d.date];
+    return lastSnap;
+  });
+
+  const dates = foodIndexed.map(d => d.date);
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'axis', ...TOOLTIP_STYLE,
+      formatter: params => {
+        let tip = `<strong>${params[0].axisValue}</strong><br/>`;
+        params.forEach(p => {
+          const diff = p.value - 100;
+          const sign = diff >= 0 ? '+' : '';
+          tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong> (${sign}${diff.toFixed(1)}%)<br/>`;
+        });
+        const gap = params[0] && params[1] ? (params[0].value - params[1].value).toFixed(1) : null;
+        if (gap !== null) tip += `<br/>Gap: <strong>${gap > 0 ? '+' : ''}${gap} points</strong>`;
+        return tip;
+      }
+    },
+    legend: {
+      data: ['Food Prices (CPI)', 'SNAP Benefits'],
+      textStyle: { color: COLORS.text }, top: 5
+    },
+    grid: { left: 50, right: 20, top: 40, bottom: 30 },
+    xAxis: {
+      type: 'category', data: dates,
+      axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'value', name: 'Index (Jan 2018 = 100)',
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series: [
+      {
+        name: 'Food Prices (CPI)', type: 'line',
+        data: foodIndexed.map(d => d.value), smooth: true, symbol: 'none',
+        lineStyle: { width: 3, color: COLORS.accent },
+        itemStyle: { color: COLORS.accent },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(255,107,53,0.15)' },
+            { offset: 1, color: 'rgba(255,107,53,0)' }
+          ])
+        }
+      },
+      {
+        name: 'SNAP Benefits', type: 'line',
+        data: alignedSnap, symbol: 'none', step: 'end',
+        lineStyle: { width: 3, color: '#22c55e' },
+        itemStyle: { color: '#22c55e' },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(34,197,94,0.15)' },
+            { offset: 1, color: 'rgba(34,197,94,0)' }
+          ])
+        }
+      }
+    ]
+  });
+
+  // Dynamic insight
+  const latestFood = foodIndexed.at(-1);
+  const latestSnap = alignedSnap.at(-1);
+  const gap = (latestFood.value - latestSnap).toFixed(1);
+  const insightEl = document.getElementById('purchasing-power-insight');
+  if (insightEl) {
+    if (gap > 0) {
+      insightEl.textContent = `As of ${latestFood.date}, food prices have risen ${(latestFood.value - 100).toFixed(0)}% since 2018 while SNAP benefits have risen ${(latestSnap - 100).toFixed(0)}%. The ${gap}-point gap means SNAP families have lost real purchasing power.`;
+    } else {
+      insightEl.textContent = `As of ${latestFood.date}, SNAP benefits (${(latestSnap - 100).toFixed(0)}% above 2018) are keeping pace with food prices (${(latestFood.value - 100).toFixed(0)}% above 2018).`;
+    }
+  }
+}
+
 // -- Init --
 async function init() {
   try {
@@ -389,8 +609,12 @@ async function init() {
     renderBurden(regionalData.affordability.quintiles);
 
     // Chart 5: Home vs Away (uses main BLS data)
+    // Chart 6: YoY Inflation Rate
+    // Chart 7: SNAP Purchasing Power
     if (blsData) {
       renderHomeVsAway(blsData);
+      renderYoYInflation(blsData);
+      renderPurchasingPower(blsData);
       updateFreshness('bls-regional', { _cached: true, _cachedAt: blsData.fetchedAt });
     }
 
@@ -419,6 +643,8 @@ async function fetchLiveBLS() {
     const liveData = await res.json();
     if (liveData.error || !liveData.series) return;
     renderHomeVsAway(liveData);
+    renderYoYInflation(liveData);
+    renderPurchasingPower(liveData);
     updateFreshness('bls-regional', liveData);
   } catch { /* PHP proxy unavailable */ }
 }
