@@ -183,13 +183,15 @@
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
+                        <button id="access-map-back-btn" class="dashboard-map-back" style="display:none" aria-label="Back to national view">&larr; Back to National View</button>
+                        <span id="access-map-state-label" class="dashboard-map-label" aria-live="polite"></span>
                         <div id="chart-desert-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food desert prevalence across US states"></div>
-                        <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
+                        <p class="dashboard-chart__hint">Hover for state details — click any state for county breakdown</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Mapping the Food Deserts</h3>
                         <p class="dashboard-info__text">
-                            A <strong>food desert</strong> is a census tract where a significant share of residents live far from a supermarket — more than 1 mile in urban areas or 10 miles in rural areas. This map shows the percentage of each state's census tracts classified as low-access.
+                            A <strong>food desert</strong> is a census tract where a significant share of residents live far from a supermarket — more than 1 mile in urban areas or 10 miles in rural areas. This map shows the percentage of each state's census tracts classified as low-access. <strong>Click any state</strong> to drill down into county-level poverty rates as a proxy for food access risk.
                         </p>
                         <p class="dashboard-info__text">
                             <strong>Mississippi (23.4%), West Virginia (22.8%), and Alaska (22.5%)</strong> have the highest rates — among seven states where more than 20% of census tracts are food deserts. Dense northeastern states fare better due to proximity, not necessarily affordability.
@@ -358,6 +360,30 @@
             </div>
         </section>
 
+        <!-- Chart 7: Food Deserts vs Food Insecurity Correlation -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food desert prevalence versus food insecurity correlation">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Do Food Deserts Cause Hunger?</h2>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-access-insecurity" class="dashboard-chart" role="img" aria-label="Scatter plot showing food desert prevalence versus food insecurity rate by state with regression line"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Correlation, Not Causation</h3>
+                        <p class="dashboard-info__text">The assumption that food deserts directly cause food insecurity is common in policy debates — but the data tells a more nuanced story. This scatter tests the relationship between <strong>food desert prevalence</strong> (low-access tracts) and <strong>food insecurity rate</strong> across all 50 states.</p>
+                        <p class="dashboard-info__text">If food deserts were the primary driver, we'd expect a strong positive correlation. The actual relationship reveals whether <strong>income, employment, and systemic poverty</strong> are more powerful predictors than geographic access alone.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA Food Access Atlas 2019 + USDA ERS/Feeding America 2022</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Note</span> Access data is 3 years older than insecurity data — interpret correlation with caution</div>
+                        </div>
+                        <div id="access-insecurity-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Accessible Data Table (hidden, for screen readers and SEO) -->
         <section class="slds-assistive-text" aria-label="Food access data table">
             <h2>State-Level Food Access Data (2019)</h2>
@@ -433,10 +459,19 @@
                         <div class="dashboard-source-card">
                             <div class="dashboard-source-card__icon">ACS</div>
                             <h3 class="dashboard-source-card__name">U.S. Census Bureau</h3>
-                            <p class="dashboard-source-card__desc">American Community Survey — vehicle access, income, and demographic data at the census tract level used for food desert classification.</p>
+                            <p class="dashboard-source-card__desc">American Community Survey — vehicle access, housing cost burden, income, and demographic data. Live SDOH indicators via Census API; county-level poverty data for drill-down views.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual (5-yr rolling)</span>
-                                <span>Census tract</span>
+                                <span>State &amp; county</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">FA</div>
+                            <h3 class="dashboard-source-card__name">Feeding America</h3>
+                            <p class="dashboard-source-card__desc">Map the Meal Gap 2024 — state-level food insecurity rates used in the food desert correlation analysis to test whether access barriers drive hunger.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual release</span>
+                                <span>State level</span>
                             </div>
                         </div>
                     </div>
