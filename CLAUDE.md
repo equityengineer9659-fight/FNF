@@ -54,7 +54,7 @@ npm run admin                   # Start Express server for scraper + AI article 
 ├── Blog and Article Content/  # Editorial tools (scraper + AI generator) — NOT deployed
 ├── scripts/               # Build scripts, scraper engine, sitemap/blog generators
 ├── public/                # Static assets, PWA manifest, PHP API endpoints, dashboard data files
-│   ├── data/              # Dashboard JSON (state/county data, BLS CPI, GeoJSON, county search index)
+│   ├── data/              # Dashboard JSON (state/county data, BLS CPI, GeoJSON, county search index, SNAP participation)
 │   └── api/               # PHP backend (contact, newsletter, csrf, dashboard proxies)
 ├── config/                # token_map, deployment, security configs
 ├── docs/                  # Active documentation
@@ -122,11 +122,11 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `effects/blog-filter.js` — category filtering (aria-pressed + aria-current)
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page
-  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup (incl. GaugeChart, ThemeRiverChart, SingleAxisComponent), colors, MAP_PALETTES, formatters, linearRegression, NTEE_MAP, US_STATES, getNteeName, scroll reveal
-  - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (separate entry point)
+  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup (incl. GaugeChart, ThemeRiverChart, SingleAxisComponent), colors, MAP_PALETTES, formatters, linearRegression, NTEE_MAP, US_STATES, getNteeName, scroll reveal, `updateFreshness()` (freshness badges with `--static` mode)
+  - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (separate entry point, live Census ACS poverty data in scatter chart)
   - `dashboards/food-access.js` — Food Access & Deserts dashboard
-  - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard
-  - `dashboards/food-prices.js` — Food Prices & Affordability dashboard
+  - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard (Sankey data from `snap-participation.json`)
+  - `dashboards/food-prices.js` — Food Prices & Affordability dashboard (live BLS regional CPI data)
   - `dashboards/food-banks.js` — Food Bank Landscape dashboard
   - `dashboards/nonprofit-directory.js` — Nonprofit Directory search (ProPublica API, debounced search, state filter, pagination)
   - `dashboards/nonprofit-profile.js` — Nonprofit Profile with 6 ECharts (revenue trend, composition, expenses vs revenue, assets/liabilities, compensation, efficiency radar) + dynamic data-driven descriptions with conditional insights
@@ -141,7 +141,8 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `POST /api/newsletter.php` — newsletter subscription
   - `GET /api/csrf-token.php` — single-use CSRF tokens (session-based)
   - `GET /api/dashboard-census.php` — Census Bureau ACS proxy (24hr file cache)
-  - `GET /api/dashboard-bls.php` — BLS CPI food price proxy (7-day file cache)
+  - `GET /api/dashboard-bls.php` — BLS CPI food price proxy (7-day file cache; `?type=regional` for regional CPI; supports BLS API v2 via optional `_config.php` API key)
+  - `GET /api/cache-cleanup.php` — SiteGround cron script to purge stale API cache files
   - `GET /api/nonprofit-search.php` — ProPublica nonprofit search proxy (24hr file cache, params: q, state, page)
   - `GET /api/nonprofit-org.php` — ProPublica org detail proxy (7-day file cache, param: ein)
 - **Security**: Rate limiting (60s cooldown), CSRF validation (`hash_equals()`), honeypot field, input sanitization (`htmlspecialchars()`), email validation (`FILTER_VALIDATE_EMAIL`), CRLF header injection prevention
@@ -201,7 +202,7 @@ Reusable slash-command workflows in `.claude/skills/`:
 - **`/register-article {slug}`** — registers a manually added article in all required files (`build-components.js`, `generate-sitemap.js`, `.pa11yci.json`) and runs sync scripts
 - **`/quality-sweep [scope]`** — launches validation agents in parallel (`all`, `content`, `css`, `deploy`) and presents a unified pass/fail summary
 
-### Project-Specific Agents (10)
+### Project-Specific Agents (11)
 Custom agents in `.claude/agents/` tailored to this project:
 - **slds-compliance-checker** — validates CSS against SLDS token map; use after CSS changes
 - **accessibility-auditor** — WCAG 2.1 AA checks; use after HTML changes
@@ -213,6 +214,7 @@ Custom agents in `.claude/agents/` tailored to this project:
 - **content-reviewer** — brand voice, article structure, SEO; use before publishing articles
 - **technical-architect** — SLDS CDN constraints, SiteGround limits, glassmorphism protection; use before structural changes
 - **business-analyst** — CTA clarity, value proposition, conversion paths; use when modifying service pages
+- **data-scientist** — trend analysis, correlations, anomalies, visualization recommendations; use after data updates or to improve dashboard insights
 
 ## Common Issues
 

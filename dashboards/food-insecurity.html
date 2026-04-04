@@ -315,6 +315,33 @@
             </div>
         </section>
 
+        <!-- 4b. Social Determinants of Health (live Census ACS data, non-blocking) -->
+        <section id="section-sdoh" class="dashboard-section scroll-reveal" style="display:none" aria-label="Social determinants affecting food insecurity">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Social Determinants of Food Insecurity</h2>
+                    <span id="freshness-sdoh" class="dashboard-freshness"></span>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-sdoh" class="dashboard-chart" role="img" aria-label="Scatter plot showing multiple social determinants correlated with food insecurity by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Beyond Poverty: What Drives Hunger?</h3>
+                        <p class="dashboard-info__text">Poverty is the strongest predictor, but other social determinants compound the risk. States with <strong>low education, high uninsured rates, limited vehicle access, and severe housing cost burden</strong> tend to have higher food insecurity — even after accounting for income.</p>
+                        <p class="dashboard-info__text">Use the buttons to explore how each factor correlates with food insecurity.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census Bureau, American Community Survey 5-Year Estimates</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2023</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually each December via Census API</div>
+                        </div>
+                        <div id="sdoh-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+                <div id="sdoh-metric-buttons" class="dashboard-metric-buttons" role="group" aria-label="Select social determinant"></div>
+            </div>
+        </section>
+
         <!-- 5. Meal Cost + Description -->
         <section class="dashboard-section scroll-reveal" aria-label="Average meal cost by state">
             <div class="dashboard-card">

@@ -329,6 +329,35 @@
             </div>
         </section>
 
+        <!-- Chart 6: SDOH Housing Burden vs Food Access (live Census data) -->
+        <section id="section-sdoh-access" class="dashboard-section scroll-reveal" style="display:none" aria-label="Housing burden and food access barriers">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Housing Cost Burden &amp; Food Access</h2>
+                    <span id="freshness-sdoh-access" class="dashboard-freshness"></span>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-sdoh-access" class="dashboard-chart" role="img" aria-label="Scatter plot showing severe housing cost burden versus food desert prevalence by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">When Rent Crowds Out Food</h3>
+                        <p class="dashboard-info__text">
+                            Renters paying more than <strong>50% of their income on housing</strong> have little left for food. Combined with limited vehicle access and distant grocery stores, severe housing cost burden creates a compounding barrier to food security.
+                        </p>
+                        <p class="dashboard-info__text">
+                            This chart uses <strong>2023 Census ACS data</strong> — 4 years newer than the food desert atlas — to show how current housing pressures overlap with food access challenges.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census ACS 2023 (housing) + USDA Food Access Atlas 2019 (food deserts)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Housing data refreshes annually via Census API</div>
+                        </div>
+                        <div id="sdoh-access-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Accessible Data Table (hidden, for screen readers and SEO) -->
         <section class="slds-assistive-text" aria-label="Food access data table">
             <h2>State-Level Food Access Data (2019)</h2>

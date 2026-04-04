@@ -153,6 +153,17 @@
                 <span id="org-ntee" class="profile-header__meta-badge">&mdash;</span>
                 <span id="org-status" class="profile-header__meta-badge">&mdash;</span>
             </div>
+            <!-- Charity Navigator Rating (populated by JS, hidden if API not configured or org not rated) -->
+            <div id="cn-rating-section" class="profile-cn-rating" style="display:none" aria-label="Charity Navigator rating">
+                <div class="profile-cn-rating__score">
+                    <div id="chart-cn-gauge" class="profile-cn-gauge"></div>
+                </div>
+                <div class="profile-cn-rating__details">
+                    <span class="profile-cn-rating__label">Charity Navigator</span>
+                    <span id="cn-beacon-level" class="profile-cn-rating__beacon"></span>
+                    <p id="cn-mission" class="profile-cn-rating__mission"></p>
+                </div>
+            </div>
             <div class="dashboard-hero__stats" aria-label="Key financial statistics">
                 <div class="dashboard-stat">
                     <span id="stat-revenue" class="dashboard-stat__number">&mdash;</span>
@@ -443,7 +454,7 @@
             <p class="slds-text-align_center slds-m-bottom_x-small">
                 <a href="mailto:hello@food-n-force.com" class="fnf-footer__link">hello@food-n-force.com</a>
             </p>
-            <p class="slds-text-body_small slds-text-align_center slds-text-color_inverse" style="opacity: 0.6;">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            <p class="slds-text-body_small slds-text-align_center fnf-footer__copyright">&copy; 2026 Food-N-Force. All rights reserved.</p>
         </div>
     </footer>
 

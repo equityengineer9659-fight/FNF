@@ -268,6 +268,106 @@ function populateAccessibleTable(states) {
 }
 
 // -- Init --
+// -- Chart 6: SDOH Housing Burden vs Food Access (live Census data, non-blocking) --
+async function fetchSDOHAccess(accessStates) {
+  try {
+    const res = await fetch('/api/dashboard-sdoh.php');
+    if (!res.ok) return;
+    const sdoh = await res.json();
+    if (sdoh.error || !sdoh.states) return;
+
+    const section = document.getElementById('section-sdoh-access');
+    if (section) section.style.display = '';
+
+    const chart = createChart('chart-sdoh-access');
+    if (!chart) return;
+
+    // Build lookup from food access atlas data
+    const accessByName = {};
+    accessStates.forEach(s => { accessByName[s.name] = s; });
+
+    const points = sdoh.states
+      .map(s => {
+        const a = accessByName[s.name];
+        if (!a) return null;
+        return {
+          value: [s.housingBurdenPct, a.lowAccessPct],
+          name: s.name,
+          population: s.population,
+          noVehicle: s.noVehiclePct,
+          uninsured: s.uninsuredPct
+        };
+      })
+      .filter(Boolean);
+
+    const byRegion = {};
+    Object.keys(REGION_COLORS).forEach(r => { byRegion[r] = []; });
+    points.forEach(p => byRegion[getRegion(p.name)].push(p));
+
+    const reg = linearRegression(points.map(p => p.value));
+    const xs = points.map(p => p.value[0]);
+    const xMin = Math.min(...xs), xMax = Math.max(...xs);
+    const rLine = {
+      symbol: 'none', silent: true,
+      lineStyle: { color: 'rgba(255,255,255,0.35)', type: 'dashed', width: 1.5 },
+      data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
+      label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
+    };
+
+    const series = Object.entries(REGION_COLORS).map(([region, color], i) => ({
+      name: region, type: 'scatter',
+      data: byRegion[region],
+      symbolSize: (_, params) => Math.max(8, Math.sqrt(params.data.population / 200000)),
+      itemStyle: { color, opacity: 0.85 },
+      emphasis: { itemStyle: { opacity: 1 } },
+      animationDuration: 1500,
+      ...(i === 0 ? { markLine: rLine } : {})
+    }));
+
+    chart.setOption({
+      legend: {
+        top: 5, right: 10,
+        textStyle: { color: COLORS.text, fontSize: 11 },
+        itemWidth: 10, itemHeight: 10
+      },
+      tooltip: {
+        ...TOOLTIP_STYLE,
+        formatter: params => {
+          const d = params.data;
+          const region = getRegion(d.name);
+          return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>` +
+            `Housing Burden (50%+): ${d.value[0]}%<br/>` +
+            `Food Deserts: ${d.value[1]}%<br/>` +
+            `No Vehicle: ${d.noVehicle}%<br/>` +
+            `Uninsured: ${d.uninsured}%`;
+        }
+      },
+      grid: { left: 55, right: 20, top: 35, bottom: 50 },
+      xAxis: {
+        name: 'Severe Housing Cost Burden (%)', nameLocation: 'center', nameGap: 35,
+        nameTextStyle: { color: COLORS.textMuted },
+        axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+        splitLine: { lineStyle: { color: COLORS.gridLine } }
+      },
+      yAxis: {
+        name: 'Low-Access Tracts (%)',
+        nameTextStyle: { color: COLORS.textMuted },
+        axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+        splitLine: { lineStyle: { color: COLORS.gridLine } }
+      },
+      series
+    });
+
+    const insightEl = document.getElementById('sdoh-access-insight');
+    if (insightEl) {
+      const strength = Math.abs(reg.r) >= 0.7 ? 'Strong' : Math.abs(reg.r) >= 0.4 ? 'Moderate' : 'Weak';
+      insightEl.textContent = `${strength} correlation (r = ${reg.r.toFixed(2)}) between housing cost burden and food desert prevalence. States where renters are most cost-burdened tend to have more food access challenges.`;
+    }
+
+    updateFreshness('sdoh-access', sdoh);
+  } catch { /* SDOH is optional — fail silently */ }
+}
+
 async function init() {
   try {
     const [accessRes, geoRes] = await Promise.all([
@@ -287,6 +387,9 @@ async function init() {
     populateAccessibleTable(accessData.states);
     initScrollReveal();
     window.addEventListener('resize', handleResize);
+
+    // Non-blocking: fetch live SDOH data for housing burden chart
+    fetchSDOHAccess(accessData.states);
   } catch {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';

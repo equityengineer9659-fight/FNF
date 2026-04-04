@@ -749,6 +749,146 @@ function renderFoodPrices(blsData) {
   });
 }
 
+// -- SDOH Scatter (live Census ACS data, non-blocking) --
+const SDOH_METRICS = [
+  { key: 'uninsuredPct', label: 'Uninsured Rate', axis: 'Uninsured (%)', insight: 'Lack of health insurance amplifies food insecurity — medical costs crowd out food budgets.' },
+  { key: 'collegePct', label: 'College Education', axis: 'Bachelor\'s+ (%)', insight: 'Higher education correlates with lower food insecurity — but causation runs through income and employment stability.', invert: true },
+  { key: 'noVehiclePct', label: 'No Vehicle', axis: 'Workers Without Vehicle (%)', insight: 'Transportation barriers limit access to affordable food — workers without vehicles face both job and food access challenges.' },
+  { key: 'housingBurdenPct', label: 'Housing Burden', axis: 'Severe Housing Cost Burden (%)', insight: 'When rent exceeds 50% of income, food is the first budget line to shrink — housing cost is a hidden driver of hunger.' }
+];
+
+let sdohData = null;
+let sdohChart = null;
+
+function renderSDOH(sdoh, fiData, metricKey) {
+  const metric = SDOH_METRICS.find(m => m.key === metricKey) || SDOH_METRICS[0];
+  const section = document.getElementById('section-sdoh');
+  if (section) section.style.display = '';
+
+  if (!sdohChart) {
+    sdohChart = createChart('chart-sdoh');
+  }
+  if (!sdohChart) return;
+
+  // Build lookup from food insecurity state data
+  const fiByName = {};
+  fiData.states.forEach(s => { fiByName[s.name] = s; });
+
+  // Merge SDOH + food insecurity
+  const points = sdoh.states
+    .map(s => {
+      const fi = fiByName[s.name];
+      if (!fi) return null;
+      return {
+        value: [s[metricKey], fi.rate],
+        name: s.name,
+        persons: fi.persons
+      };
+    })
+    .filter(Boolean);
+
+  const byRegion = {};
+  Object.keys(REGION_COLORS).forEach(r => { byRegion[r] = []; });
+  points.forEach(p => byRegion[getRegion(p.name)].push(p));
+
+  const reg = linearRegression(points.map(p => p.value));
+  const xs = points.map(p => p.value[0]);
+  const xMin = Math.min(...xs), xMax = Math.max(...xs);
+  const rLine = {
+    symbol: 'none', silent: true,
+    lineStyle: { color: 'rgba(255,255,255,0.35)', type: 'dashed', width: 1.5 },
+    data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
+    label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
+  };
+
+  const series = Object.entries(REGION_COLORS).map(([region, color], i) => ({
+    name: region, type: 'scatter',
+    data: byRegion[region],
+    symbolSize: (_, params) => Math.max(8, Math.sqrt(params.data.persons / 50000)),
+    itemStyle: { color, opacity: 0.85 },
+    emphasis: { itemStyle: { opacity: 1 } },
+    animationDuration: 1200,
+    ...(i === 0 ? { markLine: rLine } : {})
+  }));
+
+  sdohChart.setOption({
+    legend: {
+      top: 5, right: 10,
+      textStyle: { color: COLORS.text, fontSize: 11 },
+      itemWidth: 10, itemHeight: 10
+    },
+    tooltip: {
+      ...TOOLTIP_STYLE,
+      formatter: params => {
+        const d = params.data;
+        const region = getRegion(d.name);
+        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>${metric.axis}: ${d.value[0]}%<br/>Food Insecurity: ${d.value[1]}%`;
+      }
+    },
+    grid: { left: 55, right: 20, top: 35, bottom: 45 },
+    xAxis: {
+      name: metric.axis,
+      nameLocation: 'center',
+      nameGap: 30,
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: COLORS.gridLine } },
+      inverse: !!metric.invert
+    },
+    yAxis: {
+      name: 'Food Insecurity (%)',
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series
+  }, true);
+
+  // Update insight text
+  const insightEl = document.getElementById('sdoh-insight');
+  const strength = Math.abs(reg.r) >= 0.7 ? 'Strong' : Math.abs(reg.r) >= 0.4 ? 'Moderate' : 'Weak';
+  const direction = (metric.invert ? -reg.r : reg.r) > 0 ? 'positive' : 'negative';
+  if (insightEl) insightEl.textContent = `${strength} ${direction} correlation (r = ${reg.r.toFixed(2)}). ${metric.insight}`;
+}
+
+function initSDOHButtons(sdoh, fiData) {
+  const container = document.getElementById('sdoh-metric-buttons');
+  if (!container) return;
+
+  container.innerHTML = SDOH_METRICS.map((m, i) =>
+    `<button class="dashboard-metric-btn${i === 0 ? ' dashboard-metric-btn--active' : ''}" data-sdoh-metric="${m.key}" aria-pressed="${i === 0}">${m.label}</button>`
+  ).join('');
+
+  container.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-sdoh-metric]');
+    if (!btn) return;
+    container.querySelectorAll('.dashboard-metric-btn').forEach(b => {
+      b.classList.remove('dashboard-metric-btn--active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('dashboard-metric-btn--active');
+    btn.setAttribute('aria-pressed', 'true');
+    renderSDOH(sdoh, fiData, btn.dataset.sdohMetric);
+  });
+}
+
+async function fetchSDOHData() {
+  try {
+    const res = await fetch('/api/dashboard-sdoh.php');
+    if (!res.ok) return;
+    const sdoh = await res.json();
+    if (sdoh.error || !sdoh.states) return;
+
+    sdohData = sdoh;
+    const fiData = window._fnfStateData;
+    if (!fiData || !fiData.states) return;
+
+    renderSDOH(sdoh, fiData, SDOH_METRICS[0].key);
+    initSDOHButtons(sdoh, fiData);
+    updateFreshness('sdoh', sdoh);
+  } catch { /* SDOH is optional — fail silently */ }
+}
+
 // -- Init --
 async function init() {
   try {
@@ -795,6 +935,7 @@ async function init() {
     // Live data (non-blocking, enhances dashboard if available)
     fetchBLSData();
     fetchLiveCensus();
+    fetchSDOHData();
 
   } catch (err) {
     // Show error in chart containers

@@ -25,6 +25,89 @@ function toTitleCase(str) {
   return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 }
 
+// -- Fetch and render Charity Navigator rating (non-blocking) --
+async function fetchCharityNavigator(ein) {
+  try {
+    const res = await fetch(`/api/charity-navigator.php?ein=${encodeURIComponent(ein)}`);
+    if (!res.ok) return;
+    const json = await res.json();
+    if (json.error || json._notConfigured || json._notRated || !json.organization) return;
+
+    const org = json.organization;
+    const section = document.getElementById('cn-rating-section');
+    if (!section) return;
+
+    // Show the section
+    section.style.display = '';
+
+    // Render gauge chart for overall score
+    const score = org.overallRating?.score;
+    if (score != null) {
+      const gaugeEl = document.getElementById('chart-cn-gauge');
+      if (gaugeEl) {
+        const chart = createChart('chart-cn-gauge');
+        if (chart) {
+          const color = score >= 90 ? '#22c55e' : score >= 75 ? '#fbbf24' : score >= 50 ? '#f97316' : '#ef4444';
+          chart.setOption({
+            series: [{
+              type: 'gauge',
+              startAngle: 200,
+              endAngle: -20,
+              radius: '90%',
+              center: ['50%', '60%'],
+              min: 0,
+              max: 100,
+              splitNumber: 0,
+              axisLine: {
+                lineStyle: {
+                  width: 8,
+                  color: [[score / 100, color], [1, 'rgba(255,255,255,0.08)']]
+                }
+              },
+              pointer: { show: false },
+              axisTick: { show: false },
+              splitLine: { show: false },
+              axisLabel: { show: false },
+              detail: {
+                valueAnimation: true,
+                formatter: '{value}',
+                fontSize: 20,
+                fontWeight: 700,
+                color: color,
+                offsetCenter: [0, '10%']
+              },
+              data: [{ value: score }]
+            }]
+          });
+        }
+      }
+    }
+
+    // Beacon level badge
+    const beaconEl = document.getElementById('cn-beacon-level');
+    if (beaconEl && org.beacon?.level) {
+      const level = org.beacon.level.toLowerCase();
+      beaconEl.textContent = org.beacon.level;
+      beaconEl.className = `profile-cn-rating__beacon profile-cn-rating__beacon--${level}`;
+    } else if (beaconEl && org.overallRating?.rating) {
+      beaconEl.textContent = org.overallRating.rating;
+      beaconEl.className = 'profile-cn-rating__beacon';
+      beaconEl.style.background = 'rgba(255,255,255,0.1)';
+      beaconEl.style.color = 'rgba(255,255,255,0.7)';
+    }
+
+    // Mission statement
+    const missionEl = document.getElementById('cn-mission');
+    if (missionEl && org.mission) {
+      missionEl.textContent = org.mission;
+    } else if (missionEl) {
+      missionEl.style.display = 'none';
+    }
+  } catch {
+    // Charity Navigator is optional — fail silently
+  }
+}
+
 // -- Populate header from org data --
 function populateHeader(org) {
   const nameEl = document.getElementById('org-name');
@@ -1306,6 +1389,9 @@ async function init() {
     document.getElementById('profile-loading').style.display = 'none';
 
     populateHeader(json.organization);
+
+    // Fetch Charity Navigator rating in parallel (non-blocking)
+    fetchCharityNavigator(ein);
 
     const filings = json.filings_with_data || [];
     const data = prepareFilingData(filings);
