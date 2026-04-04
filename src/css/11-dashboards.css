@@ -644,10 +644,10 @@
 }
 
 .dashboard-metric-btn {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 2rem;
   padding: 0.45rem 1.1rem;
   font-size: 0.82rem;
