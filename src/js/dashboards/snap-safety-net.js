@@ -7,7 +7,7 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
-  initScrollReveal, handleResize
+  initScrollReveal, handleResize, updateFreshness
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.snap;
@@ -103,52 +103,16 @@ function renderSnapMap(geoJSON, states) {
 // -- Chart 3: Safety Net Coverage Flow (Sankey) --
 // 3-column flow: Demographics → Program → Outcome
 // Data modeled from USDA FNS, Feeding America, Census ACS
-function renderCoverageGap() {
+function renderCoverageGap(sankeyData) {
   const chart = createChart('chart-coverage-gap');
   if (!chart) return;
 
-  // Column 1: Who (demographics, exclusive, sums to 44.2M)
-  // Column 2: Safety net program (primary source of assistance)
-  // Column 3: Outcome (whether food needs are met)
-  const nodes = [
-    // Col 1 — Demographics
-    { name: 'Children\n13M', itemStyle: { color: '#f59e0b' } },
-    { name: 'Seniors 60+\n5.5M', itemStyle: { color: '#8b5cf6' } },
-    { name: 'Working Adults\n25.7M', itemStyle: { color: COLORS.primary } },
-    // Col 2 — Safety Net Programs
-    { name: 'SNAP\n23.5M', itemStyle: { color: '#22c55e' } },
-    { name: 'School Meals\n3.5M', itemStyle: { color: COLORS.secondary } },
-    { name: 'Food Banks\n6.7M', itemStyle: { color: '#f97316' } },
-    { name: 'No Assistance\n10.5M', itemStyle: { color: PAL.low } },
-    // Col 3 — Outcomes
-    { name: 'Needs Met\n15.5M', itemStyle: { color: '#16a34a' } },
-    { name: 'Partially Met\n16M', itemStyle: { color: '#eab308' } },
-    { name: 'Still in Crisis\n12.7M', itemStyle: { color: '#dc2626' } }
-  ];
-
-  const links = [
-    // Children (13M) → Programs
-    { source: 'Children\n13M', target: 'SNAP\n23.5M', value: 7000000 },
-    { source: 'Children\n13M', target: 'School Meals\n3.5M', value: 3500000 },
-    { source: 'Children\n13M', target: 'Food Banks\n6.7M', value: 1500000 },
-    { source: 'Children\n13M', target: 'No Assistance\n10.5M', value: 1000000 },
-    // Seniors (5.5M) → Programs
-    { source: 'Seniors 60+\n5.5M', target: 'SNAP\n23.5M', value: 2500000 },
-    { source: 'Seniors 60+\n5.5M', target: 'Food Banks\n6.7M', value: 1500000 },
-    { source: 'Seniors 60+\n5.5M', target: 'No Assistance\n10.5M', value: 1500000 },
-    // Working Adults (25.7M) → Programs
-    { source: 'Working Adults\n25.7M', target: 'SNAP\n23.5M', value: 14000000 },
-    { source: 'Working Adults\n25.7M', target: 'Food Banks\n6.7M', value: 3700000 },
-    { source: 'Working Adults\n25.7M', target: 'No Assistance\n10.5M', value: 8000000 },
-    // Programs → Outcomes
-    { source: 'SNAP\n23.5M', target: 'Needs Met\n15.5M', value: 14000000 },
-    { source: 'SNAP\n23.5M', target: 'Partially Met\n16M', value: 9500000 },
-    { source: 'School Meals\n3.5M', target: 'Needs Met\n15.5M', value: 1500000 },
-    { source: 'School Meals\n3.5M', target: 'Partially Met\n16M', value: 2000000 },
-    { source: 'Food Banks\n6.7M', target: 'Partially Met\n16M', value: 4500000 },
-    { source: 'Food Banks\n6.7M', target: 'Still in Crisis\n12.7M', value: 2200000 },
-    { source: 'No Assistance\n10.5M', target: 'Still in Crisis\n12.7M', value: 10500000 }
-  ];
+  // Data-driven: nodes and links come from snap-participation.json sankey section
+  const nodes = sankeyData.nodes.map(n => ({
+    name: n.name,
+    itemStyle: { color: n.color }
+  }));
+  const links = sankeyData.links;
 
   chart.setOption({
     tooltip: {
@@ -300,10 +264,11 @@ async function init() {
     const [snapData, geoJSON] = await Promise.all([snapRes.json(), geoRes.json()]);
 
     animateCounters();
+    updateFreshness('snap', { _static: true, _dataYear: snapData.national.year || 2024 });
 
     renderSnapTrend(snapData.trend);
     renderSnapMap(geoJSON, snapData.stateCoverage.states);
-    renderCoverageGap();
+    renderCoverageGap(snapData.sankey);
     renderSchoolLunch(snapData.schoolLunch.states);
     renderBenefits(snapData.benefitsPerPerson.states, snapData.stateCoverage.states);
 

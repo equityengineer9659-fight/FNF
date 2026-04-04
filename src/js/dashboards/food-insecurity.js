@@ -764,6 +764,9 @@ async function init() {
 
     const [data, geoJSON] = await Promise.all([dataRes.json(), geoRes.json()]);
 
+    // Store for live Census upgrade
+    window._fnfStateData = data;
+
     // Animate hero counters
     animateCounters();
 
@@ -789,8 +792,9 @@ async function init() {
     // Responsive
     window.addEventListener('resize', handleResize);
 
-    // Live data: BLS food prices (non-blocking, enhances dashboard if available)
+    // Live data (non-blocking, enhances dashboard if available)
     fetchBLSData();
+    fetchLiveCensus();
 
   } catch (err) {
     // Show error in chart containers
@@ -822,6 +826,34 @@ async function fetchBLSData() {
     renderFoodPrices(liveData);
     updateFreshness('bls', liveData);
   } catch { /* PHP proxy unavailable — static data already rendered */ }
+}
+
+// Non-blocking: try live Census ACS for fresher poverty data on scatter chart
+async function fetchLiveCensus() {
+  try {
+    const res = await fetch('/api/dashboard-census.php?type=states');
+    if (!res.ok) return;
+    const censusData = await res.json();
+    if (censusData.error || !censusData.records) return;
+
+    // Build FIPS lookup from Census response
+    const censusByFips = {};
+    censusData.records.forEach(r => { censusByFips[r.fips] = r; });
+
+    // Merge fresher poverty data into existing state records
+    const data = window._fnfStateData;
+    if (!data || !data.states) return;
+
+    const updatedStates = data.states.map(s => {
+      const c = censusByFips[s.fips];
+      if (c) return { ...s, povertyRate: c.povertyRate, population: c.population };
+      return s;
+    });
+
+    // Re-render scatter with updated poverty axis
+    renderScatter({ states: updatedStates });
+    updateFreshness('census', censusData);
+  } catch { /* Census proxy unavailable */ }
 }
 
 // Start when DOM ready

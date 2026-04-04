@@ -7,7 +7,7 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
-  initScrollReveal, handleResize,
+  initScrollReveal, handleResize, updateFreshness,
   REGIONS, REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
 
@@ -278,6 +278,7 @@ async function init() {
     const [accessData, geoJSON] = await Promise.all([accessRes.json(), geoRes.json()]);
 
     animateCounters();
+    updateFreshness('access', { _static: true, _dataYear: 2019 });
     renderDesertMap(geoJSON, accessData.states);
     renderUrbanRural(accessData.states);
     renderDistance(accessData.states);

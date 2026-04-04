@@ -153,6 +153,9 @@
 
     <!-- Main Content -->
     <main id="main-content" tabindex="-1">
+        <div class="dashboard-data-notice" role="note" aria-label="Data vintage notice">
+            <strong>Data Notice:</strong> State coverage data is from FY2022. National trend data extends through early 2025. SNAP program data is from USDA Food &amp; Nutrition Service.
+        </div>
         <!-- Hero Section -->
         <section class="dashboard-hero" aria-label="SNAP and safety net key statistics">
             <h1 class="slds-text-heading_large">SNAP &amp; Safety Net</h1>
@@ -183,6 +186,7 @@
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
                     <h2 class="dashboard-card__title">SNAP Participation Trend</h2>
+                    <span id="freshness-snap" class="dashboard-freshness"></span>
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
@@ -436,7 +440,7 @@
             <p class="slds-text-align_center slds-m-bottom_x-small">
                 <a href="mailto:hello@food-n-force.com" class="fnf-footer__link">hello@food-n-force.com</a>
             </p>
-            <p class="slds-text-body_small slds-text-align_center slds-text-color_inverse" style="opacity: 0.6;">&copy; 2026 Food-N-Force. All rights reserved.</p>
+            <p class="slds-text-body_small slds-text-align_center fnf-footer__copyright">&copy; 2026 Food-N-Force. All rights reserved.</p>
         </div>
     </footer>
 

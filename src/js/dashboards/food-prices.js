@@ -398,8 +398,9 @@ async function init() {
     // Responsive
     window.addEventListener('resize', handleResize);
 
-    // Try live BLS data for chart 5
+    // Try live BLS data (non-blocking upgrades)
     fetchLiveBLS();
+    fetchLiveRegional();
 
   } catch (err) {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
@@ -418,6 +419,19 @@ async function fetchLiveBLS() {
     renderHomeVsAway(liveData);
     updateFreshness('bls-regional', liveData);
   } catch { /* PHP proxy unavailable */ }
+}
+
+// Non-blocking: try live BLS API for fresher category + regional data
+async function fetchLiveRegional() {
+  try {
+    const res = await fetch('/api/dashboard-bls.php?type=regional');
+    if (!res.ok) return;
+    const liveData = await res.json();
+    if (liveData.error || !liveData.categories || !liveData.regions) return;
+    renderCategories(liveData.categories);
+    renderRegions(liveData.regions);
+    updateFreshness('bls-categories', liveData);
+  } catch { /* PHP proxy unavailable — static data already rendered */ }
 }
 
 // Start when DOM ready
