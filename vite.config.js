@@ -80,6 +80,23 @@ export default defineConfig({
     open: false,
     clearScreen: false,
     proxy: {
+      // Dashboard API proxies — forward to production PHP endpoints
+      '/api/dashboard-census.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
+      '/api/dashboard-bls.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
+      '/api/dashboard-sdoh.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
+      // Nonprofit proxies — rewrite to ProPublica API directly
       '/api/nonprofit-search.php': {
         target: 'https://projects.propublica.org',
         changeOrigin: true,
