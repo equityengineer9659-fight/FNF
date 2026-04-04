@@ -328,7 +328,7 @@
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Beyond Poverty: What Drives Hunger?</h3>
-                        <p class="dashboard-info__text">Poverty is the strongest predictor, but other social determinants compound the risk. States with <strong>low education, high uninsured rates, limited vehicle access, and severe housing cost burden</strong> tend to have higher food insecurity — even after accounting for income.</p>
+                        <p class="dashboard-info__text">Poverty is the strongest predictor, but other social determinants compound the risk. States with <strong>high unemployment, low education, high uninsured rates, limited vehicle access, and severe housing cost burden</strong> tend to have higher food insecurity — even after accounting for income.</p>
                         <p class="dashboard-info__text">Use the buttons to explore how each factor correlates with food insecurity.</p>
                         <div class="dashboard-info__meta">
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census Bureau, American Community Survey 5-Year Estimates</div>
@@ -339,6 +339,56 @@
                     </div>
                 </div>
                 <div id="sdoh-metric-buttons" class="dashboard-metric-buttons" role="group" aria-label="Select social determinant"></div>
+            </div>
+        </section>
+
+        <!-- 4c. Demographic Breakdown: Child vs Overall Food Insecurity -->
+        <section class="dashboard-section scroll-reveal" aria-label="Demographic breakdown of food insecurity by state">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Children Bear the Heaviest Burden</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-demographics" class="dashboard-chart" role="img" aria-label="Grouped bar chart comparing overall and child food insecurity rates for the 15 most affected states"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">The Child Vulnerability Gap</h3>
+                        <p class="dashboard-info__text">In every state, children face <strong>higher food insecurity rates than the general population</strong>. The gap ranges from 4 to 8 percentage points — meaning children are 30-50% more likely to be food insecure than adults in the same state.</p>
+                        <p class="dashboard-info__text">For grant writers: child food insecurity is the single most funded dimension of hunger research. These rates come directly from USDA and Feeding America surveys.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA ERS &amp; Feeding America, Map the Meal Gap 2024</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022</div>
+                        </div>
+                        <div id="demographics-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4d. Income Distribution ThemeRiver (live Census ACS, non-blocking) -->
+        <section id="section-income-river" class="dashboard-section scroll-reveal" style="display:none" aria-label="Income distribution across states sorted by food insecurity">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Income &amp; Hunger: The River of Inequality</h2>
+                    <span id="freshness-income-river" class="dashboard-freshness"></span>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-income-river" class="dashboard-chart" style="height:450px" role="img" aria-label="Theme river chart showing income distribution bands across states sorted by food insecurity rate"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Follow the Money</h3>
+                        <p class="dashboard-info__text">States are sorted left-to-right by food insecurity rate. As insecurity rises, the <strong>low-income bands widen</strong> and <strong>high-income bands narrow</strong> — a visual proof that income distribution is the structural driver of hunger.</p>
+                        <p class="dashboard-info__text">The river makes the policy case: states with more households under $25K consistently have higher food insecurity. Targeted income support programs have the highest ROI for hunger reduction.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census Bureau, ACS 5-Year (B19001 Income Distribution)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2023</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually via Census API</div>
+                        </div>
+                        <div id="income-river-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -482,7 +532,7 @@
                         <div class="dashboard-source-card">
                             <div class="dashboard-source-card__icon">ACS</div>
                             <h3 class="dashboard-source-card__name">U.S. Census Bureau</h3>
-                            <p class="dashboard-source-card__desc">American Community Survey 5-Year Estimates — providing poverty rates, income, and demographic data at county and census tract granularity via the Census API.</p>
+                            <p class="dashboard-source-card__desc">American Community Survey 5-Year Estimates — providing poverty rates, income distribution, employment, health insurance, transportation, and housing cost burden data at county and state granularity via the Census API.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual (5-yr rolling)</span>
                                 <span>County &amp; tract</span>

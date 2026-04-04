@@ -757,6 +757,7 @@ function renderFoodPrices(blsData) {
 const SDOH_METRICS = [
   { key: 'uninsuredPct', label: 'Uninsured Rate', axis: 'Uninsured (%)', insight: 'Lack of health insurance amplifies food insecurity — medical costs crowd out food budgets.' },
   { key: 'collegePct', label: 'College Education', axis: 'Bachelor\'s+ (%)', insight: 'Higher education correlates with lower food insecurity — but causation runs through income and employment stability.', invert: true },
+  { key: 'unemploymentPct', label: 'Unemployment', axis: 'Unemployment Rate (%)', insight: 'Job loss is the most immediate trigger of food insecurity — unemployed workers are 3x more likely to be food insecure than employed peers.' },
   { key: 'noVehiclePct', label: 'No Vehicle', axis: 'Workers Without Vehicle (%)', insight: 'Transportation barriers limit access to affordable food — workers without vehicles face both job and food access challenges.' },
   { key: 'housingBurdenPct', label: 'Housing Burden', axis: 'Severe Housing Cost Burden (%)', insight: 'When rent exceeds 50% of income, food is the first budget line to shrink — housing cost is a hidden driver of hunger.' }
 ];
@@ -890,7 +891,186 @@ async function fetchSDOHData() {
     renderSDOH(sdoh, fiData, SDOH_METRICS[0].key);
     initSDOHButtons(sdoh, fiData);
     updateFreshness('sdoh', sdoh);
+
+    // Income distribution ThemeRiver (uses same SDOH data)
+    if (sdoh.states.some(s => s.income)) {
+      renderIncomeRiver(sdoh, fiData);
+    }
   } catch { /* SDOH is optional — fail silently */ }
+}
+
+// -- Demographic Breakdown: Child vs Overall --
+function renderDemographics(data) {
+  const chart = createChart('chart-demographics');
+  if (!chart) return;
+
+  // Sort by child rate descending, take top 15
+  const sorted = [...data.states].sort((a, b) => b.childRate - a.childRate).slice(0, 15).reverse();
+
+  const states = sorted.map(s => s.name);
+  const overallRates = sorted.map(s => s.rate);
+  const childRates = sorted.map(s => s.childRate);
+  const gaps = sorted.map(s => (s.childRate - s.rate).toFixed(1));
+
+  chart.setOption({
+    legend: {
+      top: 5, right: 10,
+      textStyle: { color: COLORS.text, fontSize: 11 },
+      itemWidth: 12, itemHeight: 12
+    },
+    tooltip: {
+      ...TOOLTIP_STYLE,
+      formatter: params => {
+        if (!Array.isArray(params)) params = [params];
+        const name = params[0].name;
+        const s = sorted.find(st => st.name === name);
+        if (!s) return '';
+        const gap = (s.childRate - s.rate).toFixed(1);
+        const multiplier = (s.childRate / s.rate).toFixed(2);
+        return `<strong>${name}</strong><br/>Overall: ${s.rate}%<br/>Children: ${s.childRate}%<br/>Gap: +${gap} pp (${multiplier}x)`;
+      }
+    },
+    grid: { left: 120, right: 40, top: 35, bottom: 30 },
+    xAxis: {
+      type: 'value',
+      name: 'Food Insecurity Rate (%)',
+      nameLocation: 'center',
+      nameGap: 22,
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'category',
+      data: states,
+      axisLabel: { color: COLORS.text, fontSize: 11 }
+    },
+    series: [
+      {
+        name: 'Overall Rate',
+        type: 'bar',
+        data: overallRates,
+        barGap: '10%',
+        itemStyle: { color: COLORS.primary, borderRadius: [0, 3, 3, 0] },
+        label: { show: true, position: 'right', color: COLORS.textMuted, fontSize: 10, formatter: '{c}%' }
+      },
+      {
+        name: 'Child Rate',
+        type: 'bar',
+        data: childRates,
+        itemStyle: { color: COLORS.accent, borderRadius: [0, 3, 3, 0] },
+        label: { show: true, position: 'right', color: COLORS.textMuted, fontSize: 10, formatter: '{c}%' }
+      }
+    ]
+  });
+
+  // Populate insight
+  const avgGap = sorted.reduce((sum, s) => sum + (s.childRate - s.rate), 0) / sorted.length;
+  const worstState = sorted[sorted.length - 1];
+  const insightEl = document.getElementById('demographics-insight');
+  if (insightEl) {
+    insightEl.textContent = `Among the 15 hardest-hit states, children average ${avgGap.toFixed(1)} percentage points higher food insecurity than the general population. ${worstState.name} has the widest child rate at ${worstState.childRate}%.`;
+  }
+}
+
+// -- Income Distribution ThemeRiver (live Census ACS, non-blocking) --
+const INCOME_BANDS = [
+  { key: 'under25k', label: 'Under $25K', color: '#ff6b6b' },
+  { key: 'from25to50k', label: '$25K–$50K', color: '#ffa94d' },
+  { key: 'from50to100k', label: '$50K–$100K', color: '#69db7c' },
+  { key: 'from100to200k', label: '$100K–$200K', color: '#4ecdc4' },
+  { key: 'over200k', label: '$200K+', color: '#74c0fc' }
+];
+
+function renderIncomeRiver(sdoh, fiData) {
+  const section = document.getElementById('section-income-river');
+  if (section) section.style.display = '';
+
+  const chart = createChart('chart-income-river');
+  if (!chart) return;
+
+  // Build lookup from food insecurity state data
+  const fiByName = {};
+  fiData.states.forEach(s => { fiByName[s.name] = s; });
+
+  // Merge and sort by food insecurity rate
+  const merged = sdoh.states
+    .filter(s => s.income && fiByName[s.name])
+    .map(s => ({ ...s, fiRate: fiByName[s.name].rate }))
+    .sort((a, b) => a.fiRate - b.fiRate);
+
+  // ThemeRiver data: [index, value, bandName]
+  const riverData = [];
+  merged.forEach((s, i) => {
+    INCOME_BANDS.forEach(band => {
+      riverData.push([i, s.income[band.key], band.label]);
+    });
+  });
+
+  chart.setOption({
+    tooltip: {
+      ...TOOLTIP_STYLE,
+      trigger: 'axis',
+      formatter: params => {
+        const idx = params[0]?.value?.[0];
+        const state = merged[idx];
+        if (!state) return '';
+        let html = `<strong>${state.name}</strong> (FI: ${state.fiRate}%)<br/>`;
+        params.forEach(p => {
+          html += `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${p.color};margin-right:4px;"></span>${p.dimensionNames?.[1] || p.seriesName}: ${p.value[1]}%<br/>`;
+        });
+        return html;
+      }
+    },
+    legend: {
+      top: 5,
+      textStyle: { color: COLORS.text, fontSize: 11 },
+      data: INCOME_BANDS.map(b => b.label)
+    },
+    singleAxis: {
+      type: 'value',
+      min: 0,
+      max: merged.length - 1,
+      bottom: 30,
+      top: 45,
+      axisLabel: {
+        color: COLORS.textMuted,
+        formatter: val => {
+          const s = merged[Math.round(val)];
+          return s ? s.name.slice(0, 2) : '';
+        },
+        interval: Math.max(1, Math.floor(merged.length / 15))
+      },
+      axisPointer: {
+        label: {
+          formatter: ({ value }) => {
+            const s = merged[Math.round(value)];
+            return s ? `${s.name} (${s.fiRate}%)` : '';
+          }
+        }
+      },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series: [{
+      type: 'themeRiver',
+      data: riverData,
+      label: { show: false },
+      emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.3)' } },
+      color: INCOME_BANDS.map(b => b.color)
+    }]
+  });
+
+  // Insight
+  const lowInsecurity = merged.slice(0, 10);
+  const highInsecurity = merged.slice(-10);
+  const avgLowPovBand = lowInsecurity.reduce((s, st) => s + st.income.under25k, 0) / lowInsecurity.length;
+  const avgHighPovBand = highInsecurity.reduce((s, st) => s + st.income.under25k, 0) / highInsecurity.length;
+  const insightEl = document.getElementById('income-river-insight');
+  if (insightEl) {
+    insightEl.textContent = `In the 10 most food-insecure states, ${avgHighPovBand.toFixed(1)}% of households earn under $25K — compared to ${avgLowPovBand.toFixed(1)}% in the 10 least food-insecure states.`;
+  }
+
+  updateFreshness('income-river', sdoh);
 }
 
 // -- Init --
@@ -922,6 +1102,7 @@ async function init() {
     renderTrend(data);
     renderBar(data);
     renderScatter(data);
+    renderDemographics(data);
     renderMealCost(data);
 
     // Accessible table
