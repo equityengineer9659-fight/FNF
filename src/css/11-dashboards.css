@@ -80,6 +80,15 @@
 }
 
 /* Hero Section */
+.dashboard-data-notice {
+  background: rgba(245, 158, 11, 0.12);
+  border-left: 3px solid #f59e0b;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.875rem;
+  padding: 0.65rem 1rem;
+  margin: 0;
+}
+
 .dashboard-hero {
   padding: 3rem 0 2rem;
   text-align: center;

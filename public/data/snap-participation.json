@@ -7,7 +7,8 @@
     "avgMonthlyBenefit": 194,
     "freeLunchPct": 52.1,
     "coverageGap": 8200000,
-    "year": 2024
+    "year": 2024,
+    "_reconciliationNote": "State-level snapParticipants sum (~39.1M) is ~7% below this national figure. The gap reflects participants counted at the federal level rather than attributed to a specific state (e.g., multi-state households, territories, and federal correctional facilities), plus vintage differences between state-level FY2023 administrative data and this national FY2024 estimate."
   },
   "trend": {
     "description": "Monthly SNAP participation (millions), 2015-2025",

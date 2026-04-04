@@ -41,7 +41,7 @@ function renderDensityMap(geoJSON, states) {
       }
     },
     visualMap: {
-      left: 'right', bottom: 20, min: 11, max: 28,
+      left: 'right', bottom: 20, min: 11, max: Math.ceil(Math.max(...states.map(s => s.perCapitaOrgs))),
       text: ['Higher Density', 'Lower Density'], calculable: true,
       inRange: { color: [PAL.low, PAL.mid, PAL.high] },
       textStyle: { color: COLORS.text }

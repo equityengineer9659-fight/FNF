@@ -55,9 +55,9 @@ if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
 // Build Census API URL
 // ACS 5-year: B17001_002E = poverty population, B01003_001E = total population
 if ($type === 'states') {
-    $url = 'https://api.census.gov/data/2022/acs/acs5?get=NAME,B17001_002E,B01003_001E&for=state:*';
+    $url = 'https://api.census.gov/data/2023/acs/acs5?get=NAME,B17001_002E,B01003_001E&for=state:*';
 } else {
-    $url = "https://api.census.gov/data/2022/acs/acs5?get=NAME,B17001_002E,B01003_001E&for=county:*&in=state:{$stateFips}";
+    $url = "https://api.census.gov/data/2023/acs/acs5?get=NAME,B17001_002E,B01003_001E&for=county:*&in=state:{$stateFips}";
 }
 
 // Fetch from Census API
@@ -106,8 +106,10 @@ for ($i = 1; $i < count($rows); $i++) {
     $povertyRate = round(($povertyPop / $totalPop) * 100, 1);
 
     // Model food insecurity from poverty (regression: ~0.75 * poverty + 2.5)
+    // Note: county-level FI rates are modeled estimates, not official USDA survey data.
     $fiRate = round(min(35, max(3, 0.75 * $povertyRate + 2.5)), 1);
-    $childRate = round(min(40, $fiRate * (1.3 + (crc32($row[0]) & 0xFF) / 255 * 0.3)), 1);
+    // Child rate uses national child-to-adult FI ratio (1.4x) from Feeding America state data.
+    $childRate = round(min(40, $fiRate * 1.4), 1);
 
     if ($type === 'states') {
         $fips = str_pad($row[3], 2, '0', STR_PAD_LEFT);
@@ -136,7 +138,7 @@ for ($i = 1; $i < count($rows); $i++) {
 
 $result = [
     'type' => $type,
-    'year' => 2022,
+    'year' => 2023,
     'source' => 'Census Bureau ACS 5-Year Estimates',
     'count' => count($records),
     'fetchedAt' => date('c'),

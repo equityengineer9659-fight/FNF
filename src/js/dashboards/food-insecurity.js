@@ -431,7 +431,8 @@ function renderBar(data) {
   const top5 = sorted.slice(0, 5);
   const bottom5 = sorted.slice(-5).reverse();
 
-  const maxRate = 20, maxChild = 28, maxPoverty = 20, maxMeal = 5.5, maxSnap = 900000;
+  const maxRate = 20, maxChild = 28, maxPoverty = 20, maxMeal = 5.5;
+  const maxSnap = Math.max(...data.states.map(s => s.snapParticipation));
   function normalize(states) {
     return states.map(s => [
       (s.rate / maxRate * 100).toFixed(0),
@@ -595,7 +596,7 @@ function renderSnap(data) {
   const sorted = [...data.states].sort((a, b) => b.rate - a.rate).slice(0, 15);
   const names = sorted.map(s => s.name);
   const rates = sorted.map(s => s.rate);
-  const snapPer100k = sorted.map(s => Math.round((s.snapParticipation / (s.persons / (s.rate / 100))) * 100));
+  const snapCoverageRatio = sorted.map(s => Math.round((s.snapParticipation / (s.persons / (s.rate / 100))) * 100));
 
   chart.setOption({
     tooltip: {
@@ -637,7 +638,7 @@ function renderSnap(data) {
       {
         name: 'SNAP Coverage (%)',
         type: 'bar',
-        data: snapPer100k.reverse(),
+        data: snapCoverageRatio.reverse(),
         barWidth: '35%',
         itemStyle: {
           borderRadius: [0, 3, 3, 0],

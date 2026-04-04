@@ -17,7 +17,7 @@ function renderCategories(data) {
   const chart = createChart('chart-categories');
   if (!chart || !data.series) return;
 
-  const series = data.series;
+  const series = data.series.map(s => ({ ...s, data: s.data.filter(d => d.value !== null) }));
   const dates = series[0].data.map(d => d.date);
   const lineColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', COLORS.primary];
   const areaColors = [
@@ -248,9 +248,10 @@ function renderHomeVsAway(blsData) {
   const chart = createChart('chart-home-vs-away');
   if (!chart || !blsData || !blsData.series) return;
 
-  const foodHome = blsData.series.find(s => s.name === 'Food at Home');
-  const foodAway = blsData.series.find(s => s.name === 'Food Away from Home');
-  const allItems = blsData.series.find(s => s.name === 'All Items');
+  const filterNulls = s => s ? { ...s, data: s.data.filter(d => d.value !== null) } : s;
+  const foodHome = filterNulls(blsData.series.find(s => s.name === 'Food at Home'));
+  const foodAway = filterNulls(blsData.series.find(s => s.name === 'Food Away from Home'));
+  const allItems = filterNulls(blsData.series.find(s => s.name === 'All Items'));
 
   if (!foodHome) return;
 

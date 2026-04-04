@@ -7,7 +7,8 @@
     "combinedRevenue": 48200000000,
     "avgEfficiencyRatio": 82.4,
     "statesUnder100": 8,
-    "year": 2023
+    "year": 2023,
+    "_reconciliationNote": "State-level orgCount values sum to ~51,218, approximately 10,066 fewer than this national figure. The gap reflects organizations registered at the federal level without a single-state attribution (multi-state networks, national coordinating bodies), plus organizations in U.S. territories (Puerto Rico, Guam, Virgin Islands) excluded from state records. Revenue totals reconcile within 1.2%."
   },
   "states": [
     {"name":"Alabama","fips":"01","orgCount":812,"totalRevenue":685000000,"totalExpenses":648000000,"programExpenseRatio":84.2,"population":4903000,"foodInsecurityRate":15.3,"perCapitaOrgs":16.6},
