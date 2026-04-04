@@ -140,5 +140,41 @@
       {"name":"Wisconsin","benefit":185},{"name":"Wyoming","benefit":172},
       {"name":"District of Columbia","benefit":241}
     ]
+  },
+  "sankey": {
+    "description": "Safety net coverage flow: Demographics → Programs → Outcomes (modeled estimates)",
+    "source": "USDA FNS, Feeding America, Census ACS",
+    "year": 2022,
+    "nodes": [
+      {"name": "Children\n13M", "color": "#f59e0b"},
+      {"name": "Seniors 60+\n5.5M", "color": "#8b5cf6"},
+      {"name": "Working Adults\n25.7M", "color": "#0176d3"},
+      {"name": "SNAP\n23.5M", "color": "#22c55e"},
+      {"name": "School Meals\n3.5M", "color": "#00d4ff"},
+      {"name": "Food Banks\n6.7M", "color": "#f97316"},
+      {"name": "No Assistance\n10.5M", "color": "#ef4444"},
+      {"name": "Needs Met\n15.5M", "color": "#16a34a"},
+      {"name": "Partially Met\n16M", "color": "#eab308"},
+      {"name": "Still in Crisis\n12.7M", "color": "#dc2626"}
+    ],
+    "links": [
+      {"source": "Children\n13M", "target": "SNAP\n23.5M", "value": 7000000},
+      {"source": "Children\n13M", "target": "School Meals\n3.5M", "value": 3500000},
+      {"source": "Children\n13M", "target": "Food Banks\n6.7M", "value": 1500000},
+      {"source": "Children\n13M", "target": "No Assistance\n10.5M", "value": 1000000},
+      {"source": "Seniors 60+\n5.5M", "target": "SNAP\n23.5M", "value": 2500000},
+      {"source": "Seniors 60+\n5.5M", "target": "Food Banks\n6.7M", "value": 1500000},
+      {"source": "Seniors 60+\n5.5M", "target": "No Assistance\n10.5M", "value": 1500000},
+      {"source": "Working Adults\n25.7M", "target": "SNAP\n23.5M", "value": 14000000},
+      {"source": "Working Adults\n25.7M", "target": "Food Banks\n6.7M", "value": 3700000},
+      {"source": "Working Adults\n25.7M", "target": "No Assistance\n10.5M", "value": 8000000},
+      {"source": "SNAP\n23.5M", "target": "Needs Met\n15.5M", "value": 14000000},
+      {"source": "SNAP\n23.5M", "target": "Partially Met\n16M", "value": 9500000},
+      {"source": "School Meals\n3.5M", "target": "Needs Met\n15.5M", "value": 1500000},
+      {"source": "School Meals\n3.5M", "target": "Partially Met\n16M", "value": 2000000},
+      {"source": "Food Banks\n6.7M", "target": "Partially Met\n16M", "value": 4500000},
+      {"source": "Food Banks\n6.7M", "target": "Still in Crisis\n12.7M", "value": 2200000},
+      {"source": "No Assistance\n10.5M", "target": "Still in Crisis\n12.7M", "value": 10500000}
+    ]
   }
 }

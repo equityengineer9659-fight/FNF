@@ -4,21 +4,202 @@
  * Fetches Consumer Price Index data for food from api.bls.gov
  * Caches responses for 7 days (CPI is monthly).
  *
- * Endpoint:
- *   GET /api/dashboard-bls.php — returns monthly food CPI data (2018-present)
+ * Endpoints:
+ *   GET /api/dashboard-bls.php              — monthly food CPI (3 series: 2018-present)
+ *   GET /api/dashboard-bls.php?type=regional — category + regional CPI (9 series)
  */
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
 header('Access-Control-Allow-Origin: *');
 
+// Optional API key for BLS v2 (higher rate limits)
+@include __DIR__ . '/_config.php';
+
 $cacheDir = __DIR__ . '/../_cache/dashboard';
 if (!is_dir($cacheDir)) {
     mkdir($cacheDir, 0755, true);
 }
 
-$cacheFile = "{$cacheDir}/bls-food-cpi.json";
+$type = isset($_GET['type']) ? $_GET['type'] : 'default';
 $cacheTTL = 604800; // 7 days
+
+// -- Helper: fetch series from BLS API --
+function fetchBLSSeries($seriesIds, $startYear, $endYear) {
+    $useV2 = defined('BLS_API_KEY') && BLS_API_KEY !== '';
+    $url = $useV2
+        ? 'https://api.bls.gov/publicAPI/v2/timeseries/data/'
+        : 'https://api.bls.gov/publicAPI/v1/timeseries/data/';
+
+    // v2 supports 50 series per request; v1 supports only 3
+    $maxPerRequest = $useV2 ? 50 : 3;
+    $chunks = array_chunk($seriesIds, $maxPerRequest);
+    $allSeries = [];
+
+    foreach ($chunks as $chunk) {
+        $payload = [
+            'seriesid' => $chunk,
+            'startyear' => strval($startYear),
+            'endyear' => strval($endYear)
+        ];
+        if ($useV2) {
+            $payload['registrationkey'] = BLS_API_KEY;
+        }
+
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'POST',
+                'timeout' => 15,
+                'header' => "Content-Type: application/json\r\nUser-Agent: FoodNForce-Dashboard/1.0\r\n",
+                'content' => json_encode($payload)
+            ]
+        ]);
+
+        $response = @file_get_contents($url, false, $context);
+        if ($response === false) return false;
+
+        $raw = json_decode($response, true);
+        if (!$raw || $raw['status'] !== 'REQUEST_SUCCEEDED') return false;
+
+        foreach ($raw['Results']['series'] as $s) {
+            $allSeries[] = $s;
+        }
+    }
+
+    return $allSeries;
+}
+
+// -- Helper: parse BLS series data into clean points --
+function parseSeries($blsSeries, $nameMap) {
+    $result = [];
+    foreach ($blsSeries as $s) {
+        $id = $s['seriesID'];
+        $name = isset($nameMap[$id]) ? $nameMap[$id] : $id;
+        $points = [];
+
+        foreach ($s['data'] as $d) {
+            $period = $d['period'];
+            if (substr($period, 0, 1) !== 'M') continue;
+            $month = intval(substr($period, 1));
+            if ($month < 1 || $month > 12) continue;
+
+            $points[] = [
+                'date' => sprintf('%d-%02d', $d['year'], $month),
+                'value' => floatval($d['value'])
+            ];
+        }
+
+        usort($points, function($a, $b) {
+            return strcmp($a['date'], $b['date']);
+        });
+
+        $result[] = [
+            'id' => $id,
+            'name' => $name,
+            'data' => $points
+        ];
+    }
+    return $result;
+}
+
+// -- Helper: return stale cache or 502 --
+function returnStaleOrError($cacheFile, $errorMsg) {
+    if (file_exists($cacheFile)) {
+        $cached = file_get_contents($cacheFile);
+        $data = json_decode($cached, true);
+        if ($data) {
+            $data['_cached'] = true;
+            $data['_stale'] = true;
+            echo json_encode($data);
+            exit;
+        }
+    }
+    http_response_code(502);
+    echo json_encode(['error' => $errorMsg]);
+    exit;
+}
+
+// ============================================================
+// Route: ?type=regional — Category + Regional CPI
+// ============================================================
+if ($type === 'regional') {
+    $cacheFile = "{$cacheDir}/bls-regional-cpi.json";
+
+    // Check cache
+    if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
+        $cached = file_get_contents($cacheFile);
+        $data = json_decode($cached, true);
+        if ($data) {
+            $data['_cached'] = true;
+            $data['_cachedAt'] = date('c', filemtime($cacheFile));
+            $data['_expiresAt'] = date('c', filemtime($cacheFile) + $cacheTTL);
+            echo json_encode($data);
+            exit;
+        }
+    }
+
+    // Series IDs
+    $categoryIds = ['CUUR0000SAF111', 'CUUR0000SAF112', 'CUUR0000SAF113', 'CUUR0000SAF114', 'CUUR0000SAF1'];
+    $regionIds = ['CUUR0100SAF1', 'CUUR0200SAF1', 'CUUR0300SAF1', 'CUUR0400SAF1'];
+    $allIds = array_merge($categoryIds, $regionIds);
+
+    $startYear = 2018;
+    $endYear = intval(date('Y'));
+
+    $blsSeries = fetchBLSSeries($allIds, $startYear, $endYear);
+    if ($blsSeries === false) {
+        returnStaleOrError($cacheFile, 'BLS API unavailable');
+    }
+
+    $nameMap = [
+        'CUUR0000SAF111' => 'Cereals & Bakery',
+        'CUUR0000SAF112' => 'Meats, Poultry & Fish',
+        'CUUR0000SAF113' => 'Dairy & Related',
+        'CUUR0000SAF114' => 'Fruits & Vegetables',
+        'CUUR0000SAF1'   => 'All Food at Home',
+        'CUUR0100SAF1'   => 'Northeast',
+        'CUUR0200SAF1'   => 'Midwest',
+        'CUUR0300SAF1'   => 'South',
+        'CUUR0400SAF1'   => 'West'
+    ];
+
+    $parsed = parseSeries($blsSeries, $nameMap);
+
+    // Split into categories and regions
+    $catSeries = [];
+    $regSeries = [];
+    foreach ($parsed as $s) {
+        if (in_array($s['id'], $categoryIds)) {
+            $catSeries[] = $s;
+        } else {
+            $regSeries[] = $s;
+        }
+    }
+
+    $result = [
+        'source' => 'Bureau of Labor Statistics, Consumer Price Index',
+        'description' => 'Food CPI by category and region',
+        'fetchedAt' => date('c'),
+        'categories' => [
+            'meta' => ['startYear' => $startYear, 'endYear' => $endYear, 'baseline' => '1982-84 = 100'],
+            'series' => $catSeries
+        ],
+        'regions' => [
+            'meta' => ['startYear' => 2020, 'endYear' => $endYear, 'series' => 'Food at Home CPI by region'],
+            'series' => $regSeries
+        ]
+    ];
+
+    file_put_contents($cacheFile, json_encode($result));
+    $result['_cached'] = false;
+    echo json_encode($result);
+    exit;
+}
+
+// ============================================================
+// Route: default — Core Food CPI (3 series)
+// ============================================================
+$cacheFile = "{$cacheDir}/bls-food-cpi.json";
 
 // Check cache
 if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
@@ -33,94 +214,39 @@ if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
     }
 }
 
-// BLS API v1 (no key required)
-// Series IDs:
-//   CUUR0000SAF1  = Food at home (all urban consumers, US average)
-//   CUUR0000SEFV  = Food away from home
-//   CUUR0000SA0   = All items (for comparison)
 $seriesIds = ['CUUR0000SAF1', 'CUUR0000SEFV', 'CUUR0000SA0'];
 $startYear = 2018;
 $endYear = intval(date('Y'));
 
-$url = 'https://api.bls.gov/publicAPI/v1/timeseries/data/';
-
-$postData = json_encode([
-    'seriesid' => $seriesIds,
-    'startyear' => strval($startYear),
-    'endyear' => strval($endYear)
-]);
-
-$context = stream_context_create([
-    'http' => [
-        'method' => 'POST',
-        'timeout' => 15,
-        'header' => "Content-Type: application/json\r\nUser-Agent: FoodNForce-Dashboard/1.0\r\n",
-        'content' => $postData
-    ]
-]);
-
-$response = @file_get_contents($url, false, $context);
-
-if ($response === false) {
-    // Return stale cache if available
-    if (file_exists($cacheFile)) {
-        $cached = file_get_contents($cacheFile);
-        $data = json_decode($cached, true);
-        if ($data) {
-            $data['_cached'] = true;
-            $data['_stale'] = true;
-            echo json_encode($data);
-            exit;
-        }
-    }
-    http_response_code(502);
-    echo json_encode(['error' => 'BLS API unavailable']);
-    exit;
+$blsSeries = fetchBLSSeries($seriesIds, $startYear, $endYear);
+if ($blsSeries === false) {
+    returnStaleOrError($cacheFile, 'BLS API unavailable');
 }
 
-$raw = json_decode($response, true);
-if (!$raw || $raw['status'] !== 'REQUEST_SUCCEEDED') {
-    http_response_code(502);
-    echo json_encode(['error' => 'Invalid BLS response', 'details' => $raw['message'] ?? '']);
-    exit;
-}
-
-// Parse BLS response into clean time series
-$seriesNames = [
+$nameMap = [
     'CUUR0000SAF1' => 'Food at Home',
     'CUUR0000SEFV' => 'Food Away from Home',
     'CUUR0000SA0'  => 'All Items'
 ];
 
+$parsed = parseSeries($blsSeries, $nameMap);
+
+// Default route uses {year, month, date, value} format for backward compatibility
 $series = [];
-foreach ($raw['Results']['series'] as $s) {
-    $id = $s['seriesID'];
-    $name = isset($seriesNames[$id]) ? $seriesNames[$id] : $id;
+foreach ($parsed as $s) {
     $points = [];
-
-    foreach ($s['data'] as $d) {
-        // Only use annual averages (period M13) or monthly data
-        $period = $d['period'];
-        if (substr($period, 0, 1) !== 'M') continue;
-        $month = intval(substr($period, 1));
-        if ($month < 1 || $month > 12) continue;
-
+    foreach ($s['data'] as $p) {
+        $parts = explode('-', $p['date']);
         $points[] = [
-            'year' => intval($d['year']),
-            'month' => $month,
-            'date' => sprintf('%d-%02d', $d['year'], $month),
-            'value' => floatval($d['value'])
+            'year' => intval($parts[0]),
+            'month' => intval($parts[1]),
+            'date' => $p['date'],
+            'value' => $p['value']
         ];
     }
-
-    // Sort chronologically
-    usort($points, function($a, $b) {
-        return strcmp($a['date'], $b['date']);
-    });
-
     $series[] = [
-        'id' => $id,
-        'name' => $name,
+        'id' => $s['id'],
+        'name' => $s['name'],
         'data' => $points
     ];
 }
@@ -133,8 +259,6 @@ $result = [
     'series' => $series
 ];
 
-// Write cache
 file_put_contents($cacheFile, json_encode($result));
-
 $result['_cached'] = false;
 echo json_encode($result);

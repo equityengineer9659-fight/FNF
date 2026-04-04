@@ -2,6 +2,7 @@ node_modules/
 dist/
 .env
 .env.*
+.mcp.json
 !.env.example
 Blog and Article Content/scraper-analytics.json
 *.log
@@ -35,6 +36,9 @@ package-lock.json
 # Test screenshots and baselines (generated artifacts)
 .playwright-mcp/
 tools/testing/baselines/
+
+# PHP API proxy config (contains API keys)
+public/api/_config.php
 
 # PHP API proxy cache (generated on SiteGround)
 _cache/

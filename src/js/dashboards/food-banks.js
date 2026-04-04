@@ -7,7 +7,7 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
-  initScrollReveal, handleResize,
+  initScrollReveal, handleResize, updateFreshness,
   REGIONS, REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
 
@@ -326,6 +326,7 @@ async function init() {
     const [bankData, geoJSON] = await Promise.all([bankRes.json(), geoRes.json()]);
 
     animateCounters();
+    updateFreshness('banks', { _static: true, _dataYear: 2023 });
     renderDensityMap(geoJSON, bankData.states);
     renderVsInsecurity(bankData.states);
     renderRevenue(bankData.states);
