@@ -368,6 +368,27 @@
             </div>
         </section>
 
+        <!-- Peer Comparison (non-blocking, loaded from ProPublica search) -->
+        <section class="dashboard-section scroll-reveal" aria-label="Peer comparison analysis" id="section-peer-comparison" style="display:none">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">How Does This Org Compare?</h2></div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-peer-comparison" class="dashboard-chart" role="img" aria-label="Bar chart comparing this organization against state peers on key financial metrics"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Peer Benchmarking</h3>
+                        <p class="dashboard-info__text" id="peer-comparison-text">Comparing this organization against other food assistance nonprofits in the same state on revenue, program efficiency, and compensation — the metrics grant writers and board members care about most.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> ProPublica Nonprofit Explorer (IRS 990)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Peers</span> Food assistance orgs in same state</div>
+                        </div>
+                        <div id="peer-comparison-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Methodology & Data Sources -->
         <section class="dashboard-narrative scroll-reveal" aria-label="Methodology and data sources">
             <div class="slds-container_large slds-container_center slds-p-around_large">

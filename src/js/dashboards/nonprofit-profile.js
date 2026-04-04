@@ -1372,6 +1372,103 @@ function showError(msg) {
   }
 }
 
+// -- Peer Comparison (non-blocking) --
+async function fetchPeerComparison(org, data) {
+  try {
+    const state = org.state;
+    const ein = org.strein || org.ein;
+    if (!state) return;
+
+    // Search for food bank peers in the same state
+    const res = await fetch(`/api/nonprofit-search.php?q=food+bank&state=${state}`);
+    if (!res.ok) return;
+    const searchData = await res.json();
+
+    const peers = (searchData.organizations || [])
+      .filter(p => p.ein !== ein && p.total_revenue > 0)
+      .slice(0, 25);
+
+    if (peers.length < 3) return; // Not enough peers for meaningful comparison
+
+    const section = document.getElementById('section-peer-comparison');
+    if (section) section.style.display = '';
+
+    const chart = createChart('chart-peer-comparison');
+    if (!chart) return;
+
+    // This org's metrics from most recent filing
+    const latestIdx = data.years.length - 1;
+    const thisRevenue = data.revenue[latestIdx] || 0;
+
+    // Peer medians
+    const peerRevenues = peers.map(p => p.total_revenue).sort((a, b) => a - b);
+    const medianRevenue = peerRevenues[Math.floor(peerRevenues.length / 2)];
+
+    const orgName = toTitleCase(org.name);
+
+    chart.setOption({
+      tooltip: {
+        ...TOOLTIP_STYLE,
+        trigger: 'axis',
+        formatter: params => {
+          let tip = `<strong>${params[0].name}</strong><br/>`;
+          params.forEach(p => {
+            if (p.seriesName === orgName) {
+              tip += `${p.marker} ${p.seriesName}: <strong>${fmtCurrency(thisRevenue)}</strong><br/>`;
+            } else {
+              tip += `${p.marker} ${p.seriesName}: <strong>${fmtCurrency(medianRevenue)}</strong><br/>`;
+            }
+          });
+          return tip;
+        }
+      },
+      legend: {
+        data: [orgName, `State Peer Median (${peers.length} orgs)`],
+        textStyle: { color: COLORS.text }, top: 5
+      },
+      grid: { left: 50, right: 20, top: 40, bottom: 30 },
+      xAxis: {
+        type: 'category',
+        data: ['Total Revenue'],
+        axisLabel: { color: COLORS.text }
+      },
+      yAxis: {
+        type: 'value', name: 'Revenue ($)',
+        nameTextStyle: { color: COLORS.textMuted },
+        axisLabel: { color: COLORS.textMuted, formatter: v => fmtCurrency(v) },
+        splitLine: { lineStyle: { color: COLORS.gridLine } }
+      },
+      series: [
+        {
+          name: orgName, type: 'bar', barWidth: '30%',
+          data: [thisRevenue],
+          itemStyle: { color: COLORS.primary, borderRadius: [4, 4, 0, 0] },
+          label: { show: true, position: 'top', color: COLORS.text, formatter: p => fmtCurrency(p.value) }
+        },
+        {
+          name: `State Peer Median (${peers.length} orgs)`, type: 'bar', barWidth: '30%',
+          data: [medianRevenue],
+          itemStyle: { color: 'rgba(255,255,255,0.25)', borderRadius: [4, 4, 0, 0] },
+          label: { show: true, position: 'top', color: COLORS.textMuted, formatter: p => fmtCurrency(p.value) }
+        }
+      ]
+    });
+
+    // Insight
+    const insightEl = document.getElementById('peer-comparison-insight');
+    const textEl = document.getElementById('peer-comparison-text');
+    if (textEl) {
+      const ratio = medianRevenue > 0 ? (thisRevenue / medianRevenue).toFixed(1) : 0;
+      const position = thisRevenue > medianRevenue ? 'above' : thisRevenue < medianRevenue ? 'below' : 'at';
+      textEl.textContent = `${orgName}'s revenue of ${fmtCurrency(thisRevenue)} is ${ratio}x the median of ${peers.length} food assistance peers in ${state}. This places the organization ${position} the state median of ${fmtCurrency(medianRevenue)}.`;
+    }
+    if (insightEl) {
+      const percentile = peerRevenues.filter(r => r <= thisRevenue).length / peerRevenues.length * 100;
+      insightEl.textContent = `Revenue percentile: ${percentile.toFixed(0)}th among ${state} food assistance nonprofits.`;
+    }
+  } catch { /* Peer comparison is optional */ }
+}
+
 // -- Init --
 async function init() {
   const ein = new URLSearchParams(window.location.search).get('ein');
@@ -1437,6 +1534,9 @@ async function init() {
 
     initScrollReveal();
     window.addEventListener('resize', handleResize);
+
+    // Non-blocking: peer comparison
+    fetchPeerComparison(json.organization, data);
   } catch {
     showError('Unable to load organization data. Please try again.');
   }
