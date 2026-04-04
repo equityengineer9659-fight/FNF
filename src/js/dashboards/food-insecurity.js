@@ -485,15 +485,45 @@ function renderScatter(data) {
     persons: s.persons
   }));
 
+  const byRegion = {};
+  Object.keys(REGION_COLORS).forEach(r => { byRegion[r] = []; });
+  points.forEach(p => byRegion[getRegion(p.name)].push(p));
+
+  const reg = linearRegression(points.map(p => p.value));
+  const xs = points.map(p => p.value[0]);
+  const xMin = Math.min(...xs), xMax = Math.max(...xs);
+  const rLine = {
+    symbol: 'none', silent: true,
+    lineStyle: { color: 'rgba(255,255,255,0.35)', type: 'dashed', width: 1.5 },
+    data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
+    label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
+  };
+
+  const series = Object.entries(REGION_COLORS).map(([region, color], i) => ({
+    name: region, type: 'scatter',
+    data: byRegion[region],
+    symbolSize: (_, params) => Math.max(8, Math.sqrt(params.data.persons / 50000)),
+    itemStyle: { color, opacity: 0.85 },
+    emphasis: { itemStyle: { opacity: 1 } },
+    animationDuration: 2000,
+    ...(i === 0 ? { markLine: rLine } : {})
+  }));
+
   chart.setOption({
+    legend: {
+      top: 5, right: 10,
+      textStyle: { color: COLORS.text, fontSize: 11 },
+      itemWidth: 10, itemHeight: 10
+    },
     tooltip: {
       ...TOOLTIP_STYLE,
       formatter: params => {
         const d = params.data;
-        return `<strong>${d.name}</strong><br/>Poverty: ${d.value[0]}%<br/>Food Insecurity: ${d.value[1]}%`;
+        const region = getRegion(d.name);
+        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>Poverty: ${d.value[0]}%<br/>Food Insecurity: ${d.value[1]}%`;
       }
     },
-    grid: { left: 55, right: 20, top: 20, bottom: 45 },
+    grid: { left: 55, right: 20, top: 35, bottom: 45 },
     xAxis: {
       name: 'Poverty Rate (%)',
       nameLocation: 'center',
@@ -508,33 +538,7 @@ function renderScatter(data) {
       axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
       splitLine: { lineStyle: { color: COLORS.gridLine } }
     },
-    series: [{
-      type: 'scatter',
-      data: points,
-      symbolSize: (val) => {
-        const p = points.find(pt => pt.value[0] === val[0] && pt.value[1] === val[1]);
-        return p ? Math.max(8, Math.sqrt(p.persons / 50000)) : 10;
-      },
-      itemStyle: {
-        color: COLORS.secondary,
-        opacity: 0.75
-      },
-      emphasis: {
-        itemStyle: { color: COLORS.accent, opacity: 1 }
-      },
-      markLine: (() => {
-        const reg = linearRegression(points.map(p => p.value));
-        const xs = points.map(p => p.value[0]);
-        const xMin = Math.min(...xs), xMax = Math.max(...xs);
-        return {
-          symbol: 'none', silent: true,
-          lineStyle: { color: 'rgba(255,255,255,0.35)', type: 'dashed', width: 1.5 },
-          data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
-          label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
-        };
-      })(),
-      animationDuration: 2000
-    }]
+    series
   });
 }
 
