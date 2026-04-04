@@ -17,10 +17,18 @@ header('X-Content-Type-Options: nosniff');
 header('Access-Control-Allow-Origin: *');
 
 @include __DIR__ . '/_config.php';
+require_once __DIR__ . '/_rate-limiter.php';
 
 $cacheDir = __DIR__ . '/../_cache/dashboard';
 if (!is_dir($cacheDir)) {
     mkdir($cacheDir, 0755, true);
+}
+
+// Rate limit: 90K/month (free tier = 100K)
+if (!rateLimitCheck('mapbox', 'monthly', 90000)) {
+    http_response_code(429);
+    echo json_encode(['error' => 'Mapbox monthly quota reached — serving cached data only', '_rateLimited' => true]);
+    exit;
 }
 
 // Check configuration
@@ -121,6 +129,7 @@ $result = [
 
 // Write cache
 file_put_contents($cacheFile, json_encode($result));
+rateLimitIncrement('mapbox');
 
 $result['_cached'] = false;
 echo json_encode($result);

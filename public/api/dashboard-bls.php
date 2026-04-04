@@ -15,6 +15,7 @@ header('Access-Control-Allow-Origin: *');
 
 // Optional API key for BLS v2 (higher rate limits)
 @include __DIR__ . '/_config.php';
+require_once __DIR__ . '/_rate-limiter.php';
 
 $cacheDir = __DIR__ . '/../_cache/dashboard';
 if (!is_dir($cacheDir)) {
@@ -37,6 +38,12 @@ function fetchBLSSeries($seriesIds, $startYear, $endYear) {
     $allSeries = [];
 
     foreach ($chunks as $chunk) {
+        // Rate limit: 450/day (free tier = 500 for v2, 25 for v1)
+        $dailyLimit = $useV2 ? 450 : 20;
+        if (!rateLimitCheck('bls', 'daily', $dailyLimit)) {
+            return false; // will fall back to stale cache
+        }
+
         $payload = [
             'seriesid' => $chunk,
             'startyear' => strval($startYear),
@@ -57,6 +64,7 @@ function fetchBLSSeries($seriesIds, $startYear, $endYear) {
 
         $response = @file_get_contents($url, false, $context);
         if ($response === false) return false;
+        rateLimitIncrement('bls');
 
         $raw = json_decode($response, true);
         if (!$raw || $raw['status'] !== 'REQUEST_SUCCEEDED') return false;
