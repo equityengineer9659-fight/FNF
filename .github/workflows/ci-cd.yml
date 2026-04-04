@@ -87,6 +87,7 @@ jobs:
           SSH_HOST: ${{ secrets.SITEGROUND_HOST }}
           SSH_USER: ${{ secrets.SITEGROUND_USER }}
           SSH_PORT: ${{ secrets.SITEGROUND_PORT }}
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_KEY" > ~/.ssh/deploy_key
@@ -114,6 +115,10 @@ jobs:
           rsync -avz --delete -e "ssh -p $SSH_PORT" \
             dist/ \
             "${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/"
+
+          # Write API config (keys from GitHub Secrets, not in repo)
+          CONFIG_PATH="~/www/food-n-force.com/public_html/api/_config.php"
+          ssh -p "$SSH_PORT" "${SSH_USER}@${SSH_HOST}" "printf '<?php\ndefine(\"BLS_API_KEY\", \"${BLS_API_KEY}\");\n' > ${CONFIG_PATH}"
 
           # Flush LiteSpeed page cache (stored in .lscache/ directory)
           ssh -p "$SSH_PORT" "${SSH_USER}@${SSH_HOST}" "rm -rf ~/www/food-n-force.com/public_html/.lscache/ 2>/dev/null && echo 'LiteSpeed cache cleared' || echo 'No .lscache found'" || true
