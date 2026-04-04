@@ -78,6 +78,8 @@ function renderMap(geoJSON, data, metric = 'rate') {
     if (backBtn) backBtn.style.display = 'none';
     const mapLabel = document.getElementById('map-state-label');
     if (mapLabel) mapLabel.textContent = '';
+    const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
+    if (hint) hint.textContent = 'Hover for state details \u2014 click any state for county breakdown';
 
     chart.setOption({
       tooltip: {
@@ -156,6 +158,8 @@ function renderMap(geoJSON, data, metric = 'rate') {
       if (backBtn) backBtn.style.display = '';
       const mapLabel = document.getElementById('map-state-label');
       if (mapLabel) mapLabel.textContent = stateName;
+      const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
+      if (hint) hint.textContent = 'County rates are modeled estimates (poverty regression), not survey data \u2014 click Back for state-level survey data';
 
       chart.hideLoading();
 

@@ -35,7 +35,7 @@ function renderSnapTrend(trendData) {
         silent: true,
         data: [
           [{ xAxis: '2020-03', itemStyle: { color: 'rgba(239,68,68,0.15)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: PAL.low, fontSize: 9, position: 'insideTop' } }, { xAxis: '2023-03' }],
-          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(251,191,36,0.12)' }, label: { show: true, formatter: 'Post-Emergency', color: PAL.mid, fontSize: 9, position: 'insideTop' } }, { xAxis: '2025-01' }]
+          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(251,191,36,0.12)' }, label: { show: true, formatter: 'Post-Emergency', color: PAL.mid, fontSize: 9, position: 'insideTop' } }, { xAxis: '2025-12' }]
         ]
       },
       animationDuration: 2000

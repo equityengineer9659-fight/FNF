@@ -56,6 +56,7 @@ function renderRegions(data) {
   const regionColors = ['#60a5fa', '#f59e0b', '#34d399', '#a78bfa'];
   const regions = data.series.map(s => s.name);
   const latestValues = data.series.map(s => s.data[s.data.length - 1].value);
+  const latestYear = data.series[0]?.data.at(-1)?.date?.slice(0, 4) ?? new Date().getFullYear().toString();
 
   // Also show 2020 values for comparison
   const startValues = data.series.map(s => s.data[0].value);
@@ -83,7 +84,7 @@ function renderRegions(data) {
       }
     },
     legend: {
-      data: ['Jan 2020', 'Latest (2025)'],
+      data: ['Jan 2020', `Latest (${latestYear})`],
       textStyle: { color: COLORS.text },
       top: 5
     },
@@ -114,7 +115,7 @@ function renderRegions(data) {
         animationDuration: 1500
       },
       {
-        name: 'Latest (2025)',
+        name: `Latest (${latestYear})`,
         type: 'bar',
         data: latestValues,
         barWidth: '30%',
@@ -376,6 +377,7 @@ async function init() {
 
     // Chart 1: Food Prices by Category
     renderCategories(regionalData.categories);
+    updateFreshness('bls-categories', { _cached: true, _cachedAt: regionalData.fetchedAt });
 
     // Chart 2: Regional Price Comparison
     renderRegions(regionalData.regions);
