@@ -167,6 +167,38 @@
             </div>
         </section>
 
+        <!-- Find Help Near Me -->
+        <section class="dashboard-section scroll-reveal" aria-label="Find food assistance near you">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Find Help Near Me</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div style="padding: 1rem;">
+                            <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+                                <input id="help-search-input" type="text" placeholder="Enter your address, city, or zip code..." style="flex:1; padding:0.75rem 1rem; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); color:#fff; font-size:14px;" aria-label="Address search">
+                                <button id="help-search-btn" style="padding:0.75rem 1.5rem; border-radius:6px; border:none; background:var(--fnf-primary, #0176d3); color:#fff; font-weight:600; cursor:pointer; font-size:14px;">Search</button>
+                            </div>
+                            <div id="help-search-status" style="color:rgba(255,255,255,0.6); font-size:13px; margin-bottom:1rem;"></div>
+                            <div id="help-search-results" style="max-height:400px; overflow-y:auto;"></div>
+                        </div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Food Assistance Locator</h3>
+                        <p class="dashboard-info__text">Enter an address, city, or zip code to find <strong>food banks, pantries, and meal programs</strong> near you. We search the ProPublica Nonprofit Explorer database of IRS-registered food assistance organizations in your state.</p>
+                        <p class="dashboard-info__text">Results show organization name, location, revenue (where available), and a link to their full financial profile on our Nonprofit Directory.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Geocoding</span> Mapbox Geocoding API</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Organizations</span> ProPublica Nonprofit Explorer (IRS 990)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Coverage</span> All 50 states + DC</div>
+                        </div>
+                        <div class="dashboard-info__insight">This is a live search — results update in real-time from federal nonprofit filings. Not all food assistance programs file IRS 990s; small volunteer-run pantries may not appear.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Chart 1: Food Bank Density Map -->
         <section class="dashboard-section scroll-reveal" aria-label="Food bank density by state">
             <div class="dashboard-card">
@@ -216,22 +248,23 @@
         <!-- Chart 3: Revenue Top 20 -->
         <section class="dashboard-section scroll-reveal" aria-label="Food bank revenue by state">
             <div class="dashboard-card">
-                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue by State</h2></div>
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue Per Person in Need</h2></div>
                 <div class="dashboard-chart-row dashboard-chart-row--stacked">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-revenue" class="dashboard-chart" role="img" aria-label="Treemap showing food bank revenue by state, sized by revenue and colored by program efficiency"></div>
+                        <div id="chart-revenue" class="dashboard-chart" role="img" aria-label="Treemap showing food bank revenue per food-insecure person by state, colored by program efficiency"></div>
                         <div id="treemap-legend-banks" class="dashboard-chart__legend"></div>
                         <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
                     </div>
                     <div class="dashboard-chart-row__info">
-                        <h3 class="dashboard-info__title">Following the Money</h3>
-                        <p class="dashboard-info__text">Food assistance is a <strong>$48 billion industry</strong>. California, Texas, and New York alone account for nearly $15 billion in combined revenue. These numbers include all food assistance nonprofits classified under IRS NTEE code K31.</p>
-                        <p class="dashboard-info__text">Revenue comes from government grants, private donations, corporate partnerships, and program fees. Larger organizations benefit from economies of scale — but smaller pantries often serve the hardest-to-reach communities.</p>
+                        <h3 class="dashboard-info__title">Dollars Per Person in Need</h3>
+                        <p class="dashboard-info__text">Raw revenue totals favor large states. This treemap sizes each state by <strong>revenue per food-insecure person</strong> — a fairer benchmark of whether resources match need. States with high per-person funding can invest in quality programs; states with low funding stretch every dollar thin.</p>
+                        <p class="dashboard-info__text">Color indicates <strong>program efficiency</strong> (% of expenses going to programs vs. overhead). Dark green = excellent (85%+), navy = good, indigo = fair, rose = below average.</p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> ProPublica Nonprofit Explorer, IRS 990 filings</span>
+                            <span class="meta-item"><strong>Source</strong> ProPublica Nonprofit Explorer (IRS 990) + Feeding America insecurity estimates</span>
                             <span class="meta-item"><strong>Data Year</strong> Most recent filing (2022-2023)</span>
+                            <span class="meta-item"><strong>Metric</strong> Total revenue &divide; food-insecure population</span>
                         </div>
-                        <div class="dashboard-info__insight">The top 5 states by revenue handle 42% of all food assistance funding nationally.</div>
+                        <div class="dashboard-info__insight">States with the most food-insecure people don't always have the most funding per person — revealing where the resource gap is widest.</div>
                     </div>
                 </div>
             </div>
@@ -248,7 +281,7 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Dollars to Meals</h3>
                         <p class="dashboard-info__text">The <strong>program expense ratio</strong> measures how much of every dollar goes directly to feeding people (vs. overhead and fundraising). The national average is 82.4% — meaning 82 cents of every dollar reaches programs.</p>
-                        <p class="dashboard-info__text">This radar compares four US regions across five dimensions: efficiency, density, average revenue per org, food insecurity rate, and organization count. The <strong>Midwest</strong> leads in efficiency, while the <strong>South</strong> faces the highest need with fewer resources per capita.</p>
+                        <p class="dashboard-info__text">This radar compares four US regions across five dimensions: efficiency, density, average revenue per org, food insecurity rate, and organization count. The <strong>dashed white line</strong> shows the national average as a benchmark. The <strong>Midwest</strong> leads in efficiency, while the <strong>South</strong> faces the highest need with fewer resources per capita.</p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> IRS 990 filings via ProPublica</span>
                             <span class="meta-item"><strong>Metric</strong> Program expenses / total expenses x 100</span>
@@ -349,6 +382,15 @@
                             <div class="dashboard-source-card__details">
                                 <span>Annual</span>
                                 <span>State level</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">MBX</div>
+                            <h3 class="dashboard-source-card__name">Mapbox Geocoding</h3>
+                            <p class="dashboard-source-card__desc">Address-to-coordinates geocoding powering the "Find Help Near Me" feature. Converts user input to state identification for localized food bank search.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Real-time</span>
+                                <span>Address level</span>
                             </div>
                         </div>
                     </div>

@@ -148,7 +148,8 @@ function renderRevenue(states) {
         const revenuePerInsecure = insecurePersons > 0 ? Math.round(s.totalRevenue / insecurePersons) : 0;
         const revenuePerOrg = s.orgCount > 0 ? Math.round(s.totalRevenue / s.orgCount) : 0;
         flatData.push({
-          name: s.name, value: s.totalRevenue,
+          name: s.name, value: revenuePerInsecure,
+          totalRevenue: s.totalRevenue,
           efficiency: s.programExpenseRatio, orgCount: s.orgCount,
           revenuePerInsecure, revenuePerOrg, insecurePersons,
           insecurityRate: s.foodInsecurityRate,
@@ -169,11 +170,11 @@ function renderRevenue(states) {
       formatter: p => {
         const d = p.data;
         return `<strong>${p.name}</strong> <span style="color:${REGION_COLORS[d.region]}">(${d.region})</span><br/>
-          <span style="color:${COLORS.secondary}">Revenue:</span> <strong>$${fmtNum(p.value)}</strong><br/>
+          <span style="color:${COLORS.secondary}">$ per Food-Insecure Person:</span> <strong>$${fmtNum(d.revenuePerInsecure)}</strong><br/>
+          Total Revenue: $${fmtNum(d.totalRevenue)}<br/>
           Program Efficiency: <strong>${d.efficiency}%</strong><br/>
           Organizations: ${fmtNum(d.orgCount)}<br/>
-          $ per Org: $${fmtNum(d.revenuePerOrg)}<br/>
-          <span style="color:${COLORS.secondary}">$ per Food-Insecure Person:</span> <strong>$${fmtNum(d.revenuePerInsecure)}</strong><br/>
+          Food-Insecure Population: ${fmtNum(d.insecurePersons)}<br/>
           Food Insecurity Rate: ${d.insecurityRate}%`;
       }
     },
@@ -182,7 +183,7 @@ function renderRevenue(states) {
       width: '98%', height: '95%', top: 5, left: '1%',
       label: {
         show: true, color: '#fff',
-        formatter: p => `{name|${p.name}}\n{val|$${fmtNum(p.value)}  ${p.data.efficiency}%}`,
+        formatter: p => `{name|${p.name}}\n{val|$${fmtNum(p.value)}/person  ${p.data.efficiency}%}`,
         rich: {
           name: { fontSize: 12, fontWeight: 'bold', color: '#fff', lineHeight: 16 },
           val: { fontSize: 10, color: 'rgba(255,255,255,0.8)', lineHeight: 14 }
@@ -224,7 +225,7 @@ function renderEfficiency(states) {
 
   chart.setOption({
     tooltip: { ...TOOLTIP_STYLE },
-    legend: { data: regionAvgs.map(r => r.name), textStyle: { color: COLORS.text }, bottom: 0 },
+    legend: { data: ['National Avg', ...regionAvgs.map(r => r.name)], textStyle: { color: COLORS.text }, bottom: 0 },
     radar: {
       indicator: [
         { name: 'Efficiency (%)', max: 90 }, { name: 'Density\n(per 100K)', max: 22 },
@@ -239,13 +240,30 @@ function renderEfficiency(states) {
     },
     series: [{
       type: 'radar',
-      data: regionAvgs.map(r => ({
-        name: r.name,
-        value: [r.efficiency, r.density, r.avgRevPerOrg, r.insecurity, r.orgCount],
-        areaStyle: { color: REGION_COLORS[r.name].replace(')', ',0.2)').replace('rgb', 'rgba') },
-        lineStyle: { color: REGION_COLORS[r.name], width: 2 },
-        itemStyle: { color: REGION_COLORS[r.name] }
-      }))
+      data: [
+        // National average benchmark
+        {
+          name: 'National Avg',
+          value: [
+            (states.reduce((s, st) => s + st.programExpenseRatio, 0) / states.length).toFixed(1),
+            (states.reduce((s, st) => s + st.perCapitaOrgs, 0) / states.length).toFixed(1),
+            (states.reduce((s, st) => s + st.totalRevenue / st.orgCount, 0) / states.length / 1000000).toFixed(2),
+            (states.reduce((s, st) => s + st.foodInsecurityRate, 0) / states.length).toFixed(1),
+            Math.round(states.reduce((s, st) => s + st.orgCount, 0) / states.length)
+          ],
+          areaStyle: { color: 'rgba(255,255,255,0.05)' },
+          lineStyle: { color: 'rgba(255,255,255,0.5)', width: 2, type: 'dashed' },
+          itemStyle: { color: 'rgba(255,255,255,0.5)' }
+        },
+        // Regional polygons
+        ...regionAvgs.map(r => ({
+          name: r.name,
+          value: [r.efficiency, r.density, r.avgRevPerOrg, r.insecurity, r.orgCount],
+          areaStyle: { color: REGION_COLORS[r.name].replace(')', ',0.2)').replace('rgb', 'rgba') },
+          lineStyle: { color: REGION_COLORS[r.name], width: 2 },
+          itemStyle: { color: REGION_COLORS[r.name] }
+        }))
+      ]
     }]
   });
 }
@@ -315,6 +333,89 @@ function renderDistribution(states) {
   });
 }
 
+// -- Find Help Near Me --
+function initFindHelp() {
+  const input = document.getElementById('help-search-input');
+  const btn = document.getElementById('help-search-btn');
+  const status = document.getElementById('help-search-status');
+  const results = document.getElementById('help-search-results');
+  if (!input || !btn) return;
+
+  async function doSearch() {
+    const query = input.value.trim();
+    if (query.length < 2) {
+      if (status) status.textContent = 'Please enter at least 2 characters.';
+      return;
+    }
+
+    if (status) status.textContent = 'Finding your location...';
+    if (results) results.innerHTML = '';
+
+    try {
+      // Step 1: Geocode the address
+      const geoRes = await fetch(`/api/mapbox-geocode.php?q=${encodeURIComponent(query)}&limit=1`);
+      if (!geoRes.ok) throw new Error('Geocoding failed');
+      const geoData = await geoRes.json();
+
+      if (!geoData.results || geoData.results.length === 0) {
+        if (status) status.textContent = 'Location not found. Try a more specific address or zip code.';
+        return;
+      }
+
+      const location = geoData.results[0];
+      const stateCode = location.state;
+      if (!stateCode) {
+        if (status) status.textContent = 'Could not determine state from that location. Try including a state or zip code.';
+        return;
+      }
+
+      if (status) status.textContent = `Found: ${location.name || location.city + ', ' + stateCode}. Searching for food banks...`;
+
+      // Step 2: Search ProPublica for food organizations in that state
+      const searchRes = await fetch(`/api/nonprofit-search.php?q=food+bank&state=${stateCode}`);
+      if (!searchRes.ok) throw new Error('Nonprofit search failed');
+      const searchData = await searchRes.json();
+
+      const orgs = searchData.organizations || searchData.results || [];
+      if (orgs.length === 0) {
+        if (status) status.textContent = `No food assistance organizations found in ${stateCode}. Try broadening your search.`;
+        return;
+      }
+
+      if (status) status.textContent = `Found ${orgs.length}+ food assistance organizations in ${stateCode}:`;
+
+      // Step 3: Render results
+      if (results) {
+        results.innerHTML = orgs.slice(0, 20).map(org => {
+          const name = org.name || org.organization?.name || 'Unknown';
+          const city = org.city || org.organization?.city || '';
+          const state = org.state || org.organization?.state || stateCode;
+          const ein = org.ein || org.organization?.ein || '';
+          const revenue = org.total_revenue || org.organization?.total_revenue;
+          const revenueStr = revenue ? `$${fmtNum(revenue)}` : '';
+          const profileUrl = ein ? `/dashboards/nonprofit-profile.html?ein=${ein}` : '';
+
+          return `<div style="padding:0.75rem; margin-bottom:0.5rem; background:rgba(255,255,255,0.05); border-radius:6px; border-left:3px solid var(--fnf-primary, #0176d3);">
+            <div style="font-weight:600; color:#fff; margin-bottom:0.25rem;">${profileUrl ? `<a href="${profileUrl}" style="color:#fff; text-decoration:none; border-bottom:1px dotted rgba(255,255,255,0.4);">${name}</a>` : name}</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.6);">
+              ${city}${city && state ? ', ' : ''}${state}
+              ${revenueStr ? ` &middot; Revenue: ${revenueStr}` : ''}
+              ${profileUrl ? ` &middot; <a href="${profileUrl}" style="color:var(--fnf-secondary, #00d4ff);">View Profile</a>` : ''}
+            </div>
+          </div>`;
+        }).join('');
+      }
+    } catch {
+      if (status) status.textContent = 'Search unavailable. The geocoding or nonprofit API may be down — try again later.';
+    }
+  }
+
+  btn.addEventListener('click', doSearch);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doSearch();
+  });
+}
+
 // -- Init --
 async function init() {
   try {
@@ -332,6 +433,7 @@ async function init() {
     renderRevenue(bankData.states);
     renderEfficiency(bankData.states);
     renderDistribution(bankData.states);
+    initFindHelp();
     initScrollReveal();
     window.addEventListener('resize', handleResize);
   } catch {
