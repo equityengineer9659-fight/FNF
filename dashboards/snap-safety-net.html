@@ -206,7 +206,7 @@
                             <span class="meta-item"><strong>Unit</strong> Millions of participants</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            Policy markers show key inflection points: COVID emergency allotments, the Thrifty Food Plan update, and the end of emergency benefits.
+                            Policy markers show key inflection points: COVID emergency allotments, the Thrifty Food Plan update, and the end of emergency benefits. The dashed Food CPI overlay (when available) shows the economic pressure driving enrollment.
                         </div>
                     </div>
                 </div>
@@ -338,6 +338,70 @@
             </div>
         </section>
 
+        <!-- Chart 6: National Coverage KPI Gauges -->
+        <section class="dashboard-section scroll-reveal" aria-label="National safety net coverage indicators">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Safety Net at a Glance</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                            <div>
+                                <div id="gauge-coverage" class="dashboard-chart" style="height:200px" role="img" aria-label="Gauge showing SNAP coverage ratio"></div>
+                            </div>
+                            <div>
+                                <div id="gauge-lunch" class="dashboard-chart" style="height:200px" role="img" aria-label="Gauge showing school lunch participation rate"></div>
+                            </div>
+                            <div>
+                                <div id="gauge-benefit" class="dashboard-chart" style="height:200px" role="img" aria-label="Gauge showing average monthly SNAP benefit"></div>
+                            </div>
+                            <div>
+                                <div id="gauge-gap" class="dashboard-chart" style="height:200px" role="img" aria-label="Gauge showing safety net coverage gap in millions"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">The Executive Summary</h3>
+                        <p class="dashboard-info__text"><strong>SNAP Coverage</strong> — 83.7% of food-insecure Americans receive SNAP benefits. The remaining 8.2 million fall through the gap due to eligibility rules, stigma, or lack of outreach.</p>
+                        <p class="dashboard-info__text"><strong>School Lunch</strong> — 52.1% of students nationally qualify for free or reduced-price meals. For many children, this is the most reliable meal of the day.</p>
+                        <p class="dashboard-info__text"><strong>Avg Benefit</strong> — $194/month per person, or about $2.16 per meal. Benefits vary by state, household size, and income.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA FNS SNAP Data Tables &amp; Feeding America</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024 (national estimates)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data</span> Static (from snap-participation.json)</div>
+                        </div>
+                        <div class="dashboard-info__insight">These four numbers are the ones grant writers cite most. Copy them directly into proposals — they come from authoritative federal sources.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart 7: Demographic Safety Net Flow (live Census ACS, non-blocking) -->
+        <section id="section-demographic-flow" class="dashboard-section scroll-reveal" style="display:none" aria-label="Demographic breakdown of safety net coverage">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Who Falls Through the Safety Net?</h2>
+                    <span id="freshness-demographic-flow" class="dashboard-freshness"></span>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-demographic-flow" class="dashboard-chart" style="height:400px" role="img" aria-label="Sankey diagram showing demographic flow from race/ethnicity through food insecurity into safety net coverage"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Equity in the Safety Net</h3>
+                        <p class="dashboard-info__text">Food insecurity does not affect all communities equally. <strong>Black and Hispanic Americans face food insecurity at 2-3x the rate of White Americans</strong> — driven by systemic disparities in income, employment, and wealth.</p>
+                        <p class="dashboard-info__text">This flow diagram traces how each demographic group moves through the safety net: from population share to food insecurity to coverage or gaps. For federal grants, equity analysis is not optional — it is required.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Census ACS B03002 (race/ethnicity) + USDA ERS 2022 (insecurity rates by race)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually via Census API</div>
+                        </div>
+                        <div id="demographic-flow-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- How Organizations Use These Insights -->
         <section class="dashboard-section dashboard-insights scroll-reveal" aria-label="How organizations use these insights">
             <div class="slds-container_large slds-container_center slds-p-around_large">
@@ -411,10 +475,19 @@
                         <div class="dashboard-source-card">
                             <div class="dashboard-source-card__icon">ACS</div>
                             <h3 class="dashboard-source-card__name">U.S. Census Bureau</h3>
-                            <p class="dashboard-source-card__desc">American Community Survey — poverty and income data used for SNAP eligibility modeling and coverage gap estimation.</p>
+                            <p class="dashboard-source-card__desc">American Community Survey — poverty, income, and race/ethnicity data used for SNAP eligibility modeling, coverage gap estimation, and demographic equity analysis.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual (5-yr rolling)</span>
                                 <span>State &amp; county</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">BLS</div>
+                            <h3 class="dashboard-source-card__name">Bureau of Labor Statistics</h3>
+                            <p class="dashboard-source-card__desc">Consumer Price Index — food-at-home CPI overlay on the SNAP trend chart providing economic context for participation changes.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Monthly (live API)</span>
+                                <span>National</span>
                             </div>
                         </div>
                     </div>

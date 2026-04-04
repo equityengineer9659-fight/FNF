@@ -42,6 +42,10 @@
  *   B19001_011E-013E — $50K-$100K (3 brackets)
  *   B19001_014E-016E — $100K-$200K (3 brackets)
  *   B19001_017E      — $200K+ (1 bracket)
+ *   B03002_003E  — White alone, not Hispanic
+ *   B03002_004E  — Black or African American alone
+ *   B03002_006E  — Asian alone
+ *   B03002_012E  — Hispanic or Latino
  *   B01003_001E  — Total population
  *   B17001_002E  — Population below poverty level
  */
@@ -97,7 +101,11 @@ $vars = implode(',', [
     'B19001_007E','B19001_008E','B19001_009E','B19001_010E',  // $25K-$50K
     'B19001_011E','B19001_012E','B19001_013E',  // $50K-$100K
     'B19001_014E','B19001_015E','B19001_016E',  // $100K-$200K
-    'B19001_017E'   // $200K+
+    'B19001_017E',  // $200K+
+    'B03002_003E',  // White alone, not Hispanic
+    'B03002_004E',  // Black or African American alone
+    'B03002_006E',  // Asian alone
+    'B03002_012E'   // Hispanic or Latino
 ]);
 
 $url = "https://api.census.gov/data/2023/acs/acs5?get={$vars}&for=state:*";
@@ -199,6 +207,18 @@ for ($i = 1; $i < count($raw); $i++) {
         'over200k'    => round($over200k / $totalHH * 100, 1)
     ] : null;
 
+    // Race/ethnicity: % of total population
+    $white    = intval($row[47]);
+    $black    = intval($row[48]);
+    $asian    = intval($row[49]);
+    $hispanic = intval($row[50]);
+    $race = $pop > 0 ? [
+        'whitePct'    => round($white / $pop * 100, 1),
+        'blackPct'    => round($black / $pop * 100, 1),
+        'asianPct'    => round($asian / $pop * 100, 1),
+        'hispanicPct' => round($hispanic / $pop * 100, 1)
+    ] : null;
+
     $states[] = [
         'name'             => $name,
         'fips'             => $fips,
@@ -209,13 +229,14 @@ for ($i = 1; $i < count($raw); $i++) {
         'unemploymentPct'  => $unemploymentPct,
         'noVehiclePct'     => $noVehiclePct,
         'housingBurdenPct' => $housingBurdenPct,
-        'income'           => $income
+        'income'           => $income,
+        'race'             => $race
     ];
 }
 
 $result = [
     'source' => 'U.S. Census Bureau, American Community Survey 5-Year Estimates (2023)',
-    'description' => 'Social determinants of health indicators by state: poverty, education, insurance, employment, transportation, housing',
+    'description' => 'Social determinants of health indicators by state: poverty, education, insurance, employment, transportation, housing, income distribution, race/ethnicity',
     'fetchedAt' => date('c'),
     'year' => 2023,
     'states' => $states
