@@ -204,7 +204,7 @@
                             Since 2020, food prices have surged unevenly across categories. <strong>Cereals and bakery</strong> products led the spike, rising over 24% in just two years. <strong>Dairy</strong> prices were the most volatile, swinging wildly before stabilizing at elevated levels.
                         </p>
                         <p class="dashboard-info__text">
-                            Meanwhile, <strong>fruits and vegetables</strong> — the foods nutritionists recommend most — have consistently been the most expensive category, putting healthy diets further out of reach for low-income families.
+                            Meanwhile, <strong>fruits and vegetables</strong> — the foods nutritionists recommend most — have consistently been the most expensive category. <strong>Nonalcoholic beverages</strong> and <strong>other food at home</strong> (fats, oils, sugars) round out the full picture of grocery inflation, putting healthy diets further out of reach for low-income families.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> Bureau of Labor Statistics, Consumer Price Index</span>
@@ -380,13 +380,15 @@
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
                         <div id="chart-purchasing-power" class="dashboard-chart" role="img" aria-label="Dual-axis chart comparing food CPI trend against SNAP benefit levels, both indexed to 2018 baseline"></div>
+                        <div id="fred-cpi-toggles" class="fred-toggle-container" role="group" aria-label="Toggle individual food item price overlays"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">The Purchasing Power Gap</h3>
                         <p class="dashboard-info__text">This chart indexes both <strong>food-at-home prices</strong> and <strong>average SNAP monthly benefits</strong> to a common 2018 baseline (= 100). When the food price line rises faster than the SNAP benefit line, families on SNAP are losing purchasing power.</p>
                         <p class="dashboard-info__text">The Thrifty Food Plan reevaluation in October 2021 boosted SNAP benefits significantly — but the 2022 inflation surge and end of emergency allotments in March 2023 eroded much of that gain.</p>
+                        <p class="dashboard-info__text">Use the <strong>item toggles</strong> below the chart to overlay individual food prices (eggs, bread, ground beef, dairy) sourced from the FRED API — see which staples have outpaced benefits the most.</p>
                         <div class="dashboard-info__meta">
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> BLS CPI (food prices) + USDA FNS (SNAP benefits)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> BLS CPI (food prices) + USDA FNS (SNAP benefits) + FRED (item CPI)</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Baseline</span> January 2018 = 100 for both series</div>
                         </div>
                         <div id="purchasing-power-insight" class="dashboard-info__insight"></div>
@@ -481,6 +483,15 @@
                             <div class="dashboard-source-card__details">
                                 <span>Monthly</span>
                                 <span>National</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">FRED</div>
+                            <h3 class="dashboard-source-card__name">Federal Reserve Economic Data</h3>
+                            <p class="dashboard-source-card__desc">FRED API — item-level CPI series for specific food staples (eggs, bread, ground beef, dairy) used in the purchasing power overlay. Also supports county SNAP participation and unemployment data.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Monthly (live API)</span>
+                                <span>National &amp; County</span>
                             </div>
                         </div>
                     </div>

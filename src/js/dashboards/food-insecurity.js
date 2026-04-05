@@ -357,24 +357,57 @@ function renderTrend(data) {
   const rates = data.trend.map(t => t.rate);
   const childRates = data.trend.map(t => t.childRate);
 
+  // Find the boundary between actual and projected data
+  const firstProjectedIdx = data.trend.findIndex(t => t.projected);
+  const hasProjections = firstProjectedIdx > -1;
+
+  // Split data into actual and projected segments for dashed line rendering
+  // Actual data: fill projected years with null; Projected data: fill actual years with null
+  // Overlap by 1 point at the boundary so the lines connect
+  const actualRates = rates.map((r, i) => (hasProjections && i > firstProjectedIdx) ? null : r);
+  const actualChildRates = childRates.map((r, i) => (hasProjections && i > firstProjectedIdx) ? null : r);
+  const projectedRates = rates.map((r, i) => (hasProjections && i >= firstProjectedIdx) ? r : null);
+  const projectedChildRates = childRates.map((r, i) => (hasProjections && i >= firstProjectedIdx) ? r : null);
+
+  // markLine at the last actual data year
+  const markLineData = hasProjections ? [{
+    xAxis: data.trend[firstProjectedIdx].year.toString(),
+    lineStyle: { color: 'rgba(255,255,255,0.5)', type: 'dashed', width: 1.5 },
+    label: {
+      formatter: 'USDA Report\nTerminated',
+      color: COLORS.textMuted,
+      fontSize: 10,
+      position: 'insideEndTop'
+    }
+  }] : [];
+
   chart.setOption({
     tooltip: {
       trigger: 'axis',
       ...TOOLTIP_STYLE,
       formatter: params => {
         const idx = params[0].dataIndex;
-        let tip = `<strong>${params[0].axisValue}</strong><br/>`;
+        const isProjected = hasProjections && idx >= firstProjectedIdx;
+        const sourceLabel = isProjected ? 'Projected (Columbia University)' : 'Official USDA Data';
+        let tip = `<strong>${params[0].axisValue}</strong> <span style="color:${COLORS.textMuted};font-size:11px">${sourceLabel}</span><br/>`;
+        // Deduplicate: only show one entry per series name (actual and projected overlap)
+        const seen = new Set();
         params.forEach(p => {
-          const arr = p.seriesName === 'Overall Rate' ? rates : childRates;
+          const baseName = p.seriesName.replace(' (Projected)', '');
+          if (seen.has(baseName) || p.value == null) return;
+          seen.add(baseName);
+          const arr = baseName === 'Overall Rate' ? rates : childRates;
           const yoy = idx > 0 ? (p.value - arr[idx - 1]).toFixed(1) : null;
           const yoyStr = yoy !== null ? ` (<span style="color:${yoy >= 0 ? COLORS.accent : '#22c55e'}">${yoy >= 0 ? '+' : ''}${yoy}pp</span>)` : '';
-          tip += `${p.marker} ${p.seriesName}: <strong>${p.value}%</strong>${yoyStr}<br/>`;
+          tip += `${p.marker} ${baseName}: <strong>${p.value}%</strong>${yoyStr}<br/>`;
         });
         return tip;
       }
     },
     legend: {
-      data: ['Overall Rate', 'Child Rate'],
+      data: hasProjections
+        ? ['Overall Rate', 'Child Rate', 'Overall Rate (Projected)', 'Child Rate (Projected)']
+        : ['Overall Rate', 'Child Rate'],
       textStyle: { color: COLORS.text },
       top: 5
     },
@@ -396,7 +429,7 @@ function renderTrend(data) {
       {
         name: 'Overall Rate',
         type: 'line',
-        data: rates,
+        data: actualRates,
         smooth: true,
         symbol: 'circle',
         symbolSize: 8,
@@ -408,20 +441,58 @@ function renderTrend(data) {
             { offset: 1, color: 'rgba(1,118,211,0.02)' }
           ])
         },
+        markLine: markLineData.length ? { data: markLineData, symbol: 'none', silent: true } : undefined,
+        connectNulls: false,
         animationDuration: 2000
       },
       {
         name: 'Child Rate',
         type: 'line',
-        data: childRates,
+        data: actualChildRates,
         smooth: true,
         symbol: 'diamond',
         symbolSize: 8,
         lineStyle: { width: 3, color: COLORS.accent },
         itemStyle: { color: COLORS.accent },
+        connectNulls: false,
         animationDuration: 2000,
         animationDelay: 300
-      }
+      },
+      // Projected series (dashed lines)
+      ...(hasProjections ? [
+        {
+          name: 'Overall Rate (Projected)',
+          type: 'line',
+          data: projectedRates,
+          smooth: true,
+          symbol: 'circle',
+          symbolSize: 6,
+          lineStyle: { width: 2.5, color: COLORS.primary, type: 'dashed' },
+          itemStyle: { color: COLORS.primary, opacity: 0.7 },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: 'rgba(1,118,211,0.15)' },
+              { offset: 1, color: 'rgba(1,118,211,0.01)' }
+            ])
+          },
+          connectNulls: false,
+          animationDuration: 1500,
+          animationDelay: 500
+        },
+        {
+          name: 'Child Rate (Projected)',
+          type: 'line',
+          data: projectedChildRates,
+          smooth: true,
+          symbol: 'diamond',
+          symbolSize: 6,
+          lineStyle: { width: 2.5, color: COLORS.accent, type: 'dashed' },
+          itemStyle: { color: COLORS.accent, opacity: 0.7 },
+          connectNulls: false,
+          animationDuration: 1500,
+          animationDelay: 800
+        }
+      ] : [])
     ]
   });
 }
@@ -480,15 +551,30 @@ function renderBar(data) {
 }
 
 // -- Scatter: Poverty vs Food Insecurity --
-function renderScatter(data) {
+// Tracks current scatter state so toggles and live data upgrades coordinate
+let _scatterMode = 'overall'; // 'overall' or 'child'
+let _scatterSource = 'USDA/ACS'; // updated when SAIPE or ACS overlay loads
+
+function renderScatter(data, mode, source) {
+  if (mode) _scatterMode = mode;
+  if (source) _scatterSource = source;
+
   const chart = createChart('chart-scatter');
   if (!chart) return;
 
-  const points = data.states.map(s => ({
-    value: [s.povertyRate, s.rate],
-    name: s.name,
-    persons: s.persons
-  }));
+  const isChild = _scatterMode === 'child';
+
+  const points = data.states
+    .filter(s => {
+      const xVal = isChild ? s.childPovertyRate : s.povertyRate;
+      const yVal = isChild ? s.childRate : s.rate;
+      return typeof xVal === 'number' && typeof yVal === 'number';
+    })
+    .map(s => ({
+      value: [isChild ? s.childPovertyRate : s.povertyRate, isChild ? s.childRate : s.rate],
+      name: s.name,
+      persons: s.persons
+    }));
 
   const byRegion = {};
   Object.keys(REGION_COLORS).forEach(r => { byRegion[r] = []; });
@@ -503,6 +589,10 @@ function renderScatter(data) {
     data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
     label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
   };
+
+  const xLabel = isChild ? 'Child Poverty Rate (%)' : 'Poverty Rate (%)';
+  const yLabel = isChild ? 'Child Food Insecurity (%)' : 'Food Insecurity (%)';
+  const srcTag = _scatterSource;
 
   const series = Object.entries(REGION_COLORS).map(([region, color], i) => ({
     name: region, type: 'scatter',
@@ -525,12 +615,14 @@ function renderScatter(data) {
       formatter: params => {
         const d = params.data;
         const region = getRegion(d.name);
-        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>Poverty: ${d.value[0]}%<br/>Food Insecurity: ${d.value[1]}%`;
+        const pLabel = isChild ? 'Child Poverty' : 'Poverty';
+        const fiLabel = isChild ? 'Child Food Insecurity' : 'Food Insecurity';
+        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>${pLabel}: ${d.value[0]}%<br/>${fiLabel}: ${d.value[1]}%<br/><span style="color:${COLORS.textMuted};font-size:11px">Source: ${srcTag}</span>`;
       }
     },
     grid: { left: 55, right: 20, top: 35, bottom: 45 },
     xAxis: {
-      name: 'Poverty Rate (%)',
+      name: xLabel,
       nameLocation: 'center',
       nameGap: 30,
       nameTextStyle: { color: COLORS.textMuted },
@@ -538,12 +630,45 @@ function renderScatter(data) {
       splitLine: { lineStyle: { color: COLORS.gridLine } }
     },
     yAxis: {
-      name: 'Food Insecurity (%)',
+      name: yLabel,
       nameTextStyle: { color: COLORS.textMuted },
       axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
       splitLine: { lineStyle: { color: COLORS.gridLine } }
     },
     series
+  }, true);
+
+  // Update insight text with current correlation
+  const insightEl = document.getElementById('scatter-insight');
+  if (insightEl) {
+    const strength = Math.abs(reg.r) >= 0.7 ? 'Strong' : Math.abs(reg.r) >= 0.4 ? 'Moderate' : 'Weak';
+    const label = isChild ? 'child poverty is a leading predictor of child food insecurity' : 'poverty is the #1 predictor of food insecurity';
+    insightEl.textContent = `${strength} positive correlation (r \u2248 ${reg.r.toFixed(2)}) \u2014 ${label}. (${srcTag})`;
+  }
+}
+
+// Initialize scatter toggle buttons (Overall vs Child)
+function initScatterToggle() {
+  const container = document.getElementById('scatter-toggle-buttons');
+  if (!container) return;
+
+  container.innerHTML = [
+    '<button class="dashboard-metric-btn dashboard-metric-btn--active" data-scatter-mode="overall" aria-pressed="true">Overall Poverty</button>',
+    '<button class="dashboard-metric-btn" data-scatter-mode="child" aria-pressed="false">Child Poverty</button>'
+  ].join('');
+
+  container.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-scatter-mode]');
+    if (!btn) return;
+    container.querySelectorAll('.dashboard-metric-btn').forEach(b => {
+      b.classList.remove('dashboard-metric-btn--active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    btn.classList.add('dashboard-metric-btn--active');
+    btn.setAttribute('aria-pressed', 'true');
+
+    const currentData = window._fnfStateData;
+    if (currentData) renderScatter(currentData, btn.dataset.scatterMode);
   });
 }
 
@@ -755,11 +880,15 @@ function renderFoodPrices(blsData) {
 
 // -- SDOH Scatter (live Census ACS data, non-blocking) --
 const SDOH_METRICS = [
-  { key: 'uninsuredPct', label: 'Uninsured Rate', axis: 'Uninsured (%)', insight: 'Lack of health insurance amplifies food insecurity — medical costs crowd out food budgets.' },
-  { key: 'collegePct', label: 'College Education', axis: 'Bachelor\'s+ (%)', insight: 'Higher education correlates with lower food insecurity — but causation runs through income and employment stability.', invert: true },
-  { key: 'unemploymentPct', label: 'Unemployment', axis: 'Unemployment Rate (%)', insight: 'Job loss is the most immediate trigger of food insecurity — unemployed workers are 3x more likely to be food insecure than employed peers.' },
-  { key: 'noVehiclePct', label: 'No Vehicle', axis: 'Workers Without Vehicle (%)', insight: 'Transportation barriers limit access to affordable food — workers without vehicles face both job and food access challenges.' },
-  { key: 'housingBurdenPct', label: 'Housing Burden', axis: 'Severe Housing Cost Burden (%)', insight: 'When rent exceeds 50% of income, food is the first budget line to shrink — housing cost is a hidden driver of hunger.' }
+  { key: 'uninsuredPct', label: 'Uninsured Rate', axis: 'Uninsured (%)', source: 'census', insight: 'Lack of health insurance amplifies food insecurity — medical costs crowd out food budgets.' },
+  { key: 'collegePct', label: 'College Education', axis: 'Bachelor\'s+ (%)', source: 'census', insight: 'Higher education correlates with lower food insecurity — but causation runs through income and employment stability.', invert: true },
+  { key: 'unemploymentPct', label: 'Unemployment', axis: 'Unemployment Rate (%)', source: 'census', insight: 'Job loss is the most immediate trigger of food insecurity — unemployed workers are 3x more likely to be food insecure than employed peers.' },
+  { key: 'noVehiclePct', label: 'No Vehicle', axis: 'Workers Without Vehicle (%)', source: 'census', insight: 'Transportation barriers limit access to affordable food — workers without vehicles face both job and food access challenges.' },
+  { key: 'housingBurdenPct', label: 'Housing Burden', axis: 'Severe Housing Cost Burden (%)', source: 'census', insight: 'When rent exceeds 50% of income, food is the first budget line to shrink — housing cost is a hidden driver of hunger.' },
+  { key: 'obesity', label: 'Adult Obesity (CDC)', axis: 'Obesity Prevalence (%)', source: 'places', insight: 'States with higher food insecurity tend to have higher obesity rates — cheap, calorie-dense food replaces nutritious options when budgets are tight.' },
+  { key: 'diabetes', label: 'Diabetes (CDC)', axis: 'Diabetes Prevalence (%)', source: 'places', insight: 'Food insecurity and diabetes create a vicious cycle — poor diet increases diabetes risk, and diabetes management costs further strain food budgets.' },
+  { key: 'depression', label: 'Depression (CDC)', axis: 'Depression Prevalence (%)', source: 'places', insight: 'The mental health toll of food insecurity is measurable — states with higher food insecurity show higher depression prevalence.' },
+  { key: 'housinsec', label: 'Housing Insecurity (CDC)', axis: 'Housing Insecurity (%)', source: 'places', insight: 'Housing and food insecurity compound — when eviction threatens, food is the first budget line cut.' }
 ];
 
 let sdohData = null;
@@ -783,7 +912,7 @@ function renderSDOH(sdoh, fiData, metricKey) {
   const points = sdoh.states
     .map(s => {
       const fi = fiByName[s.name];
-      if (!fi) return null;
+      if (!fi || typeof s[metricKey] !== 'number') return null;
       return {
         value: [s[metricKey], fi.rate],
         name: s.name,
@@ -856,15 +985,37 @@ function renderSDOH(sdoh, fiData, metricKey) {
   if (insightEl) insightEl.textContent = `${strength} ${direction} correlation (r = ${reg.r.toFixed(2)}). ${metric.insight}`;
 }
 
+let sdohButtonHandler = null;
+
 function initSDOHButtons(sdoh, fiData) {
   const container = document.getElementById('sdoh-metric-buttons');
   if (!container) return;
 
-  container.innerHTML = SDOH_METRICS.map((m, i) =>
-    `<button class="dashboard-metric-btn${i === 0 ? ' dashboard-metric-btn--active' : ''}" data-sdoh-metric="${m.key}" aria-pressed="${i === 0}">${m.label}</button>`
-  ).join('');
+  // Preserve currently active metric when re-rendering (e.g. after PLACES data loads)
+  const activeKey = container.querySelector('.dashboard-metric-btn--active')?.dataset.sdohMetric;
 
-  container.addEventListener('click', (e) => {
+  const censusMetrics = SDOH_METRICS.filter(m => m.source === 'census');
+  const placesMetrics = SDOH_METRICS.filter(m => m.source === 'places');
+  const placesAvailable = sdoh.states.some(s => typeof s.obesity === 'number');
+
+  let html = censusMetrics.map((m, i) => {
+    const isActive = activeKey ? m.key === activeKey : i === 0;
+    return `<button class="dashboard-metric-btn${isActive ? ' dashboard-metric-btn--active' : ''}" data-sdoh-metric="${m.key}" aria-pressed="${isActive}">${m.label}</button>`;
+  }).join('');
+
+  if (placesAvailable && placesMetrics.length) {
+    html += '<span class="dashboard-metric-separator" aria-hidden="true">Health Outcomes</span>';
+    html += placesMetrics.map(m => {
+      const isActive = m.key === activeKey;
+      return `<button class="dashboard-metric-btn${isActive ? ' dashboard-metric-btn--active' : ''}" data-sdoh-metric="${m.key}" aria-pressed="${isActive}">${m.label}</button>`;
+    }).join('');
+  }
+
+  container.innerHTML = html;
+
+  // Remove previous listener to avoid stacking on re-init
+  if (sdohButtonHandler) container.removeEventListener('click', sdohButtonHandler);
+  sdohButtonHandler = (e) => {
     const btn = e.target.closest('[data-sdoh-metric]');
     if (!btn) return;
     container.querySelectorAll('.dashboard-metric-btn').forEach(b => {
@@ -874,7 +1025,8 @@ function initSDOHButtons(sdoh, fiData) {
     btn.classList.add('dashboard-metric-btn--active');
     btn.setAttribute('aria-pressed', 'true');
     renderSDOH(sdoh, fiData, btn.dataset.sdohMetric);
-  });
+  };
+  container.addEventListener('click', sdohButtonHandler);
 }
 
 async function fetchSDOHData() {
@@ -896,7 +1048,40 @@ async function fetchSDOHData() {
     if (sdoh.states.some(s => s.income)) {
       renderIncomeRiver(sdoh, fiData);
     }
+
+    // CDC PLACES health indicators (non-blocking enhancement to SDOH scatter)
+    fetchCDCPlacesData();
   } catch { /* SDOH is optional — fail silently */ }
+}
+
+// -- CDC PLACES health indicators (non-blocking enhancement) --
+async function fetchCDCPlacesData() {
+  try {
+    const res = await fetch('/api/dashboard-places.php?type=health-indicators');
+    if (!res.ok) return;
+    const places = await res.json();
+    if (places.error || !places.states) return;
+
+    // Wait for SDOH data — PLACES merges into it
+    if (!sdohData || !sdohData.states) return;
+    const fiData = window._fnfStateData;
+    if (!fiData || !fiData.states) return;
+
+    // Merge CDC fields into existing SDOH state records
+    const placesByName = {};
+    places.states.forEach(s => { placesByName[s.name] = s; });
+    sdohData.states.forEach(s => {
+      const p = placesByName[s.name];
+      if (!p) return;
+      s.obesity = p.obesity;
+      s.diabetes = p.diabetes;
+      s.depression = p.depression;
+      s.housinsec = p.housinsec;
+    });
+
+    // Re-render buttons to include CDC options
+    initSDOHButtons(sdohData, fiData);
+  } catch { /* CDC PLACES is optional — fail silently */ }
 }
 
 // -- Demographic Breakdown: Child vs Overall --
@@ -1113,6 +1298,7 @@ async function init() {
     renderTrend(data);
     renderBar(data);
     renderScatter(data);
+    initScatterToggle();
     renderDemographics(data);
     renderMealCost(data);
 
@@ -1136,7 +1322,7 @@ async function init() {
 
     // Live data (non-blocking, enhances dashboard if available)
     fetchBLSData();
-    fetchLiveCensus();
+    fetchSAIPEPoverty();
     fetchSDOHData();
 
   } catch (err) {
@@ -1171,8 +1357,48 @@ async function fetchBLSData() {
   } catch { /* PHP proxy unavailable — static data already rendered */ }
 }
 
-// Non-blocking: try live Census ACS for fresher poverty data on scatter chart
-async function fetchLiveCensus() {
+// Non-blocking: try SAIPE first (better poverty estimates), fall back to Census ACS
+async function fetchSAIPEPoverty() {
+  const saipeLoaded = await _trySAIPE();
+  if (!saipeLoaded) await _tryACSFallback();
+}
+
+// Try Census SAIPE — more accurate poverty estimates (especially for small areas)
+async function _trySAIPE() {
+  try {
+    const res = await fetch('/api/dashboard-saipe.php?type=states');
+    if (!res.ok) return false;
+    const saipeData = await res.json();
+    if (saipeData.error || !saipeData.records) return false;
+
+    // Build FIPS lookup from SAIPE response
+    const saipeByFips = {};
+    saipeData.records.forEach(r => { saipeByFips[r.fips] = r; });
+
+    // Merge SAIPE poverty data into existing state records
+    const data = window._fnfStateData;
+    if (!data || !data.states) return false;
+
+    data.states = data.states.map(s => {
+      const sp = saipeByFips[s.fips];
+      if (!sp) return s;
+      return {
+        ...s,
+        povertyRate: sp.povertyRate ?? s.povertyRate,
+        childPovertyRate: sp.childPovertyRate ?? s.childPovertyRate,
+        medianIncome: sp.medianIncome ?? s.medianIncome
+      };
+    });
+
+    // Re-render scatter with SAIPE data
+    renderScatter(data, null, 'Census SAIPE');
+    updateFreshness('census', saipeData);
+    return true;
+  } catch { return false; }
+}
+
+// Fallback: Census ACS poverty data (if SAIPE proxy unavailable)
+async function _tryACSFallback() {
   try {
     const res = await fetch('/api/dashboard-census.php?type=states');
     if (!res.ok) return;
@@ -1187,16 +1413,16 @@ async function fetchLiveCensus() {
     const data = window._fnfStateData;
     if (!data || !data.states) return;
 
-    const updatedStates = data.states.map(s => {
+    data.states = data.states.map(s => {
       const c = censusByFips[s.fips];
       if (c) return { ...s, povertyRate: c.povertyRate, population: c.population };
       return s;
     });
 
-    // Re-render scatter with updated poverty axis
-    renderScatter({ states: updatedStates });
+    // Re-render scatter with ACS data
+    renderScatter(data, null, 'Census ACS');
     updateFreshness('census', censusData);
-  } catch { /* Census proxy unavailable */ }
+  } catch { /* Census proxy unavailable — static data already rendered */ }
 }
 
 // Start when DOM ready

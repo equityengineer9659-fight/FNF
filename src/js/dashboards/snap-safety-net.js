@@ -7,7 +7,7 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
-  initScrollReveal, handleResize, updateFreshness, fetchWithFallback, addExportButton,
+  initScrollReveal, handleResize, updateFreshness, addExportButton,
   initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
@@ -15,7 +15,7 @@ const PAL = MAP_PALETTES.snap;
 
 // -- Chart 1: SNAP Trend with Policy Zones (Area) + optional BLS CPI overlay --
 let snapTrendChart = null;
-let snapTrendDates = null;
+let snapTrendDates = null; // eslint-disable-line no-unused-vars
 
 function renderSnapTrend(trendData, blsData) {
   if (!snapTrendChart) snapTrendChart = createChart('chart-snap-trend');
@@ -93,14 +93,19 @@ function renderSnapTrend(trendData, blsData) {
 }
 
 // -- Chart 2: State SNAP Coverage Map (choropleth) --
-function renderSnapMap(geoJSON, states) {
-  const chart = createChart('chart-snap-map');
-  if (!chart) return;
+let snapMapChart = null;
+let snapMapAdminData = null;
+let snapMapCdcData = null;
+let snapMapActiveView = 'admin'; // eslint-disable-line no-unused-vars
 
-  const albersProjection = { project: p => p, unproject: p => p };
+function renderSnapMap(geoJSON, states) {
+  snapMapChart = createChart('chart-snap-map');
+  if (!snapMapChart) return;
+
   echarts.registerMap('USA-snap', geoJSON);
 
-  const mapData = states.map(s => ({
+  // Store admin data for toggle
+  snapMapAdminData = states.map(s => ({
     name: s.name,
     value: s.coverageRatio,
     snapParticipants: s.snapParticipants,
@@ -109,44 +114,129 @@ function renderSnapMap(geoJSON, states) {
     snapRate: s.snapRate
   }));
 
-  chart.setOption({
-    tooltip: {
-      trigger: 'item',
-      ...TOOLTIP_STYLE,
-      formatter: params => {
-        const d = params.data;
-        if (!d) return '';
-        return `<strong style="font-size:14px">${d.name}</strong><br/>
-          <span style="color:${COLORS.secondary}">Coverage Ratio:</span> ${d.value.toFixed(1)}%<br/>
-          SNAP Participants: ${fmtNum(d.snapParticipants)}<br/>
-          Food Insecure: ${fmtNum(d.foodInsecure)}<br/>
-          Insecurity Rate: ${d.insecurityRate}%<br/>
-          SNAP Rate: ${d.snapRate}%<br/>
-          <span style="color:${COLORS.textMuted};font-size:11px">&gt;100% = SNAP exceeds insecure population</span>`;
-      }
-    },
-    visualMap: {
-      left: 'right', bottom: 20,
-      min: 40, max: 135,
-      text: ['Strong Coverage', 'Weak Coverage'],
-      calculable: true,
-      inRange: { color: [PAL.low, PAL.mid, PAL.high] },
-      textStyle: { color: COLORS.text }
-    },
-    series: [{
-      name: 'SNAP Coverage Ratio',
-      type: 'map', map: 'USA-snap', roam: false,
-      projection: albersProjection, aspectScale: 1, zoom: 1.1, top: 10, left: 'center',
-      emphasis: {
-        label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
-        itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
+  applySnapMapView('admin');
+}
+
+function applySnapMapView(view) {
+  if (!snapMapChart) return;
+  snapMapActiveView = view;
+
+  const albersProjection = { project: p => p, unproject: p => p };
+  const isAdmin = view === 'admin';
+  const mapData = isAdmin ? snapMapAdminData : snapMapCdcData;
+
+  if (!mapData) return;
+
+  // Update toggle button states
+  const adminBtn = document.getElementById('snap-map-toggle-admin');
+  const cdcBtn = document.getElementById('snap-map-toggle-cdc');
+  if (adminBtn && cdcBtn) {
+    adminBtn.setAttribute('aria-pressed', isAdmin ? 'true' : 'false');
+    adminBtn.classList.toggle('dashboard-metric-btn--active', isAdmin);
+    cdcBtn.setAttribute('aria-pressed', isAdmin ? 'false' : 'true');
+    cdcBtn.classList.toggle('dashboard-metric-btn--active', !isAdmin);
+  }
+
+  if (isAdmin) {
+    snapMapChart.setOption({
+      tooltip: {
+        trigger: 'item',
+        ...TOOLTIP_STYLE,
+        formatter: params => {
+          const d = params.data;
+          if (!d) return '';
+          let tip = `<strong style="font-size:14px">${d.name}</strong><br/>
+            <span style="color:${COLORS.secondary}">Coverage Ratio:</span> ${d.value.toFixed(1)}%<br/>
+            SNAP Participants: ${fmtNum(d.snapParticipants)}<br/>
+            Food Insecure: ${fmtNum(d.foodInsecure)}<br/>
+            Insecurity Rate: ${d.insecurityRate}%<br/>
+            SNAP Rate: ${d.snapRate}%`;
+          // Show CDC comparison if available
+          if (snapMapCdcData) {
+            const cdcMatch = snapMapCdcData.find(c => c.name === d.name);
+            if (cdcMatch) {
+              const gap = (d.snapRate - cdcMatch.cdcRate).toFixed(1);
+              tip += `<br/><span style="color:${COLORS.accent}">CDC Self-Reported:</span> ${cdcMatch.cdcRate}%`;
+              tip += `<br/><span style="color:${COLORS.textMuted};font-size:11px">Gap: ${gap > 0 ? '+' : ''}${gap}pp (admin ${gap > 0 ? '>' : '<'} self-reported)</span>`;
+            }
+          }
+          tip += `<br/><span style="color:${COLORS.textMuted};font-size:11px">&gt;100% = SNAP exceeds insecure population</span>`;
+          return tip;
+        }
       },
-      itemStyle: { borderColor: COLORS.mapBorder, borderWidth: COLORS.mapBorderWidth, areaColor: 'rgba(255,255,255,0.08)' },
-      label: { show: false },
-      data: mapData,
-      animationDurationUpdate: 500
-    }]
-  }, true);
+      visualMap: {
+        left: 'right', bottom: 20,
+        min: 40, max: 135,
+        text: ['Strong Coverage', 'Weak Coverage'],
+        calculable: true,
+        inRange: { color: [PAL.low, PAL.mid, PAL.high] },
+        textStyle: { color: COLORS.text }
+      },
+      series: [{
+        name: 'SNAP Coverage Ratio',
+        type: 'map', map: 'USA-snap', roam: false,
+        projection: albersProjection, aspectScale: 1, zoom: 1.1, top: 10, left: 'center',
+        emphasis: {
+          label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
+          itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
+        },
+        itemStyle: { borderColor: COLORS.mapBorder, borderWidth: COLORS.mapBorderWidth, areaColor: 'rgba(255,255,255,0.08)' },
+        label: { show: false },
+        data: snapMapAdminData,
+        animationDurationUpdate: 500
+      }]
+    }, true);
+  } else {
+    // CDC Self-Reported view
+    snapMapChart.setOption({
+      tooltip: {
+        trigger: 'item',
+        ...TOOLTIP_STYLE,
+        formatter: params => {
+          const d = params.data;
+          if (!d) return '';
+          let tip = `<strong style="font-size:14px">${d.name}</strong><br/>
+            <span style="color:${COLORS.accent}">CDC Self-Reported SNAP:</span> ${d.cdcRate}%`;
+          // Show admin comparison
+          const adminMatch = snapMapAdminData?.find(a => a.name === d.name);
+          if (adminMatch) {
+            tip += `<br/><span style="color:${COLORS.secondary}">Administrative SNAP Rate:</span> ${adminMatch.snapRate}%`;
+            const gap = (adminMatch.snapRate - d.cdcRate).toFixed(1);
+            tip += `<br/><span style="color:${gap > 0 ? '#fbbf24' : '#22c55e'};font-size:12px">`;
+            if (gap > 0) {
+              tip += `${gap}pp under-reported — potential stigma or awareness gap`;
+            } else {
+              tip += `${Math.abs(gap)}pp over-reported — may include former recipients`;
+            }
+            tip += '</span>';
+          }
+          tip += `<br/><span style="color:${COLORS.textMuted};font-size:11px">Source: CDC PLACES BRFSS Survey</span>`;
+          return tip;
+        }
+      },
+      visualMap: {
+        left: 'right', bottom: 20,
+        min: 3, max: 25,
+        text: ['High Self-Report', 'Low Self-Report'],
+        calculable: true,
+        inRange: { color: [PAL.high, PAL.mid, PAL.low] },
+        textStyle: { color: COLORS.text }
+      },
+      series: [{
+        name: 'CDC Self-Reported SNAP',
+        type: 'map', map: 'USA-snap', roam: false,
+        projection: albersProjection, aspectScale: 1, zoom: 1.1, top: 10, left: 'center',
+        emphasis: {
+          label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
+          itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
+        },
+        itemStyle: { borderColor: COLORS.mapBorder, borderWidth: COLORS.mapBorderWidth, areaColor: 'rgba(255,255,255,0.08)' },
+        label: { show: false },
+        data: snapMapCdcData,
+        animationDurationUpdate: 500
+      }]
+    }, true);
+  }
 }
 
 // -- Chart 3: Safety Net Coverage Flow (Sankey) --
@@ -198,11 +288,24 @@ function renderSchoolLunch(lunchData) {
   const top15 = lunchData.slice(0, 15);
   const pieData = top15.map(s => ({
     name: s.name, value: s.pct,
+    freePct: s.freePct || null,
+    reducedPct: s.reducedPct || null,
     itemStyle: { color: s.pct > 65 ? PAL.low : s.pct > 55 ? PAL.mid : PAL.high }
   }));
 
   chart.setOption({
-    tooltip: { ...TOOLTIP_STYLE, formatter: p => `<strong>${p.name}</strong><br/>Free/Reduced Lunch: <strong>${p.value}%</strong>` },
+    tooltip: {
+      ...TOOLTIP_STYLE,
+      formatter: p => {
+        const d = p.data;
+        let tip = `<strong>${d.name}</strong><br/>Free/Reduced Lunch: <strong>${d.value}%</strong>`;
+        if (d.freePct != null && d.reducedPct != null) {
+          tip += `<br/><span style="color:#22c55e">Free (&lt;130% FPL):</span> <strong>${d.freePct}%</strong>`;
+          tip += `<br/><span style="color:#fbbf24">Reduced (130-185% FPL):</span> <strong>${d.reducedPct}%</strong>`;
+        }
+        return tip;
+      }
+    },
     series: [{
       type: 'pie', roseType: 'radius', radius: ['20%', '65%'], center: ['50%', '50%'],
       label: {
@@ -353,6 +456,35 @@ async function fetchBLSForSnap() {
   } catch { /* BLS is optional */ }
 }
 
+// -- Non-blocking: CDC PLACES SNAP self-report for coverage map toggle --
+async function fetchCDCPlacesSnap() {
+  try {
+    const res = await fetch('/api/dashboard-places.php?type=snap-receipt');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.error || !data.records || data.records.length === 0) return;
+
+    // Map state abbreviations to full names and build CDC map data
+    const stateNameMap = {};
+    US_STATES.forEach(([abbr, name]) => { stateNameMap[abbr] = name; });
+
+    snapMapCdcData = data.records
+      .filter(r => stateNameMap[r.state])
+      .map(r => ({
+        name: stateNameMap[r.state],
+        value: r.value,
+        cdcRate: r.value
+      }));
+
+    // Show the toggle buttons now that CDC data is available
+    const toggleContainer = document.getElementById('snap-map-toggle-container');
+    if (toggleContainer) toggleContainer.style.display = '';
+
+    // Update freshness badge
+    updateFreshness('snap-cdc', data);
+  } catch { /* CDC PLACES is optional — fail silently */ }
+}
+
 // -- Non-blocking: Census race/ethnicity for demographic flow --
 async function fetchDemographicData(snapData) {
   try {
@@ -501,8 +633,15 @@ async function init() {
     initScrollReveal();
     window.addEventListener('resize', handleResize);
 
+    // Wire up CDC PLACES toggle buttons
+    const adminBtn = document.getElementById('snap-map-toggle-admin');
+    const cdcBtn = document.getElementById('snap-map-toggle-cdc');
+    if (adminBtn) adminBtn.addEventListener('click', () => applySnapMapView('admin'));
+    if (cdcBtn) cdcBtn.addEventListener('click', () => applySnapMapView('cdc'));
+
     // Non-blocking live data
     fetchBLSForSnap();
+    fetchCDCPlacesSnap();
     fetchDemographicData(snapData);
 
   } catch {

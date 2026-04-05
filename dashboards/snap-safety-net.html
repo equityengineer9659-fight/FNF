@@ -155,7 +155,7 @@
     <!-- Main Content -->
     <main id="main-content" tabindex="-1">
         <div class="dashboard-data-notice" role="note" aria-label="Data vintage notice">
-            <strong>Data Notice:</strong> State coverage data is from FY2022. National trend data extends through January 2025. SNAP program data is from USDA Food &amp; Nutrition Service.
+            <strong>Data Notice:</strong> State coverage data is from FY2022. National trend data extends through November 2025. SNAP program data is from USDA Food &amp; Nutrition Service (FY2025 data as of March 2026). School lunch free/reduced breakdown from FNS Child Nutrition Tables (FY2023). CDC PLACES self-reported SNAP data loads on demand via toggle.
         </div>
         <!-- Hero Section -->
         <section class="dashboard-hero" aria-label="SNAP and safety net key statistics">
@@ -168,7 +168,7 @@
                     <p class="dashboard-stat__label">SNAP Participants</p>
                 </div>
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number" data-target="194" data-suffix="">$194</span>
+                    <span class="dashboard-stat__number" data-target="188" data-suffix="">$188</span>
                     <p class="dashboard-stat__label">Avg Monthly Benefit</p>
                 </div>
                 <div class="dashboard-stat">
@@ -191,7 +191,7 @@
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-snap-trend" class="dashboard-chart" role="img" aria-label="Line chart showing monthly SNAP enrollment from 2015 to 2025"></div>
+                        <div id="chart-snap-trend" class="dashboard-chart" role="img" aria-label="Line chart showing monthly SNAP enrollment from 2015 to November 2025"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">A Decade of SNAP</h3>
@@ -199,15 +199,15 @@
                             SNAP enrollment was declining steadily from 2015 to early 2020 as the economy improved. Then <strong>COVID-19 changed everything</strong> — enrollment surged from 37 million to over 43 million in just months. Emergency allotments boosted benefits through 2023.
                         </p>
                         <p class="dashboard-info__text">
-                            When emergency benefits ended in March 2023, millions of families saw their monthly benefits cut by $90-$250. Enrollment has stabilized around 42 million — still well above pre-pandemic levels.
+                            When emergency benefits ended in March 2023, millions of families saw their monthly benefits cut by $90-$250. Enrollment stabilized near 42 million through mid-2025, but has since declined sharply — falling from 42.8M in January 2025 to 40.4M by November 2025, a 5.6% drop coinciding with USDA policy changes and a government shutdown.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> USDA Food and Nutrition Service, SNAP Data Tables</span>
-                            <span class="meta-item"><strong>Updated</strong> Monthly from USDA FNS</span>
+                            <span class="meta-item"><strong>Source</strong> USDA FNS, SNAP Data Tables (FY2025 data as of March 2026)</span>
+                            <span class="meta-item"><strong>Updated</strong> Monthly from USDA FNS (through Nov 2025)</span>
                             <span class="meta-item"><strong>Unit</strong> Millions of participants</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            Policy markers show key inflection points: COVID emergency allotments, the Thrifty Food Plan update, and the end of emergency benefits. The dashed Food CPI overlay (when available) shows the economic pressure driving enrollment.
+                            Policy markers show key inflection points: COVID emergency allotments, the Thrifty Food Plan update, the end of emergency benefits, and — new in late 2025 — the USDA terminating its food security report and removing the SNAP contingency plan, coinciding with a government shutdown. The dashed Food CPI overlay (when available) shows economic pressure driving enrollment.
                         </div>
                     </div>
                 </div>
@@ -223,6 +223,10 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
+                        <div id="snap-map-toggle-container" style="display:none;text-align:center;padding:0.5rem 0;" role="group" aria-label="Toggle SNAP data source">
+                            <button id="snap-map-toggle-admin" class="dashboard-metric-btn dashboard-metric-btn--active" aria-pressed="true">Administrative (FNS)</button>
+                            <button id="snap-map-toggle-cdc" class="dashboard-metric-btn" aria-pressed="false">Self-Reported (CDC)</button>
+                        </div>
                         <div id="chart-snap-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing SNAP coverage ratio across US states"></div>
                         <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
                     </div>
@@ -234,13 +238,16 @@
                         <p class="dashboard-info__text">
                             States with strong outreach programs like <strong>Illinois, New York, and Oregon</strong> exceed 100% coverage. States like <strong>Wyoming, Utah, and Kansas</strong> have significant gaps.
                         </p>
+                        <p class="dashboard-info__text">
+                            <strong>Toggle to "Self-Reported (CDC)"</strong> to compare administrative SNAP data with the CDC PLACES BRFSS survey, where adults self-report receiving food stamps. The gap between administrative and self-reported rates can reveal <strong>stigma effects</strong> — states where self-reported rates fall below administrative rates may have populations reluctant to disclose SNAP receipt.
+                        </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> USDA FNS SNAP Data + Feeding America</span>
-                            <span class="meta-item"><strong>Data Year</strong> 2022</span>
-                            <span class="meta-item"><strong>Metric</strong> SNAP participants / food-insecure population x 100</span>
+                            <span class="meta-item"><strong>Source</strong> USDA FNS SNAP Data + Feeding America | CDC PLACES BRFSS (toggle)</span>
+                            <span class="meta-item"><strong>Data Year</strong> 2022 (FNS) | 2023 (CDC PLACES)</span>
+                            <span class="meta-item"><strong>Metric</strong> Administrative: SNAP participants / food-insecure pop | CDC: % adults self-reporting food stamp receipt</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            Wyoming has the lowest coverage ratio at 40.6% — nearly 60% of food-insecure residents are not receiving SNAP.
+                            Wyoming has the lowest administrative coverage ratio at 40.6%. When CDC self-reported data loads, compare the two views — states where self-reported is notably lower than administrative suggest stigma or under-reporting of benefits.
                         </div>
                     </div>
                 </div>
@@ -291,18 +298,18 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">School Lunch: The Most Reliable Meal</h3>
                         <p class="dashboard-info__text">
-                            For <strong>30 million children</strong>, the school lunch program may be the most reliable meal of the day. In Mississippi, over 75% of students qualify for free or reduced-price lunch. Nationally, more than half of all students depend on this program.
+                            For <strong>29.6 million children</strong>, the school lunch program may be the most reliable meal of the day. In Mississippi, over 75% of students qualify for free or reduced-price lunch. Nationally, more than half of all students depend on this program.
                         </p>
                         <p class="dashboard-info__text">
-                            The top 15 states are shown as petals — larger petals mean higher free/reduced lunch rates. Color shifts from green (lower) through amber to red (highest) to highlight severity. Summer months, when school is out, create a dangerous gap.
+                            Hover over any state to see the <strong>free vs. reduced-price breakdown</strong>. <em>Free lunch</em> goes to families below 130% of the Federal Poverty Level; <em>reduced-price</em> covers 130-185% FPL. Nationally, <strong>85% of participants receive free meals</strong> and 15% pay the reduced price — meaning the vast majority of children in this program live in deep poverty.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> USDA FNS, National School Lunch Program + KIDS COUNT</span>
-                            <span class="meta-item"><strong>Data Year</strong> 2023 school year</span>
-                            <span class="meta-item"><strong>Metric</strong> % students receiving free or reduced-price lunch</span>
+                            <span class="meta-item"><strong>Source</strong> USDA FNS Child Nutrition Tables + KIDS COUNT</span>
+                            <span class="meta-item"><strong>Data Year</strong> FY2023 school year</span>
+                            <span class="meta-item"><strong>Metric</strong> % students receiving free or reduced-price lunch (with breakdown)</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            12 states have over 60% of students on free/reduced lunch — concentrated in the South and Appalachia.
+                            12 states have over 60% of students on free/reduced lunch — concentrated in the South and Appalachia. In the highest-need states like Mississippi and Louisiana, nearly 90% of qualifying students receive <em>free</em> (not reduced-price) meals, reflecting deeper poverty concentration.
                         </div>
                     </div>
                 </div>
@@ -322,14 +329,14 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Are Benefits Enough?</h3>
                         <p class="dashboard-info__text">
-                            The average SNAP benefit is <strong>$194 per person per month</strong> — about $6.47 per day, or $2.16 per meal. Benefits vary by state, household size, and income, but the central question remains: is this enough to eat?
+                            The average SNAP benefit is <strong>$188 per person per month</strong> — about $6.27 per day, or $2.09 per meal. Benefits vary by state, household size, and income, but the central question remains: is this enough to eat?
                         </p>
                         <p class="dashboard-info__text">
                             The food insecurity rate line overlay shows whether higher benefits correlate with lower insecurity. The relationship is complex — states with high benefits often have high costs of living too.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> USDA FNS SNAP State Activity Reports</span>
-                            <span class="meta-item"><strong>Data Year</strong> 2024</span>
+                            <span class="meta-item"><strong>Data Year</strong> FY2025</span>
                             <span class="meta-item"><strong>Metric</strong> Average monthly benefit per person ($)</span>
                         </div>
                         <div class="dashboard-info__insight">
@@ -367,10 +374,10 @@
                         <h3 class="dashboard-info__title">The Executive Summary</h3>
                         <p class="dashboard-info__text"><strong>SNAP Coverage</strong> — 83.7% of food-insecure Americans receive SNAP benefits. The remaining 8.2 million fall through the gap due to eligibility rules, stigma, or lack of outreach.</p>
                         <p class="dashboard-info__text"><strong>School Lunch</strong> — 52.1% of students nationally qualify for free or reduced-price meals. For many children, this is the most reliable meal of the day.</p>
-                        <p class="dashboard-info__text"><strong>Avg Benefit</strong> — $194/month per person, or about $2.16 per meal. Benefits vary by state, household size, and income.</p>
+                        <p class="dashboard-info__text"><strong>Avg Benefit</strong> — $188/month per person, or about $2.09 per meal. Benefits vary by state, household size, and income.</p>
                         <div class="dashboard-info__meta">
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA FNS SNAP Data Tables &amp; Feeding America</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024 (national estimates)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> FY2025 (national estimates, as of March 2026)</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data</span> Static (from snap-participation.json)</div>
                         </div>
                         <div class="dashboard-info__insight">These four numbers are the ones grant writers cite most. Copy them directly into proposals — they come from authoritative federal sources.</div>
@@ -490,6 +497,15 @@
                             <div class="dashboard-source-card__details">
                                 <span>Monthly (live API)</span>
                                 <span>National</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">CDC</div>
+                            <h3 class="dashboard-source-card__name">CDC PLACES (BRFSS)</h3>
+                            <p class="dashboard-source-card__desc">FOODSTAMP measure — self-reported food stamp/SNAP receipt rates from the Behavioral Risk Factor Surveillance System, aggregated to state level via PLACES small-area estimates.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual (live API)</span>
+                                <span>State level</span>
                             </div>
                         </div>
                     </div>

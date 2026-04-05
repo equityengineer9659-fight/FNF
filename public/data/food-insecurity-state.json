@@ -2,22 +2,25 @@
   "meta": {
     "title": "Food Insecurity in the United States by State",
     "sources": [
-      "USDA Economic Research Service, Household Food Security in the United States (2022)",
-      "Feeding America, Map the Meal Gap 2024 (2022 data)",
-      "U.S. Census Bureau, American Community Survey 2022"
+      "USDA Economic Research Service, Household Food Security in the United States in 2024, ERR-358 (December 2025)",
+      "USDA Economic Research Service, Household Food Security in the United States in 2023, ERR-337 (September 2024)",
+      "Feeding America, Map the Meal Gap 2025 (2023 data)",
+      "U.S. Census Bureau, American Community Survey 2023",
+      "Columbia University Center on Poverty and Social Policy, Predicting National Rates of Food Insecurity (October 2025) — 2025–2026 projections",
+      "Purdue University Center for Food Demand Analysis and Sustainability, Consumer Food Insights Survey (2025) — 2025 measured rate"
     ],
-    "updated": "2026-03-31",
-    "notes": "Food insecurity rates represent the percentage of households that were food insecure at some point during the year. Meal gap represents the estimated number of meals missing annually."
+    "updated": "2026-04-04",
+    "notes": "Food insecurity rates represent the percentage of households that were food insecure at some point during the year. Meal gap represents the estimated number of meals missing annually. Trend entries marked 'projected' are model-based estimates, not official USDA measurements."
   },
   "national": {
-    "foodInsecurityRate": 12.8,
-    "foodInsecurePersons": 44200000,
-    "childFoodInsecurityRate": 17.9,
-    "foodInsecureChildren": 13000000,
-    "annualMealGap": 9500000000,
-    "averageMealCost": 3.99,
-    "snapParticipation": 42100000,
-    "year": 2022
+    "foodInsecurityRate": 13.7,
+    "foodInsecurePersons": 47900000,
+    "childFoodInsecurityRate": 18.4,
+    "foodInsecureChildren": 14100000,
+    "annualMealGap": 10900000000,
+    "averageMealCost": 3.58,
+    "snapParticipation": 41700000,
+    "year": 2024
   },
   "trend": [
     { "year": 2013, "rate": 14.3, "persons": 42200000, "childRate": 19.5 },
@@ -29,7 +32,11 @@
     { "year": 2019, "rate": 10.5, "persons": 31100000, "childRate": 13.6 },
     { "year": 2020, "rate": 10.5, "persons": 31300000, "childRate": 14.8 },
     { "year": 2021, "rate": 10.2, "persons": 30400000, "childRate": 12.5 },
-    { "year": 2022, "rate": 12.8, "persons": 44200000, "childRate": 17.9 }
+    { "year": 2022, "rate": 12.8, "persons": 44200000, "childRate": 17.9 },
+    { "year": 2023, "rate": 13.5, "persons": 47400000, "childRate": 17.9 },
+    { "year": 2024, "rate": 13.7, "persons": 47900000, "childRate": 18.4 },
+    { "year": 2025, "rate": 14.2, "persons": 49200000, "childRate": 19.2, "projected": true },
+    { "year": 2026, "rate": 14.8, "persons": 51500000, "childRate": 20.1, "projected": true }
   ],
   "states": [
     { "name": "Alabama", "fips": "01", "rate": 15.3, "childRate": 21.2, "persons": 752000, "mealGap": 136000000, "mealCost": 3.52, "povertyRate": 15.5, "snapParticipation": 778000 },

@@ -6,8 +6,8 @@
 
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
-  fmtNum, animateCounters, createChart,
-  updateFreshness, initScrollReveal, handleResize, fetchWithFallback, addExportButton,
+  animateCounters, createChart,
+  updateFreshness, initScrollReveal, handleResize, addExportButton,
   initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
@@ -20,12 +20,14 @@ function renderCategories(data) {
 
   const series = data.series.map(s => ({ ...s, data: s.data.filter(d => d.value !== null) }));
   const dates = series[0].data.map(d => d.date);
-  const lineColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', COLORS.primary];
+  const lineColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', '#f59e0b', '#ec4899', COLORS.primary];
   const areaColors = [
     ['rgba(255,107,53,0.2)', 'rgba(255,107,53,0.02)'],
     ['rgba(0,212,255,0.2)', 'rgba(0,212,255,0.02)'],
     ['rgba(167,139,250,0.2)', 'rgba(167,139,250,0.02)'],
     ['rgba(52,211,153,0.2)', 'rgba(52,211,153,0.02)'],
+    ['rgba(245,158,11,0.2)', 'rgba(245,158,11,0.02)'],
+    ['rgba(236,72,153,0.2)', 'rgba(236,72,153,0.02)'],
     ['rgba(1,118,211,0.15)', 'rgba(1,118,211,0.02)']
   ];
 
@@ -447,6 +449,90 @@ function renderYoYInflation(blsData) {
   }
 }
 
+// -- FRED item-level CPI overlay series for purchasing power chart --
+const FRED_CPI_ITEMS = [
+  { id: 'CUUR0000SEFG01', label: 'Eggs', color: '#fbbf24' },
+  { id: 'CUUR0000SEFB01', label: 'Bread', color: '#a78bfa' },
+  { id: 'CUUR0000SEFD01', label: 'Ground Beef', color: '#f87171' },
+  { id: 'CUUR0000SEFJ01', label: 'Dairy', color: '#60a5fa' }
+];
+
+// Track active FRED overlays and the purchasing power chart instance
+let ppChartInstance = null;
+let ppBaseOption = null;
+let activeFredOverlays = new Map();
+
+async function fetchFredCpiItem(seriesId) {
+  try {
+    const res = await fetch(`/api/dashboard-fred.php?type=cpi-item&series=${seriesId}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.error || !data.observations) return null;
+    return data.observations;
+  } catch { return null; }
+}
+
+function toggleFredOverlay(item, btn) {
+  if (!ppChartInstance || !ppBaseOption) return;
+
+  if (activeFredOverlays.has(item.id)) {
+    // Remove overlay
+    activeFredOverlays.delete(item.id);
+    btn.setAttribute('aria-pressed', 'false');
+    btn.classList.remove('active');
+    rebuildPurchasingPowerSeries();
+    return;
+  }
+
+  // Fetch and add overlay
+  btn.textContent = item.label + '...';
+  fetchFredCpiItem(item.id).then(observations => {
+    btn.textContent = item.label;
+    if (!observations || observations.length === 0) return;
+
+    // Index to earliest available value = 100
+    const baseline = observations[0].value;
+    const indexed = observations.map(d => ({
+      date: d.date.slice(0, 7), // YYYY-MM
+      value: +(d.value / baseline * 100).toFixed(1)
+    }));
+
+    activeFredOverlays.set(item.id, { ...item, data: indexed });
+    btn.setAttribute('aria-pressed', 'true');
+    btn.classList.add('active');
+    rebuildPurchasingPowerSeries();
+  });
+}
+
+function rebuildPurchasingPowerSeries() {
+  if (!ppChartInstance || !ppBaseOption) return;
+
+  const option = JSON.parse(JSON.stringify(ppBaseOption));
+
+  // Add FRED overlays
+  activeFredOverlays.forEach((overlay) => {
+    const dates = option.xAxis[0]?.data || option.xAxis?.data || [];
+    const dataMap = {};
+    overlay.data.forEach(d => { dataMap[d.date] = d.value; });
+
+    const values = dates.map(date => dataMap[date] !== undefined ? dataMap[date] : null);
+
+    option.legend.data.push(overlay.label);
+    option.series.push({
+      name: overlay.label,
+      type: 'line',
+      data: values,
+      smooth: true,
+      symbol: 'none',
+      connectNulls: true,
+      lineStyle: { width: 2, color: overlay.color, type: 'dotted' },
+      itemStyle: { color: overlay.color }
+    });
+  });
+
+  ppChartInstance.setOption(option, true);
+}
+
 // -- Chart 7: SNAP Purchasing Power --
 function renderPurchasingPower(blsData) {
   const chart = createChart('chart-purchasing-power');
@@ -503,12 +589,13 @@ function renderPurchasingPower(blsData) {
 
   const dates = foodIndexed.map(d => d.date);
 
-  chart.setOption({
+  const option = {
     tooltip: {
       trigger: 'axis', ...TOOLTIP_STYLE,
       formatter: params => {
         let tip = `<strong>${params[0].axisValue}</strong><br/>`;
         params.forEach(p => {
+          if (p.value === null || p.value === undefined) return;
           const diff = p.value - 100;
           const sign = diff >= 0 ? '+' : '';
           tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong> (${sign}${diff.toFixed(1)}%)<br/>`;
@@ -560,7 +647,39 @@ function renderPurchasingPower(blsData) {
         }
       }
     ]
-  });
+  };
+
+  chart.setOption(option);
+
+  // Store for FRED overlay support
+  ppChartInstance = chart;
+  ppBaseOption = {
+    tooltip: option.tooltip,
+    legend: { ...option.legend },
+    grid: option.grid,
+    xAxis: { ...option.xAxis },
+    yAxis: option.yAxis,
+    series: option.series.map(s => ({ ...s }))
+  };
+
+  // Initialize FRED item toggle buttons
+  const toggleContainer = document.getElementById('fred-cpi-toggles');
+  if (toggleContainer) {
+    FRED_CPI_ITEMS.forEach(item => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'fred-toggle-btn';
+      btn.textContent = item.label;
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', `Toggle ${item.label} price overlay`);
+      Object.assign(btn.style, {
+        borderColor: item.color,
+        color: item.color
+      });
+      btn.addEventListener('click', () => toggleFredOverlay(item, btn));
+      toggleContainer.appendChild(btn);
+    });
+  }
 
   // Dynamic insight
   const latestFood = foodIndexed.at(-1);
