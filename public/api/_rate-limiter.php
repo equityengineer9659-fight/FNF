@@ -111,7 +111,9 @@ function rateLimitSummary() {
         'charity-navigator'  => ['daily' => 90000, 'monthly' => null],
         'census-sdoh'        => ['daily' => null, 'monthly' => null],
         'propublica-search'  => ['daily' => null, 'monthly' => null],
-        'propublica-org'     => ['daily' => null, 'monthly' => null]
+        'propublica-org'     => ['daily' => null, 'monthly' => null],
+        'cdc-places'         => ['daily' => 900, 'monthly' => null],
+        'fara'               => ['daily' => 500, 'monthly' => null]
     ];
 
     foreach ($limits as $service => $serviceLimits) {

@@ -298,6 +298,7 @@
                     <h2 class="dashboard-card__title">Poverty vs. Food Insecurity</h2>
                     <span id="freshness-census" class="dashboard-freshness"></span>
                 </div>
+                <div id="scatter-toggle-buttons" class="dashboard-metric-buttons" role="group" aria-label="Switch between overall and child poverty scatter views"></div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
                         <div id="chart-scatter" class="dashboard-chart" role="img" aria-label="Scatter plot showing correlation between poverty rate and food insecurity rate by state"></div>
@@ -305,13 +306,13 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Poverty Drives Hunger</h3>
                         <p class="dashboard-info__text">Where poverty is high, food insecurity follows — but the relationship isn't one-to-one. States with higher meal costs can have food insecurity rates that exceed what poverty alone would predict. <strong>The cost of eating matters as much as income.</strong></p>
-                        <p class="dashboard-info__text">Each dot represents one state. Dot size reflects the number of food-insecure persons.</p>
+                        <p class="dashboard-info__text">Each dot represents one state. Dot size reflects the number of food-insecure persons. Toggle to <strong>Child Poverty</strong> to see how child poverty rates predict child food insecurity using SAIPE data.</p>
                         <div class="dashboard-info__meta">
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census Bureau ACS (poverty) &amp; USDA ERS (food insecurity)</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024 food insecurity; 2023 ACS 5-year poverty estimates</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> ACS: annually each December (next: Dec 2026). USDA ERS: terminated after ERR-358 (2024 data)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Census Bureau SAIPE (primary poverty) with ACS fallback &amp; USDA ERS (food insecurity)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024 food insecurity; 2023 SAIPE/ACS poverty estimates</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> SAIPE: annually each December. ACS fallback: annually each December. USDA ERS: terminated after ERR-358 (2024 data)</div>
                         </div>
-                        <div class="dashboard-info__insight">Strong positive correlation (r &asymp; 0.85) — poverty is the #1 predictor of food insecurity.</div>
+                        <div id="scatter-insight" class="dashboard-info__insight">Strong positive correlation (r &asymp; 0.85) — poverty is the #1 predictor of food insecurity.</div>
                     </div>
                 </div>
             </div>
@@ -331,11 +332,11 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Beyond Poverty: What Drives Hunger?</h3>
                         <p class="dashboard-info__text">Poverty is the strongest predictor, but other social determinants compound the risk. States with <strong>high unemployment, low education, high uninsured rates, limited vehicle access, and severe housing cost burden</strong> tend to have higher food insecurity — even after accounting for income.</p>
-                        <p class="dashboard-info__text">Use the buttons to explore how each factor correlates with food insecurity.</p>
+                        <p class="dashboard-info__text">Use the buttons to explore how each factor correlates with food insecurity. Health outcome indicators from CDC PLACES show how diet-related conditions like <strong>obesity, diabetes, and depression</strong> track alongside hunger.</p>
                         <div class="dashboard-info__meta">
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census Bureau, American Community Survey 5-Year Estimates</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census Bureau ACS 5-Year Estimates; CDC PLACES (health indicators)</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2023</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually each December via Census API</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually via Census API &amp; CDC PLACES API</div>
                         </div>
                         <div id="sdoh-insight" class="dashboard-info__insight"></div>
                     </div>
@@ -533,11 +534,20 @@
                         </div>
                         <div class="dashboard-source-card">
                             <div class="dashboard-source-card__icon">ACS</div>
-                            <h3 class="dashboard-source-card__name">U.S. Census Bureau</h3>
-                            <p class="dashboard-source-card__desc">American Community Survey 5-Year Estimates — providing poverty rates, income distribution, employment, health insurance, transportation, and housing cost burden data at county and state granularity via the Census API.</p>
+                            <h3 class="dashboard-source-card__name">U.S. Census Bureau ACS</h3>
+                            <p class="dashboard-source-card__desc">American Community Survey 5-Year Estimates — providing poverty rates, income distribution, employment, health insurance, transportation, and housing cost burden data at county and state granularity via the Census API. Used as fallback when SAIPE is unavailable.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual (5-yr rolling)</span>
                                 <span>County &amp; tract</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">SAIPE</div>
+                            <h3 class="dashboard-source-card__name">Census Bureau SAIPE</h3>
+                            <p class="dashboard-source-card__desc">Small Area Income and Poverty Estimates — the primary poverty data source for the scatter chart, providing overall and child poverty rates with tighter confidence intervals than ACS for small populations. Includes median household income at state and county level.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual (live API)</span>
+                                <span>State &amp; county</span>
                             </div>
                         </div>
                         <div class="dashboard-source-card">

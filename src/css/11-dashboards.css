@@ -702,6 +702,19 @@
   box-shadow: 0 4px 14px rgba(1, 118, 211, 0.45);
 }
 
+.dashboard-metric-separator {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  margin-left: 0.25rem;
+}
+
 /* Scroll Reveal Animations */
 .scroll-reveal {
   opacity: 0;

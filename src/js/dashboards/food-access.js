@@ -7,12 +7,45 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
-  initScrollReveal, handleResize, updateFreshness,
+  initScrollReveal, handleResize, updateFreshness, fetchWithFallback,
   REGIONS, REGION_COLORS, getRegion, addExportButton,
   initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.access;
+
+/**
+ * Merge FARA API state-summary data into the static atlas data.
+ * API provides fresh aggregate counts; static file provides fields the API
+ * cannot (name, population, urbanLowAccess, ruralLowAccess, avgDistance).
+ */
+function mergeFaraIntoStatic(staticStates, faraRecords) {
+  const faraByFips = {};
+  faraRecords.forEach(r => { faraByFips[r.state] = r; });
+
+  return staticStates.map(s => {
+    const api = faraByFips[s.fips];
+    if (!api) return s;
+
+    const lowAccessPct = api.totalTracts > 0
+      ? Math.round((api.lilaTracts / api.totalTracts) * 1000) / 10
+      : s.lowAccessPct;
+
+    // noVehiclePct from API: noVehicleLowAccess as % of lowAccessPop (if available)
+    const noVehiclePct = api.lowAccessPop > 0
+      ? Math.round((api.noVehicleLowAccess / api.lowAccessPop) * 1000) / 10
+      : s.noVehiclePct;
+
+    return {
+      ...s,
+      lowAccessPct,
+      lowIncomeLowAccessPop: api.lowIncomeLowAccess || s.lowIncomeLowAccessPop,
+      noVehiclePct,
+      snapLowAccess: api.snapLowAccess || 0,
+      avgPovertyRate: api.avgPovertyRate || undefined
+    };
+  });
+}
 
 // -- Chart 1: Food Desert Map (choropleth) with County Drill-Down --
 function renderDesertMap(geoJSON, states) {
@@ -39,6 +72,17 @@ function renderDesertMap(geoJSON, states) {
   function countyTooltip(params) {
     const d = params.data;
     if (!d) return '';
+    // Enhanced tooltip when FARA county data is available
+    if (d._faraEnriched) {
+      let html = `<strong style="font-size:14px">${d.name}</strong><br/>`;
+      html += `<span style="color:${COLORS.secondary}">LILA Tracts:</span> ${d.lilaTracts} of ${d.tractCount}<br/>`;
+      html += `Avg Poverty Rate: ${d.avgPovertyRate}%<br/>`;
+      if (d.lowAccessPop) html += `Low-Access Pop: ${fmtNum(d.lowAccessPop)}<br/>`;
+      if (d.lowIncomeLowAccess) html += `Low-Income+Low-Access: ${fmtNum(d.lowIncomeLowAccess)}<br/>`;
+      if (d.noVehicleLowAccess) html += `No Vehicle+Low-Access: ${fmtNum(d.noVehicleLowAccess)}<br/>`;
+      if (d.avgMedianIncome) html += `Median Income: $${fmtNum(d.avgMedianIncome)}`;
+      return html;
+    }
     return `<strong style="font-size:14px">${d.name}</strong><br/>
       Population: ${fmtNum(d.population || 0)}<br/>
       <span style="color:${COLORS.secondary}">Poverty Rate:</span> ${d.povertyRate}%<br/>
@@ -86,21 +130,65 @@ function renderDesertMap(geoJSON, states) {
     chart.showLoading({ text: `Loading ${stateName} counties...`, color: COLORS.secondary, textColor: COLORS.text, maskColor: 'rgba(0,0,0,0.6)' });
 
     try {
-      const res = await fetch(`/data/counties/${stateFips}.json`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const countyGeo = await res.json();
+      // Always need the GeoJSON for the map geometry
+      const geoRes = await fetch(`/data/counties/${stateFips}.json`);
+      if (!geoRes.ok) throw new Error(`HTTP ${geoRes.status}`);
+      const countyGeo = await geoRes.json();
+
+      // Try FARA county API for richer food-access-specific data
+      let faraCountyData = null;
+      try {
+        const faraRes = await fetch(`/api/dashboard-fara.php?type=county&state=${stateFips}`);
+        if (faraRes.ok) {
+          const fara = await faraRes.json();
+          if (!fara.error && fara.records?.length) {
+            faraCountyData = {};
+            fara.records.forEach(r => { faraCountyData[r.county] = r; });
+          }
+        }
+      } catch { /* FARA county fetch is optional */ }
 
       const mapName = `access-${stateFips}`;
       echarts.registerMap(mapName, countyGeo);
 
-      // Show poverty rate as proxy for food access risk at county level
-      const countyData = countyGeo.features
-        .filter(f => f.properties.povertyRate)
-        .map(f => ({
-          name: f.properties.name,
-          value: f.properties.povertyRate,
-          ...f.properties
-        }));
+      let countyData, seriesName, vmText, hintText;
+
+      if (faraCountyData) {
+        // Use FARA data: show LILA tract percentage per county
+        countyData = countyGeo.features
+          .map(f => {
+            const fips5 = f.properties.GEOID || f.properties.fips || '';
+            const fara = faraCountyData[fips5];
+            if (!fara) return null;
+            const lilaPct = fara.tractCount > 0
+              ? Math.round((fara.lilaTracts / fara.tractCount) * 1000) / 10
+              : 0;
+            return {
+              name: f.properties.name || f.properties.NAME,
+              value: lilaPct,
+              _faraEnriched: true,
+              ...fara
+            };
+          })
+          .filter(Boolean);
+
+        seriesName = 'LILA Tracts (%)';
+        vmText = ['More Food Deserts', 'Fewer Food Deserts'];
+        hintText = 'Showing USDA LILA tract data from Food Access Research Atlas \u2014 click Back for state-level view';
+      } else {
+        // Fallback: poverty rate from static county GeoJSON
+        countyData = countyGeo.features
+          .filter(f => f.properties.povertyRate)
+          .map(f => ({
+            name: f.properties.name,
+            value: f.properties.povertyRate,
+            ...f.properties
+          }));
+
+        seriesName = 'Poverty Rate';
+        vmText = ['High Poverty', 'Low Poverty'];
+        hintText = 'Showing poverty rate as proxy for food access risk \u2014 click Back for state-level food desert data';
+      }
 
       const vals = countyData.map(c => c.value).filter(v => typeof v === 'number');
       const min = Math.floor(Math.min(...vals));
@@ -113,19 +201,19 @@ function renderDesertMap(geoJSON, states) {
       const mapLabel = document.getElementById('access-map-state-label');
       if (mapLabel) mapLabel.textContent = stateName;
       const hint = document.querySelector('#chart-desert-map + .dashboard-chart__hint');
-      if (hint) hint.textContent = 'Showing poverty rate as proxy for food access risk \u2014 click Back for state-level food desert data';
+      if (hint) hint.textContent = hintText;
 
       chart.hideLoading();
 
       chart.setOption({
         tooltip: { trigger: 'item', ...TOOLTIP_STYLE, formatter: countyTooltip },
         visualMap: {
-          min, max, text: ['High Poverty', 'Low Poverty'], calculable: true,
+          min, max, text: vmText, calculable: true,
           inRange: { color: [PAL.low, PAL.mid, PAL.high] },
           textStyle: { color: COLORS.text }
         },
         series: [{
-          name: 'Poverty Rate', type: 'map', map: mapName, roam: false,
+          name: seriesName, type: 'map', map: mapName, roam: false,
           projection: albersProjection, aspectScale: 1, zoom: 1, top: 10, left: 'center',
           emphasis: {
             label: { show: true, color: COLORS.text, fontSize: 11, fontWeight: 'bold' },
@@ -547,28 +635,45 @@ async function fetchSDOHAccess(accessStates) {
 
 async function init() {
   try {
-    const [accessRes, geoRes, fiRes] = await Promise.all([
+    // Load static data (always needed for fields the API cannot provide) + GeoJSON + food insecurity
+    const [staticRes, geoRes, fiRes] = await Promise.all([
       fetch('/data/food-access-atlas.json'),
       fetch('/data/us-states-geo.json'),
       fetch('/data/food-insecurity-state.json')
     ]);
-    if (!accessRes.ok || !geoRes.ok) throw new Error('Failed to load data');
-    const [accessData, geoJSON] = await Promise.all([accessRes.json(), geoRes.json()]);
+    if (!staticRes.ok || !geoRes.ok) throw new Error('Failed to load data');
+    const [staticData, geoJSON] = await Promise.all([staticRes.json(), geoRes.json()]);
     const fiData = fiRes.ok ? await fiRes.json() : null;
 
+    // Try FARA live API, merge into static data if available
+    let states = staticData.states;
+    try {
+      const { data: faraData, source } = await fetchWithFallback(
+        '/api/dashboard-fara.php?type=state-summary',
+        '/data/food-access-atlas.json'
+      );
+      if (source === 'live' && faraData.records?.length) {
+        states = mergeFaraIntoStatic(staticData.states, faraData.records);
+        updateFreshness('access', faraData);
+      } else {
+        updateFreshness('access', { _static: true, _dataYear: 2019 });
+      }
+    } catch {
+      updateFreshness('access', { _static: true, _dataYear: 2019 });
+    }
+
     animateCounters();
-    updateFreshness('access', { _static: true, _dataYear: 2019 });
-    const mapCtrl = renderDesertMap(geoJSON, accessData.states);
-    renderUrbanRural(accessData.states);
-    renderDistance(accessData.states);
-    renderVehicle(accessData.states);
-    renderDoubleBurden(accessData.states);
-    if (fiData?.states) renderAccessInsecurity(accessData.states, fiData.states);
-    populateAccessibleTable(accessData.states);
+    const mapCtrl = renderDesertMap(geoJSON, states);
+    renderUrbanRural(states);
+    renderDistance(states);
+    renderVehicle(states);
+    renderDoubleBurden(states);
+    if (fiData?.states) renderAccessInsecurity(states, fiData.states);
+    populateAccessibleTable(states);
 
     addExportButton('chart-desert-map', 'food-access-by-state.csv', () => ({
-      headers: ['State', 'Low-Access Tracts (%)', 'Urban Low-Access', 'Rural Low-Access', 'Avg Distance (mi)', 'No Vehicle (%)', 'Low-Income Low-Access Pop'],
-      rows: accessData.states.map(s => [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.noVehiclePct, s.lowIncomeLowAccessPop])
+      headers: ['State', 'Low-Access Tracts (%)', 'Urban Low-Access', 'Rural Low-Access', 'Avg Distance (mi)', 'No Vehicle (%)', 'Low-Income Low-Access Pop', 'SNAP+Low-Access'],
+      rows: states.map(s => [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.noVehiclePct, s.lowIncomeLowAccessPop, s.snapLowAccess || ''])
     }));
 
     // State deep-dive selector
@@ -579,7 +684,7 @@ async function init() {
           return;
         }
         const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
-        const match = accessData.states.find(s => s.name === stateName);
+        const match = states.find(s => s.name === stateName);
         if (match?.fips) mapCtrl.drillDown(match.name, match.fips);
       });
     }
@@ -588,7 +693,7 @@ async function init() {
     window.addEventListener('resize', handleResize);
 
     // Non-blocking: fetch live SDOH data for housing burden chart
-    fetchSDOHAccess(accessData.states);
+    fetchSDOHAccess(states);
   } catch {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
