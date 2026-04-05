@@ -8,7 +8,7 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
   initScrollReveal, handleResize, updateFreshness,
-  REGIONS, REGION_COLORS, getRegion
+  REGIONS, REGION_COLORS, getRegion, addExportButton
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.access;
@@ -562,6 +562,12 @@ async function init() {
     renderDoubleBurden(accessData.states);
     if (fiData?.states) renderAccessInsecurity(accessData.states, fiData.states);
     populateAccessibleTable(accessData.states);
+
+    addExportButton('chart-desert-map', 'food-access-by-state.csv', () => ({
+      headers: ['State', 'Low-Access Tracts (%)', 'Urban Low-Access', 'Rural Low-Access', 'Avg Distance (mi)', 'No Vehicle (%)', 'Low-Income Low-Access Pop'],
+      rows: accessData.states.map(s => [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.noVehiclePct, s.lowIncomeLowAccessPop])
+    }));
+
     initScrollReveal();
     window.addEventListener('resize', handleResize);
 

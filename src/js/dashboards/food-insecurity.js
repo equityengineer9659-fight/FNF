@@ -8,7 +8,7 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
   updateFreshness, initScrollReveal, handleResize, fetchWithFallback,
-  REGION_COLORS, getRegion
+  REGION_COLORS, getRegion, addExportButton, initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.insecurity;
@@ -1099,6 +1099,17 @@ async function init() {
 
     // County search
     initCountySearch(mapCtrl);
+
+    // State deep-dive selector
+    initStateSelector('state-selector-container', (stateCode) => {
+      if (!stateCode) {
+        mapCtrl.showNational();
+        return;
+      }
+      const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
+      const match = data.states.find(s => s.name === stateName);
+      if (match?.fips) mapCtrl.drillDown(match.name, match.fips);
+    });
     renderTrend(data);
     renderBar(data);
     renderScatter(data);
@@ -1110,6 +1121,12 @@ async function init() {
 
     // SNAP chart
     renderSnap(data);
+
+    // CSV export buttons
+    addExportButton('chart-map', 'food-insecurity-by-state.csv', () => ({
+      headers: ['State', 'Food Insecurity Rate (%)', 'Child Rate (%)', 'Persons', 'Meal Gap', 'Meal Cost ($)', 'Poverty Rate (%)', 'SNAP Participation'],
+      rows: data.states.map(s => [s.name, s.rate, s.childRate, s.persons, s.mealGap, s.mealCost, s.povertyRate, s.snapParticipation])
+    }));
 
     // Scroll reveal
     initScrollReveal();

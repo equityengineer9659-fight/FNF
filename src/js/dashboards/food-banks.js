@@ -8,7 +8,7 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
   initScrollReveal, handleResize, updateFreshness,
-  REGIONS, REGION_COLORS, getRegion
+  REGIONS, REGION_COLORS, getRegion, addExportButton
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.banks;
@@ -434,6 +434,12 @@ async function init() {
     renderEfficiency(bankData.states);
     renderDistribution(bankData.states);
     initFindHelp();
+
+    addExportButton('chart-density-map', 'food-banks-by-state.csv', () => ({
+      headers: ['State', 'Org Count', 'Density (per 100K)', 'Total Revenue ($)', 'Program Efficiency (%)', 'Food Insecurity Rate (%)'],
+      rows: bankData.states.map(s => [s.name, s.orgCount, s.perCapitaOrgs, s.totalRevenue, s.programExpenseRatio, s.foodInsecurityRate])
+    }));
+
     initScrollReveal();
     window.addEventListener('resize', handleResize);
   } catch {

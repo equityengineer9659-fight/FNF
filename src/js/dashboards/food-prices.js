@@ -7,7 +7,7 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
-  updateFreshness, initScrollReveal, handleResize, fetchWithFallback
+  updateFreshness, initScrollReveal, handleResize, fetchWithFallback, addExportButton
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.prices;
@@ -617,6 +617,11 @@ async function init() {
       renderPurchasingPower(blsData);
       updateFreshness('bls-regional', { _cached: true, _cachedAt: blsData.fetchedAt });
     }
+
+    addExportButton('chart-affordability-map', 'food-affordability-by-state.csv', () => ({
+      headers: ['State', 'Affordability Index', 'Meal Cost ($)', 'Median Income ($)'],
+      rows: regionalData.stateAffordability.states.map(s => [s.name, s.index, s.mealCost, s.medianIncome])
+    }));
 
     // Scroll reveal
     initScrollReveal();

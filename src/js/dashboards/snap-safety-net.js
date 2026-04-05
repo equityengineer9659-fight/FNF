@@ -7,7 +7,7 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
-  initScrollReveal, handleResize, updateFreshness, fetchWithFallback
+  initScrollReveal, handleResize, updateFreshness, fetchWithFallback, addExportButton
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.snap;
@@ -477,6 +477,11 @@ async function init() {
     renderSchoolLunch(snapData.schoolLunch.states);
     renderBenefits(snapData.benefitsPerPerson.states, snapData.stateCoverage.states);
     renderGauges(snapData.national);
+
+    addExportButton('chart-snap-map', 'snap-coverage-by-state.csv', () => ({
+      headers: ['State', 'SNAP Participants', 'Food Insecure', 'Coverage Ratio (%)', 'Insecurity Rate (%)'],
+      rows: snapData.stateCoverage.states.map(s => [s.name, s.snapParticipants, s.foodInsecure, s.coverageRatio, s.insecurityRate])
+    }));
 
     initScrollReveal();
     window.addEventListener('resize', handleResize);

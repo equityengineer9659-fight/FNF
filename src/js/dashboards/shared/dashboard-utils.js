@@ -279,3 +279,79 @@ export const US_STATES = [
   ['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],
   ['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']
 ];
+
+// -- CSV Data Export Utility --
+export function exportCSV(filename, headers, rows) {
+  const escape = v => {
+    const s = String(v ?? '');
+    return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const csv = [headers.map(escape).join(','), ...rows.map(r => r.map(escape).join(','))].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+export function addExportButton(containerId, filename, getDataFn) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const card = container.closest('.dashboard-card');
+  if (!card) return;
+  const header = card.querySelector('.dashboard-card__header');
+  if (!header) return;
+
+  // Don't add duplicate buttons
+  if (header.querySelector('.dashboard-export-btn')) return;
+
+  const btn = document.createElement('button');
+  btn.className = 'dashboard-export-btn';
+  btn.textContent = 'CSV';
+  btn.title = 'Export chart data as CSV';
+  btn.setAttribute('aria-label', `Export ${filename} data as CSV`);
+  btn.addEventListener('click', () => {
+    const { headers, rows } = getDataFn();
+    exportCSV(filename, headers, rows);
+  });
+  header.appendChild(btn);
+}
+
+// -- State Profile Deep-Dive Selector --
+export function getSelectedState() {
+  return new URLSearchParams(window.location.search).get('state') || '';
+}
+
+export function initStateSelector(containerId, onSelect) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const selected = getSelectedState();
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'dashboard-state-selector';
+  wrapper.innerHTML = `
+    <label for="state-deep-dive" style="color:rgba(255,255,255,0.6);font-size:12px;margin-right:0.5rem;">Focus on state:</label>
+    <select id="state-deep-dive" style="padding:0.4rem 0.6rem;border-radius:4px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:13px;">
+      <option value="">All States</option>
+      ${US_STATES.map(([code, name]) => `<option value="${code}"${code === selected ? ' selected' : ''}>${name}</option>`).join('')}
+    </select>
+  `;
+
+  container.appendChild(wrapper);
+
+  const select = wrapper.querySelector('select');
+  select.addEventListener('change', () => {
+    const val = select.value;
+    const url = new URL(window.location);
+    if (val) url.searchParams.set('state', val);
+    else url.searchParams.delete('state');
+    window.history.replaceState({}, '', url);
+    if (onSelect) onSelect(val);
+  });
+
+  // Trigger initial selection if URL has state param
+  if (selected && onSelect) onSelect(selected);
+}
