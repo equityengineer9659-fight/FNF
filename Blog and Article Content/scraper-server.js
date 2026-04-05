@@ -29,9 +29,6 @@ const XLSX_PATH = path.join(__dirname, 'Articles.xlsx');
 const FEEDS_CONFIG_PATH = path.join(PROJECT_ROOT, 'scripts', 'rss-feeds.json');
 const BLOG_DIR = path.join(PROJECT_ROOT, 'blog');
 const ILLUSTRATIONS_DIR = path.join(PROJECT_ROOT, 'src', 'assets', 'images', 'illustrations');
-const BUILD_COMPONENTS_PATH = path.join(PROJECT_ROOT, 'build-components.js');
-const SITEMAP_SCRIPT_PATH = path.join(PROJECT_ROOT, 'scripts', 'generate-sitemap.js');
-const PA11YCI_PATH = path.join(PROJECT_ROOT, '.pa11yci.json');
 const ANALYTICS_PATH = path.join(__dirname, 'scraper-analytics.json');
 
 let anthropic = null;
@@ -247,61 +244,11 @@ app.post('/api/save-article', (req, res) => {
     const registered = [];
 
     if (autoRegister) {
-      // 1. Patch build-components.js — update BOTH arrays: resourcesSubpages and articlePages
-      // Uses bracket-bounded regex ([^\]]*) so it never escapes the target array,
-      // even when the last entry has a trailing comma before ];
-      if (existsSync(BUILD_COMPONENTS_PATH)) {
-        let src = readFileSync(BUILD_COMPONENTS_PATH, 'utf-8');
-        if (!src.includes(`'${slug}'`)) {
-          // Helper: inserts slug before the closing ] of the named array
-          const insertIntoArray = (source, arrayName) =>
-            source.replace(
-              new RegExp(`(const ${arrayName}\\s*=\\s*\\[)([^\\]]*)(`  + `\\])`),
-              (m, open, content, close) =>
-                `${open}${content.trimEnd()}\n  '${slug}',\n${close}`
-            );
+      // All config files (build-components.js, generate-sitemap.js, .pa11yci.json) now
+      // auto-discover articles from the blog/ directory via glob — no file patching needed.
+      // Just run the build scripts to inject nav/footer and update the blog listing.
 
-          src = insertIntoArray(src, 'resourcesSubpages');
-          src = insertIntoArray(src, 'articlePages');
-          writeFileSync(BUILD_COMPONENTS_PATH, src, 'utf-8');
-          registered.push('build-components.js');
-        }
-      }
-
-      // 2. Patch scripts/generate-sitemap.js
-      if (existsSync(SITEMAP_SCRIPT_PATH)) {
-        let src = readFileSync(SITEMAP_SCRIPT_PATH, 'utf-8');
-        if (!src.includes(`'${slug}'`) && !src.includes(`"${slug}"`)) {
-          src = src.replace(
-            /('([a-z0-9-]+)',?\s*\/\/\s*last article[\s\S]*?\];)|('([a-z0-9-]+)'\s*\n(\s*\];))/,
-            (match) => match.replace(/(\s*\];)$/, `,\n  '${slug}'$1`)
-          );
-          // Fallback: append before closing bracket if pattern didn't match
-          if (!src.includes(`'${slug}'`)) {
-            src = src.replace(
-              /('([a-z0-9-]+)'\s*\n?([ \t]*)\];)/,
-              `'$2'\n$3  '${slug}'\n$3];`
-            );
-          }
-          if (src.includes(`'${slug}'`)) {
-            writeFileSync(SITEMAP_SCRIPT_PATH, src, 'utf-8');
-            registered.push('generate-sitemap.js');
-          }
-        }
-      }
-
-      // 3. Patch .pa11yci.json
-      if (existsSync(PA11YCI_PATH)) {
-        const pa11y = JSON.parse(readFileSync(PA11YCI_PATH, 'utf-8'));
-        const newUrl = `http://localhost:4173/blog/${slug}.html`;
-        if (pa11y.urls && !pa11y.urls.includes(newUrl)) {
-          pa11y.urls.push(newUrl);
-          writeFileSync(PA11YCI_PATH, JSON.stringify(pa11y, null, 2) + '\n', 'utf-8');
-          registered.push('.pa11yci.json');
-        }
-      }
-
-      // 4. Run build-components.js — injects nav/footer/scripts into the new article HTML
+      // 1. Run build-components.js — injects nav/footer/scripts into the new article HTML
       try {
         execSync('node build-components.js', { cwd: PROJECT_ROOT, stdio: 'pipe' });
         registered.push('build-components (nav/footer injected)');
@@ -309,7 +256,7 @@ app.post('/api/save-article', (req, res) => {
         console.error('build-components.js failed:', buildErr.message);
       }
 
-      // 5. Run sync-blog.js — rebuilds blog.html card grid so new article appears in listing
+      // 2. Run sync-blog.js — rebuilds blog.html card grid so new article appears in listing
       try {
         execSync('node scripts/sync-blog.js', { cwd: PROJECT_ROOT, stdio: 'pipe' });
         registered.push('sync-blog (blog listing updated)');
@@ -444,57 +391,9 @@ app.post('/api/delete-articles', (req, res) => {
       }
     }
 
-    // Phase 2b — Deregister from config files
-    const configsPatched = [];
-
-    // Patch build-components.js
-    if (existsSync(BUILD_COMPONENTS_PATH)) {
-      let src = readFileSync(BUILD_COMPONENTS_PATH, 'utf-8');
-      let changed = false;
-      for (const slug of slugs) {
-        const before = src;
-        src = src.replace(new RegExp(`\\s*'${slug}',?\\n?`, 'g'), '\n');
-        if (src !== before) changed = true;
-      }
-      if (changed) {
-        // Clean up any blank lines that result from removal
-        src = src.replace(/\n{3,}/g, '\n\n');
-        writeFileSync(BUILD_COMPONENTS_PATH, src, 'utf-8');
-        configsPatched.push('build-components.js');
-      }
-    }
-
-    // Patch generate-sitemap.js
-    if (existsSync(SITEMAP_SCRIPT_PATH)) {
-      let src = readFileSync(SITEMAP_SCRIPT_PATH, 'utf-8');
-      let changed = false;
-      for (const slug of slugs) {
-        const before = src;
-        src = src.replace(new RegExp(`\\s*\\{\\s*path:\\s*'blog/${slug}\\.html'[^}]*\\},?\\n?`), '\n');
-        if (src !== before) changed = true;
-      }
-      if (changed) {
-        src = src.replace(/\n{3,}/g, '\n\n');
-        writeFileSync(SITEMAP_SCRIPT_PATH, src, 'utf-8');
-        configsPatched.push('generate-sitemap.js');
-      }
-    }
-
-    // Patch .pa11yci.json
-    if (existsSync(PA11YCI_PATH)) {
-      const pa11y = JSON.parse(readFileSync(PA11YCI_PATH, 'utf-8'));
-      const before = pa11y.urls.length;
-      pa11y.urls = pa11y.urls.filter(u => {
-        for (const slug of slugs) {
-          if (u.includes(`/blog/${slug}.html`)) return false;
-        }
-        return true;
-      });
-      if (pa11y.urls.length < before) {
-        writeFileSync(PA11YCI_PATH, JSON.stringify(pa11y, null, 2) + '\n', 'utf-8');
-        configsPatched.push('.pa11yci.json');
-      }
-    }
+    // Config files (build-components.js, generate-sitemap.js, .pa11yci.json) now
+    // auto-discover articles from the blog/ directory via glob — no deregistration needed.
+    const configsPatched = ['(auto-discovered — no patching needed)'];
 
     // Phase 3 — Repair Read Next links in remaining articles
     const readNextRepairs = [];

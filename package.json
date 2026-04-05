@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "node scripts/generate-sitemap.js && node scripts/sync-blog.js && node build-components.js && vite build",
     "sync:blog": "node scripts/sync-blog.js",
+    "generate:pa11y": "node scripts/generate-pa11y-config.js",
     "build:components": "node build-components.js",
     "build:full": "npm run lint && npm run validate:html && npm run test && npm run build",
     "preview": "vite preview",

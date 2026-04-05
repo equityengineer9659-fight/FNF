@@ -6,6 +6,7 @@
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { glob } from 'glob';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,81 +14,35 @@ const __dirname = dirname(__filename);
 const BASE_URL = 'https://food-n-force.com';
 const OUTPUT_FILE = join(__dirname, '..', 'sitemap.xml');
 
-const pages = [
-  // Core pages
+// Core + hub pages (static — different priorities, change rarely)
+const staticPages = [
   { path: '', priority: '1.0', changefreq: 'weekly' },
   { path: 'about.html', priority: '0.9', changefreq: 'monthly' },
   { path: 'services.html', priority: '0.9', changefreq: 'monthly' },
   { path: 'resources.html', priority: '0.8', changefreq: 'weekly' },
   { path: 'impact.html', priority: '0.8', changefreq: 'monthly' },
   { path: 'contact.html', priority: '0.7', changefreq: 'monthly' },
-  // Blog hub + hub pages
   { path: 'blog.html', priority: '0.8', changefreq: 'weekly' },
   { path: 'case-studies.html', priority: '0.7', changefreq: 'monthly' },
   { path: 'templates-tools.html', priority: '0.7', changefreq: 'monthly' },
-  // Articles (all under blog/)
-  { path: 'blog/ai-reshaping-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/salesforce-food-bank-operations.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/donor-relationships-nonprofit-cloud.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/data-driven-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-bank-workflow-automation.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/securing-technology-grants.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/ai-inventory-management.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/agentforce-nonprofits-guide.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/ai-ethics-nonprofit-governance.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/centralized-food-hub-case-study.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/client-choice-food-pantry-technology.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/community-food-center-model.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/data-privacy-food-bank-clients.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/digital-transformation-small-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/donor-prospecting-salesforce.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-bank-client-services-technology.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-bank-crisis-response-planning.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-bank-kitchen-operations.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-bank-strategic-partnerships.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-bank-technology-stack.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-banks-healthcare-social-determinants.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-is-medicine-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/future-food-banking-trends.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/grant-management-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/impact-measurement-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/measuring-hunger-relief-outcomes.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/nonprofit-cloud-vs-sales-cloud.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/nutrition-first-food-bank-strategy.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/rapid-technology-implementation.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/salesforce-flow-builder-nonprofits.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/salesforce-reports-dashboards-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/salesforce-security-nonprofits.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/salesforce-spring-2026-nonprofits.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/snap-policy-changes-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/tax-policy-nonprofit-fundraising.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/volunteer-management-technology.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/volunteer-recruitment-retention-digital.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/purpose-driven-ai-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/salesforce-nonprofit-cloud-ai-automation.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/snap-cuts-ice-fears-food-bank-response.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/grant-writing-nonprofit-sustainability.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/ai-data-strategy-crm-food-banks.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/data-migration-food-bank-modernization.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/central-pennsylvania-food-bank-salesforce.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/barrie-food-bank-crm-transformation.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/last-mile-food-rescue-salesforce.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-bank-of-alaska-snap-management.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/san-antonio-food-bank-salesforce.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/second-harvest-silicon-valley-crm.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/second-harvest-process-automation.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/roadrunner-food-bank-salesforce.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-bank-salesforce-use-cases.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'blog/food-bank-digital-supply-chain.html', priority: '0.7', changefreq: 'monthly' },
-  { path: 'dashboards/nonprofit-directory.html', priority: '0.8', changefreq: 'monthly' },
-  // Dashboards
+];
+
+// Blog articles — auto-discovered from blog/ directory
+const blogArticles = glob.sync('*.html', { cwd: join(__dirname, '..', 'blog') })
+  .map(f => ({ path: `blog/${f}`, priority: '0.7', changefreq: 'monthly' }));
+
+// Dashboard pages (static — different priorities)
+const dashboardPages = [
   { path: 'dashboards/executive-summary.html', priority: '0.9', changefreq: 'monthly' },
   { path: 'dashboards/food-insecurity.html', priority: '0.8', changefreq: 'monthly' },
   { path: 'dashboards/food-access.html', priority: '0.8', changefreq: 'monthly' },
   { path: 'dashboards/snap-safety-net.html', priority: '0.8', changefreq: 'monthly' },
   { path: 'dashboards/food-prices.html', priority: '0.8', changefreq: 'monthly' },
   { path: 'dashboards/food-banks.html', priority: '0.8', changefreq: 'monthly' },
+  { path: 'dashboards/nonprofit-directory.html', priority: '0.8', changefreq: 'monthly' },
 ];
+
+const pages = [...staticPages, ...blogArticles, ...dashboardPages];
 
 function generateSitemap() {
   const now = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
