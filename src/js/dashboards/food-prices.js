@@ -718,7 +718,7 @@ async function init() {
 
     // Chart 1: Food Prices by Category
     renderCategories(regionalData.categories);
-    updateFreshness('bls-categories', { _cached: true, _cachedAt: regionalData.fetchedAt });
+    updateFreshness('bls-categories', { _static: true, _dataYear: 'CPI' });
 
     // Chart 2: Regional Price Comparison
     renderRegions(regionalData.regions);
@@ -736,7 +736,7 @@ async function init() {
       renderHomeVsAway(blsData);
       renderYoYInflation(blsData);
       renderPurchasingPower(blsData);
-      updateFreshness('bls-regional', { _cached: true, _cachedAt: blsData.fetchedAt });
+      updateFreshness('bls-regional', { _static: true, _dataYear: 'CPI' });
     }
 
     addExportButton('chart-affordability-map', 'food-affordability-by-state.csv', () => ({

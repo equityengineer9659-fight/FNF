@@ -169,14 +169,10 @@ export function createChart(containerId) {
 export function updateFreshness(source, info) {
   const el = document.getElementById(`freshness-${source}`);
   if (!el) return;
+  el.classList.remove('freshness--static', 'freshness--cached', 'freshness--live');
   if (info._static) {
     el.textContent = `Data: ${info._dataYear || 'Static'}`;
     el.classList.add('freshness--static');
-  } else if (info._cached) {
-    const cachedDate = new Date(info._cachedAt || info.fetchedAt);
-    const age = Math.round((Date.now() - cachedDate.getTime()) / 3600000);
-    el.textContent = `Cached ${age}h ago`;
-    el.classList.add('freshness--cached');
   } else {
     el.textContent = 'Live';
     el.classList.add('freshness--live');

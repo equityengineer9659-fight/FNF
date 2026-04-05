@@ -451,7 +451,7 @@ async function fetchBLSForSnap() {
     if (blsData.error || !blsData.series) return;
     if (snapTrendData) {
       renderSnapTrend(snapTrendData, blsData);
-      updateFreshness('snap-bls', blsData);
+      updateFreshness('snap', blsData);
     }
   } catch { /* BLS is optional */ }
 }
@@ -481,7 +481,7 @@ async function fetchCDCPlacesSnap() {
     if (toggleContainer) toggleContainer.style.display = '';
 
     // Update freshness badge
-    updateFreshness('snap-cdc', data);
+    updateFreshness('snap-map', data);
   } catch { /* CDC PLACES is optional — fail silently */ }
 }
 

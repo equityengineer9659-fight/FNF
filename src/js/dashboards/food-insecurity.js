@@ -1339,7 +1339,7 @@ async function fetchBLSData() {
     if (res.ok) {
       const data = await res.json();
       renderFoodPrices(data);
-      updateFreshness('bls', { _cached: true, _cachedAt: data.fetchedAt });
+      updateFreshness('bls', { _static: true, _dataYear: 'CPI' });
     }
   } catch { /* static file missing */ }
 
