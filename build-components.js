@@ -162,12 +162,12 @@ const components = {
     // Profile page highlights the Directory tab
     const activeTab = currentPage === 'nonprofit-profile' ? 'nonprofit-directory' : currentPage;
     const items = tabs.map(t =>
-      `            <li role="presentation"><a href="/dashboards/${t.slug}.html" class="dashboard-tabs__tab" role="tab"${t.slug === activeTab ? ' aria-current="page"' : ''}>${t.label}</a></li>`
+      `            <li><a href="/dashboards/${t.slug}.html" class="dashboard-tabs__tab"${t.slug === activeTab ? ' aria-current="page"' : ''}>${t.label}</a></li>`
     ).join('\n');
     return `    <!-- Dashboard Tabs -->
     <nav class="dashboard-tabs" aria-label="Dashboard navigation">
         <div class="dashboard-tabs__container">
-            <ul class="dashboard-tabs__list" role="tablist">
+            <ul class="dashboard-tabs__list">
 ${items}
             </ul>
         </div>

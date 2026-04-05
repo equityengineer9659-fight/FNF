@@ -130,6 +130,7 @@ export function animateCounters() {
   counters.forEach(el => {
     const target = parseFloat(el.dataset.target);
     const suffix = el.dataset.suffix || '';
+    const prefix = el.dataset.prefix || '';
     const duration = 2000;
     const start = performance.now();
 
@@ -141,12 +142,12 @@ export function animateCounters() {
       // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = (target * eased).toFixed(1);
-      el.textContent = current + suffix;
+      el.textContent = prefix + current + suffix;
 
       if (progress < 1) {
         requestAnimationFrame(tick);
       } else {
-        el.textContent = target + suffix;
+        el.textContent = prefix + target + suffix;
         el.setAttribute('role', 'status');
         el.setAttribute('aria-live', 'polite');
       }

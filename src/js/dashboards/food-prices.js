@@ -665,6 +665,7 @@ function renderPurchasingPower(blsData) {
   // Initialize FRED item toggle buttons
   const toggleContainer = document.getElementById('fred-cpi-toggles');
   if (toggleContainer) {
+    toggleContainer.innerHTML = '';
     FRED_CPI_ITEMS.forEach(item => {
       const btn = document.createElement('button');
       btn.type = 'button';
