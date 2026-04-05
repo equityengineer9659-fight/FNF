@@ -1,7 +1,7 @@
 {
   "source": "USDA Food and Nutrition Service, SNAP Data Tables",
   "description": "SNAP participation, benefits, school lunch data, and coverage gap analysis",
-  "fetchedAt": "2026-04-04T00:00:00.000Z",
+  "fetchedAt": "2026-04-05T00:00:00.000Z",
   "national": {
     "snapParticipants": 42126585,
     "avgMonthlyBenefit": 188,
@@ -14,95 +14,683 @@
     "description": "Monthly SNAP participation (millions), 2015-2026",
     "source": "USDA FNS SNAP Data Tables",
     "data": [
-      {"date":"2015-01","value":46.5},{"date":"2015-06","value":45.4},{"date":"2015-12","value":44.2},
-      {"date":"2016-06","value":43.5},{"date":"2016-12","value":42.7},
-      {"date":"2017-06","value":41.8},{"date":"2017-12","value":40.7},
-      {"date":"2018-06","value":39.7},{"date":"2018-12","value":38.6},
-      {"date":"2019-06","value":36.0},{"date":"2019-12","value":36.9},
-      {"date":"2020-01","value":37.2},{"date":"2020-03","value":39.7},{"date":"2020-06","value":43.2},{"date":"2020-09","value":42.9},{"date":"2020-12","value":42.1},
-      {"date":"2021-03","value":42.4},{"date":"2021-06","value":41.5},{"date":"2021-09","value":41.8},{"date":"2021-12","value":41.2},
-      {"date":"2022-03","value":41.0},{"date":"2022-06","value":41.2},{"date":"2022-09","value":41.5},{"date":"2022-12","value":42.0},
-      {"date":"2023-03","value":42.3},{"date":"2023-06","value":41.9},{"date":"2023-09","value":42.1},{"date":"2023-12","value":42.4},
-      {"date":"2024-03","value":42.6},{"date":"2024-06","value":42.0},{"date":"2024-09","value":41.7},{"date":"2024-12","value":42.1},
-      {"date":"2025-01","value":42.8},
-      {"date":"2025-02","value":42.2},
-      {"date":"2025-03","value":42.2},
-      {"date":"2025-04","value":42.4},
-      {"date":"2025-05","value":42.2},
-      {"date":"2025-06","value":42.1},
-      {"date":"2025-07","value":42.0},
-      {"date":"2025-08","value":41.8},
-      {"date":"2025-09","value":41.6},
-      {"date":"2025-10","value":41.1},
-      {"date":"2025-11","value":40.4}
+      {
+        "date": "2015-01",
+        "value": 46.5
+      },
+      {
+        "date": "2015-06",
+        "value": 45.4
+      },
+      {
+        "date": "2015-12",
+        "value": 44.2
+      },
+      {
+        "date": "2016-06",
+        "value": 43.5
+      },
+      {
+        "date": "2016-12",
+        "value": 42.7
+      },
+      {
+        "date": "2017-06",
+        "value": 41.8
+      },
+      {
+        "date": "2017-12",
+        "value": 40.7
+      },
+      {
+        "date": "2018-06",
+        "value": 39.7
+      },
+      {
+        "date": "2018-12",
+        "value": 38.6
+      },
+      {
+        "date": "2019-06",
+        "value": 36
+      },
+      {
+        "date": "2019-12",
+        "value": 36.9
+      },
+      {
+        "date": "2020-01",
+        "value": 37.2
+      },
+      {
+        "date": "2020-03",
+        "value": 39.7
+      },
+      {
+        "date": "2020-06",
+        "value": 43.2
+      },
+      {
+        "date": "2020-09",
+        "value": 42.9
+      },
+      {
+        "date": "2020-12",
+        "value": 42.1
+      },
+      {
+        "date": "2021-03",
+        "value": 42.4
+      },
+      {
+        "date": "2021-06",
+        "value": 41.5
+      },
+      {
+        "date": "2021-09",
+        "value": 41.8
+      },
+      {
+        "date": "2021-12",
+        "value": 41.2
+      },
+      {
+        "date": "2022-03",
+        "value": 41
+      },
+      {
+        "date": "2022-06",
+        "value": 41.2
+      },
+      {
+        "date": "2022-09",
+        "value": 41.5
+      },
+      {
+        "date": "2022-12",
+        "value": 42
+      },
+      {
+        "date": "2023-03",
+        "value": 42.3
+      },
+      {
+        "date": "2023-06",
+        "value": 41.9
+      },
+      {
+        "date": "2023-09",
+        "value": 42.1
+      },
+      {
+        "date": "2023-12",
+        "value": 42.4
+      },
+      {
+        "date": "2024-03",
+        "value": 42.6
+      },
+      {
+        "date": "2024-06",
+        "value": 42
+      },
+      {
+        "date": "2024-09",
+        "value": 41.7
+      },
+      {
+        "date": "2024-12",
+        "value": 42.1
+      },
+      {
+        "date": "2025-01",
+        "value": 42.8
+      },
+      {
+        "date": "2025-02",
+        "value": 42.2
+      },
+      {
+        "date": "2025-03",
+        "value": 42.2
+      },
+      {
+        "date": "2025-04",
+        "value": 42.4
+      },
+      {
+        "date": "2025-05",
+        "value": 42.2
+      },
+      {
+        "date": "2025-06",
+        "value": 42.1
+      },
+      {
+        "date": "2025-07",
+        "value": 42
+      },
+      {
+        "date": "2025-08",
+        "value": 41.8
+      },
+      {
+        "date": "2025-09",
+        "value": 41.6
+      },
+      {
+        "date": "2025-10",
+        "value": 41.1
+      },
+      {
+        "date": "2025-11",
+        "value": 40.4
+      }
     ],
     "events": [
-      {"date":"2020-03","label":"COVID Emergency Allotments Begin","type":"policy"},
-      {"date":"2021-10","label":"Thrifty Food Plan +21% Update","type":"policy"},
-      {"date":"2023-03","label":"Emergency Allotments End","type":"policy"},
-      {"date":"2024-01","label":"New SNAP Eligibility Rules","type":"policy"},
-      {"date":"2025-09","label":"USDA Terminates Food Security Report","type":"policy"},
-      {"date":"2025-10","label":"Government Shutdown (Oct 1 – Nov 12)","type":"policy"},
-      {"date":"2025-10","label":"USDA Removes SNAP Contingency Plan from Website","type":"policy"}
+      {
+        "date": "2020-03",
+        "label": "COVID Emergency Allotments Begin",
+        "type": "policy"
+      },
+      {
+        "date": "2021-10",
+        "label": "Thrifty Food Plan +21% Update",
+        "type": "policy"
+      },
+      {
+        "date": "2023-03",
+        "label": "Emergency Allotments End",
+        "type": "policy"
+      },
+      {
+        "date": "2024-01",
+        "label": "New SNAP Eligibility Rules",
+        "type": "policy"
+      },
+      {
+        "date": "2025-09",
+        "label": "USDA Terminates Food Security Report",
+        "type": "policy"
+      },
+      {
+        "date": "2025-10",
+        "label": "Government Shutdown (Oct 1 – Nov 12)",
+        "type": "policy"
+      },
+      {
+        "date": "2025-10",
+        "label": "USDA Removes SNAP Contingency Plan from Website",
+        "type": "policy"
+      }
     ]
   },
   "stateCoverage": {
     "description": "SNAP-to-need ratio by state (SNAP participants / food insecure population)",
-    "source": "USDA FNS + Feeding America",
-    "year": 2022,
+    "source": "USDA FNS + Feeding America (aligned with food-insecurity-state.json 2024 data)",
+    "year": 2024,
     "states": [
-      {"name":"Alabama","fips":"01","snapParticipants":778000,"foodInsecure":752000,"coverageRatio":103.5,"insecurityRate":15.3,"snapRate":15.8},
-      {"name":"Alaska","fips":"02","snapParticipants":82000,"foodInsecure":88000,"coverageRatio":93.2,"insecurityRate":12.1,"snapRate":11.2},
-      {"name":"Arizona","fips":"04","snapParticipants":892000,"foodInsecure":1040000,"coverageRatio":85.8,"insecurityRate":14.3,"snapRate":12.3},
-      {"name":"Arkansas","fips":"05","snapParticipants":382000,"foodInsecure":486000,"coverageRatio":78.6,"insecurityRate":16.3,"snapRate":12.8},
-      {"name":"California","fips":"06","snapParticipants":4200000,"foodInsecure":4500000,"coverageRatio":93.3,"insecurityRate":11.8,"snapRate":10.7},
-      {"name":"Colorado","fips":"08","snapParticipants":479000,"foodInsecure":620000,"coverageRatio":77.3,"insecurityRate":10.8,"snapRate":8.3},
-      {"name":"Connecticut","fips":"09","snapParticipants":383000,"foodInsecure":398000,"coverageRatio":96.2,"insecurityRate":11.2,"snapRate":10.7},
-      {"name":"Delaware","fips":"10","snapParticipants":113000,"foodInsecure":114000,"coverageRatio":99.1,"insecurityRate":11.5,"snapRate":11.4},
-      {"name":"Florida","fips":"12","snapParticipants":2800000,"foodInsecure":2900000,"coverageRatio":96.6,"insecurityRate":13.2,"snapRate":12.8},
-      {"name":"Georgia","fips":"13","snapParticipants":1350000,"foodInsecure":1400000,"coverageRatio":96.4,"insecurityRate":13.5,"snapRate":12.7},
-      {"name":"Hawaii","fips":"15","snapParticipants":156000,"foodInsecure":155000,"coverageRatio":100.6,"insecurityRate":10.9,"snapRate":10.8},
-      {"name":"Idaho","fips":"16","snapParticipants":174000,"foodInsecure":213000,"coverageRatio":81.7,"insecurityRate":11.4,"snapRate":9.3},
-      {"name":"Illinois","fips":"17","snapParticipants":1830000,"foodInsecure":1500000,"coverageRatio":122.0,"insecurityRate":11.9,"snapRate":14.4},
-      {"name":"Indiana","fips":"18","snapParticipants":690000,"foodInsecure":882000,"coverageRatio":78.2,"insecurityRate":13.1,"snapRate":10.3},
-      {"name":"Iowa","fips":"19","snapParticipants":297000,"foodInsecure":336000,"coverageRatio":88.4,"insecurityRate":10.7,"snapRate":9.4},
-      {"name":"Kansas","fips":"20","snapParticipants":234000,"foodInsecure":350000,"coverageRatio":66.9,"insecurityRate":12.1,"snapRate":8.0},
-      {"name":"Kentucky","fips":"21","snapParticipants":612000,"foodInsecure":658000,"coverageRatio":93.0,"insecurityRate":14.8,"snapRate":13.7},
-      {"name":"Louisiana","fips":"22","snapParticipants":785000,"foodInsecure":738000,"coverageRatio":106.4,"insecurityRate":16.1,"snapRate":16.9},
-      {"name":"Maine","fips":"23","snapParticipants":178000,"foodInsecure":169000,"coverageRatio":105.3,"insecurityRate":12.5,"snapRate":13.2},
-      {"name":"Maryland","fips":"24","snapParticipants":641000,"foodInsecure":626000,"coverageRatio":102.4,"insecurityRate":10.3,"snapRate":10.4},
-      {"name":"Massachusetts","fips":"25","snapParticipants":775000,"foodInsecure":698000,"coverageRatio":111.0,"insecurityRate":10.1,"snapRate":11.2},
-      {"name":"Michigan","fips":"26","snapParticipants":1350000,"foodInsecure":1300000,"coverageRatio":103.8,"insecurityRate":13.4,"snapRate":13.5},
-      {"name":"Minnesota","fips":"27","snapParticipants":464000,"foodInsecure":533000,"coverageRatio":87.1,"insecurityRate":9.5,"snapRate":8.2},
-      {"name":"Mississippi","fips":"28","snapParticipants":477000,"foodInsecure":548000,"coverageRatio":87.0,"insecurityRate":18.7,"snapRate":16.1},
-      {"name":"Missouri","fips":"29","snapParticipants":660000,"foodInsecure":790000,"coverageRatio":83.5,"insecurityRate":13.0,"snapRate":10.8},
-      {"name":"Montana","fips":"30","snapParticipants":102000,"foodInsecure":134000,"coverageRatio":76.1,"insecurityRate":12.3,"snapRate":9.3},
-      {"name":"Nebraska","fips":"31","snapParticipants":159000,"foodInsecure":218000,"coverageRatio":72.9,"insecurityRate":11.2,"snapRate":8.2},
-      {"name":"Nevada","fips":"32","snapParticipants":396000,"foodInsecure":432000,"coverageRatio":91.7,"insecurityRate":13.8,"snapRate":12.7},
-      {"name":"New Hampshire","fips":"33","snapParticipants":72000,"foodInsecure":118000,"coverageRatio":61.0,"insecurityRate":8.6,"snapRate":5.2},
-      {"name":"New Jersey","fips":"34","snapParticipants":716000,"foodInsecure":893000,"coverageRatio":80.2,"insecurityRate":9.8,"snapRate":7.8},
-      {"name":"New Mexico","fips":"35","snapParticipants":418000,"foodInsecure":354000,"coverageRatio":118.1,"insecurityRate":16.8,"snapRate":19.9},
-      {"name":"New York","fips":"36","snapParticipants":2690000,"foodInsecure":2200000,"coverageRatio":122.3,"insecurityRate":11.5,"snapRate":13.8},
-      {"name":"North Carolina","fips":"37","snapParticipants":1290000,"foodInsecure":1400000,"coverageRatio":92.1,"insecurityRate":13.6,"snapRate":12.3},
-      {"name":"North Dakota","fips":"38","snapParticipants":49000,"foodInsecure":77000,"coverageRatio":63.6,"insecurityRate":10.1,"snapRate":6.3},
-      {"name":"Ohio","fips":"39","snapParticipants":1490000,"foodInsecure":1700000,"coverageRatio":87.6,"insecurityRate":14.2,"snapRate":12.7},
-      {"name":"Oklahoma","fips":"40","snapParticipants":595000,"foodInsecure":613000,"coverageRatio":97.1,"insecurityRate":15.5,"snapRate":15.0},
-      {"name":"Oregon","fips":"41","snapParticipants":615000,"foodInsecure":519000,"coverageRatio":118.5,"insecurityRate":12.4,"snapRate":14.6},
-      {"name":"Pennsylvania","fips":"42","snapParticipants":1720000,"foodInsecure":1500000,"coverageRatio":114.7,"insecurityRate":12.0,"snapRate":13.3},
-      {"name":"Rhode Island","fips":"44","snapParticipants":133000,"foodInsecure":122000,"coverageRatio":109.0,"insecurityRate":11.3,"snapRate":12.2},
-      {"name":"South Carolina","fips":"45","snapParticipants":608000,"foodInsecure":726000,"coverageRatio":83.7,"insecurityRate":14.1,"snapRate":11.8},
-      {"name":"South Dakota","fips":"46","snapParticipants":89000,"foodInsecure":106000,"coverageRatio":84.0,"insecurityRate":12.0,"snapRate":10.1},
-      {"name":"Tennessee","fips":"47","snapParticipants":895000,"foodInsecure":1000000,"coverageRatio":89.5,"insecurityRate":14.5,"snapRate":12.8},
-      {"name":"Texas","fips":"48","snapParticipants":3480000,"foodInsecure":4500000,"coverageRatio":77.3,"insecurityRate":15.4,"snapRate":11.8},
-      {"name":"Utah","fips":"49","snapParticipants":198000,"foodInsecure":340000,"coverageRatio":58.2,"insecurityRate":10.2,"snapRate":6.0},
-      {"name":"Vermont","fips":"50","snapParticipants":68000,"foodInsecure":69000,"coverageRatio":98.6,"insecurityRate":11.0,"snapRate":10.5},
-      {"name":"Virginia","fips":"51","snapParticipants":683000,"foodInsecure":878000,"coverageRatio":77.8,"insecurityRate":10.2,"snapRate":7.9},
-      {"name":"Washington","fips":"53","snapParticipants":844000,"foodInsecure":876000,"coverageRatio":96.3,"insecurityRate":11.5,"snapRate":11.0},
-      {"name":"West Virginia","fips":"54","snapParticipants":311000,"foodInsecure":280000,"coverageRatio":111.1,"insecurityRate":15.8,"snapRate":17.3},
-      {"name":"Wisconsin","fips":"55","snapParticipants":555000,"foodInsecure":630000,"coverageRatio":88.1,"insecurityRate":10.8,"snapRate":9.5},
-      {"name":"Wyoming","fips":"56","snapParticipants":26000,"foodInsecure":64000,"coverageRatio":40.6,"insecurityRate":11.1,"snapRate":4.5},
-      {"name":"District of Columbia","fips":"11","snapParticipants":116000,"foodInsecure":86000,"coverageRatio":134.9,"insecurityRate":12.6,"snapRate":16.7}
-    ]
+      {
+        "name": "Alabama",
+        "fips": "01",
+        "snapParticipants": 778000,
+        "foodInsecure": 752000,
+        "coverageRatio": 103.5,
+        "insecurityRate": 15.3,
+        "snapRate": 15.8
+      },
+      {
+        "name": "Alaska",
+        "fips": "02",
+        "snapParticipants": 84000,
+        "foodInsecure": 88000,
+        "coverageRatio": 95.5,
+        "insecurityRate": 12.1,
+        "snapRate": 11.5
+      },
+      {
+        "name": "Arizona",
+        "fips": "04",
+        "snapParticipants": 891000,
+        "foodInsecure": 1040000,
+        "coverageRatio": 85.7,
+        "insecurityRate": 14.3,
+        "snapRate": 12.3
+      },
+      {
+        "name": "Arkansas",
+        "fips": "05",
+        "snapParticipants": 381000,
+        "foodInsecure": 486000,
+        "coverageRatio": 78.4,
+        "insecurityRate": 16.3,
+        "snapRate": 12.8
+      },
+      {
+        "name": "California",
+        "fips": "06",
+        "snapParticipants": 5120000,
+        "foodInsecure": 4540000,
+        "coverageRatio": 112.8,
+        "insecurityRate": 11.8,
+        "snapRate": 13.3
+      },
+      {
+        "name": "Colorado",
+        "fips": "08",
+        "snapParticipants": 511000,
+        "foodInsecure": 620000,
+        "coverageRatio": 82.4,
+        "insecurityRate": 10.8,
+        "snapRate": 8.9
+      },
+      {
+        "name": "Connecticut",
+        "fips": "09",
+        "snapParticipants": 380000,
+        "foodInsecure": 398000,
+        "coverageRatio": 95.5,
+        "insecurityRate": 11.2,
+        "snapRate": 10.7
+      },
+      {
+        "name": "Delaware",
+        "fips": "10",
+        "snapParticipants": 141000,
+        "foodInsecure": 114000,
+        "coverageRatio": 123.7,
+        "insecurityRate": 11.5,
+        "snapRate": 14.2
+      },
+      {
+        "name": "Florida",
+        "fips": "12",
+        "snapParticipants": 3120000,
+        "foodInsecure": 2890000,
+        "coverageRatio": 108,
+        "insecurityRate": 13.2,
+        "snapRate": 14.3
+      },
+      {
+        "name": "Georgia",
+        "fips": "13",
+        "snapParticipants": 1550000,
+        "foodInsecure": 1440000,
+        "coverageRatio": 107.6,
+        "insecurityRate": 13.5,
+        "snapRate": 14.5
+      },
+      {
+        "name": "Hawaii",
+        "fips": "15",
+        "snapParticipants": 178000,
+        "foodInsecure": 155000,
+        "coverageRatio": 114.8,
+        "insecurityRate": 10.9,
+        "snapRate": 12.5
+      },
+      {
+        "name": "Idaho",
+        "fips": "16",
+        "snapParticipants": 176000,
+        "foodInsecure": 213000,
+        "coverageRatio": 82.6,
+        "insecurityRate": 11.4,
+        "snapRate": 9.4
+      },
+      {
+        "name": "Illinois",
+        "fips": "17",
+        "snapParticipants": 1810000,
+        "foodInsecure": 1490000,
+        "coverageRatio": 121.5,
+        "insecurityRate": 11.9,
+        "snapRate": 14.5
+      },
+      {
+        "name": "Indiana",
+        "fips": "18",
+        "snapParticipants": 758000,
+        "foodInsecure": 882000,
+        "coverageRatio": 85.9,
+        "insecurityRate": 13.1,
+        "snapRate": 11.3
+      },
+      {
+        "name": "Iowa",
+        "fips": "19",
+        "snapParticipants": 343000,
+        "foodInsecure": 336000,
+        "coverageRatio": 102.1,
+        "insecurityRate": 10.7,
+        "snapRate": 10.9
+      },
+      {
+        "name": "Kansas",
+        "fips": "20",
+        "snapParticipants": 238000,
+        "foodInsecure": 350000,
+        "coverageRatio": 68,
+        "insecurityRate": 12.1,
+        "snapRate": 8.2
+      },
+      {
+        "name": "Kentucky",
+        "fips": "21",
+        "snapParticipants": 612000,
+        "foodInsecure": 658000,
+        "coverageRatio": 93,
+        "insecurityRate": 14.8,
+        "snapRate": 13.8
+      },
+      {
+        "name": "Louisiana",
+        "fips": "22",
+        "snapParticipants": 822000,
+        "foodInsecure": 738000,
+        "coverageRatio": 111.4,
+        "insecurityRate": 16.1,
+        "snapRate": 17.9
+      },
+      {
+        "name": "Maine",
+        "fips": "23",
+        "snapParticipants": 196000,
+        "foodInsecure": 169000,
+        "coverageRatio": 116,
+        "insecurityRate": 12.5,
+        "snapRate": 14.5
+      },
+      {
+        "name": "Maryland",
+        "fips": "24",
+        "snapParticipants": 684000,
+        "foodInsecure": 626000,
+        "coverageRatio": 109.3,
+        "insecurityRate": 10.3,
+        "snapRate": 11.3
+      },
+      {
+        "name": "Massachusetts",
+        "fips": "25",
+        "snapParticipants": 834000,
+        "foodInsecure": 698000,
+        "coverageRatio": 119.5,
+        "insecurityRate": 10.1,
+        "snapRate": 12.1
+      },
+      {
+        "name": "Michigan",
+        "fips": "26",
+        "snapParticipants": 1360000,
+        "foodInsecure": 1330000,
+        "coverageRatio": 102.3,
+        "insecurityRate": 13.4,
+        "snapRate": 13.7
+      },
+      {
+        "name": "Minnesota",
+        "fips": "27",
+        "snapParticipants": 518000,
+        "foodInsecure": 533000,
+        "coverageRatio": 97.2,
+        "insecurityRate": 9.5,
+        "snapRate": 9.2
+      },
+      {
+        "name": "Mississippi",
+        "fips": "28",
+        "snapParticipants": 438000,
+        "foodInsecure": 548000,
+        "coverageRatio": 79.9,
+        "insecurityRate": 18.7,
+        "snapRate": 14.9
+      },
+      {
+        "name": "Missouri",
+        "fips": "29",
+        "snapParticipants": 679000,
+        "foodInsecure": 790000,
+        "coverageRatio": 85.9,
+        "insecurityRate": 13,
+        "snapRate": 11.2
+      },
+      {
+        "name": "Montana",
+        "fips": "30",
+        "snapParticipants": 96000,
+        "foodInsecure": 134000,
+        "coverageRatio": 71.6,
+        "insecurityRate": 12.3,
+        "snapRate": 8.8
+      },
+      {
+        "name": "Nebraska",
+        "fips": "31",
+        "snapParticipants": 172000,
+        "foodInsecure": 218000,
+        "coverageRatio": 78.9,
+        "insecurityRate": 11.2,
+        "snapRate": 8.8
+      },
+      {
+        "name": "Nevada",
+        "fips": "32",
+        "snapParticipants": 412000,
+        "foodInsecure": 432000,
+        "coverageRatio": 95.4,
+        "insecurityRate": 13.8,
+        "snapRate": 13.2
+      },
+      {
+        "name": "New Hampshire",
+        "fips": "33",
+        "snapParticipants": 89000,
+        "foodInsecure": 118000,
+        "coverageRatio": 75.4,
+        "insecurityRate": 8.6,
+        "snapRate": 6.5
+      },
+      {
+        "name": "New Jersey",
+        "fips": "34",
+        "snapParticipants": 753000,
+        "foodInsecure": 893000,
+        "coverageRatio": 84.3,
+        "insecurityRate": 9.8,
+        "snapRate": 8.3
+      },
+      {
+        "name": "New Mexico",
+        "fips": "35",
+        "snapParticipants": 432000,
+        "foodInsecure": 354000,
+        "coverageRatio": 122,
+        "insecurityRate": 16.8,
+        "snapRate": 20.5
+      },
+      {
+        "name": "New York",
+        "fips": "36",
+        "snapParticipants": 2870000,
+        "foodInsecure": 2230000,
+        "coverageRatio": 128.7,
+        "insecurityRate": 11.5,
+        "snapRate": 14.8
+      },
+      {
+        "name": "North Carolina",
+        "fips": "37",
+        "snapParticipants": 1310000,
+        "foodInsecure": 1420000,
+        "coverageRatio": 92.3,
+        "insecurityRate": 13.6,
+        "snapRate": 12.5
+      },
+      {
+        "name": "North Dakota",
+        "fips": "38",
+        "snapParticipants": 59000,
+        "foodInsecure": 77000,
+        "coverageRatio": 76.6,
+        "insecurityRate": 10.1,
+        "snapRate": 7.7
+      },
+      {
+        "name": "Ohio",
+        "fips": "39",
+        "snapParticipants": 1490000,
+        "foodInsecure": 1660000,
+        "coverageRatio": 89.8,
+        "insecurityRate": 14.2,
+        "snapRate": 12.7
+      },
+      {
+        "name": "Oklahoma",
+        "fips": "40",
+        "snapParticipants": 577000,
+        "foodInsecure": 613000,
+        "coverageRatio": 94.1,
+        "insecurityRate": 15.5,
+        "snapRate": 14.6
+      },
+      {
+        "name": "Oregon",
+        "fips": "41",
+        "snapParticipants": 684000,
+        "foodInsecure": 519000,
+        "coverageRatio": 131.8,
+        "insecurityRate": 12.4,
+        "snapRate": 16.3
+      },
+      {
+        "name": "Pennsylvania",
+        "fips": "42",
+        "snapParticipants": 1730000,
+        "foodInsecure": 1540000,
+        "coverageRatio": 112.3,
+        "insecurityRate": 12,
+        "snapRate": 13.5
+      },
+      {
+        "name": "Rhode Island",
+        "fips": "44",
+        "snapParticipants": 149000,
+        "foodInsecure": 122000,
+        "coverageRatio": 122.1,
+        "insecurityRate": 11.3,
+        "snapRate": 13.8
+      },
+      {
+        "name": "South Carolina",
+        "fips": "45",
+        "snapParticipants": 632000,
+        "foodInsecure": 726000,
+        "coverageRatio": 87.1,
+        "insecurityRate": 14.1,
+        "snapRate": 12.3
+      },
+      {
+        "name": "South Dakota",
+        "fips": "46",
+        "snapParticipants": 92000,
+        "foodInsecure": 106000,
+        "coverageRatio": 86.8,
+        "insecurityRate": 12,
+        "snapRate": 10.4
+      },
+      {
+        "name": "Tennessee",
+        "fips": "47",
+        "snapParticipants": 948000,
+        "foodInsecure": 1000000,
+        "coverageRatio": 94.8,
+        "insecurityRate": 14.5,
+        "snapRate": 13.7
+      },
+      {
+        "name": "Texas",
+        "fips": "48",
+        "snapParticipants": 3510000,
+        "foodInsecure": 4520000,
+        "coverageRatio": 77.7,
+        "insecurityRate": 15.4,
+        "snapRate": 12
+      },
+      {
+        "name": "Utah",
+        "fips": "49",
+        "snapParticipants": 210000,
+        "foodInsecure": 340000,
+        "coverageRatio": 61.8,
+        "insecurityRate": 10.2,
+        "snapRate": 6.3
+      },
+      {
+        "name": "Vermont",
+        "fips": "50",
+        "snapParticipants": 77000,
+        "foodInsecure": 69000,
+        "coverageRatio": 111.6,
+        "insecurityRate": 11,
+        "snapRate": 12.3
+      },
+      {
+        "name": "Virginia",
+        "fips": "51",
+        "snapParticipants": 724000,
+        "foodInsecure": 878000,
+        "coverageRatio": 82.5,
+        "insecurityRate": 10.2,
+        "snapRate": 8.4
+      },
+      {
+        "name": "Washington",
+        "fips": "53",
+        "snapParticipants": 868000,
+        "foodInsecure": 876000,
+        "coverageRatio": 99.1,
+        "insecurityRate": 11.5,
+        "snapRate": 11.4
+      },
+      {
+        "name": "West Virginia",
+        "fips": "54",
+        "snapParticipants": 332000,
+        "foodInsecure": 280000,
+        "coverageRatio": 118.6,
+        "insecurityRate": 15.8,
+        "snapRate": 18.7
+      },
+      {
+        "name": "Wisconsin",
+        "fips": "55",
+        "snapParticipants": 622000,
+        "foodInsecure": 630000,
+        "coverageRatio": 98.7,
+        "insecurityRate": 10.8,
+        "snapRate": 10.7
+      },
+      {
+        "name": "Wyoming",
+        "fips": "56",
+        "snapParticipants": 30000,
+        "foodInsecure": 64000,
+        "coverageRatio": 46.9,
+        "insecurityRate": 11.1,
+        "snapRate": 5.2
+      },
+      {
+        "name": "District of Columbia",
+        "fips": "11",
+        "snapParticipants": 112000,
+        "foodInsecure": 86000,
+        "coverageRatio": 130.2,
+        "insecurityRate": 12.6,
+        "snapRate": 16.4
+      }
+    ],
+    "_reconciliationNote": "State-level SNAP participants now use the same 2024 Feeding America estimates as the Food Insecurity dashboard, ensuring cross-dashboard consistency. Coverage ratios = SNAP participants / food-insecure persons."
   },
   "schoolLunch": {
     "description": "Free/reduced price lunch participation by state (%), with free vs reduced breakdown",
@@ -118,57 +706,312 @@
       "reducedEligibility": "Household income between 130-185% of Federal Poverty Level"
     },
     "states": [
-      {"name":"Mississippi","pct":75.8,"freePct":68.2,"reducedPct":7.6},
-      {"name":"New Mexico","pct":73.2,"freePct":65.5,"reducedPct":7.7},
-      {"name":"Louisiana","pct":71.5,"freePct":63.8,"reducedPct":7.7},
-      {"name":"Oklahoma","pct":68.4,"freePct":59.8,"reducedPct":8.6},
-      {"name":"Arkansas","pct":67.1,"freePct":58.4,"reducedPct":8.7},
-      {"name":"Alabama","pct":65.8,"freePct":57.1,"reducedPct":8.7},
-      {"name":"Kentucky","pct":65.2,"freePct":56.4,"reducedPct":8.8},
-      {"name":"West Virginia","pct":64.9,"freePct":56.2,"reducedPct":8.7},
-      {"name":"South Carolina","pct":63.5,"freePct":54.6,"reducedPct":8.9},
-      {"name":"Tennessee","pct":63.1,"freePct":54.2,"reducedPct":8.9},
-      {"name":"Georgia","pct":62.7,"freePct":53.7,"reducedPct":9.0},
-      {"name":"Texas","pct":61.4,"freePct":52.4,"reducedPct":9.0},
-      {"name":"North Carolina","pct":59.8,"freePct":50.8,"reducedPct":9.0},
-      {"name":"Arizona","pct":58.2,"freePct":49.1,"reducedPct":9.1},
-      {"name":"Nevada","pct":57.6,"freePct":48.4,"reducedPct":9.2},
-      {"name":"Indiana","pct":55.1,"freePct":45.8,"reducedPct":9.3},
-      {"name":"Ohio","pct":54.3,"freePct":45.0,"reducedPct":9.3},
-      {"name":"Michigan","pct":53.7,"freePct":44.3,"reducedPct":9.4},
-      {"name":"Florida","pct":53.2,"freePct":43.8,"reducedPct":9.4},
-      {"name":"Missouri","pct":52.8,"freePct":43.3,"reducedPct":9.5},
-      {"name":"Oregon","pct":52.1,"freePct":42.5,"reducedPct":9.6},
-      {"name":"California","pct":51.9,"freePct":42.3,"reducedPct":9.6},
-      {"name":"Illinois","pct":50.4,"freePct":40.8,"reducedPct":9.6},
-      {"name":"Montana","pct":49.6,"freePct":39.9,"reducedPct":9.7},
-      {"name":"Idaho","pct":48.3,"freePct":38.5,"reducedPct":9.8},
-      {"name":"New York","pct":47.8,"freePct":38.0,"reducedPct":9.8},
-      {"name":"Pennsylvania","pct":47.2,"freePct":37.3,"reducedPct":9.9},
-      {"name":"Kansas","pct":46.5,"freePct":36.6,"reducedPct":9.9},
-      {"name":"South Dakota","pct":45.8,"freePct":35.9,"reducedPct":9.9},
-      {"name":"Maine","pct":45.1,"freePct":35.2,"reducedPct":9.9},
-      {"name":"Iowa","pct":44.6,"freePct":34.7,"reducedPct":9.9},
-      {"name":"Washington","pct":44.2,"freePct":34.2,"reducedPct":10.0},
-      {"name":"Delaware","pct":43.5,"freePct":33.5,"reducedPct":10.0},
-      {"name":"Rhode Island","pct":43.1,"freePct":33.1,"reducedPct":10.0},
-      {"name":"Nebraska","pct":42.7,"freePct":32.7,"reducedPct":10.0},
-      {"name":"Wisconsin","pct":41.9,"freePct":31.9,"reducedPct":10.0},
-      {"name":"Vermont","pct":41.3,"freePct":31.3,"reducedPct":10.0},
-      {"name":"Colorado","pct":40.8,"freePct":30.8,"reducedPct":10.0},
-      {"name":"Alaska","pct":40.2,"freePct":30.3,"reducedPct":9.9},
-      {"name":"Hawaii","pct":39.7,"freePct":29.8,"reducedPct":9.9},
-      {"name":"North Dakota","pct":38.4,"freePct":28.5,"reducedPct":9.9},
-      {"name":"Connecticut","pct":37.6,"freePct":27.8,"reducedPct":9.8},
-      {"name":"Maryland","pct":37.1,"freePct":27.3,"reducedPct":9.8},
-      {"name":"Virginia","pct":36.5,"freePct":26.8,"reducedPct":9.7},
-      {"name":"Minnesota","pct":35.2,"freePct":25.5,"reducedPct":9.7},
-      {"name":"Utah","pct":34.8,"freePct":25.2,"reducedPct":9.6},
-      {"name":"Massachusetts","pct":33.6,"freePct":24.1,"reducedPct":9.5},
-      {"name":"Wyoming","pct":32.9,"freePct":23.5,"reducedPct":9.4},
-      {"name":"New Jersey","pct":32.4,"freePct":23.0,"reducedPct":9.4},
-      {"name":"New Hampshire","pct":27.1,"freePct":18.1,"reducedPct":9.0},
-      {"name":"District of Columbia","pct":72.4,"freePct":65.0,"reducedPct":7.4}
+      {
+        "name": "Mississippi",
+        "pct": 75.8,
+        "freePct": 68.2,
+        "reducedPct": 7.6
+      },
+      {
+        "name": "New Mexico",
+        "pct": 73.2,
+        "freePct": 65.5,
+        "reducedPct": 7.7
+      },
+      {
+        "name": "Louisiana",
+        "pct": 71.5,
+        "freePct": 63.8,
+        "reducedPct": 7.7
+      },
+      {
+        "name": "Oklahoma",
+        "pct": 68.4,
+        "freePct": 59.8,
+        "reducedPct": 8.6
+      },
+      {
+        "name": "Arkansas",
+        "pct": 67.1,
+        "freePct": 58.4,
+        "reducedPct": 8.7
+      },
+      {
+        "name": "Alabama",
+        "pct": 65.8,
+        "freePct": 57.1,
+        "reducedPct": 8.7
+      },
+      {
+        "name": "Kentucky",
+        "pct": 65.2,
+        "freePct": 56.4,
+        "reducedPct": 8.8
+      },
+      {
+        "name": "West Virginia",
+        "pct": 64.9,
+        "freePct": 56.2,
+        "reducedPct": 8.7
+      },
+      {
+        "name": "South Carolina",
+        "pct": 63.5,
+        "freePct": 54.6,
+        "reducedPct": 8.9
+      },
+      {
+        "name": "Tennessee",
+        "pct": 63.1,
+        "freePct": 54.2,
+        "reducedPct": 8.9
+      },
+      {
+        "name": "Georgia",
+        "pct": 62.7,
+        "freePct": 53.7,
+        "reducedPct": 9
+      },
+      {
+        "name": "Texas",
+        "pct": 61.4,
+        "freePct": 52.4,
+        "reducedPct": 9
+      },
+      {
+        "name": "North Carolina",
+        "pct": 59.8,
+        "freePct": 50.8,
+        "reducedPct": 9
+      },
+      {
+        "name": "Arizona",
+        "pct": 58.2,
+        "freePct": 49.1,
+        "reducedPct": 9.1
+      },
+      {
+        "name": "Nevada",
+        "pct": 57.6,
+        "freePct": 48.4,
+        "reducedPct": 9.2
+      },
+      {
+        "name": "Indiana",
+        "pct": 55.1,
+        "freePct": 45.8,
+        "reducedPct": 9.3
+      },
+      {
+        "name": "Ohio",
+        "pct": 54.3,
+        "freePct": 45,
+        "reducedPct": 9.3
+      },
+      {
+        "name": "Michigan",
+        "pct": 53.7,
+        "freePct": 44.3,
+        "reducedPct": 9.4
+      },
+      {
+        "name": "Florida",
+        "pct": 53.2,
+        "freePct": 43.8,
+        "reducedPct": 9.4
+      },
+      {
+        "name": "Missouri",
+        "pct": 52.8,
+        "freePct": 43.3,
+        "reducedPct": 9.5
+      },
+      {
+        "name": "Oregon",
+        "pct": 52.1,
+        "freePct": 42.5,
+        "reducedPct": 9.6
+      },
+      {
+        "name": "California",
+        "pct": 51.9,
+        "freePct": 42.3,
+        "reducedPct": 9.6
+      },
+      {
+        "name": "Illinois",
+        "pct": 50.4,
+        "freePct": 40.8,
+        "reducedPct": 9.6
+      },
+      {
+        "name": "Montana",
+        "pct": 49.6,
+        "freePct": 39.9,
+        "reducedPct": 9.7
+      },
+      {
+        "name": "Idaho",
+        "pct": 48.3,
+        "freePct": 38.5,
+        "reducedPct": 9.8
+      },
+      {
+        "name": "New York",
+        "pct": 47.8,
+        "freePct": 38,
+        "reducedPct": 9.8
+      },
+      {
+        "name": "Pennsylvania",
+        "pct": 47.2,
+        "freePct": 37.3,
+        "reducedPct": 9.9
+      },
+      {
+        "name": "Kansas",
+        "pct": 46.5,
+        "freePct": 36.6,
+        "reducedPct": 9.9
+      },
+      {
+        "name": "South Dakota",
+        "pct": 45.8,
+        "freePct": 35.9,
+        "reducedPct": 9.9
+      },
+      {
+        "name": "Maine",
+        "pct": 45.1,
+        "freePct": 35.2,
+        "reducedPct": 9.9
+      },
+      {
+        "name": "Iowa",
+        "pct": 44.6,
+        "freePct": 34.7,
+        "reducedPct": 9.9
+      },
+      {
+        "name": "Washington",
+        "pct": 44.2,
+        "freePct": 34.2,
+        "reducedPct": 10
+      },
+      {
+        "name": "Delaware",
+        "pct": 43.5,
+        "freePct": 33.5,
+        "reducedPct": 10
+      },
+      {
+        "name": "Rhode Island",
+        "pct": 43.1,
+        "freePct": 33.1,
+        "reducedPct": 10
+      },
+      {
+        "name": "Nebraska",
+        "pct": 42.7,
+        "freePct": 32.7,
+        "reducedPct": 10
+      },
+      {
+        "name": "Wisconsin",
+        "pct": 41.9,
+        "freePct": 31.9,
+        "reducedPct": 10
+      },
+      {
+        "name": "Vermont",
+        "pct": 41.3,
+        "freePct": 31.3,
+        "reducedPct": 10
+      },
+      {
+        "name": "Colorado",
+        "pct": 40.8,
+        "freePct": 30.8,
+        "reducedPct": 10
+      },
+      {
+        "name": "Alaska",
+        "pct": 40.2,
+        "freePct": 30.3,
+        "reducedPct": 9.9
+      },
+      {
+        "name": "Hawaii",
+        "pct": 39.7,
+        "freePct": 29.8,
+        "reducedPct": 9.9
+      },
+      {
+        "name": "North Dakota",
+        "pct": 38.4,
+        "freePct": 28.5,
+        "reducedPct": 9.9
+      },
+      {
+        "name": "Connecticut",
+        "pct": 37.6,
+        "freePct": 27.8,
+        "reducedPct": 9.8
+      },
+      {
+        "name": "Maryland",
+        "pct": 37.1,
+        "freePct": 27.3,
+        "reducedPct": 9.8
+      },
+      {
+        "name": "Virginia",
+        "pct": 36.5,
+        "freePct": 26.8,
+        "reducedPct": 9.7
+      },
+      {
+        "name": "Minnesota",
+        "pct": 35.2,
+        "freePct": 25.5,
+        "reducedPct": 9.7
+      },
+      {
+        "name": "Utah",
+        "pct": 34.8,
+        "freePct": 25.2,
+        "reducedPct": 9.6
+      },
+      {
+        "name": "Massachusetts",
+        "pct": 33.6,
+        "freePct": 24.1,
+        "reducedPct": 9.5
+      },
+      {
+        "name": "Wyoming",
+        "pct": 32.9,
+        "freePct": 23.5,
+        "reducedPct": 9.4
+      },
+      {
+        "name": "New Jersey",
+        "pct": 32.4,
+        "freePct": 23,
+        "reducedPct": 9.4
+      },
+      {
+        "name": "New Hampshire",
+        "pct": 27.1,
+        "freePct": 18.1,
+        "reducedPct": 9
+      },
+      {
+        "name": "District of Columbia",
+        "pct": 72.4,
+        "freePct": 65,
+        "reducedPct": 7.4
+      }
     ]
   },
   "benefitsPerPerson": {
@@ -176,24 +1019,210 @@
     "source": "USDA FNS SNAP State Activity Reports",
     "year": 2024,
     "states": [
-      {"name":"Alabama","benefit":189},{"name":"Alaska","benefit":268},{"name":"Arizona","benefit":198},
-      {"name":"Arkansas","benefit":182},{"name":"California","benefit":234},{"name":"Colorado","benefit":201},
-      {"name":"Connecticut","benefit":212},{"name":"Delaware","benefit":195},{"name":"Florida","benefit":191},
-      {"name":"Georgia","benefit":186},{"name":"Hawaii","benefit":312},{"name":"Idaho","benefit":187},
-      {"name":"Illinois","benefit":203},{"name":"Indiana","benefit":181},{"name":"Iowa","benefit":178},
-      {"name":"Kansas","benefit":176},{"name":"Kentucky","benefit":185},{"name":"Louisiana","benefit":192},
-      {"name":"Maine","benefit":205},{"name":"Maryland","benefit":197},{"name":"Massachusetts","benefit":218},
-      {"name":"Michigan","benefit":196},{"name":"Minnesota","benefit":189},{"name":"Mississippi","benefit":174},
-      {"name":"Missouri","benefit":183},{"name":"Montana","benefit":191},{"name":"Nebraska","benefit":179},
-      {"name":"Nevada","benefit":194},{"name":"New Hampshire","benefit":188},{"name":"New Jersey","benefit":207},
-      {"name":"New Mexico","benefit":199},{"name":"New York","benefit":225},{"name":"North Carolina","benefit":190},
-      {"name":"North Dakota","benefit":175},{"name":"Ohio","benefit":188},{"name":"Oklahoma","benefit":184},
-      {"name":"Oregon","benefit":209},{"name":"Pennsylvania","benefit":195},{"name":"Rhode Island","benefit":201},
-      {"name":"South Carolina","benefit":187},{"name":"South Dakota","benefit":177},{"name":"Tennessee","benefit":186},
-      {"name":"Texas","benefit":193},{"name":"Utah","benefit":183},{"name":"Vermont","benefit":215},
-      {"name":"Virginia","benefit":189},{"name":"Washington","benefit":211},{"name":"West Virginia","benefit":190},
-      {"name":"Wisconsin","benefit":185},{"name":"Wyoming","benefit":172},
-      {"name":"District of Columbia","benefit":241}
+      {
+        "name": "Alabama",
+        "benefit": 189
+      },
+      {
+        "name": "Alaska",
+        "benefit": 268
+      },
+      {
+        "name": "Arizona",
+        "benefit": 198
+      },
+      {
+        "name": "Arkansas",
+        "benefit": 182
+      },
+      {
+        "name": "California",
+        "benefit": 234
+      },
+      {
+        "name": "Colorado",
+        "benefit": 201
+      },
+      {
+        "name": "Connecticut",
+        "benefit": 212
+      },
+      {
+        "name": "Delaware",
+        "benefit": 195
+      },
+      {
+        "name": "Florida",
+        "benefit": 191
+      },
+      {
+        "name": "Georgia",
+        "benefit": 186
+      },
+      {
+        "name": "Hawaii",
+        "benefit": 312
+      },
+      {
+        "name": "Idaho",
+        "benefit": 187
+      },
+      {
+        "name": "Illinois",
+        "benefit": 203
+      },
+      {
+        "name": "Indiana",
+        "benefit": 181
+      },
+      {
+        "name": "Iowa",
+        "benefit": 178
+      },
+      {
+        "name": "Kansas",
+        "benefit": 176
+      },
+      {
+        "name": "Kentucky",
+        "benefit": 185
+      },
+      {
+        "name": "Louisiana",
+        "benefit": 192
+      },
+      {
+        "name": "Maine",
+        "benefit": 205
+      },
+      {
+        "name": "Maryland",
+        "benefit": 197
+      },
+      {
+        "name": "Massachusetts",
+        "benefit": 218
+      },
+      {
+        "name": "Michigan",
+        "benefit": 196
+      },
+      {
+        "name": "Minnesota",
+        "benefit": 189
+      },
+      {
+        "name": "Mississippi",
+        "benefit": 174
+      },
+      {
+        "name": "Missouri",
+        "benefit": 183
+      },
+      {
+        "name": "Montana",
+        "benefit": 191
+      },
+      {
+        "name": "Nebraska",
+        "benefit": 179
+      },
+      {
+        "name": "Nevada",
+        "benefit": 194
+      },
+      {
+        "name": "New Hampshire",
+        "benefit": 188
+      },
+      {
+        "name": "New Jersey",
+        "benefit": 207
+      },
+      {
+        "name": "New Mexico",
+        "benefit": 199
+      },
+      {
+        "name": "New York",
+        "benefit": 225
+      },
+      {
+        "name": "North Carolina",
+        "benefit": 190
+      },
+      {
+        "name": "North Dakota",
+        "benefit": 175
+      },
+      {
+        "name": "Ohio",
+        "benefit": 188
+      },
+      {
+        "name": "Oklahoma",
+        "benefit": 184
+      },
+      {
+        "name": "Oregon",
+        "benefit": 209
+      },
+      {
+        "name": "Pennsylvania",
+        "benefit": 195
+      },
+      {
+        "name": "Rhode Island",
+        "benefit": 201
+      },
+      {
+        "name": "South Carolina",
+        "benefit": 187
+      },
+      {
+        "name": "South Dakota",
+        "benefit": 177
+      },
+      {
+        "name": "Tennessee",
+        "benefit": 186
+      },
+      {
+        "name": "Texas",
+        "benefit": 193
+      },
+      {
+        "name": "Utah",
+        "benefit": 183
+      },
+      {
+        "name": "Vermont",
+        "benefit": 215
+      },
+      {
+        "name": "Virginia",
+        "benefit": 189
+      },
+      {
+        "name": "Washington",
+        "benefit": 211
+      },
+      {
+        "name": "West Virginia",
+        "benefit": 190
+      },
+      {
+        "name": "Wisconsin",
+        "benefit": 185
+      },
+      {
+        "name": "Wyoming",
+        "benefit": 172
+      },
+      {
+        "name": "District of Columbia",
+        "benefit": 241
+      }
     ]
   },
   "sankey": {
@@ -201,35 +1230,133 @@
     "source": "USDA FNS, Feeding America, Census ACS",
     "year": 2022,
     "nodes": [
-      {"name": "Children\n13M", "color": "#f59e0b"},
-      {"name": "Seniors 60+\n5.5M", "color": "#8b5cf6"},
-      {"name": "Working Adults\n25.7M", "color": "#0176d3"},
-      {"name": "SNAP\n23.5M", "color": "#22c55e"},
-      {"name": "School Meals\n3.5M", "color": "#00d4ff"},
-      {"name": "Food Banks\n6.7M", "color": "#f97316"},
-      {"name": "No Assistance\n10.5M", "color": "#ef4444"},
-      {"name": "Needs Met\n15.5M", "color": "#16a34a"},
-      {"name": "Partially Met\n16M", "color": "#eab308"},
-      {"name": "Still in Crisis\n12.7M", "color": "#dc2626"}
+      {
+        "name": "Children\n13M",
+        "color": "#f59e0b"
+      },
+      {
+        "name": "Seniors 60+\n5.5M",
+        "color": "#8b5cf6"
+      },
+      {
+        "name": "Working Adults\n25.7M",
+        "color": "#0176d3"
+      },
+      {
+        "name": "SNAP\n23.5M",
+        "color": "#22c55e"
+      },
+      {
+        "name": "School Meals\n3.5M",
+        "color": "#00d4ff"
+      },
+      {
+        "name": "Food Banks\n6.7M",
+        "color": "#f97316"
+      },
+      {
+        "name": "No Assistance\n10.5M",
+        "color": "#ef4444"
+      },
+      {
+        "name": "Needs Met\n15.5M",
+        "color": "#16a34a"
+      },
+      {
+        "name": "Partially Met\n16M",
+        "color": "#eab308"
+      },
+      {
+        "name": "Still in Crisis\n12.7M",
+        "color": "#dc2626"
+      }
     ],
     "links": [
-      {"source": "Children\n13M", "target": "SNAP\n23.5M", "value": 7000000},
-      {"source": "Children\n13M", "target": "School Meals\n3.5M", "value": 3500000},
-      {"source": "Children\n13M", "target": "Food Banks\n6.7M", "value": 1500000},
-      {"source": "Children\n13M", "target": "No Assistance\n10.5M", "value": 1000000},
-      {"source": "Seniors 60+\n5.5M", "target": "SNAP\n23.5M", "value": 2500000},
-      {"source": "Seniors 60+\n5.5M", "target": "Food Banks\n6.7M", "value": 1500000},
-      {"source": "Seniors 60+\n5.5M", "target": "No Assistance\n10.5M", "value": 1500000},
-      {"source": "Working Adults\n25.7M", "target": "SNAP\n23.5M", "value": 14000000},
-      {"source": "Working Adults\n25.7M", "target": "Food Banks\n6.7M", "value": 3700000},
-      {"source": "Working Adults\n25.7M", "target": "No Assistance\n10.5M", "value": 8000000},
-      {"source": "SNAP\n23.5M", "target": "Needs Met\n15.5M", "value": 14000000},
-      {"source": "SNAP\n23.5M", "target": "Partially Met\n16M", "value": 9500000},
-      {"source": "School Meals\n3.5M", "target": "Needs Met\n15.5M", "value": 1500000},
-      {"source": "School Meals\n3.5M", "target": "Partially Met\n16M", "value": 2000000},
-      {"source": "Food Banks\n6.7M", "target": "Partially Met\n16M", "value": 4500000},
-      {"source": "Food Banks\n6.7M", "target": "Still in Crisis\n12.7M", "value": 2200000},
-      {"source": "No Assistance\n10.5M", "target": "Still in Crisis\n12.7M", "value": 10500000}
+      {
+        "source": "Children\n13M",
+        "target": "SNAP\n23.5M",
+        "value": 7000000
+      },
+      {
+        "source": "Children\n13M",
+        "target": "School Meals\n3.5M",
+        "value": 3500000
+      },
+      {
+        "source": "Children\n13M",
+        "target": "Food Banks\n6.7M",
+        "value": 1500000
+      },
+      {
+        "source": "Children\n13M",
+        "target": "No Assistance\n10.5M",
+        "value": 1000000
+      },
+      {
+        "source": "Seniors 60+\n5.5M",
+        "target": "SNAP\n23.5M",
+        "value": 2500000
+      },
+      {
+        "source": "Seniors 60+\n5.5M",
+        "target": "Food Banks\n6.7M",
+        "value": 1500000
+      },
+      {
+        "source": "Seniors 60+\n5.5M",
+        "target": "No Assistance\n10.5M",
+        "value": 1500000
+      },
+      {
+        "source": "Working Adults\n25.7M",
+        "target": "SNAP\n23.5M",
+        "value": 14000000
+      },
+      {
+        "source": "Working Adults\n25.7M",
+        "target": "Food Banks\n6.7M",
+        "value": 3700000
+      },
+      {
+        "source": "Working Adults\n25.7M",
+        "target": "No Assistance\n10.5M",
+        "value": 8000000
+      },
+      {
+        "source": "SNAP\n23.5M",
+        "target": "Needs Met\n15.5M",
+        "value": 14000000
+      },
+      {
+        "source": "SNAP\n23.5M",
+        "target": "Partially Met\n16M",
+        "value": 9500000
+      },
+      {
+        "source": "School Meals\n3.5M",
+        "target": "Needs Met\n15.5M",
+        "value": 1500000
+      },
+      {
+        "source": "School Meals\n3.5M",
+        "target": "Partially Met\n16M",
+        "value": 2000000
+      },
+      {
+        "source": "Food Banks\n6.7M",
+        "target": "Partially Met\n16M",
+        "value": 4500000
+      },
+      {
+        "source": "Food Banks\n6.7M",
+        "target": "Still in Crisis\n12.7M",
+        "value": 2200000
+      },
+      {
+        "source": "No Assistance\n10.5M",
+        "target": "Still in Crisis\n12.7M",
+        "value": 10500000
+      }
     ]
   }
 }
