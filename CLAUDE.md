@@ -68,7 +68,7 @@ npm run admin                   # Start Express server for scraper + AI article 
 - **Core pages (7)**: index, about, services, resources, impact, contact, 404
 - **Blog hub (1)**: blog
 - **Hub pages at root (2)**: case-studies, templates-tools
-- **Dashboards (7)**: dashboards/food-insecurity (Overview), dashboards/food-access, dashboards/snap-safety-net, dashboards/food-prices, dashboards/food-banks, dashboards/nonprofit-directory, dashboards/nonprofit-profile — linked by shared tab navigation (6 tabs; profile shares the Directory tab)
+- **Dashboards (8)**: dashboards/executive-summary, dashboards/food-insecurity (Overview), dashboards/food-access, dashboards/snap-safety-net, dashboards/food-prices, dashboards/food-banks, dashboards/nonprofit-directory, dashboards/nonprofit-profile — linked by shared tab navigation (7 tabs; profile shares the Directory tab)
 - **Articles (53)**: all in `blog/` directory (run `ls blog/` for full list)
 
 ### Case Studies
@@ -125,12 +125,12 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `effects/blog-filter.js` — category filtering (aria-pressed + aria-current)
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page
-  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup (incl. GaugeChart, ThemeRiverChart, SingleAxisComponent), colors, MAP_PALETTES, formatters, linearRegression, NTEE_MAP, US_STATES, getNteeName, scroll reveal, `updateFreshness()` (freshness badges with `--static` mode)
-  - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (separate entry point, live Census ACS poverty data in scatter chart)
-  - `dashboards/food-access.js` — Food Access & Deserts dashboard
-  - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard (Sankey data from `snap-participation.json`)
-  - `dashboards/food-prices.js` — Food Prices & Affordability dashboard (live BLS regional CPI data)
-  - `dashboards/food-banks.js` — Food Bank Landscape dashboard
+  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup (incl. GaugeChart, ThemeRiverChart, SingleAxisComponent), colors, MAP_PALETTES, formatters, linearRegression, NTEE_MAP, US_STATES, getNteeName, scroll reveal, `updateFreshness()` (two-state: `_static` → "Data: year", else → "Live"), `animateCounters()` (respects prefers-reduced-motion, integer-aware formatting)
+  - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (12 charts: map with SNAP Coverage metric + county drill-down, trend with markLine annotations, radar, scatter, SDOH, demographics, income river, meal cost bar, CPI trend, SNAP coverage bars, Triple Burden Index, State Deep-Dive KPI panel). Loads food-access-atlas.json + food-bank-summary.json for cross-dataset features.
+  - `dashboards/food-access.js` — Food Access & Deserts dashboard. **Map toggle**: Food Deserts ↔ SNAP Retailers on single chart instance (drill-down only in desert mode)
+  - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard (Sankey data from `snap-participation.json`). 5 KPI gauges (coverage, lunch, benefit, gap, affordability shortfall). SNAP Purchasing Power Index line on trend chart.
+  - `dashboards/food-prices.js` — Food Prices & Affordability dashboard (live BLS regional CPI data). CPI vs Food Insecurity dual-axis chart (loads food-insecurity-state.json for trend overlay).
+  - `dashboards/food-banks.js` — Food Bank Landscape dashboard. Regression line suppressed when |r| < 0.2. Need-Capacity Gap scatter (revenue per insecure person vs insecurity rate).
   - `dashboards/nonprofit-directory.js` — Nonprofit Directory search (ProPublica API, debounced search, state filter, pagination)
   - `dashboards/nonprofit-profile.js` — Nonprofit Profile with 6 ECharts (revenue trend, composition, expenses vs revenue, assets/liabilities, compensation, efficiency radar) + dynamic data-driven descriptions with conditional insights
 - **Production**: Source maps disabled, ESLint `no-console` rule enforced
