@@ -357,24 +357,57 @@ function renderTrend(data) {
   const rates = data.trend.map(t => t.rate);
   const childRates = data.trend.map(t => t.childRate);
 
+  // Find the boundary between actual and projected data
+  const firstProjectedIdx = data.trend.findIndex(t => t.projected);
+  const hasProjections = firstProjectedIdx > -1;
+
+  // Split data into actual and projected segments for dashed line rendering
+  // Actual data: fill projected years with null; Projected data: fill actual years with null
+  // Overlap by 1 point at the boundary so the lines connect
+  const actualRates = rates.map((r, i) => (hasProjections && i > firstProjectedIdx) ? null : r);
+  const actualChildRates = childRates.map((r, i) => (hasProjections && i > firstProjectedIdx) ? null : r);
+  const projectedRates = rates.map((r, i) => (hasProjections && i >= firstProjectedIdx) ? r : null);
+  const projectedChildRates = childRates.map((r, i) => (hasProjections && i >= firstProjectedIdx) ? r : null);
+
+  // markLine at the last actual data year
+  const markLineData = hasProjections ? [{
+    xAxis: data.trend[firstProjectedIdx].year.toString(),
+    lineStyle: { color: 'rgba(255,255,255,0.5)', type: 'dashed', width: 1.5 },
+    label: {
+      formatter: 'USDA Report\nTerminated',
+      color: COLORS.textMuted,
+      fontSize: 10,
+      position: 'insideEndTop'
+    }
+  }] : [];
+
   chart.setOption({
     tooltip: {
       trigger: 'axis',
       ...TOOLTIP_STYLE,
       formatter: params => {
         const idx = params[0].dataIndex;
-        let tip = `<strong>${params[0].axisValue}</strong><br/>`;
+        const isProjected = hasProjections && idx >= firstProjectedIdx;
+        const sourceLabel = isProjected ? 'Projected (Columbia University)' : 'Official USDA Data';
+        let tip = `<strong>${params[0].axisValue}</strong> <span style="color:${COLORS.textMuted};font-size:11px">${sourceLabel}</span><br/>`;
+        // Deduplicate: only show one entry per series name (actual and projected overlap)
+        const seen = new Set();
         params.forEach(p => {
-          const arr = p.seriesName === 'Overall Rate' ? rates : childRates;
+          const baseName = p.seriesName.replace(' (Projected)', '');
+          if (seen.has(baseName) || p.value == null) return;
+          seen.add(baseName);
+          const arr = baseName === 'Overall Rate' ? rates : childRates;
           const yoy = idx > 0 ? (p.value - arr[idx - 1]).toFixed(1) : null;
           const yoyStr = yoy !== null ? ` (<span style="color:${yoy >= 0 ? COLORS.accent : '#22c55e'}">${yoy >= 0 ? '+' : ''}${yoy}pp</span>)` : '';
-          tip += `${p.marker} ${p.seriesName}: <strong>${p.value}%</strong>${yoyStr}<br/>`;
+          tip += `${p.marker} ${baseName}: <strong>${p.value}%</strong>${yoyStr}<br/>`;
         });
         return tip;
       }
     },
     legend: {
-      data: ['Overall Rate', 'Child Rate'],
+      data: hasProjections
+        ? ['Overall Rate', 'Child Rate', 'Overall Rate (Projected)', 'Child Rate (Projected)']
+        : ['Overall Rate', 'Child Rate'],
       textStyle: { color: COLORS.text },
       top: 5
     },
@@ -396,7 +429,7 @@ function renderTrend(data) {
       {
         name: 'Overall Rate',
         type: 'line',
-        data: rates,
+        data: actualRates,
         smooth: true,
         symbol: 'circle',
         symbolSize: 8,
@@ -408,20 +441,58 @@ function renderTrend(data) {
             { offset: 1, color: 'rgba(1,118,211,0.02)' }
           ])
         },
+        markLine: markLineData.length ? { data: markLineData, symbol: 'none', silent: true } : undefined,
+        connectNulls: false,
         animationDuration: 2000
       },
       {
         name: 'Child Rate',
         type: 'line',
-        data: childRates,
+        data: actualChildRates,
         smooth: true,
         symbol: 'diamond',
         symbolSize: 8,
         lineStyle: { width: 3, color: COLORS.accent },
         itemStyle: { color: COLORS.accent },
+        connectNulls: false,
         animationDuration: 2000,
         animationDelay: 300
-      }
+      },
+      // Projected series (dashed lines)
+      ...(hasProjections ? [
+        {
+          name: 'Overall Rate (Projected)',
+          type: 'line',
+          data: projectedRates,
+          smooth: true,
+          symbol: 'circle',
+          symbolSize: 6,
+          lineStyle: { width: 2.5, color: COLORS.primary, type: 'dashed' },
+          itemStyle: { color: COLORS.primary, opacity: 0.7 },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: 'rgba(1,118,211,0.15)' },
+              { offset: 1, color: 'rgba(1,118,211,0.01)' }
+            ])
+          },
+          connectNulls: false,
+          animationDuration: 1500,
+          animationDelay: 500
+        },
+        {
+          name: 'Child Rate (Projected)',
+          type: 'line',
+          data: projectedChildRates,
+          smooth: true,
+          symbol: 'diamond',
+          symbolSize: 6,
+          lineStyle: { width: 2.5, color: COLORS.accent, type: 'dashed' },
+          itemStyle: { color: COLORS.accent, opacity: 0.7 },
+          connectNulls: false,
+          animationDuration: 1500,
+          animationDelay: 800
+        }
+      ] : [])
     ]
   });
 }

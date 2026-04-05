@@ -1,17 +1,17 @@
 {
   "source": "USDA Food and Nutrition Service, SNAP Data Tables",
   "description": "SNAP participation, benefits, school lunch data, and coverage gap analysis",
-  "fetchedAt": "2026-03-30T00:00:00.000Z",
+  "fetchedAt": "2026-04-04T00:00:00.000Z",
   "national": {
-    "snapParticipants": 42100000,
-    "avgMonthlyBenefit": 194,
+    "snapParticipants": 42126585,
+    "avgMonthlyBenefit": 188,
     "freeLunchPct": 52.1,
     "coverageGap": 8200000,
-    "year": 2024,
-    "_reconciliationNote": "State-level snapParticipants sum (~39.1M) is ~7% below this national figure. The gap reflects participants counted at the federal level rather than attributed to a specific state (e.g., multi-state households, territories, and federal correctional facilities), plus vintage differences between state-level FY2023 administrative data and this national FY2024 estimate."
+    "year": 2025,
+    "_reconciliationNote": "State-level snapParticipants sum (~39.1M) is ~7% below this national figure. The gap reflects participants counted at the federal level rather than attributed to a specific state (e.g., multi-state households, territories, and federal correctional facilities), plus vintage differences between state-level FY2023 administrative data and this national FY2025 estimate."
   },
   "trend": {
-    "description": "Monthly SNAP participation (millions), 2015-2025",
+    "description": "Monthly SNAP participation (millions), 2015-2026",
     "source": "USDA FNS SNAP Data Tables",
     "data": [
       {"date":"2015-01","value":46.5},{"date":"2015-06","value":45.4},{"date":"2015-12","value":44.2},
@@ -24,13 +24,26 @@
       {"date":"2022-03","value":41.0},{"date":"2022-06","value":41.2},{"date":"2022-09","value":41.5},{"date":"2022-12","value":42.0},
       {"date":"2023-03","value":42.3},{"date":"2023-06","value":41.9},{"date":"2023-09","value":42.1},{"date":"2023-12","value":42.4},
       {"date":"2024-03","value":42.6},{"date":"2024-06","value":42.0},{"date":"2024-09","value":41.7},{"date":"2024-12","value":42.1},
-      {"date":"2025-01","value":42.3}
+      {"date":"2025-01","value":42.8},
+      {"date":"2025-02","value":42.2},
+      {"date":"2025-03","value":42.2},
+      {"date":"2025-04","value":42.4},
+      {"date":"2025-05","value":42.2},
+      {"date":"2025-06","value":42.1},
+      {"date":"2025-07","value":42.0},
+      {"date":"2025-08","value":41.8},
+      {"date":"2025-09","value":41.6},
+      {"date":"2025-10","value":41.1},
+      {"date":"2025-11","value":40.4}
     ],
     "events": [
       {"date":"2020-03","label":"COVID Emergency Allotments Begin","type":"policy"},
       {"date":"2021-10","label":"Thrifty Food Plan +21% Update","type":"policy"},
       {"date":"2023-03","label":"Emergency Allotments End","type":"policy"},
-      {"date":"2024-01","label":"New SNAP Eligibility Rules","type":"policy"}
+      {"date":"2024-01","label":"New SNAP Eligibility Rules","type":"policy"},
+      {"date":"2025-09","label":"USDA Terminates Food Security Report","type":"policy"},
+      {"date":"2025-10","label":"Government Shutdown (Oct 1 – Nov 12)","type":"policy"},
+      {"date":"2025-10","label":"USDA Removes SNAP Contingency Plan from Website","type":"policy"}
     ]
   },
   "stateCoverage": {
