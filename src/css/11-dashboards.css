@@ -939,3 +939,43 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   FRED Item Toggle Buttons — Purchasing Power Chart
+   ========================================================================== */
+
+.fred-toggle-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0.75rem 0 0.25rem;
+}
+
+.fred-toggle-btn {
+  background: transparent;
+  border: 1.5px solid;
+  border-radius: 1rem;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  line-height: 1.4;
+}
+
+.fred-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+.fred-toggle-btn.active,
+.fred-toggle-btn[aria-pressed="true"] {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+.fred-toggle-btn:focus-visible {
+  outline: 2px solid var(--fnf-secondary, #00d4ff);
+  outline-offset: 2px;
+}

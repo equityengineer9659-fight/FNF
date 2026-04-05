@@ -34,6 +34,20 @@
         ]
       },
       {
+        "id": "CUUR0000SAF115",
+        "name": "Nonalcoholic Beverages",
+        "data": [
+          {"date":"2018-01","value":168.2},{"date":"2018-06","value":169.5},{"date":"2019-01","value":171.3},{"date":"2019-06","value":172.8},{"date":"2020-01","value":174.5},{"date":"2020-06","value":179.2},{"date":"2021-01","value":181.7},{"date":"2021-06","value":185.3},{"date":"2022-01","value":200.8},{"date":"2022-06","value":214.5},{"date":"2023-01","value":218.3},{"date":"2023-06","value":215.7},{"date":"2024-01","value":216.4},{"date":"2024-06","value":219.1},{"date":"2025-01","value":222.5}
+        ]
+      },
+      {
+        "id": "CUUR0000SAF116",
+        "name": "Other Food at Home",
+        "data": [
+          {"date":"2018-01","value":236.8},{"date":"2018-06","value":238.4},{"date":"2019-01","value":240.1},{"date":"2019-06","value":241.9},{"date":"2020-01","value":244.3},{"date":"2020-06","value":253.7},{"date":"2021-01","value":257.2},{"date":"2021-06","value":262.5},{"date":"2022-01","value":282.1},{"date":"2022-06","value":298.4},{"date":"2023-01","value":303.7},{"date":"2023-06","value":300.2},{"date":"2024-01","value":301.5},{"date":"2024-06","value":304.8},{"date":"2025-01","value":308.2}
+        ]
+      },
+      {
         "id": "CUUR0000SAF1",
         "name": "All Food at Home",
         "data": [
