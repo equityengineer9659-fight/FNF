@@ -69,7 +69,7 @@
   "author": "Food-N-Force",
   "license": "MIT",
   "devDependencies": {
-    "@lhci/cli": "^0.13.0",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.40.0",
     "@testing-library/dom": "^10.4.1",
     "@types/node": "^24.3.0",
