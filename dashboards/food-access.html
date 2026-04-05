@@ -211,6 +211,39 @@
             </div>
         </section>
 
+        <!-- Chart: SNAP Retailer Density -->
+        <section class="dashboard-section scroll-reveal" aria-label="SNAP retailer density by state">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Where Can SNAP Benefits Be Used?</h2>
+                    <span id="freshness-snap-retailers" class="dashboard-freshness"></span>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-snap-retailers" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing SNAP-authorized retailer density per 100,000 residents by state"></div>
+                        <p class="dashboard-chart__hint">Hover for retailer breakdown by store type</p>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">SNAP Authorization Does Not Mean Access</h3>
+                        <p class="dashboard-info__text">
+                            Over <strong>267,000 retailers</strong> are authorized to accept SNAP benefits nationwide — but authorization alone does not guarantee access. Roughly 80% of authorized stores are convenience stores and small groceries, while only about 20% are full-service supermarkets. Over 80% of SNAP dollars are redeemed at larger stores.
+                        </p>
+                        <p class="dashboard-info__text">
+                            States like <strong>Mississippi (123 per 100K) and West Virginia (121 per 100K)</strong> have the highest retailer density — but most are small stores with limited fresh food. Meanwhile, <strong>Utah (61 per 100K) and California (64 per 100K)</strong> have the fewest retailers per capita, yet more are full-service grocers. <strong>Density without quality is a false signal.</strong>
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> USDA FNS, SNAP Retailer Locator</span>
+                            <span class="meta-item"><strong>Data Year</strong> FY2024 (Dec 2025 retailer file)</span>
+                            <span class="meta-item"><strong>Metric</strong> Authorized SNAP retailers per 100,000 residents</span>
+                        </div>
+                        <div id="snap-retailers-insight" class="dashboard-info__insight">
+                            The gap between SNAP-authorized retailers and actual grocery access is one of the most overlooked barriers to food security. A convenience store accepts EBT — but rarely stocks fresh produce.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Chart 2: Urban vs Rural -->
         <section class="dashboard-section scroll-reveal" aria-label="Urban versus rural food access">
             <div class="dashboard-card">
@@ -368,6 +401,7 @@
                 <div class="dashboard-card__header">
                     <h2 class="dashboard-card__title">Do Food Deserts Cause Hunger?</h2>
                 </div>
+                <div id="access-insecurity-toggle" class="dashboard-metric-buttons" role="group" aria-label="Switch between state-level and county-level scatter views"></div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
                         <div id="chart-access-insecurity" class="dashboard-chart" role="img" aria-label="Scatter plot showing food desert prevalence versus food insecurity rate by state with regression line"></div>
@@ -375,9 +409,9 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Correlation, Not Causation</h3>
                         <p class="dashboard-info__text">The assumption that food deserts directly cause food insecurity is common in policy debates — but the data tells a more nuanced story. This scatter tests the relationship between <strong>food desert prevalence</strong> (low-access tracts) and <strong>food insecurity rate</strong> across all 50 states.</p>
-                        <p class="dashboard-info__text">If food deserts were the primary driver, we'd expect a strong positive correlation. The actual relationship reveals whether <strong>income, employment, and systemic poverty</strong> are more powerful predictors than geographic access alone.</p>
+                        <p class="dashboard-info__text">If food deserts were the primary driver, we'd expect a strong positive correlation. The actual relationship reveals whether <strong>income, employment, and systemic poverty</strong> are more powerful predictors than geographic access alone. <strong>Switch to County View</strong> to drill into individual states with ~60-250 data points per state, using CHR food insecurity rates and FARA food desert data.</p>
                         <div class="dashboard-info__meta">
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA Food Access Atlas 2019 + USDA ERS/Feeding America 2022</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA Food Access Atlas 2019, Feeding America 2022, County Health Rankings 2025, FARA county tracts</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Note</span> Access data is 3 years older than insecurity data — interpret correlation with caution</div>
                         </div>
                         <div id="access-insecurity-insight" class="dashboard-info__insight"></div>
@@ -400,6 +434,8 @@
                         <th>Avg Distance (mi)</th>
                         <th>No Vehicle (%)</th>
                         <th>Low-Income + Low-Access Pop</th>
+                        <th>SNAP Retailers</th>
+                        <th>Retailers per 100K</th>
                     </tr>
                 </thead>
                 <tbody id="accessible-access-table"></tbody>
@@ -468,12 +504,30 @@
                             </div>
                         </div>
                         <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">FNS</div>
+                            <h3 class="dashboard-source-card__name">USDA Food &amp; Nutrition Service</h3>
+                            <p class="dashboard-source-card__desc">SNAP Retailer Locator — authorized retailer counts by state and store type from the FY2024 Retailer Management Year End Summary. Maps where SNAP benefits can be redeemed and the quality of retail access.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual (FY2024)</span>
+                                <span>State level</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
                             <div class="dashboard-source-card__icon">FA</div>
                             <h3 class="dashboard-source-card__name">Feeding America</h3>
                             <p class="dashboard-source-card__desc">Map the Meal Gap 2024 — state-level food insecurity rates used in the food desert correlation analysis to test whether access barriers drive hunger.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual release</span>
                                 <span>State level</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">CHR</div>
+                            <h3 class="dashboard-source-card__name">County Health Rankings</h3>
+                            <p class="dashboard-source-card__desc">2025 county-level food insecurity rates and limited food access indices — used in the county drill-down scatter to compare food desert prevalence against hunger at the local level.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual release</span>
+                                <span>County level</span>
                             </div>
                         </div>
                     </div>
