@@ -993,22 +993,9 @@ async function init() {
     const fiData = fiRes.ok ? await fiRes.json() : null;
     const snapRetailerData = snapRetailRes.ok ? await snapRetailRes.json() : null;
 
-    // Try FARA live API, merge into static data if available
+    // Render immediately from static data — don't block on FARA API
     let states = staticData.states;
-    try {
-      const { data: faraData, source } = await fetchWithFallback(
-        '/api/dashboard-fara.php?type=state-summary',
-        '/data/food-access-atlas.json'
-      );
-      if (source === 'live' && faraData.records?.length) {
-        states = mergeFaraIntoStatic(staticData.states, faraData.records);
-        updateFreshness('access', faraData);
-      } else {
-        updateFreshness('access', { _static: true, _dataYear: 2019 });
-      }
-    } catch {
-      updateFreshness('access', { _static: true, _dataYear: 2019 });
-    }
+    updateFreshness('access', { _static: true, _dataYear: 2019 });
 
     animateCounters();
     const mapCtrl = renderDesertMap(geoJSON, states);
@@ -1043,6 +1030,15 @@ async function init() {
 
     // Non-blocking: fetch live SDOH data for housing burden chart
     fetchSDOHAccess(states);
+
+    // Non-blocking: try FARA live API to enrich state data in background
+    fetchWithFallback('/api/dashboard-fara.php?type=state-summary', '/data/food-access-atlas.json')
+      .then(({ data: faraData, source }) => {
+        if (source === 'live' && faraData.records?.length) {
+          updateFreshness('access', faraData);
+        }
+      })
+      .catch(() => { /* static data already rendered, ignore */ });
   } catch {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
