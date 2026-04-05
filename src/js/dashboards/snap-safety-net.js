@@ -17,7 +17,7 @@ const PAL = MAP_PALETTES.snap;
 let snapTrendChart = null;
 let snapTrendDates = null; // eslint-disable-line no-unused-vars
 
-function renderSnapTrend(trendData, blsData) {
+function renderSnapTrend(trendData, blsData, snapNational) {
   if (!snapTrendChart) snapTrendChart = createChart('chart-snap-trend');
   if (!snapTrendChart) return;
 
@@ -42,9 +42,16 @@ function renderSnapTrend(trendData, blsData) {
       // Align to SNAP dates (find closest month)
       const cpiAligned = dates.map(date => cpiMap[date] ?? null);
 
+      // SNAP Purchasing Power Index: how much the avg benefit buys in real terms
+      // Baseline = first available aligned CPI value
+      const firstCpi = cpiAligned.find(v => v !== null);
+      const benefit = snapNational?.avgMonthlyBenefit || 188;
+      const ppIndex = firstCpi ? cpiAligned.map(v => v ? Math.round((benefit * firstCpi / v) * 10) / 10 : null) : null;
+
       legendData.push('Food CPI');
+      if (ppIndex) legendData.push('SNAP Purchasing Power ($)');
       yAxes.push({
-        type: 'value', name: 'CPI Index',
+        type: 'value', name: 'CPI / Purch. Power ($)',
         nameTextStyle: { color: COLORS.textMuted },
         axisLabel: { color: COLORS.textMuted },
         splitLine: { show: false },
@@ -56,6 +63,14 @@ function renderSnapTrend(trendData, blsData) {
         lineStyle: { width: 2.5, color: COLORS.accent, type: 'dashed' },
         itemStyle: { color: COLORS.accent }
       }];
+      if (ppIndex) {
+        cpiSeries.push({
+          name: 'SNAP Purchasing Power ($)', type: 'line', yAxisIndex: 1,
+          data: ppIndex, smooth: true, symbol: 'none',
+          lineStyle: { width: 2, color: '#22c55e' },
+          itemStyle: { color: '#22c55e' }
+        });
+      }
     }
   }
 
@@ -66,6 +81,7 @@ function renderSnapTrend(trendData, blsData) {
         let tip = `<strong>${params[0].axisValue}</strong><br/>`;
         params.forEach(p => {
           if (p.seriesName === 'SNAP Participants') tip += `${p.marker} SNAP: <strong>${p.value}M</strong><br/>`;
+          else if (p.seriesName === 'SNAP Purchasing Power ($)' && p.value != null) tip += `${p.marker} Purchasing Power: <strong>$${p.value}/mo</strong><br/>`;
           else if (p.value != null) tip += `${p.marker} Food CPI: <strong>${p.value}</strong><br/>`;
         });
         return tip;
@@ -166,7 +182,7 @@ function applySnapMapView(view) {
       },
       visualMap: {
         left: 'right', bottom: 20,
-        min: 40, max: 135,
+        min: 40, max: 150,
         text: ['Strong Coverage', 'Weak Coverage'],
         calculable: true,
         inRange: { color: [PAL.low, PAL.mid, PAL.high] },
@@ -405,11 +421,16 @@ function renderBenefits(benefitData, coverageStates) {
 
 // -- Chart 6: Coverage KPI Gauges --
 function renderGauges(national) {
+  // Monthly food cost for 3 meals/day at national avg meal cost ($3.58)
+  const monthlyFoodCost = Math.round(3.58 * 3 * 30);
+  const affordabilityGap = monthlyFoodCost - national.avgMonthlyBenefit;
+
   const gaugeConfigs = [
     { id: 'gauge-coverage', title: 'SNAP Coverage', value: +(national.snapParticipants / (national.snapParticipants + national.coverageGap) * 100).toFixed(1), max: 100, unit: '%', color: COLORS.primary },
     { id: 'gauge-lunch', title: 'School Lunch', value: national.freeLunchPct, max: 100, unit: '%', color: COLORS.secondary },
     { id: 'gauge-benefit', title: 'Avg Benefit', value: national.avgMonthlyBenefit, max: 300, unit: '$', color: COLORS.accent },
-    { id: 'gauge-gap', title: 'Coverage Gap', value: +(national.coverageGap / 1000000).toFixed(1), max: 15, unit: 'M', color: '#ef4444' }
+    { id: 'gauge-gap', title: 'Coverage Gap', value: +(national.coverageGap / 1000000).toFixed(1), max: 15, unit: 'M', color: '#ef4444' },
+    { id: 'gauge-affordability', title: 'Monthly Shortfall', value: affordabilityGap, max: 200, unit: '$', color: '#f59e0b' }
   ];
 
   gaugeConfigs.forEach(cfg => {
@@ -442,6 +463,7 @@ function renderGauges(national) {
 
 // -- Non-blocking: BLS CPI overlay for SNAP trend --
 let snapTrendData = null;
+let snapNationalData = null;
 
 async function fetchBLSForSnap() {
   try {
@@ -450,7 +472,7 @@ async function fetchBLSForSnap() {
     const blsData = await res.json();
     if (blsData.error || !blsData.series) return;
     if (snapTrendData) {
-      renderSnapTrend(snapTrendData, blsData);
+      renderSnapTrend(snapTrendData, blsData, snapNationalData);
       updateFreshness('snap', blsData);
     }
   } catch { /* BLS is optional */ }
@@ -601,10 +623,11 @@ async function init() {
     const [snapData, geoJSON] = await Promise.all([snapRes.json(), geoRes.json()]);
 
     snapTrendData = snapData.trend;
+    snapNationalData = snapData.national;
     animateCounters();
     updateFreshness('snap', { _static: true, _dataYear: snapData.national.year || 2024 });
 
-    renderSnapTrend(snapData.trend);
+    renderSnapTrend(snapData.trend, null, snapData.national);
     renderSnapMap(geoJSON, snapData.stateCoverage.states);
     renderCoverageGap(snapData.sankey);
     renderSchoolLunch(snapData.schoolLunch.states);

@@ -160,7 +160,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
         <div class="dashboard-data-notice" role="note" aria-label="Data vintage notice">
             <strong>Data Notice:</strong> This dashboard uses 2024 USDA ERS (ERR-358) and Feeding America data. The USDA ERS Household Food Security report was terminated after this edition. Trend projections (2025-2026) are Columbia University estimates.
         </div>
@@ -217,6 +217,7 @@
                                 <option value="persons">Food Insecure Persons</option>
                                 <option value="mealGap">Annual Meal Gap</option>
                                 <option value="mealCost">Average Meal Cost ($)</option>
+                                <option value="snapCoverage">SNAP Coverage Ratio (%)</option>
                             </select>
                         </div>
                     </div>
@@ -403,7 +404,7 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-meal-cost" class="dashboard-chart" role="img" aria-label="Nightingale rose chart showing average meal cost for the 25 most expensive states, colored by region"></div>
+                        <div id="chart-meal-cost" class="dashboard-chart" role="img" aria-label="Horizontal bar chart showing average meal cost for the 25 most expensive states, colored by region"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">The Cost of a Meal</h3>
@@ -465,6 +466,42 @@
                         </div>
                         <div class="dashboard-info__insight">Alabama and West Virginia show SNAP coverage exceeding insecurity — a sign of effective outreach.</div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. Triple Burden Index -->
+        <section class="dashboard-section scroll-reveal" aria-label="Triple burden vulnerability index">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Triple Burden Vulnerability Index</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-triple-burden" class="dashboard-chart" role="img" aria-label="Bar chart showing top 10 most vulnerable states by composite score combining food insecurity, physical inaccessibility, and SNAP coverage gaps"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Where Every System Fails</h3>
+                        <p class="dashboard-info__text">The Triple Burden Index identifies states where <strong>food insecurity</strong>, <strong>physical inaccessibility</strong> (food deserts), and <strong>weak SNAP coverage</strong> all converge. These states face compounding disadvantages that no single program can address.</p>
+                        <p class="dashboard-info__text">The composite score normalizes each dimension (0–100) and sums them. A higher score means more systemic vulnerability across all three domains.</p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Sources</strong> USDA ERS, Feeding America, USDA Food Access Research Atlas, USDA FNS</span>
+                            <span class="meta-item"><strong>Dimensions</strong> Food Insecurity Rate + Low-Access Tract % + Inverse SNAP Coverage</span>
+                        </div>
+                        <div id="triple-burden-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. State Deep-Dive KPI Panel -->
+        <section id="section-state-deepdive" class="dashboard-section scroll-reveal" aria-label="State deep-dive comparison" style="display:none">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">State Deep-Dive Comparison</h2>
+                </div>
+                <div id="state-deepdive-panel" class="dashboard-chart-row">
+                    <p style="color:rgba(255,255,255,0.5);text-align:center;width:100%;padding:2rem;">Select a state from the dropdown above to see cross-dataset metrics.</p>
                 </div>
             </div>
         </section>

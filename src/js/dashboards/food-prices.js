@@ -78,7 +78,7 @@ function renderRegions(data) {
           tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`;
         });
         if (idx >= 0) {
-          const baseMealCost = 3.99;
+          const baseMealCost = 3.58;
           const dollarImpact = (baseMealCost * changesPct[idx] / 100).toFixed(2);
           tip += `<span style="color:${COLORS.secondary}">Change: +${changesPct[idx]}%</span><br/>`;
           tip += `<span style="color:${COLORS.accent}">Impact: +$${dollarImpact}/meal since 2020</span>`;
@@ -696,6 +696,66 @@ function renderPurchasingPower(blsData) {
   }
 }
 
+// -- Chart 8: CPI vs Food Insecurity (dual-axis: monthly CPI + annual insecurity) --
+function renderCpiVsInsecurity(blsData, fiTrend) {
+  const chart = createChart('chart-cpi-vs-insecurity');
+  if (!chart || !blsData?.series || !fiTrend?.length) return;
+
+  const foodHome = blsData.series.find(s => s.name === 'Food at Home');
+  if (!foodHome) return;
+
+  const cpiData = foodHome.data.filter(d => d.value !== null);
+  const cpiDates = cpiData.map(d => d.date);
+  const cpiValues = cpiData.map(d => d.value);
+
+  // Convert annual FI trend to points aligned to January of each year
+  const fiPoints = fiTrend.filter(t => !t.projected).map(t => ({
+    date: `${t.year}-01`, rate: t.rate
+  }));
+
+  // Map FI points to the CPI x-axis
+  const fiAligned = cpiDates.map(date => {
+    const match = fiPoints.find(p => p.date === date);
+    return match ? match.rate : null;
+  });
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'axis', ...TOOLTIP_STYLE,
+      formatter: params => {
+        let tip = `<strong>${params[0].axisValue}</strong><br/>`;
+        params.forEach(p => {
+          if (p.value == null) return;
+          if (p.seriesName === 'Food CPI') tip += `${p.marker} Food CPI: <strong>${p.value}</strong><br/>`;
+          else tip += `${p.marker} Food Insecurity: <strong>${p.value}%</strong><br/>`;
+        });
+        return tip;
+      }
+    },
+    legend: { data: ['Food CPI', 'Food Insecurity Rate'], textStyle: { color: COLORS.text }, top: 5 },
+    grid: { left: 55, right: 55, top: 35, bottom: 60 },
+    dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 20, bottom: 10, textStyle: { color: COLORS.textMuted }, borderColor: COLORS.gridLine, fillerColor: 'rgba(0,212,255,0.1)' }],
+    xAxis: { type: 'category', data: cpiDates, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
+    yAxis: [
+      { type: 'value', name: 'CPI Index', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
+      { type: 'value', name: 'Insecurity (%)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted, formatter: '{value}%' }, splitLine: { show: false }, position: 'right' }
+    ],
+    series: [
+      {
+        name: 'Food CPI', type: 'line', data: cpiValues, smooth: true, symbol: 'none',
+        lineStyle: { width: 2.5, color: COLORS.accent },
+        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(255,107,53,0.15)' }, { offset: 1, color: 'rgba(255,107,53,0.01)' }]) }
+      },
+      {
+        name: 'Food Insecurity Rate', type: 'line', yAxisIndex: 1, data: fiAligned,
+        connectNulls: true, smooth: true, symbol: 'circle', symbolSize: 8,
+        lineStyle: { width: 3, color: COLORS.primary },
+        itemStyle: { color: COLORS.primary }
+      }
+    ]
+  });
+}
+
 // -- Init --
 async function init() {
   try {
@@ -737,6 +797,11 @@ async function init() {
       renderYoYInflation(blsData);
       renderPurchasingPower(blsData);
       updateFreshness('bls-regional', { _static: true, _dataYear: 'CPI' });
+
+      // Non-blocking: fetch FI trend data for CPI vs Insecurity chart
+      fetch('/data/food-insecurity-state.json').then(r => r.ok ? r.json() : null)
+        .then(fiData => { if (fiData?.trend) renderCpiVsInsecurity(blsData, fiData.trend); })
+        .catch(() => {});
     }
 
     addExportButton('chart-affordability-map', 'food-affordability-by-state.csv', () => ({

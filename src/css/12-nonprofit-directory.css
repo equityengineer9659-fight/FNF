@@ -497,6 +497,12 @@
   align-items: start;
 }
 
+@media (width <= 480px) {
+  .profile-summary__contact {
+    grid-template-columns: 1fr;
+  }
+}
+
 .profile-contact__heading {
   grid-column: 1 / -1;
   font-size: 0.72rem;

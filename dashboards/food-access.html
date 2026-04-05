@@ -175,22 +175,28 @@
             </div>
         </section>
 
-        <!-- Chart 1: Food Desert Map -->
-        <section class="dashboard-section scroll-reveal" aria-label="Food desert map by state">
+        <!-- Chart 1: Food Access Map (toggles between Food Deserts and SNAP Retailers) -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food access map by state">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
-                    <h2 class="dashboard-card__title">Food Desert Map</h2>
+                    <h2 class="dashboard-card__title">Food Access Map</h2>
                     <span id="freshness-access" class="dashboard-freshness"></span>
+                    <span id="freshness-snap-retailers" class="dashboard-freshness" style="display:none"></span>
+                    <div id="map-view-toggle" style="display:flex;gap:0.5rem;justify-content:center;">
+                        <button class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="deserts" aria-pressed="true">Food Deserts</button>
+                        <button class="dashboard-metric-btn" data-map-view="snap" aria-pressed="false">SNAP Retailers</button>
+                    </div>
                     <div id="state-selector-container"></div>
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
                         <button id="access-map-back-btn" class="dashboard-map-back" style="display:none" aria-label="Back to national view">&larr; Back to National View</button>
                         <span id="access-map-state-label" class="dashboard-map-label" aria-live="polite"></span>
-                        <div id="chart-desert-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food desert prevalence across US states"></div>
+                        <div id="chart-desert-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food access data across US states"></div>
                         <p class="dashboard-chart__hint">Hover for state details — click any state for county breakdown</p>
                     </div>
-                    <div class="dashboard-chart-row__info">
+                    <!-- Info panel: Food Deserts mode -->
+                    <div id="info-desert-mode" class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Mapping the Food Deserts</h3>
                         <p class="dashboard-info__text">
                             A <strong>food desert</strong> is a census tract where a significant share of residents live far from a supermarket — more than 1 mile in urban areas or 10 miles in rural areas. This map shows the percentage of each state's census tracts classified as low-access. <strong>Click any state</strong> to drill down into county-level poverty rates as a proxy for food access risk.
@@ -207,23 +213,8 @@
                             23.5 million Americans live in food deserts — including 6.7 million children.
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Chart: SNAP Retailer Density -->
-        <section class="dashboard-section scroll-reveal" aria-label="SNAP retailer density by state">
-            <div class="dashboard-card">
-                <div class="dashboard-card__header">
-                    <h2 class="dashboard-card__title">Where Can SNAP Benefits Be Used?</h2>
-                    <span id="freshness-snap-retailers" class="dashboard-freshness"></span>
-                </div>
-                <div class="dashboard-chart-row dashboard-chart-row--reverse">
-                    <div class="dashboard-chart-row__chart">
-                        <div id="chart-snap-retailers" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing SNAP-authorized retailer density per 100,000 residents by state"></div>
-                        <p class="dashboard-chart__hint">Hover for retailer breakdown by store type</p>
-                    </div>
-                    <div class="dashboard-chart-row__info">
+                    <!-- Info panel: SNAP Retailers mode -->
+                    <div id="info-snap-mode" class="dashboard-chart-row__info" style="display:none">
                         <h3 class="dashboard-info__title">SNAP Authorization Does Not Mean Access</h3>
                         <p class="dashboard-info__text">
                             Over <strong>267,000 retailers</strong> are authorized to accept SNAP benefits nationwide — but authorization alone does not guarantee access. Roughly 80% of authorized stores are convenience stores and small groceries, while only about 20% are full-service supermarkets. Over 80% of SNAP dollars are redeemed at larger stores.

@@ -26,12 +26,18 @@ function renderMap(geoJSON, data, metric = 'rate') {
 
   echarts.registerMap('USA', geoJSON);
 
+  // Compute SNAP coverage ratio per state and attach to state objects
+  data.states.forEach(s => {
+    s.snapCoverage = s.persons > 0 ? Math.round((s.snapParticipation / s.persons) * 100) : 0;
+  });
+
   const metricConfig = {
     rate: { name: 'Food Insecurity Rate', suffix: '%', min: 8, max: 20 },
-    childRate: { name: 'Child Food Insecurity', suffix: '%', min: 10, max: 27 },
+    childRate: { name: 'Child Food Insecurity', suffix: '%', min: 10, max: 30 },
     persons: { name: 'Food Insecure Persons', suffix: '', min: 0, max: 5000000 },
     mealGap: { name: 'Annual Meal Gap', suffix: '', min: 0, max: 900000000 },
-    mealCost: { name: 'Average Meal Cost', suffix: '$', min: 3, max: 5.5 }
+    mealCost: { name: 'Average Meal Cost', suffix: '$', min: 3, max: 5.5 },
+    snapCoverage: { name: 'SNAP Coverage Ratio', suffix: '%', min: 40, max: 150 }
   };
 
   // State for drill-down
@@ -49,7 +55,7 @@ function renderMap(geoJSON, data, metric = 'rate') {
       Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
       Avg Meal Cost: $${d.mealCost}<br/>
       Poverty Rate: ${d.povertyRate}%<br/>
-      SNAP: ${fmtNum(d.snapParticipation)}<br/>
+      SNAP: ${fmtNum(d.snapParticipation)} (${d.snapCoverage || '—'}% coverage)<br/>
       <span style="color:${COLORS.secondary};font-size:11px">Click to see counties</span>`;
   }
 
@@ -369,17 +375,31 @@ function renderTrend(data) {
   const projectedRates = rates.map((r, i) => (hasProjections && i >= firstProjectedIdx) ? r : null);
   const projectedChildRates = childRates.map((r, i) => (hasProjections && i >= firstProjectedIdx) ? r : null);
 
-  // markLine at the last actual data year
-  const markLineData = hasProjections ? [{
+  // Key annotation markers
+  const markLineData = [];
+
+  // 2021 historic low
+  const lowIdx = data.trend.findIndex(t => t.year === 2021);
+  if (lowIdx > -1) markLineData.push({
+    xAxis: '2021',
+    lineStyle: { color: '#22c55e', type: 'dotted', width: 1 },
+    label: { formatter: 'Historic Low', color: '#22c55e', fontSize: 9, position: 'insideEndTop' }
+  });
+
+  // 2022 post-pandemic surge
+  const surgeIdx = data.trend.findIndex(t => t.year === 2022);
+  if (surgeIdx > -1) markLineData.push({
+    xAxis: '2022',
+    lineStyle: { color: COLORS.accent, type: 'dotted', width: 1 },
+    label: { formatter: 'Post-Pandemic\nSurge', color: COLORS.accent, fontSize: 9, position: 'insideEndTop' }
+  });
+
+  // Projection boundary
+  if (hasProjections) markLineData.push({
     xAxis: data.trend[firstProjectedIdx].year.toString(),
     lineStyle: { color: 'rgba(255,255,255,0.5)', type: 'dashed', width: 1.5 },
-    label: {
-      formatter: 'USDA Report\nTerminated',
-      color: COLORS.textMuted,
-      fontSize: 10,
-      position: 'insideEndTop'
-    }
-  }] : [];
+    label: { formatter: 'USDA Report\nTerminated', color: COLORS.textMuted, fontSize: 10, position: 'insideEndTop' }
+  });
 
   chart.setOption({
     tooltip: {
@@ -506,7 +526,7 @@ function renderBar(data) {
   const top5 = sorted.slice(0, 5);
   const bottom5 = sorted.slice(-5).reverse();
 
-  const maxRate = 20, maxChild = 28, maxPoverty = 20, maxMeal = 5.5;
+  const maxRate = 25, maxChild = 30, maxPoverty = 25, maxMeal = 5.5;
   const maxSnap = Math.max(...data.states.map(s => s.snapParticipation));
   function normalize(states) {
     return states.map(s => [
@@ -672,35 +692,55 @@ function initScatterToggle() {
   });
 }
 
-// -- Nightingale: Meal Cost by State --
+// -- Meal Cost by State (horizontal bar) --
 function renderMealCost(data) {
   const chart = createChart('chart-meal-cost');
   if (!chart) return;
 
-  const sorted = [...data.states].sort((a, b) => b.mealCost - a.mealCost).slice(0, 25);
-  const pieData = sorted.map(s => ({
-    name: s.name, value: s.mealCost,
-    itemStyle: { color: REGION_COLORS[getRegion(s.name)] }
-  }));
+  const sorted = [...data.states].sort((a, b) => a.mealCost - b.mealCost).slice(-25);
+  const names = sorted.map(s => s.name);
+  const costs = sorted.map(s => s.mealCost);
+  const natAvg = data.national.averageMealCost;
 
   chart.setOption({
     tooltip: {
       ...TOOLTIP_STYLE,
-      formatter: p => `<strong>${p.name}</strong><br/>Meal Cost: <strong>$${p.value}</strong><br/>Region: ${getRegion(p.name)}`
+      trigger: 'axis',
+      formatter: params => {
+        const p = params[0];
+        const region = getRegion(p.name);
+        const diff = ((p.value - natAvg) / natAvg * 100).toFixed(0);
+        return `<strong>${p.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>Meal Cost: <strong>$${p.value}</strong><br/>${p.value > natAvg ? '+' : ''}${diff}% vs national avg ($${natAvg})`;
+      }
+    },
+    grid: { left: 110, right: 30, top: 10, bottom: 30 },
+    xAxis: {
+      type: 'value',
+      name: 'Average Meal Cost ($)',
+      nameLocation: 'center', nameGap: 22,
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted, formatter: '${value}' },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'category',
+      data: names,
+      axisLabel: { color: COLORS.text, fontSize: 10 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
     },
     series: [{
-      type: 'pie', roseType: 'area', radius: ['15%', '60%'], center: ['50%', '50%'],
-      itemStyle: { borderRadius: 4, borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1 },
-      label: {
-        show: true, color: COLORS.text, fontSize: 10,
-        formatter: p => `${p.name}\n$${p.value}`,
-        alignTo: 'labelLine',
-        overflow: 'truncate',
-        minMargin: 5
+      type: 'bar',
+      data: costs.map((v, i) => ({
+        value: v,
+        itemStyle: { color: REGION_COLORS[getRegion(names[i])] }
+      })),
+      barWidth: '65%',
+      itemStyle: { borderRadius: [0, 3, 3, 0] },
+      markLine: {
+        symbol: 'none', silent: true,
+        data: [{ xAxis: natAvg, lineStyle: { color: 'rgba(255,255,255,0.6)', type: 'dashed', width: 1.5 }, label: { formatter: `Nat'l Avg: $${natAvg}`, color: COLORS.textMuted, fontSize: 10, position: 'end' } }]
       },
-      labelLine: { length: 12, length2: 18, smooth: true },
-      emphasis: { label: { show: true, fontSize: 12, fontWeight: 'bold', formatter: p => `${p.name}\n$${p.value}` } },
-      data: pieData, animationDuration: 2000
+      animationDuration: 1500
     }]
   });
 }
@@ -725,7 +765,7 @@ function renderSnap(data) {
   const sorted = [...data.states].sort((a, b) => b.rate - a.rate).slice(0, 15);
   const names = sorted.map(s => s.name);
   const rates = sorted.map(s => s.rate);
-  const snapCoverageRatio = sorted.map(s => Math.round((s.snapParticipation / (s.persons / (s.rate / 100))) * 100));
+  const snapCoverageRatio = sorted.map(s => Math.round((s.snapParticipation / s.persons) * 100));
 
   chart.setOption({
     tooltip: {
@@ -829,7 +869,7 @@ function renderFoodPrices(blsData) {
     }],
     xAxis: {
       type: 'category',
-      data: foodHome.data.map(d => d.date),
+      data: foodHome.data.filter(d => d.value !== null).map(d => d.date),
       axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 },
       axisLine: { lineStyle: { color: COLORS.gridLine } }
     },
@@ -844,7 +884,7 @@ function renderFoodPrices(blsData) {
       {
         name: 'Food at Home',
         type: 'line',
-        data: foodHome.data.map(d => d.value),
+        data: foodHome.data.filter(d => d.value !== null).map(d => d.value),
         smooth: true,
         lineStyle: { width: 2.5, color: COLORS.accent },
         itemStyle: { color: COLORS.accent },
@@ -859,7 +899,7 @@ function renderFoodPrices(blsData) {
       ...(foodAway ? [{
         name: 'Food Away from Home',
         type: 'line',
-        data: foodAway.data.map(d => d.value),
+        data: foodAway.data.filter(d => d.value !== null).map(d => d.value),
         smooth: true,
         lineStyle: { width: 2, color: COLORS.secondary },
         itemStyle: { color: COLORS.secondary },
@@ -868,7 +908,7 @@ function renderFoodPrices(blsData) {
       ...(allItems ? [{
         name: 'All Items',
         type: 'line',
-        data: allItems.data.map(d => d.value),
+        data: allItems.data.filter(d => d.value !== null).map(d => d.value),
         smooth: true,
         lineStyle: { width: 1.5, color: 'rgba(255,255,255,0.3)', type: 'dashed' },
         itemStyle: { color: 'rgba(255,255,255,0.3)' },
@@ -1256,6 +1296,141 @@ function renderIncomeRiver(sdoh, fiData) {
   updateFreshness('income-river', sdoh);
 }
 
+// -- Triple Burden Vulnerability Index --
+function renderTripleBurden(data, accessData) {
+  const chart = createChart('chart-triple-burden');
+  if (!chart) return;
+
+  // Build lookup of low-access % by state name
+  const accessByName = {};
+  if (accessData?.states) {
+    accessData.states.forEach(s => { accessByName[s.name] = s.lowAccessPct; });
+  }
+
+  // Normalize a value to 0-100 scale given min/max
+  const norm = (val, min, max) => Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
+
+  // Compute composite score for each state
+  const rates = data.states.map(s => s.rate);
+  const rateMin = Math.min(...rates), rateMax = Math.max(...rates);
+  const accessVals = data.states.map(s => accessByName[s.name] || 0).filter(v => v > 0);
+  const accMin = Math.min(...accessVals), accMax = Math.max(...accessVals);
+
+  const scored = data.states.map(s => {
+    const fiScore = norm(s.rate, rateMin, rateMax);
+    const accessPct = accessByName[s.name] || 0;
+    const accessScore = accessPct > 0 ? norm(accessPct, accMin, accMax) : 0;
+    const coverage = s.persons > 0 ? (s.snapParticipation / s.persons) * 100 : 100;
+    const coverageGapScore = norm(100 - Math.min(coverage, 100), 0, 60); // higher gap = higher score
+    const total = fiScore + accessScore + coverageGapScore;
+    return { name: s.name, total, fiScore, accessScore, coverageGapScore, rate: s.rate, accessPct, coverage: Math.round(coverage) };
+  }).sort((a, b) => b.total - a.total).slice(0, 10);
+
+  const names = scored.map(s => s.name).reverse();
+
+  chart.setOption({
+    tooltip: {
+      ...TOOLTIP_STYLE,
+      trigger: 'axis',
+      formatter: params => {
+        const name = params[0].name;
+        const s = scored.find(x => x.name === name);
+        return `<strong>${name}</strong><br/>`
+          + `<span style="color:${COLORS.accent}">■</span> Food Insecurity: ${s.rate}% (score: ${s.fiScore.toFixed(0)})<br/>`
+          + `<span style="color:#f59e0b">■</span> Low Access: ${s.accessPct}% (score: ${s.accessScore.toFixed(0)})<br/>`
+          + `<span style="color:${COLORS.secondary}">■</span> SNAP Gap: ${100 - Math.min(s.coverage, 100)}% uncovered (score: ${s.coverageGapScore.toFixed(0)})<br/>`
+          + `<strong>Composite: ${s.total.toFixed(0)}/300</strong>`;
+      }
+    },
+    legend: {
+      data: ['Food Insecurity', 'Low Access', 'SNAP Coverage Gap'],
+      textStyle: { color: COLORS.text, fontSize: 11 },
+      top: 5
+    },
+    grid: { left: 110, right: 20, top: 35, bottom: 20 },
+    xAxis: {
+      type: 'value', max: 300,
+      axisLabel: { color: COLORS.textMuted },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'category', data: names,
+      axisLabel: { color: COLORS.text, fontSize: 11 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series: [
+      {
+        name: 'Food Insecurity', type: 'bar', stack: 'total',
+        data: scored.map(s => s.fiScore).reverse(),
+        itemStyle: { color: COLORS.accent, borderRadius: 0 },
+        barWidth: '55%'
+      },
+      {
+        name: 'Low Access', type: 'bar', stack: 'total',
+        data: scored.map(s => s.accessScore).reverse(),
+        itemStyle: { color: '#f59e0b' }
+      },
+      {
+        name: 'SNAP Coverage Gap', type: 'bar', stack: 'total',
+        data: scored.map(s => s.coverageGapScore).reverse(),
+        itemStyle: { color: COLORS.secondary, borderRadius: [0, 3, 3, 0] }
+      }
+    ]
+  });
+
+  // Dynamic insight
+  const worst = scored[0];
+  const el = document.getElementById('triple-burden-insight');
+  if (el) el.innerHTML = `<strong>${worst.name}</strong> ranks #1 with a composite score of ${worst.total.toFixed(0)}/300 — food insecurity at ${worst.rate}%, ${worst.accessPct}% low-access tracts, and only ${worst.coverage}% SNAP coverage.`;
+}
+
+// -- State Deep-Dive Cross-Dataset KPI Panel --
+function renderStateDeepDive(stateCode, data, accessData, bankData) {
+  const section = document.getElementById('section-state-deepdive');
+  const panel = document.getElementById('state-deepdive-panel');
+  if (!section || !panel) return;
+
+  if (!stateCode) {
+    section.style.display = 'none';
+    return;
+  }
+
+  const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
+  if (!stateName) return;
+
+  const fi = data.states.find(s => s.name === stateName);
+  const access = accessData?.states?.find(s => s.name === stateName);
+  const bank = bankData?.states?.find(s => s.name === stateName);
+
+  if (!fi) return;
+  section.style.display = '';
+
+  const coverage = fi.persons > 0 ? Math.round((fi.snapParticipation / fi.persons) * 100) : 'N/A';
+  const accessPct = access ? access.lowAccessPct + '%' : 'N/A';
+  const density = bank ? bank.perCapitaOrgs.toFixed(1) : 'N/A';
+
+  const kpis = [
+    { label: 'Food Insecurity', value: fi.rate + '%', color: COLORS.accent, sub: `#${data.states.sort((a, b) => b.rate - a.rate).findIndex(s => s.name === stateName) + 1} nationally` },
+    { label: 'Child Rate', value: fi.childRate + '%', color: '#f87171', sub: `vs ${data.national.childFoodInsecurityRate}% national` },
+    { label: 'Meal Cost', value: '$' + fi.mealCost, color: COLORS.secondary, sub: `vs $${data.national.averageMealCost} national` },
+    { label: 'SNAP Coverage', value: coverage + '%', color: COLORS.primary, sub: coverage > 100 ? 'Exceeds insecure pop' : 'Of insecure pop covered' },
+    { label: 'Low-Access Tracts', value: accessPct, color: '#f59e0b', sub: access ? `${(access.urbanLowAccess + access.ruralLowAccess).toLocaleString()} tracts` : '' },
+    { label: 'Food Bank Density', value: density, color: '#34d399', sub: bank ? `per 100K (${bank.orgCount} orgs)` : '' }
+  ];
+
+  panel.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;width:100%;padding:0.5rem 0;">
+      ${kpis.map(k => `
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:1rem;text-align:center;">
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;">${k.label}</div>
+          <div style="font-size:1.6rem;font-weight:700;color:${k.color};">${k.value}</div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;">${k.sub}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
 // -- Init --
 async function init() {
   try {
@@ -1283,15 +1458,18 @@ async function init() {
     // County search
     initCountySearch(mapCtrl);
 
-    // State deep-dive selector
+    // State deep-dive selector (also drives KPI panel)
+    let accessData = null, bankData = null;
     initStateSelector('state-selector-container', (stateCode) => {
       if (!stateCode) {
         mapCtrl.showNational();
+        renderStateDeepDive('', data, accessData, bankData);
         return;
       }
       const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
       const match = data.states.find(s => s.name === stateName);
       if (match?.fips) mapCtrl.drillDown(match.name, match.fips);
+      renderStateDeepDive(stateCode, data, accessData, bankData);
     });
     renderTrend(data);
     renderBar(data);
@@ -1305,6 +1483,19 @@ async function init() {
 
     // SNAP chart
     renderSnap(data);
+
+    // Non-blocking: fetch cross-dataset files for Triple Burden + State Deep-Dive
+    Promise.all([
+      fetch('/data/food-access-atlas.json').then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch('/data/food-bank-summary.json').then(r => r.ok ? r.json() : null).catch(() => null)
+    ]).then(([ad, bd]) => {
+      accessData = ad;
+      bankData = bd;
+      renderTripleBurden(data, accessData);
+      // If state already selected via URL, render deep-dive now that data is loaded
+      const urlState = new URLSearchParams(window.location.search).get('state');
+      if (urlState) renderStateDeepDive(urlState, data, accessData, bankData);
+    });
 
     // CSV export buttons
     addExportButton('chart-map', 'food-insecurity-by-state.csv', () => ({

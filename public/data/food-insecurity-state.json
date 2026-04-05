@@ -10,7 +10,8 @@
       "Purdue University Center for Food Demand Analysis and Sustainability, Consumer Food Insights Survey (2025) — 2025 measured rate"
     ],
     "updated": "2026-04-04",
-    "notes": "Food insecurity rates represent the percentage of households that were food insecure at some point during the year. Meal gap represents the estimated number of meals missing annually. Trend entries marked 'projected' are model-based estimates, not official USDA measurements."
+    "notes": "Food insecurity rates represent the percentage of households that were food insecure at some point during the year. Meal gap represents the estimated number of meals missing annually. Trend entries marked 'projected' are model-based estimates, not official USDA measurements.",
+    "_reconciliationNote": "The sum of state-level foodInsecurePersons (≈41.8M) is lower than the national total (47.9M). The national figure is from USDA ERS household survey data which includes territories and uses a broader survey frame. State-level estimates are derived from Feeding America's Map the Meal Gap model applied to 50 states + DC. The gap reflects methodological differences between the two sources, not missing data."
   },
   "national": {
     "foodInsecurityRate": 13.7,

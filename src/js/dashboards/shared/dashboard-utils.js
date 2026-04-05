@@ -127,6 +127,18 @@ export function fmtNum(n) {
 // -- Animated hero counters --
 export function animateCounters() {
   const counters = document.querySelectorAll('.dashboard-stat__number');
+
+  // Respect reduced motion — show final values immediately
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    counters.forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      const suffix = el.dataset.suffix || '';
+      const prefix = el.dataset.prefix || '';
+      el.textContent = prefix + target + suffix;
+    });
+    return;
+  }
+
   counters.forEach(el => {
     const target = parseFloat(el.dataset.target);
     const suffix = el.dataset.suffix || '';

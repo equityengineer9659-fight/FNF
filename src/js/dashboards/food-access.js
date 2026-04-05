@@ -237,18 +237,22 @@ function renderDesertMap(geoJSON, states) {
 
   showNational();
 
-  chart.on('click', (params) => {
-    if (currentView === 'national' && params.data?.fips) {
-      drillDown(params.data.name, params.data.fips);
-    }
-  });
-
   const backBtn = document.getElementById('access-map-back-btn');
   if (backBtn) {
     backBtn.addEventListener('click', () => showNational());
   }
 
-  return { drillDown, showNational };
+  /** @type {boolean} Set to false to disable click-to-drill-down (e.g., in SNAP view) */
+  let drillDownEnabled = true;
+
+  chart.off('click'); // Prevent duplicate listeners on re-render
+  chart.on('click', (params) => {
+    if (drillDownEnabled && currentView === 'national' && params.data?.fips) {
+      drillDown(params.data.name, params.data.fips);
+    }
+  });
+
+  return { drillDown, showNational, setDrillDown: (v) => { drillDownEnabled = v; } };
 }
 
 // -- Chart 2: Urban vs Rural (Donut) --
@@ -449,7 +453,8 @@ function renderDoubleBurden(states) {
 
 // -- SNAP Retailer Density Map --
 function renderSnapRetailers(geoJSON, retailerData, accessStates) {
-  const chart = createChart('chart-snap-retailers');
+  // Reuse the desert map chart instance (toggled view)
+  const chart = getOrCreateChart('chart-desert-map');
   if (!chart) return;
 
   echarts.registerMap('USA-snap-retail', geoJSON);
@@ -525,8 +530,8 @@ function renderSnapRetailers(geoJSON, retailerData, accessStates) {
 
   updateFreshness('snap-retailers', { _static: true, _dataYear: 'FY2024' });
 
-  // CSV export for SNAP retailers
-  addExportButton('chart-snap-retailers', 'snap-retailers-by-state.csv', () => ({
+  // CSV export for SNAP retailers (on the shared map container)
+  addExportButton('chart-desert-map', 'snap-retailers-by-state.csv', () => ({
     headers: ['State', 'Total Retailers', 'Retailers per 100K', 'Supermarkets', 'Super Stores', 'Large Grocery', 'Medium Grocery', 'Small Grocery', 'Convenience', 'Specialty', 'Farmers Markets', 'Other', 'Food Deserts (%)'],
     rows: retailerData.states.map(s => {
       const access = accessByFips[s.fips] || {};
@@ -1006,7 +1011,6 @@ async function init() {
 
     animateCounters();
     const mapCtrl = renderDesertMap(geoJSON, states);
-    if (snapRetailerData?.states) renderSnapRetailers(geoJSON, snapRetailerData, states);
     renderUrbanRural(states);
     renderDistance(states);
     renderVehicle(states);
@@ -1019,12 +1023,61 @@ async function init() {
       rows: states.map(s => [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.noVehiclePct, s.lowIncomeLowAccessPop, s.snapLowAccess || ''])
     }));
 
+    // Map view toggle: Food Deserts ↔ SNAP Retailers
+    let currentMapView = 'deserts';
+    const toggleContainer = document.getElementById('map-view-toggle');
+    if (toggleContainer) {
+      toggleContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-map-view]');
+        if (!btn) return;
+        const view = btn.dataset.mapView;
+        if (view === currentMapView) return;
+
+        currentMapView = view;
+        toggleContainer.querySelectorAll('.dashboard-metric-btn').forEach(b => {
+          b.classList.remove('dashboard-metric-btn--active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('dashboard-metric-btn--active');
+        btn.setAttribute('aria-pressed', 'true');
+
+        const desertInfo = document.getElementById('info-desert-mode');
+        const snapInfo = document.getElementById('info-snap-mode');
+        const hint = document.querySelector('#chart-desert-map + .dashboard-chart__hint');
+        const freshDesert = document.getElementById('freshness-access');
+        const freshSnap = document.getElementById('freshness-snap-retailers');
+
+        if (view === 'snap' && snapRetailerData?.states) {
+          if (mapCtrl) mapCtrl.setDrillDown(false);
+          renderSnapRetailers(geoJSON, snapRetailerData, states);
+          if (desertInfo) desertInfo.style.display = 'none';
+          if (snapInfo) snapInfo.style.display = '';
+          if (hint) hint.textContent = 'Hover for retailer breakdown by store type';
+          if (freshDesert) freshDesert.style.display = 'none';
+          if (freshSnap) freshSnap.style.display = '';
+        } else {
+          if (mapCtrl) { mapCtrl.setDrillDown(true); mapCtrl.showNational(); }
+          if (desertInfo) desertInfo.style.display = '';
+          if (snapInfo) snapInfo.style.display = 'none';
+          if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
+          if (freshDesert) freshDesert.style.display = '';
+          if (freshSnap) freshSnap.style.display = 'none';
+        }
+      });
+    }
+
     // State deep-dive selector
     if (mapCtrl) {
       initStateSelector('state-selector-container', (stateCode) => {
         if (!stateCode) {
-          mapCtrl.showNational();
+          // Only drill back in desert mode
+          if (currentMapView === 'deserts') mapCtrl.showNational();
           return;
+        }
+        // Switch to desert mode if in snap mode, then drill
+        if (currentMapView === 'snap') {
+          const desertBtn = toggleContainer?.querySelector('[data-map-view="deserts"]');
+          if (desertBtn) desertBtn.click();
         }
         const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
         const match = states.find(s => s.name === stateName);

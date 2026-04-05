@@ -77,12 +77,15 @@ function renderVsInsecurity(states) {
   const reg = linearRegression(points.map(p => p.value));
   const xs = points.map(p => p.value[0]);
   const xMin = Math.min(...xs), xMax = Math.max(...xs);
-  const rLine = {
+
+  // Only show regression line when correlation is meaningful (|r| >= 0.2)
+  const showRegression = Math.abs(reg.r) >= 0.2;
+  const rLine = showRegression ? {
     symbol: 'none', silent: true,
     lineStyle: { color: 'rgba(255,255,255,0.35)', type: 'dashed', width: 1.5 },
     data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
     label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
-  };
+  } : null;
 
   const series = Object.entries(REGION_COLORS).map(([region, color], i) => ({
     name: region, type: 'scatter',
@@ -91,7 +94,7 @@ function renderVsInsecurity(states) {
     itemStyle: { color, opacity: 0.85 },
     emphasis: { itemStyle: { opacity: 1 } },
     animationDuration: 2000,
-    ...(i === 0 ? { markLine: rLine } : {})
+    ...(i === 0 && rLine ? { markLine: rLine } : {})
   }));
 
   chart.setOption({
@@ -229,7 +232,7 @@ function renderEfficiency(states) {
     legend: { data: ['National Avg', ...regionAvgs.map(r => r.name)], textStyle: { color: COLORS.text }, bottom: 0 },
     radar: {
       indicator: [
-        { name: 'Efficiency (%)', max: 90 }, { name: 'Density\n(per 100K)', max: 22 },
+        { name: 'Efficiency (%)', max: 90 }, { name: 'Density\n(per 100K)', max: 40 },
         { name: 'Avg Rev/Org\n($M)', max: 1.5 }, { name: 'Insecurity (%)', max: 18 },
         { name: 'Avg Org Count', max: 2000 }
       ],
@@ -334,6 +337,61 @@ function renderDistribution(states) {
   });
 }
 
+// -- Chart 6: Need-Capacity Gap (scatter: insecurity vs revenue/person) --
+function renderCapacityGap(states) {
+  const chart = createChart('chart-capacity-gap');
+  if (!chart) return;
+
+  // Revenue per food-insecure person
+  const enriched = states.map(s => {
+    const insecurePersons = s.population * s.foodInsecurityRate / 100;
+    const revPerPerson = insecurePersons > 0 ? Math.round(s.totalRevenue / insecurePersons) : 0;
+    return { ...s, insecurePersons, revPerPerson };
+  });
+
+  const byRegion = {};
+  Object.keys(REGION_COLORS).forEach(r => { byRegion[r] = []; });
+  enriched.forEach(s => byRegion[getRegion(s.name)].push(s));
+
+  const series = Object.entries(REGION_COLORS).map(([region, color]) => ({
+    name: region, type: 'scatter',
+    data: byRegion[region].map(s => ({
+      value: [s.foodInsecurityRate, s.revPerPerson],
+      name: s.name,
+      insecurePersons: s.insecurePersons
+    })),
+    symbolSize: (_, params) => Math.max(8, Math.sqrt(params.data.insecurePersons / 50000)),
+    itemStyle: { color, opacity: 0.85 },
+    emphasis: { itemStyle: { opacity: 1 } },
+    animationDuration: 2000
+  }));
+
+  chart.setOption({
+    legend: { top: 5, right: 10, textStyle: { color: COLORS.text, fontSize: 11 }, itemWidth: 10, itemHeight: 10 },
+    tooltip: {
+      ...TOOLTIP_STYLE,
+      formatter: params => {
+        const d = params.data;
+        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[getRegion(d.name)]}">(${getRegion(d.name)})</span><br/>Food Insecurity: ${d.value[0]}%<br/>Revenue/Insecure Person: <strong>$${d.value[1].toLocaleString()}</strong><br/>Food-Insecure Pop: ${fmtNum(d.insecurePersons)}`;
+      }
+    },
+    grid: { left: 70, right: 20, top: 35, bottom: 50 },
+    xAxis: {
+      name: 'Food Insecurity Rate (%)', nameLocation: 'center', nameGap: 35,
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      name: 'Revenue per Insecure Person ($)',
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted, formatter: val => '$' + fmtNum(val) },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series
+  });
+}
+
 // -- Init --
 async function init() {
   try {
@@ -351,6 +409,7 @@ async function init() {
     renderRevenue(bankData.states);
     renderEfficiency(bankData.states);
     renderDistribution(bankData.states);
+    renderCapacityGap(bankData.states);
     addExportButton('chart-density-map', 'food-banks-by-state.csv', () => ({
       headers: ['State', 'Org Count', 'Density (per 100K)', 'Total Revenue ($)', 'Program Efficiency (%)', 'Food Insecurity Rate (%)'],
       rows: bankData.states.map(s => [s.name, s.orgCount, s.perCapitaOrgs, s.totalRevenue, s.programExpenseRatio, s.foodInsecurityRate])
