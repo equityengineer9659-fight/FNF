@@ -14,6 +14,13 @@ import {
 
 const PAL = MAP_PALETTES.access;
 
+/** Get existing chart instance or create new one (safe for re-renders) */
+function getOrCreateChart(id) {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  return echarts.getInstanceByDom(el) || createChart(id);
+}
+
 /**
  * Merge FARA API state-summary data into the static atlas data.
  * API provides fresh aggregate counts; static file provides fields the API
@@ -49,7 +56,7 @@ function mergeFaraIntoStatic(staticStates, faraRecords) {
 
 // -- Chart 1: Food Desert Map (choropleth) with County Drill-Down --
 function renderDesertMap(geoJSON, states) {
-  const chart = createChart('chart-desert-map');
+  const chart = getOrCreateChart('chart-desert-map');
   if (!chart) return;
 
   const albersProjection = { project: p => p, unproject: p => p };
@@ -246,7 +253,7 @@ function renderDesertMap(geoJSON, states) {
 
 // -- Chart 2: Urban vs Rural (Donut) --
 function renderUrbanRural(states) {
-  const chart = createChart('chart-urban-rural');
+  const chart = getOrCreateChart('chart-urban-rural');
   if (!chart) return;
 
   const totalUrban = states.reduce((s, st) => s + st.urbanLowAccess, 0);
@@ -271,7 +278,7 @@ function renderUrbanRural(states) {
 
 // -- Chart 3: Distance to Store (Gradient Area) --
 function renderDistance(states) {
-  const chart = createChart('chart-distance');
+  const chart = getOrCreateChart('chart-distance');
   if (!chart) return;
 
   const sorted = [...states].sort((a, b) => a.avgDistance - b.avgDistance);
@@ -301,7 +308,7 @@ function renderDistance(states) {
 
 // -- Chart 4: Vehicle Access & Food Deserts (scatter) --
 function renderVehicle(states) {
-  const chart = createChart('chart-vehicle');
+  const chart = getOrCreateChart('chart-vehicle');
   if (!chart) return;
 
   const points = states.map(s => ({
@@ -366,7 +373,7 @@ function renderVehicle(states) {
 
 // -- Chart 5: Low-Income + Low-Access (Treemap) --
 function renderDoubleBurden(states) {
-  const chart = createChart('chart-double-burden');
+  const chart = getOrCreateChart('chart-double-burden');
   if (!chart) return;
 
   // Color states by severity — darker shades so white labels are always readable
@@ -781,7 +788,7 @@ async function renderCountyScatter(chart, stateFips, stateName) {
 
 // Main entry: set up chart + toggle
 function renderAccessInsecurity(accessStates, fiStates) {
-  const chart = createChart('chart-access-insecurity');
+  const chart = getOrCreateChart('chart-access-insecurity');
   if (!chart) return;
 
   // Build state FIPS lookup: name -> fips
@@ -1031,12 +1038,23 @@ async function init() {
     // Non-blocking: fetch live SDOH data for housing burden chart
     fetchSDOHAccess(states);
 
-    // Non-blocking: try FARA live API to enrich state data in background
+    // Non-blocking: try FARA live API, then re-render charts with enriched data
     fetchWithFallback('/api/dashboard-fara.php?type=state-summary', '/data/food-access-atlas.json')
       .then(({ data: faraData, source }) => {
-        if (source === 'live' && faraData.records?.length) {
-          updateFreshness('access', faraData);
-        }
+        if (source !== 'live' || !faraData.records?.length) return;
+
+        // Merge API data into static states
+        const enriched = mergeFaraIntoStatic(staticData.states, faraData.records);
+        updateFreshness('access', faraData);
+
+        // Re-render charts with enriched data (ECharts setOption merges smoothly)
+        renderDesertMap(geoJSON, enriched);
+        renderUrbanRural(enriched);
+        renderDistance(enriched);
+        renderVehicle(enriched);
+        renderDoubleBurden(enriched);
+        if (fiData?.states) renderAccessInsecurity(enriched, fiData.states);
+        populateAccessibleTable(enriched, snapRetailerData);
       })
       .catch(() => { /* static data already rendered, ignore */ });
   } catch {
