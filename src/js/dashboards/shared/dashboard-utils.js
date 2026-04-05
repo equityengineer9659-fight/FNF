@@ -143,6 +143,7 @@ export function animateCounters() {
     const target = parseFloat(el.dataset.target);
     const suffix = el.dataset.suffix || '';
     const prefix = el.dataset.prefix || '';
+    const isInteger = Number.isInteger(target);
     const duration = 2000;
     const start = performance.now();
 
@@ -153,7 +154,7 @@ export function animateCounters() {
       const progress = Math.min(elapsed / duration, 1);
       // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
-      const current = (target * eased).toFixed(1);
+      const current = isInteger ? Math.round(target * eased) : (target * eased).toFixed(1);
       el.textContent = prefix + current + suffix;
 
       if (progress < 1) {

@@ -61,6 +61,23 @@
 
 /* Mobile: horizontal scroll */
 @media (width <= 768px) {
+  .dashboard-tabs__container {
+    position: relative;
+  }
+
+  /* Right-edge fade to signal more tabs off-screen */
+  .dashboard-tabs__container::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 2.5rem;
+    background: linear-gradient(to right, transparent, rgba(10, 25, 47, 0.95));
+    pointer-events: none;
+    z-index: 1;
+  }
+
   .dashboard-tabs__list {
     justify-content: flex-start;
     overflow-x: auto;
@@ -954,6 +971,17 @@
 
   .dashboard-source-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (width <= 360px) {
+  .dashboard-chart {
+    height: 220px;
+    min-height: 180px;
+  }
+
+  .dashboard-chart--map {
+    height: 260px;
   }
 }
 
