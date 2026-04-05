@@ -4,7 +4,7 @@
  */
 
 import {
-  initScrollReveal, handleResize,
+  fmtNum, initScrollReveal, handleResize,
   getNteeName, isFoodRelated, US_STATES
 } from './shared/dashboard-utils.js';
 
@@ -187,8 +187,89 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// -- Find Help Near Me (Mapbox geocode → ProPublica search) --
+function initFindHelp() {
+  const input = document.getElementById('help-search-input');
+  const btn = document.getElementById('help-search-btn');
+  const status = document.getElementById('help-search-status');
+  const results = document.getElementById('help-search-results');
+  if (!input || !btn) return;
+
+  async function doSearch() {
+    const query = input.value.trim();
+    if (query.length < 2) {
+      if (status) status.textContent = 'Please enter at least 2 characters.';
+      return;
+    }
+
+    if (status) status.textContent = 'Finding your location...';
+    if (results) results.innerHTML = '';
+
+    try {
+      const geoRes = await fetch(`/api/mapbox-geocode.php?q=${encodeURIComponent(query)}&limit=1`);
+      if (!geoRes.ok) throw new Error('Geocoding failed');
+      const geoData = await geoRes.json();
+
+      if (!geoData.results || geoData.results.length === 0) {
+        if (status) status.textContent = 'Location not found. Try a more specific address or zip code.';
+        return;
+      }
+
+      const location = geoData.results[0];
+      const stateCode = location.state;
+      if (!stateCode) {
+        if (status) status.textContent = 'Could not determine state from that location. Try including a state or zip code.';
+        return;
+      }
+
+      if (status) status.textContent = `Found: ${location.name || location.city + ', ' + stateCode}. Searching for food banks...`;
+
+      const searchRes = await fetch(`/api/nonprofit-search.php?q=food+bank&state=${stateCode}`);
+      if (!searchRes.ok) throw new Error('Nonprofit search failed');
+      const searchData = await searchRes.json();
+
+      const orgs = searchData.organizations || searchData.results || [];
+      if (orgs.length === 0) {
+        if (status) status.textContent = `No food assistance organizations found in ${stateCode}. Try broadening your search.`;
+        return;
+      }
+
+      if (status) status.textContent = `Found ${orgs.length}+ food assistance organizations in ${stateCode}:`;
+
+      if (results) {
+        results.innerHTML = orgs.slice(0, 20).map(org => {
+          const name = org.name || org.organization?.name || 'Unknown';
+          const city = org.city || org.organization?.city || '';
+          const state = org.state || org.organization?.state || stateCode;
+          const ein = org.ein || org.organization?.ein || '';
+          const revenue = org.total_revenue || org.organization?.total_revenue;
+          const revenueStr = revenue ? `$${fmtNum(revenue)}` : '';
+          const profileUrl = ein ? `/dashboards/nonprofit-profile.html?ein=${ein}` : '';
+
+          return `<div style="padding:0.75rem; margin-bottom:0.5rem; background:rgba(255,255,255,0.05); border-radius:6px; border-left:3px solid var(--fnf-primary, #0176d3);">
+            <div style="font-weight:600; color:#fff; margin-bottom:0.25rem;">${profileUrl ? `<a href="${profileUrl}" style="color:#fff; text-decoration:none; border-bottom:1px dotted rgba(255,255,255,0.4);">${name}</a>` : name}</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.6);">
+              ${city}${city && state ? ', ' : ''}${state}
+              ${revenueStr ? ` &middot; Revenue: ${revenueStr}` : ''}
+              ${profileUrl ? ` &middot; <a href="${profileUrl}" style="color:var(--fnf-secondary, #00d4ff);">View Profile</a>` : ''}
+            </div>
+          </div>`;
+        }).join('');
+      }
+    } catch {
+      if (status) status.textContent = 'Search unavailable. The geocoding or nonprofit API may be down — try again later.';
+    }
+  }
+
+  btn.addEventListener('click', doSearch);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doSearch();
+  });
+}
+
 function init() {
   populateStateDropdown();
+  initFindHelp();
 
   const input = document.getElementById('directory-search-input');
   const select = document.getElementById('directory-state-select');

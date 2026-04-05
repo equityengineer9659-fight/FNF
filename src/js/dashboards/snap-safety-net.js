@@ -7,7 +7,8 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
-  initScrollReveal, handleResize, updateFreshness, fetchWithFallback, addExportButton
+  initScrollReveal, handleResize, updateFreshness, fetchWithFallback, addExportButton,
+  initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.snap;
@@ -482,6 +483,20 @@ async function init() {
       headers: ['State', 'SNAP Participants', 'Food Insecure', 'Coverage Ratio (%)', 'Insecurity Rate (%)'],
       rows: snapData.stateCoverage.states.map(s => [s.name, s.snapParticipants, s.foodInsecure, s.coverageRatio, s.insecurityRate])
     }));
+
+    // State deep-dive selector
+    initStateSelector('state-selector-container', (stateCode) => {
+      const chart = echarts.getInstanceByDom(document.getElementById('chart-snap-map'));
+      if (!chart) return;
+      if (!stateCode) {
+        chart.dispatchAction({ type: 'downplay' });
+        return;
+      }
+      const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
+      chart.dispatchAction({ type: 'downplay' });
+      chart.dispatchAction({ type: 'highlight', name: stateName });
+      chart.dispatchAction({ type: 'showTip', name: stateName });
+    });
 
     initScrollReveal();
     window.addEventListener('resize', handleResize);

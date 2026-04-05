@@ -134,6 +134,7 @@
             <li role="presentation"><a href="/dashboards/food-prices.html" class="dashboard-tabs__tab" role="tab">Food Prices</a></li>
             <li role="presentation"><a href="/dashboards/food-banks.html" class="dashboard-tabs__tab" role="tab" aria-current="page">Food Banks</a></li>
             <li role="presentation"><a href="/dashboards/nonprofit-directory.html" class="dashboard-tabs__tab" role="tab">Nonprofit Directory</a></li>
+            <li role="presentation"><a href="/dashboards/executive-summary.html" class="dashboard-tabs__tab" role="tab">Summary</a></li>
             </ul>
         </div>
     </nav>
@@ -167,42 +168,11 @@
             </div>
         </section>
 
-        <!-- Find Help Near Me -->
-        <section class="dashboard-section scroll-reveal" aria-label="Find food assistance near you">
-            <div class="dashboard-card">
-                <div class="dashboard-card__header">
-                    <h2 class="dashboard-card__title">Find Help Near Me</h2>
-                </div>
-                <div class="dashboard-chart-row">
-                    <div class="dashboard-chart-row__chart">
-                        <div style="padding: 1rem;">
-                            <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
-                                <input id="help-search-input" type="text" placeholder="Enter your address, city, or zip code..." style="flex:1; padding:0.75rem 1rem; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); color:#fff; font-size:14px;" aria-label="Address search">
-                                <button id="help-search-btn" style="padding:0.75rem 1.5rem; border-radius:6px; border:none; background:var(--fnf-primary, #0176d3); color:#fff; font-weight:600; cursor:pointer; font-size:14px;">Search</button>
-                            </div>
-                            <div id="help-search-status" style="color:rgba(255,255,255,0.6); font-size:13px; margin-bottom:1rem;"></div>
-                            <div id="help-search-results" style="max-height:400px; overflow-y:auto;"></div>
-                        </div>
-                    </div>
-                    <div class="dashboard-chart-row__info">
-                        <h3 class="dashboard-info__title">Food Assistance Locator</h3>
-                        <p class="dashboard-info__text">Enter an address, city, or zip code to find <strong>food banks, pantries, and meal programs</strong> near you. We search the ProPublica Nonprofit Explorer database of IRS-registered food assistance organizations in your state.</p>
-                        <p class="dashboard-info__text">Results show organization name, location, revenue (where available), and a link to their full financial profile on our Nonprofit Directory.</p>
-                        <div class="dashboard-info__meta">
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Geocoding</span> Mapbox Geocoding API</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Organizations</span> ProPublica Nonprofit Explorer (IRS 990)</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Coverage</span> All 50 states + DC</div>
-                        </div>
-                        <div class="dashboard-info__insight">This is a live search — results update in real-time from federal nonprofit filings. Not all food assistance programs file IRS 990s; small volunteer-run pantries may not appear.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Chart 1: Food Bank Density Map -->
         <section class="dashboard-section scroll-reveal" aria-label="Food bank density by state">
             <div class="dashboard-card">
-                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Food Bank Density</h2><span id="freshness-banks" class="dashboard-freshness"></span></div>
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Food Bank Density</h2><span id="freshness-banks" class="dashboard-freshness"></span><div id="state-selector-container"></div></div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
                         <div id="chart-density-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food banks per 100,000 residents by state"></div>
@@ -382,15 +352,6 @@
                             <div class="dashboard-source-card__details">
                                 <span>Annual</span>
                                 <span>State level</span>
-                            </div>
-                        </div>
-                        <div class="dashboard-source-card">
-                            <div class="dashboard-source-card__icon">MBX</div>
-                            <h3 class="dashboard-source-card__name">Mapbox Geocoding</h3>
-                            <p class="dashboard-source-card__desc">Address-to-coordinates geocoding powering the "Find Help Near Me" feature. Converts user input to state identification for localized food bank search.</p>
-                            <div class="dashboard-source-card__details">
-                                <span>Real-time</span>
-                                <span>Address level</span>
                             </div>
                         </div>
                     </div>

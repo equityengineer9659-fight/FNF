@@ -7,7 +7,8 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
-  updateFreshness, initScrollReveal, handleResize, fetchWithFallback, addExportButton
+  updateFreshness, initScrollReveal, handleResize, fetchWithFallback, addExportButton,
+  initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.prices;
@@ -622,6 +623,20 @@ async function init() {
       headers: ['State', 'Affordability Index', 'Meal Cost ($)', 'Median Income ($)'],
       rows: regionalData.stateAffordability.states.map(s => [s.name, s.index, s.mealCost, s.medianIncome])
     }));
+
+    // State deep-dive selector
+    initStateSelector('state-selector-container', (stateCode) => {
+      const chart = echarts.getInstanceByDom(document.getElementById('chart-affordability-map'));
+      if (!chart) return;
+      if (!stateCode) {
+        chart.dispatchAction({ type: 'downplay' });
+        return;
+      }
+      const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
+      chart.dispatchAction({ type: 'downplay' });
+      chart.dispatchAction({ type: 'highlight', name: stateName });
+      chart.dispatchAction({ type: 'showTip', name: stateName });
+    });
 
     // Scroll reveal
     initScrollReveal();

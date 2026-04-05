@@ -8,7 +8,8 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
   initScrollReveal, handleResize, updateFreshness,
-  REGIONS, REGION_COLORS, getRegion, addExportButton
+  REGIONS, REGION_COLORS, getRegion, addExportButton,
+  initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.access;
@@ -151,6 +152,8 @@ function renderDesertMap(geoJSON, states) {
   if (backBtn) {
     backBtn.addEventListener('click', () => showNational());
   }
+
+  return { drillDown, showNational };
 }
 
 // -- Chart 2: Urban vs Rural (Donut) --
@@ -555,7 +558,7 @@ async function init() {
 
     animateCounters();
     updateFreshness('access', { _static: true, _dataYear: 2019 });
-    renderDesertMap(geoJSON, accessData.states);
+    const mapCtrl = renderDesertMap(geoJSON, accessData.states);
     renderUrbanRural(accessData.states);
     renderDistance(accessData.states);
     renderVehicle(accessData.states);
@@ -567,6 +570,19 @@ async function init() {
       headers: ['State', 'Low-Access Tracts (%)', 'Urban Low-Access', 'Rural Low-Access', 'Avg Distance (mi)', 'No Vehicle (%)', 'Low-Income Low-Access Pop'],
       rows: accessData.states.map(s => [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.noVehiclePct, s.lowIncomeLowAccessPop])
     }));
+
+    // State deep-dive selector
+    if (mapCtrl) {
+      initStateSelector('state-selector-container', (stateCode) => {
+        if (!stateCode) {
+          mapCtrl.showNational();
+          return;
+        }
+        const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
+        const match = accessData.states.find(s => s.name === stateName);
+        if (match?.fips) mapCtrl.drillDown(match.name, match.fips);
+      });
+    }
 
     initScrollReveal();
     window.addEventListener('resize', handleResize);

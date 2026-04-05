@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Summary Dashboard - Food-N-Force</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="One-page executive summary of food insecurity in America. Vulnerability map, SNAP coverage gaps, food price trends, and state rankings — built for grant writers and decision-makers.">
+    <meta name="keywords" content="food insecurity executive summary, grant writer dashboard, hunger data overview, vulnerability index, SNAP coverage gap, food price inflation">
+    <meta name="author" content="Food-N-Force">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://food-n-force.com/dashboards/executive-summary.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate icon" type="image/png" href="/icon-32x32.png">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Executive Summary Dashboard - Food-N-Force">
+    <meta property="og:description" content="One-page executive summary of food insecurity in America. Vulnerability map, SNAP coverage gaps, food price trends, and state rankings.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://food-n-force.com/dashboards/executive-summary.html">
+    <meta property="og:image" content="https://food-n-force.com/og-image.png">
+    <meta property="og:site_name" content="Food-N-Force">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Executive Summary Dashboard - Food-N-Force">
+    <meta name="twitter:description" content="One-page executive summary of food insecurity in America with vulnerability map, SNAP gaps, and state rankings.">
+    <meta name="twitter:image" content="https://food-n-force.com/og-image.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Executive Summary Dashboard",
+        "description": "One-page executive summary connecting the entire food insecurity story — vulnerability map, SNAP coverage gaps, food price trends, and state rankings for grant writers and decision-makers.",
+        "url": "https://food-n-force.com/dashboards/executive-summary.html",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Food-N-Force",
+            "url": "https://food-n-force.com"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Food Insecurity in the United States"
+        }
+    }
+    </script>
+
+    <!-- Performance: Preload critical resources -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Orbitron font for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Critical CSS -->
+    <link rel="stylesheet" href="/src/css/critical-inline.css">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
+    <!-- Salesforce Lightning Design System -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/src/css/main.css">
+</head>
+<body class="fnf-page--dashboard" id="page-top">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
+        <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
+        <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
+            <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
+                <div class="fnf-nav__logo">
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
+                </div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
+                    <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect y="0" width="24" height="2" fill="#ffffff"/>
+                        <rect y="8" width="24" height="2" fill="#ffffff"/>
+                        <rect y="16" width="24" height="2" fill="#ffffff"/>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
+            <ul class="fnf-nav__menu">
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link">Blog</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="fnf-nav__mobile">
+            <ul class="fnf-nav__mobile-menu">
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">Dashboards</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link">Blog</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Tabs -->
+    <nav class="dashboard-tabs" aria-label="Dashboard navigation">
+        <div class="dashboard-tabs__container">
+            <ul class="dashboard-tabs__list" role="tablist">
+            <li role="presentation"><a href="/dashboards/food-insecurity.html" class="dashboard-tabs__tab" role="tab">Overview</a></li>
+            <li role="presentation"><a href="/dashboards/food-access.html" class="dashboard-tabs__tab" role="tab">Food Access</a></li>
+            <li role="presentation"><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab" role="tab">SNAP & Safety Net</a></li>
+            <li role="presentation"><a href="/dashboards/food-prices.html" class="dashboard-tabs__tab" role="tab">Food Prices</a></li>
+            <li role="presentation"><a href="/dashboards/food-banks.html" class="dashboard-tabs__tab" role="tab">Food Banks</a></li>
+            <li role="presentation"><a href="/dashboards/nonprofit-directory.html" class="dashboard-tabs__tab" role="tab">Nonprofit Directory</a></li>
+            <li role="presentation"><a href="/dashboards/executive-summary.html" class="dashboard-tabs__tab" role="tab" aria-current="page">Summary</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="dashboard-hero" aria-label="Food insecurity executive summary">
+            <h1 class="slds-text-heading_large">Food Insecurity at a Glance</h1>
+            <p class="dashboard-hero__subtitle">The elevator pitch for grant writers — one URL that connects the entire food insecurity story</p>
+            <p class="dashboard-hero__positioning">Vulnerability mapping, coverage gaps, price trends, and state rankings drawn from USDA, Census, BLS, and Feeding America data.</p>
+            <div class="dashboard-hero__stats" aria-label="Key national statistics">
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="12.8" data-suffix="%">12.8%</span>
+                    <p class="dashboard-stat__label">National Insecurity Rate</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="95.4" data-suffix="%">95.4%</span>
+                    <p class="dashboard-stat__label">SNAP Coverage Rate</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" data-target="61.3" data-suffix="K">61.3K</span>
+                    <p class="dashboard-stat__label">Food Bank Orgs</p>
+                </div>
+                <div class="dashboard-stat">
+                    <span class="dashboard-stat__number" id="kpi-cpi-yoy" data-target="2.6" data-suffix="%">2.6%</span>
+                    <p class="dashboard-stat__label">Food CPI YoY Change</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. Vulnerability Map -->
+        <section class="dashboard-section scroll-reveal" aria-label="State vulnerability index map">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Vulnerability Index by State</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-vulnerability-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing composite vulnerability index combining food insecurity, poverty, and meal cost by state">
+                            <noscript><p>This interactive map requires JavaScript.</p></noscript>
+                        </div>
+                        <p class="dashboard-chart__hint">Hover for state details</p>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Where Vulnerability Converges</h3>
+                        <p class="dashboard-info__text">This composite index combines <strong>food insecurity rate</strong> (40%), <strong>poverty rate</strong> (30%), and <strong>relative meal cost</strong> (30%) into a single score per state. States scoring highest face the triple burden of high hunger, deep poverty, and expensive food.</p>
+                        <p class="dashboard-info__text">Grant writers can use this single metric to identify where need is greatest and funding most impactful.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Sources</span> USDA ERS, Feeding America, U.S. Census Bureau ACS</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Index Formula</span> (Insecurity &times; 0.4) + (Poverty &times; 0.3) + (Meal Cost &times; 0.3)</div>
+                        </div>
+                        <div id="vulnerability-map-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SNAP Coverage Gap -->
+        <section class="dashboard-section scroll-reveal" aria-label="SNAP coverage gap by state">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">SNAP Coverage Gap</h2>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-snap-gap" class="dashboard-chart" role="img" aria-label="Grouped bar chart comparing food-insecure population to SNAP participants for top 15 most insecure states"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Is SNAP Reaching the Hungry?</h3>
+                        <p class="dashboard-info__text">For the 15 most food-insecure states, this chart compares the <strong>food-insecure population</strong> against <strong>SNAP participants</strong>. Where SNAP bars fall short of insecurity bars, a coverage gap exists — meaning eligible families are not receiving benefits.</p>
+                        <p class="dashboard-info__text">States with strong outreach programs show SNAP coverage meeting or exceeding food-insecure populations. The gap reveals where enrollment efforts and policy changes can make the biggest impact.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Sources</span> USDA FNS SNAP Data Tables &amp; Feeding America Map the Meal Gap 2024</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022</div>
+                        </div>
+                        <div id="snap-gap-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Food Price Impact (YoY Inflation) -->
+        <section class="dashboard-section scroll-reveal" aria-label="Food price year-over-year inflation">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Food Price Impact</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-price-impact" class="dashboard-chart" role="img" aria-label="Line chart showing year-over-year food-at-home inflation rate"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Grocery Inflation Over Time</h3>
+                        <p class="dashboard-info__text">Year-over-year change in the BLS <strong>Food at Home</strong> Consumer Price Index. The 2022 spike — peaking above 13% — was the worst grocery inflation in over 40 years. Though it has cooled, prices remain elevated, squeezing families already on the edge.</p>
+                        <p class="dashboard-info__text">For food banks, this means every dollar buys less food. For families, it means the gap between income and an adequate diet keeps widening.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Bureau of Labor Statistics, Consumer Price Index</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Monthly (BLS API)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Calculation</span> (Current CPI - CPI 12 months prior) / CPI 12 months prior &times; 100</div>
+                        </div>
+                        <div id="price-impact-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Worst 10 States -->
+        <section class="dashboard-section scroll-reveal" aria-label="Top 10 most vulnerable states">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">10 Most Vulnerable States</h2>
+                </div>
+                <div class="dashboard-chart-row dashboard-chart-row--reverse">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-worst-states" class="dashboard-chart" role="img" aria-label="Horizontal bar chart ranking the 10 most vulnerable states by weighted vulnerability index"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Where Need Is Greatest</h3>
+                        <p class="dashboard-info__text">These 10 states rank highest on the composite vulnerability index. The bar length reflects the weighted score combining food insecurity, poverty, and meal cost. Southern states dominate — consistent with decades of structural disadvantage in food access and economic opportunity.</p>
+                        <p class="dashboard-info__text">For grant applications, these rankings help identify <strong>target geographies</strong> where federal and foundation funding is most needed and most defensible.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Sources</span> USDA ERS, Feeding America, U.S. Census Bureau ACS</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022</div>
+                        </div>
+                        <div id="worst-states-insight" class="dashboard-info__insight"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How Organizations Use These Insights -->
+        <section class="dashboard-section dashboard-insights scroll-reveal" aria-label="How organizations use these insights">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <h2 class="dashboard-narrative__heading">How Organizations Use These Insights</h2>
+                <div class="dashboard-insights__grid">
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Grant Writers</div>
+                        <p class="dashboard-insights__card-text">Use this single URL to show funders the full scope of hunger in your service area — vulnerability scores, coverage gaps, and price pressure in one compelling narrative.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Executive Directors</div>
+                        <p class="dashboard-insights__card-text">Share with board members and stakeholders as a quick-reference briefing on national food insecurity trends, SNAP coverage shortfalls, and rising costs.</p>
+                    </div>
+                    <div class="dashboard-insights__card">
+                        <div class="dashboard-insights__card-title">Policy Advocates</div>
+                        <p class="dashboard-insights__card-text">Cite the vulnerability index and SNAP gap data in testimony, op-eds, and legislative briefings. Every chart links to authoritative federal data sources.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="dashboard-narrative dashboard-cta scroll-reveal" aria-label="Take action">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-narrative__content dashboard-narrative__content--cta">
+                    <h2 class="dashboard-narrative__heading">Turn Data Into Action</h2>
+                    <p class="dashboard-narrative__text">This executive summary connects the dots. Food-N-Force helps you build the systems behind the data — Salesforce dashboards, funder reporting, and operational workflows designed for food relief organizations.</p>
+                    <div class="dashboard-cta__buttons">
+                        <a href="/contact.html" class="dashboard-cta__btn dashboard-cta__btn--primary">Talk With Us About Dashboard Strategy</a>
+                        <a href="/services.html" class="dashboard-cta__btn dashboard-cta__btn--secondary">See Our Services</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology & Sources -->
+        <section class="dashboard-section dashboard-sources scroll-reveal" aria-label="Methodology and data sources">
+            <div class="slds-container_large slds-container_center slds-p-around_large">
+                <div class="dashboard-card">
+                    <div class="dashboard-card__header">
+                        <h2 class="slds-text-heading_medium">Methodology & Data Sources</h2>
+                    </div>
+
+                    <!-- Source Cards Grid -->
+                    <div class="dashboard-source-grid">
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">USDA</div>
+                            <h3 class="dashboard-source-card__name">USDA Economic Research Service</h3>
+                            <p class="dashboard-source-card__desc">Household Food Security in the United States — the authoritative federal survey measuring food insecurity. Provides state-level insecurity rates, child rates, and meal gap estimates.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual release</span>
+                                <span>State &amp; national</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">BLS</div>
+                            <h3 class="dashboard-source-card__name">Bureau of Labor Statistics</h3>
+                            <p class="dashboard-source-card__desc">Consumer Price Index — monthly food price tracking for Food at Home. Powers the inflation chart and CPI YoY KPI via the BLS Public Data API.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Monthly (live API)</span>
+                                <span>National</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">FNS</div>
+                            <h3 class="dashboard-source-card__name">USDA Food &amp; Nutrition Service</h3>
+                            <p class="dashboard-source-card__desc">SNAP participation data by state. Compared against food-insecure populations to reveal the coverage gap where eligible families are not receiving benefits.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Monthly from USDA</span>
+                                <span>State level</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-source-card">
+                            <div class="dashboard-source-card__icon">FA</div>
+                            <h3 class="dashboard-source-card__name">Feeding America</h3>
+                            <p class="dashboard-source-card__desc">Map the Meal Gap 2024 — county-level food insecurity estimates, meal gaps, and meal costs used in the vulnerability index calculation.</p>
+                            <div class="dashboard-source-card__details">
+                                <span>Annual release</span>
+                                <span>County level</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Methodology Notes -->
+                    <div class="dashboard-methodology">
+                        <div class="dashboard-methodology__row">
+                            <div class="dashboard-methodology__item">
+                                <h3>Vulnerability Index</h3>
+                                <p>The composite vulnerability index is computed per state as: <strong>(food insecurity rate &times; 0.4) + (poverty rate &times; 0.3) + (normalized meal cost &times; 30)</strong>. Meal cost is normalized against the national maximum ($5.12 in Hawaii). Higher scores indicate greater combined vulnerability across all three dimensions.</p>
+                            </div>
+                            <div class="dashboard-methodology__item">
+                                <h3>SNAP Coverage Gap</h3>
+                                <p>The SNAP coverage gap compares food-insecure persons (from Feeding America) against SNAP participants (from USDA FNS administrative data). A gap exists when food-insecure persons exceed SNAP participants, indicating eligible families who are not enrolled.</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-methodology__row">
+                            <div class="dashboard-methodology__item">
+                                <h3>Data Currency</h3>
+                                <p>Food insecurity and poverty rates reflect <strong>2022</strong>. BLS food prices update monthly via live API. SNAP participation uses FY2022-2023 administrative data. The USDA ERS food security report was discontinued after 2024; Feeding America continues annually.</p>
+                            </div>
+                            <div class="dashboard-methodology__item">
+                                <h3>About This Dashboard</h3>
+                                <p>Built by <strong>Food-N-Force</strong> as the executive summary entry point for grant writers, board presentations, and stakeholder briefings. All data sources are authoritative, free, and publicly accessible. This dashboard is open for use in grant applications and community planning.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fnf-footer">
+        <div class="slds-container_large slds-container_center slds-p-vertical_large slds-p-horizontal_medium">
+            <nav class="slds-text-align_center slds-m-bottom_medium" aria-label="Footer navigation">
+                <a href="/services.html" class="fnf-footer__link">Services</a>
+                <span class="fnf-footer__separator">&middot;</span>
+                <a href="/resources.html" class="fnf-footer__link">Resources</a>
+                <span class="fnf-footer__separator">&middot;</span>
+                <a href="/dashboards/food-insecurity.html" class="fnf-footer__link">Dashboards</a>
+                <span class="fnf-footer__separator">&middot;</span>
+                <a href="/blog.html" class="fnf-footer__link">Blog</a>
+                <span class="fnf-footer__separator">&middot;</span>
+                <a href="/contact.html" class="fnf-footer__link">Contact</a>
+            </nav>
+            <p class="slds-text-align_center slds-m-bottom_x-small">
+                <a href="mailto:hello@food-n-force.com" class="fnf-footer__link">hello@food-n-force.com</a>
+            </p>
+            <p class="slds-text-body_small slds-text-align_center fnf-footer__copyright">&copy; 2026 Food-N-Force. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules - Deferred for performance -->
+    <script type="module" src="/src/js/main.js" defer></script>
+    <script type="module" src="/src/js/dashboards/executive-summary.js" defer></script>
+</body>
+</html>

@@ -81,6 +81,7 @@ const pages = [
   { path: 'blog/food-bank-digital-supply-chain.html', priority: '0.7', changefreq: 'monthly' },
   { path: 'dashboards/nonprofit-directory.html', priority: '0.8', changefreq: 'monthly' },
   // Dashboards
+  { path: 'dashboards/executive-summary.html', priority: '0.9', changefreq: 'monthly' },
   { path: 'dashboards/food-insecurity.html', priority: '0.8', changefreq: 'monthly' },
   { path: 'dashboards/food-access.html', priority: '0.8', changefreq: 'monthly' },
   { path: 'dashboards/snap-safety-net.html', priority: '0.8', changefreq: 'monthly' },
