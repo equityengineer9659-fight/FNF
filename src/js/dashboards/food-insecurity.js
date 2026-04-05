@@ -7,7 +7,7 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
-  updateFreshness, initScrollReveal, handleResize, fetchWithFallback,
+  updateFreshness, initScrollReveal, handleResize,
   REGION_COLORS, getRegion, addExportButton, initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
@@ -1095,8 +1095,6 @@ function renderDemographics(data) {
   const states = sorted.map(s => s.name);
   const overallRates = sorted.map(s => s.rate);
   const childRates = sorted.map(s => s.childRate);
-  const gaps = sorted.map(s => (s.childRate - s.rate).toFixed(1));
-
   chart.setOption({
     legend: {
       top: 5, right: 10,

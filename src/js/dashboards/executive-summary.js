@@ -8,7 +8,7 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
   initScrollReveal, handleResize,
-  REGION_COLORS, getRegion, addExportButton
+  getRegion, addExportButton
 } from './shared/dashboard-utils.js';
 
 // ── Vulnerability Index computation ──
@@ -321,7 +321,6 @@ function renderWorstStates(statesWithIndex) {
   const insightEl = document.getElementById('worst-states-insight');
   if (insightEl && top10.length >= 3) {
     const topState = top10.at(-1); // highest after reverse
-    const region = getRegion(topState.name);
     const southCount = top10.filter(s => getRegion(s.name) === 'South').length;
     insightEl.textContent = `${southCount} of the 10 most vulnerable states are in the South. ${topState.name} scores highest at ${topState.vulnerabilityIndex.toFixed(1)}, driven by a ${topState.rate}% insecurity rate and ${topState.povertyRate}% poverty.`;
   }
@@ -345,7 +344,7 @@ async function init() {
       throw new Error('Failed to load one or more data files');
     }
 
-    const [fiData, snapData, blsData, bankData, geoJSON] = await Promise.all([
+    const [fiData, snapData, blsData, , geoJSON] = await Promise.all([
       fiRes.json(), snapRes.json(), blsRes.json(), bankRes.json(), geoRes.json()
     ]);
 
