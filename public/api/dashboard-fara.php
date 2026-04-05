@@ -2,6 +2,7 @@
 /**
  * USDA Food Access Research Atlas Proxy — Food-N-Force Dashboard
  * Fetches food desert / food access data from USDA ERS ArcGIS REST services.
+ * Endpoint migrated 2026-04: FARA/FARA_2019/MapServer/30 (was FoodAccess_2019/FeatureServer/1).
  * Caches responses for 7 days (data is 2019 vintage, does not change).
  *
  * Endpoints:
@@ -74,7 +75,7 @@ if (!rateLimitCheck('fara', 'daily', 500)) {
 }
 
 // ArcGIS REST base URL
-$baseUrl = 'https://gisportal.ers.usda.gov/server/rest/services/FoodAccess_2019/FeatureServer/1/query';
+$baseUrl = 'https://gisportal.ers.usda.gov/server/rest/services/FARA/FARA_2019/MapServer/30/query';
 
 $context = stream_context_create([
     'http' => [
@@ -117,14 +118,32 @@ $result['_cached'] = false;
 echo json_encode($result);
 
 
+// ---- State name → FIPS mapping ----
+$STATE_FIPS = [
+    'Alabama'=>'01','Alaska'=>'02','Arizona'=>'04','Arkansas'=>'05','California'=>'06',
+    'Colorado'=>'08','Connecticut'=>'09','Delaware'=>'10','District of Columbia'=>'11',
+    'Florida'=>'12','Georgia'=>'13','Hawaii'=>'15','Idaho'=>'16','Illinois'=>'17',
+    'Indiana'=>'18','Iowa'=>'19','Kansas'=>'20','Kentucky'=>'21','Louisiana'=>'22',
+    'Maine'=>'23','Maryland'=>'24','Massachusetts'=>'25','Michigan'=>'26','Minnesota'=>'27',
+    'Mississippi'=>'28','Missouri'=>'29','Montana'=>'30','Nebraska'=>'31','Nevada'=>'32',
+    'New Hampshire'=>'33','New Jersey'=>'34','New Mexico'=>'35','New York'=>'36',
+    'North Carolina'=>'37','North Dakota'=>'38','Ohio'=>'39','Oklahoma'=>'40','Oregon'=>'41',
+    'Pennsylvania'=>'42','Rhode Island'=>'44','South Carolina'=>'45','South Dakota'=>'46',
+    'Tennessee'=>'47','Texas'=>'48','Utah'=>'49','Vermont'=>'50','Virginia'=>'51',
+    'Washington'=>'53','West Virginia'=>'54','Wisconsin'=>'55','Wyoming'=>'56',
+    'Puerto Rico'=>'72','Guam'=>'66','Virgin Islands'=>'78','American Samoa'=>'60',
+    'Northern Mariana Islands'=>'69'
+];
+
 // ---- Query functions ----
 
 /**
  * Fetch state-level summary using outStatistics (server-side aggregation).
- * Groups by state FIPS (first 2 digits of CensusTract via TRUNCATE).
+ * Groups by St_Name and maps to FIPS codes for JS compatibility.
  */
 function fetchStateSummary($baseUrl, $context) {
-    // ArcGIS outStatistics definitions
+    global $STATE_FIPS;
+
     $stats = [
         ['statisticType' => 'count', 'onStatisticField' => 'LILATracts_1And10', 'outStatisticFieldName' => 'totalTracts'],
         ['statisticType' => 'sum',   'onStatisticField' => 'LILATracts_1And10', 'outStatisticFieldName' => 'lilaTracts'],
@@ -135,14 +154,10 @@ function fetchStateSummary($baseUrl, $context) {
         ['statisticType' => 'sum',   'onStatisticField' => 'lasnap1',           'outStatisticFieldName' => 'snapLowAccess']
     ];
 
-    // Use SQL expression to extract state FIPS: TRUNCATE(CensusTract / 1000000000, 0)
-    // CensusTract is 11 digits; dividing by 1e9 and truncating gives first 2 digits
-    $groupByFields = 'State';
-
     $params = [
         'where'            => '1=1',
         'outStatistics'    => json_encode($stats),
-        'groupByFieldsForStatistics' => $groupByFields,
+        'groupByFieldsForStatistics' => 'St_Name',
         'f'                => 'json',
         'returnGeometry'   => 'false'
     ];
@@ -156,16 +171,17 @@ function fetchStateSummary($baseUrl, $context) {
 
     $json = json_decode($response, true);
     if (!$json || isset($json['error']) || !isset($json['features'])) {
-        // Fallback: try grouping by a computed expression if 'State' field doesn't exist
         return fetchStateSummaryFallback($baseUrl, $context, $stats);
     }
 
     $records = [];
     foreach ($json['features'] as $feature) {
         $attrs = $feature['attributes'];
-        $state = str_pad($attrs['State'], 2, '0', STR_PAD_LEFT);
+        $stateName = $attrs['St_Name'] ?? null;
+        if (!$stateName || !isset($STATE_FIPS[$stateName])) continue;
+        $fips = $STATE_FIPS[$stateName];
         $records[] = [
-            'state'              => $state,
+            'state'              => $fips,
             'totalTracts'        => intval($attrs['totalTracts'] ?? 0),
             'lilaTracts'         => intval($attrs['lilaTracts'] ?? 0),
             'avgPovertyRate'     => round(floatval($attrs['avgPovertyRate'] ?? 0), 1),
@@ -176,7 +192,6 @@ function fetchStateSummary($baseUrl, $context) {
         ];
     }
 
-    // Sort by state FIPS
     usort($records, function($a, $b) { return strcmp($a['state'], $b['state']); });
 
     return [
