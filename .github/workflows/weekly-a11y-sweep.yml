@@ -1,0 +1,42 @@
+name: Weekly Full Accessibility Sweep
+
+on:
+  schedule:
+    - cron: '0 6 * * 0'  # Every Sunday at 6am UTC
+  workflow_dispatch:      # Allow manual runs
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  full-accessibility-sweep:
+    name: Full Pa11y Sweep (All Pages)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: ''
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_ENV: production
+
+      - name: Generate Full Pa11y Config
+        run: node scripts/generate-pa11y-config.js --mode=full
+
+      - name: Run Full Accessibility Tests
+        run: |
+          npx vite preview --port 4173 &
+          sleep 3
+          npm run test:accessibility
+          kill %1 || true

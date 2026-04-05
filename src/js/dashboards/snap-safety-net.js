@@ -610,6 +610,11 @@ async function init() {
     renderSchoolLunch(snapData.schoolLunch.states);
     renderBenefits(snapData.benefitsPerPerson.states, snapData.stateCoverage.states);
     renderGauges(snapData.national);
+    updateFreshness('snap-map', { _static: true, _dataYear: 'FY2022' });
+    updateFreshness('snap-sankey', { _static: true, _dataYear: 2022 });
+    updateFreshness('snap-lunch', { _static: true, _dataYear: 'FY2023' });
+    updateFreshness('snap-benefits', { _static: true, _dataYear: 'FY2025' });
+    updateFreshness('snap-gauges', { _static: true, _dataYear: 'FY2025' });
 
     addExportButton('chart-snap-map', 'snap-coverage-by-state.csv', () => ({
       headers: ['State', 'SNAP Participants', 'Food Insecure', 'Coverage Ratio (%)', 'Insecurity Rate (%)'],

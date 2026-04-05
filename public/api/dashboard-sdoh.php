@@ -74,8 +74,8 @@ if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
     }
 }
 
-// Census ACS 5-year variables
-$vars = implode(',', [
+// Census ACS 5-year variables — split into 2 requests (Census API limit: 50 vars)
+$vars1 = implode(',', [
     'NAME',
     'B01003_001E',  // total population
     'B17001_002E',  // below poverty
@@ -95,7 +95,11 @@ $vars = implode(',', [
     'B08141_001E',  // commute universe
     'B08141_002E',  // no vehicle workers
     'B25070_001E',  // renter universe
-    'B25070_010E',  // severe housing cost burden (50%+)
+    'B25070_010E'   // severe housing cost burden (50%+)
+]);
+
+$vars2 = implode(',', [
+    'NAME',
     'B19001_001E',  // total households (income universe)
     'B19001_002E','B19001_003E','B19001_004E','B19001_005E','B19001_006E',  // under $25K
     'B19001_007E','B19001_008E','B19001_009E','B19001_010E',  // $25K-$50K
@@ -108,7 +112,8 @@ $vars = implode(',', [
     'B03002_012E'   // Hispanic or Latino
 ]);
 
-$url = "https://api.census.gov/data/2023/acs/acs5?get={$vars}&for=state:*";
+$url1 = "https://api.census.gov/data/2023/acs/acs5?get={$vars1}&for=state:*";
+$url2 = "https://api.census.gov/data/2023/acs/acs5?get={$vars2}&for=state:*";
 
 $context = stream_context_create([
     'http' => [
@@ -118,9 +123,10 @@ $context = stream_context_create([
     ]
 ]);
 
-$response = @file_get_contents($url, false, $context);
+$response1 = @file_get_contents($url1, false, $context);
+$response2 = @file_get_contents($url2, false, $context);
 
-if ($response === false) {
+if ($response1 === false || $response2 === false) {
     // Return stale cache if available
     if (file_exists($cacheFile)) {
         $cached = file_get_contents($cacheFile);
@@ -137,11 +143,32 @@ if ($response === false) {
     exit;
 }
 
-$raw = json_decode($response, true);
-if (!$raw || count($raw) < 2) {
+$raw1 = json_decode($response1, true);
+$raw2 = json_decode($response2, true);
+if (!$raw1 || count($raw1) < 2 || !$raw2 || count($raw2) < 2) {
     http_response_code(502);
     echo json_encode(['error' => 'Invalid Census response']);
     exit;
+}
+
+// Merge the two responses: raw1 has cols 0..30+state, raw2 has NAME+cols+state
+// Build lookup from raw2 by state FIPS, skip NAME and state columns
+$raw2Lookup = [];
+for ($i = 1; $i < count($raw2); $i++) {
+    $fips = $raw2[$i][count($raw2[$i]) - 1]; // state FIPS is last column
+    $raw2Lookup[$fips] = array_slice($raw2[$i], 1, -1); // skip NAME (0) and state (last)
+}
+
+// Merge into combined rows: raw1 row + raw2 data columns
+$raw = [$raw1[0]]; // headers from first request (we'll handle indexing manually)
+for ($i = 1; $i < count($raw1); $i++) {
+    $fips = $raw1[$i][count($raw1[$i]) - 1];
+    $merged = array_slice($raw1[$i], 0, -1); // everything except state FIPS
+    if (isset($raw2Lookup[$fips])) {
+        $merged = array_merge($merged, $raw2Lookup[$fips]);
+    }
+    $merged[] = $fips; // re-append state FIPS at end
+    $raw[] = $merged;
 }
 
 // Parse — first row is headers, rest is data

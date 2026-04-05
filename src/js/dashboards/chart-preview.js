@@ -295,7 +295,7 @@ function renderAreaSnap(snapData) {
 // ============================================================
 // 7. SANKEY — Safety Net Coverage Flow
 // ============================================================
-function renderSankeySnap(snapData) {
+function renderSankeySnap() {
   const chart = createChart('preview-sankey-snap');
   if (!chart) return;
 
@@ -382,8 +382,6 @@ function renderStackedArea(priceData) {
     ['rgba(52,211,153,0.6)', 'rgba(52,211,153,0.1)'],
     ['rgba(1,118,211,0.5)', 'rgba(1,118,211,0.1)']
   ];
-  const lineColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', COLORS.primary];
-
   chart.setOption({
     tooltip: {
       trigger: 'axis', ...TOOLTIP_STYLE,
@@ -640,7 +638,7 @@ async function init() {
     renderAreaDistance(accessData);      // 4
     renderTreemapBurden(accessData);    // 5
     renderAreaSnap(snapData);           // 6
-    renderSankeySnap(snapData);         // 7
+    renderSankeySnap();                  // 7
     renderNightingaleLunch(snapData);   // 8
     renderStackedArea(priceData);       // 9a (current - broken)
     renderUnstackedArea(priceData);     // 9b (fixed - overlapping)

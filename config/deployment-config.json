@@ -130,7 +130,7 @@
     },
     
     "staging": {
-      "url": "https://foodnforce.com",
+      "url": "https://food-n-force.com",
       "note": "SiteGround shared hosting — staging deploys to same domain via staging branch. No separate staging subdomain.",
       "auto_deploy": true,
       "validation_level": "comprehensive",
@@ -138,7 +138,7 @@
     },
 
     "production": {
-      "url": "https://foodnforce.com",
+      "url": "https://food-n-force.com",
       "auto_deploy": false,
       "validation_level": "full",
       "approval_required": true,

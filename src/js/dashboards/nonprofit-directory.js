@@ -5,7 +5,7 @@
 
 import {
   fmtNum, initScrollReveal, handleResize,
-  getNteeName, isFoodRelated, US_STATES
+  getNteeName, US_STATES
 } from './shared/dashboard-utils.js';
 
 let searchTimeout = null;

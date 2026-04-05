@@ -30,6 +30,7 @@ npm run test:performance         # Lighthouse CI audits
 npm run test:browser             # Playwright browser tests
 npm run test:performance-budget  # Performance budget monitoring
 npm run analyze:bundle           # Vite bundle analyzer
+npm run generate:pa11y           # Regenerate .pa11yci.json from filesystem (--mode=full|sample)
 
 # Deployment
 npm run deploy:staging          # SiteGround staging (GitHub Actions → staging branch)
@@ -60,10 +61,10 @@ npm run admin                   # Start Express server for scraper + AI article 
 ├── docs/                  # Active documentation
 ├── tools/                 # Testing, deployment, governance utilities
 ├── vite.config.js         # Vite build config (auto-discovers *.html and blog/*.html)
-└── build-components.js    # Injects nav/footer/dashboard-tabs/scripts into all 68 pages before Vite builds
+└── build-components.js    # Injects nav/footer/dashboard-tabs/scripts into all 72 pages before Vite builds
 ```
 
-### Page Inventory (68 pages)
+### Page Inventory (72 pages)
 - **Core pages (7)**: index, about, services, resources, impact, contact, 404
 - **Blog hub (1)**: blog
 - **Hub pages at root (2)**: case-studies, templates-tools
@@ -80,9 +81,9 @@ npm run admin                   # Start Express server for scraper + AI article 
 Case study cards also appear on `blog.html` and testimonials on `impact.html`.
 10 additional case studies published as individual blog articles (category: Case Studies).
 
-**Adding new articles via scraper tool**: `npm run admin` → New Article tab → Generate with Claude → Save to blog/. Auto-registers in `build-components.js`, `generate-sitemap.js`, and `.pa11yci.json`, then runs `build-components.js` and `sync-blog.js`. After saving, run `/create-illustration {slug}` to generate the SVG illustration.
+**Adding new articles via scraper tool**: `npm run admin` → New Article tab → Generate with Claude → Save to blog/. Runs `build-components.js` and `sync-blog.js` automatically. After saving, run `/create-illustration {slug}` to generate the SVG illustration.
 
-**Adding new articles manually**: Place HTML in `blog/`, then run `/register-article {slug}` to register in all required files and run sync scripts. Or manually: register slug in both arrays of `build-components.js`, `scripts/generate-sitemap.js`, and `.pa11yci.json`, then run `node build-components.js && node scripts/sync-blog.js`.
+**Adding new articles manually**: Place HTML in `blog/`, then run `/register-article {slug}` to run build scripts. Or manually: `node build-components.js && node scripts/sync-blog.js`. No config file edits needed — all build scripts auto-discover articles from the `blog/` directory via glob.
 
 ### Navigation
 8 links: Home | Services | Resources | Dashboards | Impact | Contact | Blog | About Us
@@ -92,10 +93,12 @@ Case study cards also appear on `blog.html` and testimonials on `impact.html`.
 - Navigation arrays in `build-components.js`: `dashboardSubpages`, `blogSubpages`, `resourcesSubpages`
 
 ### Build Pipeline
-- `build-components.js` injects shared nav, footer, dashboard tabs, and script tags into all 68 pages before Vite builds
+- `build-components.js` auto-discovers blog articles from `blog/` via glob, then injects shared nav, footer, dashboard tabs, and script tags into all pages before Vite builds
 - `scripts/sync-blog.js` rebuilds blog.html card grid from article metadata (auto-run on build)
-- `scripts/generate-sitemap.js` generates sitemap.xml covering all public pages
+- `scripts/generate-sitemap.js` auto-discovers blog articles from `blog/` via glob and generates sitemap.xml
+- `scripts/generate-pa11y-config.js` auto-generates `.pa11yci.json` from filesystem (`--mode=full|sample`)
 - ECharts is tree-shaken and code-split into a separate chunk loaded only on dashboard pages
+- **Adding blog articles requires zero config file edits** — just drop HTML in `blog/` and run build scripts
 
 ### Blog Content Pipeline
 AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHROPIC_API_KEY` in `.env`. Full workflow: Scraper tab → select sources → New Article tab → Generate with Claude → Preview → Save to blog/. Illustrations created separately by Claude Code for better quality. See `docs/current/blog-content-pipeline.md` for full guide.
@@ -165,6 +168,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **Unit Test Coverage**: 65% threshold
 - **Lighthouse Configs**: `lighthouse.config.js` (local) vs `tools/testing/lighthouserc.json` (CI)
+- **Pa11y CI**: Sample mode on push (non-blog pages + 5 random articles), full sweep weekly via scheduled workflow
 
 ### Special Effects Validation
 - Glassmorphism fallbacks work in all browsers

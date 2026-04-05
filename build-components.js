@@ -7,6 +7,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { glob } from 'glob';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -16,37 +17,11 @@ const dashboardSubpages = [
   'nonprofit-directory', 'nonprofit-profile',
 ];
 
-// Pages that should highlight "Blog" in navigation
+// Pages that should highlight "Blog" in navigation — auto-discovered from blog/ directory
 const blogSubpages = [
   'blog',
-  'ai-reshaping-food-banks', 'salesforce-food-bank-operations', 'donor-relationships-nonprofit-cloud',
-  'data-driven-food-banks', 'food-bank-workflow-automation', 'securing-technology-grants',
-  'ai-inventory-management',
-  'agentforce-nonprofits-guide', 'ai-ethics-nonprofit-governance', 'centralized-food-hub-case-study',
-  'client-choice-food-pantry-technology', 'community-food-center-model', 'data-privacy-food-bank-clients',
-  'digital-transformation-small-food-banks', 'donor-prospecting-salesforce', 'food-bank-client-services-technology',
-  'food-bank-crisis-response-planning', 'food-bank-kitchen-operations', 'food-bank-strategic-partnerships',
-  'food-bank-technology-stack', 'food-banks-healthcare-social-determinants', 'food-is-medicine-food-banks',
-  'future-food-banking-trends', 'grant-management-food-banks', 'impact-measurement-food-banks',
-  'measuring-hunger-relief-outcomes', 'nonprofit-cloud-vs-sales-cloud', 'nutrition-first-food-bank-strategy',
-  'rapid-technology-implementation', 'salesforce-flow-builder-nonprofits', 'salesforce-reports-dashboards-food-banks',
-  'salesforce-security-nonprofits', 'salesforce-spring-2026-nonprofits', 'snap-policy-changes-food-banks',
-  'tax-policy-nonprofit-fundraising', 'volunteer-management-technology', 'volunteer-recruitment-retention-digital',
-  'purpose-driven-ai-food-banks', 'salesforce-nonprofit-cloud-ai-automation',
-  'snap-cuts-ice-fears-food-bank-response',
-  'grant-writing-nonprofit-sustainability',
-  'ai-data-strategy-crm-food-banks',
-  'data-migration-food-bank-modernization',
-  'central-pennsylvania-food-bank-salesforce',
-  'barrie-food-bank-crm-transformation',
-  'last-mile-food-rescue-salesforce',
-  'food-bank-of-alaska-snap-management',
-  'san-antonio-food-bank-salesforce',
-  'second-harvest-silicon-valley-crm',
-  'second-harvest-process-automation',
-  'roadrunner-food-bank-salesforce',
-  'food-bank-salesforce-use-cases',
-  'food-bank-digital-supply-chain',
+  ...glob.sync('*.html', { cwd: path.join(__dirname, 'blog') })
+    .map(f => f.replace('.html', '')),
 ];
 
 // Pages that should highlight "Resources" in navigation
@@ -187,12 +162,12 @@ const components = {
     // Profile page highlights the Directory tab
     const activeTab = currentPage === 'nonprofit-profile' ? 'nonprofit-directory' : currentPage;
     const items = tabs.map(t =>
-      `            <li role="presentation"><a href="/dashboards/${t.slug}.html" class="dashboard-tabs__tab" role="tab"${t.slug === activeTab ? ' aria-current="page"' : ''}>${t.label}</a></li>`
+      `            <li><a href="/dashboards/${t.slug}.html" class="dashboard-tabs__tab"${t.slug === activeTab ? ' aria-current="page"' : ''}>${t.label}</a></li>`
     ).join('\n');
     return `    <!-- Dashboard Tabs -->
     <nav class="dashboard-tabs" aria-label="Dashboard navigation">
         <div class="dashboard-tabs__container">
-            <ul class="dashboard-tabs__list" role="tablist">
+            <ul class="dashboard-tabs__list">
 ${items}
             </ul>
         </div>
@@ -277,37 +252,9 @@ function buildComponents() {
   // Hub pages at root (not articles, not core)
   const hubPages = ['case-studies', 'templates-tools'];
 
-  // Article pages under blog/
-  const articlePages = [
-    'ai-reshaping-food-banks', 'salesforce-food-bank-operations', 'donor-relationships-nonprofit-cloud',
-    'data-driven-food-banks', 'food-bank-workflow-automation', 'securing-technology-grants',
-    'ai-inventory-management',
-    'agentforce-nonprofits-guide', 'ai-ethics-nonprofit-governance', 'centralized-food-hub-case-study',
-    'client-choice-food-pantry-technology', 'community-food-center-model', 'data-privacy-food-bank-clients',
-    'digital-transformation-small-food-banks', 'donor-prospecting-salesforce', 'food-bank-client-services-technology',
-    'food-bank-crisis-response-planning', 'food-bank-kitchen-operations', 'food-bank-strategic-partnerships',
-    'food-bank-technology-stack', 'food-banks-healthcare-social-determinants', 'food-is-medicine-food-banks',
-    'future-food-banking-trends', 'grant-management-food-banks', 'impact-measurement-food-banks',
-    'measuring-hunger-relief-outcomes', 'nonprofit-cloud-vs-sales-cloud', 'nutrition-first-food-bank-strategy',
-    'rapid-technology-implementation', 'salesforce-flow-builder-nonprofits', 'salesforce-reports-dashboards-food-banks',
-    'salesforce-security-nonprofits', 'salesforce-spring-2026-nonprofits', 'snap-policy-changes-food-banks',
-    'tax-policy-nonprofit-fundraising', 'volunteer-management-technology', 'volunteer-recruitment-retention-digital',
-    'purpose-driven-ai-food-banks', 'salesforce-nonprofit-cloud-ai-automation',
-    'snap-cuts-ice-fears-food-bank-response',
-  'grant-writing-nonprofit-sustainability',
-  'ai-data-strategy-crm-food-banks',
-  'data-migration-food-bank-modernization',
-  'central-pennsylvania-food-bank-salesforce',
-  'barrie-food-bank-crm-transformation',
-  'last-mile-food-rescue-salesforce',
-  'food-bank-of-alaska-snap-management',
-  'san-antonio-food-bank-salesforce',
-  'second-harvest-silicon-valley-crm',
-  'second-harvest-process-automation',
-  'roadrunner-food-bank-salesforce',
-  'food-bank-salesforce-use-cases',
-  'food-bank-digital-supply-chain',
-];
+  // Article pages under blog/ — auto-discovered from filesystem
+  const articlePages = glob.sync('*.html', { cwd: path.join(__dirname, 'blog') })
+    .map(f => f.replace('.html', ''));
 
   [...corePages, ...hubPages].forEach(page => {
     const filePath = path.join(__dirname, `${page}.html`);

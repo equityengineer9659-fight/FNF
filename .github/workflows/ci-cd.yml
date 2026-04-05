@@ -49,8 +49,9 @@ jobs:
           VITE_ENV: production
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
 
-      - name: Accessibility Tests
+      - name: Accessibility Tests (sample)
         run: |
+          node scripts/generate-pa11y-config.js --mode=sample
           npx vite preview --port 4173 &
           sleep 3
           npm run test:accessibility
