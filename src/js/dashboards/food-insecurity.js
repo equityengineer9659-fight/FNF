@@ -596,6 +596,14 @@ function renderScatter(data, mode, source) {
       persons: s.persons
     }));
 
+  if (isChild && points.length === 0) {
+    chart.setOption({
+      title: { text: 'Child poverty data requires a live Census connection', left: 'center', top: 'center', textStyle: { color: 'rgba(255,255,255,0.5)', fontSize: 14, fontWeight: 'normal' } },
+      xAxis: { show: false }, yAxis: { show: false }, series: []
+    });
+    return;
+  }
+
   const byRegion = {};
   Object.keys(REGION_COLORS).forEach(r => { byRegion[r] = []; });
   points.forEach(p => byRegion[getRegion(p.name)].push(p));

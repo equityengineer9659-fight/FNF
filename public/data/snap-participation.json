@@ -7,6 +7,7 @@
     "avgMonthlyBenefit": 188,
     "freeLunchPct": 52.1,
     "coverageGap": 8200000,
+    "mealCostPerDay": 3.58,
     "year": 2025,
     "_reconciliationNote": "State-level snapParticipants sum (~39.1M) is ~7% below this national figure. The gap reflects participants counted at the federal level rather than attributed to a specific state (e.g., multi-state households, territories, and federal correctional facilities), plus vintage differences between state-level FY2023 administrative data and this national FY2025 estimate."
   },

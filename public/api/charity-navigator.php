@@ -31,7 +31,7 @@ if (!rateLimitCheck('charity-navigator', 'daily', 90000)) {
 }
 
 // Check API key configuration
-if (!defined('CHARITY_NAVIGATOR_API_KEY') || CHARITY_NAVIGATOR_API_KEY === '') {
+if (!defined('CHARITY_NAVIGATOR_API_KEY') || CHARITY_NAVIGATOR_API_KEY === '' || CHARITY_NAVIGATOR_API_KEY === 'your-charity-navigator-key-here') {
     http_response_code(503);
     echo json_encode(['error' => 'Charity Navigator API not configured', '_notConfigured' => true]);
     exit;

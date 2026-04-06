@@ -19,7 +19,7 @@ if (!is_dir($cacheDir)) {
 
 // Validate EIN — digits only
 $ein = isset($_GET['ein']) ? preg_replace('/[^0-9]/', '', $_GET['ein']) : '';
-if ($ein === '' || strlen($ein) < 2) {
+if ($ein === '' || strlen($ein) !== 9) {
     http_response_code(400);
     echo json_encode(['error' => 'Provide a valid EIN parameter']);
     exit;
