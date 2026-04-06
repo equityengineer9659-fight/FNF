@@ -175,15 +175,16 @@
             </div>
         </section>
 
-        <!-- Chart 1: Food Access Map (toggles between Food Deserts and SNAP Retailers) -->
+        <!-- Chart 1: Food Access Map (toggles between Food Insecurity, Food Deserts, SNAP Retailers) -->
         <section class="dashboard-section scroll-reveal" aria-label="Food access map by state">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
                     <h2 class="dashboard-card__title">Food Access Map</h2>
                     <span id="freshness-access" class="dashboard-freshness"></span>
                     <span id="freshness-snap-retailers" class="dashboard-freshness" style="display:none"></span>
-                    <div id="map-view-toggle" style="display:flex;gap:0.5rem;justify-content:center;">
-                        <button class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="deserts" aria-pressed="true">Food Deserts</button>
+                    <div id="map-view-toggle" style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
+                        <button class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="insecurity" aria-pressed="true">Food Insecurity</button>
+                        <button class="dashboard-metric-btn" data-map-view="deserts" aria-pressed="false">Food Deserts</button>
                         <button class="dashboard-metric-btn" data-map-view="snap" aria-pressed="false">SNAP Retailers</button>
                     </div>
                     <div id="state-selector-container"></div>
@@ -195,18 +196,34 @@
                         <div id="chart-desert-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food access data across US states"></div>
                         <p class="dashboard-chart__hint">Hover for state details — click any state for county breakdown</p>
                     </div>
-                    <!-- Info panel: Food Deserts mode -->
-                    <div id="info-desert-mode" class="dashboard-chart-row__info">
-                        <h3 class="dashboard-info__title">Mapping the Food Deserts</h3>
+                    <!-- Info panel: Food Insecurity mode (default) -->
+                    <div id="info-insecurity-mode" class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Where Hunger Is Most Prevalent</h3>
                         <p class="dashboard-info__text">
-                            A <strong>food desert</strong> is a census tract where a significant share of residents live far from a supermarket — more than 1 mile in urban areas or 10 miles in rural areas. This map shows the percentage of each state's census tracts classified as low-access. <strong>Click any state</strong> to drill down into county-level poverty rates as a proxy for food access risk.
+                            This map shows <strong>food insecurity rates</strong> estimated at the census-tract level by the CDC PLACES program, aggregated to state averages. <strong>Click any state</strong> to drill down into county-level food insecurity data.
                         </p>
                         <p class="dashboard-info__text">
-                            <strong>Mississippi (23.4%), West Virginia (22.8%), and Alaska (22.5%)</strong> have the highest rates — among seven states where more than 20% of census tracts are food deserts. Dense northeastern states fare better due to proximity, not necessarily affordability.
+                            Unlike the 2019 Food Desert atlas, this data is <strong>updated annually</strong> using the CDC's Behavioral Risk Factor Surveillance System (BRFSS) combined with Census data and statistical modeling.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Source</strong> CDC PLACES, Model-Based Small Area Estimates</span>
+                            <span class="meta-item"><strong>Data Year</strong> 2023 (annual release)</span>
+                            <span class="meta-item"><strong>Definition</strong> % of adults reporting food insecurity in past 12 months</span>
+                        </div>
+                        <div id="insecurity-map-insight" class="dashboard-info__insight"></div>
+                    </div>
+                    <!-- Info panel: Food Deserts mode -->
+                    <div id="info-desert-mode" class="dashboard-chart-row__info" style="display:none">
+                        <h3 class="dashboard-info__title">Historic Food Desert Map (2019)</h3>
+                        <p class="dashboard-info__text">
+                            A <strong>food desert</strong> is a census tract where a significant share of residents live far from a supermarket — more than 1 mile in urban areas or 10 miles in rural areas. This view uses the USDA's 2019 Food Access Research Atlas — the most recent available. <strong>Click any state</strong> for county-level breakdown.
+                        </p>
+                        <p class="dashboard-info__text">
+                            <strong>Mississippi (23.4%), West Virginia (22.8%), and Alaska (22.5%)</strong> have the highest rates — among seven states where more than 20% of census tracts are food deserts.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> USDA ERS, Food Access Research Atlas</span>
-                            <span class="meta-item"><strong>Data Year</strong> 2019 (most recent atlas)</span>
+                            <span class="meta-item"><strong>Data Year</strong> 2019 (most recent atlas — no newer release scheduled)</span>
                             <span class="meta-item"><strong>Definition</strong> Low-access: &gt;1mi urban / &gt;10mi rural to supermarket</span>
                         </div>
                         <div class="dashboard-info__insight">

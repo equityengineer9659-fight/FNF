@@ -127,7 +127,7 @@ $records = [];
 if ($type === 'food-insecurity-county') {
     // County-level query for a specific state
     $measureList = $measures[$type];
-    $whereClause = "measure='" . $measureList[0] . "' AND stateabbr='" . $stateAbbr . "'";
+    $whereClause = "measureid='" . $measureList[0] . "' AND stateabbr='" . $stateAbbr . "'";
 
     $params = [
         '$select' => 'countyfips,countyname,avg(data_value) as avg_value',
@@ -166,7 +166,7 @@ if ($type === 'food-insecurity-county') {
     // Multiple measures aggregated to state level
     $measureList = $measures[$type];
     $measureIn = implode("','", $measureList);
-    $whereClause = "measure in ('" . $measureIn . "')";
+    $whereClause = "measureid in ('" . $measureIn . "')";
 
     $params = [
         '$select' => 'stateabbr,measure,avg(data_value) as avg_value',
@@ -211,7 +211,7 @@ if ($type === 'food-insecurity-county') {
 } else {
     // Single measure aggregated to state level (food-insecurity or snap-receipt)
     $measureList = $measures[$type];
-    $whereClause = "measure='" . $measureList[0] . "'";
+    $whereClause = "measureid='" . $measureList[0] . "'";
 
     $params = [
         '$select' => 'stateabbr,avg(data_value) as avg_value',

@@ -451,6 +451,63 @@ function renderDoubleBurden(states) {
   }
 }
 
+// -- Food Insecurity Map (CDC PLACES data, 2023) --
+function renderInsecurityMap(geoJSON, cdcRecords) {
+  const chart = getOrCreateChart('chart-desert-map');
+  if (!chart) return;
+
+  // Map state abbreviations to full names
+  const stateNameMap = {};
+  US_STATES.forEach(([abbr, name]) => { stateNameMap[abbr] = name; });
+
+  const mapData = cdcRecords
+    .filter(r => stateNameMap[r.state])
+    .map(r => ({
+      name: stateNameMap[r.state],
+      value: r.value,
+      fips: null // CDC data uses state abbr, not FIPS — drill-down uses different path
+    }));
+
+  const albersProjection = { project: p => p, unproject: p => p };
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'item', ...TOOLTIP_STYLE,
+      formatter: params => {
+        const d = params.data;
+        if (!d) return '';
+        return `<strong style="font-size:14px">${d.name}</strong><br/>
+          <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.value}%<br/>
+          <span style="color:${COLORS.secondary};font-size:11px">Source: CDC PLACES 2023</span><br/>
+          <span style="color:${COLORS.secondary};font-size:11px">Click for county breakdown</span>`;
+      }
+    },
+    visualMap: {
+      left: 'right', bottom: 20, min: 8, max: 25,
+      text: ['Higher Insecurity', 'Lower Insecurity'], calculable: true,
+      inRange: { color: [PAL.low, PAL.mid, PAL.high] },
+      textStyle: { color: COLORS.text }
+    },
+    series: [{
+      name: 'Food Insecurity Rate', type: 'map', map: 'USA-access', roam: false,
+      projection: albersProjection, aspectScale: 1, zoom: 1.1, top: 10, left: 'center',
+      emphasis: {
+        label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
+        itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
+      },
+      itemStyle: { borderColor: COLORS.mapBorder, borderWidth: COLORS.mapBorderWidth, areaColor: 'rgba(255,255,255,0.08)' },
+      label: { show: false }, data: mapData, animationDurationUpdate: 500
+    }]
+  }, true);
+
+  // Dynamic insight
+  const sorted = [...mapData].sort((a, b) => b.value - a.value);
+  const insightEl = document.getElementById('insecurity-map-insight');
+  if (insightEl && sorted.length >= 3) {
+    insightEl.innerHTML = `<strong>${sorted[0].name} (${sorted[0].value}%)</strong>, <strong>${sorted[1].name} (${sorted[1].value}%)</strong>, and <strong>${sorted[2].name} (${sorted[2].value}%)</strong> have the highest food insecurity rates — based on 2023 CDC PLACES census-tract data.`;
+  }
+}
+
 // -- SNAP Retailer Density Map --
 function renderSnapRetailers(geoJSON, retailerData, accessStates) {
   // Reuse the desert map chart instance (toggled view)
@@ -1005,7 +1062,7 @@ async function init() {
     const fiData = fiRes.ok ? await fiRes.json() : null;
     const snapRetailerData = snapRetailRes.ok ? await snapRetailRes.json() : null;
 
-    // Render immediately from static data — don't block on FARA API
+    // Render immediately from static data — don't block on APIs
     let states = staticData.states;
     updateFreshness('access', { _static: true, _dataYear: 2019 });
 
@@ -1023,46 +1080,69 @@ async function init() {
       rows: states.map(s => [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.noVehiclePct, s.lowIncomeLowAccessPop, s.snapLowAccess || ''])
     }));
 
-    // Map view toggle: Food Deserts ↔ SNAP Retailers
-    let currentMapView = 'deserts';
+    // Map view toggle: Food Insecurity (CDC) ↔ Food Deserts (FARA) ↔ SNAP Retailers
+    let currentMapView = 'insecurity'; // Default — will show deserts until CDC data arrives
+    let cdcInsecurityData = null;
     const toggleContainer = document.getElementById('map-view-toggle');
+
+    // Helper: switch to a specific view
+    const switchMapView = (view) => {
+      currentMapView = view;
+      if (toggleContainer) {
+        toggleContainer.querySelectorAll('.dashboard-metric-btn').forEach(b => {
+          b.classList.remove('dashboard-metric-btn--active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        const activeBtn = toggleContainer.querySelector(`[data-map-view="${view}"]`);
+        if (activeBtn) {
+          activeBtn.classList.add('dashboard-metric-btn--active');
+          activeBtn.setAttribute('aria-pressed', 'true');
+        }
+      }
+
+      const insecurityInfo = document.getElementById('info-insecurity-mode');
+      const desertInfo = document.getElementById('info-desert-mode');
+      const snapInfo = document.getElementById('info-snap-mode');
+      const hint = document.querySelector('#chart-desert-map + .dashboard-chart__hint');
+      const freshAccess = document.getElementById('freshness-access');
+      const freshSnap = document.getElementById('freshness-snap-retailers');
+
+      // Hide all info panels first
+      if (insecurityInfo) insecurityInfo.style.display = 'none';
+      if (desertInfo) desertInfo.style.display = 'none';
+      if (snapInfo) snapInfo.style.display = 'none';
+      if (freshAccess) freshAccess.style.display = '';
+      if (freshSnap) freshSnap.style.display = 'none';
+
+      if (view === 'insecurity' && cdcInsecurityData) {
+        if (mapCtrl) mapCtrl.setDrillDown(true);
+        renderInsecurityMap(geoJSON, cdcInsecurityData);
+        if (insecurityInfo) insecurityInfo.style.display = '';
+        if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
+        updateFreshness('access', cdcInsecurityData);
+      } else if (view === 'snap' && snapRetailerData?.states) {
+        if (mapCtrl) mapCtrl.setDrillDown(false);
+        renderSnapRetailers(geoJSON, snapRetailerData, states);
+        if (snapInfo) snapInfo.style.display = '';
+        if (hint) hint.textContent = 'Hover for retailer breakdown by store type';
+        if (freshAccess) freshAccess.style.display = 'none';
+        if (freshSnap) freshSnap.style.display = '';
+      } else {
+        // deserts (default fallback if insecurity data not loaded yet)
+        if (mapCtrl) { mapCtrl.setDrillDown(true); mapCtrl.showNational(); }
+        if (desertInfo) desertInfo.style.display = '';
+        if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
+        updateFreshness('access', { _static: true, _dataYear: 2019 });
+      }
+    };
+
     if (toggleContainer) {
       toggleContainer.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-map-view]');
         if (!btn) return;
         const view = btn.dataset.mapView;
         if (view === currentMapView) return;
-
-        currentMapView = view;
-        toggleContainer.querySelectorAll('.dashboard-metric-btn').forEach(b => {
-          b.classList.remove('dashboard-metric-btn--active');
-          b.setAttribute('aria-pressed', 'false');
-        });
-        btn.classList.add('dashboard-metric-btn--active');
-        btn.setAttribute('aria-pressed', 'true');
-
-        const desertInfo = document.getElementById('info-desert-mode');
-        const snapInfo = document.getElementById('info-snap-mode');
-        const hint = document.querySelector('#chart-desert-map + .dashboard-chart__hint');
-        const freshDesert = document.getElementById('freshness-access');
-        const freshSnap = document.getElementById('freshness-snap-retailers');
-
-        if (view === 'snap' && snapRetailerData?.states) {
-          if (mapCtrl) mapCtrl.setDrillDown(false);
-          renderSnapRetailers(geoJSON, snapRetailerData, states);
-          if (desertInfo) desertInfo.style.display = 'none';
-          if (snapInfo) snapInfo.style.display = '';
-          if (hint) hint.textContent = 'Hover for retailer breakdown by store type';
-          if (freshDesert) freshDesert.style.display = 'none';
-          if (freshSnap) freshSnap.style.display = '';
-        } else {
-          if (mapCtrl) { mapCtrl.setDrillDown(true); mapCtrl.showNational(); }
-          if (desertInfo) desertInfo.style.display = '';
-          if (snapInfo) snapInfo.style.display = 'none';
-          if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
-          if (freshDesert) freshDesert.style.display = '';
-          if (freshSnap) freshSnap.style.display = 'none';
-        }
+        switchMapView(view);
       });
     }
 
@@ -1070,14 +1150,16 @@ async function init() {
     if (mapCtrl) {
       initStateSelector('state-selector-container', (stateCode) => {
         if (!stateCode) {
-          // Only drill back in desert mode
-          if (currentMapView === 'deserts') mapCtrl.showNational();
+          if (currentMapView === 'insecurity' && cdcInsecurityData) {
+            renderInsecurityMap(geoJSON, cdcInsecurityData);
+          } else if (currentMapView === 'deserts') {
+            mapCtrl.showNational();
+          }
           return;
         }
-        // Switch to desert mode if in snap mode, then drill
+        // Switch to a drillable view if in snap mode
         if (currentMapView === 'snap') {
-          const desertBtn = toggleContainer?.querySelector('[data-map-view="deserts"]');
-          if (desertBtn) desertBtn.click();
+          switchMapView(cdcInsecurityData ? 'insecurity' : 'deserts');
         }
         const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
         const match = states.find(s => s.name === stateName);
@@ -1091,6 +1173,17 @@ async function init() {
     // Non-blocking: fetch live SDOH data for housing burden chart
     fetchSDOHAccess(states);
 
+    // Non-blocking: fetch CDC PLACES food insecurity for default map view
+    fetch('/api/dashboard-places.php?type=food-insecurity')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data || data.error || !data.records?.length) return;
+        cdcInsecurityData = data;
+        // Switch to insecurity view as the default (replaces 2019 desert map)
+        switchMapView('insecurity');
+      })
+      .catch(() => { /* CDC unavailable — desert map stays as default */ });
+
     // Non-blocking: try FARA live API, then re-render charts with enriched data
     fetchWithFallback('/api/dashboard-fara.php?type=state-summary', '/data/food-access-atlas.json')
       .then(({ data: faraData, source }) => {
@@ -1098,18 +1191,23 @@ async function init() {
 
         // Merge API data into static states
         const enriched = mergeFaraIntoStatic(staticData.states, faraData.records);
-        updateFreshness('access', faraData);
 
-        // Re-render charts with enriched data (ECharts setOption merges smoothly)
-        renderDesertMap(geoJSON, enriched);
+        // Re-render non-map charts with enriched data
         renderUrbanRural(enriched);
         renderDistance(enriched);
         renderVehicle(enriched);
         renderDoubleBurden(enriched);
         if (fiData?.states) renderAccessInsecurity(enriched, fiData.states);
         populateAccessibleTable(enriched, snapRetailerData);
+
+        // Update desert map data for when user toggles to it
+        states = enriched;
+        if (currentMapView === 'deserts') {
+          renderDesertMap(geoJSON, enriched);
+          updateFreshness('access', faraData);
+        }
       })
-      .catch(() => { /* static data already rendered, ignore */ });
+      .catch(() => { /* static data already rendered */ });
   } catch {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
