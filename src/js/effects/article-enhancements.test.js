@@ -6,6 +6,10 @@ describe('ArticleEnhancements', () => {
     document.body.innerHTML = '';
     document.body.className = '';
     vi.restoreAllMocks();
+    // jsdom in CI may not have matchMedia — provide default mock
+    if (!window.matchMedia) {
+      window.matchMedia = vi.fn().mockReturnValue({ matches: false });
+    }
   });
 
   it('should not initialize on non-article pages', () => {
