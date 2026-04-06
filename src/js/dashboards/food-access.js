@@ -1174,7 +1174,7 @@ async function init() {
     const snapRetailerData = snapRetailRes.ok ? await snapRetailRes.json() : null;
     const currentAccessData = currentAccessRes.ok ? await currentAccessRes.json() : null;
 
-    // Render immediately from static data — don't block on APIs
+    // Static atlas provides fields needed by non-map charts (urbanLowAccess, noVehiclePct, etc.)
     let states = staticData.states;
     updateFreshness('access', { _static: true, _dataYear: 'Current' });
 

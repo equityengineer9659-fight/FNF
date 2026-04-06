@@ -4,7 +4,8 @@
     "description": "Low-access tracts computed from current USDA FNS SNAP retailer locations + Census 2020 tract centroids. Qualifying stores: Supermarket, Super Store, Large Grocery Store. Thresholds: >1mi urban, >10mi rural.",
     "sources": [
       "USDA FNS SNAP Retailer Location Data (current, via ArcGIS REST)",
-      "U.S. Census Bureau, Centers of Population for Census Tracts: 2020"
+      "U.S. Census Bureau, Centers of Population for Census Tracts: 2020",
+      "U.S. Census Bureau, American Community Survey 2023 5-Year Estimates (vehicle access, poverty)"
     ],
     "methodology": {
       "qualifyingStores": "Supermarket, Super Store, Large Grocery Store",
@@ -13,7 +14,7 @@
       "urbanClassification": "Counties with average tract population > 3,000 classified as urban",
       "distanceMethod": "Haversine (great-circle) distance from population-weighted tract centroid to nearest qualifying store"
     },
-    "computed": "2026-04-06T02:36:41.296Z",
+    "computed": "2026-04-06T03:17:54.409Z",
     "retailerCount": 259593,
     "qualifyingRetailerCount": 40144,
     "tractCount": 84414
@@ -33,6 +34,8 @@
       "name": "Alabama",
       "totalTracts": 1437,
       "lowAccessTracts": 862,
+      "urbanLowAccess": 828,
+      "ruralLowAccess": 34,
       "lowAccessPct": 60,
       "totalPopulation": 5024279,
       "lowAccessPopulation": 3116604,
@@ -775,7 +778,10 @@
           "avgDistance": 7.17,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 2,
+      "povertyRate": 15.2,
+      "lowIncomeLowAccessPop": 473724
     },
     {
       "fips": "02",
@@ -783,6 +789,8 @@
       "name": "Alaska",
       "totalTracts": 177,
       "lowAccessTracts": 104,
+      "urbanLowAccess": 86,
+      "ruralLowAccess": 18,
       "lowAccessPct": 58.8,
       "totalPopulation": 733391,
       "lowAccessPopulation": 414127,
@@ -1118,7 +1126,10 @@
           "avgDistance": 167.99,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 5.4,
+      "povertyRate": 9.9,
+      "lowIncomeLowAccessPop": 40999
     },
     {
       "fips": "04",
@@ -1126,6 +1137,8 @@
       "name": "Arizona",
       "totalTracts": 1765,
       "lowAccessTracts": 688,
+      "urbanLowAccess": 672,
+      "ruralLowAccess": 16,
       "lowAccessPct": 39,
       "totalPopulation": 7151502,
       "lowAccessPopulation": 2648834,
@@ -1296,7 +1309,10 @@
           "avgDistance": 2.3,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.5,
+      "povertyRate": 12.5,
+      "lowIncomeLowAccessPop": 331104
     },
     {
       "fips": "05",
@@ -1304,6 +1320,8 @@
       "name": "Arkansas",
       "totalTracts": 823,
       "lowAccessTracts": 448,
+      "urbanLowAccess": 409,
+      "ruralLowAccess": 39,
       "lowAccessPct": 54.4,
       "totalPopulation": 3011524,
       "lowAccessPopulation": 1708467,
@@ -2134,7 +2152,10 @@
           "avgDistance": 4.03,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.1,
+      "povertyRate": 15.6,
+      "lowIncomeLowAccessPop": 266521
     },
     {
       "fips": "06",
@@ -2142,6 +2163,8 @@
       "name": "California",
       "totalTracts": 9129,
       "lowAccessTracts": 2030,
+      "urbanLowAccess": 2015,
+      "ruralLowAccess": 15,
       "lowAccessPct": 22.2,
       "totalPopulation": 39538223,
       "lowAccessPopulation": 8355329,
@@ -2785,7 +2808,10 @@
           "avgDistance": 3.96,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 3.4,
+      "povertyRate": 11.7,
+      "lowIncomeLowAccessPop": 977573
     },
     {
       "fips": "08",
@@ -2793,6 +2819,8 @@
       "name": "Colorado",
       "totalTracts": 1447,
       "lowAccessTracts": 506,
+      "urbanLowAccess": 469,
+      "ruralLowAccess": 37,
       "lowAccessPct": 35,
       "totalPopulation": 5773714,
       "lowAccessPopulation": 1982410,
@@ -3502,7 +3530,10 @@
           "avgDistance": 2.72,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.4,
+      "povertyRate": 9.2,
+      "lowIncomeLowAccessPop": 182382
     },
     {
       "fips": "09",
@@ -3510,6 +3541,8 @@
       "name": "Connecticut",
       "totalTracts": 883,
       "lowAccessTracts": 429,
+      "urbanLowAccess": 429,
+      "ruralLowAccess": 0,
       "lowAccessPct": 48.6,
       "totalPopulation": 3605944,
       "lowAccessPopulation": 1764654,
@@ -3603,7 +3636,10 @@
           "avgDistance": 2.98,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 3.6,
+      "povertyRate": 9.8,
+      "lowIncomeLowAccessPop": 172936
     },
     {
       "fips": "10",
@@ -3611,6 +3647,8 @@
       "name": "Delaware",
       "totalTracts": 262,
       "lowAccessTracts": 136,
+      "urbanLowAccess": 136,
+      "ruralLowAccess": 0,
       "lowAccessPct": 51.9,
       "totalPopulation": 989948,
       "lowAccessPopulation": 531677,
@@ -3649,7 +3687,10 @@
           "avgDistance": 2.05,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.9,
+      "povertyRate": 10.5,
+      "lowIncomeLowAccessPop": 55826
     },
     {
       "fips": "11",
@@ -3657,6 +3698,8 @@
       "name": "District of Columbia",
       "totalTracts": 206,
       "lowAccessTracts": 12,
+      "urbanLowAccess": 12,
+      "ruralLowAccess": 0,
       "lowAccessPct": 5.8,
       "totalPopulation": 689545,
       "lowAccessPopulation": 34077,
@@ -3673,7 +3716,10 @@
           "avgDistance": 0.44,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 26.3,
+      "povertyRate": 14,
+      "lowIncomeLowAccessPop": 4771
     },
     {
       "fips": "12",
@@ -3681,6 +3727,8 @@
       "name": "Florida",
       "totalTracts": 5160,
       "lowAccessTracts": 2019,
+      "urbanLowAccess": 1997,
+      "ruralLowAccess": 22,
       "lowAccessPct": 39.1,
       "totalPopulation": 21538187,
       "lowAccessPopulation": 8547946,
@@ -4423,7 +4471,10 @@
           "avgDistance": 6.92,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.8,
+      "povertyRate": 12.3,
+      "lowIncomeLowAccessPop": 1051397
     },
     {
       "fips": "13",
@@ -4431,6 +4482,8 @@
       "name": "Georgia",
       "totalTracts": 2796,
       "lowAccessTracts": 1524,
+      "urbanLowAccess": 1482,
+      "ruralLowAccess": 42,
       "lowAccessPct": 54.5,
       "totalPopulation": 10711908,
       "lowAccessPopulation": 6048040,
@@ -6185,7 +6238,10 @@
           "avgDistance": 7.1,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.9,
+      "povertyRate": 13.1,
+      "lowIncomeLowAccessPop": 792293
     },
     {
       "fips": "15",
@@ -6193,6 +6249,8 @@
       "name": "Hawaii",
       "totalTracts": 461,
       "lowAccessTracts": 186,
+      "urbanLowAccess": 185,
+      "ruralLowAccess": 1,
       "lowAccessPct": 40.3,
       "totalPopulation": 1455271,
       "lowAccessPopulation": 553423,
@@ -6253,7 +6311,10 @@
           "avgDistance": 2.83,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 3.8,
+      "povertyRate": 9.7,
+      "lowIncomeLowAccessPop": 53682
     },
     {
       "fips": "16",
@@ -6261,6 +6322,8 @@
       "name": "Idaho",
       "totalTracts": 456,
       "lowAccessTracts": 227,
+      "urbanLowAccess": 211,
+      "ruralLowAccess": 16,
       "lowAccessPct": 49.8,
       "totalPopulation": 1839106,
       "lowAccessPopulation": 934001,
@@ -6750,7 +6813,10 @@
           "avgDistance": 8.72,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 1.6,
+      "povertyRate": 10.4,
+      "lowIncomeLowAccessPop": 97136
     },
     {
       "fips": "17",
@@ -6758,6 +6824,8 @@
       "name": "Illinois",
       "totalTracts": 3265,
       "lowAccessTracts": 1173,
+      "urbanLowAccess": 1132,
+      "ruralLowAccess": 41,
       "lowAccessPct": 35.9,
       "totalPopulation": 12812508,
       "lowAccessPopulation": 4655815,
@@ -7885,7 +7953,10 @@
           "avgDistance": 4.77,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 5.6,
+      "povertyRate": 11.5,
+      "lowIncomeLowAccessPop": 535419
     },
     {
       "fips": "18",
@@ -7893,6 +7964,8 @@
       "name": "Indiana",
       "totalTracts": 1696,
       "lowAccessTracts": 1005,
+      "urbanLowAccess": 1000,
+      "ruralLowAccess": 5,
       "lowAccessPct": 59.3,
       "totalPopulation": 6785528,
       "lowAccessPopulation": 4118271,
@@ -8910,7 +8983,10 @@
           "avgDistance": 4.58,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.8,
+      "povertyRate": 11.9,
+      "lowIncomeLowAccessPop": 490074
     },
     {
       "fips": "19",
@@ -8918,6 +8994,8 @@
       "name": "Iowa",
       "totalTracts": 896,
       "lowAccessTracts": 396,
+      "urbanLowAccess": 356,
+      "ruralLowAccess": 40,
       "lowAccessPct": 44.2,
       "totalPopulation": 3190369,
       "lowAccessPopulation": 1398282,
@@ -10012,7 +10090,10 @@
           "avgDistance": 2.62,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 2.4,
+      "povertyRate": 10.6,
+      "lowIncomeLowAccessPop": 148218
     },
     {
       "fips": "20",
@@ -10020,6 +10101,8 @@
       "name": "Kansas",
       "totalTracts": 829,
       "lowAccessTracts": 374,
+      "urbanLowAccess": 308,
+      "ruralLowAccess": 66,
       "lowAccessPct": 45.1,
       "totalPopulation": 2937880,
       "lowAccessPopulation": 1311905,
@@ -11180,7 +11263,10 @@
           "avgDistance": 1.09,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 2.1,
+      "povertyRate": 11.2,
+      "lowIncomeLowAccessPop": 146933
     },
     {
       "fips": "21",
@@ -11188,6 +11274,8 @@
       "name": "Kentucky",
       "totalTracts": 1306,
       "lowAccessTracts": 604,
+      "urbanLowAccess": 583,
+      "ruralLowAccess": 21,
       "lowAccessPct": 46.2,
       "totalPopulation": 4505836,
       "lowAccessPopulation": 2214400,
@@ -12513,7 +12601,10 @@
           "avgDistance": 3.03,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.6,
+      "povertyRate": 15.7,
+      "lowIncomeLowAccessPop": 347661
     },
     {
       "fips": "22",
@@ -12521,6 +12612,8 @@
       "name": "Louisiana",
       "totalTracts": 1388,
       "lowAccessTracts": 602,
+      "urbanLowAccess": 581,
+      "ruralLowAccess": 21,
       "lowAccessPct": 43.4,
       "totalPopulation": 4657757,
       "lowAccessPopulation": 2179949,
@@ -13230,7 +13323,10 @@
           "avgDistance": 4.53,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 3.3,
+      "povertyRate": 18.4,
+      "lowIncomeLowAccessPop": 401111
     },
     {
       "fips": "23",
@@ -13238,6 +13334,8 @@
       "name": "Maine",
       "totalTracts": 407,
       "lowAccessTracts": 251,
+      "urbanLowAccess": 231,
+      "ruralLowAccess": 20,
       "lowAccessPct": 61.7,
       "totalPopulation": 1362359,
       "lowAccessPopulation": 836302,
@@ -13419,7 +13517,10 @@
           "avgDistance": 2.58,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.4,
+      "povertyRate": 10.5,
+      "lowIncomeLowAccessPop": 87812
     },
     {
       "fips": "24",
@@ -13427,6 +13528,8 @@
       "name": "Maryland",
       "totalTracts": 1475,
       "lowAccessTracts": 528,
+      "urbanLowAccess": 525,
+      "ruralLowAccess": 3,
       "lowAccessPct": 35.8,
       "totalPopulation": 6177224,
       "lowAccessPopulation": 2283885,
@@ -13696,7 +13799,10 @@
           "avgDistance": 0.54,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 4.1,
+      "povertyRate": 9.2,
+      "lowIncomeLowAccessPop": 210117
     },
     {
       "fips": "25",
@@ -13704,6 +13810,8 @@
       "name": "Massachusetts",
       "totalTracts": 1620,
       "lowAccessTracts": 606,
+      "urbanLowAccess": 606,
+      "ruralLowAccess": 0,
       "lowAccessPct": 37.4,
       "totalPopulation": 7029917,
       "lowAccessPopulation": 2806168,
@@ -13863,7 +13971,10 @@
           "avgDistance": 1.55,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 6,
+      "povertyRate": 9.7,
+      "lowIncomeLowAccessPop": 272198
     },
     {
       "fips": "26",
@@ -13871,6 +13982,8 @@
       "name": "Michigan",
       "totalTracts": 3017,
       "lowAccessTracts": 1272,
+      "urbanLowAccess": 1193,
+      "ruralLowAccess": 79,
       "lowAccessPct": 42.2,
       "totalPopulation": 10077331,
       "lowAccessPopulation": 4476779,
@@ -14789,7 +14902,10 @@
           "avgDistance": 5.32,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.8,
+      "povertyRate": 12.8,
+      "lowIncomeLowAccessPop": 573028
     },
     {
       "fips": "27",
@@ -14797,6 +14913,8 @@
       "name": "Minnesota",
       "totalTracts": 1505,
       "lowAccessTracts": 700,
+      "urbanLowAccess": 639,
+      "ruralLowAccess": 61,
       "lowAccessPct": 46.5,
       "totalPopulation": 5706494,
       "lowAccessPopulation": 2724669,
@@ -15759,7 +15877,10 @@
           "avgDistance": 7.64,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 2.7,
+      "povertyRate": 9,
+      "lowIncomeLowAccessPop": 245220
     },
     {
       "fips": "28",
@@ -15767,6 +15888,8 @@
       "name": "Mississippi",
       "totalTracts": 878,
       "lowAccessTracts": 489,
+      "urbanLowAccess": 469,
+      "ruralLowAccess": 20,
       "lowAccessPct": 55.7,
       "totalPopulation": 2961279,
       "lowAccessPopulation": 1790879,
@@ -16674,7 +16797,10 @@
           "avgDistance": 5.08,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.3,
+      "povertyRate": 18.4,
+      "lowIncomeLowAccessPop": 329522
     },
     {
       "fips": "29",
@@ -16682,6 +16808,8 @@
       "name": "Missouri",
       "totalTracts": 1654,
       "lowAccessTracts": 777,
+      "urbanLowAccess": 741,
+      "ruralLowAccess": 36,
       "lowAccessPct": 47,
       "totalPopulation": 6154913,
       "lowAccessPopulation": 3036681,
@@ -17952,7 +18080,10 @@
           "avgDistance": 0.67,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 2.7,
+      "povertyRate": 12.3,
+      "lowIncomeLowAccessPop": 373512
     },
     {
       "fips": "30",
@@ -17960,6 +18091,8 @@
       "name": "Montana",
       "totalTracts": 319,
       "lowAccessTracts": 164,
+      "urbanLowAccess": 127,
+      "ruralLowAccess": 37,
       "lowAccessPct": 51.4,
       "totalPopulation": 1084225,
       "lowAccessPopulation": 550175,
@@ -18581,7 +18714,10 @@
           "avgDistance": 1.43,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.2,
+      "povertyRate": 11.8,
+      "lowIncomeLowAccessPop": 64921
     },
     {
       "fips": "31",
@@ -18589,6 +18725,8 @@
       "name": "Nebraska",
       "totalTracts": 553,
       "lowAccessTracts": 268,
+      "urbanLowAccess": 207,
+      "ruralLowAccess": 61,
       "lowAccessPct": 48.5,
       "totalPopulation": 1961504,
       "lowAccessPopulation": 888363,
@@ -19617,7 +19755,10 @@
           "avgDistance": 3.2,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 1.9,
+      "povertyRate": 10,
+      "lowIncomeLowAccessPop": 88836
     },
     {
       "fips": "32",
@@ -19625,6 +19766,8 @@
       "name": "Nevada",
       "totalTracts": 779,
       "lowAccessTracts": 229,
+      "urbanLowAccess": 222,
+      "ruralLowAccess": 7,
       "lowAccessPct": 29.4,
       "totalPopulation": 3104614,
       "lowAccessPopulation": 909031,
@@ -19817,7 +19960,10 @@
           "avgDistance": 1.2,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 3.3,
+      "povertyRate": 12.4,
+      "lowIncomeLowAccessPop": 112720
     },
     {
       "fips": "33",
@@ -19825,6 +19971,8 @@
       "name": "New Hampshire",
       "totalTracts": 350,
       "lowAccessTracts": 226,
+      "urbanLowAccess": 224,
+      "ruralLowAccess": 2,
       "lowAccessPct": 64.6,
       "totalPopulation": 1377529,
       "lowAccessPopulation": 897754,
@@ -19940,7 +20088,10 @@
           "avgDistance": 4.09,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 1.6,
+      "povertyRate": 7,
+      "lowIncomeLowAccessPop": 62843
     },
     {
       "fips": "34",
@@ -19948,6 +20099,8 @@
       "name": "New Jersey",
       "totalTracts": 2181,
       "lowAccessTracts": 704,
+      "urbanLowAccess": 704,
+      "ruralLowAccess": 0,
       "lowAccessPct": 32.3,
       "totalPopulation": 9288994,
       "lowAccessPopulation": 3007524,
@@ -20184,7 +20337,10 @@
           "avgDistance": 2.84,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 6.4,
+      "povertyRate": 9.6,
+      "lowIncomeLowAccessPop": 288722
     },
     {
       "fips": "35",
@@ -20192,6 +20348,8 @@
       "name": "New Mexico",
       "totalTracts": 612,
       "lowAccessTracts": 272,
+      "urbanLowAccess": 239,
+      "ruralLowAccess": 33,
       "lowAccessPct": 44.4,
       "totalPopulation": 2117522,
       "lowAccessPopulation": 946518,
@@ -20560,7 +20718,10 @@
           "avgDistance": 3.33,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.3,
+      "povertyRate": 17.8,
+      "lowIncomeLowAccessPop": 168480
     },
     {
       "fips": "36",
@@ -20568,6 +20729,8 @@
       "name": "New York",
       "totalTracts": 5411,
       "lowAccessTracts": 1286,
+      "urbanLowAccess": 1265,
+      "ruralLowAccess": 21,
       "lowAccessPct": 23.8,
       "totalPopulation": 20201249,
       "lowAccessPopulation": 4624496,
@@ -21255,7 +21418,10 @@
           "avgDistance": 5.81,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 21.8,
+      "povertyRate": 13.4,
+      "lowIncomeLowAccessPop": 619682
     },
     {
       "fips": "37",
@@ -21263,6 +21429,8 @@
       "name": "North Carolina",
       "totalTracts": 2672,
       "lowAccessTracts": 1390,
+      "urbanLowAccess": 1370,
+      "ruralLowAccess": 20,
       "lowAccessPct": 52,
       "totalPopulation": 10439388,
       "lowAccessPopulation": 5644116,
@@ -22368,7 +22536,10 @@
           "avgDistance": 4.45,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.2,
+      "povertyRate": 12.8,
+      "lowIncomeLowAccessPop": 722447
     },
     {
       "fips": "38",
@@ -22376,6 +22547,8 @@
       "name": "North Dakota",
       "totalTracts": 228,
       "lowAccessTracts": 104,
+      "urbanLowAccess": 68,
+      "ruralLowAccess": 36,
       "lowAccessPct": 45.6,
       "totalPopulation": 779094,
       "lowAccessPopulation": 343863,
@@ -22964,7 +23137,10 @@
           "avgDistance": 3.6,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.3,
+      "povertyRate": 10.2,
+      "lowIncomeLowAccessPop": 35074
     },
     {
       "fips": "39",
@@ -22972,6 +23148,8 @@
       "name": "Ohio",
       "totalTracts": 3168,
       "lowAccessTracts": 1447,
+      "urbanLowAccess": 1440,
+      "ruralLowAccess": 7,
       "lowAccessPct": 45.7,
       "totalPopulation": 11799448,
       "lowAccessPopulation": 5796214,
@@ -23945,7 +24123,10 @@
           "avgDistance": 4.68,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 3.1,
+      "povertyRate": 12.9,
+      "lowIncomeLowAccessPop": 747712
     },
     {
       "fips": "40",
@@ -23953,6 +24134,8 @@
       "name": "Oklahoma",
       "totalTracts": 1205,
       "lowAccessTracts": 504,
+      "urbanLowAccess": 456,
+      "ruralLowAccess": 48,
       "lowAccessPct": 41.8,
       "totalPopulation": 3959353,
       "lowAccessPopulation": 1731018,
@@ -24805,7 +24988,10 @@
           "avgDistance": 2.96,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.3,
+      "povertyRate": 14.9,
+      "lowIncomeLowAccessPop": 257922
     },
     {
       "fips": "41",
@@ -24813,6 +24999,8 @@
       "name": "Oregon",
       "totalTracts": 1001,
       "lowAccessTracts": 366,
+      "urbanLowAccess": 353,
+      "ruralLowAccess": 13,
       "lowAccessPct": 36.6,
       "totalPopulation": 4237256,
       "lowAccessPopulation": 1519728,
@@ -25214,7 +25402,10 @@
           "avgDistance": 2.11,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 3.2,
+      "povertyRate": 11.7,
+      "lowIncomeLowAccessPop": 177808
     },
     {
       "fips": "42",
@@ -25222,6 +25413,8 @@
       "name": "Pennsylvania",
       "totalTracts": 3446,
       "lowAccessTracts": 1540,
+      "urbanLowAccess": 1533,
+      "ruralLowAccess": 7,
       "lowAccessPct": 44.7,
       "totalPopulation": 13002700,
       "lowAccessPopulation": 5962641,
@@ -25964,7 +26157,10 @@
           "avgDistance": 1.82,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 5.1,
+      "povertyRate": 11.4,
+      "lowIncomeLowAccessPop": 679741
     },
     {
       "fips": "44",
@@ -25972,6 +26168,8 @@
       "name": "Rhode Island",
       "totalTracts": 250,
       "lowAccessTracts": 97,
+      "urbanLowAccess": 97,
+      "ruralLowAccess": 0,
       "lowAccessPct": 38.8,
       "totalPopulation": 1097379,
       "lowAccessPopulation": 429571,
@@ -26032,7 +26230,10 @@
           "avgDistance": 3.46,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 3.3,
+      "povertyRate": 10.5,
+      "lowIncomeLowAccessPop": 45105
     },
     {
       "fips": "45",
@@ -26040,6 +26241,8 @@
       "name": "South Carolina",
       "totalTracts": 1323,
       "lowAccessTracts": 798,
+      "urbanLowAccess": 780,
+      "ruralLowAccess": 18,
       "lowAccessPct": 60.3,
       "totalPopulation": 5118425,
       "lowAccessPopulation": 3155962,
@@ -26551,7 +26754,10 @@
           "avgDistance": 1.81,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.4,
+      "povertyRate": 13.8,
+      "lowIncomeLowAccessPop": 435523
     },
     {
       "fips": "46",
@@ -26559,6 +26765,8 @@
       "name": "South Dakota",
       "totalTracts": 242,
       "lowAccessTracts": 146,
+      "urbanLowAccess": 105,
+      "ruralLowAccess": 41,
       "lowAccessPct": 60.3,
       "totalPopulation": 886667,
       "lowAccessPopulation": 529020,
@@ -27290,7 +27498,10 @@
           "avgDistance": 14.71,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 2.2,
+      "povertyRate": 11.6,
+      "lowIncomeLowAccessPop": 61366
     },
     {
       "fips": "47",
@@ -27298,6 +27509,8 @@
       "name": "Tennessee",
       "totalTracts": 1701,
       "lowAccessTracts": 1045,
+      "urbanLowAccess": 1040,
+      "ruralLowAccess": 5,
       "lowAccessPct": 61.4,
       "totalPopulation": 6910840,
       "lowAccessPopulation": 4271304,
@@ -28348,7 +28561,10 @@
           "avgDistance": 2.45,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 1.9,
+      "povertyRate": 13.5,
+      "lowIncomeLowAccessPop": 576626
     },
     {
       "fips": "48",
@@ -28356,6 +28572,8 @@
       "name": "Texas",
       "totalTracts": 6896,
       "lowAccessTracts": 2965,
+      "urbanLowAccess": 2862,
+      "ruralLowAccess": 103,
       "lowAccessPct": 43,
       "totalPopulation": 29145505,
       "lowAccessPopulation": 13142435,
@@ -31155,7 +31373,10 @@
           "avgDistance": 10.21,
           "isUrban": false
         }
-      ]
+      ],
+      "noVehiclePct": 2.4,
+      "povertyRate": 13.5,
+      "lowIncomeLowAccessPop": 1774229
     },
     {
       "fips": "49",
@@ -31163,6 +31384,8 @@
       "name": "Utah",
       "totalTracts": 716,
       "lowAccessTracts": 276,
+      "urbanLowAccess": 271,
+      "ruralLowAccess": 5,
       "lowAccessPct": 38.5,
       "totalPopulation": 3271616,
       "lowAccessPopulation": 1275154,
@@ -31487,7 +31710,10 @@
           "avgDistance": 1.01,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 1.9,
+      "povertyRate": 8.4,
+      "lowIncomeLowAccessPop": 107113
     },
     {
       "fips": "50",
@@ -31495,6 +31721,8 @@
       "name": "Vermont",
       "totalTracts": 193,
       "lowAccessTracts": 99,
+      "urbanLowAccess": 91,
+      "ruralLowAccess": 8,
       "lowAccessPct": 51.3,
       "totalPopulation": 643077,
       "lowAccessPopulation": 327447,
@@ -31654,7 +31882,10 @@
           "avgDistance": 4.36,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.2,
+      "povertyRate": 9.9,
+      "lowIncomeLowAccessPop": 32417
     },
     {
       "fips": "51",
@@ -31662,6 +31893,8 @@
       "name": "Virginia",
       "totalTracts": 2198,
       "lowAccessTracts": 892,
+      "urbanLowAccess": 878,
+      "ruralLowAccess": 14,
       "lowAccessPct": 40.6,
       "totalPopulation": 8631393,
       "lowAccessPopulation": 3592679,
@@ -33130,7 +33363,10 @@
           "avgDistance": 0.74,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.9,
+      "povertyRate": 9.6,
+      "lowIncomeLowAccessPop": 344897
     },
     {
       "fips": "53",
@@ -33138,6 +33374,8 @@
       "name": "Washington",
       "totalTracts": 1784,
       "lowAccessTracts": 733,
+      "urbanLowAccess": 717,
+      "ruralLowAccess": 16,
       "lowAccessPct": 41.1,
       "totalPopulation": 7705281,
       "lowAccessPopulation": 3068381,
@@ -33572,7 +33810,10 @@
           "avgDistance": 1.96,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 3.6,
+      "povertyRate": 9.7,
+      "lowIncomeLowAccessPop": 297633
     },
     {
       "fips": "54",
@@ -33580,6 +33821,8 @@
       "name": "West Virginia",
       "totalTracts": 546,
       "lowAccessTracts": 273,
+      "urbanLowAccess": 259,
+      "ruralLowAccess": 14,
       "lowAccessPct": 50,
       "totalPopulation": 1793716,
       "lowAccessPopulation": 994240,
@@ -34190,7 +34433,10 @@
           "avgDistance": 3.34,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.8,
+      "povertyRate": 16.1,
+      "lowIncomeLowAccessPop": 160073
     },
     {
       "fips": "55",
@@ -34198,6 +34444,8 @@
       "name": "Wisconsin",
       "totalTracts": 1542,
       "lowAccessTracts": 770,
+      "urbanLowAccess": 737,
+      "ruralLowAccess": 33,
       "lowAccessPct": 49.9,
       "totalPopulation": 5893718,
       "lowAccessPopulation": 3101933,
@@ -34995,7 +35243,10 @@
           "avgDistance": 3.18,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 2.8,
+      "povertyRate": 10.3,
+      "lowIncomeLowAccessPop": 319499
     },
     {
       "fips": "56",
@@ -35003,6 +35254,8 @@
       "name": "Wyoming",
       "totalTracts": 160,
       "lowAccessTracts": 96,
+      "urbanLowAccess": 90,
+      "ruralLowAccess": 6,
       "lowAccessPct": 60,
       "totalPopulation": 576851,
       "lowAccessPopulation": 341329,
@@ -35261,7 +35514,10 @@
           "avgDistance": 6.99,
           "isUrban": true
         }
-      ]
+      ],
+      "noVehiclePct": 1.6,
+      "povertyRate": 10.5,
+      "lowIncomeLowAccessPop": 35840
     }
   ]
 }

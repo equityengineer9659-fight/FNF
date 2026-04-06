@@ -327,6 +327,8 @@ function aggregate(tracts, stores) {
         name: STATE_NAMES[FIPS_TO_ABBR[sf]] || FIPS_TO_ABBR[sf],
         totalTracts: 0,
         lowAccessTracts: 0,
+        urbanLowAccess: 0,
+        ruralLowAccess: 0,
         totalPopulation: 0,
         lowAccessPopulation: 0,
         totalDistance: 0,
@@ -336,6 +338,8 @@ function aggregate(tracts, stores) {
     const s = stateMap[sf];
     s.totalTracts += c.totalTracts;
     s.lowAccessTracts += c.lowAccessTracts;
+    if (c.isUrban) s.urbanLowAccess += c.lowAccessTracts;
+    else s.ruralLowAccess += c.lowAccessTracts;
     s.totalPopulation += c.totalPopulation;
     s.lowAccessPopulation += c.lowAccessPopulation;
     s.totalDistance += c.avgDistance * c.totalTracts;
@@ -348,6 +352,8 @@ function aggregate(tracts, stores) {
     name: s.name,
     totalTracts: s.totalTracts,
     lowAccessTracts: s.lowAccessTracts,
+    urbanLowAccess: s.urbanLowAccess,
+    ruralLowAccess: s.ruralLowAccess,
     lowAccessPct: s.totalTracts > 0 ? Math.round((s.lowAccessTracts / s.totalTracts) * 1000) / 10 : 0,
     totalPopulation: s.totalPopulation,
     lowAccessPopulation: s.lowAccessPopulation,
@@ -357,6 +363,40 @@ function aggregate(tracts, stores) {
 
   stateRecords.sort((a, b) => a.name.localeCompare(b.name));
   return stateRecords;
+}
+
+// -- Step 6: Fetch Census ACS state-level vehicle access + poverty --
+async function fetchCensusACS(stateData) {
+  console.log('Fetching Census ACS data (vehicle access, poverty)...');
+  try {
+    // B08141_001E = total workers, B08141_002E = no vehicle workers
+    // B17001_002E = population below poverty, B01003_001E = total population
+    const url = 'https://api.census.gov/data/2023/acs/acs5?get=NAME,B08141_001E,B08141_002E,B17001_002E,B01003_001E&for=state:*';
+    const raw = await fetchUrl(url);
+    const rows = JSON.parse(raw);
+    const header = rows[0];
+
+    for (let i = 1; i < rows.length; i++) {
+      const row = rows[i];
+      const stateFips = row[header.indexOf('state')];
+      const totalWorkers = parseInt(row[header.indexOf('B08141_001E')], 10) || 0;
+      const noVehicle = parseInt(row[header.indexOf('B08141_002E')], 10) || 0;
+      const povertyPop = parseInt(row[header.indexOf('B17001_002E')], 10) || 0;
+      const totalPop = parseInt(row[header.indexOf('B01003_001E')], 10) || 0;
+
+      const state = stateData.find(s => s.fips === stateFips);
+      if (state) {
+        state.noVehiclePct = totalWorkers > 0 ? Math.round((noVehicle / totalWorkers) * 1000) / 10 : 0;
+        state.povertyRate = totalPop > 0 ? Math.round((povertyPop / totalPop) * 1000) / 10 : 0;
+        // Estimate low-income + low-access population (poverty rate × low-access population)
+        state.lowIncomeLowAccessPop = Math.round(state.lowAccessPopulation * (state.povertyRate / 100));
+      }
+    }
+    console.log(`  Census ACS data merged for ${rows.length - 1} states`);
+  } catch (err) {
+    console.warn('  Census ACS fetch failed (non-critical):', err.message);
+    // States will have noVehiclePct=undefined, which is fine — dashboard handles missing data
+  }
 }
 
 // -- Main --
@@ -369,6 +409,9 @@ async function main() {
   const urbanCounties = classifyUrbanRural(tracts);
   const processedTracts = computeAccess(tracts, stores, urbanCounties);
   const stateData = aggregate(processedTracts, stores);
+
+  // Enrich with Census ACS data
+  await fetchCensusACS(stateData);
 
   // National summary
   const totalTracts = stateData.reduce((s, st) => s + st.totalTracts, 0);
@@ -383,7 +426,8 @@ async function main() {
       description: 'Low-access tracts computed from current USDA FNS SNAP retailer locations + Census 2020 tract centroids. Qualifying stores: Supermarket, Super Store, Large Grocery Store. Thresholds: >1mi urban, >10mi rural.',
       sources: [
         'USDA FNS SNAP Retailer Location Data (current, via ArcGIS REST)',
-        'U.S. Census Bureau, Centers of Population for Census Tracts: 2020'
+        'U.S. Census Bureau, Centers of Population for Census Tracts: 2020',
+        'U.S. Census Bureau, American Community Survey 2023 5-Year Estimates (vehicle access, poverty)'
       ],
       methodology: {
         qualifyingStores: 'Supermarket, Super Store, Large Grocery Store',
