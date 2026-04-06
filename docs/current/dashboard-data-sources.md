@@ -2,6 +2,8 @@
 
 Complete inventory of every data source used across the 7 interactive dashboards. Covers static JSON files, live PHP proxy endpoints, and the upstream APIs they bridge.
 
+> **See also:** [Data Source Inventory](data-source-inventory.md) (update frequencies, freshness thresholds, ownership) | [Data Refresh Runbook](data-refresh-runbook.md) (step-by-step update procedures) | [Data Monitoring Strategy](data-monitoring-strategy.md) (staleness detection & caching)
+
 ---
 
 ## Food Insecurity Overview
