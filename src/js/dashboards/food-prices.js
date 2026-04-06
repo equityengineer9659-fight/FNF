@@ -160,6 +160,12 @@ function renderAffordabilityMap(geoJSON, stateData) {
   }));
 
   chart.setOption({
+    title: {
+      text: '',
+      subtext: 'Index = annual meal cost per $1,000 of median income · Data: 2024 (Feeding America + Census ACS)',
+      subtextStyle: { color: COLORS.textMuted, fontSize: 11 },
+      top: 0, left: 'center'
+    },
     tooltip: {
       trigger: 'item',
       ...TOOLTIP_STYLE,
@@ -168,9 +174,9 @@ function renderAffordabilityMap(geoJSON, stateData) {
         if (!d) return '';
         return `<strong style="font-size:14px">${d.name}</strong><br/>
           <span style="color:${COLORS.secondary}">Affordability Index:</span> ${d.value.toFixed(1)}<br/>
-          Avg Meal Cost: $${d.mealCost}<br/>
-          Median Income: $${d.medianIncome.toLocaleString()}<br/>
-          <span style="color:${COLORS.textMuted};font-size:11px">Higher index = less affordable</span>`;
+          Avg Meal Cost: $${d.mealCost}/meal<br/>
+          Median Household Income: $${d.medianIncome.toLocaleString()}<br/>
+          <span style="color:${COLORS.textMuted};font-size:11px">Index = annual 3-meal food cost per $1,000 income. Higher = less affordable. Source: Feeding America 2024 + Census ACS 2023.</span>`;
       }
     },
     visualMap: {
@@ -252,10 +258,10 @@ function renderHomeVsAway(blsData) {
   const chart = createChart('chart-home-vs-away');
   if (!chart || !blsData || !blsData.series) return;
 
-  const filterNulls = s => s ? { ...s, data: s.data.filter(d => d.value !== null) } : s;
-  const foodHome = filterNulls(blsData.series.find(s => s.name === 'Food at Home'));
-  const foodAway = filterNulls(blsData.series.find(s => s.name === 'Food Away from Home'));
-  const allItems = filterNulls(blsData.series.find(s => s.name === 'All Items'));
+  // Use connectNulls instead of filtering so gaps from known events (e.g. gov't shutdown Oct-Nov 2025) are bridged visually
+  const foodHome = blsData.series.find(s => s.name === 'Food at Home');
+  const foodAway = blsData.series.find(s => s.name === 'Food Away from Home');
+  const allItems = blsData.series.find(s => s.name === 'All Items');
 
   if (!foodHome) return;
 
@@ -320,6 +326,7 @@ function renderHomeVsAway(blsData) {
         type: 'line',
         data: foodHome.data.map(d => d.value),
         smooth: true,
+        connectNulls: true,
         lineStyle: { width: 3, color: COLORS.accent },
         itemStyle: { color: COLORS.accent },
         symbol: 'none',
@@ -328,6 +335,12 @@ function renderHomeVsAway(blsData) {
             { offset: 0, color: 'rgba(255,107,53,0.2)' },
             { offset: 1, color: 'rgba(255,107,53,0.01)' }
           ])
+        },
+        markArea: {
+          silent: true,
+          itemStyle: { color: 'rgba(156,163,175,0.12)', borderWidth: 0 },
+          label: { color: COLORS.textMuted, fontSize: 10, position: 'insideTop' },
+          data: [[{ xAxis: '2025-10', name: 'Gov\'t shutdown\ndata gap' }, { xAxis: '2025-11' }]]
         }
       },
       ...(foodAway ? [{
@@ -335,6 +348,7 @@ function renderHomeVsAway(blsData) {
         type: 'line',
         data: foodAway.data.map(d => d.value),
         smooth: true,
+        connectNulls: true,
         lineStyle: { width: 2.5, color: COLORS.secondary },
         itemStyle: { color: COLORS.secondary },
         symbol: 'none',
@@ -350,6 +364,7 @@ function renderHomeVsAway(blsData) {
         type: 'line',
         data: allItems.data.map(d => d.value),
         smooth: true,
+        connectNulls: true,
         lineStyle: { width: 1.5, color: 'rgba(255,255,255,0.3)', type: 'dashed' },
         itemStyle: { color: 'rgba(255,255,255,0.3)' },
         symbol: 'none'

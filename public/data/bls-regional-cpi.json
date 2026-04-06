@@ -4439,6 +4439,8 @@
     "description": "State-level meal cost affordability relative to median household income",
     "source": "Feeding America Map the Meal Gap (meal costs) + Census ACS 1-year (median income)",
     "year": 2024,
+    "methodology": "index = (mealCost × 3 meals × 365 days / medianIncome) × 1000 — annual 3-meal-per-day food cost as a share of median household income, scaled by 1,000. Higher = less affordable.",
+    "nationalAvg": 57.2,
     "states": [
       {
         "name": "Alabama",

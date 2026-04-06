@@ -270,6 +270,12 @@ function renderCoverageGap(sankeyData) {
   const links = sankeyData.links;
 
   chart.setOption({
+    title: {
+      text: '',
+      subtext: 'Modeled estimates · USDA FNS, Feeding America, Census ACS · 2022 data',
+      subtextStyle: { color: COLORS.textMuted, fontSize: 11 },
+      top: 0, left: 'center'
+    },
     tooltip: {
       ...TOOLTIP_STYLE,
       formatter: p => {
@@ -421,8 +427,9 @@ function renderBenefits(benefitData, coverageStates) {
 
 // -- Chart 6: Coverage KPI Gauges --
 function renderGauges(national) {
-  // Monthly food cost for 3 meals/day at national avg meal cost ($3.58)
-  const monthlyFoodCost = Math.round(3.58 * 3 * 30);
+  // Monthly food cost for 3 meals/day at national avg meal cost ($3.58 — Feeding America Map the Meal Gap 2025, update annually)
+  const mealCost = national.mealCostPerDay ?? 3.58;
+  const monthlyFoodCost = Math.round(mealCost * 3 * 30);
   const affordabilityGap = monthlyFoodCost - national.avgMonthlyBenefit;
 
   const gaugeConfigs = [
@@ -550,9 +557,9 @@ function renderDemographicFlow(sdoh, snapData) {
   });
 
   // Food insecurity disproportionality: compare race share of food-insecure vs general population
-  // Use national food insecurity rates by race (USDA ERS 2022):
-  // Hispanic: 20.8%, Black: 22.4%, White: 8.6%, Asian: 9.7%
-  const fiRates = { 'Hispanic/Latino': 20.8, 'White (non-Hispanic)': 8.6, 'Black/African American': 22.4, 'Asian': 9.7, 'Other': 14.0 };
+  // Source: USDA ERS ERR-337 (Household Food Security in the United States, 2023) — most recent official data
+  // Note: USDA discontinued annual food security reports after 2024; 2023 figures are the latest available
+  const fiRates = { 'Hispanic/Latino': 20.8, 'White (non-Hispanic)': 9.4, 'Black/African American': 22.4, 'Asian': 9.7, 'Other': 14.0 };
   const raceColors = { 'Hispanic/Latino': '#fbbf24', 'White (non-Hispanic)': '#74c0fc', 'Black/African American': '#ff6b6b', 'Asian': '#69db7c', 'Other': '#c084fc' };
 
   // Build Sankey: Population → Food Insecure → Safety Net Coverage

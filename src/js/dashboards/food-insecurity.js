@@ -773,7 +773,7 @@ function renderSnap(data) {
       ...TOOLTIP_STYLE
     },
     legend: {
-      data: ['Food Insecurity Rate (%)', 'SNAP Coverage (%)'],
+      data: ['Food Insecurity Rate (2024)', 'SNAP Coverage (FY2023)'],
       textStyle: { color: COLORS.text },
       top: 5
     },
@@ -791,7 +791,7 @@ function renderSnap(data) {
     },
     series: [
       {
-        name: 'Food Insecurity Rate (%)',
+        name: 'Food Insecurity Rate (2024)',
         type: 'bar',
         data: rates.reverse(),
         barWidth: '35%',
@@ -805,7 +805,7 @@ function renderSnap(data) {
         animationDuration: 1500
       },
       {
-        name: 'SNAP Coverage (%)',
+        name: 'SNAP Coverage (FY2023)',
         type: 'bar',
         data: snapCoverageRatio.reverse(),
         barWidth: '35%',
@@ -1091,7 +1091,13 @@ async function fetchSDOHData() {
 
     // CDC PLACES health indicators (non-blocking enhancement to SDOH scatter)
     fetchCDCPlacesData();
-  } catch { /* SDOH is optional — fail silently */ }
+  } catch {
+    // SDOH is optional — show fallback if chart container is still empty
+    const sdohChart = document.getElementById('chart-sdoh');
+    if (sdohChart && !sdohChart.querySelector('canvas')) {
+      sdohChart.innerHTML = '<p class="chart-unavailable">Social determinants data unavailable</p>';
+    }
+  }
 }
 
 // -- CDC PLACES health indicators (non-blocking enhancement) --
