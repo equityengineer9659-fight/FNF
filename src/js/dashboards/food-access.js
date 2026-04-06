@@ -1114,9 +1114,9 @@ async function init() {
       if (freshAccess) freshAccess.style.display = '';
       if (freshSnap) freshSnap.style.display = 'none';
 
-      if (view === 'insecurity' && cdcInsecurityData) {
+      if (view === 'insecurity' && cdcInsecurityData?.records) {
         if (mapCtrl) mapCtrl.setDrillDown(true);
-        renderInsecurityMap(geoJSON, cdcInsecurityData);
+        renderInsecurityMap(geoJSON, cdcInsecurityData.records);
         if (insecurityInfo) insecurityInfo.style.display = '';
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
         updateFreshness('access', cdcInsecurityData);
