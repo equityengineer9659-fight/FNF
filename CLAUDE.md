@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Food-N-Force website - A nonprofit food bank and pantry solution built with modern web standards, SLDS compliance, and multi-agent governance framework. Features glassmorphism effects, premium background animations, and comprehensive accessibility support.
 
+This project uses JavaScript (not TypeScript), HTML, CSS, Markdown, and YAML. The site is built with Vite. Always run `npm run build` to verify changes compile correctly before committing.
+
 ## Development Commands
 
 ```bash
@@ -183,13 +185,31 @@ All development work follows this branch-based workflow tied to Jira stories:
 ### Key Rule
 Never commit directly to master for story work — always use a branch and PR so the GitHub Actions workflow can update Jira automatically and the CI/CD pipeline runs before merge.
 
+## Git Workflow
+
+Always push to the remote after committing. Never stop at just a local commit unless explicitly told to.
+
+## Data & APIs
+
+When working on dashboards, always verify API endpoint URLs are current and field mappings match the actual API response schema before committing.
+
+## Frontend Development
+
+After making frontend changes, run the build and verify the output. Do not assume dev server hot-reload reflects production. Clear caches when debugging visual issues.
+
+## Project Management
+
+When given JIRA instructions, follow them exactly — correct epic, correct scope. Do not start code work when the user asks for JIRA-only tasks.
+
 ## Agent Framework
 
-### Skills (3)
+### Skills (5)
 Reusable slash-command workflows in `.claude/skills/`:
 - **`/create-illustration {slug}`** — reads a blog article and creates a matching SVG illustration following the project style guide
 - **`/register-article {slug}`** — registers a manually added article in all required files (`build-components.js`, `generate-sitemap.js`, `.pa11yci.json`) and runs sync scripts
 - **`/quality-sweep [scope]`** — launches validation agents in parallel (`all`, `content`, `css`, `deploy`) and presents a unified pass/fail summary
+- **`/test-fix [scope]`** — systematic code review with test-first fixes: explore → find bugs → write failing test → fix → verify green → next issue. Scope: file path, category (`security`, `performance`, `tests`, `bugs`, `dead-code`), or omit for full review
+- **`verify-changes`** *(auto-invoked, not a slash command)* — Claude auto-invokes after modifying source files: writes tests, runs vitest, verifies build + lint. Scoped to JS, PHP, HTML, CSS, and build scripts via `paths` filter
 
 ### Project-Specific Agents (12)
 Custom agents in `.claude/agents/` tailored to this project:
