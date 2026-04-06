@@ -234,9 +234,11 @@ function processHtmlFile(filePath, pageName) {
     html = html.replace(/<link rel="stylesheet" href="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/design-system\/2\.22\.2\/styles\/salesforce-lightning-design-system\.min\.css"[^>]*>/, sldsWithSri);
   }
 
-  // Write back the processed HTML
+  // Write back the processed HTML (atomic: write temp file, then rename)
   try {
-    fs.writeFileSync(filePath, html);
+    const tmpPath = filePath + '.tmp';
+    fs.writeFileSync(tmpPath, html);
+    fs.renameSync(tmpPath, filePath);
   } catch (err) {
     console.error(`❌ ERROR writing ${pageName}: ${err.message}`);
   }

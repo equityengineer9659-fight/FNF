@@ -124,7 +124,9 @@ function syncBlog() {
   const before = blogHtml.slice(0, startIdx + START_MARKER.length);
   const after  = blogHtml.slice(endIdx);
   try {
-    fs.writeFileSync(blogPath, before + '\n' + cards + '\n' + CARD_INDENT + after, 'utf-8');
+    const tmpPath = blogPath + '.tmp';
+    fs.writeFileSync(tmpPath, before + '\n' + cards + '\n' + CARD_INDENT + after, 'utf-8');
+    fs.renameSync(tmpPath, blogPath);
   } catch (err) {
     console.error(`sync-blog: ERROR writing blog.html — ${err.message}`);
     process.exit(1);

@@ -161,6 +161,10 @@ class NewsletterPopup {
         return;
       }
 
+      // Disable submit button to prevent double-submit
+      const submitBtn = form.querySelector('.fnf-submit-btn');
+      if (submitBtn) submitBtn.disabled = true;
+
       const formData = new FormData();
       formData.append('email', email);
 

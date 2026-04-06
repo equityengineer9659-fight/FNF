@@ -178,6 +178,19 @@ export function createChart(containerId) {
   return chart;
 }
 
+// -- Dispose all chart instances (call on page unload to free memory) --
+export function disposeAllCharts() {
+  charts.forEach(c => {
+    try { c.dispose(); } catch { /* already disposed */ }
+  });
+  charts.length = 0;
+}
+
+// Auto-cleanup on page navigation or browser close
+if (typeof window !== 'undefined') {
+  window.addEventListener('pagehide', disposeAllCharts, { once: true });
+}
+
 // -- Update data freshness indicator --
 export function updateFreshness(source, info) {
   const el = document.getElementById(`freshness-${source}`);

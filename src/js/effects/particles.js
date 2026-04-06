@@ -329,7 +329,14 @@ export function initParticles() {
     return null;
   }
 
-  return new ParticleSystem(null);
+  const system = new ParticleSystem(null);
+
+  // Reduce particle count on mobile to improve frame rate
+  if (window.innerWidth < 768) {
+    system.setParticleCount(40);
+  }
+
+  return system;
 }
 
 export default ParticleSystem;

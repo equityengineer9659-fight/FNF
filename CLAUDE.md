@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Food-N-Force website - A nonprofit food bank and pantry solution built with modern web standards, SLDS compliance, and multi-agent governance framework. Features glassmorphism effects, premium background animations, and comprehensive accessibility support.
 
+This project uses JavaScript (not TypeScript), HTML, CSS, Markdown, and YAML. The site is built with Vite. Always run `npm run build` to verify changes compile correctly before committing.
+
 ## Development Commands
 
 ```bash
@@ -163,16 +165,27 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
 
 ## Development Workflow (Jira + GitHub)
 
-All development work follows this branch-based workflow tied to Jira stories:
+### Story Work (Jira-tracked)
 
-1. **Pick a story** — user specifies the Jira issue key (e.g. "let's work on KAN-82")
-2. **Move to In Progress** — Claude transitions the story to In Progress in Jira before touching any code
-3. **Create branch** — named `KAN-XX-short-description` (e.g. `KAN-82-newsletter-notification`)
-4. **Do the work** — all commits reference the issue key: `KAN-82 Add admin notification to newsletter.php`
-5. **Push branch** — Claude pushes the branch to GitHub
-6. **Open PR** — PR title includes the issue key; GitHub Actions automatically moves the story to In Review
-7. **User merges PR** — the only step the user handles manually
-8. **GitHub Actions** — automatically moves the story to Done on merge
+When the user specifies a Jira issue key (e.g. "let's work on KAN-82"):
+
+1. **Move to In Progress** — Claude transitions the story to In Progress in Jira before touching any code
+2. **Create branch** — named `KAN-XX-short-description` (e.g. `KAN-82-newsletter-notification`)
+3. **Do the work** — all commits reference the issue key: `KAN-82 Add admin notification to newsletter.php`
+4. **Push branch** — Claude pushes the branch to GitHub
+5. **Open PR** — PR title includes the issue key; GitHub Actions automatically moves the story to In Review
+6. **User merges PR** — the only step the user handles manually
+7. **GitHub Actions** — automatically moves the story to Done on merge
+
+### Ad Hoc Work (no Jira story)
+
+When the user asks for work without referencing a Jira issue key:
+
+1. **Create a fresh branch from master** — named `chore/short-description` (e.g. `chore/code-review-fixes`, `chore/add-skills`). Never reuse an existing story branch.
+2. **Do the work** — commits use plain descriptive messages (no `KAN-XX` prefix)
+3. **Push branch** — Claude pushes the branch to GitHub
+4. **Open PR** — when the work is complete and ready to merge
+5. **User merges PR** — the Jira workflow runs but skips all jobs (no `KAN-` key found), which is expected
 
 ### Jira Project
 - **Board**: KAN project at foodnforce.atlassian.net (Kanban)
@@ -181,17 +194,35 @@ All development work follows this branch-based workflow tied to Jira stories:
 - **GitHub integration**: GitHub for Atlassian app connected; commits/PRs with KAN keys appear on issue Development panel
 
 ### Key Rule
-Never commit directly to master for story work — always use a branch and PR so the GitHub Actions workflow can update Jira automatically and the CI/CD pipeline runs before merge.
+Never commit directly to master — always use a branch and PR so the CI/CD pipeline runs before merge.
+
+## Git Workflow
+
+Always push to the remote after committing. Never stop at just a local commit unless explicitly told to.
+
+## Data & APIs
+
+When working on dashboards, always verify API endpoint URLs are current and field mappings match the actual API response schema before committing.
+
+## Frontend Development
+
+After making frontend changes, run the build and verify the output. Do not assume dev server hot-reload reflects production. Clear caches when debugging visual issues.
+
+## Project Management
+
+When given JIRA instructions, follow them exactly — correct epic, correct scope. Do not start code work when the user asks for JIRA-only tasks.
 
 ## Agent Framework
 
-### Skills (3)
+### Skills (5)
 Reusable slash-command workflows in `.claude/skills/`:
 - **`/create-illustration {slug}`** — reads a blog article and creates a matching SVG illustration following the project style guide
 - **`/register-article {slug}`** — registers a manually added article in all required files (`build-components.js`, `generate-sitemap.js`, `.pa11yci.json`) and runs sync scripts
 - **`/quality-sweep [scope]`** — launches validation agents in parallel (`all`, `content`, `css`, `deploy`) and presents a unified pass/fail summary
+- **`/test-fix [scope]`** — systematic code review with test-first fixes: explore → find bugs → write failing test → fix → verify green → next issue. Scope: file path, category (`security`, `performance`, `tests`, `bugs`, `dead-code`), or omit for full review
+- **`verify-changes`** *(auto-invoked, not a slash command)* — Claude auto-invokes after modifying source files: writes tests, runs vitest, verifies build + lint. Scoped to JS, PHP, HTML, CSS, and build scripts via `paths` filter
 
-### Project-Specific Agents (11)
+### Project-Specific Agents (12)
 Custom agents in `.claude/agents/` tailored to this project:
 - **slds-compliance-checker** — validates CSS against SLDS token map; use after CSS changes
 - **accessibility-auditor** — WCAG 2.1 AA checks; use after HTML changes
@@ -204,6 +235,7 @@ Custom agents in `.claude/agents/` tailored to this project:
 - **technical-architect** — SLDS CDN constraints, SiteGround limits, glassmorphism protection; use before structural changes
 - **business-analyst** — CTA clarity, value proposition, conversion paths; use when modifying service pages
 - **data-scientist** — trend analysis, correlations, anomalies, visualization recommendations; use after data updates or to improve dashboard insights
+- **project-manager** — sprint planning, story prioritization, dependency mapping, status reporting; use when planning work or reviewing backlog
 
 ## Common Issues
 

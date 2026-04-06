@@ -146,6 +146,17 @@ class ErrorTracker {
     }
 
     this.lastErrorTime.set(errorKey, now);
+
+    // Evict oldest entries to prevent unbounded growth
+    if (this.lastErrorTime.size > 100) {
+      const keys = this.lastErrorTime.keys();
+      for (let i = 0; i < 50; i++) {
+        const key = keys.next().value;
+        this.lastErrorTime.delete(key);
+        this.errorCounts.delete(key);
+      }
+    }
+
     return false;
   }
 
@@ -250,17 +261,19 @@ class ErrorTracker {
       window.LogRocket.captureException(new Error(error.message));
     }
 
-    // Send to custom endpoint if configured
+    // Send to custom endpoint if configured — use original fetch to bypass
+    // the monkey-patched wrapper and avoid re-entrant error capture
     if (config.security.cspReportUri && error.type !== 'network') {
+      const fetchFn = this._originalFetch || fetch;
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
-      fetch(config.security.cspReportUri, {
+      fetchFn(config.security.cspReportUri, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
         signal: controller.signal
       }).catch(() => {
-        // Silently fail - don't create infinite error loop
+        // Silently fail
       }).finally(() => clearTimeout(timeoutId));
     }
   }
