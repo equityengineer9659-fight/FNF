@@ -191,7 +191,7 @@ Reusable slash-command workflows in `.claude/skills/`:
 - **`/register-article {slug}`** — registers a manually added article in all required files (`build-components.js`, `generate-sitemap.js`, `.pa11yci.json`) and runs sync scripts
 - **`/quality-sweep [scope]`** — launches validation agents in parallel (`all`, `content`, `css`, `deploy`) and presents a unified pass/fail summary
 
-### Project-Specific Agents (11)
+### Project-Specific Agents (12)
 Custom agents in `.claude/agents/` tailored to this project:
 - **slds-compliance-checker** — validates CSS against SLDS token map; use after CSS changes
 - **accessibility-auditor** — WCAG 2.1 AA checks; use after HTML changes
@@ -204,6 +204,7 @@ Custom agents in `.claude/agents/` tailored to this project:
 - **technical-architect** — SLDS CDN constraints, SiteGround limits, glassmorphism protection; use before structural changes
 - **business-analyst** — CTA clarity, value proposition, conversion paths; use when modifying service pages
 - **data-scientist** — trend analysis, correlations, anomalies, visualization recommendations; use after data updates or to improve dashboard insights
+- **project-manager** — sprint planning, story prioritization, dependency mapping, status reporting; use when planning work or reviewing backlog
 
 ## Common Issues
 

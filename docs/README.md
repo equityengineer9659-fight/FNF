@@ -7,6 +7,7 @@
 
 ### Most Frequently Accessed
 - [Project Plan](project/plan.md) - Strategic refactoring phases
+- [Story Priority List](current/story-priority-list.md) - 55 stories across 5 tiers with dependencies
 - [Technical Architecture](../CLAUDE.md) - Complete technical architecture and build system
 - [ADRs](technical/adr/) - Architecture Decision Records
 - [Blog Content Pipeline](current/blog-content-pipeline.md) - Scraper tool, editorial workflow, search presets
@@ -37,6 +38,12 @@ docs/
 │   └── risks.md           # Risk register
 ├── current/               # Enhanced active documentation
 │   ├── blog-content-pipeline.md  # Scraper tool + editorial workflow
+│   ├── story-priority-list.md    # 55 stories, 5 tiers, with dependencies
+│   ├── data-source-inventory.md  # All data sources, cadences, ownership
+│   ├── data-refresh-runbook.md   # Step-by-step data update procedures
+│   ├── data-monitoring-strategy.md # Freshness thresholds, caching, alerts
+│   ├── dashboard-data-sources.md # Component-to-data-source mapping
+│   ├── data-quality.md           # Quality ratings per dashboard component
 │   ├── emergency/         # Emergency response procedures
 │   ├── design-system/     # SLDS governance
 │   ├── governance/        # Agent coordination
