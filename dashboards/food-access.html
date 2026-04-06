@@ -185,7 +185,7 @@
                     <div id="map-view-toggle" style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
                         <button class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="insecurity" aria-pressed="true">Food Insecurity</button>
                         <button class="dashboard-metric-btn" data-map-view="current-access" aria-pressed="false">Current Access</button>
-                        <button class="dashboard-metric-btn" data-map-view="deserts" aria-pressed="false">Low Access</button>
+                        <button class="dashboard-metric-btn" data-map-view="deserts" aria-pressed="false">Food Deserts</button>
                         <button class="dashboard-metric-btn" data-map-view="snap" aria-pressed="false">SNAP Retailers</button>
                     </div>
                     <div id="state-selector-container"></div>
@@ -229,17 +229,17 @@
                         </div>
                         <div id="current-access-insight" class="dashboard-info__insight"></div>
                     </div>
-                    <!-- Info panel: Low Access (Current) mode -->
+                    <!-- Info panel: Food Deserts mode -->
                     <div id="info-desert-mode" class="dashboard-chart-row__info" style="display:none">
-                        <h3 class="dashboard-info__title">Current Low-Access Tracts</h3>
+                        <h3 class="dashboard-info__title">Mapping the Food Deserts</h3>
                         <p class="dashboard-info__text">
-                            This view shows the <strong>percentage of census tracts</strong> where residents live far from a qualifying grocery store — more than <strong>1 mile in urban areas</strong> or <strong>10 miles in rural areas</strong>. <strong>Click any state</strong> for county-level breakdown.
+                            A <strong>food desert</strong> is a census tract where a significant share of residents live far from a supermarket — more than 1 mile in urban areas or 10 miles in rural areas. This map shows the percentage of each state's census tracts classified as low-access. <strong>Click any state</strong> to drill down into county-level data.
                         </p>
                         <p class="dashboard-info__text">
-                            Unlike the USDA's 2019 Food Access Research Atlas, this measure is <strong>computed from current data</strong>: USDA FNS SNAP-authorized retailer locations (updated biweekly) + Census 2020 population-weighted tract centroids. Only supermarkets, super stores, and large grocery stores are counted as qualifying access points.
+                            This measure is <strong>computed from current data</strong> — not the legacy 2019 USDA atlas. We use USDA FNS SNAP-authorized retailer locations (updated biweekly) and Census 2020 population-weighted tract centroids. Only supermarkets, super stores, and large grocery stores count as qualifying access points.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Retailers</strong> USDA FNS SNAP Retailer Location Data (current, ~40K qualifying stores)</span>
+                            <span class="meta-item"><strong>Retailers</strong> USDA FNS SNAP Retailer Location Data (current, ~40K qualifying stores of ~260K total)</span>
                             <span class="meta-item"><strong>Tracts</strong> Census 2020 population-weighted centroids (84,414 tracts)</span>
                             <span class="meta-item"><strong>Definition</strong> Low-access: &gt;1mi urban / &gt;10mi rural to nearest supermarket/super store/large grocery</span>
                         </div>

@@ -619,10 +619,10 @@ function renderLowAccessMap(geoJSON, accessData) {
         if (!d) return '';
         return `<strong style="font-size:14px">${d.name}</strong><br/>
           <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
-          Tracts: ${d.lowAccessTracts} of ${d.totalTracts}<br/>
+          Population: ${fmtNum(d.totalPopulation)}<br/>
           Low-Access Pop: ${fmtNum(d.lowAccessPopulation)}<br/>
           Avg Distance: ${d.avgDistance} mi<br/>
-          <span style="color:${COLORS.secondary};font-size:11px">Click for county breakdown</span>`;
+          <span style="color:${COLORS.secondary};font-size:11px">Click to see counties</span>`;
       }
     },
     visualMap: {
