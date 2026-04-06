@@ -14,7 +14,7 @@ import {
 const PAL = MAP_PALETTES.insecurity;
 
 // -- Map Chart with County Drill-Down --
-function renderMap(geoJSON, data, metric = 'rate') {
+function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
   const chart = createChart('chart-map');
   if (!chart) return;
 
@@ -43,6 +43,7 @@ function renderMap(geoJSON, data, metric = 'rate') {
   // State for drill-down
   let currentView = 'national';
   let currentMetric = metric;
+  let currentStateName = '';
 
   // State tooltip formatter
   function stateTooltip(params) {
@@ -84,6 +85,9 @@ function renderMap(geoJSON, data, metric = 'rate') {
     if (backBtn) backBtn.style.display = 'none';
     const mapLabel = document.getElementById('map-state-label');
     if (mapLabel) mapLabel.textContent = '';
+    currentStateName = '';
+    const mapInsight = document.getElementById('map-insight');
+    if (mapInsight) mapInsight.textContent = 'Mississippi leads the nation at 18.7% \u2014 nearly 1 in 5 residents.';
     const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
     if (hint) hint.textContent = 'Hover for state details \u2014 click any state for county breakdown';
 
@@ -158,6 +162,7 @@ function renderMap(geoJSON, data, metric = 'rate') {
       const max = Math.ceil(Math.max(...vals));
 
       currentView = stateFips;
+      currentStateName = stateName;
 
       // Show back button
       const backBtn = document.getElementById('map-back-btn');
@@ -208,6 +213,22 @@ function renderMap(geoJSON, data, metric = 'rate') {
         }]
       }, true);
 
+      // Update insight callout with worst county in this state (by current metric)
+      const worst = countyData.reduce((a, b) => (b.value ?? 0) > (a.value ?? 0) ? b : a, countyData[0]);
+      const stateObj = data.states.find(s => s.name === stateName);
+      const mapInsight = document.getElementById('map-insight');
+      if (mapInsight && worst && stateObj) {
+        const cfg = metricConfig[currentMetric];
+        const fmtVal = v => currentMetric === 'mealCost' ? `$${v}` : currentMetric === 'persons' || currentMetric === 'mealGap' ? fmtNum(v) : `${v}${cfg.suffix}`;
+        const stateVal = stateObj[currentMetric] ?? stateObj.rate;
+        const diff = typeof worst.value === 'number' && typeof stateVal === 'number'
+          ? (worst.value - stateVal).toFixed(currentMetric === 'mealCost' ? 2 : 1)
+          : null;
+        const sign = diff !== null && diff >= 0 ? '+' : '';
+        const diffStr = diff !== null ? ` — ${sign}${diff}${currentMetric === 'mealCost' ? '' : cfg.suffix} vs. state avg` : '';
+        mapInsight.textContent = `Within ${stateName}, ${worst.name} has the highest ${cfg.name.toLowerCase()} at ${fmtVal(worst.value)}${diffStr} (modeled estimate).`;
+      }
+
       // Highlight specific county if requested (from search)
       if (highlightCounty) {
         setTimeout(() => {
@@ -226,12 +247,31 @@ function renderMap(geoJSON, data, metric = 'rate') {
   // Initial render
   showNational();
 
-  // Click handler: state click → drill down
+  // Click handler: state click → drill down + fire KPI panel; county click → update insight
   chart.on('click', (params) => {
     if (currentView === 'national' && params.data) {
       const stateFips = params.data.fips;
       const stateName = params.data.name;
-      if (stateFips) drillDown(stateName, stateFips);
+      if (stateFips) {
+        drillDown(stateName, stateFips);
+        const stateCode = US_STATES.find(([, n]) => n === stateName)?.[0];
+        if (stateCode) onStateClick?.(stateCode);
+      }
+    } else if (currentView !== 'national' && params.data) {
+      const d = /** @type {Record<string, *>} */ (params.data);
+      const stateObj = data.states.find(s => s.name === currentStateName);
+      const insight = document.getElementById('map-insight');
+      if (insight && d.value != null && stateObj) {
+        const cfg = metricConfig[currentMetric];
+        const fmtVal = v => currentMetric === 'mealCost' ? `$${v}` : currentMetric === 'persons' || currentMetric === 'mealGap' ? fmtNum(v) : `${v}${cfg.suffix}`;
+        const stateVal = stateObj[currentMetric] ?? stateObj.rate;
+        const diff = typeof d.value === 'number' && typeof stateVal === 'number'
+          ? (d.value - stateVal).toFixed(currentMetric === 'mealCost' ? 2 : 1)
+          : null;
+        const sign = diff !== null && diff >= 0 ? '+' : '';
+        const diffStr = diff !== null ? ` (${sign}${diff}${currentMetric === 'mealCost' ? '' : cfg.suffix} vs. ${currentStateName} avg of ${fmtVal(stateVal)})` : '';
+        insight.textContent = `${d.name}: ${cfg.name.toLowerCase()} ${fmtVal(d.value)}${diffStr}. ~${fmtNum(d.persons)} residents affected (modeled estimate).`;
+      }
     }
   });
 
@@ -1398,6 +1438,32 @@ function renderTripleBurden(data, accessData) {
   if (el) el.innerHTML = `<strong>${worst.name}</strong> ranks #1 with a composite score of ${worst.total.toFixed(0)}/300 — food insecurity at ${worst.rate}%, ${worst.accessPct}% low-access tracts, and only ${worst.coverage}% SNAP coverage.`;
 }
 
+// -- State Narrative Insight Builder --
+function buildStateInsight(fi, data, stateName) {
+  const sortedByRate = [...data.states].sort((a, b) => b.rate - a.rate);
+  const rank = sortedByRate.findIndex(s => s.name === stateName) + 1;
+  const natRate = data.national.foodInsecurityRate;
+  const diff = (fi.rate - natRate).toFixed(1);
+  const sign = diff >= 0 ? '+' : '';
+  const childGap = (fi.childRate - fi.rate).toFixed(1);
+  const coverage = fi.persons > 0 ? Math.round((fi.snapParticipation / fi.persons) * 100) : 0;
+  const snapGap = 100 - coverage;
+
+  const s1 = `${stateName} ranks #${rank} nationally at ${fi.rate}% food insecurity — ${sign}${diff} pp vs. the ${natRate}% national average, affecting an estimated ${fmtNum(fi.persons)} residents.`;
+  const s2 = `Children face a sharper burden: ${fi.childRate}% child food insecurity is ${childGap} pp above the overall state rate.`;
+
+  let s3;
+  if (coverage < 85) {
+    s3 = `Only ${coverage}% of food-insecure residents participate in SNAP, leaving an estimated ${snapGap}% without this support.`;
+  } else if (coverage <= 110) {
+    s3 = `SNAP participation covers roughly ${coverage}% of the food-insecure population, suggesting most eligible residents are enrolled.`;
+  } else {
+    s3 = `SNAP participation (${coverage}%) exceeds the estimated food-insecure population — possibly reflecting recent insecurity increases not yet captured in survey data.`;
+  }
+
+  return `${s1} ${s2} ${s3}`;
+}
+
 // -- State Deep-Dive Cross-Dataset KPI Panel --
 function renderStateDeepDive(stateCode, data, accessData, bankData) {
   const section = document.getElementById('section-state-deepdive');
@@ -1442,6 +1508,7 @@ function renderStateDeepDive(stateCode, data, accessData, bankData) {
         </div>
       `).join('')}
     </div>
+    <p style="margin:1rem 0 0;font-size:0.85rem;line-height:1.6;color:rgba(255,255,255,0.75);">${buildStateInsight(fi, data, stateName)}</p>
   `;
 }
 
@@ -1467,7 +1534,9 @@ async function init() {
     animateCounters();
 
     // Render all charts
-    const mapCtrl = renderMap(geoJSON, data);
+    const mapCtrl = renderMap(geoJSON, data, 'rate', (stateCode) => {
+      renderStateDeepDive(stateCode, data, accessData, bankData);
+    });
 
     // County search
     initCountySearch(mapCtrl);
