@@ -114,7 +114,7 @@ let snapMapAdminData = null;
 let snapMapCdcData = null;
 let snapMapActiveView = 'admin'; // eslint-disable-line no-unused-vars
 
-const SNAP_MAP_DEFAULT_INSIGHT = 'Wyoming has the lowest administrative coverage ratio at 40.6%. When CDC self-reported data loads, compare the two views \u2014 states where self-reported is notably lower than administrative suggest stigma or under-reporting of benefits.';
+export const SNAP_MAP_DEFAULT_INSIGHT = 'Wyoming has the lowest administrative coverage ratio at 46.9%. When CDC self-reported data loads, compare the two views \u2014 states where self-reported is notably lower than administrative suggest stigma or under-reporting of benefits.';
 
 function renderSnapMap(geoJSON, states) {
   snapMapChart = createChart('chart-snap-map');
@@ -479,7 +479,7 @@ function renderGauges(national) {
   const gaugeConfigs = [
     { id: 'gauge-coverage', title: 'SNAP Coverage', value: +(national.snapParticipants / (national.snapParticipants + national.coverageGap) * 100).toFixed(1), max: 100, unit: '%', color: COLORS.primary },
     { id: 'gauge-lunch', title: 'School Lunch', value: national.freeLunchPct, max: 100, unit: '%', color: COLORS.secondary },
-    { id: 'gauge-benefit', title: 'Avg Benefit', value: national.avgMonthlyBenefit, max: 300, unit: '$', color: COLORS.accent },
+    { id: 'gauge-benefit', title: 'Avg Benefit', value: national.avgMonthlyBenefit, max: 350, unit: '$', color: COLORS.accent },
     { id: 'gauge-gap', title: 'Coverage Gap', value: +(national.coverageGap / 1000000).toFixed(1), max: 15, unit: 'M', color: '#ef4444' },
     { id: 'gauge-affordability', title: 'Monthly Shortfall', value: affordabilityGap, max: 200, unit: '$', color: '#f59e0b' }
   ];

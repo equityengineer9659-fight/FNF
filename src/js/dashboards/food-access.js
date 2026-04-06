@@ -1425,21 +1425,6 @@ async function init() {
       }
     };
 
-    // Wire map click for current-access mode
-    const chartDom = document.getElementById('chart-desert-map');
-    if (chartDom) {
-      const chartInstance = echarts.getInstanceByDom(chartDom);
-      if (chartInstance) {
-        chartInstance.on('click', (params) => {
-          if (params.data?.name) {
-            const stateCode = US_STATES.find(([, name]) => name === params.data.name)?.[0];
-            if (!stateCode) return;
-            if (currentMapView === 'deserts' && currentAccessData?.states) drillDownLowAccess(stateCode);
-          }
-        });
-      }
-    }
-
     // Wire back button for deserts mode
     const backBtn = document.getElementById('access-map-back-btn');
     if (backBtn) {

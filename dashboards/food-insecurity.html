@@ -194,7 +194,7 @@
             <div class="dashboard-search">
                 <label for="county-search" class="dashboard-search__label">Find Your County</label>
                 <div class="dashboard-search__wrapper">
-                    <input type="text" id="county-search" class="dashboard-search__input" placeholder="Type a county name..." autocomplete="off" aria-describedby="search-hint">
+                    <input type="text" id="county-search" class="dashboard-search__input" placeholder="Type a county name..." autocomplete="off" aria-describedby="search-hint" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="county-search-results">
                     <span id="search-hint" class="slds-assistive-text">Type at least 2 characters to search 3,100+ US counties</span>
                     <ul id="county-search-results" class="dashboard-search__results" role="listbox" aria-label="County search results"></ul>
                 </div>

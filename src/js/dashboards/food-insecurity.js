@@ -323,6 +323,7 @@ function initCountySearch(mapController) {
 
     if (!countyIndex || query.length < 2) {
       resultsList.setAttribute('data-visible', 'false');
+      input.setAttribute('aria-expanded', 'false');
       resultsList.innerHTML = '';
       return;
     }
@@ -339,6 +340,7 @@ function initCountySearch(mapController) {
     if (matches.length === 0) {
       resultsList.innerHTML = '<li style="color:rgba(255,255,255,0.4)">No counties found</li>';
       resultsList.setAttribute('data-visible', 'true');
+      input.setAttribute('aria-expanded', 'true');
       return;
     }
 
@@ -346,6 +348,7 @@ function initCountySearch(mapController) {
       `<li role="option" data-fips="${m.stateFips}" data-county="${m.name}" data-state="${m.stateName}" id="search-opt-${i}">${m.name}<span class="search-state">${m.stateName}</span></li>`
     ).join('');
     resultsList.setAttribute('data-visible', 'true');
+    input.setAttribute('aria-expanded', 'true');
 
     // Click handler for results
     resultsList.querySelectorAll('li[role="option"]').forEach(li => {
@@ -355,6 +358,7 @@ function initCountySearch(mapController) {
         const countyName = li.dataset.county;
         input.value = `${countyName}, ${sName}`;
         resultsList.setAttribute('data-visible', 'false');
+        input.setAttribute('aria-expanded', 'false');
         if (mapController) mapController.drillDown(sName, sFips, countyName);
       });
     });
@@ -821,7 +825,7 @@ function renderSnap(data) {
       ...TOOLTIP_STYLE
     },
     legend: {
-      data: ['Food Insecurity Rate (2024)', 'SNAP Coverage (FY2023)'],
+      data: ['Food Insecurity Rate (2024)', 'SNAP Coverage (FY2024)'],
       textStyle: { color: COLORS.text },
       top: 5
     },

@@ -62,8 +62,10 @@ function renderRegions(data) {
   const latestValues = data.series.map(s => s.data[s.data.length - 1].value);
   const latestYear = data.series[0]?.data.at(-1)?.date?.slice(0, 4) ?? new Date().getFullYear().toString();
 
-  // Also show 2020 values for comparison
+  // Show baseline values for comparison
   const startValues = data.series.map(s => s.data[0].value);
+  const startYear = data.series[0]?.data[0]?.date?.slice(0, 7) ?? 'Baseline';
+  const startLabel = startYear.length >= 7 ? new Date(startYear + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : startYear;
   const changesPct = latestValues.map((v, i) => ((v - startValues[i]) / startValues[i] * 100).toFixed(1));
 
   chart.setOption({
@@ -82,13 +84,13 @@ function renderRegions(data) {
           const baseMealCost = 3.58;
           const dollarImpact = (baseMealCost * changesPct[idx] / 100).toFixed(2);
           tip += `<span style="color:${COLORS.secondary}">Change: +${changesPct[idx]}%</span><br/>`;
-          tip += `<span style="color:${COLORS.accent}">Impact: +$${dollarImpact}/meal since 2020</span>`;
+          tip += `<span style="color:${COLORS.accent}">Impact: +$${dollarImpact}/meal since ${startLabel}</span>`;
         }
         return tip;
       }
     },
     legend: {
-      data: ['Jan 2020', `Latest (${latestYear})`],
+      data: [startLabel, `Latest (${latestYear})`],
       textStyle: { color: COLORS.text },
       top: 5
     },
@@ -108,7 +110,7 @@ function renderRegions(data) {
     },
     series: [
       {
-        name: 'Jan 2020',
+        name: startLabel,
         type: 'bar',
         data: startValues,
         barWidth: '30%',
@@ -183,7 +185,7 @@ function renderAffordabilityMap(geoJSON, stateData) {
     visualMap: {
       left: 'right',
       bottom: 20,
-      min: 45,
+      min: 40,
       max: 75,
       text: ['Less Affordable', 'More Affordable'],
       calculable: true,

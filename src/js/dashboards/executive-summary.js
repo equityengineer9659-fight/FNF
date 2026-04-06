@@ -12,10 +12,10 @@ import {
 } from './shared/dashboard-utils.js';
 
 // ── Vulnerability Index computation ──
-function computeVulnerabilityIndex(states) {
+export function computeVulnerabilityIndex(states) {
   const maxMealCost = Math.max(...states.map(s => s.mealCost || 0));
   return states.map(s => {
-    const score = (s.rate * 0.4) + (s.povertyRate * 0.3) + ((s.mealCost / maxMealCost) * 30);
+    const score = (s.rate * 0.4) + (s.povertyRate * 0.3) + ((s.mealCost / maxMealCost) * 0.3);
     return { ...s, vulnerabilityIndex: Math.round(score * 100) / 100 };
   });
 }
@@ -202,19 +202,28 @@ function renderSnapGap(fiStates, snapStates) {
 }
 
 // ── Chart 3: Food Price Impact (YoY Inflation) ──
-function renderPriceImpact(blsData) {
+export function renderPriceImpact(blsData) {
   const chart = createChart('chart-price-impact');
   if (!chart || !blsData?.series) return;
 
   const foodHome = blsData.series.find(s => s.name === 'Food at Home');
   if (!foodHome) return;
 
-  // Compute YoY % for each month (skip first 12)
-  const data = foodHome.data.filter(d => d.value !== null);
-  const yoyData = data.slice(12).map((d, i) => ({
-    date: d.date,
-    value: Math.round((d.value - data[i].value) / data[i].value * 10000) / 100
-  }));
+  // Compute YoY % using date-keyed lookback (robust to null gaps)
+  const validData = foodHome.data.filter(d => d.value !== null);
+  const dataByDate = {};
+  validData.forEach(d => { dataByDate[d.date] = d.value; });
+
+  const yoyData = validData.filter(d => {
+    const [y, m] = d.date.split('-').map(Number);
+    const priorDate = `${y - 1}-${String(m).padStart(2, '0')}`;
+    return dataByDate[priorDate] !== undefined;
+  }).map(d => {
+    const [y, m] = d.date.split('-').map(Number);
+    const priorDate = `${y - 1}-${String(m).padStart(2, '0')}`;
+    const prior = dataByDate[priorDate];
+    return { date: d.date, value: Math.round((d.value - prior) / prior * 10000) / 100 };
+  });
 
   const dates = yoyData.map(d => d.date);
 
