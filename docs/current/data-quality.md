@@ -139,6 +139,8 @@ These issues are structural — they cannot be fixed without new data releases o
 
 ## Data Sources Reference
 
+> For the complete source inventory with freshness thresholds, update procedures, and monitoring plan, see [Data Source Inventory](data-source-inventory.md) and [Data Monitoring Strategy](data-monitoring-strategy.md).
+
 | Source | Data | Vintage | Update Frequency |
 |---|---|---|---|
 | USDA ERS | Food insecurity rates by state | 2024 (final report) | Annual — discontinued after 2024 |
