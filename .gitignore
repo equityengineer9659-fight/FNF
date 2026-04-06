@@ -37,6 +37,11 @@ package-lock.json
 .playwright-mcp/
 tools/testing/baselines/
 
+# Root-level QA/dev screenshots (Playwright + manual captures)
+/*.png
+/*.jpeg
+/*.jpg
+
 # PHP API proxy config (contains API keys)
 public/api/_config.php
 
