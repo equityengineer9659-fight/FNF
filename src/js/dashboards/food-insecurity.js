@@ -920,15 +920,15 @@ function renderFoodPrices(blsData) {
 
 // -- SDOH Scatter (live Census ACS data, non-blocking) --
 const SDOH_METRICS = [
-  { key: 'uninsuredPct', label: 'Uninsured Rate', axis: 'Uninsured (%)', source: 'census', insight: 'Lack of health insurance amplifies food insecurity — medical costs crowd out food budgets.' },
-  { key: 'collegePct', label: 'College Education', axis: 'Bachelor\'s+ (%)', source: 'census', insight: 'Higher education correlates with lower food insecurity — but causation runs through income and employment stability.', invert: true },
-  { key: 'unemploymentPct', label: 'Unemployment', axis: 'Unemployment Rate (%)', source: 'census', insight: 'Job loss is the most immediate trigger of food insecurity — unemployed workers are 3x more likely to be food insecure than employed peers.' },
-  { key: 'noVehiclePct', label: 'No Vehicle', axis: 'Workers Without Vehicle (%)', source: 'census', insight: 'Transportation barriers limit access to affordable food — workers without vehicles face both job and food access challenges.' },
-  { key: 'housingBurdenPct', label: 'Housing Burden', axis: 'Severe Housing Cost Burden (%)', source: 'census', insight: 'When rent exceeds 50% of income, food is the first budget line to shrink — housing cost is a hidden driver of hunger.' },
-  { key: 'obesity', label: 'Adult Obesity (CDC)', axis: 'Obesity Prevalence (%)', source: 'places', insight: 'States with higher food insecurity tend to have higher obesity rates — cheap, calorie-dense food replaces nutritious options when budgets are tight.' },
-  { key: 'diabetes', label: 'Diabetes (CDC)', axis: 'Diabetes Prevalence (%)', source: 'places', insight: 'Food insecurity and diabetes create a vicious cycle — poor diet increases diabetes risk, and diabetes management costs further strain food budgets.' },
-  { key: 'depression', label: 'Depression (CDC)', axis: 'Depression Prevalence (%)', source: 'places', insight: 'The mental health toll of food insecurity is measurable — states with higher food insecurity show higher depression prevalence.' },
-  { key: 'housinsec', label: 'Housing Insecurity (CDC)', axis: 'Housing Insecurity (%)', source: 'places', insight: 'Housing and food insecurity compound — when eviction threatens, food is the first budget line cut.' }
+  { key: 'uninsuredPct', label: 'Uninsured Rate', axis: 'Uninsured (%)', source: 'census', insight: 'Lack of health insurance is associated with higher food insecurity — medical costs may crowd out food budgets.' },
+  { key: 'collegePct', label: 'College Education', axis: 'Bachelor\'s+ (%)', source: 'census', insight: 'Higher education correlates with lower food insecurity — the association likely reflects differences in income and employment stability.', invert: true },
+  { key: 'unemploymentPct', label: 'Unemployment', axis: 'Unemployment Rate (%)', source: 'census', insight: 'Job loss is the strongest predictor of food insecurity — unemployed workers are 3x more likely to be food insecure than employed peers.' },
+  { key: 'noVehiclePct', label: 'No Vehicle', axis: 'Workers Without Vehicle (%)', source: 'census', insight: 'Transportation barriers are linked to reduced access to affordable food — workers without vehicles face both job and food access challenges.' },
+  { key: 'housingBurdenPct', label: 'Housing Burden', axis: 'Severe Housing Cost Burden (%)', source: 'census', insight: 'When rent exceeds 50% of income, food budgets are often the first to shrink — housing cost is closely linked to hunger.' },
+  { key: 'obesity', label: 'Adult Obesity (CDC)', axis: 'Obesity Prevalence (%)', source: 'places', insight: 'States with higher food insecurity tend to have higher obesity rates — this may reflect limited access to nutritious options when budgets are tight.' },
+  { key: 'diabetes', label: 'Diabetes (CDC)', axis: 'Diabetes Prevalence (%)', source: 'places', insight: 'Food insecurity and diabetes show a reinforcing pattern — poor diet is linked to diabetes risk, and diabetes management costs further strain food budgets.' },
+  { key: 'depression', label: 'Depression (CDC)', axis: 'Depression Prevalence (%)', source: 'places', insight: 'Food insecurity is associated with poorer mental health outcomes — states with higher food insecurity show higher depression prevalence.' },
+  { key: 'housinsec', label: 'Housing Insecurity (CDC)', axis: 'Housing Insecurity (%)', source: 'places', insight: 'Housing and food insecurity are closely linked — when housing costs rise, food budgets are often the first to shrink.' }
 ];
 
 let sdohData = null;
@@ -1416,7 +1416,7 @@ function renderStateDeepDive(stateCode, data, accessData, bankData) {
   const density = bank ? bank.perCapitaOrgs.toFixed(1) : 'N/A';
 
   const kpis = [
-    { label: 'Food Insecurity', value: fi.rate + '%', color: COLORS.accent, sub: `#${data.states.sort((a, b) => b.rate - a.rate).findIndex(s => s.name === stateName) + 1} nationally` },
+    { label: 'Food Insecurity', value: fi.rate + '%', color: COLORS.accent, sub: `#${[...data.states].sort((a, b) => b.rate - a.rate).findIndex(s => s.name === stateName) + 1} nationally` },
     { label: 'Child Rate', value: fi.childRate + '%', color: '#f87171', sub: `vs ${data.national.childFoodInsecurityRate}% national` },
     { label: 'Meal Cost', value: '$' + fi.mealCost, color: COLORS.secondary, sub: `vs $${data.national.averageMealCost} national` },
     { label: 'SNAP Coverage', value: coverage + '%', color: COLORS.primary, sub: coverage > 100 ? 'Exceeds insecure pop' : 'Of insecure pop covered' },

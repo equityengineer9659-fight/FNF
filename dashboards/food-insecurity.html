@@ -286,7 +286,7 @@
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually, spring release (next: Spring 2026)</div>
                         </div>
-                        <div class="dashboard-info__insight">The top 5 states show food insecurity and child rates nearly double the bottom 5 — but meal costs run lower in the hardest-hit states, revealing that poverty drives hunger more than food prices.</div>
+                        <div class="dashboard-info__insight">The top 5 states show food insecurity and child rates nearly double the bottom 5 — but meal costs run lower in the hardest-hit states, revealing that poverty is more strongly associated with hunger than food prices.</div>
                     </div>
                 </div>
             </div>
@@ -332,7 +332,7 @@
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Beyond Poverty: What Drives Hunger?</h3>
-                        <p class="dashboard-info__text">Poverty is the strongest predictor, but other social determinants compound the risk. States with <strong>high unemployment, low education, high uninsured rates, limited vehicle access, and severe housing cost burden</strong> tend to have higher food insecurity — even after accounting for income.</p>
+                        <p class="dashboard-info__text">Poverty is the strongest predictor, but other social determinants are associated with higher risk. States with <strong>high unemployment, low education, high uninsured rates, limited vehicle access, and severe housing cost burden</strong> tend to have higher food insecurity — even after accounting for income.</p>
                         <p class="dashboard-info__text">Use the buttons to explore how each factor correlates with food insecurity. Health outcome indicators from CDC PLACES show how diet-related conditions like <strong>obesity, diabetes, and depression</strong> track alongside hunger.</p>
                         <div class="dashboard-info__meta">
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census Bureau ACS 5-Year Estimates; CDC PLACES (health indicators)</div>
@@ -383,7 +383,7 @@
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Follow the Money</h3>
-                        <p class="dashboard-info__text">States are sorted left-to-right by food insecurity rate. As insecurity rises, the <strong>low-income bands widen</strong> and <strong>high-income bands narrow</strong> — a visual proof that income distribution is the structural driver of hunger.</p>
+                        <p class="dashboard-info__text">States are sorted left-to-right by food insecurity rate. As insecurity rises, the <strong>low-income bands widen</strong> and <strong>high-income bands narrow</strong> — a visual demonstration that income distribution is the strongest correlate of hunger.</p>
                         <p class="dashboard-info__text">The river makes the policy case: states with more households under $25K consistently have higher food insecurity. Targeted income support programs have the highest ROI for hunger reduction.</p>
                         <div class="dashboard-info__meta">
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census Bureau, ACS 5-Year (B19001 Income Distribution)</div>
@@ -488,6 +488,7 @@
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Sources</strong> USDA ERS, Feeding America, USDA Food Access Research Atlas, USDA FNS</span>
                             <span class="meta-item"><strong>Dimensions</strong> Food Insecurity Rate + Low-Access Tract % + Inverse SNAP Coverage</span>
+                            <span class="meta-item"><strong>Methodology</strong> Each dimension is normalized to 0–100 based on min/max across states, then summed (equal weight). Max composite score: 300. Weights are equal by design, not statistically optimized.</span>
                         </div>
                         <div id="triple-burden-insight" class="dashboard-info__insight"></div>
                     </div>

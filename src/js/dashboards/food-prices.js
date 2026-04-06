@@ -12,6 +12,7 @@ import {
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.prices;
+let _snapBenefits = null;
 
 // -- Chart 1: Food Prices by Category (Overlapping Lines with Area) --
 function renderCategories(data) {
@@ -466,10 +467,10 @@ function renderYoYInflation(blsData) {
 
 // -- FRED item-level CPI overlay series for purchasing power chart --
 const FRED_CPI_ITEMS = [
-  { id: 'CUUR0000SEFG01', label: 'Eggs', color: '#fbbf24' },
-  { id: 'CUUR0000SEFB01', label: 'Bread', color: '#a78bfa' },
-  { id: 'CUUR0000SEFD01', label: 'Ground Beef', color: '#f87171' },
-  { id: 'CUUR0000SEFJ01', label: 'Dairy', color: '#60a5fa' }
+  { id: 'APU0000708111', label: 'Eggs', color: '#fbbf24' },
+  { id: 'APU0000702111', label: 'Bread', color: '#a78bfa' },
+  { id: 'APU0000703112', label: 'Ground Beef', color: '#f87171' },
+  { id: 'APU0000709112', label: 'Milk', color: '#60a5fa' }
 ];
 
 // Track active FRED overlays and the purchasing power chart instance
@@ -792,7 +793,8 @@ async function init() {
     if (blsData) {
       renderHomeVsAway(blsData);
       renderYoYInflation(blsData);
-      renderPurchasingPower(blsData, snapData?.benefitTimeline?.data);
+      _snapBenefits = snapData?.benefitTimeline?.data;
+      renderPurchasingPower(blsData, _snapBenefits);
       updateFreshness('bls-regional', { _static: true, _dataYear: 'CPI' });
 
       // Non-blocking: fetch FI trend data for CPI vs Insecurity chart
@@ -846,7 +848,7 @@ async function fetchLiveBLS() {
     if (liveData.error || !liveData.series) return;
     renderHomeVsAway(liveData);
     renderYoYInflation(liveData);
-    renderPurchasingPower(liveData);
+    renderPurchasingPower(liveData, _snapBenefits);
     updateFreshness('bls-regional', liveData);
   } catch { /* PHP proxy unavailable */ }
 }

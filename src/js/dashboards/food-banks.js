@@ -174,7 +174,7 @@ function renderRevenue(states) {
       formatter: p => {
         const d = p.data;
         return `<strong>${p.name}</strong> <span style="color:${REGION_COLORS[d.region]}">(${d.region})</span><br/>
-          <span style="color:${COLORS.secondary}">$ per Food-Insecure Person:</span> <strong>$${fmtNum(d.revenuePerInsecure)}</strong><br/>
+          <span style="color:${COLORS.secondary}">$ per Food-Insecure Person (est.):</span> <strong>$${fmtNum(d.revenuePerInsecure)}</strong><br/>
           Total Revenue: $${fmtNum(d.totalRevenue)}<br/>
           Program Efficiency: <strong>${d.efficiency}%</strong><br/>
           Organizations: ${fmtNum(d.orgCount)}<br/>

@@ -475,7 +475,7 @@ function renderDoubleBurden(states) {
       formatter: p => {
         const d = p.data;
         return `<strong>${p.name}</strong> <span style="color:${REGION_COLORS[d.region]}">(${d.region})</span><br/>
-          <span style="color:${COLORS.secondary}">Low-Income Low-Access (est.):</span> <strong>${fmtNum(p.value)}</strong><br/>
+          <span style="color:${COLORS.secondary}">Low-Income Low-Access (modeled est.):</span> <strong>${fmtNum(p.value)}</strong><br/>
           Share of State Pop: <strong>${d.pctOfPop}%</strong><br/>
           State Population: ${fmtNum(d.population)}<br/>
           Low-Access Tracts: ${d.lowAccessPct}% of tracts`;
@@ -891,9 +891,9 @@ function updateAccessInsecurityInsight(reg, mode, countyCount, stateName) {
 
   if (mode === 'county') {
     if (Math.abs(reg.r) < 0.4) {
-      insightEl.textContent = `${strength} correlation (r = ${reg.r.toFixed(2)}) across ${countyCount} counties in ${stateName}. At the county level within this state, food desert prevalence is a weak predictor of food insecurity — local economic conditions and poverty drive outcomes more than grocery access.`;
+      insightEl.textContent = `${strength} correlation (r = ${reg.r.toFixed(2)}) across ${countyCount} counties in ${stateName}. At the county level within this state, food desert prevalence is a weak predictor of food insecurity — local economic conditions and poverty appear more strongly associated with outcomes than grocery access.`;
     } else {
-      insightEl.textContent = `${strength} correlation (r = ${reg.r.toFixed(2)}) across ${countyCount} counties in ${stateName}. Counties with more food desert tracts do tend to have higher food insecurity — but the scatter shows wide variation, suggesting local factors like poverty and employment matter just as much.`;
+      insightEl.textContent = `${strength} correlation (r = ${reg.r.toFixed(2)}) across ${countyCount} counties in ${stateName}. Counties with more food desert tracts do tend to have higher food insecurity — but the scatter shows wide variation, suggesting local factors like poverty and employment may matter just as much.`;
     }
   } else {
     if (Math.abs(reg.r) < 0.4) {
