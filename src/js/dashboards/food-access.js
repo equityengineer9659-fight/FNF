@@ -597,6 +597,116 @@ function renderSnapRetailers(geoJSON, retailerData, accessStates) {
   }));
 }
 
+// -- Low Access (Current): state-level computed from FNS + Census tract data --
+function renderLowAccessMap(geoJSON, accessData) {
+  const chart = getOrCreateChart('chart-desert-map');
+  if (!chart) return;
+
+  const mapData = accessData.states.map(s => ({
+    name: s.name, value: s.lowAccessPct, fips: s.fips,
+    totalTracts: s.totalTracts, lowAccessTracts: s.lowAccessTracts,
+    totalPopulation: s.totalPopulation, lowAccessPopulation: s.lowAccessPopulation,
+    avgDistance: s.avgDistance
+  }));
+
+  const albersProjection = { project: p => p, unproject: p => p };
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'item', ...TOOLTIP_STYLE,
+      formatter: params => {
+        const d = params.data;
+        if (!d) return '';
+        return `<strong style="font-size:14px">${d.name}</strong><br/>
+          <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
+          Tracts: ${d.lowAccessTracts} of ${d.totalTracts}<br/>
+          Low-Access Pop: ${fmtNum(d.lowAccessPopulation)}<br/>
+          Avg Distance: ${d.avgDistance} mi<br/>
+          <span style="color:${COLORS.secondary};font-size:11px">Click for county breakdown</span>`;
+      }
+    },
+    visualMap: {
+      left: 'right', bottom: 20, min: 20, max: 65,
+      text: ['More Low-Access', 'Fewer Low-Access'], calculable: true,
+      inRange: { color: [PAL.low, PAL.mid, PAL.high] },
+      textStyle: { color: COLORS.text }
+    },
+    series: [{
+      name: 'Low-Access Tracts (%)', type: 'map', map: 'USA-access', roam: false,
+      projection: albersProjection, aspectScale: 1, zoom: 1.1, top: 10, left: 'center',
+      emphasis: {
+        label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
+        itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
+      },
+      itemStyle: { borderColor: COLORS.mapBorder, borderWidth: COLORS.mapBorderWidth, areaColor: 'rgba(255,255,255,0.08)' },
+      label: { show: false }, data: mapData, animationDurationUpdate: 500
+    }]
+  }, true);
+
+  // Dynamic insight
+  const sorted = [...mapData].sort((a, b) => b.value - a.value);
+  const insightEl = document.getElementById('low-access-insight');
+  if (insightEl && sorted.length >= 3) {
+    insightEl.innerHTML = `<strong>${sorted[0].name} (${sorted[0].value}%)</strong>, <strong>${sorted[1].name} (${sorted[1].value}%)</strong>, and <strong>${sorted[2].name} (${sorted[2].value}%)</strong> have the highest share of low-access census tracts — computed from ${accessData.meta.qualifyingRetailerCount?.toLocaleString() || '40K'} current SNAP-authorized grocery stores.`;
+  }
+}
+
+// -- Low Access county drill-down --
+function renderLowAccessCounty(countyGeo, countyData) {
+  const chart = getOrCreateChart('chart-desert-map');
+  if (!chart) return;
+
+  // Build county lookup by FIPS
+  const countyByFips = {};
+  countyData.forEach(c => { countyByFips[c.fips] = c; });
+
+  const mapName = chart.__currentMapName || 'USA-access';
+  const mapData = countyGeo.features.map(f => {
+    const fips = f.properties.fips || f.properties.GEOID;
+    const c = countyByFips[fips];
+    return {
+      name: f.properties.name || f.properties.NAME,
+      value: c ? c.lowAccessPct : 0,
+      totalTracts: c ? c.totalTracts : 0,
+      lowAccessTracts: c ? c.lowAccessTracts : 0,
+      lowAccessPopulation: c ? c.lowAccessPopulation : 0,
+      avgDistance: c ? c.avgDistance : 0,
+      population: c ? c.totalPopulation : (f.properties.population || 0)
+    };
+  });
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'item', ...TOOLTIP_STYLE,
+      formatter: params => {
+        const d = params.data;
+        if (!d) return '';
+        return `<strong style="font-size:14px">${d.name}</strong><br/>
+          <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
+          Tracts: ${d.lowAccessTracts} of ${d.totalTracts}<br/>
+          Low-Access Pop: ${fmtNum(d.lowAccessPopulation)}<br/>
+          Avg Distance: ${d.avgDistance} mi<br/>
+          Population: ${fmtNum(d.population)}`;
+      }
+    },
+    visualMap: {
+      left: 'right', bottom: 20, min: 0, max: 100,
+      text: ['More Low-Access', 'Fewer'], calculable: true,
+      inRange: { color: [PAL.low, PAL.mid, PAL.high] },
+      textStyle: { color: COLORS.text }
+    },
+    series: [{
+      name: 'Low-Access Tracts (%)', type: 'map', map: mapName, roam: false,
+      emphasis: {
+        label: { show: true, color: COLORS.text, fontSize: 11, fontWeight: 'bold' },
+        itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1 }
+      },
+      itemStyle: { borderColor: COLORS.countyBorder, borderWidth: COLORS.countyBorderWidth, areaColor: 'rgba(255,255,255,0.05)' },
+      label: { show: false }, data: mapData, animationDurationUpdate: 500
+    }]
+  }, true);
+}
+
 // -- Current Access: National (state-level) view --
 function renderCurrentAccessNational(geoJSON, accessStates, retailerData) {
   const chart = getOrCreateChart('chart-desert-map');
@@ -1204,16 +1314,18 @@ async function fetchSDOHAccess(accessStates) {
 async function init() {
   try {
     // Load static data (always needed for fields the API cannot provide) + GeoJSON + food insecurity + SNAP retailers
-    const [staticRes, geoRes, fiRes, snapRetailRes] = await Promise.all([
+    const [staticRes, geoRes, fiRes, snapRetailRes, currentAccessRes] = await Promise.all([
       fetch('/data/food-access-atlas.json'),
       fetch('/data/us-states-geo.json'),
       fetch('/data/food-insecurity-state.json'),
-      fetch('/data/snap-retailers.json')
+      fetch('/data/snap-retailers.json'),
+      fetch('/data/current-food-access.json')
     ]);
     if (!staticRes.ok || !geoRes.ok) throw new Error('Failed to load data');
     const [staticData, geoJSON] = await Promise.all([staticRes.json(), geoRes.json()]);
     const fiData = fiRes.ok ? await fiRes.json() : null;
     const snapRetailerData = snapRetailRes.ok ? await snapRetailRes.json() : null;
+    const currentAccessData = currentAccessRes.ok ? await currentAccessRes.json() : null;
 
     // Render immediately from static data — don't block on APIs
     let states = staticData.states;
@@ -1285,8 +1397,15 @@ async function init() {
         if (hint) hint.textContent = 'Hover for retailer breakdown by store type';
         if (freshAccess) freshAccess.style.display = 'none';
         if (freshSnap) freshSnap.style.display = '';
+      } else if (view === 'deserts' && currentAccessData?.states) {
+        // Low Access (Current) — computed from FNS + Census tract data
+        if (mapCtrl) mapCtrl.setDrillDown(true);
+        renderLowAccessMap(geoJSON, currentAccessData);
+        const el = document.getElementById('info-desert-mode'); if (el) el.style.display = '';
+        if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
+        updateFreshness('access', { _static: true, _dataYear: 'Current' });
       } else {
-        // deserts (default fallback if insecurity data not loaded yet)
+        // Fallback to FARA 2019 if computed data unavailable
         if (mapCtrl) { mapCtrl.setDrillDown(true); mapCtrl.showNational(); }
         const el = document.getElementById('info-desert-mode'); if (el) el.style.display = '';
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
@@ -1317,8 +1436,11 @@ async function init() {
           switchMapView(cdcInsecurityData ? 'insecurity' : 'deserts');
         }
         if (currentMapView === 'current-access') {
-          // Current access drill-down: fetch FNS county data + county GeoJSON
           drillDownCurrentAccess(stateCode);
+          return;
+        }
+        if (currentMapView === 'deserts' && currentAccessData?.states) {
+          drillDownLowAccess(stateCode);
           return;
         }
         const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
@@ -1371,15 +1493,49 @@ async function init() {
       }
     };
 
+    // Low Access drill-down: use pre-computed county data from current-food-access.json
+    const drillDownLowAccess = async (stateCode) => {
+      const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
+      const match = states.find(s => s.name === stateName);
+      if (!match?.fips || !currentAccessData?.states) return;
+
+      const stateAccess = currentAccessData.states.find(s => s.fips === match.fips);
+      if (!stateAccess?.counties) return;
+
+      const chart = getOrCreateChart('chart-desert-map');
+      if (chart) chart.showLoading({ text: `Loading ${stateName}...`, color: COLORS.secondary, textColor: COLORS.text, maskColor: 'rgba(0,0,0,0.6)' });
+
+      try {
+        const countyRes = await fetch(`/data/counties/${match.fips}.json`);
+        if (!countyRes.ok) throw new Error('County GeoJSON unavailable');
+        const countyGeo = await countyRes.json();
+
+        const mapName = `access-lowaccess-${match.fips}`;
+        echarts.registerMap(mapName, countyGeo);
+        if (chart) { chart.__currentMapName = mapName; chart.hideLoading(); }
+
+        renderLowAccessCounty(countyGeo, stateAccess.counties);
+
+        const backBtn = document.getElementById('access-map-back-btn');
+        if (backBtn) backBtn.style.display = '';
+        const mapLabel = document.getElementById('access-map-state-label');
+        if (mapLabel) mapLabel.textContent = stateName;
+      } catch {
+        if (chart) chart.hideLoading();
+      }
+    };
+
     // Wire map click for current-access mode
     const chartDom = document.getElementById('chart-desert-map');
     if (chartDom) {
       const chartInstance = echarts.getInstanceByDom(chartDom);
       if (chartInstance) {
         chartInstance.on('click', (params) => {
-          if (currentMapView === 'current-access' && params.data?.fips) {
+          if (params.data?.name) {
             const stateCode = US_STATES.find(([, name]) => name === params.data.name)?.[0];
-            if (stateCode) drillDownCurrentAccess(stateCode);
+            if (!stateCode) return;
+            if (currentMapView === 'current-access') drillDownCurrentAccess(stateCode);
+            else if (currentMapView === 'deserts' && currentAccessData?.states) drillDownLowAccess(stateCode);
           }
         });
       }
