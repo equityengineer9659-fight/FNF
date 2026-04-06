@@ -96,6 +96,31 @@ export default defineConfig({
         changeOrigin: true,
         secure: true
       },
+      '/api/dashboard-fred.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
+      '/api/dashboard-places.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
+      '/api/dashboard-saipe.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
+      '/api/mapbox-geocode.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
+      '/api/charity-navigator.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
       // Nonprofit proxies — rewrite to ProPublica API directly
       '/api/nonprofit-search.php': {
         target: 'https://projects.propublica.org',

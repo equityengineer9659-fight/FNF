@@ -47,7 +47,7 @@ npm run admin                   # Start Express server for scraper + AI article 
 /
 ├── src/css/               # 13 CSS files (main.css imports all modules)
 ├── src/js/                # JS modules (main.js, effects/, dashboards/, config/, monitoring/)
-├── src/data/              # Source data files (food insecurity JSON, GeoJSON)
+├── src/data/              # Source data files (GeoJSON)
 ├── src/assets/            # Images, fonts
 ├── *.html                 # 10 root pages (index, about, services, resources, impact, contact, 404, blog, case-studies, templates-tools)
 ├── dashboards/            # Interactive ECharts dashboards
@@ -126,7 +126,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page
   - `dashboards/shared/dashboard-utils.js` — shared ECharts setup (incl. GaugeChart, ThemeRiverChart, SingleAxisComponent), colors, MAP_PALETTES, formatters, linearRegression, NTEE_MAP, US_STATES, getNteeName, scroll reveal, `updateFreshness()` (two-state: `_static` → "Data: year", else → "Live"), `animateCounters()` (respects prefers-reduced-motion, integer-aware formatting)
-  - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (12 charts: map with SNAP Coverage metric + county drill-down, trend with markLine annotations, radar, scatter, SDOH, demographics, income river, meal cost bar, CPI trend, SNAP coverage bars, Triple Burden Index, State Deep-Dive KPI panel). Loads food-access-atlas.json + food-bank-summary.json for cross-dataset features.
+  - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (12 charts: map with SNAP Coverage metric + county drill-down, trend with markLine annotations, radar, scatter, SDOH, demographics, income river, meal cost bar, CPI trend, SNAP coverage bars, Triple Burden Index, State Deep-Dive KPI panel). Loads current-food-access.json + food-bank-summary.json for cross-dataset features.
   - `dashboards/food-access.js` — Food Access & Deserts dashboard. **Map toggle**: Food Deserts ↔ SNAP Retailers on single chart instance (drill-down only in desert mode)
   - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard (Sankey data from `snap-participation.json`). 5 KPI gauges (coverage, lunch, benefit, gap, affordability shortfall). SNAP Purchasing Power Index line on trend chart.
   - `dashboards/food-prices.js` — Food Prices & Affordability dashboard (live BLS regional CPI data). CPI vs Food Insecurity dual-axis chart (loads food-insecurity-state.json for trend overlay).
