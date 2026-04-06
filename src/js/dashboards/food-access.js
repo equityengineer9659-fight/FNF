@@ -14,6 +14,9 @@ import {
 
 const PAL = MAP_PALETTES.access;
 
+// Module-level cache: restored when back button resets to national desert view
+let _lowAccessDefaultInsight = '';
+
 /** Get existing chart instance or create new one (safe for re-renders) */
 function getOrCreateChart(id) {
   const el = document.getElementById(id);
@@ -76,6 +79,8 @@ function renderDesertMap(geoJSON, states, accessData) {
     if (mapLabel) mapLabel.textContent = '';
     const hint = document.querySelector('#chart-desert-map + .dashboard-chart__hint');
     if (hint) hint.textContent = 'Hover for state details \u2014 click any state for county breakdown';
+    const lowAccessInsight = document.getElementById('low-access-insight');
+    if (lowAccessInsight && _lowAccessDefaultInsight) lowAccessInsight.innerHTML = _lowAccessDefaultInsight;
 
     chart.setOption({
       tooltip: { trigger: 'item', ...TOOLTIP_STYLE, formatter: stateTooltip },
@@ -712,7 +717,8 @@ function renderLowAccessMap(geoJSON, accessData) {
   const sorted = [...mapData].sort((a, b) => b.value - a.value);
   const insightEl = document.getElementById('low-access-insight');
   if (insightEl && sorted.length >= 3) {
-    insightEl.innerHTML = `<strong>${sorted[0].name} (${sorted[0].value}%)</strong>, <strong>${sorted[1].name} (${sorted[1].value}%)</strong>, and <strong>${sorted[2].name} (${sorted[2].value}%)</strong> have the highest share of low-access census tracts — computed from ${accessData.meta.qualifyingRetailerCount?.toLocaleString() || '40K'} current SNAP-authorized grocery stores.`;
+    _lowAccessDefaultInsight = `<strong>${sorted[0].name} (${sorted[0].value}%)</strong>, <strong>${sorted[1].name} (${sorted[1].value}%)</strong>, and <strong>${sorted[2].name} (${sorted[2].value}%)</strong> have the highest share of low-access census tracts \u2014 computed from ${accessData.meta.qualifyingRetailerCount?.toLocaleString() || '40K'} current SNAP-authorized grocery stores.`;
+    insightEl.innerHTML = _lowAccessDefaultInsight;
   }
 }
 
@@ -736,6 +742,7 @@ function renderLowAccessCounty(countyGeo, countyData) {
       lowAccessTracts: c ? c.lowAccessTracts : 0,
       lowAccessPopulation: c ? c.lowAccessPopulation : 0,
       avgDistance: c ? c.avgDistance : 0,
+      isUrban: c ? c.isUrban : null,
       population: c ? c.totalPopulation : (f.properties.population || 0)
     };
   });
@@ -770,6 +777,22 @@ function renderLowAccessCounty(countyGeo, countyData) {
       label: { show: false }, data: mapData, animationDurationUpdate: 500
     }]
   }, true);
+
+  // County click: update low-access insight callout with county-specific narrative
+  const insightEl = document.getElementById('low-access-insight');
+  chart.off('click');
+  chart.on('click', (params) => {
+    const d = /** @type {Record<string, *>} */ (params.data);
+    if (!d || !insightEl) return;
+    const tractInfo = d.totalTracts > 0 ? ` (${d.lowAccessTracts} of ${d.totalTracts} tracts)` : '';
+    let urbanSentence = '';
+    if (d.isUrban === true) {
+      urbanSentence = ' \u2014 Urban low-access areas often reflect income barriers more than physical distance.';
+    } else if (d.isUrban === false) {
+      urbanSentence = ' \u2014 Rural counties face compounding barriers: distance, vehicle dependency, and limited retailer options.';
+    }
+    insightEl.textContent = `${d.name} County: ${d.value}% of tracts are low-access${tractInfo}. ${fmtNum(d.lowAccessPopulation)} residents lack easy grocery access${urbanSentence} Average distance to store: ${d.avgDistance} mi.`;
+  });
 }
 
 // -- Accessible Data Table --
@@ -1380,6 +1403,23 @@ async function init() {
         if (backBtn) backBtn.style.display = '';
         const mapLabel = document.getElementById('access-map-state-label');
         if (mapLabel) mapLabel.textContent = stateName;
+
+        // Update insight callout with state-level narrative
+        const insightEl = document.getElementById('low-access-insight');
+        if (insightEl && stateAccess) {
+          const pct = stateAccess.lowAccessPct;
+          const pop = stateAccess.lowAccessPopulation;
+          const dist = stateAccess.avgDistance;
+          let distSentence;
+          if (dist < 1.0) {
+            distSentence = 'well within urban norms, suggesting the burden here is concentrated in specific pockets rather than statewide.';
+          } else if (dist < 3.0) {
+            distSentence = `near the national average of 2.1 miles, masking county-level variation across ${stateName}.`;
+          } else {
+            distSentence = `nearly ${(dist / 2.1).toFixed(1)}\xd7 the national average of 2.1 miles, a strong signal of rural food desert conditions.`;
+          }
+          insightEl.textContent = `${stateName} has ${pct}% of its census tracts classified as low-access, affecting ${fmtNum(pop)} residents. The average distance to the nearest grocery store is ${dist} miles \u2014 ${distSentence}`;
+        }
       } catch {
         if (chart) chart.hideLoading();
       }

@@ -114,6 +114,8 @@ let snapMapAdminData = null;
 let snapMapCdcData = null;
 let snapMapActiveView = 'admin'; // eslint-disable-line no-unused-vars
 
+const SNAP_MAP_DEFAULT_INSIGHT = 'Wyoming has the lowest administrative coverage ratio at 40.6%. When CDC self-reported data loads, compare the two views \u2014 states where self-reported is notably lower than administrative suggest stigma or under-reporting of benefits.';
+
 function renderSnapMap(geoJSON, states) {
   snapMapChart = createChart('chart-snap-map');
   if (!snapMapChart) return;
@@ -131,11 +133,53 @@ function renderSnapMap(geoJSON, states) {
   }));
 
   applySnapMapView('admin');
+
+  // Click insight: state click updates callout with per-state narrative
+  snapMapChart.on('click', (params) => {
+    const d = /** @type {Record<string, *>} */ (params.data);
+    const insightEl = document.getElementById('snap-map-insight');
+    if (!d || !insightEl) return;
+
+    if (snapMapActiveView === 'admin') {
+      const ratio = typeof d.value === 'number' ? d.value : 0;
+      let branch;
+      if (ratio >= 100) {
+        branch = 'Coverage exceeds the estimated food-insecure population, suggesting either over-counting or SNAP reaching households above the insecurity threshold.';
+      } else if (ratio >= 80) {
+        branch = `Strong coverage \u2014 most food-insecure residents in ${d.name} have access to SNAP benefits.`;
+      } else if (ratio >= 60) {
+        branch = `Moderate coverage \u2014 roughly ${(100 - ratio).toFixed(0)}% of food-insecure residents are not reached by SNAP.`;
+      } else {
+        branch = `Weak coverage \u2014 more than ${(100 - ratio).toFixed(0)}% of food-insecure residents in ${d.name} fall outside SNAP\u2019s reach, pointing to eligibility barriers, stigma, or awareness gaps.`;
+      }
+      insightEl.textContent = `${d.name}: ${ratio.toFixed(1)}% coverage ratio \u2014 SNAP serves ${fmtNum(d.snapParticipants)} of an estimated ${fmtNum(d.foodInsecure)} food-insecure residents. ${branch}`;
+    } else if (snapMapActiveView === 'cdc' && snapMapCdcData) {
+      const cdcRate = typeof d.cdcRate === 'number' ? d.cdcRate : 0;
+      const adminMatch = snapMapAdminData?.find(a => a.name === d.name);
+      const snapRate = adminMatch?.snapRate ?? null;
+      const gap = snapRate !== null ? (snapRate - cdcRate).toFixed(1) : null;
+      let gapBranch = '';
+      if (gap !== null) {
+        if (gap > 5) {
+          gapBranch = ` The ${gap}pp gap may reflect stigma, survey underreporting, or recipients who do not identify as current users.`;
+        } else if (gap >= -2) {
+          gapBranch = ` Administrative and self-reported rates are broadly consistent for ${d.name}.`;
+        } else {
+          gapBranch = ' Self-reported rate exceeds administrative enrollment \u2014 may include former recipients or households in the enrollment process.';
+        }
+      }
+      insightEl.textContent = `${d.name}: ${cdcRate}% of adults self-report SNAP receipt (CDC BRFSS)${snapRate !== null ? `, versus ${snapRate}% from administrative enrollment data.` : '.'}${gapBranch}`;
+    }
+  });
 }
 
 function applySnapMapView(view) {
   if (!snapMapChart) return;
   snapMapActiveView = view;
+
+  // Reset insight callout to default when switching views
+  const insightEl = document.getElementById('snap-map-insight');
+  if (insightEl) insightEl.textContent = SNAP_MAP_DEFAULT_INSIGHT;
 
   const albersProjection = { project: p => p, unproject: p => p };
   const isAdmin = view === 'admin';

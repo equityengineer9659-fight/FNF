@@ -83,9 +83,35 @@ function renderVulnerabilityMap(statesWithIndex, geoJSON) {
 
   // Dynamic insight
   const insightEl = document.getElementById('vulnerability-map-insight');
-  if (insightEl && sorted.length >= 3) {
-    insightEl.textContent = `${sorted[0].name} leads with a vulnerability score of ${sorted[0].vulnerabilityIndex.toFixed(1)}, followed by ${sorted[1].name} (${sorted[1].vulnerabilityIndex.toFixed(1)}) and ${sorted[2].name} (${sorted[2].vulnerabilityIndex.toFixed(1)}).`;
-  }
+  const defaultInsightText = sorted.length >= 3
+    ? `${sorted[0].name} leads with a vulnerability score of ${sorted[0].vulnerabilityIndex.toFixed(1)}, followed by ${sorted[1].name} (${sorted[1].vulnerabilityIndex.toFixed(1)}) and ${sorted[2].name} (${sorted[2].vulnerabilityIndex.toFixed(1)}).`
+    : '';
+  if (insightEl) insightEl.textContent = defaultInsightText;
+
+  // Click insight: state click updates callout with per-state narrative
+  const natRate = statesWithIndex.reduce((s, x) => s + x.rate, 0) / statesWithIndex.length;
+  const natPoverty = statesWithIndex.reduce((s, x) => s + x.povertyRate, 0) / statesWithIndex.length;
+  const natMealCost = statesWithIndex.reduce((s, x) => s + x.mealCost, 0) / statesWithIndex.length;
+
+  chart.on('click', (params) => {
+    if (!params.data || !insightEl) return;
+    const d = statesWithIndex.find(s => s.name === params.name);
+    if (!d) return;
+    const rank = sorted.findIndex(s => s.name === d.name) + 1;
+    const fiDiff = d.rate - natRate;
+    const povDiff = d.povertyRate - natPoverty;
+    const costDiff = d.mealCost - natMealCost;
+    const driverCandidates = [
+      { diff: fiDiff, sentence: `Food insecurity is the primary driver, running ${fiDiff.toFixed(1)} pp above the national average.` },
+      { diff: povDiff, sentence: 'High poverty rates are the primary driver \u2014 household income constraints compound access and affordability barriers.' },
+      { diff: costDiff, sentence: 'Above-average meal costs are the primary driver, stretching limited food budgets further than most states.' },
+    ];
+    const topDriver = driverCandidates.reduce((a, b) => b.diff > a.diff ? b : a);
+    const driver = topDriver.diff > 0
+      ? topDriver.sentence
+      : `All three risk factors are at or below national averages, contributing to ${d.name}'s relatively low vulnerability score.`;
+    insightEl.textContent = `${d.name} vulnerability score: ${d.vulnerabilityIndex.toFixed(1)} \u2014 ranked #${rank} nationally. Food insecurity: ${d.rate}%, poverty: ${d.povertyRate}%, avg meal cost: $${d.mealCost.toFixed(2)}/meal. ${driver}`;
+  });
 
   // CSV export
   addExportButton('chart-vulnerability-map', 'vulnerability-index-by-state', () => ({
