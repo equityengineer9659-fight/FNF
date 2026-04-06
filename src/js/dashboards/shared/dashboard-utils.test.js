@@ -170,6 +170,10 @@ describe('dashboard-utils', () => {
 
   describe('exportCSV', () => {
     it('should create and click a download link', () => {
+      // jsdom in CI may not have URL.createObjectURL — polyfill before spying
+      if (!URL.createObjectURL) URL.createObjectURL = () => '';
+      if (!URL.revokeObjectURL) URL.revokeObjectURL = () => {};
+
       const createSpy = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
       const revokeSpy = vi.spyOn(URL, 'revokeObjectURL');
       const clickSpy = vi.fn();
