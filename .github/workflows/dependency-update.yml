@@ -173,8 +173,4 @@ jobs:
         if: always()
         continue-on-error: true
         run: |
-          # Add your Slack webhook URL as a secret
-          # curl -X POST -H 'Content-type: application/json' \
-          #   --data '{"text":"${{ steps.status.outputs.message }}"}' \
-          #   ${{ secrets.SLACK_WEBHOOK_URL }}
           echo "Notification: ${{ steps.status.outputs.message }}"
