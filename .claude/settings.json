@@ -8,5 +8,18 @@
       "Bash(git diff:*)",
       "Bash(git log:*)"
     ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint && npm run build || (echo 'Lint or build failed — fix before committing' >&2; exit 2)"
+          }
+        ]
+      }
+    ]
   }
 }

@@ -73,11 +73,14 @@ function rateLimitIncrement($service) {
 
     foreach ($periods as $period) {
         $counterFile = _rateLimitFile($service, $period);
-        $data = null;
 
-        if (file_exists($counterFile)) {
-            $data = json_decode(file_get_contents($counterFile), true);
-        }
+        // Use flock() for atomic read-modify-write to prevent race conditions
+        $fp = fopen($counterFile, 'c+');
+        if (!$fp) continue;
+
+        flock($fp, LOCK_EX);
+        $raw = stream_get_contents($fp);
+        $data = $raw ? json_decode($raw, true) : null;
 
         if (!$data || _rateLimitExpired($data, $period)) {
             $data = [
@@ -92,7 +95,11 @@ function rateLimitIncrement($service) {
         $data['count']++;
         $data['last_call'] = date('c');
 
-        file_put_contents($counterFile, json_encode($data));
+        ftruncate($fp, 0);
+        rewind($fp);
+        fwrite($fp, json_encode($data));
+        flock($fp, LOCK_UN);
+        fclose($fp);
     }
 }
 

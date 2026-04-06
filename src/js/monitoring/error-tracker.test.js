@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 vi.mock('../config/environment.js', () => ({
   default: {
@@ -16,6 +16,7 @@ vi.mock('./sentry.js', () => ({
 
 // Import the singleton — it auto-initializes
 import errorTracker from './error-tracker.js';
+import config from '../config/environment.js';
 
 describe('ErrorTracker', () => {
   beforeEach(() => {
@@ -102,6 +103,18 @@ describe('ErrorTracker', () => {
       expect(errorTracker.isDuplicateError(error)).toBe(false);
       vi.useRealTimers();
     });
+
+    it('should not grow lastErrorTime Map beyond bounded size', () => {
+      for (let i = 0; i < 200; i++) {
+        errorTracker.isDuplicateError({
+          message: `unique-error-${i}`,
+          filename: `file-${i}.js`,
+          line: i,
+        });
+      }
+      expect(errorTracker.lastErrorTime.size).toBeLessThanOrEqual(100);
+      expect(errorTracker.errorCounts.size).toBeLessThanOrEqual(100);
+    });
   });
 
   describe('handleWindowError', () => {
@@ -160,6 +173,112 @@ describe('ErrorTracker', () => {
       expect(errorTracker.initialized).toBe(false);
       // Re-init for other tests
       errorTracker.init();
+    });
+  });
+
+  describe('setupNetworkCapture — re-entrancy', () => {
+    let originalFetch;
+
+    beforeEach(() => {
+      // Store the real fetch before error-tracker patches it
+      originalFetch = window.fetch;
+      // Reset tracker state
+      errorTracker.destroy();
+      errorTracker.errors = [];
+      errorTracker.errorCounts.clear();
+      errorTracker.lastErrorTime.clear();
+    });
+
+    afterEach(() => {
+      // Restore fetch to avoid leaking patches between tests
+      window.fetch = originalFetch;
+      errorTracker.destroy();
+    });
+
+    it('should not capture secondary network error when CSP reporting fetch also fails', async () => {
+      // Enable CSP reporting so sendToMonitoring will make a fetch call
+      const origEnv = errorTracker.config.environment;
+      const origCspUri = config.security.cspReportUri;
+      errorTracker.config.environment = 'production';
+      config.security.cspReportUri = 'https://csp.example.com/report';
+
+      // Mock fetch: every call returns 500
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+        statusText: 'Internal Server Error',
+      });
+      window.fetch = mockFetch;
+
+      // Re-initialize to install the monkey-patch on our mock
+      errorTracker.initialized = false;
+      errorTracker.init();
+
+      // Spy on captureError to count invocations
+      const captureSpy = vi.spyOn(errorTracker, 'captureError');
+
+      // Trigger a non-network error that will cause CSP reporting
+      errorTracker.captureError({
+        type: 'javascript',
+        message: 'Test error',
+        timestamp: new Date().toISOString(),
+      });
+
+      // Wait for the CSP fetch (which is fire-and-forget) to resolve
+      await vi.waitFor(() => {
+        expect(mockFetch).toHaveBeenCalled();
+      });
+      // Allow microtasks to settle
+      await new Promise((r) => setTimeout(r, 0));
+
+      // captureError should be called exactly once (the original call).
+      // The CSP reporting fetch returning 500 should NOT trigger a second
+      // captureError call, thanks to the re-entrancy guard.
+      expect(captureSpy.mock.calls.length).toBe(1);
+      expect(captureSpy.mock.calls[0][0].type).toBe('javascript');
+
+      captureSpy.mockRestore();
+      errorTracker.config.environment = origEnv;
+      config.security.cspReportUri = origCspUri;
+    });
+
+    it('should still report original network error when guard is inactive', async () => {
+      // Mock fetch to return non-ok
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found',
+      });
+      window.fetch = mockFetch;
+
+      // Re-initialize to install the monkey-patch
+      errorTracker.initialized = false;
+      errorTracker.init();
+
+      const response = await window.fetch('https://example.com/missing');
+
+      // The error should still be captured
+      expect(errorTracker.errors.length).toBe(1);
+      expect(errorTracker.errors[0].type).toBe('network');
+      expect(errorTracker.errors[0].message).toContain('404');
+      // And the original response should still be returned
+      expect(response.status).toBe(404);
+    });
+
+    it('should still throw original error on fetch failure', async () => {
+      const networkError = new Error('Failed to fetch');
+      const mockFetch = vi.fn().mockRejectedValue(networkError);
+      window.fetch = mockFetch;
+
+      // Re-initialize to install the monkey-patch
+      errorTracker.initialized = false;
+      errorTracker.init();
+
+      await expect(window.fetch('https://example.com/down')).rejects.toThrow('Failed to fetch');
+
+      // Error should be captured
+      expect(errorTracker.errors.length).toBe(1);
+      expect(errorTracker.errors[0].type).toBe('network');
     });
   });
 });

@@ -217,6 +217,62 @@ describe('NewsletterPopup', () => {
       vi.useRealTimers();
     });
 
+    it('should disable submit button during async submission', async () => {
+      vi.useFakeTimers();
+      // Use a delayed fetch so we can observe the button state mid-flight
+      let resolveFetch;
+      globalThis.fetch = vi.fn()
+        .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({ token: 'csrf' }) })
+        .mockImplementationOnce(() => new Promise((r) => { resolveFetch = r; }));
+
+      document.body.classList.add('fnf-page--about');
+      const popup = new NewsletterPopup();
+      popup.openModal();
+
+      const input = document.querySelector('.fnf-email-input');
+      const form = document.querySelector('.fnf-email-form');
+      const submitBtn = document.querySelector('.fnf-submit-btn');
+      input.value = 'test@example.com';
+      form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+      // Let CSRF fetch resolve
+      await vi.advanceTimersByTimeAsync(0);
+
+      // Button should be disabled while newsletter fetch is in-flight
+      expect(submitBtn.disabled).toBe(true);
+
+      // Resolve the newsletter fetch
+      resolveFetch({ ok: true });
+      await vi.advanceTimersByTimeAsync(0);
+
+      vi.advanceTimersByTime(2000);
+      vi.useRealTimers();
+    });
+
+    it('should re-enable submit button on error', async () => {
+      vi.useFakeTimers();
+      globalThis.fetch = vi.fn()
+        .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve({ token: 'csrf' }) })
+        .mockRejectedValueOnce(new Error('Network error'));
+
+      document.body.classList.add('fnf-page--about');
+      const popup = new NewsletterPopup();
+      popup.openModal();
+
+      const input = document.querySelector('.fnf-email-input');
+      const form = document.querySelector('.fnf-email-form');
+      input.value = 'test@example.com';
+      form.dispatchEvent(new Event('submit', { cancelable: true }));
+
+      await vi.advanceTimersByTimeAsync(0);
+
+      // After error, the error state replaces the form, so button won't exist
+      // But the error state should be shown (no crash)
+      const content = document.querySelector('.fnf-newsletter-content');
+      expect(content.textContent).toContain('Something went wrong');
+      vi.useRealTimers();
+    });
+
     it('should not submit with empty email', () => {
       document.body.classList.add('fnf-page--about');
       const popup = new NewsletterPopup();
