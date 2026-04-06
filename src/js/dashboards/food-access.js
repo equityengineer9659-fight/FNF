@@ -597,6 +597,159 @@ function renderSnapRetailers(geoJSON, retailerData, accessStates) {
   }));
 }
 
+// -- Current Access: National (state-level) view --
+function renderCurrentAccessNational(geoJSON, accessStates, retailerData) {
+  const chart = getOrCreateChart('chart-desert-map');
+  if (!chart) return;
+
+  const retailerByName = {};
+  if (retailerData?.states) {
+    retailerData.states.forEach(s => { retailerByName[s.name] = s; });
+  }
+
+  const mapData = accessStates.map(s => {
+    const r = retailerByName[s.name] || {};
+    return {
+      name: s.name, value: r.retailersPer100K || 0, fips: s.fips,
+      totalRetailers: r.totalRetailers || 0,
+      lowAccessPct: s.lowAccessPct,
+      population: s.population
+    };
+  });
+
+  const albersProjection = { project: p => p, unproject: p => p };
+
+  chart.setOption({
+    tooltip: {
+      trigger: 'item', ...TOOLTIP_STYLE,
+      formatter: params => {
+        const d = params.data;
+        if (!d) return '';
+        return `<strong style="font-size:14px">${d.name}</strong><br/>
+          <span style="color:${COLORS.secondary}">Retailers per 100K:</span> <strong>${d.value}</strong><br/>
+          Total SNAP Retailers: ${fmtNum(d.totalRetailers)}<br/>
+          Food Deserts: ${d.lowAccessPct}%<br/>
+          <span style="color:${COLORS.secondary};font-size:11px">Click for county-level access scores</span>`;
+      }
+    },
+    visualMap: {
+      left: 'right', bottom: 20, min: 55, max: 130,
+      text: ['More Retailers', 'Fewer Retailers'], calculable: true,
+      inRange: { color: [PAL.high, PAL.mid, PAL.low] },
+      textStyle: { color: COLORS.text }
+    },
+    series: [{
+      name: 'Retailers per 100K', type: 'map', map: 'USA-access', roam: false,
+      projection: albersProjection, aspectScale: 1, zoom: 1.1, top: 10, left: 'center',
+      emphasis: {
+        label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
+        itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1.5 }
+      },
+      itemStyle: { borderColor: COLORS.mapBorder, borderWidth: COLORS.mapBorderWidth, areaColor: 'rgba(255,255,255,0.08)' },
+      label: { show: false }, data: mapData, animationDurationUpdate: 500
+    }]
+  }, true);
+}
+
+// -- Current Access Score Map (FNS retailer data + CHR county indicators) --
+function renderCurrentAccessCounty(countyGeo, fnsRecords) {
+  const chart = getOrCreateChart('chart-desert-map');
+  if (!chart) return;
+
+  // Build FNS lookup by normalized county name
+  const fnsByName = {};
+  fnsRecords.forEach(r => { fnsByName[r.county.toUpperCase()] = r; });
+
+  // Normalize: min-max across all counties in this state
+  const norm = (val, min, max) => max > min ? ((val - min) / (max - min)) * 100 : 50;
+
+  // Extract values for normalization
+  const allData = countyGeo.features.map(f => {
+    const p = f.properties;
+    const countyName = (p.name || '').replace(/ County$/i, '').toUpperCase();
+    const fns = fnsByName[countyName];
+    const pop = p.population || 1;
+    const storesPer10K = fns ? (fns.totalStores / pop) * 10000 : 0;
+    return {
+      name: p.name,
+      fips: p.fips,
+      population: pop,
+      povertyRate: p.povertyRate || 0,
+      foodInsecurity: p.rate || 0,
+      foodEnvIndex: p.foodEnvIndex || 5,
+      storesPer10K,
+      fullServicePct: fns ? fns.fullServicePct : 0,
+      totalStores: fns ? fns.totalStores : 0,
+      convenienceStores: fns ? fns.convenience : 0
+    };
+  });
+
+  // Calculate normalization bounds
+  const vals = (key) => allData.map(d => d[key]);
+  const storeMin = Math.min(...vals('storesPer10K')), storeMax = Math.max(...vals('storesPer10K'));
+  const fiMin = Math.min(...vals('foodInsecurity')), fiMax = Math.max(...vals('foodInsecurity'));
+  const povMin = Math.min(...vals('povertyRate')), povMax = Math.max(...vals('povertyRate'));
+  const envMin = Math.min(...vals('foodEnvIndex')), envMax = Math.max(...vals('foodEnvIndex'));
+
+  // Compute composite score
+  const scored = allData.map(d => {
+    const score = Math.round(
+      0.30 * norm(d.storesPer10K, storeMin, storeMax) +
+      0.25 * (100 - norm(d.foodInsecurity, fiMin, fiMax)) +
+      0.25 * (100 - norm(d.povertyRate, povMin, povMax)) +
+      0.20 * norm(d.foodEnvIndex, envMin, envMax)
+    );
+    return { ...d, score };
+  });
+
+  const mapName = chart.__currentMapName || 'USA-access';
+  const mapData = scored.map(d => ({
+    name: d.name, value: d.score, ...d
+  }));
+
+  // Inverted palette: high score (good access) = green, low = orange/red
+  chart.setOption({
+    tooltip: {
+      trigger: 'item', ...TOOLTIP_STYLE,
+      formatter: params => {
+        const d = params.data;
+        if (!d) return '';
+        return `<strong style="font-size:14px">${d.name}</strong><br/>
+          <span style="color:${COLORS.secondary}">Access Score:</span> <strong>${d.score}/100</strong><br/>
+          <span style="font-size:11px;color:rgba(255,255,255,0.7)">--- Components ---</span><br/>
+          SNAP Retailers: ${d.totalStores} (${d.storesPer10K.toFixed(1)} per 10K)<br/>
+          Full-Service: ${d.fullServicePct}%<br/>
+          Food Insecurity: ${d.foodInsecurity}%<br/>
+          Poverty Rate: ${d.povertyRate}%<br/>
+          Food Env Index: ${d.foodEnvIndex}/10`;
+      }
+    },
+    visualMap: {
+      left: 'right', bottom: 20, min: 0, max: 100,
+      text: ['Better Access', 'Worse Access'], calculable: true,
+      inRange: { color: [PAL.high, PAL.mid, PAL.low] },
+      textStyle: { color: COLORS.text }
+    },
+    series: [{
+      name: 'Food Access Score', type: 'map', map: mapName, roam: false,
+      emphasis: {
+        label: { show: true, color: COLORS.text, fontSize: 11, fontWeight: 'bold' },
+        itemStyle: { areaColor: COLORS.secondary, borderColor: '#fff', borderWidth: 1 }
+      },
+      itemStyle: { borderColor: COLORS.countyBorder, borderWidth: COLORS.countyBorderWidth, areaColor: 'rgba(255,255,255,0.05)' },
+      label: { show: false }, data: mapData, animationDurationUpdate: 500
+    }]
+  }, true);
+
+  // Dynamic insight
+  const sorted = [...scored].sort((a, b) => a.score - b.score);
+  const insightEl = document.getElementById('current-access-insight');
+  if (insightEl && sorted.length >= 3) {
+    const worst = sorted.slice(0, 3);
+    insightEl.innerHTML = `Lowest access: <strong>${worst[0].name} (${worst[0].score}/100)</strong>, <strong>${worst[1].name} (${worst[1].score}/100)</strong>, <strong>${worst[2].name} (${worst[2].score}/100)</strong> — these counties have the most limited food access based on retailer density, insecurity, poverty, and environment.`;
+  }
+}
+
 // -- Accessible Data Table --
 function populateAccessibleTable(states, retailerData) {
   const tbody = document.getElementById('accessible-access-table');
@@ -1083,6 +1236,7 @@ async function init() {
     // Map view toggle: Food Insecurity (CDC) ↔ Food Deserts (FARA) ↔ SNAP Retailers
     let currentMapView = 'insecurity'; // Default — will show deserts until CDC data arrives
     let cdcInsecurityData = null;
+    let fnsStoreData = null;
     const toggleContainer = document.getElementById('map-view-toggle');
 
     // Helper: switch to a specific view
@@ -1100,37 +1254,41 @@ async function init() {
         }
       }
 
-      const insecurityInfo = document.getElementById('info-insecurity-mode');
-      const desertInfo = document.getElementById('info-desert-mode');
-      const snapInfo = document.getElementById('info-snap-mode');
+      const infoPanels = ['info-insecurity-mode', 'info-current-access-mode', 'info-desert-mode', 'info-snap-mode'];
       const hint = document.querySelector('#chart-desert-map + .dashboard-chart__hint');
       const freshAccess = document.getElementById('freshness-access');
       const freshSnap = document.getElementById('freshness-snap-retailers');
 
       // Hide all info panels first
-      if (insecurityInfo) insecurityInfo.style.display = 'none';
-      if (desertInfo) desertInfo.style.display = 'none';
-      if (snapInfo) snapInfo.style.display = 'none';
+      infoPanels.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
       if (freshAccess) freshAccess.style.display = '';
       if (freshSnap) freshSnap.style.display = 'none';
 
       if (view === 'insecurity' && cdcInsecurityData?.records) {
         if (mapCtrl) mapCtrl.setDrillDown(true);
         renderInsecurityMap(geoJSON, cdcInsecurityData.records);
-        if (insecurityInfo) insecurityInfo.style.display = '';
+        const el = document.getElementById('info-insecurity-mode'); if (el) el.style.display = '';
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
         updateFreshness('access', cdcInsecurityData);
+      } else if (view === 'current-access') {
+        // Current Access: state-level view prompts drill-down; county view shows composite score
+        if (mapCtrl) mapCtrl.setDrillDown(true);
+        // At national level, show state-level retailer density as a preview
+        renderCurrentAccessNational(geoJSON, states, snapRetailerData);
+        const el = document.getElementById('info-current-access-mode'); if (el) el.style.display = '';
+        if (hint) hint.textContent = 'Click any state for county-level access scores';
+        updateFreshness('access', fnsStoreData || { _static: true, _dataYear: 'FNS' });
       } else if (view === 'snap' && snapRetailerData?.states) {
         if (mapCtrl) mapCtrl.setDrillDown(false);
         renderSnapRetailers(geoJSON, snapRetailerData, states);
-        if (snapInfo) snapInfo.style.display = '';
+        const el = document.getElementById('info-snap-mode'); if (el) el.style.display = '';
         if (hint) hint.textContent = 'Hover for retailer breakdown by store type';
         if (freshAccess) freshAccess.style.display = 'none';
         if (freshSnap) freshSnap.style.display = '';
       } else {
         // deserts (default fallback if insecurity data not loaded yet)
         if (mapCtrl) { mapCtrl.setDrillDown(true); mapCtrl.showNational(); }
-        if (desertInfo) desertInfo.style.display = '';
+        const el = document.getElementById('info-desert-mode'); if (el) el.style.display = '';
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
         updateFreshness('access', { _static: true, _dataYear: 2019 });
       }
@@ -1150,20 +1308,90 @@ async function init() {
     if (mapCtrl) {
       initStateSelector('state-selector-container', (stateCode) => {
         if (!stateCode) {
-          if (currentMapView === 'insecurity' && cdcInsecurityData) {
-            renderInsecurityMap(geoJSON, cdcInsecurityData);
-          } else if (currentMapView === 'deserts') {
-            mapCtrl.showNational();
-          }
+          // Reset to national view for the current mode
+          switchMapView(currentMapView);
           return;
         }
         // Switch to a drillable view if in snap mode
         if (currentMapView === 'snap') {
           switchMapView(cdcInsecurityData ? 'insecurity' : 'deserts');
         }
+        if (currentMapView === 'current-access') {
+          // Current access drill-down: fetch FNS county data + county GeoJSON
+          drillDownCurrentAccess(stateCode);
+          return;
+        }
         const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
         const match = states.find(s => s.name === stateName);
         if (match?.fips) mapCtrl.drillDown(match.name, match.fips);
+      });
+    }
+
+    // Current Access drill-down: fetch FNS county data + county GeoJSON, render composite
+    const drillDownCurrentAccess = async (stateCode) => {
+      const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
+      const match = states.find(s => s.name === stateName);
+      if (!match?.fips) return;
+
+      const chart = getOrCreateChart('chart-desert-map');
+      if (chart) chart.showLoading({ text: `Loading ${stateName} access data...`, color: COLORS.secondary, textColor: COLORS.text, maskColor: 'rgba(0,0,0,0.6)' });
+
+      try {
+        const [countyRes, fnsRes] = await Promise.all([
+          fetch(`/data/counties/${match.fips}.json`),
+          fetch(`/api/dashboard-fns-stores.php?type=county&state=${stateCode}`)
+        ]);
+
+        if (!countyRes.ok) throw new Error('County GeoJSON unavailable');
+        const countyGeo = await countyRes.json();
+        const fnsData = fnsRes.ok ? await fnsRes.json() : null;
+        const fnsRecords = (fnsData && !fnsData.error && fnsData.records) ? fnsData.records : [];
+
+        const mapName = `access-current-${match.fips}`;
+        echarts.registerMap(mapName, countyGeo);
+
+        if (chart) {
+          chart.__currentMapName = mapName;
+          chart.hideLoading();
+        }
+
+        renderCurrentAccessCounty(countyGeo, fnsRecords);
+
+        // Update UI
+        const backBtn = document.getElementById('access-map-back-btn');
+        if (backBtn) backBtn.style.display = '';
+        const mapLabel = document.getElementById('access-map-state-label');
+        if (mapLabel) mapLabel.textContent = stateName;
+
+        if (fnsData && !fnsData.error) {
+          updateFreshness('access', fnsData);
+        }
+      } catch {
+        if (chart) chart.hideLoading();
+      }
+    };
+
+    // Wire map click for current-access mode
+    const chartDom = document.getElementById('chart-desert-map');
+    if (chartDom) {
+      const chartInstance = echarts.getInstanceByDom(chartDom);
+      if (chartInstance) {
+        chartInstance.on('click', (params) => {
+          if (currentMapView === 'current-access' && params.data?.fips) {
+            const stateCode = US_STATES.find(([, name]) => name === params.data.name)?.[0];
+            if (stateCode) drillDownCurrentAccess(stateCode);
+          }
+        });
+      }
+    }
+
+    // Wire back button for current-access mode
+    const backBtn = document.getElementById('access-map-back-btn');
+    if (backBtn) {
+      backBtn.addEventListener('click', () => {
+        if (currentMapView === 'current-access') {
+          switchMapView('current-access');
+        }
       });
     }
 

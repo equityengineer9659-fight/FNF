@@ -184,6 +184,7 @@
                     <span id="freshness-snap-retailers" class="dashboard-freshness" style="display:none"></span>
                     <div id="map-view-toggle" style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
                         <button class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="insecurity" aria-pressed="true">Food Insecurity</button>
+                        <button class="dashboard-metric-btn" data-map-view="current-access" aria-pressed="false">Current Access</button>
                         <button class="dashboard-metric-btn" data-map-view="deserts" aria-pressed="false">Food Deserts</button>
                         <button class="dashboard-metric-btn" data-map-view="snap" aria-pressed="false">SNAP Retailers</button>
                     </div>
@@ -211,6 +212,22 @@
                             <span class="meta-item"><strong>Definition</strong> % of adults reporting food insecurity in past 12 months</span>
                         </div>
                         <div id="insecurity-map-insight" class="dashboard-info__insight"></div>
+                    </div>
+                    <!-- Info panel: Current Access mode -->
+                    <div id="info-current-access-mode" class="dashboard-chart-row__info" style="display:none">
+                        <h3 class="dashboard-info__title">Current Food Access Score</h3>
+                        <p class="dashboard-info__text">
+                            This view combines <strong>live SNAP retailer data</strong> with food insecurity rates, poverty levels, and food environment quality into a single composite score per county. <strong>Click any state</strong> for the county breakdown.
+                        </p>
+                        <p class="dashboard-info__text">
+                            <strong>Score Formula:</strong> 30% retailer density + 25% inverse food insecurity + 25% inverse poverty + 20% food environment index. All components normalized 0-100 within each state. Higher score = better access.
+                        </p>
+                        <div class="dashboard-info__meta">
+                            <span class="meta-item"><strong>Retailers</strong> USDA FNS SNAP Retailer Location Data (current)</span>
+                            <span class="meta-item"><strong>Health</strong> County Health Rankings 2025 (food insecurity, poverty, food env index)</span>
+                            <span class="meta-item"><strong>Limitation</strong> County-level; convenience stores counted same as supermarkets in density</span>
+                        </div>
+                        <div id="current-access-insight" class="dashboard-info__insight"></div>
                     </div>
                     <!-- Info panel: Food Deserts mode -->
                     <div id="info-desert-mode" class="dashboard-chart-row__info" style="display:none">
