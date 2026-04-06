@@ -148,29 +148,26 @@
 
     <!-- Main Content -->
     <main id="main-content" tabindex="-1">
-        <div class="dashboard-data-notice" role="note" aria-label="Data vintage notice">
-            <strong>Data Notice:</strong> This dashboard uses the USDA Economic Research Service Food Access Research Atlas (2019). The USDA has not released an updated atlas since 2019. Food access conditions may have changed significantly. Use data directionally.
-        </div>
         <section class="dashboard-hero" aria-label="Food access key statistics">
             <h1 class="slds-text-heading_large">Food Access &amp; Deserts</h1>
             <p class="dashboard-hero__subtitle">Where is food hard to reach in America?</p>
             <p class="dashboard-hero__positioning">Mapping the gap between where people live and where food is available — so organizations can plan smarter outreach and mobile distribution.</p>
             <div class="dashboard-hero__stats" aria-label="Key national statistics">
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number" data-target="23.5" data-suffix="M">23.5M</span>
+                    <span class="dashboard-stat__number" data-target="137.5" data-suffix="M">137.5M</span>
                     <p class="dashboard-stat__label">Low-Access Population</p>
                 </div>
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number" data-target="6529" data-suffix="">6,529</span>
-                    <p class="dashboard-stat__label">Food Desert Tracts</p>
+                    <span class="dashboard-stat__number" data-target="34638" data-suffix="">34,638</span>
+                    <p class="dashboard-stat__label">Low-Access Tracts</p>
                 </div>
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number" data-target="1.8" data-suffix=" mi">1.8 mi</span>
+                    <span class="dashboard-stat__number" data-target="2.1" data-suffix=" mi">2.1 mi</span>
                     <p class="dashboard-stat__label">Avg Distance to Store</p>
                 </div>
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number" data-target="6.7" data-suffix="M">6.7M</span>
-                    <p class="dashboard-stat__label">Children in Deserts</p>
+                    <span class="dashboard-stat__number" data-target="41" data-suffix="%">41%</span>
+                    <p class="dashboard-stat__label">Tracts Low-Access</p>
                 </div>
             </div>
         </section>
@@ -183,9 +180,8 @@
                     <span id="freshness-access" class="dashboard-freshness"></span>
                     <span id="freshness-snap-retailers" class="dashboard-freshness" style="display:none"></span>
                     <div id="map-view-toggle" style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
-                        <button class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="insecurity" aria-pressed="true">Food Insecurity</button>
-                        <button class="dashboard-metric-btn" data-map-view="current-access" aria-pressed="false">Current Access</button>
-                        <button class="dashboard-metric-btn" data-map-view="deserts" aria-pressed="false">Food Deserts</button>
+                        <button class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="deserts" aria-pressed="true">Food Deserts</button>
+                        <button class="dashboard-metric-btn" data-map-view="insecurity" aria-pressed="false">Food Insecurity</button>
                         <button class="dashboard-metric-btn" data-map-view="snap" aria-pressed="false">SNAP Retailers</button>
                     </div>
                     <div id="state-selector-container"></div>
@@ -197,14 +193,14 @@
                         <div id="chart-desert-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food access data across US states"></div>
                         <p class="dashboard-chart__hint">Hover for state details — click any state for county breakdown</p>
                     </div>
-                    <!-- Info panel: Food Insecurity mode (default) -->
-                    <div id="info-insecurity-mode" class="dashboard-chart-row__info">
+                    <!-- Info panel: Food Insecurity mode -->
+                    <div id="info-insecurity-mode" class="dashboard-chart-row__info" style="display:none">
                         <h3 class="dashboard-info__title">Where Hunger Is Most Prevalent</h3>
                         <p class="dashboard-info__text">
                             This map shows <strong>food insecurity rates</strong> estimated at the census-tract level by the CDC PLACES program, aggregated to state averages. <strong>Click any state</strong> to drill down into county-level food insecurity data.
                         </p>
                         <p class="dashboard-info__text">
-                            Unlike the 2019 Food Desert atlas, this data is <strong>updated annually</strong> using the CDC's Behavioral Risk Factor Surveillance System (BRFSS) combined with Census data and statistical modeling.
+                            This data is <strong>updated annually</strong> using the CDC's Behavioral Risk Factor Surveillance System (BRFSS) combined with Census data and statistical modeling.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> CDC PLACES, Model-Based Small Area Estimates</span>
@@ -213,30 +209,14 @@
                         </div>
                         <div id="insecurity-map-insight" class="dashboard-info__insight"></div>
                     </div>
-                    <!-- Info panel: Current Access mode -->
-                    <div id="info-current-access-mode" class="dashboard-chart-row__info" style="display:none">
-                        <h3 class="dashboard-info__title">Current Food Access Score</h3>
-                        <p class="dashboard-info__text">
-                            This view combines <strong>live SNAP retailer data</strong> with food insecurity rates, poverty levels, and food environment quality into a single composite score per county. <strong>Click any state</strong> for the county breakdown.
-                        </p>
-                        <p class="dashboard-info__text">
-                            <strong>Score Formula:</strong> 30% retailer density + 25% inverse food insecurity + 25% inverse poverty + 20% food environment index. All components normalized 0-100 within each state. Higher score = better access.
-                        </p>
-                        <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Retailers</strong> USDA FNS SNAP Retailer Location Data (current)</span>
-                            <span class="meta-item"><strong>Health</strong> County Health Rankings 2025 (food insecurity, poverty, food env index)</span>
-                            <span class="meta-item"><strong>Limitation</strong> County-level; convenience stores counted same as supermarkets in density</span>
-                        </div>
-                        <div id="current-access-insight" class="dashboard-info__insight"></div>
-                    </div>
-                    <!-- Info panel: Food Deserts mode -->
-                    <div id="info-desert-mode" class="dashboard-chart-row__info" style="display:none">
+                    <!-- Info panel: Food Deserts mode (default) -->
+                    <div id="info-desert-mode" class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Mapping the Food Deserts</h3>
                         <p class="dashboard-info__text">
                             A <strong>food desert</strong> is a census tract where a significant share of residents live far from a supermarket — more than 1 mile in urban areas or 10 miles in rural areas. This map shows the percentage of each state's census tracts classified as low-access. <strong>Click any state</strong> to drill down into county-level data.
                         </p>
                         <p class="dashboard-info__text">
-                            This measure is <strong>computed from current data</strong> — not the legacy 2019 USDA atlas. We use USDA FNS SNAP-authorized retailer locations (updated biweekly) and Census 2020 population-weighted tract centroids. Only supermarkets, super stores, and large grocery stores count as qualifying access points.
+                            This measure is <strong>computed from current data</strong>. We use USDA FNS SNAP-authorized retailer locations (updated biweekly) and Census 2020 population-weighted tract centroids. Only supermarkets, super stores, and large grocery stores count as qualifying access points.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Retailers</strong> USDA FNS SNAP Retailer Location Data (current, ~40K qualifying stores of ~260K total)</span>
@@ -286,7 +266,7 @@
                             Nationally, the split is roughly even — but the <strong>barriers are different</strong>. Urban tracts need more stores; rural tracts need shorter distances. Hover for the exact breakdown.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> USDA ERS, Food Access Research Atlas</span>
+                            <span class="meta-item"><strong>Source</strong> Computed from USDA FNS SNAP retailer data + Census 2020 tract centroids</span>
                             <span class="meta-item"><strong>Metric</strong> Count of low-access census tracts (urban vs rural)</span>
                         </div>
                         <div class="dashboard-info__insight">
@@ -316,7 +296,7 @@
                             For families without reliable transportation, even 2 miles can be an insurmountable barrier — especially when carrying groceries home on foot or by bus.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> USDA ERS, Food Access Research Atlas</span>
+                            <span class="meta-item"><strong>Source</strong> Computed from USDA FNS SNAP retailer data + Census 2020 tract centroids</span>
                             <span class="meta-item"><strong>Metric</strong> Average distance to nearest supermarket (miles)</span>
                         </div>
                         <div class="dashboard-info__insight">
@@ -346,8 +326,7 @@
                             This scatter plot reveals that the worst outcomes occur where <strong>both</strong> vehicle access is low and food desert prevalence is high — a combination concentrated in the rural South.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> USDA ERS Food Access Research Atlas (vehicle access + food deserts)</span>
-                            <span class="meta-item"><strong>Data Year</strong> 2019</span>
+                            <span class="meta-item"><strong>Source</strong> Food desert tracts: FNS retailers + Census 2020. Vehicle access: Census ACS</span>
                         </div>
                         <div class="dashboard-info__insight">
                             Mississippi has both the highest food desert rate (23.4%) and one of the highest no-vehicle rates (8.2%) outside of cities.
@@ -378,7 +357,7 @@
                             <strong>Texas</strong> leads with 1.7 million people in this overlap, followed by California and Florida. But as a share of population, states like <strong>Mississippi and West Virginia</strong> are most severely affected.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> USDA ERS, Food Access Research Atlas</span>
+                            <span class="meta-item"><strong>Source</strong> Computed from USDA FNS SNAP retailer data + Census 2020 tract centroids</span>
                             <span class="meta-item"><strong>Metric</strong> Population in low-income + low-access census tracts</span>
                         </div>
                         <div class="dashboard-info__insight">
@@ -406,10 +385,10 @@
                             Renters paying more than <strong>50% of their income on housing</strong> have little left for food. Combined with limited vehicle access and distant grocery stores, severe housing cost burden creates a compounding barrier to food security.
                         </p>
                         <p class="dashboard-info__text">
-                            This chart uses <strong>2023 Census ACS data</strong> alongside the 2019 food desert atlas (now 7 years old) to show how current housing pressures overlap with food access challenges.
+                            This chart uses <strong>2023 Census ACS data</strong> alongside current food desert measures to show how housing cost pressures compound food access challenges.
                         </p>
                         <div class="dashboard-info__meta">
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census ACS 5-Year Estimates 2023 (housing) + USDA Food Access Atlas 2019 (food deserts)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> U.S. Census ACS 5-Year Estimates 2023 (housing) + Current food desert tracts (FNS retailers + Census 2020)</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Housing data refreshes annually via Census API</div>
                         </div>
                         <div id="sdoh-access-insight" class="dashboard-info__insight"></div>
@@ -432,9 +411,9 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Correlation, Not Causation</h3>
                         <p class="dashboard-info__text">The assumption that food deserts directly cause food insecurity is common in policy debates — but the data tells a more nuanced story. This scatter tests the relationship between <strong>food desert prevalence</strong> (low-access tracts) and <strong>food insecurity rate</strong> across all 50 states.</p>
-                        <p class="dashboard-info__text">If food deserts were the primary driver, we'd expect a strong positive correlation. The actual relationship reveals whether <strong>income, employment, and systemic poverty</strong> are more powerful predictors than geographic access alone. <strong>Switch to County View</strong> to drill into individual states with ~60-250 data points per state, using CHR food insecurity rates and FARA food desert data.</p>
+                        <p class="dashboard-info__text">If food deserts were the primary driver, we'd expect a strong positive correlation. The actual relationship reveals whether <strong>income, employment, and systemic poverty</strong> are more powerful predictors than geographic access alone. <strong>Switch to County View</strong> to drill into individual states with ~60-250 data points per state, using CHR food insecurity rates and current food desert data.</p>
                         <div class="dashboard-info__meta">
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA Food Access Atlas 2019, Feeding America 2022, County Health Rankings 2025, FARA county tracts</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Current food desert tracts (FNS + Census), CHR 2025, Feeding America</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Note</span> Access data is 5 years older than insecurity data — interpret correlation with caution</div>
                         </div>
                         <div id="access-insecurity-insight" class="dashboard-info__insight"></div>
@@ -445,7 +424,7 @@
 
         <!-- Accessible Data Table (hidden, for screen readers and SEO) -->
         <section class="slds-assistive-text" aria-label="Food access data table">
-            <h2>State-Level Food Access Data (2019)</h2>
+            <h2>State-Level Food Access Data</h2>
             <p>This table provides the same data visualized in the interactive charts above.</p>
             <table>
                 <thead>
@@ -509,12 +488,12 @@
                     </div>
                     <div class="dashboard-source-grid">
                         <div class="dashboard-source-card">
-                            <div class="dashboard-source-card__icon">ERS</div>
-                            <h3 class="dashboard-source-card__name">USDA Economic Research Service</h3>
-                            <p class="dashboard-source-card__desc">Food Access Research Atlas via ArcGIS REST API (2019 data) — the definitive dataset on food deserts, mapping low-access census tracts at urban and rural thresholds nationwide. Live API with static fallback.</p>
+                            <div class="dashboard-source-card__icon">FNS</div>
+                            <h3 class="dashboard-source-card__name">USDA FNS &mdash; SNAP Retailer Locations</h3>
+                            <p class="dashboard-source-card__desc">SNAP-authorized retailer locations (current, via ArcGIS REST) &mdash; the basis for the food desert computation. ~40,000 qualifying supermarkets, super stores, and large grocery stores out of ~260,000 total retailers. Updated biweekly by USDA.</p>
                             <div class="dashboard-source-card__details">
-                                <span>Live API + static fallback</span>
-                                <span>Census tract level</span>
+                                <span>Current (biweekly updates)</span>
+                                <span>Tract level via Census 2020 centroids</span>
                             </div>
                         </div>
                         <div class="dashboard-source-card">
