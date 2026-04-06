@@ -779,9 +779,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 5.4,
-      "povertyRate": 15.2,
-      "lowIncomeLowAccessPop": 473724
+      "povertyRate": 15.2
     },
     {
       "fips": "02",
@@ -1127,9 +1125,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 9.1,
-      "povertyRate": 9.9,
-      "lowIncomeLowAccessPop": 40999
+      "povertyRate": 9.9
     },
     {
       "fips": "04",
@@ -1310,9 +1306,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.4,
-      "povertyRate": 12.5,
-      "lowIncomeLowAccessPop": 331104
+      "povertyRate": 12.5
     },
     {
       "fips": "05",
@@ -2153,9 +2147,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.9,
-      "povertyRate": 15.6,
-      "lowIncomeLowAccessPop": 266521
+      "povertyRate": 15.6
     },
     {
       "fips": "06",
@@ -2809,9 +2801,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 7,
-      "povertyRate": 11.7,
-      "lowIncomeLowAccessPop": 977573
+      "povertyRate": 11.7
     },
     {
       "fips": "08",
@@ -3531,9 +3521,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.1,
-      "povertyRate": 9.2,
-      "lowIncomeLowAccessPop": 182382
+      "povertyRate": 9.2
     },
     {
       "fips": "09",
@@ -3637,9 +3625,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 8.6,
-      "povertyRate": 9.8,
-      "lowIncomeLowAccessPop": 172936
+      "povertyRate": 9.8
     },
     {
       "fips": "10",
@@ -3688,9 +3674,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 6,
-      "povertyRate": 10.5,
-      "lowIncomeLowAccessPop": 55826
+      "povertyRate": 10.5
     },
     {
       "fips": "11",
@@ -3717,9 +3701,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 35.9,
-      "povertyRate": 14,
-      "lowIncomeLowAccessPop": 4771
+      "povertyRate": 14
     },
     {
       "fips": "12",
@@ -4472,9 +4454,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.9,
-      "povertyRate": 12.3,
-      "lowIncomeLowAccessPop": 1051397
+      "povertyRate": 12.3
     },
     {
       "fips": "13",
@@ -6239,9 +6219,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.9,
-      "povertyRate": 13.1,
-      "lowIncomeLowAccessPop": 792293
+      "povertyRate": 13.1
     },
     {
       "fips": "15",
@@ -6312,9 +6290,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 8.2,
-      "povertyRate": 9.7,
-      "lowIncomeLowAccessPop": 53682
+      "povertyRate": 9.7
     },
     {
       "fips": "16",
@@ -6814,9 +6790,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 3.7,
-      "povertyRate": 10.4,
-      "lowIncomeLowAccessPop": 97136
+      "povertyRate": 10.4
     },
     {
       "fips": "17",
@@ -7954,9 +7928,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 10.9,
-      "povertyRate": 11.5,
-      "lowIncomeLowAccessPop": 535419
+      "povertyRate": 11.5
     },
     {
       "fips": "18",
@@ -8984,9 +8956,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 6.2,
-      "povertyRate": 11.9,
-      "lowIncomeLowAccessPop": 490074
+      "povertyRate": 11.9
     },
     {
       "fips": "19",
@@ -10091,9 +10061,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 5.4,
-      "povertyRate": 10.6,
-      "lowIncomeLowAccessPop": 148218
+      "povertyRate": 10.6
     },
     {
       "fips": "20",
@@ -11264,9 +11232,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 5.1,
-      "povertyRate": 11.2,
-      "lowIncomeLowAccessPop": 146933
+      "povertyRate": 11.2
     },
     {
       "fips": "21",
@@ -12602,9 +12568,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 6.7,
-      "povertyRate": 15.7,
-      "lowIncomeLowAccessPop": 347661
+      "povertyRate": 15.7
     },
     {
       "fips": "22",
@@ -13324,9 +13288,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 8.3,
-      "povertyRate": 18.4,
-      "lowIncomeLowAccessPop": 401111
+      "povertyRate": 18.4
     },
     {
       "fips": "23",
@@ -13518,9 +13480,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 6.7,
-      "povertyRate": 10.5,
-      "lowIncomeLowAccessPop": 87812
+      "povertyRate": 10.5
     },
     {
       "fips": "24",
@@ -13800,9 +13760,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 8.7,
-      "povertyRate": 9.2,
-      "lowIncomeLowAccessPop": 210117
+      "povertyRate": 9.2
     },
     {
       "fips": "25",
@@ -13972,9 +13930,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 11.8,
-      "povertyRate": 9.7,
-      "lowIncomeLowAccessPop": 272198
+      "povertyRate": 9.7
     },
     {
       "fips": "26",
@@ -14903,9 +14859,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 7.1,
-      "povertyRate": 12.8,
-      "lowIncomeLowAccessPop": 573028
+      "povertyRate": 12.8
     },
     {
       "fips": "27",
@@ -15878,9 +15832,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 6.5,
-      "povertyRate": 9,
-      "lowIncomeLowAccessPop": 245220
+      "povertyRate": 9
     },
     {
       "fips": "28",
@@ -16798,9 +16750,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 6.2,
-      "povertyRate": 18.4,
-      "lowIncomeLowAccessPop": 329522
+      "povertyRate": 18.4
     },
     {
       "fips": "29",
@@ -18081,9 +18031,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 6.6,
-      "povertyRate": 12.3,
-      "lowIncomeLowAccessPop": 373512
+      "povertyRate": 12.3
     },
     {
       "fips": "30",
@@ -18715,9 +18663,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 4.6,
-      "povertyRate": 11.8,
-      "lowIncomeLowAccessPop": 64921
+      "povertyRate": 11.8
     },
     {
       "fips": "31",
@@ -19756,9 +19702,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.2,
-      "povertyRate": 10,
-      "lowIncomeLowAccessPop": 88836
+      "povertyRate": 10
     },
     {
       "fips": "32",
@@ -19961,9 +19905,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 7.1,
-      "povertyRate": 12.4,
-      "lowIncomeLowAccessPop": 112720
+      "povertyRate": 12.4
     },
     {
       "fips": "33",
@@ -20089,9 +20031,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 4.5,
-      "povertyRate": 7,
-      "lowIncomeLowAccessPop": 62843
+      "povertyRate": 7
     },
     {
       "fips": "34",
@@ -20338,9 +20278,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 11.3,
-      "povertyRate": 9.6,
-      "lowIncomeLowAccessPop": 288722
+      "povertyRate": 9.6
     },
     {
       "fips": "35",
@@ -20719,9 +20657,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.7,
-      "povertyRate": 17.8,
-      "lowIncomeLowAccessPop": 168480
+      "povertyRate": 17.8
     },
     {
       "fips": "36",
@@ -21419,9 +21355,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 29,
-      "povertyRate": 13.4,
-      "lowIncomeLowAccessPop": 619682
+      "povertyRate": 13.4
     },
     {
       "fips": "37",
@@ -22537,9 +22471,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.3,
-      "povertyRate": 12.8,
-      "lowIncomeLowAccessPop": 722447
+      "povertyRate": 12.8
     },
     {
       "fips": "38",
@@ -23138,9 +23070,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.6,
-      "povertyRate": 10.2,
-      "lowIncomeLowAccessPop": 35074
+      "povertyRate": 10.2
     },
     {
       "fips": "39",
@@ -24124,9 +24054,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 7.4,
-      "povertyRate": 12.9,
-      "lowIncomeLowAccessPop": 747712
+      "povertyRate": 12.9
     },
     {
       "fips": "40",
@@ -24989,9 +24917,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.5,
-      "povertyRate": 14.9,
-      "lowIncomeLowAccessPop": 257922
+      "povertyRate": 14.9
     },
     {
       "fips": "41",
@@ -25403,9 +25329,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 7.1,
-      "povertyRate": 11.7,
-      "lowIncomeLowAccessPop": 177808
+      "povertyRate": 11.7
     },
     {
       "fips": "42",
@@ -26158,9 +26082,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 10.5,
-      "povertyRate": 11.4,
-      "lowIncomeLowAccessPop": 679741
+      "povertyRate": 11.4
     },
     {
       "fips": "44",
@@ -26231,9 +26153,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 9,
-      "povertyRate": 10.5,
-      "lowIncomeLowAccessPop": 45105
+      "povertyRate": 10.5
     },
     {
       "fips": "45",
@@ -26755,9 +26675,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.7,
-      "povertyRate": 13.8,
-      "lowIncomeLowAccessPop": 435523
+      "povertyRate": 13.8
     },
     {
       "fips": "46",
@@ -27499,9 +27417,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 5.1,
-      "povertyRate": 11.6,
-      "lowIncomeLowAccessPop": 61366
+      "povertyRate": 11.6
     },
     {
       "fips": "47",
@@ -28562,9 +28478,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 5.2,
-      "povertyRate": 13.5,
-      "lowIncomeLowAccessPop": 576626
+      "povertyRate": 13.5
     },
     {
       "fips": "48",
@@ -31374,9 +31288,7 @@
           "isUrban": false
         }
       ],
-      "noVehiclePct": 5.3,
-      "povertyRate": 13.5,
-      "lowIncomeLowAccessPop": 1774229
+      "povertyRate": 13.5
     },
     {
       "fips": "49",
@@ -31711,9 +31623,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 3.9,
-      "povertyRate": 8.4,
-      "lowIncomeLowAccessPop": 107113
+      "povertyRate": 8.4
     },
     {
       "fips": "50",
@@ -31883,9 +31793,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 6.3,
-      "povertyRate": 9.9,
-      "lowIncomeLowAccessPop": 32417
+      "povertyRate": 9.9
     },
     {
       "fips": "51",
@@ -33364,9 +33272,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 6,
-      "povertyRate": 9.6,
-      "lowIncomeLowAccessPop": 344897
+      "povertyRate": 9.6
     },
     {
       "fips": "53",
@@ -33811,9 +33717,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 6.9,
-      "povertyRate": 9.7,
-      "lowIncomeLowAccessPop": 297633
+      "povertyRate": 9.7
     },
     {
       "fips": "54",
@@ -34434,9 +34338,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 8.2,
-      "povertyRate": 16.1,
-      "lowIncomeLowAccessPop": 160073
+      "povertyRate": 16.1
     },
     {
       "fips": "55",
@@ -35244,9 +35146,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 6.3,
-      "povertyRate": 10.3,
-      "lowIncomeLowAccessPop": 319499
+      "povertyRate": 10.3
     },
     {
       "fips": "56",
@@ -35515,9 +35415,7 @@
           "isUrban": true
         }
       ],
-      "noVehiclePct": 4,
-      "povertyRate": 10.5,
-      "lowIncomeLowAccessPop": 35840
+      "povertyRate": 10.5
     }
   ]
 }

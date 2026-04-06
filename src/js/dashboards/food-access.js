@@ -57,9 +57,9 @@ function renderDesertMap(geoJSON, states, accessData) {
     }
     return `<strong style="font-size:14px">${d.name}</strong><br/>
       Population: ${fmtNum(d.population || 0)}<br/>
-      <span style="color:${COLORS.secondary}">Poverty Rate:</span> ${d.povertyRate}%<br/>
-      Food Insecurity: ${d.rate}%<br/>
-      Avg Meal Cost: $${d.mealCost}`;
+      ${d.povertyRate != null ? `<span style="color:${COLORS.secondary}">Poverty Rate:</span> ${d.povertyRate}%<br/>` : ''}
+      ${d.rate != null ? `Food Insecurity: ${d.rate}%<br/>` : ''}
+      ${d.mealCost != null ? `Avg Meal Cost: $${d.mealCost}` : ''}`;
   }
 
   function showNational() {
@@ -1108,7 +1108,7 @@ function renderAccessInsecurity(accessStates, fiStates, accessData) {
       const stateName = US_STATES.find(([c]) => c === code)?.[1];
       const stateFips = stateName ? fipsByName[stateName] : null;
       if (stateFips) {
-        renderCountyScatter(chart, stateFips, stateName);
+        renderCountyScatter(chart, stateFips, stateName, accessData);
       }
     });
   }
