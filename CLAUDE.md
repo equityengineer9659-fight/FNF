@@ -72,14 +72,7 @@ npm run admin                   # Start Express server for scraper + AI article 
 - **Articles (53)**: all in `blog/` directory (run `ls blog/` for full list)
 
 ### Case Studies
-4 featured case studies on `case-studies.html` (real Salesforce implementations):
-1. Second Harvest Food Bank of Central Florida — 250K meals/month, ~100 partner sites
-2. Feeding America — 2B+ pounds recovered, 200 food banks, MealConnect
-3. Midwest Food Bank — 400hrs saved/chapter/year, 95%+ email capture
-4. National Food Bank Supply Chain — 50% faster delivery, 60% less compliance time
-
-Case study cards also appear on `blog.html` and testimonials on `impact.html`.
-10 additional case studies published as individual blog articles (category: Case Studies).
+4 featured case studies on `case-studies.html` (real Salesforce implementations) + 10 blog articles (category: Case Studies). Cards appear on `blog.html`, testimonials on `impact.html`. Details in memory: `project_case_studies.md`
 
 **Adding new articles via scraper tool**: `npm run admin` → New Article tab → Generate with Claude → Save to blog/. Runs `build-components.js` and `sync-blog.js` automatically. After saving, run `/create-illustration {slug}` to generate the SVG illustration.
 
@@ -125,7 +118,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `effects/blog-filter.js` — category filtering (aria-pressed + aria-current)
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page
-  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup (incl. GaugeChart, ThemeRiverChart, SingleAxisComponent), colors, MAP_PALETTES, formatters, linearRegression, NTEE_MAP, US_STATES, getNteeName, scroll reveal, `updateFreshness()` (two-state: `_static` → "Data: year", else → "Live"), `animateCounters()` (respects prefers-reduced-motion, integer-aware formatting)
+  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup, colors, MAP_PALETTES, formatters, linearRegression, US_STATES, `updateFreshness()` (two-state: `_static` → "Data: year", else → "Live"), `animateCounters()` (respects prefers-reduced-motion, integer-aware)
   - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (12 charts: map with SNAP Coverage metric + county drill-down, trend with markLine annotations, radar, scatter, SDOH, demographics, income river, meal cost bar, CPI trend, SNAP coverage bars, Triple Burden Index, State Deep-Dive KPI panel). Loads current-food-access.json + food-bank-summary.json for cross-dataset features.
   - `dashboards/food-access.js` — Food Access & Deserts dashboard. **Map toggle**: Food Deserts ↔ SNAP Retailers on single chart instance (drill-down only in desert mode)
   - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard (Sankey data from `snap-participation.json`). 5 KPI gauges (coverage, lunch, benefit, gap, affordability shortfall). SNAP Purchasing Power Index line on trend chart.
@@ -139,15 +132,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
 ### PHP Backend (SiteGround)
 - **Location**: `public/api/` (copied to `dist/api/` during build)
 - **Deployment**: GitHub Actions → SSH/rsync to SiteGround `public_html/`
-- **Endpoints**:
-  - `POST /api/contact.php` — contact form (validates, sanitizes, sends via `mail()`)
-  - `POST /api/newsletter.php` — newsletter subscription
-  - `GET /api/csrf-token.php` — single-use CSRF tokens (session-based)
-  - `GET /api/dashboard-census.php` — Census Bureau ACS proxy (24hr file cache)
-  - `GET /api/dashboard-bls.php` — BLS CPI food price proxy (7-day file cache; `?type=regional` for regional CPI; supports BLS API v2 via optional `_config.php` API key)
-  - `GET /api/cache-cleanup.php` — SiteGround cron script to purge stale API cache files
-  - `GET /api/nonprofit-search.php` — ProPublica nonprofit search proxy (24hr file cache, params: q, state, page)
-  - `GET /api/nonprofit-org.php` — ProPublica org detail proxy (7-day file cache, param: ein)
+- **Endpoints**: 3 form endpoints (`contact.php`, `newsletter.php`, `csrf-token.php`) + 10 dashboard API proxies (BLS, Census, SDOH, SAIPE, PLACES, FRED, ProPublica search/org, Mapbox, Charity Navigator) + `cache-cleanup.php` (cron). Full inventory with cache TTLs in memory: `project_dashboard.md`
 - **Security**: Rate limiting (60s cooldown), CSRF validation (`hash_equals()`), honeypot field, input sanitization (`htmlspecialchars()`), email validation (`FILTER_VALIDATE_EMAIL`), CRLF header injection prevention
 - **Recipient**: All form emails to `hello@food-n-force.com`
 
