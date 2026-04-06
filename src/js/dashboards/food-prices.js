@@ -534,9 +534,9 @@ function rebuildPurchasingPowerSeries() {
 }
 
 // -- Chart 7: SNAP Purchasing Power --
-function renderPurchasingPower(blsData) {
+function renderPurchasingPower(blsData, snapBenefits) {
   const chart = createChart('chart-purchasing-power');
-  if (!chart || !blsData?.series) return;
+  if (!chart || !blsData?.series || !snapBenefits?.length) return;
 
   const foodHome = blsData.series.find(s => s.name === 'Food at Home');
   if (!foodHome) return;
@@ -550,26 +550,6 @@ function renderPurchasingPower(blsData) {
     date: d.date,
     value: +(d.value / baseline * 100).toFixed(1)
   }));
-
-  // SNAP benefit timeline (key inflection points, nominal $/person/month)
-  // Source: USDA FNS historical data
-  const snapBenefits = [
-    { date: '2018-01', value: 126 }, { date: '2018-06', value: 126 }, { date: '2018-12', value: 126 },
-    { date: '2019-01', value: 129 }, { date: '2019-06', value: 129 }, { date: '2019-12', value: 129 },
-    { date: '2020-01', value: 131 }, { date: '2020-03', value: 131 },
-    { date: '2020-04', value: 234 }, // Emergency allotments begin (avg ~$234)
-    { date: '2020-06', value: 234 }, { date: '2020-12', value: 234 },
-    { date: '2021-01', value: 234 }, { date: '2021-06', value: 234 },
-    { date: '2021-10', value: 258 }, // Thrifty Food Plan reevaluation
-    { date: '2021-12', value: 258 },
-    { date: '2022-01', value: 258 }, { date: '2022-06', value: 258 }, { date: '2022-12', value: 258 },
-    { date: '2023-01', value: 258 },
-    { date: '2023-03', value: 258 },
-    { date: '2023-04', value: 194 }, // Emergency allotments end
-    { date: '2023-06', value: 194 }, { date: '2023-12', value: 194 },
-    { date: '2024-01', value: 194 }, { date: '2024-06', value: 194 }, { date: '2024-12', value: 194 },
-    { date: '2025-01', value: 195 }, { date: '2025-06', value: 195 }, { date: '2025-12', value: 195 }
-  ];
 
   // Index SNAP to Jan 2018 = 100
   const snapBaseline = snapBenefits[0].value;
@@ -760,10 +740,11 @@ function renderCpiVsInsecurity(blsData, fiTrend) {
 async function init() {
   try {
     // Load all data in parallel
-    const [regionalRes, geoRes, blsRes] = await Promise.all([
+    const [regionalRes, geoRes, blsRes, snapRes] = await Promise.all([
       fetch('/data/bls-regional-cpi.json'),
       fetch('/data/us-states-geo.json'),
-      fetch('/data/bls-food-cpi.json')
+      fetch('/data/bls-food-cpi.json'),
+      fetch('/data/snap-participation.json')
     ]);
 
     if (!regionalRes.ok || !geoRes.ok) {
@@ -772,6 +753,7 @@ async function init() {
 
     const [regionalData, geoJSON] = await Promise.all([regionalRes.json(), geoRes.json()]);
     const blsData = blsRes.ok ? await blsRes.json() : null;
+    const snapData = snapRes.ok ? await snapRes.json() : null;
 
     // Animate hero counters
     animateCounters();
@@ -795,7 +777,7 @@ async function init() {
     if (blsData) {
       renderHomeVsAway(blsData);
       renderYoYInflation(blsData);
-      renderPurchasingPower(blsData);
+      renderPurchasingPower(blsData, snapData?.benefitTimeline?.data);
       updateFreshness('bls-regional', { _static: true, _dataYear: 'CPI' });
 
       // Non-blocking: fetch FI trend data for CPI vs Insecurity chart

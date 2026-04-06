@@ -113,7 +113,6 @@ function rateLimitSummary() {
         'propublica-search'  => ['daily' => null, 'monthly' => null],
         'propublica-org'     => ['daily' => null, 'monthly' => null],
         'cdc-places'         => ['daily' => 900, 'monthly' => null],
-        'fara'               => ['daily' => 500, 'monthly' => null],
         'fred'               => ['daily' => 500, 'monthly' => null]
     ];
 

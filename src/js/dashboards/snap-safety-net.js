@@ -633,7 +633,7 @@ async function init() {
     renderSchoolLunch(snapData.schoolLunch.states);
     renderBenefits(snapData.benefitsPerPerson.states, snapData.stateCoverage.states);
     renderGauges(snapData.national);
-    updateFreshness('snap-map', { _static: true, _dataYear: 'FY2022' });
+    updateFreshness('snap-map', { _static: true, _dataYear: `FY${snapData.stateCoverage.year}` });
     updateFreshness('snap-sankey', { _static: true, _dataYear: 2022 });
     updateFreshness('snap-lunch', { _static: true, _dataYear: 'FY2023' });
     updateFreshness('snap-benefits', { _static: true, _dataYear: 'FY2025' });

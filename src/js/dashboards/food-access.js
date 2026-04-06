@@ -408,7 +408,7 @@ function renderVehicle(states) {
             : '';
         return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>
           Avg Distance to Store: ${d.value[0]} mi<br/>
-          Low-Access Tracts: ${d.value[1]}%<br/>
+          Low-Access Tracts: ${d.value[1]}% of tracts<br/>
           Population: ${fmtNum(d.population)}${note}`;
       }
     },
@@ -478,7 +478,7 @@ function renderDoubleBurden(states) {
           <span style="color:${COLORS.secondary}">Low-Income Low-Access (est.):</span> <strong>${fmtNum(p.value)}</strong><br/>
           Share of State Pop: <strong>${d.pctOfPop}%</strong><br/>
           State Population: ${fmtNum(d.population)}<br/>
-          Low-Access Tracts: ${d.lowAccessPct}%`;
+          Low-Access Tracts: ${d.lowAccessPct}% of tracts`;
       }
     },
     series: [{

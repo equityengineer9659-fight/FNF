@@ -405,6 +405,11 @@ async function init() {
     animateCounters();
     updateFreshness('banks', { _static: true, _dataYear: 2023 });
     renderDensityMap(geoJSON, bankData.states);
+    // Surface reconciliation note if present in data
+    if (bankData.national?._reconciliationNote) {
+      const el = document.getElementById('density-reconciliation');
+      if (el) { el.textContent = bankData.national._reconciliationNote; el.style.display = ''; }
+    }
     renderVsInsecurity(bankData.states);
     renderRevenue(bankData.states);
     renderEfficiency(bankData.states);

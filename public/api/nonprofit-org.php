@@ -73,6 +73,17 @@ if ($response === false) {
 
 $raw = json_decode($response, true);
 if (!$raw || !isset($raw['organization'])) {
+    // Serve stale cache if available rather than hard 502
+    if (file_exists($cacheFile)) {
+        $cached = file_get_contents($cacheFile);
+        $data = json_decode($cached, true);
+        if ($data) {
+            $data['_cached'] = true;
+            $data['_stale'] = true;
+            echo json_encode($data);
+            exit;
+        }
+    }
     http_response_code(502);
     echo json_encode(['error' => 'Invalid ProPublica response or organization not found']);
     exit;
