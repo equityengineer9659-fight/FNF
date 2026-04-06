@@ -208,8 +208,8 @@ function renderTreemapBurden(accessData) {
       .filter(s => stateNames.includes(s.name))
       .map(s => ({
         name: s.name,
-        value: s.lowIncomeLowAccessPop,
-        pctOfPop: ((s.lowIncomeLowAccessPop / s.population) * 100).toFixed(1)
+        value: s.lowAccessPopulation,
+        pctOfPop: ((s.lowAccessPopulation / (s.totalPopulation || s.population)) * 100).toFixed(1)
       }))
       .sort((a, b) => b.value - a.value);
     return { name: region, children, itemStyle: { borderColor: REGION_COLORS[region] } };
@@ -220,7 +220,7 @@ function renderTreemapBurden(accessData) {
       ...TOOLTIP_STYLE,
       formatter: p => {
         if (p.data.children) return `<strong>${p.name}</strong><br/>Total: ${fmtNum(p.value)}`;
-        return `<strong>${p.name}</strong><br/>Low-Income + Low-Access: <strong>${fmtNum(p.value)}</strong><br/>${p.data.pctOfPop}% of state population`;
+        return `<strong>${p.name}</strong><br/>Low-Access Population: <strong>${fmtNum(p.value)}</strong><br/>${p.data.pctOfPop}% of state population`;
       }
     },
     series: [{
@@ -621,7 +621,7 @@ async function init() {
   try {
     const [fiRes, accessRes, snapRes, priceRes, bankRes] = await Promise.all([
       fetch('/data/food-insecurity-state.json'),
-      fetch('/data/food-access-atlas.json'),
+      fetch('/data/current-food-access.json'),
       fetch('/data/snap-participation.json'),
       fetch('/data/bls-regional-cpi.json'),
       fetch('/data/food-bank-summary.json')

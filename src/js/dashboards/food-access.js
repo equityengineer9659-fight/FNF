@@ -38,9 +38,8 @@ function renderDesertMap(geoJSON, states, accessData) {
     return `<strong style="font-size:14px">${d.name}</strong><br/>
       <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
       Population: ${fmtNum(d.population)}<br/>
-      Low-Income + Low-Access: ${fmtNum(d.lowIncomeLowAccessPop)}<br/>
+      Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>
       Avg Distance: ${d.avgDistance} mi<br/>
-      No Vehicle: ${d.noVehiclePct}%<br/>
       <span style="color:${COLORS.secondary};font-size:11px">Click to see counties</span>`;
   }
 
@@ -67,8 +66,8 @@ function renderDesertMap(geoJSON, states, accessData) {
     currentView = 'national';
     const mapData = states.map(s => ({
       name: s.name, value: s.lowAccessPct, fips: s.fips,
-      population: s.population, lowIncomeLowAccessPop: s.lowIncomeLowAccessPop,
-      avgDistance: s.avgDistance, noVehiclePct: s.noVehiclePct
+      population: s.totalPopulation || s.population,
+      lowAccessPopulation: s.lowAccessPopulation, avgDistance: s.avgDistance
     }));
 
     const backBtn = document.getElementById('access-map-back-btn');
@@ -357,16 +356,16 @@ function renderDistance(states) {
 // Dense transit-rich states (NY, DC, MA) have high no-vehicle rates but good store proximity.
 // Rural states (WV, MS) have low no-vehicle rates because cars are mandatory — yet stores are still far.
 // Car ownership alone does not predict food desert risk at the state level.
-const VEHICLE_LABEL_STATES = new Set(['District of Columbia', 'New York', 'West Virginia', 'Massachusetts', 'Wyoming']);
-
 function renderVehicle(states) {
   const chart = getOrCreateChart('chart-vehicle');
   if (!chart) return;
 
+  const LABEL_STATES = new Set(['Wyoming', 'Montana', 'North Dakota', 'District of Columbia', 'New Jersey']);
+
   const points = states.map(s => ({
-    value: [s.noVehiclePct, s.lowAccessPct],
+    value: [s.avgDistance, s.lowAccessPct],
     name: s.name, population: s.population,
-    label: VEHICLE_LABEL_STATES.has(s.name)
+    label: LABEL_STATES.has(s.name)
       ? { show: true, formatter: s.state || s.name.slice(0, 2).toUpperCase(), color: COLORS.text, fontSize: 9, position: 'right' }
       : { show: false }
   }));
@@ -382,7 +381,7 @@ function renderVehicle(states) {
     symbol: 'none', silent: true,
     lineStyle: { color: 'rgba(255,255,255,0.3)', type: 'dashed', width: 1.5 },
     data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
-    label: { formatter: `r = ${reg.r.toFixed(2)} (negative — see note)`, color: COLORS.textMuted, fontSize: 10, position: 'end' }
+    label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 10, position: 'end' }
   };
 
   const series = Object.entries(REGION_COLORS).map(([region, color], i) => ({
@@ -402,22 +401,22 @@ function renderVehicle(states) {
       formatter: params => {
         const d = params.data;
         const region = getRegion(d.name);
-        const note = d.value[0] > 20
-          ? `<br/><span style="font-size:10px;color:${COLORS.textMuted}">Dense/transit-rich — proximity mitigates vehicle gap</span>`
-          : d.value[1] > 50
-            ? `<br/><span style="font-size:10px;color:${COLORS.textMuted}">High food desert rate despite high car ownership</span>`
+        const note = d.value[0] < 1
+          ? `<br/><span style="font-size:10px;color:${COLORS.textMuted}">Dense/urban — stores within walking distance</span>`
+          : d.value[0] > 3
+            ? `<br/><span style="font-size:10px;color:${COLORS.textMuted}">Rural distance barrier — car essential for food access</span>`
             : '';
         return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>
-          No Vehicle: ${d.value[0]}%<br/>
+          Avg Distance to Store: ${d.value[0]} mi<br/>
           Low-Access Tracts: ${d.value[1]}%<br/>
           Population: ${fmtNum(d.population)}${note}`;
       }
     },
     grid: { left: 55, right: 20, top: 35, bottom: 50 },
     xAxis: {
-      name: 'Households Without Vehicle (%)', nameLocation: 'center', nameGap: 35,
+      name: 'Average Distance to Grocery Store (mi)', nameLocation: 'center', nameGap: 35,
       nameTextStyle: { color: COLORS.textMuted },
-      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+      axisLabel: { color: COLORS.textMuted, formatter: '{value} mi' },
       splitLine: { lineStyle: { color: COLORS.gridLine } }
     },
     yAxis: {
@@ -445,16 +444,19 @@ function renderDoubleBurden(states) {
   }
 
   // Flatten into a single level — region identity shown via border color + label
+  // Estimate low-income low-access pop: low-access population × state poverty rate
   const flatData = [];
   Object.entries(REGIONS).forEach(([region, stateNames]) => {
     states
       .filter(s => stateNames.includes(s.name))
       .forEach(s => {
-        const pct = (s.lowIncomeLowAccessPop / s.population) * 100;
+        const pop = s.totalPopulation || s.population || 0;
+        const estimate = Math.round((s.lowAccessPopulation || 0) * ((s.povertyRate || 0) / 100));
+        const pct = pop > 0 ? (estimate / pop) * 100 : 0;
         flatData.push({
-          name: s.name, value: s.lowIncomeLowAccessPop,
+          name: s.name, value: estimate,
           pctOfPop: pct.toFixed(1),
-          population: s.population,
+          population: pop,
           lowAccessPct: s.lowAccessPct,
           region,
           itemStyle: {
@@ -473,7 +475,7 @@ function renderDoubleBurden(states) {
       formatter: p => {
         const d = p.data;
         return `<strong>${p.name}</strong> <span style="color:${REGION_COLORS[d.region]}">(${d.region})</span><br/>
-          <span style="color:${COLORS.secondary}">Double Burden:</span> <strong>${fmtNum(p.value)}</strong><br/>
+          <span style="color:${COLORS.secondary}">Low-Income Low-Access (est.):</span> <strong>${fmtNum(p.value)}</strong><br/>
           Share of State Pop: <strong>${d.pctOfPop}%</strong><br/>
           State Population: ${fmtNum(d.population)}<br/>
           Low-Access Tracts: ${d.lowAccessPct}%`;
@@ -503,6 +505,14 @@ function renderDoubleBurden(states) {
     legendEl.innerHTML = Object.entries(REGION_COLORS).map(([region, color]) =>
       `<span><span class="legend-swatch" style="background:${color}"></span>${region}</span>`
     ).join('');
+  }
+
+  // Update insight text with computed national total
+  const insightEl = document.getElementById('double-burden-insight');
+  if (insightEl && flatData.length) {
+    const total = flatData.reduce((sum, s) => sum + s.value, 0);
+    const top = flatData[0];
+    insightEl.innerHTML = `An estimated <strong>${fmtNum(Math.round(total / 1000000 * 10) / 10)} million Americans</strong> face overlapping low access and low income — these communities face the greatest compounded access and affordability constraints. <strong>${top.name}</strong> leads with ~${fmtNum(top.value)} people (${top.pctOfPop}% of state population).`;
   }
 }
 
@@ -776,7 +786,8 @@ function populateAccessibleTable(states, retailerData) {
   states.forEach(s => {
     const r = retailerByFips[s.fips];
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${s.name}</td><td>${s.lowAccessPct}%</td><td>${s.urbanLowAccess}</td><td>${s.ruralLowAccess}</td><td>${s.avgDistance}</td><td>${s.noVehiclePct}%</td><td>${fmtNum(s.lowIncomeLowAccessPop)}</td><td>${r ? fmtNum(r.totalRetailers) : 'N/A'}</td><td>${r ? r.retailersPer100K : 'N/A'}</td>`;
+    const estimate = Math.round((s.lowAccessPopulation || 0) * ((s.povertyRate || 0) / 100));
+    tr.innerHTML = `<td>${s.name}</td><td>${s.lowAccessPct}%</td><td>${s.urbanLowAccess}</td><td>${s.ruralLowAccess}</td><td>${s.avgDistance}</td><td>${fmtNum(s.lowAccessPopulation || 0)}</td><td>${estimate > 0 ? fmtNum(estimate) : 'N/A'}</td><td>${r ? fmtNum(r.totalRetailers) : 'N/A'}</td><td>${r ? r.retailersPer100K : 'N/A'}</td>`;
     tbody.appendChild(tr);
   });
 }
@@ -1205,30 +1216,32 @@ async function fetchSDOHAccess(accessStates) {
 
 async function init() {
   try {
-    // Load static data (always needed for fields the API cannot provide) + GeoJSON + food insecurity + SNAP retailers
-    const [staticRes, geoRes, fiRes, snapRetailRes, currentAccessRes] = await Promise.all([
-      fetch('/data/food-access-atlas.json'),
+    // Load current-access data + GeoJSON + food insecurity + SNAP retailers
+    const [currentAccessRes, geoRes, fiRes, snapRetailRes] = await Promise.all([
+      fetch('/data/current-food-access.json'),
       fetch('/data/us-states-geo.json'),
       fetch('/data/food-insecurity-state.json'),
-      fetch('/data/snap-retailers.json'),
-      fetch('/data/current-food-access.json')
+      fetch('/data/snap-retailers.json')
     ]);
-    if (!staticRes.ok || !geoRes.ok) throw new Error('Failed to load data');
-    const [staticData, geoJSON] = await Promise.all([staticRes.json(), geoRes.json()]);
+    if (!currentAccessRes.ok || !geoRes.ok) throw new Error('Failed to load data');
+    const [currentAccessData, geoJSON] = await Promise.all([currentAccessRes.json(), geoRes.json()]);
     const fiData = fiRes.ok ? await fiRes.json() : null;
     const snapRetailerData = snapRetailRes.ok ? await snapRetailRes.json() : null;
-    const currentAccessData = currentAccessRes.ok ? await currentAccessRes.json() : null;
 
-    // Use current computed data for all non-map charts (consistent with Food Deserts map)
-    // Normalize field name: current JSON uses totalPopulation, atlas uses population
-    let states = staticData.states;
-    const curStates = (currentAccessData?.states ?? staticData.states).map(s =>
-      s.totalPopulation !== undefined ? { ...s, population: s.totalPopulation } : s
-    );
+    // Normalize totalPopulation → population for chart compatibility
+    const curStates = currentAccessData.states.map(s => ({ ...s, population: s.totalPopulation }));
+
+    // Merge poverty rate from food-insecurity-state.json for Double Burden estimate
+    if (fiData?.states) {
+      const fiByName = {};
+      fiData.states.forEach(s => { fiByName[s.name] = s.povertyRate; });
+      curStates.forEach(s => { if (fiByName[s.name]) s.povertyRate = fiByName[s.name]; });
+    }
+
     updateFreshness('access', { _static: true, _dataYear: 'Current' });
 
     animateCounters();
-    const mapCtrl = renderDesertMap(geoJSON, states, currentAccessData);
+    const mapCtrl = renderDesertMap(geoJSON, currentAccessData.states, currentAccessData);
     renderUrbanRural(curStates);
     renderDistance(curStates);
     renderVehicle(curStates);
@@ -1237,8 +1250,11 @@ async function init() {
     populateAccessibleTable(curStates, snapRetailerData);
 
     addExportButton('chart-desert-map', 'food-access-by-state.csv', () => ({
-      headers: ['State', 'Low-Access Tracts (%)', 'Urban Low-Access', 'Rural Low-Access', 'Avg Distance (mi)', 'No Vehicle (%)', 'Low-Income Low-Access Pop', 'SNAP+Low-Access'],
-      rows: curStates.map(s => [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.noVehiclePct, s.lowIncomeLowAccessPop, s.snapLowAccess || ''])
+      headers: ['State', 'Low-Access Tracts (%)', 'Urban Low-Access', 'Rural Low-Access', 'Avg Distance (mi)', 'Low-Access Population', 'Low-Income Low-Access Pop (est.)'],
+      rows: curStates.map(s => {
+        const estimate = Math.round((s.lowAccessPopulation || 0) * ((s.povertyRate || 0) / 100));
+        return [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.lowAccessPopulation || 0, estimate || ''];
+      })
     }));
 
     // Map view toggle: Food Deserts (default) | Food Insecurity (CDC) | SNAP Retailers
@@ -1279,7 +1295,7 @@ async function init() {
         updateFreshness('access', cdcInsecurityData);
       } else if (view === 'snap' && snapRetailerData?.states) {
         if (mapCtrl) mapCtrl.setDrillDown(false);
-        renderSnapRetailers(geoJSON, snapRetailerData, states);
+        renderSnapRetailers(geoJSON, snapRetailerData, curStates);
         const el = document.getElementById('info-snap-mode'); if (el) el.style.display = '';
         if (hint) hint.textContent = 'Hover for retailer breakdown by store type';
         if (freshAccess) freshAccess.style.display = 'none';
@@ -1332,7 +1348,7 @@ async function init() {
           return;
         }
         const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
-        const match = states.find(s => s.name === stateName);
+        const match = curStates.find(s => s.name === stateName);
         if (match?.fips) mapCtrl.drillDown(match.name, match.fips);
       });
     }
@@ -1340,7 +1356,7 @@ async function init() {
     // Food Deserts drill-down: use pre-computed county data from current-food-access.json
     const drillDownLowAccess = async (stateCode) => {
       const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
-      const match = states.find(s => s.name === stateName);
+      const match = curStates.find(s => s.name === stateName);
       if (!match?.fips || !currentAccessData?.states) return;
 
       const stateAccess = currentAccessData.states.find(s => s.fips === match.fips);

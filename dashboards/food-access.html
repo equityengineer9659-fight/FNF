@@ -308,33 +308,33 @@
             </div>
         </section>
 
-        <!-- Chart 4: Vehicle Access vs Food Deserts -->
-        <section class="dashboard-section scroll-reveal" aria-label="Scatter plot showing vehicle ownership versus low-access tract rate by state — negative correlation explained">
+        <!-- Chart 4: Distance vs Food Desert Rate -->
+        <section class="dashboard-section scroll-reveal" aria-label="Scatter plot showing average distance to grocery store versus low-access tract rate by state">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
-                    <h2 class="dashboard-card__title">Car Ownership Doesn't Predict Food Desert Risk</h2>
+                    <h2 class="dashboard-card__title">Distance Is the Primary Food Access Barrier</h2>
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-vehicle" class="dashboard-chart" role="img" aria-label="Scatter plot showing household no-vehicle rate versus low-access tract rate by state, revealing a negative correlation driven by the urban-rural divide"></div>
+                        <div id="chart-vehicle" class="dashboard-chart" role="img" aria-label="Scatter plot showing average distance to nearest grocery store versus low-access tract rate by state"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
-                        <h3 class="dashboard-info__title">The Transit Paradox</h3>
+                        <h3 class="dashboard-info__title">Physical Distance Defines Access</h3>
                         <p class="dashboard-info__text">
-                            This scatter reveals a counterintuitive finding: states with <strong>more car-free households</strong> tend to have <strong>lower</strong> food desert rates (r = −0.65). That is not a data error — it reflects a structural reality.
+                            States with <strong>greater average distances to grocery stores</strong> consistently have <strong>higher food desert rates</strong>. This is the most direct physical measure of access: when stores are far, communities are underserved.
                         </p>
                         <p class="dashboard-info__text">
-                            <strong>Dense urban states</strong> (New York, DC, Massachusetts) have high no-vehicle rates because transit and walkability reduce the need for cars — and stores are nearby. <strong>Rural states</strong> (West Virginia, Wyoming, Mississippi) have low no-vehicle rates because a car is practically mandatory — yet stores remain far away and food desert rates are high.
+                            <strong>Dense urban states</strong> (DC, New Jersey) have low average distances — proximity reduces access barriers regardless of income. <strong>Rural western and plains states</strong> (Wyoming, Montana, North Dakota) see the longest distances, reflecting the sparse retail geography that forces long trips for basic groceries.
                         </p>
                         <p class="dashboard-info__text">
-                            The real access burden is not captured by vehicle ownership alone. It requires understanding <strong>distance, density, and transit availability together</strong>.
+                            Unlike car ownership or income, distance is a structural barrier that policy can address through <strong>retailer incentive programs, mobile markets, and rural infrastructure investment</strong>.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> Food desert tracts: FNS retailers + Census 2020. Vehicle access: Census ACS 2023 5-Year (B25044, household-level)</span>
-                            <span class="meta-item"><strong>Note</strong> State-level aggregation masks within-state variation; county or tract-level analysis would show different patterns</span>
+                            <span class="meta-item"><strong>Source</strong> Custom current low-access computation: Haversine distance from Census tract centroids to nearest SNAP-authorized supermarket/grocery (FNS retailer data + Census 2020 tract geography), computed 2026</span>
+                            <span class="meta-item"><strong>Note</strong> State-level averages mask within-state variation; rural counties within otherwise urban states may show much longer distances</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            West Virginia has 50% low-access tracts and only 8.2% no-vehicle households — high car ownership doesn't prevent food access hardship when stores are simply too far away.
+                            Wyoming averages over 4 miles to the nearest grocery store — and over 60% of its tracts qualify as low-access. Distance is the defining structural barrier in food-scarce states.
                         </div>
                     </div>
                 </div>
@@ -362,11 +362,11 @@
                             <strong>Texas</strong> leads with 1.8 million people in this overlap, followed by Florida and California. But as a share of population, states like <strong>Mississippi and West Virginia</strong> are most severely affected.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> Custom current low-access computation (USDA FNS retailer data + Census 2020 tract geography) combined with ACS 2023 poverty data</span>
-                            <span class="meta-item"><strong>Metric</strong> Estimated low-income population in low-access census tracts (computed as estimated low-access population × tract poverty rate)</span>
+                            <span class="meta-item"><strong>Source</strong> Current low-access computation (FNS retailer data + Census 2020 tract geography, computed 2026) combined with state poverty rates from USDA ERS / Feeding America 2024</span>
+                            <span class="meta-item"><strong>Metric</strong> Estimated low-income population in low-access census tracts (low-access population × state poverty rate) — state-level estimate, actual tract-level overlap may vary</span>
                         </div>
-                        <div class="dashboard-info__insight">
-                            Over 17 million Americans face overlapping low access and low income — these communities face the greatest compounded access and affordability constraints.
+                        <div id="double-burden-insight" class="dashboard-info__insight">
+                            Millions of Americans face overlapping low access and low income — these communities face the greatest compounded access and affordability constraints.
                         </div>
                     </div>
                 </div>
@@ -439,8 +439,8 @@
                         <th>Urban Low-Access</th>
                         <th>Rural Low-Access</th>
                         <th>Avg Distance (mi)</th>
-                        <th>No Vehicle (%)</th>
-                        <th>Low-Income + Low-Access Pop</th>
+                        <th>Low-Access Population</th>
+                        <th>Low-Income Low-Access Pop (est.)</th>
                         <th>SNAP Retailers</th>
                         <th>Retailers per 100K</th>
                     </tr>

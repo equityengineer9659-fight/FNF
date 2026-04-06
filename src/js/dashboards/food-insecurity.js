@@ -1100,7 +1100,7 @@ async function fetchCDCPlacesData() {
     const res = await fetch('/api/dashboard-places.php?type=health-indicators');
     if (!res.ok) return;
     const places = await res.json();
-    if (places.error || !places.states) return;
+    if (places.error || !places.records) return;
 
     // Wait for SDOH data — PLACES merges into it
     if (!sdohData || !sdohData.states) return;
@@ -1109,7 +1109,7 @@ async function fetchCDCPlacesData() {
 
     // Merge CDC fields into existing SDOH state records
     const placesByName = {};
-    places.states.forEach(s => { placesByName[s.name] = s; });
+    places.records.forEach(s => { placesByName[s.name] = s; });
     sdohData.states.forEach(s => {
       const p = placesByName[s.name];
       if (!p) return;
@@ -1486,7 +1486,7 @@ async function init() {
 
     // Non-blocking: fetch cross-dataset files for Triple Burden + State Deep-Dive
     Promise.all([
-      fetch('/data/food-access-atlas.json').then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch('/data/current-food-access.json').then(r => r.ok ? r.json() : null).catch(() => null),
       fetch('/data/food-bank-summary.json').then(r => r.ok ? r.json() : null).catch(() => null)
     ]).then(([ad, bd]) => {
       accessData = ad;
