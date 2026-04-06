@@ -120,9 +120,15 @@ jobs:
             dist/ \
             "${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/"
 
-          # Write API config (keys from GitHub Secrets, not in repo)
-          CONFIG_PATH="~/www/food-n-force.com/public_html/api/_config.php"
-          ssh -p "$SSH_PORT" "${SSH_USER}@${SSH_HOST}" "printf '<?php\ndefine(\"BLS_API_KEY\", \"${BLS_API_KEY}\");\ndefine(\"MAPBOX_ACCESS_TOKEN\", \"${MAPBOX_ACCESS_TOKEN}\");\ndefine(\"FRED_API_KEY\", \"${FRED_API_KEY}\");\ndefine(\"CHARITY_NAVIGATOR_API_KEY\", \"${CHARITY_NAVIGATOR_API_KEY}\");\n' > ${CONFIG_PATH}"
+          # Write API config — generate locally then scp to avoid passing
+          # secrets as SSH command arguments (prevents process inspection
+          # and remote shell history exposure)
+          CONFIG_PATH="www/food-n-force.com/public_html/api/_config.php"
+          printf "<?php\ndefine('BLS_API_KEY', '%s');\ndefine('MAPBOX_ACCESS_TOKEN', '%s');\ndefine('FRED_API_KEY', '%s');\ndefine('CHARITY_NAVIGATOR_API_KEY', '%s');\n" \
+            "$BLS_API_KEY" "$MAPBOX_ACCESS_TOKEN" "$FRED_API_KEY" "$CHARITY_NAVIGATOR_API_KEY" \
+            > /tmp/_config.php
+          scp -P "$SSH_PORT" /tmp/_config.php "${SSH_USER}@${SSH_HOST}:${CONFIG_PATH}"
+          rm -f /tmp/_config.php
 
           # Flush LiteSpeed page cache (stored in .lscache/ directory)
           ssh -p "$SSH_PORT" "${SSH_USER}@${SSH_HOST}" "rm -rf ~/www/food-n-force.com/public_html/.lscache/ 2>/dev/null && echo 'LiteSpeed cache cleared' || echo 'No .lscache found'" || true

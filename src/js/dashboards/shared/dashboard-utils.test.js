@@ -45,6 +45,8 @@ import {
   exportCSV,
   fetchWithFallback,
   updateFreshness,
+  createChart,
+  disposeAllCharts,
   REGIONS,
   US_STATES,
 } from './dashboard-utils.js';
@@ -280,6 +282,40 @@ describe('dashboard-utils', () => {
     it('should cover all 50 states + DC', () => {
       const allStates = Object.values(REGIONS).flat();
       expect(allStates.length).toBe(51);
+    });
+  });
+
+  describe('disposeAllCharts', () => {
+    it('should call dispose on all chart instances and clear the array', () => {
+      // Create mock chart containers
+      const container1 = document.createElement('div');
+      container1.id = 'chart-test-1';
+      document.body.appendChild(container1);
+      const container2 = document.createElement('div');
+      container2.id = 'chart-test-2';
+      document.body.appendChild(container2);
+
+      // Create charts (uses mocked echarts.init)
+      const chart1 = createChart('chart-test-1');
+      const chart2 = createChart('chart-test-2');
+
+      expect(chart1).not.toBeNull();
+      expect(chart2).not.toBeNull();
+
+      // Dispose all
+      disposeAllCharts();
+
+      // dispose() should have been called on each
+      expect(chart1.dispose).toHaveBeenCalled();
+      expect(chart2.dispose).toHaveBeenCalled();
+
+      // Cleanup DOM
+      container1.remove();
+      container2.remove();
+    });
+
+    it('should not throw if charts array is empty', () => {
+      expect(() => disposeAllCharts()).not.toThrow();
     });
   });
 });

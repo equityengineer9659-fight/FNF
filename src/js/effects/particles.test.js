@@ -268,6 +268,22 @@ describe('initParticles', () => {
     const system = initParticles();
     expect(system).toBeNull();
   });
+
+  it('should reduce particle count on mobile viewport', () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, value: 375 });
+    const system = initParticles();
+    expect(system).not.toBeNull();
+    expect(system.config.count).toBeLessThanOrEqual(40);
+    if (system) system.destroy();
+  });
+
+  it('should keep default particle count on desktop viewport', () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, value: 1920 });
+    const system = initParticles();
+    expect(system).not.toBeNull();
+    expect(system.config.count).toBe(80);
+    if (system) system.destroy();
+  });
 });
 
 describe('createParticleSystem', () => {
