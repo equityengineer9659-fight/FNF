@@ -369,9 +369,11 @@ function aggregate(tracts, stores) {
 async function fetchCensusACS(stateData) {
   console.log('Fetching Census ACS data (vehicle access, poverty)...');
   try {
-    // B08141_001E = total workers, B08141_002E = no vehicle workers
+    // B25044_001E = total occupied housing units
+    // B25044_003E = owner-occupied, no vehicles available
+    // B25044_010E = renter-occupied, no vehicles available
     // B17001_002E = population below poverty, B01003_001E = total population
-    const url = 'https://api.census.gov/data/2023/acs/acs5?get=NAME,B08141_001E,B08141_002E,B17001_002E,B01003_001E&for=state:*';
+    const url = 'https://api.census.gov/data/2023/acs/acs5?get=NAME,B25044_001E,B25044_003E,B25044_010E,B17001_002E,B01003_001E&for=state:*';
     const raw = await fetchUrl(url);
     const rows = JSON.parse(raw);
     const header = rows[0];
@@ -379,14 +381,15 @@ async function fetchCensusACS(stateData) {
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
       const stateFips = row[header.indexOf('state')];
-      const totalWorkers = parseInt(row[header.indexOf('B08141_001E')], 10) || 0;
-      const noVehicle = parseInt(row[header.indexOf('B08141_002E')], 10) || 0;
+      const totalHouseholds = parseInt(row[header.indexOf('B25044_001E')], 10) || 0;
+      const ownerNoVeh = parseInt(row[header.indexOf('B25044_003E')], 10) || 0;
+      const renterNoVeh = parseInt(row[header.indexOf('B25044_010E')], 10) || 0;
       const povertyPop = parseInt(row[header.indexOf('B17001_002E')], 10) || 0;
       const totalPop = parseInt(row[header.indexOf('B01003_001E')], 10) || 0;
 
       const state = stateData.find(s => s.fips === stateFips);
       if (state) {
-        state.noVehiclePct = totalWorkers > 0 ? Math.round((noVehicle / totalWorkers) * 1000) / 10 : 0;
+        state.noVehiclePct = totalHouseholds > 0 ? Math.round(((ownerNoVeh + renterNoVeh) / totalHouseholds) * 1000) / 10 : 0;
         state.povertyRate = totalPop > 0 ? Math.round((povertyPop / totalPop) * 1000) / 10 : 0;
         // Estimate low-income + low-access population (poverty rate × low-access population)
         state.lowIncomeLowAccessPop = Math.round(state.lowAccessPopulation * (state.povertyRate / 100));

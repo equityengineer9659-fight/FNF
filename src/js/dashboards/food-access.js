@@ -7,7 +7,7 @@
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
-  initScrollReveal, handleResize, updateFreshness, fetchWithFallback,
+  initScrollReveal, handleResize, updateFreshness,
   REGIONS, REGION_COLORS, getRegion, addExportButton,
   initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
@@ -21,41 +21,9 @@ function getOrCreateChart(id) {
   return echarts.getInstanceByDom(el) || createChart(id);
 }
 
-/**
- * Merge ERS API state-summary data into the static atlas data.
- * API provides fresh aggregate counts; static file provides fields the API
- * cannot (name, population, urbanLowAccess, ruralLowAccess, avgDistance).
- */
-function mergeFaraIntoStatic(staticStates, faraRecords) {
-  const faraByFips = {};
-  faraRecords.forEach(r => { faraByFips[r.state] = r; });
-
-  return staticStates.map(s => {
-    const api = faraByFips[s.fips];
-    if (!api) return s;
-
-    const lowAccessPct = api.totalTracts > 0
-      ? Math.round((api.lilaTracts / api.totalTracts) * 1000) / 10
-      : s.lowAccessPct;
-
-    // noVehiclePct from API: noVehicleLowAccess as % of lowAccessPop (if available)
-    const noVehiclePct = api.lowAccessPop > 0
-      ? Math.round((api.noVehicleLowAccess / api.lowAccessPop) * 1000) / 10
-      : s.noVehiclePct;
-
-    return {
-      ...s,
-      lowAccessPct,
-      lowIncomeLowAccessPop: api.lowIncomeLowAccess || s.lowIncomeLowAccessPop,
-      noVehiclePct,
-      snapLowAccess: api.snapLowAccess || 0,
-      avgPovertyRate: api.avgPovertyRate || undefined
-    };
-  });
-}
 
 // -- Chart 1: Food Desert Map (choropleth) with County Drill-Down --
-function renderDesertMap(geoJSON, states) {
+function renderDesertMap(geoJSON, states, accessData) {
   const chart = getOrCreateChart('chart-desert-map');
   if (!chart) return;
 
@@ -79,15 +47,13 @@ function renderDesertMap(geoJSON, states) {
   function countyTooltip(params) {
     const d = params.data;
     if (!d) return '';
-    // Enhanced tooltip when FARA county data is available
-    if (d._faraEnriched) {
+    // Enhanced tooltip when current food access data is available
+    if (d._currentData) {
       let html = `<strong style="font-size:14px">${d.name}</strong><br/>`;
-      html += `<span style="color:${COLORS.secondary}">LILA Tracts:</span> ${d.lilaTracts} of ${d.tractCount}<br/>`;
-      html += `Avg Poverty Rate: ${d.avgPovertyRate}%<br/>`;
-      if (d.lowAccessPop) html += `Low-Access Pop: ${fmtNum(d.lowAccessPop)}<br/>`;
-      if (d.lowIncomeLowAccess) html += `Low-Income+Low-Access: ${fmtNum(d.lowIncomeLowAccess)}<br/>`;
-      if (d.noVehicleLowAccess) html += `No Vehicle+Low-Access: ${fmtNum(d.noVehicleLowAccess)}<br/>`;
-      if (d.avgMedianIncome) html += `Median Income: $${fmtNum(d.avgMedianIncome)}`;
+      html += `<span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.lowAccessTracts} of ${d.totalTracts} (${d.value}%)<br/>`;
+      if (d.lowAccessPopulation) html += `Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>`;
+      if (d.avgDistance) html += `Avg Distance to Store: ${d.avgDistance} mi<br/>`;
+      html += `Type: ${d.isUrban ? 'Urban' : 'Rural'}`;
       return html;
     }
     return `<strong style="font-size:14px">${d.name}</strong><br/>
@@ -142,46 +108,42 @@ function renderDesertMap(geoJSON, states) {
       if (!geoRes.ok) throw new Error(`HTTP ${geoRes.status}`);
       const countyGeo = await geoRes.json();
 
-      // Try FARA county API for richer food-access-specific data
-      let faraCountyData = null;
-      try {
-        const faraRes = await fetch(`/api/dashboard-fara.php?type=county&state=${stateFips}`);
-        if (faraRes.ok) {
-          const fara = await faraRes.json();
-          if (!fara.error && fara.records?.length) {
-            faraCountyData = {};
-            fara.records.forEach(r => { faraCountyData[r.county] = r; });
-          }
-        }
-      } catch { /* FARA county fetch is optional */ }
+      // Build county lookup from currentAccessData (consistent with state-level map)
+      const stateAccess = accessData?.states?.find(s => s.fips === stateFips);
+      const accessByFips = {};
+      if (stateAccess?.counties) {
+        stateAccess.counties.forEach(c => { accessByFips[c.fips] = c; });
+      }
+      const hasCurrentAccess = Object.keys(accessByFips).length > 0;
 
       const mapName = `access-${stateFips}`;
       echarts.registerMap(mapName, countyGeo);
 
       let countyData, seriesName, vmText, hintText;
 
-      if (faraCountyData) {
-        // Use FARA data: show LILA tract percentage per county
+      if (hasCurrentAccess) {
+        // Use current computed data: low-access tract % per county (consistent with state map)
         countyData = countyGeo.features
           .map(f => {
             const fips5 = f.properties.GEOID || f.properties.fips || '';
-            const fara = faraCountyData[fips5];
-            if (!fara) return null;
-            const lilaPct = fara.tractCount > 0
-              ? Math.round((fara.lilaTracts / fara.tractCount) * 1000) / 10
-              : 0;
+            const access = accessByFips[fips5];
+            if (!access) return null;
             return {
               name: f.properties.name || f.properties.NAME,
-              value: lilaPct,
-              _faraEnriched: true,
-              ...fara
+              value: access.lowAccessPct,
+              _currentData: true,
+              lowAccessTracts: access.lowAccessTracts,
+              totalTracts: access.totalTracts,
+              lowAccessPopulation: access.lowAccessPopulation,
+              avgDistance: access.avgDistance,
+              isUrban: access.isUrban
             };
           })
           .filter(Boolean);
 
-        seriesName = 'LILA Tracts (%)';
-        vmText = ['More Food Deserts', 'Fewer Food Deserts'];
-        hintText = 'Showing USDA low-income/low-access (LILA) tract data \u2014 click Back for state-level view';
+        seriesName = 'Low-Access Tracts (%)';
+        vmText = ['More Low-Access', 'Less Low-Access'];
+        hintText = 'Showing current food desert data (distance-only) \u2014 click Back for state-level view';
       } else {
         // Fallback: poverty rate from static county GeoJSON
         countyData = countyGeo.features
@@ -260,23 +222,84 @@ function renderUrbanRural(states) {
   const chart = getOrCreateChart('chart-urban-rural');
   if (!chart) return;
 
-  const totalUrban = states.reduce((s, st) => s + st.urbanLowAccess, 0);
-  const totalRural = states.reduce((s, st) => s + st.ruralLowAccess, 0);
+  // Compute low-access RATE per geography type from county data — honest metric
+  // (tract counts are misleading: there are far more urban tracts, so sharing them distorts the story)
+  let urbanLATracts = 0, urbanTotalTracts = 0;
+  let ruralLATracts = 0, ruralTotalTracts = 0;
+  let urbanDistSum = 0, ruralDistSum = 0;
+
+  for (const state of states) {
+    for (const county of (state.counties || [])) {
+      if (county.isUrban) {
+        urbanLATracts += county.lowAccessTracts;
+        urbanTotalTracts += county.totalTracts;
+        urbanDistSum += county.avgDistance * county.totalTracts;
+      } else {
+        ruralLATracts += county.lowAccessTracts;
+        ruralTotalTracts += county.totalTracts;
+        ruralDistSum += county.avgDistance * county.totalTracts;
+      }
+    }
+  }
+
+  const urbanRate = urbanTotalTracts > 0 ? Math.round(urbanLATracts / urbanTotalTracts * 1000) / 10 : 0;
+  const ruralRate = ruralTotalTracts > 0 ? Math.round(ruralLATracts / ruralTotalTracts * 1000) / 10 : 0;
+  const urbanDist = urbanTotalTracts > 0 ? Math.round(urbanDistSum / urbanTotalTracts * 100) / 100 : 0;
+  const ruralDist = ruralTotalTracts > 0 ? Math.round(ruralDistSum / ruralTotalTracts * 100) / 100 : 0;
 
   chart.setOption({
-    tooltip: { ...TOOLTIP_STYLE, formatter: p => `${p.name}: <strong>${fmtNum(p.value)}</strong> tracts (${p.percent.toFixed(1)}%)` },
-    legend: { data: ['Urban Low-Access', 'Rural Low-Access'], textStyle: { color: COLORS.text }, bottom: 0 },
-    series: [{
-      type: 'pie', radius: ['40%', '70%'], center: ['50%', '45%'],
-      label: { show: true, color: COLORS.text, formatter: '{b}\n{d}%', fontSize: 12 },
-      itemStyle: { borderRadius: 6, borderColor: 'rgba(0,0,0,0.4)', borderWidth: 2 },
-      data: [
-        { name: 'Urban Low-Access', value: totalUrban, itemStyle: { color: COLORS.primary } },
-        { name: 'Rural Low-Access', value: totalRural, itemStyle: { color: COLORS.accent } }
-      ],
-      emphasis: { itemStyle: { shadowBlur: 20, shadowColor: 'rgba(0,212,255,0.3)' } },
-      animationType: 'scale', animationDuration: 2000
-    }]
+    tooltip: {
+      ...TOOLTIP_STYLE, trigger: 'axis', axisPointer: { type: 'shadow' },
+      formatter: params => {
+        const geo = params[0].name;
+        const rateP = params.find(p => p.seriesName === 'Low-Access Rate');
+        const distP = params.find(p => p.seriesName === 'Avg Distance');
+        return `<strong>${geo}</strong><br/>
+          Low-Access Rate: <strong>${rateP?.value}%</strong> of tracts<br/>
+          Avg Distance to Store: <strong>${distP?.value} mi</strong>`;
+      }
+    },
+    legend: { data: ['Low-Access Rate', 'Avg Distance'], textStyle: { color: COLORS.text }, bottom: 0 },
+    grid: { left: 60, right: 60, top: 30, bottom: 50 },
+    xAxis: {
+      type: 'category', data: ['Urban', 'Rural'],
+      axisLabel: { color: COLORS.text, fontSize: 13, fontWeight: 'bold' },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: [
+      {
+        type: 'value', name: 'Low-Access Rate (%)', max: 60,
+        nameTextStyle: { color: COLORS.textMuted, fontSize: 10 },
+        axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+        splitLine: { lineStyle: { color: COLORS.gridLine } }
+      },
+      {
+        type: 'value', name: 'Avg Distance (mi)', max: 8,
+        nameTextStyle: { color: COLORS.textMuted, fontSize: 10 },
+        axisLabel: { color: COLORS.textMuted, formatter: '{value} mi' },
+        splitLine: { show: false }
+      }
+    ],
+    series: [
+      {
+        name: 'Low-Access Rate', type: 'bar', yAxisIndex: 0, barWidth: '28%',
+        data: [
+          { value: urbanRate, itemStyle: { color: COLORS.primary } },
+          { value: ruralRate, itemStyle: { color: COLORS.accent } }
+        ],
+        label: { show: true, position: 'top', formatter: '{c}%', color: COLORS.text, fontSize: 11 },
+        animationDuration: 1800
+      },
+      {
+        name: 'Avg Distance', type: 'bar', yAxisIndex: 1, barWidth: '28%',
+        data: [
+          { value: urbanDist, itemStyle: { color: 'rgba(0,212,255,0.45)' } },
+          { value: ruralDist, itemStyle: { color: 'rgba(255,140,0,0.55)' } }
+        ],
+        label: { show: true, position: 'top', formatter: '{c} mi', color: COLORS.text, fontSize: 11 },
+        animationDuration: 1800
+      }
+    ]
   });
 }
 
@@ -285,15 +308,34 @@ function renderDistance(states) {
   const chart = getOrCreateChart('chart-distance');
   if (!chart) return;
 
+  // Sort ascending; cap Alaska to keep lower-48 distribution readable
   const sorted = [...states].sort((a, b) => a.avgDistance - b.avgDistance);
+  const ALASKA_CAP = 10; // Display cap in miles — Alaska (26.8mi) noted in tooltip
   const names = sorted.map(s => s.name);
-  const distances = sorted.map(s => s.avgDistance);
+  const distances = sorted.map(s => Math.min(s.avgDistance, ALASKA_CAP));
+  const rawDistances = sorted.map(s => s.avgDistance);
 
   chart.setOption({
-    tooltip: { trigger: 'axis', ...TOOLTIP_STYLE, formatter: p => `<strong>${p[0].name}</strong><br/>Avg Distance: <strong>${p[0].value} mi</strong>` },
+    tooltip: {
+      trigger: 'axis', ...TOOLTIP_STYLE,
+      formatter: p => {
+        const raw = rawDistances[p[0].dataIndex];
+        const capped = raw > ALASKA_CAP ? ` <span style="font-size:10px;color:${COLORS.textMuted}">(capped at ${ALASKA_CAP} mi for scale)</span>` : '';
+        return `<strong>${p[0].name}</strong><br/>Avg centroid distance: <strong>${raw} mi</strong>${capped}`;
+      }
+    },
     grid: { left: 50, right: 20, top: 20, bottom: 40 },
-    xAxis: { type: 'category', data: names, axisLabel: { color: COLORS.textMuted, rotate: 60, fontSize: 8 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
-    yAxis: { type: 'value', name: 'Miles', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
+    xAxis: {
+      type: 'category', data: names,
+      axisLabel: { color: COLORS.textMuted, rotate: 60, fontSize: 8 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'value', name: 'Miles', max: ALASKA_CAP,
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
     series: [{
       type: 'line', data: distances, smooth: true, symbol: 'none',
       lineStyle: { width: 2.5, color: COLORS.secondary },
@@ -304,20 +346,29 @@ function renderDistance(states) {
           { offset: 1, color: 'rgba(0,212,255,0.01)' }
         ])
       },
-      markLine: { symbol: 'none', data: [{ yAxis: 1, label: { formatter: 'Urban threshold (1mi)', color: COLORS.secondary, fontSize: 10 }, lineStyle: { color: COLORS.secondary, type: 'dashed' } }] },
+      // No USDA threshold markLine — state averages mix urban+rural so a single threshold is misleading
       animationDuration: 2000
     }]
   });
 }
 
 // -- Chart 4: Vehicle Access & Food Deserts (scatter) --
+// Note: the negative correlation (r ≈ -0.65) is the finding, not a bug.
+// Dense transit-rich states (NY, DC, MA) have high no-vehicle rates but good store proximity.
+// Rural states (WV, MS) have low no-vehicle rates because cars are mandatory — yet stores are still far.
+// Car ownership alone does not predict food desert risk at the state level.
+const VEHICLE_LABEL_STATES = new Set(['District of Columbia', 'New York', 'West Virginia', 'Massachusetts', 'Wyoming']);
+
 function renderVehicle(states) {
   const chart = getOrCreateChart('chart-vehicle');
   if (!chart) return;
 
   const points = states.map(s => ({
     value: [s.noVehiclePct, s.lowAccessPct],
-    name: s.name, population: s.population
+    name: s.name, population: s.population,
+    label: VEHICLE_LABEL_STATES.has(s.name)
+      ? { show: true, formatter: s.state || s.name.slice(0, 2).toUpperCase(), color: COLORS.text, fontSize: 9, position: 'right' }
+      : { show: false }
   }));
 
   const byRegion = {};
@@ -329,9 +380,9 @@ function renderVehicle(states) {
   const xMin = Math.min(...xs), xMax = Math.max(...xs);
   const rLine = {
     symbol: 'none', silent: true,
-    lineStyle: { color: 'rgba(255,255,255,0.35)', type: 'dashed', width: 1.5 },
+    lineStyle: { color: 'rgba(255,255,255,0.3)', type: 'dashed', width: 1.5 },
     data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
-    label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
+    label: { formatter: `r = ${reg.r.toFixed(2)} (negative — see note)`, color: COLORS.textMuted, fontSize: 10, position: 'end' }
   };
 
   const series = Object.entries(REGION_COLORS).map(([region, color], i) => ({
@@ -345,17 +396,21 @@ function renderVehicle(states) {
   }));
 
   chart.setOption({
-    legend: {
-      top: 5, right: 10,
-      textStyle: { color: COLORS.text, fontSize: 11 },
-      itemWidth: 10, itemHeight: 10
-    },
+    legend: { top: 5, right: 10, textStyle: { color: COLORS.text, fontSize: 11 }, itemWidth: 10, itemHeight: 10 },
     tooltip: {
       ...TOOLTIP_STYLE,
       formatter: params => {
         const d = params.data;
         const region = getRegion(d.name);
-        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>No Vehicle: ${d.value[0]}%<br/>Food Deserts: ${d.value[1]}%<br/>Population: ${fmtNum(d.population)}`;
+        const note = d.value[0] > 20
+          ? `<br/><span style="font-size:10px;color:${COLORS.textMuted}">Dense/transit-rich — proximity mitigates vehicle gap</span>`
+          : d.value[1] > 50
+            ? `<br/><span style="font-size:10px;color:${COLORS.textMuted}">High food desert rate despite high car ownership</span>`
+            : '';
+        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>
+          No Vehicle: ${d.value[0]}%<br/>
+          Low-Access Tracts: ${d.value[1]}%<br/>
+          Population: ${fmtNum(d.population)}${note}`;
       }
     },
     grid: { left: 55, right: 20, top: 35, bottom: 50 },
@@ -831,9 +886,9 @@ function updateAccessInsecurityInsight(reg, mode, countyCount, stateName) {
     }
   } else {
     if (Math.abs(reg.r) < 0.4) {
-      insightEl.textContent = `${strength} correlation (r = ${reg.r.toFixed(2)}). Food deserts alone are a poor predictor of food insecurity — poverty and income are far stronger drivers. Policy focused solely on grocery store placement may miss the root causes.`;
+      insightEl.textContent = `${strength} state-level correlation (r = ${reg.r.toFixed(2)}). Low-access prevalence alone does not explain much of the variation in food insecurity across states. State averages can mask stronger patterns at the county or neighborhood level.`;
     } else {
-      insightEl.textContent = `${strength} correlation (r = ${reg.r.toFixed(2)}). Food desert prevalence does correlate with food insecurity, but the relationship is mediated by poverty, transportation, and income — not geography alone.`;
+      insightEl.textContent = `${strength} correlation (r = ${reg.r.toFixed(2)}). Low-access prevalence and food insecurity do move together across states, but the relationship is imperfect — local factors like poverty, employment, and income likely play a major role.`;
     }
   }
 }
@@ -867,45 +922,36 @@ function renderStateScatter(chart, accessStates, fiStates) {
 }
 
 // County-level scatter for a single state
-async function renderCountyScatter(chart, stateFips, stateName) {
+async function renderCountyScatter(chart, stateFips, stateName, accessData) {
   chart.showLoading({ text: `Loading ${stateName} counties...`, color: COLORS.secondary, textColor: COLORS.text, maskColor: 'rgba(0,0,0,0.6)' });
 
   try {
-    // Fetch county GeoJSON (has food insecurity rate) and FARA county data (has LILA tracts) in parallel
-    const [geoRes, faraRes] = await Promise.all([
-      fetch(`/data/counties/${stateFips}.json`),
-      fetch(`/api/dashboard-fara.php?type=county&state=${stateFips}`).catch(() => null)
-    ]);
-
+    // Fetch county GeoJSON (has food insecurity rate from CHR)
+    const geoRes = await fetch(`/data/counties/${stateFips}.json`);
     if (!geoRes.ok) throw new Error(`County data not available for ${stateName}`);
     const countyGeo = await geoRes.json();
 
-    // Build FARA lookup by county FIPS
-    let faraByFips = {};
-    if (faraRes && faraRes.ok) {
-      try {
-        const fara = await faraRes.json();
-        if (!fara.error && fara.records?.length) {
-          fara.records.forEach(r => { faraByFips[r.county] = r; });
-        }
-      } catch { /* FARA is optional */ }
+    // Build current food access lookup by county FIPS (consistent with state-level map)
+    const stateAccess = accessData?.states?.find(s => s.fips === stateFips);
+    const accessByFips = {};
+    if (stateAccess?.counties) {
+      stateAccess.counties.forEach(c => { accessByFips[c.fips] = c; });
     }
+    const hasCurrentAccess = Object.keys(accessByFips).length > 0;
 
-    const hasFara = Object.keys(faraByFips).length > 0;
-
-    // Build scatter points: x = food desert proxy, y = food insecurity rate
+    // Build scatter points: x = low-access tract %, y = food insecurity rate
     const points = [];
     countyGeo.features.forEach(f => {
       const props = f.properties;
       if (!props || !props.rate) return; // need food insecurity rate
 
       const fips5 = props.GEOID || props.fips || f.id || '';
-      const fara = faraByFips[fips5];
+      const access = accessByFips[fips5];
 
       let desertPct;
-      if (hasFara && fara && fara.tractCount > 0) {
-        // FARA: % of tracts that are LILA
-        desertPct = Math.round((fara.lilaTracts / fara.tractCount) * 1000) / 10;
+      if (hasCurrentAccess && access) {
+        // Current computed data: % of tracts beyond distance threshold
+        desertPct = access.lowAccessPct;
       } else if (props.limitedAccess !== undefined) {
         // Fallback: CHR "limited access to healthy foods" index
         desertPct = props.limitedAccess;
@@ -917,8 +963,7 @@ async function renderCountyScatter(chart, stateFips, stateName) {
         value: [desertPct, props.rate],
         name: props.name || props.NAME || 'Unknown',
         population: props.population || 0,
-        povertyRate: props.povertyRate,
-        _hasFara: !!(hasFara && fara)
+        povertyRate: props.povertyRate
       });
     });
 
@@ -930,7 +975,7 @@ async function renderCountyScatter(chart, stateFips, stateName) {
       return;
     }
 
-    const xLabel = hasFara ? 'LILA Tracts (%)' : 'Limited Food Access Index';
+    const xLabel = hasCurrentAccess ? 'Low-Access Tracts (%)' : 'Limited Food Access Index';
 
     const reg = drawAccessInsecurityScatter(chart, points, {
       xLabel,
@@ -943,7 +988,7 @@ async function renderCountyScatter(chart, stateFips, stateName) {
       tooltipFn: params => {
         const d = params.data;
         let html = `<strong>${d.name}</strong><br/>`;
-        html += `${hasFara ? 'LILA Tracts' : 'Limited Access'}: ${d.value[0]}%<br/>`;
+        html += `${hasCurrentAccess ? 'Low-Access Tracts' : 'Limited Access'}: ${d.value[0]}%<br/>`;
         html += `Food Insecurity: ${d.value[1]}%<br/>`;
         if (d.povertyRate !== undefined) html += `Poverty Rate: ${d.povertyRate}%<br/>`;
         if (d.population) html += `Population: ${fmtNum(d.population)}`;
@@ -959,7 +1004,7 @@ async function renderCountyScatter(chart, stateFips, stateName) {
 }
 
 // Main entry: set up chart + toggle
-function renderAccessInsecurity(accessStates, fiStates) {
+function renderAccessInsecurity(accessStates, fiStates, accessData) {
   const chart = getOrCreateChart('chart-access-insecurity');
   if (!chart) return;
 
@@ -1022,7 +1067,7 @@ function renderAccessInsecurity(accessStates, fiStates) {
         const stateName = US_STATES.find(([c]) => c === stateSelect.value)?.[1];
         const stateFips = stateName ? fipsByName[stateName] : null;
         if (stateFips) {
-          renderCountyScatter(chart, stateFips, stateName);
+          renderCountyScatter(chart, stateFips, stateName, accessData);
         }
       } else {
         // Show prompt to select a state
@@ -1174,22 +1219,26 @@ async function init() {
     const snapRetailerData = snapRetailRes.ok ? await snapRetailRes.json() : null;
     const currentAccessData = currentAccessRes.ok ? await currentAccessRes.json() : null;
 
-    // Static atlas provides fields needed by non-map charts (urbanLowAccess, noVehiclePct, etc.)
+    // Use current computed data for all non-map charts (consistent with Food Deserts map)
+    // Normalize field name: current JSON uses totalPopulation, atlas uses population
     let states = staticData.states;
+    const curStates = (currentAccessData?.states ?? staticData.states).map(s =>
+      s.totalPopulation !== undefined ? { ...s, population: s.totalPopulation } : s
+    );
     updateFreshness('access', { _static: true, _dataYear: 'Current' });
 
     animateCounters();
-    const mapCtrl = renderDesertMap(geoJSON, states);
-    renderUrbanRural(states);
-    renderDistance(states);
-    renderVehicle(states);
-    renderDoubleBurden(states);
-    if (fiData?.states) renderAccessInsecurity(states, fiData.states);
-    populateAccessibleTable(states, snapRetailerData);
+    const mapCtrl = renderDesertMap(geoJSON, states, currentAccessData);
+    renderUrbanRural(curStates);
+    renderDistance(curStates);
+    renderVehicle(curStates);
+    renderDoubleBurden(curStates);
+    if (fiData?.states) renderAccessInsecurity(curStates, fiData.states, currentAccessData);
+    populateAccessibleTable(curStates, snapRetailerData);
 
     addExportButton('chart-desert-map', 'food-access-by-state.csv', () => ({
       headers: ['State', 'Low-Access Tracts (%)', 'Urban Low-Access', 'Rural Low-Access', 'Avg Distance (mi)', 'No Vehicle (%)', 'Low-Income Low-Access Pop', 'SNAP+Low-Access'],
-      rows: states.map(s => [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.noVehiclePct, s.lowIncomeLowAccessPop, s.snapLowAccess || ''])
+      rows: curStates.map(s => [s.name, s.lowAccessPct, s.urbanLowAccess, s.ruralLowAccess, s.avgDistance, s.noVehiclePct, s.lowIncomeLowAccessPop, s.snapLowAccess || ''])
     }));
 
     // Map view toggle: Food Deserts (default) | Food Insecurity (CDC) | SNAP Retailers
@@ -1349,7 +1398,7 @@ async function init() {
     window.addEventListener('resize', handleResize);
 
     // Non-blocking: fetch live SDOH data for housing burden chart
-    fetchSDOHAccess(states);
+    fetchSDOHAccess(curStates);
 
     // Non-blocking: fetch CDC PLACES food insecurity for default map view
     fetch('/api/dashboard-places.php?type=food-insecurity')
@@ -1361,30 +1410,6 @@ async function init() {
       })
       .catch(() => { /* CDC unavailable — desert map stays as default */ });
 
-    // Non-blocking: try ERS food access API for enriched state aggregates
-    fetchWithFallback('/api/dashboard-fara.php?type=state-summary', '/data/food-access-atlas.json')
-      .then(({ data: faraData, source }) => {
-        if (source !== 'live' || !faraData.records?.length) return;
-
-        // Merge API data into static states
-        const enriched = mergeFaraIntoStatic(staticData.states, faraData.records);
-
-        // Re-render non-map charts with enriched data
-        renderUrbanRural(enriched);
-        renderDistance(enriched);
-        renderVehicle(enriched);
-        renderDoubleBurden(enriched);
-        if (fiData?.states) renderAccessInsecurity(enriched, fiData.states);
-        populateAccessibleTable(enriched, snapRetailerData);
-
-        // Update desert map data for when user toggles to it
-        states = enriched;
-        if (currentMapView === 'deserts') {
-          renderDesertMap(geoJSON, enriched);
-          updateFreshness('access', faraData);
-        }
-      })
-      .catch(() => { /* static data already rendered */ });
   } catch {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';

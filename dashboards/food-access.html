@@ -197,7 +197,7 @@
                     <div id="info-insecurity-mode" class="dashboard-chart-row__info" style="display:none">
                         <h3 class="dashboard-info__title">Where Hunger Is Most Prevalent</h3>
                         <p class="dashboard-info__text">
-                            This map shows <strong>food insecurity rates</strong> estimated at the census-tract level by the CDC PLACES program, aggregated to state averages. <strong>Click any state</strong> to drill down into county-level food insecurity data.
+                            This map shows <strong>food insecurity rates</strong> estimated at the census-tract level by the CDC PLACES program, aggregated to state averages. Use the <strong>state selector</strong> above to explore county-level food access data for a specific state.
                         </p>
                         <p class="dashboard-info__text">
                             This data is <strong>updated annually</strong> using the CDC's Behavioral Risk Factor Surveillance System (BRFSS) combined with Census data and statistical modeling.
@@ -255,81 +255,86 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-urban-rural" class="dashboard-chart" role="img" aria-label="Donut chart showing national split between urban and rural low-access census tracts"></div>
+                        <div id="chart-urban-rural" class="dashboard-chart" role="img" aria-label="Grouped bar chart comparing low-access tract rates and average distances for urban versus rural areas"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Different Barriers, Same Outcome</h3>
                         <p class="dashboard-info__text">
-                            Urban food deserts are about <strong>density</strong> — too many people, too few stores. Rural food deserts are about <strong>distance</strong> — the nearest grocery may be 20+ miles away. Both leave families without consistent access to fresh, healthy food.
+                            Urban food deserts are about <strong>density</strong> — too many people, too few qualifying stores. Rural food deserts are about <strong>distance</strong> — the nearest grocery may be 5–10+ miles away. Under a 1-mile urban threshold, <strong>44% of urban tracts</strong> are flagged as low-access. Only 14% of rural tracts fail the 10-mile rural threshold.
                         </p>
                         <p class="dashboard-info__text">
-                            Nationally, the split is roughly even — but the <strong>barriers are different</strong>. Urban tracts need more stores; rural tracts need shorter distances. Hover for the exact breakdown.
+                            But that lower rural rate does not mean a smaller problem. Rural communities face nearly <strong>3× greater distances</strong> (4.9 mi avg vs 1.8 mi), have fewer transportation options, and lack the transit infrastructure that mitigates urban access gaps.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> Computed from USDA FNS SNAP retailer data + Census 2020 tract centroids</span>
-                            <span class="meta-item"><strong>Metric</strong> Count of low-access census tracts (urban vs rural)</span>
+                            <span class="meta-item"><strong>Metric</strong> Low-access rate = share of tracts failing distance threshold; avg distance weighted by tract count</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            Rural food deserts often get overlooked — but they affect some of the poorest communities in America.
+                            Urban areas have more low-access tracts by rate (44% vs 14%) — but rural communities travel nearly 3× farther. Both require solutions, not the same solution.
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Chart 3: Distance to Nearest Supermarket -->
-        <section class="dashboard-section scroll-reveal" aria-label="Average distance to supermarket">
+        <!-- Chart 3: Average Distance to Qualifying Grocery -->
+        <section class="dashboard-section scroll-reveal" aria-label="Average tract-centroid distance to nearest qualifying grocery store by state">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
-                    <h2 class="dashboard-card__title">Distance to Nearest Supermarket</h2>
+                    <h2 class="dashboard-card__title">Average Distance to Nearest Qualifying Grocery</h2>
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-distance" class="dashboard-chart" role="img" aria-label="Gradient area chart showing average distance to nearest supermarket by state, sorted shortest to longest"></div>
+                        <div id="chart-distance" class="dashboard-chart" role="img" aria-label="Gradient area chart showing average tract-centroid distance to nearest qualifying grocery store by state, sorted shortest to longest. Alaska is capped at 10 miles for chart scale."></div>
                     </div>
                     <div class="dashboard-chart-row__info">
-                        <h3 class="dashboard-info__title">How Far Is Too Far?</h3>
+                        <h3 class="dashboard-info__title">A Descriptive Access Measure</h3>
                         <p class="dashboard-info__text">
-                            The USDA defines food deserts differently for urban (&gt;1 mile) and rural (&gt;10 miles) areas. But even the average distance tells a story: in <strong>Wyoming and Montana</strong>, residents travel over 5 miles on average to reach a supermarket.
+                            This chart shows the <strong>state average distance from a census tract's population center to the nearest qualifying store</strong> — defined as supermarkets, super stores, or large grocery stores from the USDA FNS SNAP retailer dataset. It is a descriptive measure of geographic proximity, not a threshold-based food desert classification.
                         </p>
                         <p class="dashboard-info__text">
-                            For families without reliable transportation, even 2 miles can be an insurmountable barrier — especially when carrying groceries home on foot or by bus.
+                            State averages smooth over significant internal variation: rural counties within a state can far exceed the average. <strong>Alaska</strong> (26.8 mi avg) is capped at 10 mi on the chart scale to preserve readability for the lower 48 — hover to see the actual value.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> Computed from USDA FNS SNAP retailer data + Census 2020 tract centroids</span>
-                            <span class="meta-item"><strong>Metric</strong> Average distance to nearest supermarket (miles)</span>
+                            <span class="meta-item"><strong>Qualifying stores</strong> Supermarket, Super Store, Large Grocery Store (from FNS retailer type field)</span>
+                            <span class="meta-item"><strong>Method</strong> Haversine distance from population-weighted tract centroid to nearest qualifying store</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            Wyoming residents travel an average of 5.5 miles to the nearest grocery store — more than 6x the distance in New Jersey (0.9 mi).
+                            South Dakota averages 7.0 miles — more than 6× the distance in New Jersey (1.1 mi). Alaska at 26.8 mi reflects vast frontier geography with few qualifying retailers.
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Chart 4: Vehicle Access -->
-        <section class="dashboard-section scroll-reveal" aria-label="Vehicle access and food deserts">
+        <!-- Chart 4: Vehicle Access vs Food Deserts -->
+        <section class="dashboard-section scroll-reveal" aria-label="Scatter plot showing vehicle ownership versus low-access tract rate by state — negative correlation explained">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
-                    <h2 class="dashboard-card__title">Vehicle Access &amp; Food Deserts</h2>
+                    <h2 class="dashboard-card__title">Car Ownership Doesn't Predict Food Desert Risk</h2>
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-vehicle" class="dashboard-chart" role="img" aria-label="Scatter plot showing vehicle access versus food desert prevalence"></div>
+                        <div id="chart-vehicle" class="dashboard-chart" role="img" aria-label="Scatter plot showing household no-vehicle rate versus low-access tract rate by state, revealing a negative correlation driven by the urban-rural divide"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
-                        <h3 class="dashboard-info__title">No Car, No Food?</h3>
+                        <h3 class="dashboard-info__title">The Transit Paradox</h3>
                         <p class="dashboard-info__text">
-                            Transportation is the invisible barrier. In <strong>New York City</strong>, 28% of households lack a car — but dense transit networks mitigate the impact. In <strong>rural Mississippi</strong>, 8% lack vehicles and there is no public transit at all.
+                            This scatter reveals a counterintuitive finding: states with <strong>more car-free households</strong> tend to have <strong>lower</strong> food desert rates (r = −0.65). That is not a data error — it reflects a structural reality.
                         </p>
                         <p class="dashboard-info__text">
-                            This scatter plot reveals that the worst outcomes occur where <strong>both</strong> vehicle access is low and food desert prevalence is high — a combination concentrated in the rural South.
+                            <strong>Dense urban states</strong> (New York, DC, Massachusetts) have high no-vehicle rates because transit and walkability reduce the need for cars — and stores are nearby. <strong>Rural states</strong> (West Virginia, Wyoming, Mississippi) have low no-vehicle rates because a car is practically mandatory — yet stores remain far away and food desert rates are high.
+                        </p>
+                        <p class="dashboard-info__text">
+                            The real access burden is not captured by vehicle ownership alone. It requires understanding <strong>distance, density, and transit availability together</strong>.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> Food desert tracts: FNS retailers + Census 2020. Vehicle access: Census ACS</span>
+                            <span class="meta-item"><strong>Source</strong> Food desert tracts: FNS retailers + Census 2020. Vehicle access: Census ACS 2023 5-Year (B25044, household-level)</span>
+                            <span class="meta-item"><strong>Note</strong> State-level aggregation masks within-state variation; county or tract-level analysis would show different patterns</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            Mississippi has both the highest food desert rate (23.4%) and one of the highest no-vehicle rates (8.2%) outside of cities.
+                            West Virginia has 50% low-access tracts and only 8.2% no-vehicle households — high car ownership doesn't prevent food access hardship when stores are simply too far away.
                         </div>
                     </div>
                 </div>
@@ -349,19 +354,19 @@
                         <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
                     </div>
                     <div class="dashboard-chart-row__info">
-                        <h3 class="dashboard-info__title">Where Poverty and Food Deserts Overlap</h3>
+                        <h3 class="dashboard-info__title">Where Poverty and Low Access Overlap</h3>
                         <p class="dashboard-info__text">
-                            Living in a food desert is hard. Living in a food desert <strong>while also being low-income</strong> is a crisis. These families cannot afford to drive farther, pay delivery fees, or shop at premium stores. They are trapped.
+                            Living in a low-access area is hard. Living in a low-access area <strong>while also being low-income</strong> creates compounded barriers to affordable food access. These households face higher transportation, delivery, and price constraints.
                         </p>
                         <p class="dashboard-info__text">
-                            <strong>Texas</strong> leads with 1.7 million people in this overlap, followed by California and Florida. But as a share of population, states like <strong>Mississippi and West Virginia</strong> are most severely affected.
+                            <strong>Texas</strong> leads with 1.8 million people in this overlap, followed by Florida and California. But as a share of population, states like <strong>Mississippi and West Virginia</strong> are most severely affected.
                         </p>
                         <div class="dashboard-info__meta">
-                            <span class="meta-item"><strong>Source</strong> Computed from USDA FNS SNAP retailer data + Census 2020 tract centroids</span>
-                            <span class="meta-item"><strong>Metric</strong> Population in low-income + low-access census tracts</span>
+                            <span class="meta-item"><strong>Source</strong> Custom current low-access computation (USDA FNS retailer data + Census 2020 tract geography) combined with ACS 2023 poverty data</span>
+                            <span class="meta-item"><strong>Metric</strong> Estimated low-income population in low-access census tracts (computed as estimated low-access population × tract poverty rate)</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            Over 17 million Americans live at the intersection of poverty and food deserts — the hardest communities to reach.
+                            Over 17 million Americans face overlapping low access and low income — these communities face the greatest compounded access and affordability constraints.
                         </div>
                     </div>
                 </div>
@@ -397,24 +402,24 @@
             </div>
         </section>
 
-        <!-- Chart 7: Food Deserts vs Food Insecurity Correlation -->
-        <section class="dashboard-section scroll-reveal" aria-label="Food desert prevalence versus food insecurity correlation">
+        <!-- Chart 7: Low Access vs Food Insecurity Correlation -->
+        <section class="dashboard-section scroll-reveal" aria-label="State-level relationship between low-access tract prevalence and food insecurity rate">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
-                    <h2 class="dashboard-card__title">Do Food Deserts Cause Hunger?</h2>
+                    <h2 class="dashboard-card__title">Low Access and Food Insecurity</h2>
                 </div>
                 <div id="access-insecurity-toggle" class="dashboard-metric-buttons" role="group" aria-label="Switch between state-level and county-level scatter views"></div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-access-insecurity" class="dashboard-chart" role="img" aria-label="Scatter plot showing food desert prevalence versus food insecurity rate by state with regression line"></div>
+                        <div id="chart-access-insecurity" class="dashboard-chart" role="img" aria-label="Scatter plot showing low-access tract prevalence versus food insecurity rate by state with regression line"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Correlation, Not Causation</h3>
-                        <p class="dashboard-info__text">The assumption that food deserts directly cause food insecurity is common in policy debates — but the data tells a more nuanced story. This scatter tests the relationship between <strong>food desert prevalence</strong> (low-access tracts) and <strong>food insecurity rate</strong> across all 50 states.</p>
-                        <p class="dashboard-info__text">If food deserts were the primary driver, we'd expect a strong positive correlation. The actual relationship reveals whether <strong>income, employment, and systemic poverty</strong> are more powerful predictors than geographic access alone. <strong>Switch to County View</strong> to drill into individual states with ~60-250 data points per state, using CHR food insecurity rates and current food desert data.</p>
+                        <p class="dashboard-info__text">This chart compares <strong>state-level low-access prevalence</strong> with <strong>food insecurity rates</strong> across all 50 states. The relationship is positive but weak — suggesting that low-access prevalence alone explains little of the variation in food insecurity at the state level.</p>
+                        <p class="dashboard-info__text">If low access were a dominant state-level driver, we would expect a stronger positive relationship. The actual correlation suggests that <strong>income, employment, and systemic poverty</strong> likely play a major role — though state averages can mask stronger county- or neighborhood-level patterns. <strong>Switch to County View</strong> to drill into individual states with ~60-250 data points, using CHR food insecurity rates (y-axis) and current food desert tract data (x-axis).</p>
                         <div class="dashboard-info__meta">
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Current food desert tracts (FNS + Census), CHR 2025, Feeding America</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Note</span> Access data is 5 years older than insecurity data — interpret correlation with caution</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Note</span> State-level analysis; low-access definition uses distance-only threshold — county or tract-level patterns may differ</div>
                         </div>
                         <div id="access-insecurity-insight" class="dashboard-info__insight"></div>
                     </div>
@@ -499,16 +504,16 @@
                         <div class="dashboard-source-card">
                             <div class="dashboard-source-card__icon">ACS</div>
                             <h3 class="dashboard-source-card__name">U.S. Census Bureau</h3>
-                            <p class="dashboard-source-card__desc">American Community Survey — vehicle access, housing cost burden, income, and demographic data. Live SDOH indicators via Census API; county-level poverty data for drill-down views.</p>
+                            <p class="dashboard-source-card__desc">American Community Survey — household vehicle availability (B25044), housing cost burden, income, and demographic data. Live SDOH indicators via Census API; county poverty rate used as fallback in county drill-down views.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual (5-yr rolling)</span>
                                 <span>State &amp; county</span>
                             </div>
                         </div>
                         <div class="dashboard-source-card">
-                            <div class="dashboard-source-card__icon">FNS</div>
-                            <h3 class="dashboard-source-card__name">USDA Food &amp; Nutrition Service</h3>
-                            <p class="dashboard-source-card__desc">SNAP Retailer Locator — authorized retailer counts by state and store type from the FY2024 Retailer Management Year End Summary. Maps where SNAP benefits can be redeemed and the quality of retail access.</p>
+                            <div class="dashboard-source-card__icon">SNAP</div>
+                            <h3 class="dashboard-source-card__name">USDA FNS &mdash; SNAP Retailer Counts</h3>
+                            <p class="dashboard-source-card__desc">Aggregate retailer counts by state and store type from the FY2024 Retailer Management Year End Summary — powers the SNAP Retailers map overlay. Different from the point-level ArcGIS data above: this is a published annual summary, not live API data.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual (FY2024)</span>
                                 <span>State level</span>
@@ -517,7 +522,7 @@
                         <div class="dashboard-source-card">
                             <div class="dashboard-source-card__icon">FA</div>
                             <h3 class="dashboard-source-card__name">Feeding America</h3>
-                            <p class="dashboard-source-card__desc">Map the Meal Gap 2025 — state-level food insecurity rates used in the food desert correlation analysis to test whether access barriers drive hunger.</p>
+                            <p class="dashboard-source-card__desc">Map the Meal Gap 2025 — state-level food insecurity estimates (model-based, applied to 50 states + DC) used in the low access vs food insecurity correlation scatter.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual release</span>
                                 <span>State level</span>
@@ -526,7 +531,7 @@
                         <div class="dashboard-source-card">
                             <div class="dashboard-source-card__icon">CHR</div>
                             <h3 class="dashboard-source-card__name">County Health Rankings</h3>
-                            <p class="dashboard-source-card__desc">2025 county-level food insecurity rates and limited food access indices — used in the county drill-down scatter to compare food desert prevalence against hunger at the local level.</p>
+                            <p class="dashboard-source-card__desc">2025 county-level food insecurity rates and limited food access indices — used in the county drill-down scatter to compare food desert prevalence with food insecurity at the local level.</p>
                             <div class="dashboard-source-card__details">
                                 <span>Annual release</span>
                                 <span>County level</span>

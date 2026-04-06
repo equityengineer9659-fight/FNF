@@ -70,21 +70,11 @@ This is already live — no registration needed. The Census ACS API is free and 
 
 ---
 
-## Step 4: Apply for ESRI Nonprofit Program (15 minutes)
+## Step 4: ~~Apply for ESRI Nonprofit Program~~ (COMPLETED — different approach)
 
-### What You Do
-1. Go to https://www.esri.com/en-us/industries/nonprofit/nonprofit-program
-2. Apply as a qualifying nonprofit (Food-N-Force)
-3. ESRI reviews and responds (can take 1-4 weeks)
-4. If approved, you get ArcGIS Online access at 50-99% off (potentially free)
-
-### What to Tell Claude (after approval)
-> "I got approved for the ESRI Nonprofit Program. Here are my credentials: [details]. Let's integrate ArcGIS Living Atlas food desert layers into the Food Access dashboard to replace the 2019 USDA data."
-
-### What This Enables
-- Updated food desert mapping data (Living Atlas layers are refreshed more frequently than USDA atlas)
-- 20K free geocodes/month for "find nearest food bank" features
-- Potential for tract-level geographic analysis beyond state-level
+> **Status: No longer needed for food desert data.** We computed our own food desert data (2026-04-06) from USDA FNS SNAP retailer locations (ArcGIS REST, no auth) + Census 2020 tract centroids. Output: `public/data/current-food-access.json`. All Food Access dashboard charts now use this data. Re-run via `node scripts/compute-food-access.cjs`.
+>
+> ESRI Nonprofit Program may still be worth pursuing for geocoding credits (20K/month free) or future Living Atlas integrations — but the food desert mapping problem is solved.
 
 ---
 
