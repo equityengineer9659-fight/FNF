@@ -195,7 +195,7 @@ if ($type === 'regional') {
             'series' => $catSeries
         ],
         'regions' => [
-            'meta' => ['startYear' => 2020, 'endYear' => $endYear, 'series' => 'Food at Home CPI by region'],
+            'meta' => ['startYear' => 2018, 'endYear' => $endYear, 'series' => 'Food at Home CPI by region'],
             'series' => $regSeries
         ]
     ];

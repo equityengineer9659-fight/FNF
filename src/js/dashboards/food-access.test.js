@@ -186,6 +186,77 @@ describe('food-access', () => {
     });
   });
 
+  // ── FA-06: Double Burden must be guarded by fiData availability ──
+  describe('Double Burden fiData guard', () => {
+    it('renderDoubleBurden should only be called when povertyRate has been merged', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      // renderDoubleBurden must be inside the if (fiData?.states) block,
+      // not called unconditionally, because curStates have no povertyRate without the merge
+      const fiGuardIdx = jsSource.indexOf('if (fiData?.states)');
+      const doubleBurdenCallIdx = jsSource.indexOf('renderDoubleBurden(curStates)');
+      expect(fiGuardIdx).toBeGreaterThan(-1);
+      expect(doubleBurdenCallIdx).toBeGreaterThan(-1);
+      // renderDoubleBurden must appear AFTER the fiData guard opens
+      expect(doubleBurdenCallIdx).toBeGreaterThan(fiGuardIdx);
+      // Verify it's inside the block: the next closing brace after the guard
+      // should come AFTER renderDoubleBurden
+      const blockAfterGuard = jsSource.slice(fiGuardIdx);
+      const doubleBurdenInBlock = blockAfterGuard.indexOf('renderDoubleBurden(curStates)');
+      const renderAccessInsecurity = blockAfterGuard.indexOf('renderAccessInsecurity');
+      // Both should be in the same guarded block
+      expect(doubleBurdenInBlock).toBeGreaterThan(0);
+      expect(doubleBurdenInBlock).toBeLessThan(renderAccessInsecurity);
+    });
+
+    it('povertyRate merge should use nullish check, not truthy', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      // The merge guard `if (fiByName[s.name])` drops povertyRate=0
+      // Should use != null instead
+      expect(jsSource).not.toMatch(/if\s*\(fiByName\[s\.name\]\)\s*s\.povertyRate/);
+    });
+  });
+
+  // ── Fix 9: map-view-toggle group semantics ──
+  describe('map-view-toggle accessibility', () => {
+    it('should have role="group" and aria-label', () => {
+      const html = readHTML('food-access.html');
+      const match = html.match(/id="map-view-toggle"[^>]*/);
+      expect(match).toBeTruthy();
+      expect(match[0]).toContain('role="group"');
+      expect(match[0]).toContain('aria-label');
+    });
+  });
+
+  // ── Fix 10: Mode B tiles must have ARIA roles ──
+  describe('Mode B tile ARIA', () => {
+    it('tiles should have role="listitem" and aria-label', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      expect(jsSource).toContain('listitem');
+      expect(jsSource).toContain('aria-label');
+    });
+  });
+
+  // ── Fix 14: D3 treemap container should not have role="img" ──
+  describe('D3 treemap container role', () => {
+    it('chart-double-burden should not have role="img"', () => {
+      const html = readHTML('food-access.html');
+      const match = html.match(/id="chart-double-burden"[^>]*/);
+      expect(match).toBeTruthy();
+      expect(match[0]).not.toContain('role="img"');
+    });
+  });
+
+  // ── FA-21: Mode B tile column min clamp ──
+  describe('Mode B tile column calculation', () => {
+    it('minimum column clamp should allow 2 columns for mobile widths', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      // Math.max(4, ...) forces 4 columns minimum which overflows on mobile
+      // Should be Math.max(2, ...) to allow 2-column layout
+      expect(jsSource).not.toMatch(/Math\.max\(4,\s*Math\.floor/);
+      expect(jsSource).toMatch(/Math\.max\(2,\s*Math\.floor/);
+    });
+  });
+
   // ── CODX #2: Insecurity tooltip should not promise drill-down ──
   describe('insecurity view drill-down promise', () => {
     it('insecurity tooltip should NOT say "Click for county breakdown"', () => {

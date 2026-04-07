@@ -220,7 +220,7 @@ function renderRevenue(states) {
 }
 
 // -- Chart 4: Regional Comparison (Radar) --
-function renderEfficiency(states) {
+function renderEfficiency(states, national) {
   const chart = createChart('chart-efficiency');
   if (!chart) return;
 
@@ -259,9 +259,9 @@ function renderEfficiency(states) {
         {
           name: 'National Avg',
           value: [
-            (states.reduce((s, st) => s + st.programExpenseRatio, 0) / states.length).toFixed(1),
+            (national?.avgEfficiencyRatio ?? (states.reduce((s, st) => s + st.programExpenseRatio, 0) / states.length)).toFixed(1),
             (states.reduce((s, st) => s + st.perCapitaOrgs, 0) / states.length).toFixed(1),
-            (states.reduce((s, st) => s + st.totalRevenue / st.orgCount, 0) / states.length / 1000000).toFixed(2),
+            (states.reduce((s, st) => s + (st.orgCount > 0 ? st.totalRevenue / st.orgCount : 0), 0) / states.length / 1000000).toFixed(2),
             (states.reduce((s, st) => s + st.foodInsecurityRate, 0) / states.length).toFixed(1),
             Math.round(states.reduce((s, st) => s + st.orgCount, 0) / states.length)
           ],
@@ -413,7 +413,7 @@ async function init() {
     const [bankData, geoJSON] = await Promise.all([bankRes.json(), geoRes.json()]);
 
     animateCounters();
-    updateFreshness('banks', { _static: true, _dataYear: 2023 });
+    updateFreshness('banks', { _static: true, _dataYear: '2023/2024' });
     renderDensityMap(geoJSON, bankData.states);
     // Surface reconciliation note if present in data
     if (bankData.national?._reconciliationNote) {
@@ -422,7 +422,7 @@ async function init() {
     }
     renderVsInsecurity(bankData.states);
     renderRevenue(bankData.states);
-    renderEfficiency(bankData.states);
+    renderEfficiency(bankData.states, bankData.national);
     renderDistribution(bankData.states);
     renderCapacityGap(bankData.states);
     addExportButton('chart-density-map', 'food-banks-by-state.csv', () => ({

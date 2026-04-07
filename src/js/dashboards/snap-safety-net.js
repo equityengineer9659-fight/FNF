@@ -535,6 +535,13 @@ function renderGauges(national) {
         data: [{ value: cfg.value, name: cfg.title }]
       }]
     });
+
+    // Update aria-label with computed value for screen readers
+    const gaugeEl = document.getElementById(cfg.id);
+    if (gaugeEl) {
+      const displayVal = cfg.unit === '$' ? `$${cfg.value}` : `${cfg.value}${cfg.unit}`;
+      gaugeEl.setAttribute('aria-label', `Gauge showing ${cfg.title}: ${displayVal}`);
+    }
   });
 }
 
@@ -579,6 +586,8 @@ async function fetchCDCPlacesSnap() {
     // Show the toggle buttons now that CDC data is available
     const toggleContainer = document.getElementById('snap-map-toggle-container');
     if (toggleContainer) toggleContainer.style.display = '';
+    const cdcStatus = document.getElementById('snap-map-cdc-status');
+    if (cdcStatus) cdcStatus.textContent = 'CDC self-reported data loaded. Toggle available to compare administrative and self-reported SNAP data.';
 
     // Update freshness badge
     updateFreshness('snap-map', data);

@@ -1,177 +1,139 @@
-# Food Banks Dashboard Audit
+# Food Bank Landscape Dashboard Audit
 
-**Date**: 2026-04-07  
-**Auditor**: Claude Code (full re-audit)  
-**Scope**: `food-banks.js`, `food-banks.html`, `food-bank-summary.json`, `d3-heatmap.js`, `food-banks.test.js`, `d3-heatmap.test.js`, live production site
-
----
-
-## API Endpoints
-
-| Endpoint | Method | HTTP Status | Response Shape | Issues |
-|---|---|---|---|---|
-| `/data/food-bank-summary.json` | fetch (static) | 200 (11 KB) | `{ national, states[] }` | Shape matches JS field access |
-| `/data/us-states-geo.json` | fetch (static) | 200 (366 KB) | GeoJSON FeatureCollection | Shape matches ECharts registerMap |
-
-**Dev proxy**: `http://localhost:4173` was not running at audit time. Both endpoints verified against production `https://food-n-force.com`.
-
-**Error handling**: A single `try/catch` block wraps both fetches. On failure, all `.dashboard-chart` elements receive a generic reload message. No per-chart fallback; if only one fetch fails, the entire dashboard goes blank.
-
-**No PHP proxy endpoints** are used by this dashboard.
+**Date**: 2026-04-07 (fresh re-audit)
+**Scope**: All 6 audit categories
+**Files**: `dashboards/food-banks.html`, `src/js/dashboards/food-banks.js`, `src/js/dashboards/shared/d3-heatmap.js`, `public/data/food-bank-summary.json`, `src/js/dashboards/__tests__/food-banks.test.js`, `src/js/dashboards/__tests__/d3-heatmap.test.js`
 
 ---
 
-## Hardcoded / Stale Data
+## Prior Audit Fix Verification
 
-- **Hero KPI counters are hardcoded in HTML** — `data-target="61284"`, `"48.2"`, `"82.4"`, `"1"` — these match `food-bank-summary.json` `national` fields exactly and are correct for 2023 data. However, they are not dynamically read from the loaded JSON; a data refresh without an HTML edit will cause silent divergence.
-
-- **Hardcoded year `_dataYear: 2023`** — `updateFreshness('banks', { _static: true, _dataYear: 2023 })` shows "Data: 2023" in the freshness badge. The food insecurity rates in the same JSON come from Feeding America's 2024 estimates. The single year label misrepresents the mixed vintage. The page's own data notice (shown in HTML) correctly discloses 2024 Feeding America data, but the freshness badge does not.
-
-- **Mississippi hardcoded insight is correct** — HTML says "$587 in food bank revenue per food-insecure person". Computed from JSON: `totalRevenue=325,000,000 / insecure=553,707 = $587`. Matches. The "6x less than national leader" claim: DC leads at $3,589/person; ratio = 6.1x. Accurate.
-
-- **Regression suppression threshold `0.2` is hardcoded** — `Math.abs(reg.r) >= 0.2` in `renderVsInsecurity`. Acceptable as a domain constant but undocumented; should have a code comment.
-
-- **Radar chart `max` values hardcoded** — `{ name: 'Efficiency (%)', max: 90 }`, `{ name: 'Density\n(per 100K)', max: 40 }`, `{ name: 'Avg Rev/Org\n($M)', max: 1.5 }`, `{ name: 'Insecurity (%)', max: 18 }`, `{ name: 'Avg Org Count', max: 2000 }`. These are not computed from data. A state with insecurity > 18% or density > 40 would be clipped without warning. Current max values: insecurity 18.7% (Mississippi exceeds the `max: 18` cap), density 35.9 (DC, but excluded from regional avg).
-
-- **`national.statesUnder100 = 1`** is a hardcoded field in `food-bank-summary.json`, not derived from `states[].orgCount`. It is consistent with the data (Wyoming has 82 orgs, the only state under 100), but could drift if data is refreshed without updating the national aggregate.
-
----
-
-## D3 Heatmap Integration
-
-**Container/breadcrumb ID match** — verified correct:
-- `containerId: 'chart-revenue'` → `<div id="chart-revenue">` — matches
-- `breadcrumbId: 'revenue-breadcrumb'` → `<div id="revenue-breadcrumb">` — matches
-- `buildHeatmapLegend(document.getElementById('treemap-legend-banks'), ...)` → `<div id="treemap-legend-banks">` — matches
-- `buildRegionChips(document.getElementById('revenue-region-legend'))` → `<div id="revenue-region-legend">` — matches
-
-**State coverage in hierarchy** — all 51 states (50 states + DC) are present in `REGIONS` and in `food-bank-summary.json`. No states missing from any Census region. No duplicates.
-
-**`normFn` is correct** — `createRankNorm(revValues)` receives an array of revenue-per-insecure-person values; `normFn: (leaf) => rankNorm(leaf.value)` correctly maps the leaf's `size` (rev/person) to a rank position 0–1. Rank normalization is appropriate to prevent DC ($3,589/person) from compressing all other states toward zero.
-
-**CRITICAL: `aria-label` on chart container contradicts actual behavior** — The `<div id="chart-revenue">` has:
-```
-aria-label="Treemap showing food bank revenue per food-insecure person by state, colored by program efficiency"
-```
-The sidebar panel text also says: _"Color indicates **program efficiency**"_. But the `normFn` encodes **revenue per insecure person** for color (same metric as size). Program efficiency (`programExpenseRatio`) appears only in the tooltip's third line and as `label3` when zoomed in. The aria-label and the sidebar paragraph are both factually wrong. The color gradient and the HTML description panel in `food-banks.html` (lines 234–235) were not updated when the D3 heatmap was wired to rank-norm revenue-per-person instead of efficiency.
-
-**Resize behavior** — `ResizeObserver` updates only the SVG `viewBox` dimensions; the treemap tile layout (computed once at `init()` time from the original container dimensions) is **not re-computed**. On resize, tiles scale proportionally via `viewBox` but text sizes and tile positions do not reflow. On a narrow mobile viewport where `getBoundingClientRect()` returns a small width at init time, tiles will be very compressed. If `width < 10 || height < 10` at init, no SVG is created at all (silent no-render; no fallback message).
-
-**`tooltipFn` robustness** — all fields accessed (`d.name`, `d.efficiency`, `d.totalRevenue`, `d.orgCount`, `d.insecurePersons`, `d.insecurityRate`) are explicitly set in `hierarchyData` construction. No null risk with current data. However, if a state has `insecure = 0` (e.g., hypothetical 0% insecurity rate), `rev = 0` is passed as `size`; D3 gives it zero area and the tile is never rendered — it silently disappears from the heatmap with no user indication.
-
-**Breadcrumb navigation is keyboard-inaccessible** — `updateBreadcrumb()` in `d3-heatmap.js` creates `<span>` elements with `addEventListener('click')` for navigation. They have no `tabindex`, no `role="button"`, and no `keydown` handler. Keyboard users cannot activate breadcrumb navigation. The "Click breadcrumb to zoom out" hint text is also mouse-only.
-
----
-
-## Data Transformation Gaps
-
-| Function | Potential Issue |
+| Prior Finding | Status |
 |---|---|
-| `renderRevenue()` | `ins = 0` → `rev = 0` → zero-area tile silently excluded from heatmap; no user feedback |
-| `renderEfficiency()` | `avgRevPerOrg = st.totalRevenue / st.orgCount` — if `orgCount = 0`, produces `Infinity`. Current data has no zero-count states, but there's no guard. |
-| `renderEfficiency()` | Region averages divide by `n` (number of matching states). If a region had no states in the JSON (impossible now, but possible if regions shift), `NaN` propagates to the radar chart silently. |
-| `renderVsInsecurity()` | `symbolSize = Math.sqrt(params.data.totalRevenue / 10000000)` — if revenue is negative, produces `NaN` (no guard). Current data is clean. |
-| `renderCapacityGap()` | `insecurePersons = s.population * s.foodInsecurityRate / 100` — not rounded here (float). Consistent with `renderRevenue` which does round; minor inconsistency but both end up in scatter as values, not for display. |
-| `renderDensityMap()` | `d.value.toFixed(1)` in tooltip — would throw if `perCapitaOrgs` is `null`. Current data has no nulls. |
+| P1-4: aria-label "colored by program efficiency" | FIXED — now "with continuous color gradient from low to high" |
+| P1-14: Mississippi test uses non-existent `ms.foodInsecurePersons` | FIXED — derives from `population * foodInsecurityRate / 100` |
+| P2-2: Breadcrumb not keyboard-accessible | FIXED — `tabindex="0"`, `role="button"`, `keydown` (Enter/Space) |
+| P2-3: Radar max:18 clips Mississippi 18.7% | FIXED — now `max: 20` |
+| P2-4: No feedback when regression line suppressed | FIXED — dynamic insight text: "No statistically meaningful correlation found" |
+
+**All 5 prior findings confirmed resolved.**
 
 ---
 
-## Test Coverage Gaps
+## 1. Data Source Integrity
 
-**Existing coverage:**
+| Dataset | Source | Data Year | Updated | Status |
+|---------|--------|-----------|---------|--------|
+| food-bank-summary.json | ProPublica IRS 990 (NTEE K31) + Feeding America | 2023 IRS / 2024 FA | 2026-03-30 | OK |
+| us-states-geo.json | US Census Bureau | Static GeoJSON | — | OK |
 
-`food-banks.test.js` (4 tests in 4 describes):
-- `REGION_COLORS hex-to-rgba conversion` — tests the `hexToRgba` utility function (2 tests)
-- `Mississippi insight` — checks hardcoded `$587` value against `ms.foodInsecurePersons` field (see bug below)
-- `data year label` — checks that Feeding America/2024 is mentioned in HTML
-- `data shape: food-bank-summary.json` — validates JSON has `national`, `states[]`, and that all states have `name`, `orgCount`, `totalRevenue`, `foodInsecurityRate`
-
-`d3-heatmap.test.js` — covers `createRankNorm`, `buildHeatmapLegend`, `buildRegionChips`, `HEATMAP_REGION_COLORS`, module exports, and hierarchy data contract (11 tests).
-
-**Gaps and bugs in existing tests:**
-
-- **Bug in `Mississippi insight` test**: `ms.foodInsecurePersons` — this field does **not exist** in `food-bank-summary.json`. The computed value is `NaN`. The `if (match)` guard prevents an assertion failure, but the test never actually validates anything; it always passes vacuously. The test should use `Math.round(ms.population * ms.foodInsecurityRate / 100)` to derive the insecure population.
-
-- **No test for the aria-label/color mismatch** — nothing validates that `chart-revenue`'s `aria-label` accurately describes what color encodes.
-
-- **No test for `renderVsInsecurity` regression suppression** — the `|r| >= 0.2` logic is not tested. No test verifies that when `|r| < 0.2` the `markLine` is omitted.
-
-- **No test for D3 heatmap hierarchy construction** in `food-banks.test.js` — the `hierarchyData` builder inside `renderRevenue()` is not tested. No test verifies: all 51 states appear, no state is duplicated, `insecure = 0` states get `rev = 0` and `size = 0`.
-
-- **No test for radar `max` value clamping** — Mississippi's insecurity rate (18.7%) exceeds the hardcoded radar `max: 18`. No test flags this.
-
-- **No test for `renderEfficiency` zero-division guard** — `orgCount === 0` scenario is untested.
-
-- **No test for breadcrumb keyboard accessibility** in `d3-heatmap.test.js`.
-
-- **`renderCapacityGap`, `renderDistribution`, `renderEfficiency`, `renderDensityMap`** have zero dedicated test coverage in `food-banks.test.js`.
+No live API calls — entirely static dashboard.
 
 ---
 
-## Accessibility Issues
+## 2. National vs. State Totals Cross-Check
 
-| Severity | Issue | Location |
-|---|---|---|
-| Critical | `aria-label` on `chart-revenue` div says "colored by program efficiency" but color encodes revenue-per-person rank | `food-banks.html:226` |
-| Critical | Breadcrumb `<span>` elements in D3 heatmap lack `tabindex`, `role="button"`, and `keydown` handler — not keyboard accessible | `d3-heatmap.js:356–369` |
-| Major | HTML sidebar text for Revenue chart says "Color indicates **program efficiency**" — contradicts actual chart behavior | `food-banks.html:238` |
-| Major | Freshness badge shows "Data: 2023" for a dataset that mixes 2023 IRS 990 data and 2024 Feeding America estimates | `food-banks.js:403` |
-| Major | D3 heatmap `<svg>` element has no `aria-label` or `role` — only the container `<div>` has `role="img"`, but screen readers may not always associate the SVG content with the div's label | `d3-heatmap.js:397–403` |
-| Minor | Radar chart indicator `Density\n(per 100K)` contains a literal `\n` newline in the label string — renders correctly in canvas but is a code smell | `food-banks.js:232` |
-| Minor | "Click a region to zoom in. Click breadcrumb to zoom out." hint text describes mouse-only interaction; no keyboard equivalent is mentioned | `food-banks.html:229` |
-| Minor | No `aria-live` region for when D3 heatmap zoom level changes | `d3-heatmap.js` |
-| Minor | `chart-vs-insecurity` and `chart-capacity-gap` aria-labels describe bubble size as "total revenue" and "population" respectively, which is correct, but do not mention color encodes region — minor gap in description completeness | `food-banks.html:203, 296` |
-
-**Heading hierarchy**: H1 → H2 → H3 throughout — correct.  
-**Skip link**: present and functional.  
-**Dashboard tab `aria-current="page"`**: correctly set on Food Banks tab.  
-**Freshness timestamp**: present (`freshness-banks` element), populated via JS.
+| Metric | Sum of States | National | Variance | Status |
+|--------|--------------|----------|----------|--------|
+| Organization count | 51,218 | 61,284 | -16.4% | Documented in reconciliation note |
+| Combined Revenue | $48.756B | $48.200B | +1.15% | WARNING — see F2 |
+| Avg Efficiency | 83.5% (unweighted) | 82.4% (national) | -1.1pp | WARNING — see F1 |
 
 ---
 
-## Mobile Rendering Issues
+## 3. Calculation Spot-Checks (all pass)
 
-Screenshots captured at 375×812 (mobile) and 1280×900 (desktop). Note: the mobile screenshot navigated to `snap-safety-net.html` mid-resize due to a viewport-change-triggered navigation event — this itself is a bug in the nav system but is pre-existing and out of scope for this dashboard.
-
-| Severity | Issue |
-|---|---|
-| Major | D3 heatmap layout is computed once at desktop dimensions; on mobile the tile positions are only scaled via `viewBox` — text sizes and proportions do not reflow. Small states (e.g., Rhode Island, Delaware) likely produce tiles too small to read labels. No re-layout on mobile viewport. |
-| Major | If `chart-revenue` container has `width < 10` or `height < 10` at JS init time (e.g., hidden by CSS on mobile, or scroll-reveal not yet visible), `createD3Heatmap()` returns silently with no SVG and no error message. |
-| Minor | The breadcrumb row (`revenue-breadcrumb`) is `display:flex` with inline styles — may wrap awkwardly on 375px if several region labels are in the path. |
-| Minor | Scatter chart labels (axis names) are not mobile-responsive; `nameGap: 35` and fixed `left: 60` grid padding may cause label clipping on narrow screens. |
+| Formula | Result | Status |
+|---------|--------|--------|
+| MS rev/person: 325M / round(2.961M × 18.7%) | $587 — matches HTML | OK |
+| DC rev/person: 312M / 86,940 | $3,589 | OK |
+| Regression r (density vs insecurity) | r = −0.0838, suppressed (|r| < 0.2) | Expected |
+| Radar bounds vs actuals | Eff 86.8% < 90; FI 18.7% < 20; Density 17.8 < 40; AvgRev 0.92M < 1.5M | All clear |
 
 ---
 
-## Chart Configuration Issues
+## 4. Findings
 
-| Issue | Location |
-|---|---|
-| No `aria` config on any ECharts chart options | All 5 ECharts charts in `food-banks.js` |
-| Radar `max: 18` for insecurity rate — Mississippi at 18.7% is clipped; the polygon is capped at the max rather than overflowing, silently misrepresenting the state's position | `food-banks.js:233` |
-| Regression suppression: when `|r| < 0.2` the line is omitted, but there is **no visual indicator** to the user that suppression occurred. The user sees a scatter plot with no trend line and no explanation. Other dashboards use a text note in this case. | `food-banks.js:92–99` |
-| `renderVsInsecurity` places `markLine` only on series index `i === 0` (first region in `REGION_COLORS`). If the region iteration order changes, the regression line may attach to the wrong series legend entry. | `food-banks.js:108` |
-| `renderDistribution`: `names.reverse()`, `rates.reverse()`, `density.reverse()` are called sequentially on the same `sorted` array's derived arrays — `.reverse()` mutates in place, but since these are separate `.map()` outputs, the triple-reverse is safe. However, it reverses `names` and `rates`/`density` independently; a future refactor that shares arrays could break the pairing. | `food-banks.js:306–309` |
-| Tooltip for `renderDensityMap` says `Revenue: $${fmtNum(d.totalRevenue)}` — no label for units (millions? billions?). `fmtNum` returns e.g. "685.0M" but the tooltip does not say "685.0M in revenue" or provide context. | `food-banks.js:52` |
-| All 5 ECharts charts use `animateCounters()` is called before charts are rendered (line 402 before renderDensityMap line 404) — correct order. |  |
+### Warning
+
+**F1: Radar national avg (83.5%) contradicts sidebar text and hero stat (82.4%)**
+- **File**: `food-banks.js:259-266`, `food-banks.html:257`
+- Radar National Avg benchmark computed as unweighted state mean (83.5%). Hero stat and sidebar use `national.avgEfficiencyRatio` = 82.4% (likely revenue-weighted). Two different "national average" values on same card.
+- **Test**: Assert radar efficiency value equals `bankData.national.avgEfficiencyRatio`
+- **Fix**: Use `bankData.national.avgEfficiencyRatio` in radar instead of recomputed mean
+- **Effort**: XS
+
+**F2: Revenue sum exceeds national aggregate — reconciliation note directionally inconsistent**
+- **File**: `food-bank-summary.json` `national._reconciliationNote`
+- State sum ($48.756B) > national ($48.2B). Note explains org count gap via multi-state orgs but doesn't address revenue exceeding national.
+- **Fix**: Update reconciliation note
+- **Effort**: XS
+
+**F3: Freshness badge shows "Data: 2023" for mixed 2023/2024 dataset**
+- **File**: `food-banks.js:416`
+- Dashboard mixes 2023 IRS financials + 2024 Feeding America insecurity. Badge misrepresents insecurity data recency.
+- **Fix**: Change `_dataYear` to `'2023/2024'`
+- **Effort**: XS
+
+### Minor
+
+**F4**: Hero KPI counters hardcoded in HTML. `init()` never reads `bankData.national` to update. Will drift silently.
+- **Effort**: M (need init() update + regression test)
+
+**F5**: D3 SVG has no accessible name — screen readers navigate unlabeled `<rect>`/`<text>` elements inside `role="img"` container.
+- **Fix**: Add `.attr('role', 'img').attr('aria-hidden', 'true')` to SVG
+- **Effort**: XS
+
+**F6**: D3 heatmap does not re-layout on resize; zero-size init silently skips render. ResizeObserver only updates `viewBox`. Small states unreadable at narrow widths.
+- **Effort**: M (full re-layout on resize)
+
+**F7**: `renderEfficiency` has no guard against `orgCount === 0` — produces `Infinity` in reduce callback.
+- **Fix**: `st.orgCount > 0 ? st.totalRevenue / st.orgCount : 0`
+- **Effort**: XS
+
+**F8**: No ECharts `aria: { enabled: true }` on any of 5 chart `setOption` calls.
+- **Effort**: S
+
+**F9**: Breadcrumb hint text says "Click" despite keyboard support now present.
+- **Fix**: "Click or press Enter on a region to zoom in"
+- **Effort**: XS
+
+### Info
+
+**F10**: `markLine` attached to first series by array position, not by name. Stable in V8 but fragile if `REGION_COLORS` reordered.
+
+**F11**: No test for breadcrumb keyboard accessibility (P2-2 regression risk). `tabindex`, `role="button"`, `keydown` handler untested.
+
+**F12**: No test asserting regression suppression for current dataset (r = −0.084). Suppression behavior not covered.
+
+**F13**: `insecurePersons` is float in `renderCapacityGap` but integer in `renderRevenue`. Tooltip shows "553.7K" vs "554K". Cosmetic.
 
 ---
 
-## Prioritized Findings
+## 5. Test Coverage
 
-| # | Issue | Severity | Effort |
-|---|---|---|---|
-| 1 | `aria-label` on `chart-revenue` and sidebar copy say "colored by program efficiency" — actually color encodes revenue-per-person rank | Critical | XS (text edit) |
-| 2 | D3 heatmap breadcrumb spans are not keyboard accessible (no `tabindex`, no `role="button"`, no `keydown` handler) | Critical | S |
-| 3 | Mississippi insight test uses `ms.foodInsecurePersons` which doesn't exist in JSON — test always passes vacuously, never validates the insight | Major | XS |
-| 4 | Radar `max: 18` for insecurity rate clips Mississippi (18.7%) silently | Major | XS |
-| 5 | No visual feedback when regression line is suppressed (`|r| < 0.2`) | Major | S |
-| 6 | D3 heatmap: no re-layout on resize — only `viewBox` is updated; tiles don't reflow for mobile | Major | M |
-| 7 | Freshness badge shows "Data: 2023" but insecurity data is 2024 Feeding America | Major | XS |
-| 8 | No D3 heatmap hierarchy construction test — zero-area states, all-51-present, no duplicates | Major | S |
-| 9 | Hero KPI counters hardcoded in HTML; not derived from loaded JSON — silent divergence risk on data refresh | Minor | M |
-| 10 | `renderEfficiency` `avgRevPerOrg` has no guard against `orgCount === 0` (Infinity) | Minor | XS |
-| 11 | `markLine` anchored to series index `i === 0` by position, not by name — fragile | Minor | XS |
-| 12 | No `aria` config in any ECharts chart `setOption` calls | Minor | S |
-| 13 | `createD3Heatmap` returns silently with no SVG if container is <10px at init time — no fallback message | Minor | S |
-| 14 | D3 heatmap `<svg>` has no aria label; relies on container `role="img"` which screen readers may not reliably associate | Minor | XS |
-| 15 | No test coverage for `renderCapacityGap`, `renderDistribution`, `renderEfficiency`, `renderDensityMap` | Minor | L |
+Existing tests (all passing):
+- hexToRgba conversion
+- Mississippi insight population formula
+- Data year label mixed vintage
+- JSON shape validation
+- createRankNorm (5 cases including DC outlier)
+- buildHeatmapLegend (5 cases)
+- buildRegionChips (3 cases)
+- HEATMAP_REGION_COLORS structure
+- Module exports
+- Hierarchy data contract
+
+**Untested**: Breadcrumb keyboard (F11), regression suppression (F12), radar avg vs national (F1), hero stat vs JSON (F4), orgCount=0 guard (F7).
+
+---
+
+## 6. Summary
+
+| Severity | Count | Key Findings |
+|----------|-------|-------------|
+| Warning | 3 | F1 (radar avg mismatch), F2 (revenue reconciliation), F3 (freshness badge) |
+| Minor | 6 | F4–F9 |
+| Info | 4 | F10–F13 |
+
+**No critical findings.** All 5 prior issues confirmed fixed. Dashboard is in good shape. Remaining issues are minor data consistency (F1-F3) and accessibility gaps (F5, F8).

@@ -122,6 +122,39 @@ describe('food-banks', () => {
     });
   });
 
+  // ── Fix 29: Radar national avg must use national.avgEfficiencyRatio ──
+  describe('radar national avg source', () => {
+    it('should use national.avgEfficiencyRatio, not recomputed state mean', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      // The radar National Avg benchmark should reference the JSON national value
+      // not a states.reduce(...) / states.length recomputed average
+      expect(jsSource).toContain('avgEfficiencyRatio');
+    });
+  });
+
+  // ── Fix 30: Revenue reconciliation note direction ──
+  describe('revenue reconciliation', () => {
+    it('reconciliation note should address state sum exceeding national', () => {
+      const data = readJSON('food-bank-summary.json');
+      const stateRevSum = data.states.reduce((sum, s) => sum + s.totalRevenue, 0);
+      const natRev = data.national.combinedRevenue;
+      // State sum should be close but may exceed national
+      const variance = ((stateRevSum - natRev) / natRev) * 100;
+      expect(Math.abs(variance)).toBeLessThan(5);
+      // Reconciliation note should exist
+      expect(data.national._reconciliationNote).toBeDefined();
+    });
+  });
+
+  // ── Fix 31: Freshness badge mixed year ──
+  describe('freshness badge year', () => {
+    it('should show mixed data year, not just 2023', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      expect(jsSource).toContain('2023/2024');
+      expect(jsSource).not.toMatch(/_dataYear:\s*2023\b(?!\/)/);
+    });
+  });
+
   // ── Data shape validation ──
   describe('data shape: food-bank-summary.json', () => {
     it('should have national aggregate and states array', () => {

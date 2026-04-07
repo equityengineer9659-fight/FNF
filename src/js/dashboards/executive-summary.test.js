@@ -222,6 +222,22 @@ describe('executive-summary', () => {
     });
   });
 
+  // ── Fix 5: food-insecurity-kpi must be updated by JS ──
+  describe('food-insecurity-kpi dynamic update', () => {
+    it('init() should update food-insecurity-kpi from fiData', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      expect(jsSource).toContain('food-insecurity-kpi');
+    });
+  });
+
+  // ── Fix 6: Food Bank Orgs KPI needs an id ──
+  describe('food-bank-orgs-kpi', () => {
+    it('HTML should have id on the Food Bank Orgs stat element', () => {
+      const html = readHTML('executive-summary.html');
+      expect(html).toContain('id="food-bank-orgs-kpi"');
+    });
+  });
+
   // ── Audit 2026-04-07 #3: Dynamic insight containers need aria-live ──
   describe('aria-live on dynamic insights', () => {
     it('executive-summary: all dynamic insight containers should have aria-live', () => {

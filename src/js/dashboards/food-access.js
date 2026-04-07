@@ -465,7 +465,7 @@ function renderDoubleBurdenTiles(enriched, rankNorm) {
   // Determine grid columns from container width for balanced rows
   const containerWidth = container.parentElement?.clientWidth || 700;
   const tileW = 112, tileH = 72, gap = 5;
-  const cols = Math.max(4, Math.floor((containerWidth + gap) / (tileW + gap)));
+  const cols = Math.max(2, Math.floor((containerWidth + gap) / (tileW + gap)));
 
   regionOrder.forEach((region, ri) => {
     const states = enriched
@@ -492,6 +492,7 @@ function renderDoubleBurdenTiles(enriched, rankNorm) {
     // CSS Grid — fixed columns, balanced rows, no orphan tiles
     const grid = document.createElement('div');
     grid.style.cssText = `display:grid;grid-template-columns:repeat(${cols},1fr);gap:${gap}px`;
+    grid.setAttribute('role', 'list');
 
     states.forEach(d => {
       const norm = rankNorm(parseFloat(d.pctOfPop) || 0);
@@ -527,6 +528,8 @@ function renderDoubleBurdenTiles(enriched, rankNorm) {
       countDiv.textContent = fmtNum(d.estimate) + ' people';
 
       tile.append(nameDiv, pctDiv, countDiv);
+      tile.setAttribute('role', 'listitem');
+      tile.setAttribute('aria-label', `${d.name}: ${d.pctOfPop}% of population, ${fmtNum(d.estimate)} people`);
 
       tile.addEventListener('mouseenter', (e) => {
         tile.style.transform = 'scale(1.04)';
@@ -1426,7 +1429,7 @@ async function init() {
     if (fiData?.states) {
       const fiByName = {};
       fiData.states.forEach(s => { fiByName[s.name] = s.povertyRate; });
-      curStates.forEach(s => { if (fiByName[s.name]) s.povertyRate = fiByName[s.name]; });
+      curStates.forEach(s => { if (fiByName[s.name] != null) s.povertyRate = fiByName[s.name]; });
     }
 
     updateFreshness('access', { _static: true, _dataYear: 'Current' });
@@ -1447,8 +1450,10 @@ async function init() {
     renderUrbanRural(curStates);
     renderDistance(curStates);
     renderVehicle(curStates);
-    renderDoubleBurden(curStates);
-    if (fiData?.states) renderAccessInsecurity(curStates, fiData.states, currentAccessData);
+    if (fiData?.states) {
+      renderDoubleBurden(curStates);
+      renderAccessInsecurity(curStates, fiData.states, currentAccessData);
+    }
     populateAccessibleTable(curStates, snapRetailerData);
 
     addExportButton('chart-desert-map', 'food-access-by-state.csv', () => ({
@@ -1495,7 +1500,7 @@ async function init() {
       if (freshSnap) freshSnap.style.display = 'none';
 
       if (view === 'insecurity' && cdcInsecurityData?.records) {
-        if (mapCtrl) mapCtrl.setDrillDown(true);
+        if (mapCtrl) mapCtrl.setDrillDown(false);
         renderInsecurityMap(geoJSON, cdcInsecurityData.records, currentAccessData?.states || []);
         const el = document.getElementById('info-insecurity-mode'); if (el) el.style.display = '';
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';

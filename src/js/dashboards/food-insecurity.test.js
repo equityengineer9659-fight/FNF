@@ -186,6 +186,58 @@ describe('food-insecurity', () => {
     });
   });
 
+  // ── C-1: CDC PLACES merge must key by state abbreviation, not s.name ──
+  describe('CDC PLACES merge key', () => {
+    it('placesByName should be keyed by state abbreviation (s.state), not s.name', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // The PHP API returns records with { state: "AL", obesity: ..., ... }
+      // The merge must key on s.state (abbreviation), then look up full names via US_STATES
+      const mergeBlock = jsSource.slice(
+        jsSource.indexOf('// Merge CDC fields'),
+        jsSource.indexOf('// Re-render buttons to include CDC')
+      );
+      // Must NOT key by s.name (which doesn't exist in the API response)
+      expect(mergeBlock).not.toMatch(/placesByName\[s\.name\]\s*=\s*s/);
+      // Must key by s.state (the abbreviation field from the API)
+      expect(mergeBlock).toMatch(/placesByName\[s\.state\]\s*=\s*s/);
+    });
+
+    it('merge lookup should use abbreviation-to-name mapping for sdohData join', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // sdohData.states use full names ("Alabama"), but placesByName is keyed by abbreviation ("AL")
+      // Code must use a nameToAbbr mapping or US_STATES to bridge the join
+      expect(jsSource).toContain('nameToAbbr');
+    });
+  });
+
+  // ── Fix 7: Meal cost insight percentage must match data ──
+  describe('meal cost insight accuracy', () => {
+    it('Hawaii premium over national average should be ~43%, not 28%', () => {
+      const fiData = readJSON('food-insecurity-state.json');
+      const html = readHTML('food-insecurity.html');
+      const hawaii = fiData.states.find(s => s.name === 'Hawaii');
+      const nationalAvg = fiData.national.averageMealCost;
+      const actualPremium = Math.round((hawaii.mealCost / nationalAvg - 1) * 100);
+      // HTML should contain the correct percentage
+      expect(html).toContain(`${actualPremium}% above the national average`);
+      // Should NOT contain stale 28%
+      expect(html).not.toContain('28% above the national average');
+    });
+  });
+
+  // ── Fix 8: Triple Burden empty array guard ──
+  describe('Triple Burden accessVals guard', () => {
+    it('should guard against Math.min/max on empty accessVals array', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // Must check accessVals.length before Math.min/max to prevent Infinity/-Infinity
+      const tripleBurdenSection = jsSource.slice(
+        jsSource.indexOf('const accessVals'),
+        jsSource.indexOf('const scored = data.states.map')
+      );
+      expect(tripleBurdenSection).toMatch(/accessVals\.length/);
+    });
+  });
+
   // ── County GeoJSON integrity ──
   describe('county GeoJSON', () => {
     it('all 51 state FIPS files should exist', () => {

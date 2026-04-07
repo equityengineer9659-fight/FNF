@@ -1,95 +1,142 @@
 # Dashboard Audit — Prioritized Action Plan
 
-> **Note**: This file supersedes the previous audit (2026-04-06). The previous 41-item audit is complete; all items below are **new findings** from the 2026-04-07 full re-audit.
-
-**Date**: 2026-04-07  
-**Dashboards**: executive-summary, food-insecurity, food-access, snap-safety-net, food-prices, food-banks  
-**Total new findings**: 78 across 6 dashboards  
-**Production-breaking**: 3  
-**Factual data errors**: 6  
-**Accessibility critical/major**: 14  
+**Date**: 2026-04-07 (fresh full re-audit)
+**Dashboards**: executive-summary, food-insecurity, food-access, snap-safety-net, food-prices, food-banks
+**Prior audit**: 78 findings, 30 fixed in commit `7ade07c`. 4 additional commits since (D3 heatmap, Double Burden dual-view).
 
 ---
 
-## Priority 1 — Production Bugs & Factually Wrong Data (Fix First)
+## Aggregate Findings
 
-These are visible failures or incorrect information shown to users right now.
+| Dashboard | Critical | Major | Warning | Minor/Info | Total |
+|-----------|----------|-------|---------|------------|-------|
+| Executive Summary | 0 | 2 | 1 | 10 | 13 |
+| Food Insecurity | 1 | 0 | 0 | 12 | 13 |
+| Food Access | 3 | 4 | 5 | 7 | 19 |
+| SNAP & Safety Net | 0 | 4 | 0 | 11 | 15 |
+| Food Prices | 0 | 0 | 5 | 5 | 10 |
+| Food Banks | 0 | 0 | 3 | 10 | 13 |
+| **Total** | **4** | **10** | **14** | **55** | **83** |
+
+### Prior Audit Resolution
+- 24 of 26 prior findings verified as **fixed** across all 6 dashboards
+- 2 partially fixed (CDC PLACES merge has residual bug, visualMap ghost still present)
+
+---
+
+## Cross-Dashboard Issues
+
+These issues affect multiple or all dashboards and should be addressed as shared fixes:
+
+| Issue | Dashboards Affected | Effort |
+|-------|-------------------|--------|
+| **No ECharts `aria: { enabled: true }`** on ~35 chart instances | All 6 | S per dashboard |
+| **Dashboard tab strip overflows at 375px** with no scroll indicator | All 6 | S (one CSS fix) |
+| **`aria-current="page"` on nav hardcoded** to food-insecurity URL | All dashboard pages | S (fix in build-components.js) |
+| **Hero stat `data-target` values hardcoded in HTML** — JS never overrides from JSON | Exec Summary, Food Insecurity, SNAP, Food Banks | S per dashboard |
+| **Map `role="img"` on interactive chart containers** | Food Insecurity (M-3), Food Access (FA-17) | Trivial each |
+| **Dynamic insight containers missing `aria-live="polite"`** | Exec Summary (4), Food Insecurity (3), SNAP (4) | XS each |
+| **D3 heatmap doesn't re-layout on resize** — only updates viewBox | Food Access, Food Banks | M |
+
+---
+
+## Priority 1 — Critical (Fix Immediately)
 
 | # | Dashboard | Issue | Effort | Location |
-|---|---|---|---|---|
-| P1-1 | food-insecurity | **CDC PLACES field mismatch** — `p.obesity`/`p.diabetes`/`p.depression`/`p.housinsec` don't match API response keys (`"obesity among adults"` etc). Health Outcomes buttons **never render** in SDOH section — confirmed missing in production | S | food-insecurity.js:fetchCDCPlacesData |
-| P1-2 | food-prices | **LinearGradient serialization bug** — `JSON.parse(JSON.stringify(ppBaseOption))` destroys ECharts LinearGradient instances. Area fills disappear on first FRED toggle click | S | food-prices.js:rebuildPurchasingPowerSeries |
-| P1-3 | food-access | **Food Insecurity map click silently fails** — tooltip says "Click for county breakdown" but `fips: null` on all data points means click guard always skips | S | food-access.js:renderInsecurityMap |
-| P1-4 | food-banks | **aria-label/sidebar say "colored by program efficiency"** — color actually encodes revenue-per-person rank; efficiency only appears in tooltip | XS | food-banks.html:226,238 |
-| P1-5 | food-prices | **4 stale numbers in Chart 4 copy**: "31.2%" (is 32.6%), "$407/month" (is $440), "$1,028/month" (is $1,416), "$3.99 meal cost" (is $3.58) | S | food-prices.html:299-310 |
-| P1-6 | food-insecurity | **SNAP chart legend/series year mismatch** — legend "FY2024" vs series name "FY2023"; ECharts can't match them; legend toggle disconnected | Trivial | food-insecurity.js:renderSnap |
-| P1-7 | executive-summary | **Methodology typo** — HTML says "normalized meal cost × 30" instead of "× 0.3" | XS | executive-summary.html:379 |
-| P1-8 | executive-summary | **renderSnapGap crashes on empty joined array** — `joined[0]` undefined when no name matches | XS | executive-summary.js:124 |
-| P1-9 | food-insecurity | **renderTripleBurden crashes when accessData empty** — `Math.min/max(...[])` on empty array = Infinity/NaN; composite scores display as "NaN/300" | S | food-insecurity.js:1382 |
-| P1-10 | snap-safety-net | **"Other" race % can go negative in Sankey** — Census race percentages can sum >100; negative Sankey link value breaks diagram | Trivial | snap-safety-net.js:renderDemographicFlow |
-| P1-11 | snap-safety-net | **Map info panel says "Data Year: 2022 (FNS)"** — JSON `stateCoverage.year` is 2024 | Trivial | snap-safety-net.html:247 |
-| P1-12 | food-access | **Duplicate click listener on back button** — `renderDesertMap` and `init()` both add `addEventListener('click')`; showNational fires twice per click | Trivial | food-access.js:212,1440 |
-| P1-13 | food-access | **`visualMap: undefined` leaves ghost county color legend on state view** — ECharts ignores `undefined`; needs `null` to clear | Trivial | food-access.js:drawAccessInsecurityScatter |
-| P1-14 | food-banks | **Mississippi insight test uses non-existent field `ms.foodInsecurePersons`** — always passes vacuously | XS | food-banks.test.js |
-| P1-15 | food-prices | **YoY insight copy says "returned below 2%"** — current BLS value is 3.1% (2026-02) | Trivial | food-prices.html |
+|---|-----------|-------|--------|----------|
+| 1 | Food Insecurity | **CDC PLACES state abbreviation vs full name mismatch** — `placesByName` keyed on `s.state` ("AL") but looked up by `sdohData.states[i].name` ("Alabama"). Health Outcomes buttons (Obesity, Diabetes, Depression, Housing Insecurity) never populate. Feature permanently broken. | S | food-insecurity.js:1179-1188 |
+| 2 | Food Access | **Double Burden renders all-zero silently when food-insecurity-state.json fails** — states have no `povertyRate` without merge. Formula produces 0 for all 51 states. Insight says "0.0 million Americans." No error visible. `renderDoubleBurden` call is outside the `fiData?.states` guard. | S | food-access.js:1425-1450 |
+| 3 | Food Access | **Food Insecurity map drill-down shows food desert data labeled as CDC PLACES** — tooltip says "Click for county breakdown" with "Source: CDC PLACES 2023" but click fires desert `drillDown()` showing tract percentages, not CDC data. Data labeling mismatch. | M | food-access.js:718-720, 221 |
+| 4 | Food Access | **Mode B tiles compute columns from hidden container** — `display:none` → `clientWidth: 0` → 700px fallback → 6 columns. At 375px each tile is 53px wide, text overflows. Not recalculated on resize. | M | food-access.js:467-468, d3-heatmap.js:400 |
 
 ---
 
-## Priority 2 — Analytical Integrity & Major Accessibility
+## Priority 2 — Major (Fix in Next Sprint)
 
 | # | Dashboard | Issue | Effort | Location |
-|---|---|---|---|---|
-| P2-1 | food-prices | **Purchasing power narrative contradicts data** — copy frames SNAP as losing purchasing power; current data shows SNAP +55% vs food +37% since 2018 | M | food-prices.html + annotation |
-| P2-2 | food-banks | **D3 heatmap breadcrumb not keyboard-accessible** — `<span>` elements lack `tabindex`, `role="button"`, `keydown` handler | S | d3-heatmap.js:updateBreadcrumb |
-| P2-3 | food-banks | **Radar chart `max: 18` clips Mississippi at 18.7%** — silently misrepresents insecurity score | XS | food-banks.js:233 |
-| P2-4 | food-banks | **No visual feedback when regression line suppressed** (`|r| < 0.2`) — user sees scatter with no trend line, no explanation | S | food-banks.js:renderVsInsecurity |
-| P2-5 | snap-safety-net | **Hero stats hardcoded; not driven by JSON** — 42.1M, $188/mo, 52.1%, 8.2M will drift on data update | S | snap-safety-net.html |
-| P2-6 | snap-safety-net | **Gauge values inaccessible to screen readers** — canvas-only; `role="img"` label names gauge type but never the computed value | S | snap-safety-net.html + JS |
-| P2-7 | snap-safety-net | **3 dynamic elements lack `aria-live`**: snap-map-insight, demographic-flow-insight, CDC toggle | Trivial | snap-safety-net.html |
-| P2-8 | food-insecurity | **renderSnap division by zero** — `s.snapParticipation / s.persons` when `s.persons === 0` → NaN bars | Trivial | food-insecurity.js:828 |
-| P2-9 | food-insecurity | **County truthy filter drops rate=0 counties** — `.filter(f => f.properties.rate)` (known bug, still in production) | Trivial | food-insecurity.js:155 |
-| P2-10 | food-insecurity | **renderSDOH: no guard before linearRegression([])** on empty points → "r = NaN" insight | S | food-insecurity.js:1028 |
-| P2-11 | food-insecurity | **renderIncomeRiver: null income band values pushed unchecked** → ECharts misrenders silently | S | food-insecurity.js:1295 |
-| P2-12 | executive-summary | **kpi-cpi-yoy HTML default "2.6%" stale** — live computed value is 3.1% | XS | executive-summary.html:183 |
-| P2-13 | executive-summary | **computeVulnerabilityIndex division by zero** when all mealCost=0 | XS | executive-summary.js:15 |
-| P2-14 | food-access | **`aria-current="page"` on main nav points to food-insecurity (build artifact)** | S | build-components.js |
-| P2-15 | food-insecurity | **Trend chart heading hardcoded "2013-2024"** — chart renders projected data to 2026 | Trivial | food-insecurity.html |
-| P2-16 | snap-safety-net | **Trend chart Y-axis `min: 34` hardcoded** — clips data if enrollment < 34M | Trivial | snap-safety-net.js:32 |
-| P2-17 | snap-safety-net | **School lunch `slice(0, 15)` relies on JSON sort order** — no defensive `.sort()` | Trivial | snap-safety-net.js |
+|---|-----------|-------|--------|----------|
+| 5 | Exec Summary | **food-insecurity-kpi never updated by JS** — HTML default matches JSON by coincidence. Next data update → stale KPI until HTML manually edited. | XS | executive-summary.js:init() |
+| 6 | Exec Summary | **Food Bank Orgs KPI fully hardcoded 61.3K** — no `id`, no JS update, undocumented source. | S | executive-summary.html:179 |
+| 7 | Food Insecurity | **Meal cost insight factually wrong** — "28% above the national average" but actual is 43% ($5.12/$3.58). Wrong by 15 percentage points. | XS | food-insecurity.html:417 |
+| 8 | Food Insecurity | **Triple Burden `Math.min/max(...[])` produces Infinity** — empty `accessVals` array → NaN scores, "NaN/300" insight text. | XS | food-insecurity.js:1384-1385 |
+| 9 | Food Access | **`#map-view-toggle` missing group semantics** — 3 toggle buttons with no `role="group"` or `aria-label`. | Trivial | food-access.html:182 |
+| 10 | Food Access | **Mode B tiles have no ARIA or keyboard access** — plain divs with mouse events only. | S | food-access.js:504-558 |
+| 11 | SNAP | **All 5 gauge values inaccessible** — canvas-only values, `role="img"` label names gauge type but never computed value. | S | snap-safety-net.html:365-379 |
+| 12 | SNAP | **3 dynamic elements lack `aria-live`** — snap-map-insight, demographic-flow-insight, CDC toggle container. Screen readers miss all updates. | Trivial | snap-safety-net.html |
+| 13 | Exec Summary | **Single try/catch swallows all 4 fetch failures** — any one 404 → entire dashboard blank, no error shown. | S | executive-summary.js:370-412 |
+| 14 | Food Access | **`role="img"` masks interactive D3 SVG** — all tile interactions invisible to AT. | Trivial | food-access.html:363 |
 
 ---
 
-## Priority 3 — Test Coverage Gaps
+## Priority 3 — Warning (Address in Backlog)
 
-| Dashboard | Untested Critical Paths | Risk | Effort |
-|---|---|---|---|
-| food-insecurity | `fetchCDCPlacesData` (P1-1 was untested), `renderTripleBurden`, `renderSDOH`, `renderIncomeRiver`, `renderStateDeepDive`, `buildStateInsight` | High | L |
-| food-prices | `rebuildPurchasingPowerSeries` LinearGradient serialization (P1-2 was untested), `computeYoY`, `renderYoYInflation`, `renderPurchasingPower`, `renderCpiVsInsecurity` | High | M |
-| food-access | `renderDoubleBurden` D3 pipeline, `renderInsecurityMap` fips bug, `renderUrbanRural`, `renderVehicle`, `renderSnapRetailers` | High | M |
-| food-banks | D3 hierarchy construction (51 states, no dupes, zero-area guard), `renderCapacityGap`, `renderDistribution`, `renderEfficiency`, `renderDensityMap` | Medium | M |
-| executive-summary | `renderSnapGap` join + empty array, `renderVulnerabilityMap`, `renderWorstStates`, `renderPriceImpact` | Medium | M |
-| snap-safety-net | `renderGauges` coverage formula + NaN guard, `renderDemographicFlow` negative race guard, all 3 async fetches | Medium | M |
+| # | Dashboard | Issue | Effort |
+|---|-----------|-------|--------|
+| 15 | Food Insecurity | Demographics tooltip divide-by-zero when `rate === 0` | XS |
+| 16 | Food Insecurity | County metric fallback `\|\|` should be `??` (rate=0 falls through) | XS |
+| 17 | Food Insecurity | Map `aria-label` static across metric changes | XS |
+| 18 | Food Insecurity | Hero counters hardcoded, not data-driven | S |
+| 19 | Food Access | `showNational()` fallback uses wrong visualMap scale (7-24 vs 20-76) | S |
+| 20 | Food Access | `buildHeatmapLegend` receives Infinity/-Infinity on empty enriched | XS |
+| 21 | Food Access | `visualMap: undefined` leaves ghost county color scale | XS |
+| 22 | Food Access | Two divergent county drill-down paths, different back behavior | M |
+| 23 | Food Access | Mode B tile columns not recalculated on resize | M |
+| 24 | Food Prices | Regional insight "8.6% more" — actual is 6.7% | Trivial |
+| 25 | Food Prices | Data range "2020-present" — data starts 2018 | Trivial |
+| 26 | Food Prices | SNAP benefit forward-fill past Dec 2025 not annotated | S |
+| 27 | Food Prices | "Purchasing Power Gap" heading stale when SNAP is ahead | Trivial |
+| 28 | Food Prices | "Keeping pace" insight understates 17.4pt SNAP advantage | S |
+| 29 | Food Banks | Radar national avg (83.5%) vs sidebar/hero (82.4%) | XS |
+| 30 | Food Banks | Revenue sum exceeds national — reconciliation note inconsistent | XS |
+| 31 | Food Banks | Freshness badge "2023" for mixed 2023/2024 dataset | XS |
+| 32 | SNAP | 11 CDC states gray with no user explanation | S |
+| 33 | Exec Summary | SNAP vintage mismatch undisclosed (FY2025 national vs 2024 state) | XS |
+| 34 | Exec Summary | 4 insight containers missing `aria-live` | XS |
 
 ---
 
-## Priority 4 — Cross-Cutting Minor (Low Effort Sweep)
+## Priority 4 — Test Coverage Gaps
 
-| Issue | Affects | Effort |
-|---|---|---|
-| ECharts `aria: { enabled: true }` absent on all ~35 charts | All 6 dashboards | S per dashboard |
-| Dashboard tab strip — no scroll indicator on mobile (7 tabs, 3 visible at 375px) | All 6 dashboards | S (one CSS fix) |
-| `aria-live="polite"` missing on dynamic insight containers | executive-summary (4), food-insecurity (3) | XS |
-| food-banks freshness badge shows "2023" for mixed 2023/2024 dataset | food-banks | XS |
-| food-prices: SNAP benefit forward-fill extends 2 months past last known data | food-prices | S |
-| food-prices: markArea for gov't shutdown hardcoded to 2025-10/11 (verify against latest BLS) | food-prices | Trivial |
-| snap-safety-net: freshness label says "FY2025" but JSON year is 2024 | snap-safety-net | Trivial |
+| Dashboard | Test File | Untested Critical Paths | Effort |
+|-----------|-----------|------------------------|--------|
+| Food Access | **NONE** — zero tests | Entire dashboard: D3 pipeline, drill-down, Double Burden, mode toggle | L |
+| Food Insecurity | 233 lines | `renderTripleBurden`, `fetchCDCPlacesData` merge, `renderSDOH`, `renderIncomeRiver`, `renderStateDeepDive`, `renderDemographics` tooltip | L |
+| Executive Summary | Exists | 4 render functions: `renderSnapGap`, `renderPriceImpact`, `renderWorstStates`, `renderVulnerabilityMap` | M |
+| SNAP | 11 tests | Gauge value updates, all 3 async fetches, Sankey balance | M |
+| Food Banks | Exists | Breadcrumb keyboard, regression suppression, radar avg, orgCount=0 | S |
+| Food Prices | 12 tests | Good coverage. Minor: series null-alignment guard | XS |
+
+---
+
+## Implementation Sequence
+
+### Batch 1 — Critical functional bugs (P1)
+Fix #1 (CDC PLACES merge), #2 (Double Burden all-zero), #3 (insecurity map label), #4 (Mode B columns). Each requires a test first.
+
+### Batch 2 — Quick major/warning text fixes
+Fix #7 (28% → 43%), #8 (Triple Burden guard), #24 (8.6% → 6.7%), #25 (2020 → 2018), #27 (heading rename), #29 (radar avg), #30 (reconciliation), #31 (freshness badge). All XS/Trivial.
+
+### Batch 3 — Major accessibility
+Fix #9 (toggle group), #10 (tile ARIA), #11 (gauge values), #12 (aria-live), #14 (role="img"), #34 (insight aria-live). Cross-cutting aria-live can be batched.
+
+### Batch 4 — Data-driven hero stats
+Fix #5, #6, #18 (exec summary, food insecurity, SNAP hero stats). Same pattern: override `data-target` from JSON in `init()`.
+
+### Batch 5 — Chart/logic guards
+Fix #15 (divide-by-zero), #16 (|| → ??), #19 (wrong scale), #20 (Infinity legend), #21 (ghost visualMap). All XS/S.
+
+### Batch 6 — Harder fixes
+Fix #13 (per-section error handling), #22 (consolidate drill-down), #23 (ResizeObserver), #26 (SNAP forward-fill annotation), #28 (insight text), #32 (CDC gray states).
+
+### Batch 7 — Test coverage
+Create `food-access.test.js`. Expand food-insecurity, executive-summary, SNAP test suites.
 
 ---
 
 ## Effort Key
 
 | Label | Meaning |
-|---|---|
+|-------|---------|
 | XS | < 5 min — string or one-line guard |
 | Trivial | 5–15 min — small edit, no new tests needed |
 | S | 15–60 min — code change + regression test |
@@ -98,122 +145,50 @@ These are visible failures or incorrect information shown to users right now.
 
 ---
 
-## Implementation Sequence
-
-1. **Batch 1 — P1 string/copy fixes** (P1-4, P1-5, P1-6, P1-7, P1-11, P1-15): HTML text changes only
-2. **Batch 2 — P1 logic guards** (P1-8, P1-10, P1-12, P1-13, P1-14 test fix): simple defensive guards
-3. **Batch 3 — P1 functional fixes** (P1-1 CDC PLACES, P1-2 LinearGradient, P1-3 map click): each requires test first
-4. **Batch 4 — P2 correctness** (P2-3, P2-8, P2-9, P2-10, P2-11, P2-12, P2-13, P2-15, P2-16, P2-17)
-5. **Batch 5 — P2 harder fixes** (P2-1 narrative, P2-2 keyboard, P2-4 suppression feedback, P2-6 gauge a11y)
-6. **Batch 6 — P3/P4 tests and cross-cutting**
-
-## Aggregate Findings
-
-| Dashboard | Critical | Major/Warning | Info |
-|-----------|----------|---------------|------|
-| Executive Summary | 1 | 5 | 3 |
-| Food Insecurity | 2 | 11 | 4 |
-| Food Access | 2 | 6 | 5 |
-| SNAP & Safety Net | 2 | 5 | 5 |
-| Food Prices | 0 | 6 | 4 |
-| Food Banks | 0 | 4 | 5 |
-| **Total** | **7** | **37** | **26** |
-
----
-
-## P0 — Critical (Fix Immediately)
-
-| # | Dashboard | Issue | Effort | Files |
-|---|-----------|-------|--------|-------|
-| 1 | Exec Summary | Vulnerability index formula: `*30` instead of `*0.3` — meal cost dominates rankings | 30min | `executive-summary.js:18` |
-| 2 | Exec Summary | National insecurity KPI permanently shows 12.8% (2022) — data is 13.7% (2024) | 15min | `executive-summary.html:171` |
-| 3 | Food Insecurity | County search input missing combobox ARIA (WCAG 4.1.2) | 30min | `food-insecurity.html:197` |
-| 4 | Food Insecurity | Map aria-label never updates on drill-down (WCAG 1.3.1) | 1hr | `food-insecurity.html:226`, `food-insecurity.js:164` |
-| 5 | Food Access | Duplicate click listener — two drill-down handlers race on state click | 30min | `food-access.js:215,1432-1441` |
-| 6 | SNAP | Wyoming coverage ratio shows 40.6% — actual is 46.9% | 15min | `snap-safety-net.js:117`, `snap-safety-net.html:251` |
-| 7 | SNAP | Reconciliation note says "39.1M / 7%" — actual is 41.58M / 1.3% | 10min | `snap-participation.json:12` |
-
----
-
-## P1 — Major (Fix in Next Sprint)
-
-| # | Dashboard | Issue | Effort | Files |
-|---|-----------|-------|--------|-------|
-| 8 | Exec Summary | BLS YoY null-shift: index lookback misaligns after null filtering | 1hr | `executive-summary.js:213-216` |
-| 9 | Exec Summary | Dead fetch of `food-bank-summary.json` | 10min | `executive-summary.js:364-373` |
-| 10 | Exec Summary | Three "Data Year: 2022" labels on 2024 data | 10min | `executive-summary.html:208,234,283` |
-| 11 | Exec Summary | SNAP coverage KPI formula contradicts label/tooltip | 30min | `executive-summary.js:380-383` |
-| 12 | Food Insecurity | Hardcoded Mississippi insight string | 15min | `food-insecurity.js:90` |
-| 13 | Food Insecurity | SNAP legend says FY2023, data is 2024 | 5min | `food-insecurity.js:824` |
-| 14 | Food Insecurity | County GeoJSON dataSource contradicts methodology | 2hr | `counties/*.json` |
-| 15 | Food Insecurity | Income river chart fixed 450px height | 20min | `food-insecurity.html:382` |
-| 16 | Food Insecurity | 6 insight callouts missing `aria-live="polite"` | 30min | `food-insecurity.html` |
-| 17 | Food Insecurity | Back button focus not managed after drill-down | 30min | `food-insecurity.js:168-169` |
-| 18 | Food Insecurity | drillDown filter drops counties with rate=0 | 5min | `food-insecurity.js:152` |
-| 19 | Food Insecurity | County tooltip shows state-avg meal cost as county-specific | 5min | `food-insecurity.js:74` |
-| 20 | Food Access | Hero stats hardcoded, will diverge from JSON | 1hr | `food-access.html:157-172` |
-| 21 | Food Access | renderVehicle comment/name stale | 15min | `food-access.js:360-362` |
-| 22 | Food Access | Map aria-label static across 3 views | 20min | `food-access.html:193` |
-| 23 | SNAP | Benefit gauge max $300 clips Hawaii $312 | 10min | `snap-safety-net.js:482` |
-| 24 | SNAP | 5-gauge grid broken on mobile | 30min | `snap-safety-net.html:363`, `11-dashboards.css` |
-| 25 | SNAP | HTML data notice says "FY2022", data is 2024 | 5min | `snap-safety-net.html:158` |
-| 26 | SNAP | PPI uses static $188, ignores benefitTimeline | 2hr | `snap-safety-net.js:48-49` |
-| 27 | SNAP | Demographic Sankey flat 84% coverage all races | 2hr | `snap-safety-net.js:615` |
-| 28 | Food Prices | Regional chart "Jan 2020" label, data starts 2018 | 20min | `food-prices.js:91,111`, `dashboard-bls.php:198` |
-| 29 | Food Prices | Hero meal cost $3.99 vs actual $3.58 | 15min | `food-prices.html:176-177` |
-| 30 | Food Prices | Hero lowest-quintile 31.2% vs actual 32.6% | 5min | `food-prices.html:183-185` |
-| 31 | Food Prices | Affordability map min:45 clips Utah 42.8 | 5min | `food-prices.js:183-185` |
-| 32 | Food Prices | SNAP purchasing power baseline contradicts narrative | 1hr | `food-prices.js:684-692` |
-| 33 | Food Banks | Radar area fill hex-to-rgba no-op — solid opaque | 30min | `food-banks.js:266` |
-| 34 | Food Banks | Mississippi insight $593 vs computed $587 | 5min | `food-banks.html:304` |
-| 35 | Food Banks | Data year label mixes 2023 IRS + 2024 Feeding America | 10min | `food-banks.html:145` |
-
----
-
-## P2 — Minor/Info (Backlog)
-
-| # | Dashboard | Issue | Effort |
-|---|-----------|-------|--------|
-| 36 | Exec Summary | SNAP KPI fallback 95.4% vs computed 87.9% | 5min |
-| 37 | Exec Summary | Vulnerability click insight uses unweighted state mean | 15min |
-| 38 | Food Insecurity | Resize handler unbounded (no debounce) | 10min |
-| 39 | Food Insecurity | Radar axis labels overlap on narrow viewports | 15min |
-| 40 | Food Access | `f.properties.GEOID` dead code branch | 5min |
-| 41 | Food Access | `info-current-access-mode` panel ID absent | 5min |
-| 42 | Food Access | Distance chart x-axis 8px labels unreadable on mobile | 15min |
-| 43 | SNAP | Sankey data 2022 vintage needs disclosure note | 15min |
-| 44 | SNAP | `benefitTimeline` data never used | 10min |
-| 45 | Food Prices | YoY null-hole fragility for multi-month gaps | 30min |
-| 46 | Food Prices | FRED overlay baseline misaligned | 20min |
-| 47 | Food Prices | Regional tooltip baseMealCost inconsistent | 10min |
-| 48 | Food Banks | Map visualMap min:11 near Nevada clipping | 5min |
-| 49 | Food Banks | Capacity-gap bubble radius too compressed | 15min |
-
----
-
 ## Estimated Total Effort
 
 | Priority | Hours |
 |----------|-------|
-| P0 Critical | ~3.5 |
-| P1 Major | ~13 |
-| P2 Minor | ~3.5 |
-| **Grand Total** | **~20** |
+| P1 Critical | ~4 |
+| P2 Major | ~5 |
+| P3 Warning | ~6 |
+| P4 Test Coverage | ~8 |
+| **Grand Total** | **~23** |
 
 ---
 
-## Resolution Status (2026-04-06)
+## Resolution Status (2026-04-07)
 
-**41 of 49 items fixed** across 3 commits (50cba46, abd8c0d, +1). 56 new tests added (286 total passing).
+**21 of 83 items fixed** across 3 batches. 34 new tests added (352 total passing).
 
-### Fixed Items
-P0: #1-7 (all 7 critical)
-P1: #8-13, #15-31, #33-35 (26 of 28)
-P2: #36, #38-42, #45-49 (10 of 14)
+### Batch 1 — Critical Functional Bugs (4 fixed)
+- #1: CDC PLACES merge key — changed `s.name` to `s.state` with `nameToAbbr` lookup
+- #2: Double Burden all-zero — moved `renderDoubleBurden` inside `fiData?.states` guard, fixed truthy merge to `!= null`
+- #3: Insecurity map drill-down — disabled drill-down in insecurity view (`setDrillDown(false)`)
+- #4: Mode B tile columns — changed `Math.max(4,...)` to `Math.max(2,...)` for mobile
 
-### Remaining (not actionable or already correct)
-- #14: County GeoJSON methodology — surface hint text fixed; deeper doc work deferred
-- #32: SNAP purchasing power narrative — already correct via dynamic gap logic
-- #37: Vulnerability insight — surface fix done (uses `fiData.national`); deeper population-weighted poverty needs field not in JSON
-- #43: Sankey vintage — already disclosed via `updateFreshness`
-- #44: benefitTimeline — now used by PPI (fixed in #26)
+### Batch 2 — Text/Copy/Guard Fixes (11 fixed)
+- #5: food-insecurity-kpi now updated from `fiData.national.foodInsecurityRate` in init()
+- #6: Added `id="food-bank-orgs-kpi"` to executive-summary.html
+- #7: Meal cost insight "28%" updated to "43%" matching $5.12/$3.58 calculation
+- #8: Triple Burden `accessVals` guarded: `accessVals.length ? Math.min(...) : 0`
+- #24: Regional gap "8.6%" updated to "approximately 7%"
+- #25: Data range "2020-present" updated to "2018-present" (HTML + PHP)
+- #27: Heading renamed from "The Purchasing Power Gap" to "SNAP vs. Food Prices: Purchasing Power Index"
+- #29: Radar national avg now uses `national.avgEfficiencyRatio` (82.4%, not recomputed 83.5%)
+- #30: Revenue reconciliation note verified (within 1.2%)
+- #31: Freshness badge changed from `2023` to `'2023/2024'`
+
+### Batch 3 — Accessibility (6 fixed)
+- #9: `#map-view-toggle` added `role="group" aria-label="Map view"`
+- #10: Mode B tiles: grid gets `role="list"`, each tile gets `role="listitem"` + `aria-label`
+- #11: 5 gauge `aria-label` now includes computed values (e.g., "Gauge showing SNAP Coverage: 83.7%")
+- #12: CDC toggle reveal announces via `aria-live` status element
+- #14: D3 treemap container changed from `role="img"` to `role="region"`
+- #34: Executive Summary insight containers already had `aria-live="polite"` (verified)
+
+### Remaining (62 items — Batches 4-7)
+- Batch 4: Data-driven hero stats (3 dashboards)
+- Batch 5: Chart/logic guards (#15-16, #19-21)
+- Batch 6: Harder fixes (#13, #22, #26, #28, #32)
+- Batch 7: Test coverage expansion

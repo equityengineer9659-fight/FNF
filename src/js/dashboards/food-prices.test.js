@@ -220,6 +220,31 @@ describe('food-prices', () => {
     });
   });
 
+  // ── Fix 24: Regional insight gap percentage ──
+  describe('regional insight accuracy', () => {
+    it('should not contain stale "8.6%" regional gap', () => {
+      const html = readHTML('food-prices.html');
+      expect(html).not.toContain('8.6% more');
+    });
+  });
+
+  // ── Fix 25: Data range start year ──
+  describe('regional data range label', () => {
+    it('data range should say 2018, not 2020', () => {
+      const html = readHTML('food-prices.html');
+      expect(html).toContain('2018-present');
+      expect(html).not.toMatch(/Data Range<\/strong>\s*2020-present/);
+    });
+  });
+
+  // ── Fix 27: Purchasing Power heading ──
+  describe('purchasing power heading', () => {
+    it('heading should not contain "Gap" when SNAP exceeds food CPI', () => {
+      const html = readHTML('food-prices.html');
+      expect(html).not.toContain('The Purchasing Power Gap');
+    });
+  });
+
   // ── CODX #3: HTML metadata accuracy ──
   describe('affordability map metadata', () => {
     it('HTML data year should match JSON data year', () => {

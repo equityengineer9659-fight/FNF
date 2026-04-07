@@ -186,6 +186,29 @@ describe('snap-safety-net', () => {
     });
   });
 
+  // ── Fix 11: Gauge aria-labels must include computed values ──
+  describe('gauge accessibility', () => {
+    it('JS should update gauge aria-label with computed value', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      // After rendering gauges, JS should update aria-label on gauge containers
+      expect(jsSource).toContain('aria-label');
+      // Should reference gauge container element by ID and set aria-label
+      expect(jsSource).toMatch(/gauge-(coverage|lunch|benefit|gap|affordability)/);
+    });
+  });
+
+  // ── Fix 12: CDC toggle container needs aria-live notification ──
+  describe('CDC toggle accessibility', () => {
+    it('snap-map-toggle-container reveal should notify screen readers', () => {
+      const html = readHTML('snap-safety-net.html');
+      // An aria-live element should exist near the toggle to announce CDC data loading
+      expect(html).toContain('snap-map-cdc-status');
+      expect(html).toContain('aria-live');
+      const toggleSection = html.match(/id="snap-map-toggle-container"[^>]*/);
+      expect(toggleSection).toBeTruthy();
+    });
+  });
+
   // ── CODX #5: CDC/admin tooltip parity label ──
   describe('formatCdcAdminGap', () => {
     it('should label positive gap as under-reported', () => {

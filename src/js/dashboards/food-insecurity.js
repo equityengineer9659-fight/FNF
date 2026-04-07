@@ -1176,10 +1176,13 @@ async function fetchCDCPlacesData() {
     if (!fiData || !fiData.states) return;
 
     // Merge CDC fields into existing SDOH state records
+    // API returns { state: "AL", obesity: ..., ... } — keyed by abbreviation
     const placesByName = {};
-    places.records.forEach(s => { placesByName[s.name] = s; });
+    places.records.forEach(s => { placesByName[s.state] = s; });
+    const nameToAbbr = {};
+    US_STATES.forEach(([abbr, name]) => { nameToAbbr[name] = abbr; });
     sdohData.states.forEach(s => {
-      const p = placesByName[s.name];
+      const p = placesByName[nameToAbbr[s.name]];
       if (!p) return;
       s.obesity = p.obesity;
       s.diabetes = p.diabetes;
@@ -1382,7 +1385,8 @@ function renderTripleBurden(data, accessData) {
   const rates = data.states.map(s => s.rate);
   const rateMin = Math.min(...rates), rateMax = Math.max(...rates);
   const accessVals = data.states.map(s => accessByName[s.name] || 0).filter(v => v > 0);
-  const accMin = Math.min(...accessVals), accMax = Math.max(...accessVals);
+  const accMin = accessVals.length ? Math.min(...accessVals) : 0;
+  const accMax = accessVals.length ? Math.max(...accessVals) : 1;
 
   const scored = data.states.map(s => {
     const fiScore = norm(s.rate, rateMin, rateMax);
