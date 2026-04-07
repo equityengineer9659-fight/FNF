@@ -137,6 +137,19 @@ function renderVsInsecurity(states) {
     },
     series
   });
+
+  // Update insight text with correlation result or suppression note
+  const insightEl = document.getElementById('vs-insecurity-insight');
+  if (insightEl) {
+    if (showRegression) {
+      const rAbs = Math.abs(reg.r);
+      const strength = rAbs >= 0.6 ? 'strong' : rAbs >= 0.4 ? 'moderate' : 'weak';
+      const direction = reg.r > 0 ? 'positive' : 'negative';
+      insightEl.textContent = `${direction.charAt(0).toUpperCase() + direction.slice(1)} ${strength} correlation (r = ${reg.r.toFixed(2)}) — states with more insecurity tend to have ${reg.r > 0 ? 'more' : 'fewer'} food banks per capita.`;
+    } else {
+      insightEl.textContent = 'No statistically meaningful correlation found (|r| < 0.2) — food bank density does not reliably track food insecurity rate across states.';
+    }
+  }
 }
 
 // -- Chart 3: Revenue by State (D3 Zoomable Heatmap) --
@@ -230,7 +243,7 @@ function renderEfficiency(states) {
     radar: {
       indicator: [
         { name: 'Efficiency (%)', max: 90 }, { name: 'Density\n(per 100K)', max: 40 },
-        { name: 'Avg Rev/Org\n($M)', max: 1.5 }, { name: 'Insecurity (%)', max: 18 },
+        { name: 'Avg Rev/Org\n($M)', max: 1.5 }, { name: 'Insecurity (%)', max: 20 },
         { name: 'Avg Org Count', max: 2000 }
       ],
       shape: 'polygon', splitNumber: 4,

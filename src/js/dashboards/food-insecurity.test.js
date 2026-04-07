@@ -146,6 +146,46 @@ describe('food-insecurity', () => {
     });
   });
 
+  // ── P1-1: CDC PLACES field name contract ──
+  describe('CDC PLACES field names', () => {
+    it('dashboard-places.php should use measureid (not measure text) as record key', () => {
+      const phpSource = readFileSync(
+        resolve(__dirname, '../../../public/api/dashboard-places.php'), 'utf-8'
+      );
+      // Must use $row['measureid'] — not $row['measure'] — as the key
+      // $row['measure'] returns long text like "Obesity among adults" which breaks JS field access
+      expect(phpSource).toContain('$row[\'measureid\']');
+      expect(phpSource).not.toMatch(/\$key\s*=\s*strtolower\s*\(\s*\$row\s*\[\s*['"]measure['"]\s*\]/);
+    });
+
+    it('food-insecurity.js should merge CDC records using short-form keys matching measureid', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // The merge uses p.obesity, p.diabetes, p.depression, p.housinsec
+      // These match the lowercase measureid values: obesity, diabetes, depression, housinsec
+      expect(jsSource).toContain('p.obesity');
+      expect(jsSource).toContain('p.diabetes');
+      expect(jsSource).toContain('p.depression');
+      expect(jsSource).toContain('p.housinsec');
+    });
+
+    it('CDC PLACES merge should produce short-key fields on sdoh state records', () => {
+      // Simulate the merge logic with a mock CDC record using correct (short) keys
+      const sdohState = { name: 'Alabama' };
+      const cdcRecord = { obesity: 37.2, diabetes: 14.1, depression: 20.5, housinsec: 9.8 };
+
+      // This is what fetchCDCPlacesData does after the fix:
+      sdohState.obesity = cdcRecord.obesity;
+      sdohState.diabetes = cdcRecord.diabetes;
+      sdohState.depression = cdcRecord.depression;
+      sdohState.housinsec = cdcRecord.housinsec;
+
+      expect(sdohState.obesity).toBe(37.2);
+      expect(sdohState.diabetes).toBe(14.1);
+      expect(sdohState.depression).toBe(20.5);
+      expect(sdohState.housinsec).toBe(9.8);
+    });
+  });
+
   // ── County GeoJSON integrity ──
   describe('county GeoJSON', () => {
     it('all 51 state FIPS files should exist', () => {

@@ -825,7 +825,7 @@ function renderSnap(data) {
   const sorted = [...data.states].sort((a, b) => b.rate - a.rate).slice(0, 15);
   const names = sorted.map(s => s.name);
   const rates = sorted.map(s => s.rate);
-  const snapCoverageRatio = sorted.map(s => Math.round((s.snapParticipation / s.persons) * 100));
+  const snapCoverageRatio = sorted.map(s => s.persons > 0 ? Math.round((s.snapParticipation / s.persons) * 100) : 0);
 
   chart.setOption({
     tooltip: {
@@ -1020,6 +1020,8 @@ function renderSDOH(sdoh, fiData, metricKey) {
       };
     })
     .filter(Boolean);
+
+  if (!points.length) return;
 
   const byRegion = {};
   Object.keys(REGION_COLORS).forEach(r => { byRegion[r] = []; });
@@ -1292,7 +1294,7 @@ function renderIncomeRiver(sdoh, fiData) {
   const riverData = [];
   merged.forEach((s, i) => {
     INCOME_BANDS.forEach(band => {
-      riverData.push([i, s.income[band.key], band.label]);
+      riverData.push([i, s.income[band.key] ?? 0, band.label]);
     });
   });
 

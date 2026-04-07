@@ -29,7 +29,7 @@ function renderSnapTrend(trendData, blsData, snapNational) {
   let cpiSeries = [];
   let legendData = ['SNAP Participants'];
   const yAxes = [
-    { type: 'value', name: 'Participants (M)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted, formatter: '{value}M' }, splitLine: { lineStyle: { color: COLORS.gridLine } }, min: 34, max: 48 }
+    { type: 'value', name: 'Participants (M)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted, formatter: '{value}M' }, splitLine: { lineStyle: { color: COLORS.gridLine } }, max: 48 }
   ];
 
   if (blsData?.series) {
@@ -377,7 +377,7 @@ function renderSchoolLunch(lunchData) {
   const chart = createChart('chart-school-lunch');
   if (!chart) return;
 
-  const top15 = lunchData.slice(0, 15);
+  const top15 = [...lunchData].sort((a, b) => b.pct - a.pct).slice(0, 15);
   const pieData = top15.map(s => ({
     name: s.name, value: s.pct,
     freePct: s.freePct || null,
@@ -624,7 +624,7 @@ function renderDemographicFlow(sdoh, snapData) {
     raceGroups['White (non-Hispanic)'] += pop * (s.race.whitePct / 100);
     raceGroups['Black/African American'] += pop * (s.race.blackPct / 100);
     raceGroups['Asian'] += pop * (s.race.asianPct / 100);
-    raceGroups['Other'] += pop * ((100 - s.race.hispanicPct - s.race.whitePct - s.race.blackPct - s.race.asianPct) / 100);
+    raceGroups['Other'] += pop * (Math.max(0, 100 - s.race.hispanicPct - s.race.whitePct - s.race.blackPct - s.race.asianPct) / 100);
   });
 
   // Food insecurity disproportionality: compare race share of food-insecure vs general population

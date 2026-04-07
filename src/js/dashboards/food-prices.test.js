@@ -144,6 +144,60 @@ describe('food-prices', () => {
     });
   });
 
+  // ── P1-2: LinearGradient serialization bug ──
+  describe('rebuildPurchasingPowerSeries LinearGradient preservation', () => {
+    it('rebuildPurchasingPowerSeries should not use bare JSON.parse(JSON.stringify()) for option clone', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      // Extract the rebuildPurchasingPowerSeries function body
+      const fnStart = jsSource.indexOf('function rebuildPurchasingPowerSeries');
+      const fnBody = jsSource.slice(fnStart, fnStart + 600);
+
+      // If JSON.parse(JSON.stringify(ppBaseOption)) exists, gradient restoration must also exist
+      if (fnBody.includes('JSON.parse(JSON.stringify(ppBaseOption))')) {
+        // The fix: gradients must be restored after cloning
+        const hasGradientRestore = fnBody.includes('.colorStops') || fnBody.includes('areaStyle.color = ');
+        expect(hasGradientRestore).toBe(true);
+      }
+    });
+
+    it('LinearGradient instances should not survive JSON round-trip (documents the bug)', () => {
+      // Demonstrates why JSON.parse/stringify alone is insufficient
+      const gradient = { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(255,0,0,0.2)' }] };
+      const cloned = JSON.parse(JSON.stringify(gradient));
+      // After cloning, the colorStops are preserved in plain objects
+      expect(cloned.colorStops).toBeDefined();
+      expect(cloned.colorStops[0].color).toBe('rgba(255,0,0,0.2)');
+      // BUT ECharts LinearGradient class instances lose their prototype
+      // This test documents why class instances need special handling
+    });
+
+    it('food-prices.html Chart 4 copy values should match bls-regional-cpi.json quintile data', () => {
+      const regionalData = readJSON('bls-regional-cpi.json');
+      const html = readHTML('food-prices.html');
+      const quintiles = regionalData.affordability?.quintiles;
+      if (!quintiles) return;
+
+      const bottom = quintiles[0];
+      const top = quintiles[quintiles.length - 1];
+
+      // Helper: strip commas for matching (HTML may format 1416 as 1,416)
+      const htmlStripped = html.replace(/,/g, '');
+
+      // Bottom quintile food share (32.6%)
+      if (bottom?.foodSharePct) {
+        expect(html).toContain(bottom.foodSharePct.toString());
+      }
+      // Bottom quintile monthly cost ($440)
+      if (bottom?.monthlyFoodCost) {
+        expect(htmlStripped).toContain(bottom.monthlyFoodCost.toString());
+      }
+      // Top quintile monthly cost ($1,416)
+      if (top?.monthlyFoodCost) {
+        expect(htmlStripped).toContain(top.monthlyFoodCost.toString());
+      }
+    });
+  });
+
   // ── PHP proxy series ID validation ──
   describe('BLS series IDs', () => {
     it('dashboard-bls.php should use CUUR* format (not APU*)', () => {

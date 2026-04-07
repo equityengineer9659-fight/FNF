@@ -515,7 +515,7 @@ function renderDoubleBurden(states) {
 }
 
 // -- Food Insecurity Map (CDC PLACES data, 2023) --
-function renderInsecurityMap(geoJSON, cdcRecords) {
+function renderInsecurityMap(geoJSON, cdcRecords, accessStates = []) {
   const chart = getOrCreateChart('chart-desert-map');
   if (!chart) return;
 
@@ -523,12 +523,16 @@ function renderInsecurityMap(geoJSON, cdcRecords) {
   const stateNameMap = {};
   US_STATES.forEach(([abbr, name]) => { stateNameMap[abbr] = name; });
 
+  // Build FIPS lookup from access data so county drill-down works in insecurity view
+  const fipsByName = {};
+  accessStates.forEach(s => { if (s.name && s.fips) fipsByName[s.name] = s.fips; });
+
   const mapData = cdcRecords
     .filter(r => stateNameMap[r.state])
     .map(r => ({
       name: stateNameMap[r.state],
       value: r.value,
-      fips: null // CDC data uses state abbr, not FIPS — drill-down uses different path
+      fips: fipsByName[stateNameMap[r.state]] || null
     }));
 
   const albersProjection = { project: p => p, unproject: p => p };
@@ -1100,7 +1104,7 @@ function renderAccessInsecurity(accessStates, fiStates, accessData) {
         // Show prompt to select a state
         chart.setOption({
           title: { text: 'Select a state above to view county-level data', left: 'center', top: 'center', textStyle: { color: COLORS.textMuted, fontSize: 14 } },
-          legend: { show: false }, visualMap: undefined, series: []
+          legend: { show: false }, visualMap: null, series: []
         }, true);
         const insightEl = document.getElementById('access-insecurity-insight');
         if (insightEl) insightEl.textContent = 'Choose a state from the dropdown to see county-level correlation between food deserts and food insecurity.';
@@ -1117,7 +1121,7 @@ function renderAccessInsecurity(accessStates, fiStates, accessData) {
       if (!code) {
         chart.setOption({
           title: { text: 'Select a state above to view county-level data', left: 'center', top: 'center', textStyle: { color: COLORS.textMuted, fontSize: 14 } },
-          legend: { show: false }, visualMap: undefined, series: []
+          legend: { show: false }, visualMap: null, series: []
         }, true);
         return;
       }
@@ -1321,7 +1325,7 @@ async function init() {
 
       if (view === 'insecurity' && cdcInsecurityData?.records) {
         if (mapCtrl) mapCtrl.setDrillDown(true);
-        renderInsecurityMap(geoJSON, cdcInsecurityData.records);
+        renderInsecurityMap(geoJSON, cdcInsecurityData.records, currentAccessData?.states || []);
         const el = document.getElementById('info-insecurity-mode'); if (el) el.style.display = '';
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
         updateFreshness('access', cdcInsecurityData);
@@ -1433,16 +1437,6 @@ async function init() {
         if (chart) chart.hideLoading();
       }
     };
-
-    // Wire back button for deserts mode
-    const backBtn = document.getElementById('access-map-back-btn');
-    if (backBtn) {
-      backBtn.addEventListener('click', () => {
-        if (currentMapView === 'deserts') {
-          switchMapView('deserts');
-        }
-      });
-    }
 
     initScrollReveal();
     window.addEventListener('resize', handleResize);
