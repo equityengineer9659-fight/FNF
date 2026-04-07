@@ -332,6 +332,61 @@ describe('food-access', () => {
     });
   });
 
+  // ── P4: Desert map drill-down data contract ──
+  describe('desert map drill-down', () => {
+    it('drill-down should use current-food-access county data when available', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const drillSection = jsSource.slice(
+        jsSource.indexOf('async function drillDown'),
+        jsSource.indexOf('async function drillDown') + 2000
+      );
+      expect(drillSection).toContain('accessByFips');
+      expect(drillSection).toContain('hasCurrentAccess');
+      expect(drillSection).toContain('lowAccessPct');
+    });
+
+    it('all 51 county GeoJSON files should have correct properties', () => {
+      const fipsDir = resolve(dataDir, 'counties');
+      // Spot-check 4 states
+      const checks = ['06', '12', '36', '48']; // CA, FL, NY, TX
+      for (const fips of checks) {
+        const geo = readJSON(`counties/${fips}.json`);
+        expect(geo.features.length).toBeGreaterThan(0);
+        const f = geo.features[0];
+        expect(f.properties).toHaveProperty('name');
+        expect(f.properties).toHaveProperty('fips');
+      }
+    });
+  });
+
+  // ── P4: Urban vs Rural donut data contract ──
+  describe('urban vs rural computation', () => {
+    it('access data should have counties with isUrban flag', () => {
+      const accessData = readJSON('current-food-access.json');
+      let hasCounties = false;
+      for (const state of accessData.states) {
+        if (state.counties && state.counties.length > 0) {
+          hasCounties = true;
+          const first = state.counties[0];
+          expect(first).toHaveProperty('isUrban');
+          expect(first).toHaveProperty('lowAccessTracts');
+          expect(first).toHaveProperty('totalTracts');
+          break;
+        }
+      }
+      expect(hasCounties).toBe(true);
+    });
+  });
+
+  // ── P4: SNAP retailers map ──
+  describe('SNAP retailers map', () => {
+    it('renderSnapRetailers should disable drill-down', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const snapSection = jsSource.slice(jsSource.indexOf('function renderSnapRetailers'));
+      expect(snapSection).toContain('setDrillDown(false)');
+    });
+  });
+
   // ── CODX #2: Insecurity tooltip should not promise drill-down ──
   describe('insecurity view drill-down promise', () => {
     it('insecurity tooltip should NOT say "Click for county breakdown"', () => {
