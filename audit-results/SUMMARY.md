@@ -95,3 +95,21 @@
 | P1 Major | ~13 |
 | P2 Minor | ~3.5 |
 | **Grand Total** | **~20** |
+
+---
+
+## Resolution Status (2026-04-06)
+
+**41 of 49 items fixed** across 3 commits (50cba46, abd8c0d, +1). 56 new tests added (286 total passing).
+
+### Fixed Items
+P0: #1-7 (all 7 critical)
+P1: #8-13, #15-31, #33-35 (26 of 28)
+P2: #36, #38-42, #45-49 (10 of 14)
+
+### Remaining (not actionable or already correct)
+- #14: County GeoJSON methodology — surface hint text fixed; deeper doc work deferred
+- #32: SNAP purchasing power narrative — already correct via dynamic gap logic
+- #37: Vulnerability insight — surface fix done (uses `fiData.national`); deeper population-weighted poverty needs field not in JSON
+- #43: Sankey vintage — already disclosed via `updateFreshness`
+- #44: benefitTimeline — now used by PPI (fixed in #26)

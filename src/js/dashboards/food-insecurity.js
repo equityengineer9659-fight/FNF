@@ -173,7 +173,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
       const mapLabel = document.getElementById('map-state-label');
       if (mapLabel) mapLabel.textContent = stateName;
       const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
-      if (hint) hint.textContent = 'County rates are modeled estimates (poverty regression), not survey data \u2014 click Back for state-level survey data';
+      if (hint) hint.textContent = 'County rates are modeled estimates (County Health Rankings 2025), not direct survey data \u2014 click Back for state-level survey data';
 
       chart.hideLoading();
 

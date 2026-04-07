@@ -129,7 +129,7 @@ function renderDesertMap(geoJSON, states, accessData) {
         // Use current computed data: low-access tract % per county (consistent with state map)
         countyData = countyGeo.features
           .map(f => {
-            const fips5 = f.properties.GEOID || f.properties.fips || '';
+            const fips5 = f.properties.fips || '';
             const access = accessByFips[fips5];
             if (!access) return null;
             return {
@@ -730,7 +730,7 @@ function renderLowAccessCounty(countyGeo, countyData) {
 
   const mapName = chart.__currentMapName || 'USA-access';
   const mapData = countyGeo.features.map(f => {
-    const fips = f.properties.fips || f.properties.GEOID;
+    const fips = f.properties.fips;
     const c = countyByFips[fips];
     return {
       name: f.properties.name || f.properties.NAME,
@@ -976,7 +976,7 @@ async function renderCountyScatter(chart, stateFips, stateName, accessData) {
       const props = f.properties;
       if (!props || !props.rate) return; // need food insecurity rate
 
-      const fips5 = props.GEOID || props.fips || f.id || '';
+      const fips5 = props.fips || f.id || '';
       const access = accessByFips[fips5];
 
       let desertPct;

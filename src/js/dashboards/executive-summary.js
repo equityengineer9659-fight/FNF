@@ -21,7 +21,7 @@ export function computeVulnerabilityIndex(states) {
 }
 
 // ── Chart 1: Vulnerability Map (choropleth) ──
-function renderVulnerabilityMap(statesWithIndex, geoJSON) {
+function renderVulnerabilityMap(statesWithIndex, geoJSON, national) {
   const chart = createChart('chart-vulnerability-map');
   if (!chart) return;
 
@@ -88,10 +88,10 @@ function renderVulnerabilityMap(statesWithIndex, geoJSON) {
     : '';
   if (insightEl) insightEl.textContent = defaultInsightText;
 
-  // Click insight: state click updates callout with per-state narrative
-  const natRate = statesWithIndex.reduce((s, x) => s + x.rate, 0) / statesWithIndex.length;
+  // Click insight: use authoritative national values, not unweighted state means
+  const natRate = national?.foodInsecurityRate || statesWithIndex.reduce((s, x) => s + x.rate, 0) / statesWithIndex.length;
   const natPoverty = statesWithIndex.reduce((s, x) => s + x.povertyRate, 0) / statesWithIndex.length;
-  const natMealCost = statesWithIndex.reduce((s, x) => s + x.mealCost, 0) / statesWithIndex.length;
+  const natMealCost = national?.averageMealCost || statesWithIndex.reduce((s, x) => s + x.mealCost, 0) / statesWithIndex.length;
 
   chart.on('click', (params) => {
     if (!params.data || !insightEl) return;
@@ -395,7 +395,7 @@ async function init() {
     }
 
     // Render all 4 charts
-    renderVulnerabilityMap(statesWithIndex, geoJSON);
+    renderVulnerabilityMap(statesWithIndex, geoJSON, fiData.national);
     renderSnapGap(fiData.states, snapData.stateCoverage.states);
     renderPriceImpact(blsData);
     renderWorstStates(statesWithIndex);
