@@ -450,12 +450,14 @@ function renderDoubleBurden(states) {
         const estimate = Math.round((s.lowAccessPopulation || 0) * ((s.povertyRate || 0) / 100));
         const pct = pop > 0 ? (estimate / pop) * 100 : 0;
         enriched.push({
-          name: s.name, size: estimate,
+          // Size by rate (% of pop) so small high-burden states aren't crushed by large low-rate states
+          name: s.name, size: parseFloat(pct.toFixed(2)),
+          estimate,
           pctOfPop: pct.toFixed(1),
           population: pop,
           lowAccessPct: s.lowAccessPct,
           region,
-          label2: fmtNum(estimate) + '  ' + pct.toFixed(1) + '%'
+          label2: pct.toFixed(1) + '%  ' + fmtNum(estimate)
         });
       });
   });
@@ -485,8 +487,8 @@ function renderDoubleBurden(states) {
           <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
           <span style="color:${rc}">${region}</span>
         </span><br/>
-        <span style="color:#818CF8;font-weight:500">Low-Income Low-Access (est.):</span> <strong>${fmtNum(leaf.value)}</strong><br/>
-        <span style="color:#818CF8;font-weight:500">Share of State Pop:</span> <strong>${d.pctOfPop}%</strong>
+        <span style="color:#818CF8;font-weight:500">Share of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
+        <span style="color:#818CF8;font-weight:500">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
         <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:7px 0">
         Population: ${fmtNum(d.population)}<br/>
         Low-Access Tracts: ${d.lowAccessPct}% of tracts`;
@@ -507,10 +509,11 @@ function renderDoubleBurden(states) {
   // Update insight text
   const insightEl = document.getElementById('double-burden-insight');
   if (insightEl && enriched.length) {
-    const sorted = [...enriched].sort((a, b) => b.size - a.size);
-    const total = sorted.reduce((sum, s) => sum + s.size, 0);
-    const top = sorted[0];
-    insightEl.innerHTML = `An estimated <strong>${fmtNum(Math.round(total / 1000000 * 10) / 10)} million Americans</strong> face overlapping low access and low income — these communities face the greatest compounded access and affordability constraints. <strong>${top.name}</strong> leads with ~${fmtNum(top.size)} people (${top.pctOfPop}% of state population).`;
+    const byRate = [...enriched].sort((a, b) => b.size - a.size);
+    const total = enriched.reduce((sum, s) => sum + s.estimate, 0);
+    const topRate = byRate[0];
+    const topCount = [...enriched].sort((a, b) => b.estimate - a.estimate)[0];
+    insightEl.innerHTML = `An estimated <strong>${fmtNum(Math.round(total / 1000000 * 10) / 10)} million Americans</strong> face overlapping low food access and low income. <strong>${topRate.name}</strong> has the highest rate (${topRate.pctOfPop}% of its population); <strong>${topCount.name}</strong> has the most people in absolute terms (~${fmtNum(topCount.estimate)}).`;
   }
 }
 
