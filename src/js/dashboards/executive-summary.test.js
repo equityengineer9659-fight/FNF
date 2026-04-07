@@ -183,6 +183,22 @@ describe('executive-summary', () => {
     });
   });
 
+  // ── P1 #9: Dead fetch removal ──
+  describe('dead fetch check', () => {
+    it('should not fetch food-bank-summary.json (unused in executive summary)', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      expect(jsSource).not.toContain('food-bank-summary.json');
+    });
+
+    it('SNAP KPI formula should use coverageGap, not foodInsecurePersons', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      // Formula should use participants / (participants + coverageGap)
+      expect(jsSource).toContain('coverageGap');
+      // Should NOT divide by totalInsecure
+      expect(jsSource).not.toMatch(/totalSnap\s*\/\s*totalInsecure/);
+    });
+  });
+
   // ── P1 #11: SNAP coverage KPI formula ──
   describe('SNAP coverage KPI', () => {
     it('should use participants / (participants + gap) formula, not participants / insecure', () => {

@@ -49,7 +49,7 @@ function renderDensityMap(geoJSON, states) {
       }
     },
     visualMap: {
-      left: 'right', bottom: 20, min: 11, max: Math.ceil(Math.max(...states.map(s => s.perCapitaOrgs))),
+      left: 'right', bottom: 20, min: Math.floor(Math.min(...states.map(s => s.perCapitaOrgs))), max: Math.ceil(Math.max(...states.map(s => s.perCapitaOrgs))),
       text: ['Higher Density', 'Lower Density'], calculable: true,
       inRange: { color: [PAL.low, PAL.mid, PAL.high] },
       textStyle: { color: COLORS.text }
@@ -367,7 +367,7 @@ function renderCapacityGap(states) {
       name: s.name,
       insecurePersons: s.insecurePersons
     })),
-    symbolSize: (_, params) => Math.max(8, Math.sqrt(params.data.insecurePersons / 50000)),
+    symbolSize: (_, params) => Math.max(6, Math.min(35, Math.sqrt(params.data.insecurePersons / 10000))),
     itemStyle: { color, opacity: 0.85 },
     emphasis: { itemStyle: { opacity: 1 } },
     animationDuration: 2000

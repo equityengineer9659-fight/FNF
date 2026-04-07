@@ -71,7 +71,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
       Poverty Rate: ${d.povertyRate}%<br/>
       Persons: ${fmtNum(d.persons)}<br/>
       Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
-      Avg Meal Cost: $${d.mealCost}`;
+      Avg Meal Cost: $${d.mealCost} <span style="opacity:0.7">(state avg)</span>`;
   }
 
   // Show national (state-level) view
@@ -87,7 +87,10 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
     if (mapLabel) mapLabel.textContent = '';
     currentStateName = '';
     const mapInsight = document.getElementById('map-insight');
-    if (mapInsight) mapInsight.textContent = 'Mississippi leads the nation at 18.7% \u2014 nearly 1 in 5 residents.';
+    if (mapInsight) {
+      const worst = data.states.reduce((a, b) => (b.rate > a.rate ? b : a), data.states[0]);
+      mapInsight.textContent = `${worst.name} leads the nation at ${worst.rate}% \u2014 nearly 1 in ${Math.round(100 / worst.rate)} residents.`;
+    }
     const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
     if (hint) hint.textContent = 'Hover for state details \u2014 click any state for county breakdown';
 
@@ -278,7 +281,11 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
   // Back button
   const backBtn = document.getElementById('map-back-btn');
   if (backBtn) {
-    backBtn.addEventListener('click', () => showNational());
+    backBtn.addEventListener('click', () => {
+      showNational();
+      const mapEl = document.getElementById('chart-map');
+      if (mapEl) mapEl.focus();
+    });
   }
 
   // Metric selector
@@ -599,7 +606,8 @@ function renderBar(data) {
         { name: 'SNAP Usage', max: 100 }
       ],
       shape: 'polygon', splitNumber: 4,
-      axisName: { color: COLORS.text, fontSize: 11 },
+      axisName: { color: COLORS.text, fontSize: window.innerWidth < 640 ? 9 : 11 },
+      radius: window.innerWidth < 640 ? '55%' : '65%',
       splitLine: { lineStyle: { color: COLORS.gridLine } },
       splitArea: { areaStyle: { color: ['rgba(0,212,255,0.02)', 'rgba(0,212,255,0.05)'] } },
       axisLine: { lineStyle: { color: COLORS.gridLine } }

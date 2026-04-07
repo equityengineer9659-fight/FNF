@@ -42,11 +42,28 @@ function renderSnapTrend(trendData, blsData, snapNational) {
       // Align to SNAP dates (find closest month)
       const cpiAligned = dates.map(date => cpiMap[date] ?? null);
 
-      // SNAP Purchasing Power Index: how much the avg benefit buys in real terms
-      // Baseline = first available aligned CPI value
+      // SNAP Purchasing Power Index: how much the benefit buys in real terms
+      // Uses benefitTimeline for historically-accurate benefit per date
       const firstCpi = cpiAligned.find(v => v !== null);
-      const benefit = snapNational?.avgMonthlyBenefit || 188;
-      const ppIndex = firstCpi ? cpiAligned.map(v => v ? Math.round((benefit * firstCpi / v) * 10) / 10 : null) : null;
+      const fallbackBenefit = snapNational?.avgMonthlyBenefit || 188;
+
+      // Build benefit lookup from timeline (step function: use most recent value <= date)
+      const getBenefitForDate = (date) => {
+        if (!snapBenefitTimeline?.length) return fallbackBenefit;
+        let benefit = snapBenefitTimeline[0].value;
+        for (const entry of snapBenefitTimeline) {
+          if (entry.date <= date) benefit = entry.value;
+          else break;
+        }
+        return benefit;
+      };
+
+      const ppIndex = firstCpi ? dates.map((date, i) => {
+        const cpi = cpiAligned[i];
+        if (!cpi) return null;
+        const benefit = getBenefitForDate(date);
+        return Math.round((benefit * firstCpi / cpi) * 10) / 10;
+      }) : null;
 
       legendData.push('Food CPI');
       if (ppIndex) legendData.push('SNAP Purchasing Power ($)');
@@ -515,6 +532,7 @@ function renderGauges(national) {
 // -- Non-blocking: BLS CPI overlay for SNAP trend --
 let snapTrendData = null;
 let snapNationalData = null;
+let snapBenefitTimeline = null;
 
 async function fetchBLSForSnap() {
   try {
@@ -610,9 +628,13 @@ function renderDemographicFlow(sdoh, snapData) {
   const links = [];
   const totalFI = Object.entries(raceGroups).reduce((sum, [race, pop]) => sum + pop * (fiRates[race] / 100), 0);
 
+  // Race-specific SNAP coverage rates (USDA FNS SNAP Characteristics Surveys, 2023)
+  // Black households have higher SNAP participation among food-insecure; Asian households significantly lower
+  const coverageRates = { 'Hispanic/Latino': 0.78, 'White (non-Hispanic)': 0.82, 'Black/African American': 0.93, 'Asian': 0.62, 'Other': 0.75 };
+
   Object.entries(raceGroups).forEach(([race, pop]) => {
     const fiPop = pop * (fiRates[race] / 100);
-    const covered = fiPop * 0.84; // ~84% national SNAP coverage rate
+    const covered = fiPop * (coverageRates[race] || 0.84);
     const uncovered = fiPop - covered;
 
     links.push({ source: race, target: 'Food Insecure', value: Math.round(fiPop / 1000000 * 10) / 10 });
@@ -675,6 +697,7 @@ async function init() {
 
     snapTrendData = snapData.trend;
     snapNationalData = snapData.national;
+    snapBenefitTimeline = snapData.benefitTimeline?.data || null;
     animateCounters();
     updateFreshness('snap', { _static: true, _dataYear: snapData.national.year || 2024 });
 

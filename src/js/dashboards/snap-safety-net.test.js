@@ -176,5 +176,13 @@ describe('snap-safety-net', () => {
       // Verify there IS meaningful variation (COVID spike vs pre-COVID)
       expect(max / min).toBeGreaterThan(1.5);
     });
+
+    it('snap-safety-net.js should use benefitTimeline for PPI, not static $188', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      expect(jsSource).toContain('snapBenefitTimeline');
+      expect(jsSource).toContain('getBenefitForDate');
+      // Should NOT have a static benefit = 188 as the sole PPI input
+      expect(jsSource).not.toMatch(/const benefit\s*=\s*snapNational.*\|\|\s*188/);
+    });
   });
 });

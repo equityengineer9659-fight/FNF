@@ -223,7 +223,7 @@
                     </div>
                     <div class="dashboard-chart-row">
                         <div class="dashboard-chart-row__chart">
-                            <div id="chart-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map of food insecurity rates across US states">
+                            <div id="chart-map" class="dashboard-chart dashboard-chart--map" tabindex="-1" role="img" aria-label="Choropleth map of food insecurity rates across US states">
                                 <noscript><p>This interactive map requires JavaScript.</p></noscript>
                             </div>
                             <p class="dashboard-chart__hint">Hover for state details — click any state for county breakdown</p>
@@ -238,7 +238,7 @@
                                 <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> USDA report terminated after ERR-358 (Dec 2025). Feeding America continues annually (next: Spring 2026)</div>
                                 <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Granularity</span> State &amp; county level</div>
                             </div>
-                            <div id="map-insight" class="dashboard-info__insight">Mississippi leads the nation at 18.7% — nearly 1 in 5 residents.</div>
+                            <div id="map-insight" class="dashboard-info__insight" aria-live="polite">Mississippi leads the nation at 18.7% — nearly 1 in 5 residents.</div>
                         </div>
                     </div>
             </div>
@@ -313,7 +313,7 @@
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024 food insecurity; 2023 SAIPE/ACS poverty estimates</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> SAIPE: annually each December. ACS fallback: annually each December. USDA ERS: terminated after ERR-358 (2024 data)</div>
                         </div>
-                        <div id="scatter-insight" class="dashboard-info__insight">Strong positive correlation (r &asymp; 0.92) — poverty is the #1 predictor of food insecurity.</div>
+                        <div id="scatter-insight" class="dashboard-info__insight" aria-live="polite">Strong positive correlation (r &asymp; 0.92) — poverty is the #1 predictor of food insecurity.</div>
                     </div>
                 </div>
             </div>
@@ -339,7 +339,7 @@
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2023</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually via Census API &amp; CDC PLACES API</div>
                         </div>
-                        <div id="sdoh-insight" class="dashboard-info__insight"></div>
+                        <div id="sdoh-insight" class="dashboard-info__insight" aria-live="polite"></div>
                     </div>
                 </div>
                 <div id="sdoh-metric-buttons" class="dashboard-metric-buttons" role="group" aria-label="Select social determinant"></div>
@@ -364,7 +364,7 @@
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA ERS ERR-358 &amp; Feeding America, Map the Meal Gap 2025</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024</div>
                         </div>
-                        <div id="demographics-insight" class="dashboard-info__insight"></div>
+                        <div id="demographics-insight" class="dashboard-info__insight" aria-live="polite"></div>
                     </div>
                 </div>
             </div>
@@ -379,7 +379,7 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-income-river" class="dashboard-chart" style="height:450px" role="img" aria-label="Theme river chart showing income distribution bands across states sorted by food insecurity rate"></div>
+                        <div id="chart-income-river" class="dashboard-chart" style="min-height:350px; height:50vh; max-height:600px" role="img" aria-label="Theme river chart showing income distribution bands across states sorted by food insecurity rate"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Follow the Money</h3>
@@ -390,7 +390,7 @@
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2023</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually via Census API</div>
                         </div>
-                        <div id="income-river-insight" class="dashboard-info__insight"></div>
+                        <div id="income-river-insight" class="dashboard-info__insight" aria-live="polite"></div>
                     </div>
                 </div>
             </div>
@@ -490,7 +490,7 @@
                             <span class="meta-item"><strong>Dimensions</strong> Food Insecurity Rate + Low-Access Tract % + Inverse SNAP Coverage</span>
                             <span class="meta-item"><strong>Methodology</strong> Each dimension is normalized to 0–100 based on min/max across states, then summed (equal weight). Max composite score: 300. Weights are equal by design, not statistically optimized.</span>
                         </div>
-                        <div id="triple-burden-insight" class="dashboard-info__insight"></div>
+                        <div id="triple-burden-insight" class="dashboard-info__insight" aria-live="polite"></div>
                     </div>
                 </div>
             </div>

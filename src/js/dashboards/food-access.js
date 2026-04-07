@@ -331,7 +331,7 @@ function renderDistance(states) {
     grid: { left: 50, right: 20, top: 20, bottom: 40 },
     xAxis: {
       type: 'category', data: names,
-      axisLabel: { color: COLORS.textMuted, rotate: 60, fontSize: 8 },
+      axisLabel: { color: COLORS.textMuted, rotate: 60, fontSize: window.innerWidth < 640 ? 7 : 9, interval: window.innerWidth < 640 ? 2 : 0 },
       axisLine: { lineStyle: { color: COLORS.gridLine } }
     },
     yAxis: {
@@ -356,11 +356,8 @@ function renderDistance(states) {
   });
 }
 
-// -- Chart 4: Vehicle Access & Food Deserts (scatter) --
-// Note: the negative correlation (r ≈ -0.65) is the finding, not a bug.
-// Dense transit-rich states (NY, DC, MA) have high no-vehicle rates but good store proximity.
-// Rural states (WV, MS) have low no-vehicle rates because cars are mandatory — yet stores are still far.
-// Car ownership alone does not predict food desert risk at the state level.
+// -- Chart 4: Distance vs Low-Access (scatter) --
+// Positive correlation: states with higher avg distance to stores have more low-access tracts.
 function renderVehicle(states) {
   const chart = getOrCreateChart('chart-vehicle');
   if (!chart) return;
@@ -1263,6 +1260,17 @@ async function init() {
 
     updateFreshness('access', { _static: true, _dataYear: 'Current' });
 
+    // Sync hero stats from live data
+    const nat = currentAccessData.national;
+    const heroTargets = document.querySelectorAll('.dashboard-hero .dashboard-stat__number');
+    heroTargets.forEach(el => {
+      const label = el.nextElementSibling?.textContent?.trim() || '';
+      if (label.includes('Low-Access Population')) el.dataset.target = (nat.lowAccessPopulation / 1e6).toFixed(1);
+      else if (label.includes('Low-Access Tracts') && !label.includes('%')) el.dataset.target = String(nat.lowAccessTracts);
+      else if (label.includes('Avg Distance')) el.dataset.target = nat.avgDistance.toFixed(1);
+      else if (label.includes('Tracts Low-Access')) el.dataset.target = String(nat.lowAccessPct);
+    });
+
     animateCounters();
     const mapCtrl = renderDesertMap(geoJSON, currentAccessData.states, currentAccessData);
     renderUrbanRural(curStates);
@@ -1300,10 +1308,15 @@ async function init() {
         }
       }
 
-      const infoPanels = ['info-insecurity-mode', 'info-current-access-mode', 'info-desert-mode', 'info-snap-mode'];
+      const infoPanels = ['info-insecurity-mode', 'info-desert-mode', 'info-snap-mode'];
       const hint = document.querySelector('#chart-desert-map + .dashboard-chart__hint');
       const freshAccess = document.getElementById('freshness-access');
       const freshSnap = document.getElementById('freshness-snap-retailers');
+
+      // Update map aria-label for current view
+      const mapLabels = { deserts: 'Choropleth map showing low-access food tracts across US states', insecurity: 'Choropleth map showing food insecurity rates across US states', snap: 'Choropleth map showing SNAP retailer density across US states' };
+      const mapEl = document.getElementById('chart-desert-map');
+      if (mapEl) mapEl.setAttribute('aria-label', mapLabels[view] || mapLabels.deserts);
 
       // Hide all info panels first
       infoPanels.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });

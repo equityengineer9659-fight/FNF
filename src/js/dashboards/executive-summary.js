@@ -367,29 +367,28 @@ async function init() {
   initScrollReveal();
 
   try {
-    const [fiRes, snapRes, blsRes, bankRes, geoRes] = await Promise.all([
+    const [fiRes, snapRes, blsRes, geoRes] = await Promise.all([
       fetch('/data/food-insecurity-state.json'),
       fetch('/data/snap-participation.json'),
       fetch('/data/bls-food-cpi.json'),
-      fetch('/data/food-bank-summary.json'),
       fetch('/data/us-states-geo.json')
     ]);
 
-    if (!fiRes.ok || !snapRes.ok || !blsRes.ok || !bankRes.ok || !geoRes.ok) {
+    if (!fiRes.ok || !snapRes.ok || !blsRes.ok || !geoRes.ok) {
       throw new Error('Failed to load one or more data files');
     }
 
-    const [fiData, snapData, blsData, , geoJSON] = await Promise.all([
-      fiRes.json(), snapRes.json(), blsRes.json(), bankRes.json(), geoRes.json()
+    const [fiData, snapData, blsData, geoJSON] = await Promise.all([
+      fiRes.json(), snapRes.json(), blsRes.json(), geoRes.json()
     ]);
 
     const statesWithIndex = computeVulnerabilityIndex(fiData.states);
 
     // Update SNAP coverage KPI dynamically
     // Formula: SNAP participants ÷ (participants + coverage gap) — eligible-population denominator (USDA FNS)
-    const totalInsecure = fiData.national.foodInsecurePersons;
     const totalSnap = snapData.national.snapParticipants;
-    const snapCoverage = ((totalSnap / totalInsecure) * 100).toFixed(1);
+    const coverageGap = snapData.national.coverageGap;
+    const snapCoverage = ((totalSnap / (totalSnap + coverageGap)) * 100).toFixed(1);
     const snapKpiEl = document.getElementById('snap-coverage-kpi');
     if (snapKpiEl) {
       snapKpiEl.dataset.target = snapCoverage;

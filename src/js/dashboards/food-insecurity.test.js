@@ -76,20 +76,15 @@ describe('food-insecurity', () => {
 
   // ── P1 #12: Hardcoded Mississippi insight ──
   describe('hardcoded state insight', () => {
-    it('default map insight should reference the actual worst state from data', () => {
-      const fiData = readJSON('food-insecurity-state.json');
+    it('map insight should use dynamic worst state from data, not hardcoded', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
 
-      // Find actual worst state
-      const worst = fiData.states.reduce((max, s) =>
-        s.rate > max.rate ? s : max, fiData.states[0]);
+      // Should NOT have a hardcoded "Mississippi leads the nation at 18.7%"
+      const hasHardcoded = jsSource.includes('Mississippi leads the nation at 18.7%');
+      expect(hasHardcoded).toBe(false);
 
-      // The hardcoded insight should match
-      const insightMatch = jsSource.match(/mapInsight\)\s*mapInsight\.textContent\s*=\s*'([^']+)'/);
-      if (insightMatch) {
-        expect(insightMatch[1]).toContain(worst.name);
-        expect(insightMatch[1]).toContain(worst.rate.toString());
-      }
+      // Should compute worst state dynamically via reduce
+      expect(jsSource).toContain('data.states.reduce');
     });
 
     it('worst state by food insecurity rate should be identifiable', () => {

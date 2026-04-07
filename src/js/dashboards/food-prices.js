@@ -13,6 +13,7 @@ import {
 
 const PAL = MAP_PALETTES.prices;
 let _snapBenefits = null;
+let avgMealCost = 3.58;
 
 // -- Chart 1: Food Prices by Category (Overlapping Lines with Area) --
 function renderCategories(data) {
@@ -52,7 +53,7 @@ function renderCategories(data) {
 }
 
 // -- Chart 2: Regional Price Comparison (grouped bar) --
-function renderRegions(data) {
+function renderRegions(data, mealCost) {
   const chart = createChart('chart-regions');
   if (!chart || !data.series) return;
 
@@ -81,7 +82,7 @@ function renderRegions(data) {
           tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`;
         });
         if (idx >= 0) {
-          const baseMealCost = 3.58;
+          const baseMealCost = mealCost || 3.58;
           const dollarImpact = (baseMealCost * changesPct[idx] / 100).toFixed(2);
           tip += `<span style="color:${COLORS.secondary}">Change: +${changesPct[idx]}%</span><br/>`;
           tip += `<span style="color:${COLORS.accent}">Impact: +$${dollarImpact}/meal since ${startLabel}</span>`;
@@ -386,12 +387,18 @@ function renderYoYInflation(blsData) {
   const allItems = blsData.series.find(s => s.name === 'All Items');
   if (!foodHome) return;
 
-  // Compute YoY % for each series (skip first 12 months)
+  // Compute YoY % for each series using date-keyed lookback (null-safe)
   function computeYoY(series) {
     if (!series) return null;
-    const data = series.data.filter(d => d.value !== null);
-    return data.slice(12).map((d, i) => {
-      const prior = data[i].value;
+    const validData = series.data.filter(d => d.value !== null);
+    const byDate = {};
+    validData.forEach(d => { byDate[d.date] = d.value; });
+    return validData.filter(d => {
+      const [y, m] = d.date.split('-').map(Number);
+      return byDate[`${y - 1}-${String(m).padStart(2, '0')}`] !== undefined;
+    }).map(d => {
+      const [y, m] = d.date.split('-').map(Number);
+      const prior = byDate[`${y - 1}-${String(m).padStart(2, '0')}`];
       return { date: d.date, value: +((d.value - prior) / prior * 100).toFixed(1) };
     });
   }
@@ -508,8 +515,9 @@ function toggleFredOverlay(item, btn) {
     btn.textContent = item.label;
     if (!observations || observations.length === 0) return;
 
-    // Index to earliest available value = 100
-    const baseline = observations[0].value;
+    // Index to Jan 2018 value = 100 (aligned with main chart baseline)
+    const jan2018 = observations.find(d => d.date.startsWith('2018-01'));
+    const baseline = jan2018 ? jan2018.value : observations[0].value;
     const indexed = observations.map(d => ({
       date: d.date.slice(0, 7), // YYYY-MM
       value: +(d.value / baseline * 100).toFixed(1)
@@ -781,7 +789,10 @@ async function init() {
     updateFreshness('bls-categories', { _static: true, _dataYear: 'CPI' });
 
     // Chart 2: Regional Price Comparison
-    renderRegions(regionalData.regions);
+    avgMealCost = regionalData.stateAffordability?.states?.length
+      ? +(regionalData.stateAffordability.states.reduce((s, st) => s + st.mealCost, 0) / regionalData.stateAffordability.states.length).toFixed(2)
+      : 3.58;
+    renderRegions(regionalData.regions, avgMealCost);
 
     // Chart 3: Affordability Map
     renderAffordabilityMap(geoJSON, regionalData.stateAffordability.states);
@@ -863,7 +874,7 @@ async function fetchLiveRegional() {
     const liveData = await res.json();
     if (liveData.error || !liveData.categories || !liveData.regions) return;
     renderCategories(liveData.categories);
-    renderRegions(liveData.regions);
+    renderRegions(liveData.regions, avgMealCost);
     updateFreshness('bls-categories', liveData);
   } catch { /* PHP proxy unavailable — static data already rendered */ }
 }
