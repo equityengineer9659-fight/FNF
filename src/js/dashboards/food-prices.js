@@ -656,6 +656,12 @@ function renderPurchasingPower(blsData, snapBenefits) {
             { offset: 0, color: 'rgba(34,197,94,0.15)' },
             { offset: 1, color: 'rgba(34,197,94,0)' }
           ])
+        },
+        markLine: {
+          silent: true, symbol: 'none',
+          lineStyle: { color: 'rgba(34,197,94,0.4)', type: 'dashed', width: 1 },
+          label: { formatter: 'SNAP data\nthrough here', color: COLORS.textMuted, fontSize: 9, position: 'insideEndTop' },
+          data: [{ xAxis: snapBenefits.at(-1)?.date || dates.at(-1) }]
         }
       }
     ]
@@ -703,7 +709,7 @@ function renderPurchasingPower(blsData, snapBenefits) {
     if (gap > 0) {
       insightEl.textContent = `As of ${latestFood.date}, food prices have risen ${(latestFood.value - 100).toFixed(0)}% since 2018 while SNAP benefits have risen ${(latestSnap - 100).toFixed(0)}%. The ${gap}-point gap means SNAP families have lost real purchasing power.`;
     } else {
-      insightEl.textContent = `As of ${latestFood.date}, SNAP benefits (${(latestSnap - 100).toFixed(0)}% above 2018) are keeping pace with food prices (${(latestFood.value - 100).toFixed(0)}% above 2018).`;
+      insightEl.textContent = `As of ${latestFood.date}, SNAP benefits (${(latestSnap - 100).toFixed(0)}% above 2018) have outpaced food prices (${(latestFood.value - 100).toFixed(0)}% above 2018) by ${Math.abs(gap)} index points — reflecting the 2021 Thrifty Food Plan increase.`;
     }
   }
 }

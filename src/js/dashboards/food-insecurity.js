@@ -155,7 +155,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
         .filter(f => f.properties.rate != null)
         .map(f => ({
           name: f.properties.name,
-          value: f.properties[currentMetric] || f.properties.rate,
+          value: f.properties[currentMetric] ?? f.properties.rate,
           ...f.properties
         }));
 
@@ -1176,10 +1176,13 @@ async function fetchCDCPlacesData() {
     if (!fiData || !fiData.states) return;
 
     // Merge CDC fields into existing SDOH state records
+    // API returns { state: "AL", obesity: ..., ... } — keyed by abbreviation
     const placesByName = {};
-    places.records.forEach(s => { placesByName[s.name] = s; });
+    places.records.forEach(s => { placesByName[s.state] = s; });
+    const nameToAbbr = {};
+    US_STATES.forEach(([abbr, name]) => { nameToAbbr[name] = abbr; });
     sdohData.states.forEach(s => {
-      const p = placesByName[s.name];
+      const p = placesByName[nameToAbbr[s.name]];
       if (!p) return;
       s.obesity = p.obesity;
       s.diabetes = p.diabetes;
@@ -1217,7 +1220,7 @@ function renderDemographics(data) {
         const s = sorted.find(st => st.name === name);
         if (!s) return '';
         const gap = (s.childRate - s.rate).toFixed(1);
-        const multiplier = (s.childRate / s.rate).toFixed(2);
+        const multiplier = s.rate > 0 ? (s.childRate / s.rate).toFixed(2) : 'N/A';
         return `<strong>${name}</strong><br/>Overall: ${s.rate}%<br/>Children: ${s.childRate}%<br/>Gap: +${gap} pp (${multiplier}x)`;
       }
     },
@@ -1382,7 +1385,8 @@ function renderTripleBurden(data, accessData) {
   const rates = data.states.map(s => s.rate);
   const rateMin = Math.min(...rates), rateMax = Math.max(...rates);
   const accessVals = data.states.map(s => accessByName[s.name] || 0).filter(v => v > 0);
-  const accMin = Math.min(...accessVals), accMax = Math.max(...accessVals);
+  const accMin = accessVals.length ? Math.min(...accessVals) : 0;
+  const accMax = accessVals.length ? Math.max(...accessVals) : 1;
 
   const scored = data.states.map(s => {
     const fiScore = norm(s.rate, rateMin, rateMax);
@@ -1544,7 +1548,15 @@ async function init() {
     // Store for live Census upgrade
     window._fnfStateData = data;
 
-    // Animate hero counters
+    // Sync hero stat data-targets from live JSON
+    const nat = data.national;
+    document.querySelectorAll('.dashboard-hero .dashboard-stat__number').forEach(el => {
+      const label = el.nextElementSibling?.textContent?.trim() || '';
+      if (label.includes('Food Insecure') && label.includes('Rate')) el.dataset.target = nat.foodInsecurityRate.toFixed(1);
+      else if (label.includes('Americans')) el.dataset.target = (nat.foodInsecurePersons / 1e6).toFixed(1);
+      else if (label.includes('Children')) el.dataset.target = (nat.foodInsecureChildren / 1e6).toFixed(1);
+      else if (label.includes('Meals')) el.dataset.target = (nat.annualMealGap / 1e9).toFixed(1);
+    });
     animateCounters();
 
     // Render all charts

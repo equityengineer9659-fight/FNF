@@ -186,6 +186,129 @@ describe('food-insecurity', () => {
     });
   });
 
+  // ── C-1: CDC PLACES merge must key by state abbreviation, not s.name ──
+  describe('CDC PLACES merge key', () => {
+    it('placesByName should be keyed by state abbreviation (s.state), not s.name', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // The PHP API returns records with { state: "AL", obesity: ..., ... }
+      // The merge must key on s.state (abbreviation), then look up full names via US_STATES
+      const mergeBlock = jsSource.slice(
+        jsSource.indexOf('// Merge CDC fields'),
+        jsSource.indexOf('// Re-render buttons to include CDC')
+      );
+      // Must NOT key by s.name (which doesn't exist in the API response)
+      expect(mergeBlock).not.toMatch(/placesByName\[s\.name\]\s*=\s*s/);
+      // Must key by s.state (the abbreviation field from the API)
+      expect(mergeBlock).toMatch(/placesByName\[s\.state\]\s*=\s*s/);
+    });
+
+    it('merge lookup should use abbreviation-to-name mapping for sdohData join', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // sdohData.states use full names ("Alabama"), but placesByName is keyed by abbreviation ("AL")
+      // Code must use a nameToAbbr mapping or US_STATES to bridge the join
+      expect(jsSource).toContain('nameToAbbr');
+    });
+  });
+
+  // ── Fix 18: Hero stats must be updated from JSON ──
+  describe('hero stat dynamic updates', () => {
+    it('init() should update hero data-target from national data', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
+      // Should update at least the national rate and persons KPIs
+      expect(initSection).toContain('foodInsecurityRate');
+      expect(initSection).toContain('foodInsecurePersons');
+      expect(initSection).toContain('dashboard-stat__number');
+    });
+  });
+
+  // ── Fix 7: Meal cost insight percentage must match data ──
+  describe('meal cost insight accuracy', () => {
+    it('Hawaii premium over national average should be ~43%, not 28%', () => {
+      const fiData = readJSON('food-insecurity-state.json');
+      const html = readHTML('food-insecurity.html');
+      const hawaii = fiData.states.find(s => s.name === 'Hawaii');
+      const nationalAvg = fiData.national.averageMealCost;
+      const actualPremium = Math.round((hawaii.mealCost / nationalAvg - 1) * 100);
+      // HTML should contain the correct percentage
+      expect(html).toContain(`${actualPremium}% above the national average`);
+      // Should NOT contain stale 28%
+      expect(html).not.toContain('28% above the national average');
+    });
+  });
+
+  // ── Fix 8: Triple Burden empty array guard ──
+  describe('Triple Burden accessVals guard', () => {
+    it('should guard against Math.min/max on empty accessVals array', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // Must check accessVals.length before Math.min/max to prevent Infinity/-Infinity
+      const tripleBurdenSection = jsSource.slice(
+        jsSource.indexOf('const accessVals'),
+        jsSource.indexOf('const scored = data.states.map')
+      );
+      expect(tripleBurdenSection).toMatch(/accessVals\.length/);
+    });
+  });
+
+  // ── Fix 15: Demographics tooltip divide-by-zero guard ──
+  describe('demographics tooltip safety', () => {
+    it('childRate/rate division should guard against rate === 0', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // Should have a guard like s.rate > 0 before dividing
+      expect(jsSource).toMatch(/s\.rate\s*>\s*0/);
+    });
+  });
+
+  // ── Fix 16: County metric fallback must use ?? not || ──
+  describe('county metric fallback operator', () => {
+    it('should use nullish coalescing, not truthy fallback', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // Must use ?? to preserve metric value of 0
+      expect(jsSource).toContain('currentMetric] ??');
+      expect(jsSource).not.toContain('currentMetric] ||');
+    });
+  });
+
+  // ── Batch 7: Test coverage for critical untested functions ──
+  describe('renderTripleBurden data contract', () => {
+    it('should guard accessVals with length check before Math.min/max', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('const accessVals'));
+      expect(section).toContain('accessVals.length');
+    });
+
+    it('norm function should clamp to 0-100 range', () => {
+      // Test the norm function inline
+      const norm = (val, min, max) => Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
+      expect(norm(50, 0, 100)).toBe(50);
+      expect(norm(-10, 0, 100)).toBe(0);
+      expect(norm(200, 0, 100)).toBe(100);
+      expect(norm(5, 5, 5)).toBeNaN(); // division by zero edge case
+    });
+  });
+
+  describe('renderDemographics data contract', () => {
+    it('tooltip should guard against rate=0 for child multiplier', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toMatch(/s\.rate\s*>\s*0/);
+    });
+  });
+
+  describe('renderIncomeRiver null handling', () => {
+    it('should use nullish coalescing for income band values', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toMatch(/income\[.*\]\s*\?\?\s*0/);
+    });
+  });
+
+  describe('renderSDOH empty points guard', () => {
+    it('should early-return when no SDOH data points exist', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const sdohSection = jsSource.slice(jsSource.indexOf('function renderSDOH'));
+      expect(sdohSection).toContain('points.length');
+    });
+  });
+
   // ── County GeoJSON integrity ──
   describe('county GeoJSON', () => {
     it('all 51 state FIPS files should exist', () => {

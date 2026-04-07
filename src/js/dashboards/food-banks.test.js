@@ -122,6 +122,81 @@ describe('food-banks', () => {
     });
   });
 
+  // ── F4: Hero stats must be updated from JSON ──
+  describe('hero stat dynamic updates', () => {
+    it('init() should update hero data-target from bankData.national', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
+      expect(initSection).toContain('totalOrganizations');
+      expect(initSection).toContain('dashboard-stat__number');
+    });
+  });
+
+  // ── Fix 29: Radar national avg must use national.avgEfficiencyRatio ──
+  describe('radar national avg source', () => {
+    it('should use national.avgEfficiencyRatio, not recomputed state mean', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      // The radar National Avg benchmark should reference the JSON national value
+      // not a states.reduce(...) / states.length recomputed average
+      expect(jsSource).toContain('avgEfficiencyRatio');
+    });
+  });
+
+  // ── Fix 30: Revenue reconciliation note direction ──
+  describe('revenue reconciliation', () => {
+    it('reconciliation note should address state sum exceeding national', () => {
+      const data = readJSON('food-bank-summary.json');
+      const stateRevSum = data.states.reduce((sum, s) => sum + s.totalRevenue, 0);
+      const natRev = data.national.combinedRevenue;
+      // State sum should be close but may exceed national
+      const variance = ((stateRevSum - natRev) / natRev) * 100;
+      expect(Math.abs(variance)).toBeLessThan(5);
+      // Reconciliation note should exist
+      expect(data.national._reconciliationNote).toBeDefined();
+    });
+  });
+
+  // ── Fix 31: Freshness badge mixed year ──
+  describe('freshness badge year', () => {
+    it('should show mixed data year, not just 2023', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      expect(jsSource).toContain('2023/2024');
+      expect(jsSource).not.toMatch(/_dataYear:\s*2023\b(?!\/)/);
+    });
+  });
+
+  // ── Batch 7: Breadcrumb keyboard, regression suppression, orgCount guard ──
+  describe('D3 heatmap breadcrumb keyboard', () => {
+    it('breadcrumb spans should have tabindex and role=button', () => {
+      const d3Source = readFileSync(resolve(__dirname, 'shared/d3-heatmap.js'), 'utf-8');
+      expect(d3Source).toContain('tabindex');
+      expect(d3Source).toContain('role');
+      expect(d3Source).toContain('keydown');
+    });
+  });
+
+  describe('regression suppression', () => {
+    it('should suppress regression line when |r| < 0.2', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      expect(jsSource).toMatch(/Math\.abs\(.*r.*\)\s*>=?\s*0\.2/);
+    });
+
+    it('current data should have |r| < 0.2 for density vs insecurity', () => {
+      const { linearRegression } = require('./shared/dashboard-utils.js');
+      const data = readJSON('food-bank-summary.json');
+      const points = data.states.map(s => [s.foodInsecurityRate, s.perCapitaOrgs]);
+      const { r } = linearRegression(points);
+      expect(Math.abs(r)).toBeLessThan(0.2);
+    });
+  });
+
+  describe('orgCount guard', () => {
+    it('renderEfficiency should guard against orgCount === 0', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      expect(jsSource).toContain('orgCount > 0');
+    });
+  });
+
   // ── Data shape validation ──
   describe('data shape: food-bank-summary.json', () => {
     it('should have national aggregate and states array', () => {

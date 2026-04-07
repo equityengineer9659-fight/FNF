@@ -220,7 +220,7 @@ function renderRevenue(states) {
 }
 
 // -- Chart 4: Regional Comparison (Radar) --
-function renderEfficiency(states) {
+function renderEfficiency(states, national) {
   const chart = createChart('chart-efficiency');
   if (!chart) return;
 
@@ -259,9 +259,9 @@ function renderEfficiency(states) {
         {
           name: 'National Avg',
           value: [
-            (states.reduce((s, st) => s + st.programExpenseRatio, 0) / states.length).toFixed(1),
+            (national?.avgEfficiencyRatio ?? (states.reduce((s, st) => s + st.programExpenseRatio, 0) / states.length)).toFixed(1),
             (states.reduce((s, st) => s + st.perCapitaOrgs, 0) / states.length).toFixed(1),
-            (states.reduce((s, st) => s + st.totalRevenue / st.orgCount, 0) / states.length / 1000000).toFixed(2),
+            (states.reduce((s, st) => s + (st.orgCount > 0 ? st.totalRevenue / st.orgCount : 0), 0) / states.length / 1000000).toFixed(2),
             (states.reduce((s, st) => s + st.foodInsecurityRate, 0) / states.length).toFixed(1),
             Math.round(states.reduce((s, st) => s + st.orgCount, 0) / states.length)
           ],
@@ -412,8 +412,17 @@ async function init() {
     if (!bankRes.ok || !geoRes.ok) throw new Error('Failed to load data');
     const [bankData, geoJSON] = await Promise.all([bankRes.json(), geoRes.json()]);
 
+    // Sync hero stat data-targets from live JSON
+    const bn = bankData.national;
+    document.querySelectorAll('.dashboard-hero .dashboard-stat__number').forEach(el => {
+      const label = el.nextElementSibling?.textContent?.trim() || '';
+      if (label.includes('Assistance Orgs')) el.dataset.target = String(bn.totalOrganizations);
+      else if (label.includes('Revenue')) el.dataset.target = (bn.combinedRevenue / 1e9).toFixed(1);
+      else if (label.includes('Efficiency')) el.dataset.target = String(bn.avgEfficiencyRatio);
+      else if (label.includes('Under 100')) el.dataset.target = String(bn.statesUnder100);
+    });
     animateCounters();
-    updateFreshness('banks', { _static: true, _dataYear: 2023 });
+    updateFreshness('banks', { _static: true, _dataYear: '2023/2024' });
     renderDensityMap(geoJSON, bankData.states);
     // Surface reconciliation note if present in data
     if (bankData.national?._reconciliationNote) {
@@ -422,7 +431,7 @@ async function init() {
     }
     renderVsInsecurity(bankData.states);
     renderRevenue(bankData.states);
-    renderEfficiency(bankData.states);
+    renderEfficiency(bankData.states, bankData.national);
     renderDistribution(bankData.states);
     renderCapacityGap(bankData.states);
     addExportButton('chart-density-map', 'food-banks-by-state.csv', () => ({

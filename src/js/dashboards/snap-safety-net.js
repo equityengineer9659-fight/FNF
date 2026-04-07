@@ -285,7 +285,7 @@ function applySnapMapView(view) {
         ...TOOLTIP_STYLE,
         formatter: params => {
           const d = params.data;
-          if (!d) return '';
+          if (!d) return `<strong style="font-size:14px">${params.name}</strong><br/><span style="color:${COLORS.textMuted}">No CDC survey data available for this state</span>`;
           let tip = `<strong style="font-size:14px">${d.name}</strong><br/>
             <span style="color:${COLORS.accent}">CDC Self-Reported SNAP:</span> ${d.cdcRate}%`;
           // Show admin comparison
@@ -535,6 +535,13 @@ function renderGauges(national) {
         data: [{ value: cfg.value, name: cfg.title }]
       }]
     });
+
+    // Update aria-label with computed value for screen readers
+    const gaugeEl = document.getElementById(cfg.id);
+    if (gaugeEl) {
+      const displayVal = cfg.unit === '$' ? `$${cfg.value}` : `${cfg.value}${cfg.unit}`;
+      gaugeEl.setAttribute('aria-label', `Gauge showing ${cfg.title}: ${displayVal}`);
+    }
   });
 }
 
@@ -579,6 +586,8 @@ async function fetchCDCPlacesSnap() {
     // Show the toggle buttons now that CDC data is available
     const toggleContainer = document.getElementById('snap-map-toggle-container');
     if (toggleContainer) toggleContainer.style.display = '';
+    const cdcStatus = document.getElementById('snap-map-cdc-status');
+    if (cdcStatus) cdcStatus.textContent = 'CDC self-reported data loaded. Toggle available to compare administrative and self-reported SNAP data.';
 
     // Update freshness badge
     updateFreshness('snap-map', data);
@@ -707,6 +716,16 @@ async function init() {
     snapTrendData = snapData.trend;
     snapNationalData = snapData.national;
     snapBenefitTimeline = snapData.benefitTimeline?.data || null;
+
+    // Sync hero stat data-targets from live JSON
+    const sn = snapData.national;
+    document.querySelectorAll('.dashboard-hero .dashboard-stat__number').forEach(el => {
+      const label = el.nextElementSibling?.textContent?.trim() || '';
+      if (label.includes('SNAP Participants')) el.dataset.target = (sn.snapParticipants / 1e6).toFixed(1);
+      else if (label.includes('Avg Monthly')) el.dataset.target = String(sn.avgMonthlyBenefit);
+      else if (label.includes('Free Lunch')) el.dataset.target = String(sn.freeLunchPct);
+      else if (label.includes('Coverage Gap')) el.dataset.target = (sn.coverageGap / 1e6).toFixed(1);
+    });
     animateCounters();
     updateFreshness('snap', { _static: true, _dataYear: snapData.national.year || 2024 });
 

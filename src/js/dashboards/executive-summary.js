@@ -394,11 +394,15 @@ async function init() {
       snapKpiEl.dataset.target = snapCoverage;
     }
 
-    // Render all 4 charts
-    renderVulnerabilityMap(statesWithIndex, geoJSON, fiData.national);
-    renderSnapGap(fiData.states, snapData.stateCoverage.states);
-    renderPriceImpact(blsData);
-    renderWorstStates(statesWithIndex);
+    // Update food insecurity KPI dynamically
+    const fiKpiEl = document.getElementById('food-insecurity-kpi');
+    if (fiKpiEl) fiKpiEl.dataset.target = fiData.national.foodInsecurityRate.toFixed(1);
+
+    // Render each chart independently so partial data can still render
+    try { renderVulnerabilityMap(statesWithIndex, geoJSON, fiData.national); } catch { /* partial render OK */ }
+    try { renderSnapGap(fiData.states, snapData.stateCoverage.states); } catch { /* partial render OK */ }
+    try { renderPriceImpact(blsData); } catch { /* partial render OK */ }
+    try { renderWorstStates(statesWithIndex); } catch { /* partial render OK */ }
 
     // Re-animate counters after dynamic KPI updates
     animateCounters();

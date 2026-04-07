@@ -179,7 +179,7 @@
                     <h2 class="dashboard-card__title">Food Access Map</h2>
                     <span id="freshness-access" class="dashboard-freshness"></span>
                     <span id="freshness-snap-retailers" class="dashboard-freshness" style="display:none"></span>
-                    <div id="map-view-toggle" style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
+                    <div id="map-view-toggle" role="group" aria-label="Map view" style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;">
                         <button class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="deserts" aria-pressed="true">Food Deserts</button>
                         <button class="dashboard-metric-btn" data-map-view="insecurity" aria-pressed="false">Food Insecurity</button>
                         <button class="dashboard-metric-btn" data-map-view="snap" aria-pressed="false">SNAP Retailers</button>
@@ -360,7 +360,7 @@
                         </div>
                         <!-- Mode A: D3 Treemap -->
                         <div id="double-burden-breadcrumb" style="display:flex;align-items:center;gap:2px;padding:4px 0;min-height:26px"></div>
-                        <div id="chart-double-burden" class="dashboard-chart" role="img" aria-label="Treemap showing estimated low-income low-access population by state, sized by affected count and colored by rate"></div>
+                        <div id="chart-double-burden" class="dashboard-chart" role="region" aria-label="Treemap showing estimated low-income low-access population by state, sized by affected count and colored by rate"></div>
                         <!-- Mode B: Equal tiles -->
                         <div id="chart-double-burden-tiles" style="display:none;padding:4px 0;" role="region" aria-label="Equal-tile rate comparison of low-income low-access population by state"></div>
                         <!-- Shared legend -->
