@@ -387,6 +387,85 @@ describe('food-access', () => {
     });
   });
 
+  // ── P4: renderUrbanRural source contract ──
+  describe('renderUrbanRural', () => {
+    it('should compute urban vs rural low-access rates from county data', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderUrbanRural'),
+        jsSource.indexOf('function renderUrbanRural') + 800
+      );
+      expect(section).toContain('urbanLATracts');
+      expect(section).toContain('ruralLATracts');
+      expect(section).toContain('isUrban');
+    });
+  });
+
+  // ── P4: renderDistance source contract ──
+  describe('renderDistance', () => {
+    it('should render line chart of average distance with Alaska cap', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderDistance'),
+        jsSource.indexOf('function renderDistance') + 600
+      );
+      expect(section).toContain('avgDistance');
+      expect(section).toContain('ALASKA_CAP');
+    });
+  });
+
+  // ── P4: renderVehicle source contract ──
+  describe('renderVehicle', () => {
+    it('should plot distance vs low-access scatter with labeled states', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const start = jsSource.indexOf('function renderVehicle');
+      const nextFn = jsSource.indexOf('\nfunction ', start + 10);
+      const section = jsSource.slice(start, nextFn > start ? nextFn : start + 2000);
+      expect(section).toContain('scatter');
+      expect(section).toContain('lowAccessPct');
+      expect(section).toContain('LABEL_STATES');
+    });
+  });
+
+  // ── P4: renderLowAccessMap source contract ──
+  describe('renderLowAccessMap', () => {
+    it('should render choropleth with lowAccessPct metric', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderLowAccessMap'));
+      expect(section).toContain('lowAccessPct');
+      expect(section).toContain('map');
+    });
+  });
+
+  // ── P4: renderAccessInsecurity source contract ──
+  describe('renderAccessInsecurity', () => {
+    it('should include drawAccessInsecurityScatter and updateInsight', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      expect(jsSource).toContain('drawAccessInsecurityScatter');
+      expect(jsSource).toContain('updateAccessInsecurityInsight');
+    });
+  });
+
+  // ── P4: initDoubleBurdenModeToggle source contract ──
+  describe('initDoubleBurdenModeToggle', () => {
+    it('should toggle between treemap and tiles modes', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function initDoubleBurdenModeToggle'));
+      expect(section).toContain('data-db-mode');
+      expect(section).toContain('aria-pressed');
+    });
+  });
+
+  // ── P4: populateAccessibleTable source contract ──
+  describe('populateAccessibleTable', () => {
+    it('should populate a screen-reader accessible data table', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function populateAccessibleTable'));
+      expect(section).toContain('table');
+      expect(section).toContain('tbody');
+    });
+  });
+
   // ── CODX #2: Insecurity tooltip should not promise drill-down ──
   describe('insecurity view drill-down promise', () => {
     it('insecurity tooltip should NOT say "Click for county breakdown"', () => {
