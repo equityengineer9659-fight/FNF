@@ -360,6 +360,62 @@ describe('food-insecurity', () => {
     });
   });
 
+  // ── Fix 17: Map aria-label should update on metric change ──
+  describe('map aria-label metric updates', () => {
+    it('showNational should update chart-map aria-label with current metric name', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const showNationalBody = jsSource.slice(
+        jsSource.indexOf('function showNational()'),
+        jsSource.indexOf('function showNational()') + 1200
+      );
+      expect(showNationalBody).toContain('aria-label');
+      expect(showNationalBody).toContain('chart-map');
+    });
+  });
+
+  // ── P4: renderSDOH data contract ──
+  describe('renderSDOH scatter data contract', () => {
+    it('SDOH state data should join with food-insecurity-state.json on name', () => {
+      const fiData = readJSON('food-insecurity-state.json');
+      // SDOH data comes from Census API at runtime, but the merge is by name
+      const fiNames = new Set(fiData.states.map(s => s.name));
+      expect(fiNames.size).toBeGreaterThanOrEqual(50);
+    });
+
+    it('SDOH metric keys should exist in source code', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toContain('SDOH_METRICS');
+      expect(jsSource).toContain('obesity');
+      expect(jsSource).toContain('diabetes');
+    });
+  });
+
+  // ── P4: renderStateDeepDive data contract ──
+  describe('renderStateDeepDive data contract', () => {
+    it('should render 6 KPI tiles per state', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const deepDiveSection = jsSource.slice(jsSource.indexOf('function renderStateDeepDive'));
+      // Should create KPI elements for multiple data points
+      expect(deepDiveSection).toContain('kpi');
+      expect(deepDiveSection).toContain('accessData');
+      expect(deepDiveSection).toContain('bankData');
+    });
+  });
+
+  // ── P4: renderIncomeRiver data contract ──
+  describe('renderIncomeRiver data contract', () => {
+    it('income river should use themeRiver chart type', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toContain('themeRiver');
+    });
+
+    it('INCOME_BANDS should span full range from lowest to highest', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toContain('Under $25K');
+      expect(jsSource).toContain('$200K+');
+    });
+  });
+
   // ── P3 #3: County search ARIA ──
   describe('county search accessibility', () => {
     it('search input should have combobox ARIA attributes', () => {

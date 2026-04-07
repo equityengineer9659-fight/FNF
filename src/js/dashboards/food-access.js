@@ -670,6 +670,17 @@ function renderDoubleBurden(states) {
   // Mode B: equal tiles (pre-rendered, toggled by CSS display)
   renderDoubleBurdenTiles(enriched, rankNorm);
 
+  // Re-layout tiles on container resize (Fix #23: columns computed from hidden container)
+  const tileContainer = document.getElementById('chart-double-burden-tiles');
+  if (tileContainer && typeof ResizeObserver !== 'undefined') {
+    let resizeTimer;
+    const tileObserver = new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => renderDoubleBurdenTiles(enriched, rankNorm), 150);
+    });
+    tileObserver.observe(tileContainer.parentElement || tileContainer);
+  }
+
   // Shared legend (visible in both modes)
   buildHeatmapLegend(
     document.getElementById('treemap-legend-access'),

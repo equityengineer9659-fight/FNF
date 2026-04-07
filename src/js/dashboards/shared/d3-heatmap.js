@@ -447,9 +447,20 @@ export function createD3Heatmap({ containerId, breadcrumbId, hierarchyData, tool
 
   render(root);
 
+  // Re-layout on resize: recompute treemap with new dimensions
+  let resizeTimer;
   const ro = new ResizeObserver(() => {
-    const r = container.getBoundingClientRect();
-    svg.attr('viewBox', `0 0 ${r.width} ${r.height}`);
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const r = container.getBoundingClientRect();
+      if (r.width < 10 || r.height < 10) return;
+      treemap().size([r.width, r.height])
+        .paddingTop(THEME.regionHeaderHeight)
+        .paddingRight(4).paddingBottom(4).paddingLeft(4)
+        .paddingInner(THEME.tileGap).round(true)(root);
+      svg.attr('viewBox', `0 0 ${r.width} ${r.height}`);
+      render(root);
+    }, 200);
   });
   ro.observe(container);
 }

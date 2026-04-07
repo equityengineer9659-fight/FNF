@@ -272,4 +272,44 @@ describe('snap-safety-net', () => {
       expect(result).toContain('align');
     });
   });
+
+  // ── P4: SNAP trend chart data contract ──
+  describe('SNAP trend data contract', () => {
+    it('trend data should span at least 10 years', () => {
+      const data = readJSON('snap-participation.json');
+      const dates = data.trend.data.map(d => new Date(d.date).getFullYear());
+      const range = Math.max(...dates) - Math.min(...dates);
+      expect(range).toBeGreaterThanOrEqual(10);
+    });
+  });
+
+  // ── P4: Benefits per person state data ──
+  describe('benefits per person completeness', () => {
+    it('all 50 states + DC should have benefit amounts', () => {
+      const data = readJSON('snap-participation.json');
+      expect(data.benefitsPerPerson.states.length).toBeGreaterThanOrEqual(51);
+    });
+
+    it('benefit amounts should be in reasonable range ($100-$500)', () => {
+      const data = readJSON('snap-participation.json');
+      for (const s of data.benefitsPerPerson.states) {
+        expect(s.benefit).toBeGreaterThan(100);
+        expect(s.benefit).toBeLessThan(500);
+      }
+    });
+  });
+
+  // ── P4: Affordability shortfall gauge ──
+  describe('affordability shortfall', () => {
+    it('should compute shortfall from mealCostPerDay and avgMonthlyBenefit', () => {
+      const data = readJSON('snap-participation.json');
+      expect(data.national.mealCostPerDay).toBeTypeOf('number');
+      expect(data.national.avgMonthlyBenefit).toBeTypeOf('number');
+      // Monthly food need = mealCostPerDay * 3 meals * 30 days
+      const monthlyNeed = data.national.mealCostPerDay * 3 * 30;
+      const shortfall = monthlyNeed - data.national.avgMonthlyBenefit;
+      // Shortfall should be positive (benefits don't cover full cost)
+      expect(shortfall).toBeGreaterThan(0);
+    });
+  });
 });

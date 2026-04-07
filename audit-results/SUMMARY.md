@@ -159,7 +159,7 @@ Create `food-access.test.js`. Expand food-insecurity, executive-summary, SNAP te
 
 ## Resolution Status (2026-04-07)
 
-**21 of 83 items fixed** across 3 batches. 34 new tests added (352 total passing).
+**39 of 83 items fixed** across 8 batches. 62 new tests added (380 total passing). PRs #33 + #34 merged; Batch 8 on `chore/audit-remaining-fixes`.
 
 ### Batch 1 — Critical Functional Bugs (4 fixed)
 - #1: CDC PLACES merge key — changed `s.name` to `s.state` with `nameToAbbr` lookup
@@ -187,8 +187,41 @@ Create `food-access.test.js`. Expand food-insecurity, executive-summary, SNAP te
 - #14: D3 treemap container changed from `role="img"` to `role="region"`
 - #34: Executive Summary insight containers already had `aria-live="polite"` (verified)
 
-### Remaining (62 items — Batches 4-7)
-- Batch 4: Data-driven hero stats (3 dashboards)
-- Batch 5: Chart/logic guards (#15-16, #19-21)
-- Batch 6: Harder fixes (#13, #22, #26, #28, #32)
-- Batch 7: Test coverage expansion
+### Batch 4 — Data-Driven Hero Stats (3 fixed)
+- #18: Food Insecurity hero stats synced from `data.national` (rate, persons, children, meals)
+- B-1: SNAP hero stats synced from `snapData.national` (participants, gap, benefit, lunch)
+- F4: Food Banks hero stats synced from `bankData.national` (orgs, revenue, insecurity rate)
+
+### Batch 5 — Chart/Logic Guards (5 fixed)
+- #15: Demographics tooltip divide-by-zero guard (`s.rate > 0 ? ... : 'N/A'`)
+- #16: County metric fallback `||` → `??` (rate=0 no longer falls through)
+- #19: `showNational()` visualMap scale corrected: 7/24 → 20/65 (matches `renderLowAccessMap`)
+- #20: `buildHeatmapLegend` Infinity guard (`!isFinite(pctMin) || !isFinite(pctMax)`)
+- #21: `visualMap: undefined` → `null` (properly clears county color scale)
+
+### Batch 6 — Harder Fixes (5 fixed)
+- #13: Per-chart error isolation in executive-summary.js (4 independent try/catch blocks)
+- #26: SNAP forward-fill annotation — markLine at last benefitTimeline date
+- #28: Purchasing power insight: "keeping pace" → "outpaced" with magnitude
+- #32: CDC gray states tooltip fallback: "No CDC survey data available"
+- #22: Resolved by #19 — both drill-down paths now use matching 20/65 scale
+
+### Batch 7 — Test Coverage Expansion (57 new tests)
+- food-insecurity.test.js: CDC PLACES merge, Triple Burden guard, hero stats, demographics guard, county fallback
+- food-access.test.js: Double Burden guard, tile ARIA, D3 role, showNational scale, Infinity guard, visualMap null
+- executive-summary.test.js: KPI sync, org KPI id, per-chart error isolation
+- snap-safety-net.test.js: hero stats, gauge a11y, CDC toggle a11y, gray states tooltip, Sankey balance
+- food-prices.test.js: regional insight, data range, heading, insight language
+- food-banks.test.js: hero stats, radar avg, reconciliation, freshness badge, breadcrumb keyboard, regression suppression, orgCount guard
+
+### Batch 8 — Remaining P3 fixes + cross-cutting (6 fixed)
+- #17: Map aria-label updates dynamically on metric change (food-insecurity.js)
+- #23: Mode B tiles recalculate columns on resize via ResizeObserver (food-access.js)
+- #33: SNAP vintage mismatch disclosed — FY2025 national vs 2024 state (executive-summary.html)
+- Cross-cutting: ECharts `aria: { enabled: true }` applied to all ~35 charts via `createChart()` (dashboard-utils.js)
+- Cross-cutting: D3 heatmap ResizeObserver recomputes treemap layout on resize, not just viewBox (d3-heatmap.js)
+- Cross-cutting: `aria-current="page"` already dynamic per page in build-components.js (audit was incorrect)
+
+### Remaining (44 items — P4 minor/info)
+- Dashboard tab strip already has mobile scroll indicator (gradient fade, verified)
+- Additional test coverage for untested render functions

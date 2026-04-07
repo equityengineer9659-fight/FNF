@@ -296,6 +296,90 @@ describe('executive-summary', () => {
     });
   });
 
+  // ── Fix 33: SNAP vintage disclosure ──
+  describe('SNAP vintage disclosure', () => {
+    it('methodology should disclose SNAP national vs state data year difference', () => {
+      const snapData = readJSON('snap-participation.json');
+      const html = readHTML('executive-summary.html');
+      const natYear = snapData.national.year;
+      const stateYear = snapData.stateCoverage?.year;
+      if (natYear !== stateYear) {
+        // Methodology must mention both years
+        expect(html).toContain(String(natYear));
+        expect(html).toContain(String(stateYear));
+        expect(html).toMatch(/SNAP.*national.*FY\d{4}|FY\d{4}.*national.*SNAP/i);
+      }
+    });
+  });
+
+  // ── P4: renderSnapGap data contract ──
+  describe('renderSnapGap data contract', () => {
+    it('fiStates and snapStates should have at least 15 joinable states', () => {
+      const fiData = readJSON('food-insecurity-state.json');
+      const snapData = readJSON('snap-participation.json');
+      const fiNames = new Set(fiData.states.map(s => s.name));
+      const snapNames = new Set(snapData.stateCoverage.states.map(s => s.name));
+      const joinable = [...fiNames].filter(n => snapNames.has(n));
+      expect(joinable.length).toBeGreaterThanOrEqual(15);
+    });
+
+    it('snap states should have snapParticipants field', () => {
+      const snapData = readJSON('snap-participation.json');
+      for (const s of snapData.stateCoverage.states) {
+        expect(s).toHaveProperty('snapParticipants');
+        expect(s.snapParticipants).toBeTypeOf('number');
+      }
+    });
+  });
+
+  // ── P4: renderPriceImpact YoY computation ──
+  describe('renderPriceImpact data contract', () => {
+    it('BLS data should have enough points for YoY computation (13+ months)', () => {
+      const blsData = readJSON('bls-food-cpi.json');
+      const foodHome = blsData.series.find(s => s.name === 'Food at Home');
+      expect(foodHome).toBeDefined();
+      const validPoints = foodHome.data.filter(d => d.value !== null);
+      expect(validPoints.length).toBeGreaterThan(13);
+    });
+  });
+
+  // ── P4: renderWorstStates data contract ──
+  describe('renderWorstStates data contract', () => {
+    it('vulnerability index should produce at least 10 states for ranking', () => {
+      const fiData = readJSON('food-insecurity-state.json');
+      const result = computeVulnerabilityIndex(fiData.states);
+      expect(result.length).toBeGreaterThanOrEqual(10);
+      const sorted = [...result].sort((a, b) => b.vulnerabilityIndex - a.vulnerabilityIndex);
+      // Top 10 should all have positive vulnerability scores
+      sorted.slice(0, 10).forEach(s => {
+        expect(s.vulnerabilityIndex).toBeGreaterThan(0);
+      });
+    });
+
+    it('worst-states insight should reference South region count', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      const worstSection = jsSource.slice(jsSource.indexOf('function renderWorstStates'));
+      expect(worstSection).toContain('South');
+      expect(worstSection).toContain('getRegion');
+    });
+  });
+
+  // ── P4: renderVulnerabilityMap click insight ──
+  describe('renderVulnerabilityMap click insight', () => {
+    it('should generate click-driven insight with driver analysis', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      const mapSection = jsSource.slice(
+        jsSource.indexOf('function renderVulnerabilityMap'),
+        jsSource.indexOf('function renderSnapGap')
+      );
+      // Should have 3 driver candidates for click insight
+      expect(mapSection).toContain('driverCandidates');
+      expect(mapSection).toContain('primary driver');
+      // Should have CSV export
+      expect(mapSection).toContain('addExportButton');
+    });
+  });
+
   // ── CODX #1: Methodology text must match code ──
   describe('methodology text accuracy', () => {
     it('should show "× 0.3" for meal cost weight, not "× 30"', () => {

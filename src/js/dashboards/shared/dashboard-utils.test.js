@@ -322,4 +322,22 @@ describe('dashboard-utils', () => {
       expect(() => disposeAllCharts()).not.toThrow();
     });
   });
+
+  // ── ECharts aria enabled on all charts ──
+  describe('createChart aria support', () => {
+    it('should call setOption with aria enabled immediately after init', () => {
+      const container = document.createElement('div');
+      container.id = 'chart-aria-test';
+      document.body.appendChild(container);
+
+      const chart = createChart('chart-aria-test');
+      expect(chart).not.toBeNull();
+      // setOption should have been called with aria config
+      expect(chart.setOption).toHaveBeenCalledWith(
+        expect.objectContaining({ aria: expect.objectContaining({ enabled: true }) })
+      );
+
+      container.remove();
+    });
+  });
 });
