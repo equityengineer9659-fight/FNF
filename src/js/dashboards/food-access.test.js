@@ -126,4 +126,21 @@ describe('food-access', () => {
       }
     });
   });
+
+  // ── CODX #2: Insecurity tooltip should not promise drill-down ──
+  describe('insecurity view drill-down promise', () => {
+    it('insecurity tooltip should NOT say "Click for county breakdown"', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      // Find the renderInsecurityMap function's tooltip
+      const insecuritySection = jsSource.match(/renderInsecurityMap[\s\S]*?(?=function\s|export\s|$)/);
+      expect(insecuritySection).toBeTruthy();
+      expect(insecuritySection[0]).not.toContain('Click for county breakdown');
+    });
+
+    it('HTML hint should not unconditionally promise county drill-down', () => {
+      const html = readHTML('food-access.html');
+      // The static hint near the map should not promise drill-down for all views
+      expect(html).not.toMatch(/class="dashboard-chart__hint"[^>]*>.*click any state for county breakdown/i);
+    });
+  });
 });

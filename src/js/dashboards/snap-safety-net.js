@@ -133,6 +133,20 @@ let snapMapActiveView = 'admin'; // eslint-disable-line no-unused-vars
 
 export const SNAP_MAP_DEFAULT_INSIGHT = 'Wyoming has the lowest administrative coverage ratio at 46.9%. When CDC self-reported data loads, compare the two views \u2014 states where self-reported is notably lower than administrative suggest stigma or under-reporting of benefits.';
 
+/**
+ * Format CDC vs admin SNAP rate comparison tooltip.
+ * Extracted for testability.
+ */
+export function formatCdcAdminGap(adminRate, cdcRate) {
+  const gap = (adminRate - cdcRate).toFixed(1);
+  if (gap > 0) {
+    return `${gap}pp under-reported — potential stigma or awareness gap`;
+  } else if (gap < 0) {
+    return `${Math.abs(gap)}pp over-reported — may include former recipients`;
+  }
+  return '0pp — CDC and administrative rates align';
+}
+
 function renderSnapMap(geoJSON, states) {
   snapMapChart = createChart('chart-snap-map');
   if (!snapMapChart) return;
@@ -279,13 +293,8 @@ function applySnapMapView(view) {
           if (adminMatch) {
             tip += `<br/><span style="color:${COLORS.secondary}">Administrative SNAP Rate:</span> ${adminMatch.snapRate}%`;
             const gap = (adminMatch.snapRate - d.cdcRate).toFixed(1);
-            tip += `<br/><span style="color:${gap > 0 ? '#fbbf24' : '#22c55e'};font-size:12px">`;
-            if (gap > 0) {
-              tip += `${gap}pp under-reported — potential stigma or awareness gap`;
-            } else {
-              tip += `${Math.abs(gap)}pp over-reported — may include former recipients`;
-            }
-            tip += '</span>';
+            const gapColor = gap > 0 ? '#fbbf24' : gap < 0 ? '#ef4444' : '#22c55e';
+            tip += `<br/><span style="color:${gapColor};font-size:12px">${formatCdcAdminGap(adminMatch.snapRate, d.cdcRate)}</span>`;
           }
           tip += `<br/><span style="color:${COLORS.textMuted};font-size:11px">Source: CDC PLACES BRFSS Survey</span>`;
           return tip;

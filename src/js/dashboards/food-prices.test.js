@@ -165,4 +165,22 @@ describe('food-prices', () => {
       expect(apuMatches.length).toBeGreaterThan(0);
     });
   });
+
+  // ── CODX #3: HTML metadata accuracy ──
+  describe('affordability map metadata', () => {
+    it('HTML data year should match JSON data year', () => {
+      const regionalData = readJSON('bls-regional-cpi.json');
+      const html = readHTML('food-prices.html');
+      const jsonYear = regionalData.stateAffordability.year;
+
+      const yearMatch = html.match(/Data Year<\/strong>\s*(\d{4})/);
+      expect(yearMatch).toBeTruthy();
+      expect(parseInt(yearMatch[1], 10)).toBe(jsonYear);
+    });
+
+    it('HTML formula should not claim multiplier is 1,000,000', () => {
+      const html = readHTML('food-prices.html');
+      expect(html).not.toMatch(/x\s*1,000,000/i);
+    });
+  });
 });

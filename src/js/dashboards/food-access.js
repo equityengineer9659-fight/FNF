@@ -546,7 +546,7 @@ function renderInsecurityMap(geoJSON, cdcRecords) {
         return `<strong style="font-size:14px">${d.name}</strong><br/>
           <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.value}%<br/>
           <span style="color:${COLORS.secondary};font-size:11px">Source: CDC PLACES 2023</span><br/>
-          <span style="color:${COLORS.secondary};font-size:11px">Click for county breakdown</span>`;
+          <span style="color:${COLORS.textMuted};font-size:11px">Use Food Deserts view for county drill-down</span>`;
       }
     },
     visualMap: {

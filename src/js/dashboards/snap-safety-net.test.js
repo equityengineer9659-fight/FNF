@@ -30,7 +30,7 @@ vi.mock('echarts/components', () => ({
 }));
 vi.mock('echarts/renderers', () => ({ CanvasRenderer: 'CanvasRenderer' }));
 
-import { SNAP_MAP_DEFAULT_INSIGHT } from './snap-safety-net.js';
+import { SNAP_MAP_DEFAULT_INSIGHT, formatCdcAdminGap } from './snap-safety-net.js';
 
 // -- Helpers --
 const dataDir = resolve(__dirname, '../../../public/data');
@@ -183,6 +183,28 @@ describe('snap-safety-net', () => {
       expect(jsSource).toContain('getBenefitForDate');
       // Should NOT have a static benefit = 188 as the sole PPI input
       expect(jsSource).not.toMatch(/const benefit\s*=\s*snapNational.*\|\|\s*188/);
+    });
+  });
+
+  // ── CODX #5: CDC/admin tooltip parity label ──
+  describe('formatCdcAdminGap', () => {
+    it('should label positive gap as under-reported', () => {
+      const result = formatCdcAdminGap(15, 10);
+      expect(result).toContain('under-reported');
+      expect(result).toContain('5.0pp');
+    });
+
+    it('should label negative gap as over-reported', () => {
+      const result = formatCdcAdminGap(10, 15);
+      expect(result).toContain('over-reported');
+      expect(result).toContain('5pp');
+    });
+
+    it('should NOT label zero gap as over-reported', () => {
+      const result = formatCdcAdminGap(12, 12);
+      expect(result).not.toContain('over-reported');
+      expect(result).not.toContain('under-reported');
+      expect(result).toContain('align');
     });
   });
 });

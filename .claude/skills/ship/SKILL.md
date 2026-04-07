@@ -1,6 +1,6 @@
 # /ship
 
-Ship all pending changes: lint, build, commit, and push.
+Ship all pending changes: lint, build, commit, push, and open a PR.
 
 ## Steps
 
@@ -15,4 +15,8 @@ Ship all pending changes: lint, build, commit, and push.
    - Summarize the "why" not the "what"
    - End with the `Co-Authored-By` trailer
 6. Push to the current remote branch (`git push` or `git push -u origin <branch>` if no upstream is set)
-7. Report: commit hash, branch name, files committed, and confirm push succeeded
+7. Open a pull request against master using `gh pr create`:
+   - Title: short summary (under 70 chars), include `KAN-XX` prefix if on a story branch
+   - Body: `## Summary` (bullet points), `## Test plan` (checklist), and the Claude Code footer
+   - If a PR already exists for this branch, skip this step
+8. Report: commit hash, branch name, files committed, PR URL
