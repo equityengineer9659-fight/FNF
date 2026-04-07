@@ -174,6 +174,29 @@ describe('food-insecurity', () => {
     });
   });
 
+  // ── Audit 2026-04-07 #1: County filter must not use truthy check ──
+  describe('county filter null-safety', () => {
+    it('drillDown filter should use explicit null check, not truthy', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // The filter on county GeoJSON features must NOT use truthy `.filter(f => f.properties.rate)`
+      // because rate=0 is falsy but valid. Must use null/undefined check instead.
+      const truthyFilterPattern = /\.filter\(f\s*=>\s*f\.properties\.rate\)/;
+      expect(jsSource).not.toMatch(truthyFilterPattern);
+    });
+  });
+
+  // ── Audit 2026-04-07 #2: SNAP legend vs series name consistency ──
+  describe('SNAP legend/series name consistency', () => {
+    it('all SNAP Coverage year references should be consistent', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const yearRefs = [...jsSource.matchAll(/SNAP Coverage \(FY(\d{4})\)/g)].map(m => m[1]);
+      // All year references for SNAP Coverage should be the same
+      expect(yearRefs.length).toBeGreaterThan(0);
+      const uniqueYears = [...new Set(yearRefs)];
+      expect(uniqueYears).toHaveLength(1);
+    });
+  });
+
   // ── P3 #3: County search ARIA ──
   describe('county search accessibility', () => {
     it('search input should have combobox ARIA attributes', () => {

@@ -1,72 +1,59 @@
 # SNAP & Safety Net Dashboard Audit
 
-**Date**: 2026-04-06
-**Scope**: 7 charts/gauges, `snap-participation.json`, PHP proxies, `snap-safety-net.js`, `snap-safety-net.html`
+**Date**: 2026-04-07
+**Scope**: 7 charts + 5 gauges, 2 data files, 3 PHP proxies
 
 ## Data Sources & API Endpoints
-
 | Source | Type | Status | Issues |
 |--------|------|--------|--------|
-| `snap-participation.json` — national | USDA FNS FY2025 | OK | — |
-| `snap-participation.json` — trend | USDA FNS (through Nov 2025) | OK | — |
-| `snap-participation.json` — stateCoverage | Feeding America 2024 | OK | — |
-| `snap-participation.json` — schoolLunch | USDA FNS / KIDS COUNT FY2023 | OK | — |
-| `snap-participation.json` — benefitsPerPerson | USDA FNS FY2024 | OK | — |
-| `snap-participation.json` — sankey | USDA FNS / Feeding America / Census 2022 | Oldest (4 years) | — |
-| `dashboard-bls.php` (Food CPI) | BLS live API, 7-day cache | OK | Series IDs correct |
-| `dashboard-places.php` (CDC BRFSS) | CDC PLACES, 24h cache | OK | `FOODSTAMP` measure confirmed |
+| `snap-participation.json` | Static JSON | Current (fetched 2026-04-05) | FY2025 national, 2024 state coverage |
+| `us-states-geo.json` | GeoJSON | Present | 51 features, correct schema |
+| `dashboard-bls.php` | PHP Proxy | Healthy | Optional CPI overlay, series format matches |
+| `dashboard-places.php` | PHP Proxy | Healthy | Optional CDC SNAP self-report toggle |
+| `dashboard-sdoh.php` | PHP Proxy | Healthy | Race/ethnicity data for demographic flow |
 
 ## Hardcoded/Stale Data
 
-### Critical
+None found. All hero stats match JSON:
+- 42.1M SNAP participants = JSON `national.snapParticipants` (42,126,585)
+- $188 avg benefit = JSON `national.avgMonthlyBenefit` (188)
+- 52.1% free lunch = JSON `national.freeLunchPct` (52.1)
+- 8.2M coverage gap = JSON `national.coverageGap` (8,200,000)
 
-**C1: `_reconciliationNote` contains stale state-sum figure**
-- File: `snap-participation.json:12`
-- Note says "~39.1M / ~7% below national." Actual sum is 41.58M / 1.3% below.
+## Calculation Errors
 
-**C2: Hardcoded Wyoming coverage ratio is wrong**
-- File: `snap-safety-net.js:117` and `snap-safety-net.html:251`
-- Both hardcode "Wyoming...40.6%". JSON shows Wyoming coverageRatio is 46.9%.
-- Visible on every page load before any interaction.
+None found. SNAP coverage gauge correctly uses `participants / (participants + coverageGap)` (JS:506). PPI uses `benefitTimeline` via `getBenefitForDate()` (JS:51-58), not static $188 fallback.
 
-### Warning
-
-**W1: Benefit gauge max ($300) clips Hawaii ($312)**
-- File: `snap-safety-net.js:482`
-- ECharts visually clamps gauge at 100% for Hawaii.
-
-**W2: PPI uses static $188 benefit, ignoring `benefitTimeline`**
-- File: `snap-safety-net.js:48-49`
-- Real SNAP benefits changed from $126 (2018) to $258 (COVID) to $194 (post-allotments).
-- `benefitTimeline` array exists in JSON but is never used.
-
-**W3: HTML data notice says "FY2022" but data is 2024**
-- File: `snap-safety-net.html:158`
-
-**W4: Demographic Sankey uses flat 84% SNAP coverage for all race groups**
-- File: `snap-safety-net.js:615`
-- Eliminates any equity signal from the demographic equity chart.
-
-**W5: 5-gauge grid `repeat(5,1fr)` broken on mobile**
-- File: `snap-safety-net.html:363`
-- Inline style, no responsive override. Each gauge ~67px wide on 375px screen.
+## API Contract Verification
+| JS fetch URL | PHP file | Response shape match? | Issues |
+|--------------|----------|----------------------|--------|
+| `/api/dashboard-bls.php` | `dashboard-bls.php` | Yes | JS expects `data.series[].data[].{date, value}` |
+| `/api/dashboard-places.php?type=snap-receipt` | `dashboard-places.php` | Yes | JS expects `data.records[]` |
+| `/api/dashboard-sdoh.php` | `dashboard-sdoh.php` | Yes | JS expects `data.states[].race` for demographic flow |
 
 ## Accessibility Issues
+| Severity | Issue | WCAG | Location |
+|----------|-------|------|----------|
+| Major | 2 dynamically populated insight containers lack `aria-live="polite"`: `snap-map-insight` (HTML:250) and `demographic-flow-insight` (HTML:417) | 4.1.3 Status Messages | HTML |
 
+## Mobile/Responsive Issues
 | Severity | Issue | Location |
 |----------|-------|----------|
-| Info | CDC PLACES toggle hidden entirely on API failure — no fallback message | `html:227`, `js:552-554` |
+| None found | Gauge grid and chart layouts render correctly at tested breakpoints | — |
 
-## Calculation Spot-Checks
+## Data Integrity Issues
+| Severity | Issue | Location |
+|----------|-------|----------|
+| None | Sankey data fully balanced: total inflows = 44.2M = total outflows across all 3 layers. All intermediate nodes balance (SNAP 23.5M, School Meals 3.5M, Food Banks 6.7M, No Assistance 10.5M). | `snap-participation.json:1250-1382` |
+| Info | Coverage gap Sankey data vintage is 2022 — disclosed in HTML (line 279) | `snap-participation.json:1253` |
 
-| Formula | Expected | Actual | Status |
-|---------|----------|--------|--------|
-| Coverage gauge | `snap / (snap + gap) * 100` | 83.7% | OK |
-| Monthly shortfall | `$3.58 * 3 * 30 - $188` | $134 | OK |
-| Sankey flow balance | inflow = outflow all nodes | Balanced | OK |
-| Coverage ratio all 51 states | stored == calculated | 0 mismatches | OK |
+## Previously Fixed Items (Verified)
+- Gauge benefit max: now 350 (JS:508), accommodates all state values
+- Data notice year: says "2024" and "FY2025" correctly (HTML:158)
+- PPI: uses benefitTimeline, not static $188
+- Demographic Sankey: uses race-specific coverage rates (JS:642), not flat 84%
+- Reconciliation note: accurately states ~1.3% variance (JSON:12)
+- Wyoming: coverage data at 46.9% (30K/64K) — correct in JSON
 
 ## Summary
-- Critical: 2 (stale reconciliation note, wrong Wyoming ratio)
-- Warning: 5 (gauge clips, PPI static, FY2022 label, flat Sankey, mobile gauges)
-- Info: 5
+- Critical: 0 | Major: 1 | Info: 1
