@@ -349,11 +349,23 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--stacked">
                     <div class="dashboard-chart-row__chart">
+                        <!-- Mode toggle -->
+                        <div id="double-burden-mode-toggle" role="group" aria-label="Visualization mode" style="display:flex;gap:0.5rem;justify-content:center;margin-bottom:4px;flex-wrap:wrap;">
+                            <button class="dashboard-metric-btn dashboard-metric-btn--active" data-db-mode="treemap" aria-pressed="true">Total Affected</button>
+                            <button class="dashboard-metric-btn" data-db-mode="tiles" aria-pressed="false">Rate Comparison</button>
+                        </div>
+                        <!-- Encoding subtitle — updates with mode -->
+                        <p id="db-encoding-treemap" class="dashboard-chart__hint" style="text-align:center;margin:0 0 4px;font-size:0.72rem;opacity:0.65">Box size = affected population (&#8730; scaled) &nbsp;&middot;&nbsp; Color = % of state population</p>
+                        <p id="db-encoding-tiles" class="dashboard-chart__hint" style="display:none;text-align:center;margin:0 0 4px;font-size:0.72rem;opacity:0.65">Equal tile size &nbsp;&middot;&nbsp; Color = % of state population affected</p>
+                        <!-- Mode A: D3 Treemap -->
                         <div id="double-burden-breadcrumb" style="display:flex;align-items:center;gap:2px;padding:6px 0;min-height:30px"></div>
                         <div id="chart-double-burden" class="dashboard-chart" role="img" aria-label="Heatmap showing population in low-income and low-access tracts, with continuous color gradient by severity"></div>
+                        <!-- Mode B: Equal tiles -->
+                        <div id="chart-double-burden-tiles" style="display:none;padding:4px 0;" role="region" aria-label="Equal-tile rate comparison of low-income low-access population by state"></div>
+                        <!-- Shared legend (both modes) -->
                         <div id="treemap-legend-access" class="dashboard-chart__legend"></div>
                         <div id="double-burden-region-legend" style="display:flex;justify-content:center;gap:16px;margin-top:4px;flex-wrap:wrap"></div>
-                        <p class="dashboard-chart__hint">Click a region to zoom in. Click breadcrumb to zoom out.</p>
+                        <p id="db-hint-text" class="dashboard-chart__hint">Click a region to zoom in. Click breadcrumb to zoom out.</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Where Poverty and Low Access Overlap</h3>

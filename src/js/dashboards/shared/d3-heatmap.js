@@ -476,4 +476,4 @@ export function createRankNorm(values) {
   };
 }
 
-export { HEATMAP_REGION_COLORS };
+export { HEATMAP_REGION_COLORS, sampleGradient, tileTextColor, tileSubTextColor };
