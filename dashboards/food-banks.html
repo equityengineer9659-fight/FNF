@@ -222,14 +222,16 @@
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue Per Person in Need</h2></div>
                 <div class="dashboard-chart-row dashboard-chart-row--stacked">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-revenue" class="dashboard-chart" role="img" aria-label="Treemap showing food bank revenue per food-insecure person by state, colored by program efficiency"></div>
+                        <div id="revenue-breadcrumb" style="display:flex;align-items:center;gap:2px;padding:6px 0;min-height:30px"></div>
+                        <div id="chart-revenue" class="dashboard-chart" role="img" aria-label="Heatmap showing food bank revenue per food-insecure person by state, with continuous color gradient from low to high"></div>
                         <div id="treemap-legend-banks" class="dashboard-chart__legend"></div>
-                        <p class="dashboard-chart__hint">Hover over any state for detailed breakdown</p>
+                        <div id="revenue-region-legend" style="display:flex;justify-content:center;gap:16px;margin-top:4px;flex-wrap:wrap"></div>
+                        <p class="dashboard-chart__hint">Click a region to zoom in. Click breadcrumb to zoom out.</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Dollars Per Person in Need</h3>
-                        <p class="dashboard-info__text">Raw revenue totals favor large states. This treemap sizes each state by <strong>revenue per food-insecure person</strong> — a fairer benchmark of whether resources match need. States with high per-person funding can invest in quality programs; states with low funding stretch every dollar thin.</p>
-                        <p class="dashboard-info__text">Color indicates <strong>program efficiency</strong> (% of expenses going to programs vs. overhead). Dark green = excellent (85%+), navy = good, indigo = fair, rose = below average.</p>
+                        <p class="dashboard-info__text">Raw revenue totals favor large states. This heatmap sizes each state by <strong>revenue per food-insecure person</strong> — a fairer benchmark of whether resources match need. States with high per-person funding can invest in quality programs; states with low funding stretch every dollar thin.</p>
+                        <p class="dashboard-info__text">Color shows <strong>revenue per person</strong> on a continuous gradient — deep indigo (lowest) through violet, pink, and orange to bright yellow (highest). Region grouping is shown via subtle borders.</p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> ProPublica Nonprofit Explorer (IRS 990) + Feeding America insecurity estimates</span>
                             <span class="meta-item"><strong>Data Year</strong> 2023 IRS 990 filings; Feeding America insecurity estimates</span>

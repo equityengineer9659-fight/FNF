@@ -8,6 +8,10 @@ import {
   fmtNum, createChart, REGIONS, REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
 
+import {
+  createD3Heatmap, createRankNorm, HEATMAP_REGION_COLORS
+} from './shared/d3-heatmap.js';
+
 // ============================================================
 // 1. RADAR — Top 5 vs Bottom 5 states (Food Insecurity Overview)
 // ============================================================
@@ -196,55 +200,60 @@ function renderAreaDistance(accessData) {
 }
 
 // ============================================================
-// 5. TREEMAP — Double Burden (Food Access)
+// 5. HEATMAP — Double Burden (Food Access)
 // ============================================================
 function renderTreemapBurden(accessData) {
-  const chart = createChart('preview-treemap-burden');
-  if (!chart) return;
+  const container = document.getElementById('preview-treemap-burden');
+  if (!container) return;
 
-  // Group by region
-  const regionData = Object.entries(REGIONS).map(([region, stateNames]) => {
-    const children = accessData.states
-      .filter(s => stateNames.includes(s.name))
-      .map(s => ({
-        name: s.name,
-        value: s.lowAccessPopulation,
-        pctOfPop: ((s.lowAccessPopulation / (s.totalPopulation || s.population)) * 100).toFixed(1)
-      }))
-      .sort((a, b) => b.value - a.value);
-    return { name: region, children, itemStyle: { borderColor: REGION_COLORS[region] } };
+  // Compute normalization range from low-access percentage
+  const pctValues = accessData.states.map(s => {
+    const pop = s.totalPopulation || s.population;
+    return pop > 0 ? (s.lowAccessPopulation / pop) * 100 : 0;
   });
 
-  chart.setOption({
-    tooltip: {
-      ...TOOLTIP_STYLE,
-      formatter: p => {
-        if (p.data.children) return `<strong>${p.name}</strong><br/>Total: ${fmtNum(p.value)}`;
-        return `<strong>${p.name}</strong><br/>Low-Access Population: <strong>${fmtNum(p.value)}</strong><br/>${p.data.pctOfPop}% of state population`;
-      }
+  const hierarchyData = {
+    name: 'United States',
+    children: Object.entries(REGIONS).map(([region, stateNames]) => ({
+      name: region,
+      children: accessData.states
+        .filter(s => stateNames.includes(s.name))
+        .map(s => {
+          const pop = s.totalPopulation || s.population;
+          const pct = pop > 0 ? ((s.lowAccessPopulation / pop) * 100).toFixed(1) : '0';
+          return {
+            name: s.name,
+            size: s.lowAccessPopulation,
+            pctOfPop: pct,
+            population: pop,
+            region,
+            label2: fmtNum(s.lowAccessPopulation) + '  ' + pct + '%'
+          };
+        })
+    }))
+  };
+
+  createD3Heatmap({
+    containerId: 'preview-treemap-burden',
+    hierarchyData,
+    tooltipFn: (leaf) => {
+      const d = leaf.data;
+      const region = leaf.parent ? leaf.parent.data.name : d.region;
+      const rc = HEATMAP_REGION_COLORS[region] || '#888';
+      return `<strong>${d.name}</strong>
+        <span style="margin-left:6px;display:inline-flex;align-items:center">
+          <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
+          <span style="color:${rc}">${region}</span>
+        </span><br/>
+        <span style="color:#818CF8;font-weight:500">Low-Access Population:</span> <strong>${fmtNum(leaf.value)}</strong><br/>
+        <span style="color:#818CF8;font-weight:500">% of State Population:</span> <strong>${d.pctOfPop}%</strong>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:7px 0">
+        Total Population: ${fmtNum(d.population)}`;
     },
-    series: [{
-      type: 'treemap',
-      data: regionData,
-      leafDepth: 1,
-      roam: false,
-      width: '95%', height: '90%', top: 10,
-      label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff' },
-      upperLabel: { show: true, height: 24, color: '#fff', fontSize: 12, fontWeight: 'bold', backgroundColor: 'transparent' },
-      itemStyle: { borderColor: 'rgba(0,0,0,0.5)', borderWidth: 1, gapWidth: 2 },
-      levels: [
-        { itemStyle: { borderColor: 'rgba(255,255,255,0.2)', borderWidth: 3, gapWidth: 3 }, upperLabel: { show: true } },
-        {
-          colorSaturation: [0.3, 0.7],
-          itemStyle: { borderColorSaturation: 0.5, gapWidth: 1, borderWidth: 1 }
-        }
-      ],
-      colorMappingBy: 'value',
-      visualMin: 30000,
-      visualMax: 1700000,
-      color: [MAP_PALETTES.access.low, MAP_PALETTES.access.mid, MAP_PALETTES.access.high],
-      animationDuration: 1500
-    }]
+    normFn: (() => {
+      const rankNorm = createRankNorm(pctValues);
+      return (leaf) => rankNorm(parseFloat(leaf.data.pctOfPop) || 0);
+    })()
   });
 }
 
@@ -518,44 +527,51 @@ function renderSunburstBurden(priceData) {
 }
 
 // ============================================================
-// 11. TREEMAP — Food Bank Revenue by State
+// 11. HEATMAP — Food Bank Revenue by State
 // ============================================================
 function renderTreemapRevenue(bankData) {
-  const chart = createChart('preview-treemap-revenue');
-  if (!chart) return;
+  const container = document.getElementById('preview-treemap-revenue');
+  if (!container) return;
 
-  const regionData = Object.entries(REGIONS).map(([region, stateNames]) => {
-    const children = bankData.states
-      .filter(s => stateNames.includes(s.name))
-      .map(s => ({
-        name: s.name, value: s.totalRevenue,
-        efficiency: s.programExpenseRatio, orgCount: s.orgCount
-      }))
-      .sort((a, b) => b.value - a.value);
-    return { name: region, children, itemStyle: { borderColor: REGION_COLORS[region] } };
-  });
+  const revValues = bankData.states.map(s => s.totalRevenue);
 
-  chart.setOption({
-    tooltip: {
-      ...TOOLTIP_STYLE,
-      formatter: p => {
-        if (p.data.children) return `<strong>${p.name}</strong><br/>Total Revenue: $${fmtNum(p.value)}`;
-        return `<strong>${p.name}</strong><br/>Revenue: <strong>$${fmtNum(p.value)}</strong><br/>Efficiency: ${p.data.efficiency}%<br/>Organizations: ${fmtNum(p.data.orgCount)}`;
-      }
+  const hierarchyData = {
+    name: 'United States',
+    children: Object.entries(REGIONS).map(([region, stateNames]) => ({
+      name: region,
+      children: bankData.states
+        .filter(s => stateNames.includes(s.name))
+        .map(s => ({
+          name: s.name, size: s.totalRevenue,
+          efficiency: s.programExpenseRatio, orgCount: s.orgCount,
+          region,
+          label2: '$' + fmtNum(s.totalRevenue),
+          label3: s.programExpenseRatio + '% eff.'
+        }))
+    }))
+  };
+
+  createD3Heatmap({
+    containerId: 'preview-treemap-revenue',
+    hierarchyData,
+    tooltipFn: (leaf) => {
+      const d = leaf.data;
+      const region = leaf.parent ? leaf.parent.data.name : d.region;
+      const rc = HEATMAP_REGION_COLORS[region] || '#888';
+      return `<strong>${d.name}</strong>
+        <span style="margin-left:6px;display:inline-flex;align-items:center">
+          <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
+          <span style="color:${rc}">${region}</span>
+        </span><br/>
+        <span style="color:#818CF8;font-weight:500">Revenue:</span> <strong>$${fmtNum(leaf.value)}</strong><br/>
+        <span style="color:#818CF8;font-weight:500">Efficiency:</span> <strong>${d.efficiency}%</strong>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:7px 0">
+        Organizations: ${fmtNum(d.orgCount)}`;
     },
-    series: [{
-      type: 'treemap', data: regionData, leafDepth: 1, roam: false,
-      width: '95%', height: '90%', top: 10,
-      label: { show: true, formatter: p => p.data.children ? '' : `${p.name}\n$${fmtNum(p.value)}`, fontSize: 9, color: '#fff' },
-      upperLabel: { show: true, height: 24, color: '#fff', fontSize: 12, fontWeight: 'bold', backgroundColor: 'transparent' },
-      itemStyle: { borderColor: 'rgba(0,0,0,0.5)', borderWidth: 1, gapWidth: 2 },
-      levels: [
-        { itemStyle: { borderColor: 'rgba(255,255,255,0.2)', borderWidth: 3, gapWidth: 3 }, upperLabel: { show: true } },
-        { colorSaturation: [0.3, 0.7], itemStyle: { borderColorSaturation: 0.5, gapWidth: 1, borderWidth: 1 } }
-      ],
-      color: [COLORS.primary, COLORS.secondary, '#a78bfa', '#34d399', COLORS.accent],
-      animationDuration: 1500
-    }]
+    normFn: (() => {
+      const rankNorm = createRankNorm(revValues);
+      return (leaf) => rankNorm(leaf.value);
+    })()
   });
 }
 

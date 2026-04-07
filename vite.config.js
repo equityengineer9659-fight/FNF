@@ -38,7 +38,8 @@ export default defineConfig({
         // Keep separate CSS and JS bundles for maintainability
         manualChunks: {
           effects: ['./src/js/effects/particles.js'],
-          echarts: ['echarts/core', 'echarts/charts', 'echarts/components', 'echarts/renderers']
+          echarts: ['echarts/core', 'echarts/charts', 'echarts/components', 'echarts/renderers'],
+          d3: ['d3-hierarchy', 'd3-selection', 'd3-transition', 'd3-scale', 'd3-interpolate', 'd3-format', 'd3-color']
         },
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');

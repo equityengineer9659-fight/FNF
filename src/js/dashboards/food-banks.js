@@ -12,6 +12,10 @@ import {
   initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
+import {
+  createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm, HEATMAP_REGION_COLORS
+} from './shared/d3-heatmap.js';
+
 const PAL = MAP_PALETTES.banks;
 
 function hexToRgba(hex, alpha) {
@@ -135,85 +139,71 @@ function renderVsInsecurity(states) {
   });
 }
 
-// -- Chart 3: Revenue by State (Treemap) --
+// -- Chart 3: Revenue by State (D3 Zoomable Heatmap) --
 function renderRevenue(states) {
-  const chart = createChart('chart-revenue');
-  if (!chart) return;
+  const container = document.getElementById('chart-revenue');
+  if (!container) return;
 
-  // Color by efficiency — visually distinct, all dark enough for white text
-  function efficiencyColor(ratio) {
-    if (ratio >= 85) return '#0f4c3a';   // excellent — dark emerald
-    if (ratio >= 80) return '#1e3a5f';   // good — deep navy
-    if (ratio >= 75) return '#5b21b6';   // fair — indigo
-    if (ratio >= 70) return '#9f1239';   // below avg — deep rose
-    return '#7f1d1d';                     // poor — dark red
-  }
-
-  // Flatten into a single level — region identity shown via border color + tooltip
-  const flatData = [];
-  Object.entries(REGIONS).forEach(([region, stateNames]) => {
-    states
-      .filter(s => stateNames.includes(s.name))
-      .forEach(s => {
-        const insecurePersons = Math.round(s.population * s.foodInsecurityRate / 100);
-        const revenuePerInsecure = insecurePersons > 0 ? Math.round(s.totalRevenue / insecurePersons) : 0;
-        const revenuePerOrg = s.orgCount > 0 ? Math.round(s.totalRevenue / s.orgCount) : 0;
-        flatData.push({
-          name: s.name, value: revenuePerInsecure,
-          totalRevenue: s.totalRevenue,
-          efficiency: s.programExpenseRatio, orgCount: s.orgCount,
-          revenuePerInsecure, revenuePerOrg, insecurePersons,
-          insecurityRate: s.foodInsecurityRate,
-          region,
-          itemStyle: {
-            color: efficiencyColor(s.programExpenseRatio),
-            borderColor: REGION_COLORS[region],
-            borderWidth: 1.5
-          }
-        });
-      });
+  // Compute rank-based normalization (prevents outliers like DC from compressing the scale)
+  const revValues = states.map(s => {
+    const ins = Math.round(s.population * s.foodInsecurityRate / 100);
+    return ins > 0 ? Math.round(s.totalRevenue / ins) : 0;
   });
-  flatData.sort((a, b) => b.value - a.value);
+  const revMin = Math.min(...revValues), revMax = Math.max(...revValues);
+  const rankNorm = createRankNorm(revValues);
 
-  chart.setOption({
-    tooltip: {
-      ...TOOLTIP_STYLE,
-      formatter: p => {
-        const d = p.data;
-        return `<strong>${p.name}</strong> <span style="color:${REGION_COLORS[d.region]}">(${d.region})</span><br/>
-          <span style="color:${COLORS.secondary}">$ per Food-Insecure Person (est.):</span> <strong>$${fmtNum(d.revenuePerInsecure)}</strong><br/>
-          Total Revenue: $${fmtNum(d.totalRevenue)}<br/>
-          Program Efficiency: <strong>${d.efficiency}%</strong><br/>
-          Organizations: ${fmtNum(d.orgCount)}<br/>
-          Food-Insecure Population: ${fmtNum(d.insecurePersons)}<br/>
-          Food Insecurity Rate: ${d.insecurityRate}%`;
-      }
+  // Build hierarchy: Region > State
+  const hierarchyData = {
+    name: 'United States',
+    children: Object.entries(REGIONS).map(([region, names]) => ({
+      name: region,
+      children: states
+        .filter(s => names.includes(s.name))
+        .map(s => {
+          const insecure = Math.round(s.population * s.foodInsecurityRate / 100);
+          const rev = insecure > 0 ? Math.round(s.totalRevenue / insecure) : 0;
+          return {
+            name: s.name, size: rev,
+            totalRevenue: s.totalRevenue, efficiency: s.programExpenseRatio,
+            orgCount: s.orgCount, insecurePersons: insecure,
+            insecurityRate: s.foodInsecurityRate, region,
+            label2: '$' + fmtNum(rev) + '/person',
+            label3: s.programExpenseRatio + '% eff.'
+          };
+        })
+    }))
+  };
+
+  createD3Heatmap({
+    containerId: 'chart-revenue',
+    breadcrumbId: 'revenue-breadcrumb',
+    hierarchyData,
+    tooltipFn: (leaf) => {
+      const d = leaf.data;
+      const region = leaf.parent ? leaf.parent.data.name : d.region;
+      const rc = HEATMAP_REGION_COLORS[region] || '#888';
+      return `<strong>${d.name}</strong>
+        <span style="margin-left:6px;display:inline-flex;align-items:center">
+          <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
+          <span style="color:${rc}">${region}</span>
+        </span><br/>
+        <span style="color:#818CF8;font-weight:500">$ per Person in Need:</span> <strong>$${fmtNum(leaf.value)}</strong><br/>
+        <span style="color:#818CF8;font-weight:500">Program Efficiency:</span> <strong>${d.efficiency}%</strong>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:7px 0">
+        Total Revenue: $${fmtNum(d.totalRevenue)}<br/>
+        Organizations: ${fmtNum(d.orgCount)}<br/>
+        Insecure Pop: ${fmtNum(d.insecurePersons)}<br/>
+        Insecurity Rate: ${d.insecurityRate}%`;
     },
-    series: [{
-      type: 'treemap', data: flatData, roam: false,
-      width: '98%', height: '95%', top: 5, left: '1%',
-      label: {
-        show: true, color: '#fff',
-        formatter: p => `{name|${p.name}}\n{val|$${fmtNum(p.value)}/person  ${p.data.efficiency}%}`,
-        rich: {
-          name: { fontSize: 12, fontWeight: 'bold', color: '#fff', lineHeight: 16 },
-          val: { fontSize: 10, color: 'rgba(255,255,255,0.8)', lineHeight: 14 }
-        },
-        overflow: 'truncate',
-        ellipsis: '..'
-      },
-      itemStyle: { borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1, gapWidth: 1 },
-      animationDuration: 1500
-    }]
+    normFn: (leaf) => rankNorm(leaf.value)
   });
 
-  // Populate region legend
-  const legendEl = document.getElementById('treemap-legend-banks');
-  if (legendEl) {
-    legendEl.innerHTML = Object.entries(REGION_COLORS).map(([region, color]) =>
-      `<span><span class="legend-swatch" style="background:${color}"></span>${region}</span>`
-    ).join('');
-  }
+  // Populate legend containers
+  buildHeatmapLegend(
+    document.getElementById('treemap-legend-banks'),
+    revMin, revMax, v => '$' + fmtNum(v)
+  );
+  buildRegionChips(document.getElementById('revenue-region-legend'));
 }
 
 // -- Chart 4: Regional Comparison (Radar) --
