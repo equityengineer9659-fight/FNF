@@ -152,7 +152,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
 
       // Extract data from GeoJSON properties
       const countyData = countyGeo.features
-        .filter(f => f.properties.rate)
+        .filter(f => f.properties.rate != null)
         .map(f => ({
           name: f.properties.name,
           value: f.properties[currentMetric] || f.properties.rate,
@@ -865,7 +865,7 @@ function renderSnap(data) {
         animationDuration: 1500
       },
       {
-        name: 'SNAP Coverage (FY2023)',
+        name: 'SNAP Coverage (FY2024)',
         type: 'bar',
         data: snapCoverageRatio.reverse(),
         barWidth: '35%',

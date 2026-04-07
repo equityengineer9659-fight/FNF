@@ -1,64 +1,48 @@
 # Food Bank Landscape Dashboard Audit
 
-**Date**: 2026-04-06
-**Scope**: 6 charts, `food-bank-summary.json`, `food-banks.js`, `food-banks.html`
+**Date**: 2026-04-07
+**Scope**: 6 charts, 2 data files, 0 PHP proxies
 
 ## Data Sources & API Endpoints
-
 | Source | Type | Status | Issues |
 |--------|------|--------|--------|
-| `food-bank-summary.json` | Static JSON | Current | Field shapes match JS expectations |
-| `food-insecurity-state.json` | Static JSON | Current (2024) | Cross-dataset join for insecurity rates |
-| `us-states-geo.json` | Static GeoJSON | OK | — |
-
-No PHP proxies used by this dashboard.
+| `food-bank-summary.json` | Static JSON | Current (fetched 2026-03-30) | IRS 990 2023 + Feeding America 2024 |
+| `us-states-geo.json` | GeoJSON | Present | 51 features, correct schema |
 
 ## Hardcoded/Stale Data
 
-### Warning
+- **Info**: HTML insight "Mississippi has only $587 in food bank revenue per food-insecure person" (HTML:304). Computed: Mississippi totalRevenue=$325M / (population 2.961M * 18.7% insecurity) = $325M / 553,707 = $587. MATCH.
+- **Info**: Data year disclosure: HTML shows "IRS 990 filings (2023 tax year)" and metadata references Feeding America 2024. Accurate mix documented.
 
-**W1: Radar area fill hex-to-rgba conversion is no-op**
-- File: `food-banks.js:266`
-- `REGION_COLORS[r.name].replace(')', ',0.2)').replace('rgb', 'rgba')` — REGION_COLORS are hex strings (e.g., `#4fc3f7`). The `.replace(')', ...)` matches nothing. Fills are solid opaque instead of 20% alpha.
+## Calculation Errors
 
-**W2: Mississippi insight $593 vs computed $587**
-- File: `food-banks.html:304`
-- Hardcoded revenue-per-insecure-person is $6 off from current data.
+None found.
 
-**W3: Map visualMap `min:11` near Nevada clipping**
-- File: `food-banks.js:45`
-- Nevada sits at 11.2. A small data revision could cause clipping.
+## API Contract Verification
 
-**W4: Data year label says "2023 IRS 990" but insecurity rates are 2024 Feeding America**
-- File: `food-banks.html:145`
-- Mixed data vintages not disclosed.
+N/A — this dashboard uses no PHP API proxies. Only static JSON files.
 
 ## Accessibility Issues
-
-| Severity | Issue | Location |
-|----------|-------|----------|
-| Info | No accessible data alternatives on 5 of 6 charts | Multiple |
+| Severity | Issue | WCAG | Location |
+|----------|-------|------|----------|
+| None | All insight containers are static (not dynamically populated by JS). No `aria-live` needed. | — | — |
 
 ## Mobile/Responsive Issues
+| Severity | Issue | Location |
+|----------|-------|----------|
+| None found | — | — |
 
-No critical mobile issues found.
+## Data Integrity Issues
+| Severity | Issue | Location |
+|----------|-------|----------|
+| None | All data shapes match JS expectations. `national` and `states[]` have all required fields: `name`, `fips`, `orgCount`, `totalRevenue`, `programExpenseRatio`, `population`, `foodInsecurityRate`, `perCapitaOrgs`. | `food-bank-summary.json` |
 
-## Info
-
-- I1: Regression suppression working correctly (r=-0.084, below |r|<0.2 threshold)
-- I2: Capacity-gap bubble radius range too compressed (8.0-9.7 px)
-- I3: DC outlier unlabeled in gap scatter
-- I4: `statesUnder100` is a hardcoded JSON field that could drift from state records
-
-## Calculation Spot-Checks
-
-| Check | Status |
-|-------|--------|
-| Regression r-value threshold |r| < 0.2 | Correctly suppresses line |
-| Need-Capacity Gap scatter formula | Correct |
-| Per-capita org density | Matches JSON |
+## Previously Fixed Items (Verified)
+- `hexToRgba`: correctly parses hex codes to rgba (JS:17-22)
+- Map visualMap: dynamic min/max from data (JS:52) — no hardcoded bounds
+- Regression suppression: `|r| >= 0.2` threshold correct (JS:89)
+- Capacity gap bubble: range 6-35px using population scaling (JS:370)
+- Reconciliation note: surfaced dynamically if present in JSON (JS:416-418)
 
 ## Summary
-- Critical: 0
-- Warning: 4
-- Info: 5
+- Critical: 0 | Major: 0 | Info: 2

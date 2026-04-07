@@ -222,6 +222,53 @@ describe('executive-summary', () => {
     });
   });
 
+  // ── Audit 2026-04-07 #3: Dynamic insight containers need aria-live ──
+  describe('aria-live on dynamic insights', () => {
+    it('executive-summary: all dynamic insight containers should have aria-live', () => {
+      const html = readHTML('executive-summary.html');
+      const dynamicIds = ['vulnerability-map-insight', 'snap-gap-insight', 'price-impact-insight', 'worst-states-insight'];
+      for (const id of dynamicIds) {
+        const regex = new RegExp(`id="${id}"[^>]*`);
+        const match = html.match(regex);
+        expect(match, `${id} should exist`).toBeTruthy();
+        expect(match[0], `${id} should have aria-live`).toContain('aria-live');
+      }
+    });
+
+    it('food-access: all dynamic insight containers should have aria-live', () => {
+      const html = readHTML('food-access.html');
+      const dynamicIds = ['insecurity-map-insight', 'low-access-insight', 'snap-retailers-insight', 'sdoh-access-insight', 'access-insecurity-insight'];
+      for (const id of dynamicIds) {
+        const regex = new RegExp(`id="${id}"[^>]*`);
+        const match = html.match(regex);
+        expect(match, `${id} should exist`).toBeTruthy();
+        expect(match[0], `${id} should have aria-live`).toContain('aria-live');
+      }
+    });
+
+    it('snap-safety-net: all dynamic insight containers should have aria-live', () => {
+      const html = readHTML('snap-safety-net.html');
+      const dynamicIds = ['snap-map-insight', 'demographic-flow-insight'];
+      for (const id of dynamicIds) {
+        const regex = new RegExp(`id="${id}"[^>]*`);
+        const match = html.match(regex);
+        expect(match, `${id} should exist`).toBeTruthy();
+        expect(match[0], `${id} should have aria-live`).toContain('aria-live');
+      }
+    });
+
+    it('food-prices: all dynamic insight containers should have aria-live', () => {
+      const html = readHTML('food-prices.html');
+      const dynamicIds = ['yoy-insight', 'purchasing-power-insight'];
+      for (const id of dynamicIds) {
+        const regex = new RegExp(`id="${id}"[^>]*`);
+        const match = html.match(regex);
+        expect(match, `${id} should exist`).toBeTruthy();
+        expect(match[0], `${id} should have aria-live`).toContain('aria-live');
+      }
+    });
+  });
+
   // ── CODX #1: Methodology text must match code ──
   describe('methodology text accuracy', () => {
     it('should show "× 0.3" for meal cost weight, not "× 30"', () => {
