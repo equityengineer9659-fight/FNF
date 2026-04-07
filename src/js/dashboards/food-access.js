@@ -12,6 +12,10 @@ import {
   initStateSelector, US_STATES
 } from './shared/dashboard-utils.js';
 
+import {
+  createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm, HEATMAP_REGION_COLORS
+} from './shared/d3-heatmap.js';
+
 const PAL = MAP_PALETTES.access;
 
 // Module-level cache: restored when back button resets to national desert view
@@ -433,21 +437,11 @@ function renderVehicle(states) {
 
 // -- Chart 5: Low-Income + Low-Access (Treemap) --
 function renderDoubleBurden(states) {
-  const chart = getOrCreateChart('chart-double-burden');
-  if (!chart) return;
+  const container = document.getElementById('chart-double-burden');
+  if (!container) return;
 
-  // Color states by severity — darker shades so white labels are always readable
-  function severityColor(pct) {
-    if (pct >= 10) return '#9f1239';   // severe — deep rose
-    if (pct >= 8) return '#b45309';    // high — dark amber
-    if (pct >= 6) return '#a16207';    // moderate — dark gold
-    if (pct >= 4) return '#166534';    // mild — dark green
-    return '#115e59';                  // low — dark teal
-  }
-
-  // Flatten into a single level — region identity shown via border color + label
-  // Estimate low-income low-access pop: low-access population × state poverty rate
-  const flatData = [];
+  // Pre-compute data for hierarchy and insight
+  const enriched = [];
   Object.entries(REGIONS).forEach(([region, stateNames]) => {
     states
       .filter(s => stateNames.includes(s.name))
@@ -455,66 +449,68 @@ function renderDoubleBurden(states) {
         const pop = s.totalPopulation || s.population || 0;
         const estimate = Math.round((s.lowAccessPopulation || 0) * ((s.povertyRate || 0) / 100));
         const pct = pop > 0 ? (estimate / pop) * 100 : 0;
-        flatData.push({
-          name: s.name, value: estimate,
+        enriched.push({
+          name: s.name, size: estimate,
           pctOfPop: pct.toFixed(1),
           population: pop,
           lowAccessPct: s.lowAccessPct,
           region,
-          itemStyle: {
-            color: severityColor(pct),
-            borderColor: REGION_COLORS[region],
-            borderWidth: 1.5
-          }
+          label2: fmtNum(estimate) + '  ' + pct.toFixed(1) + '%'
         });
       });
   });
-  flatData.sort((a, b) => b.value - a.value);
 
-  chart.setOption({
-    tooltip: {
-      ...TOOLTIP_STYLE,
-      formatter: p => {
-        const d = p.data;
-        return `<strong>${p.name}</strong> <span style="color:${REGION_COLORS[d.region]}">(${d.region})</span><br/>
-          <span style="color:${COLORS.secondary}">Low-Income Low-Access (modeled est.):</span> <strong>${fmtNum(p.value)}</strong><br/>
-          Share of State Pop: <strong>${d.pctOfPop}%</strong><br/>
-          State Population: ${fmtNum(d.population)}<br/>
-          Low-Access Tracts: ${d.lowAccessPct}% of tracts`;
-      }
+  const pctValues = enriched.map(s => parseFloat(s.pctOfPop));
+  const pctMin = Math.min(...pctValues), pctMax = Math.max(...pctValues);
+  const rankNorm = createRankNorm(pctValues);
+
+  const hierarchyData = {
+    name: 'United States',
+    children: Object.keys(REGIONS).map(region => ({
+      name: region,
+      children: enriched.filter(s => s.region === region)
+    }))
+  };
+
+  createD3Heatmap({
+    containerId: 'chart-double-burden',
+    breadcrumbId: 'double-burden-breadcrumb',
+    hierarchyData,
+    tooltipFn: (leaf) => {
+      const d = leaf.data;
+      const region = leaf.parent ? leaf.parent.data.name : d.region;
+      const rc = HEATMAP_REGION_COLORS[region] || '#888';
+      return `<strong>${d.name}</strong>
+        <span style="margin-left:6px;display:inline-flex;align-items:center">
+          <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
+          <span style="color:${rc}">${region}</span>
+        </span><br/>
+        <span style="color:#818CF8;font-weight:500">Low-Income Low-Access (est.):</span> <strong>${fmtNum(leaf.value)}</strong><br/>
+        <span style="color:#818CF8;font-weight:500">Share of State Pop:</span> <strong>${d.pctOfPop}%</strong>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:7px 0">
+        Population: ${fmtNum(d.population)}<br/>
+        Low-Access Tracts: ${d.lowAccessPct}% of tracts`;
     },
-    series: [{
-      type: 'treemap', data: flatData, roam: false,
-      width: '98%', height: '95%', top: 5, left: '1%',
-      label: {
-        show: true, color: '#fff',
-        formatter: p => `{name|${p.name}}\n{val|${fmtNum(p.value)}  ${p.data.pctOfPop}%}`,
-        rich: {
-          name: { fontSize: 12, fontWeight: 'bold', color: '#fff', lineHeight: 16 },
-          val: { fontSize: 10, color: 'rgba(255,255,255,0.8)', lineHeight: 14 }
-        },
-        overflow: 'truncate',
-        ellipsis: '..'
-      },
-      itemStyle: { borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1, gapWidth: 1 },
-      animationDuration: 1500
-    }]
+    normFn: (leaf) => {
+      const pct = parseFloat(leaf.data.pctOfPop) || 0;
+      return rankNorm(pct);
+    }
   });
 
-  // Populate region legend
-  const legendEl = document.getElementById('treemap-legend-access');
-  if (legendEl) {
-    legendEl.innerHTML = Object.entries(REGION_COLORS).map(([region, color]) =>
-      `<span><span class="legend-swatch" style="background:${color}"></span>${region}</span>`
-    ).join('');
-  }
+  // Populate legends
+  buildHeatmapLegend(
+    document.getElementById('treemap-legend-access'),
+    pctMin, pctMax, v => v.toFixed(1) + '%'
+  );
+  buildRegionChips(document.getElementById('double-burden-region-legend'));
 
-  // Update insight text with computed national total
+  // Update insight text
   const insightEl = document.getElementById('double-burden-insight');
-  if (insightEl && flatData.length) {
-    const total = flatData.reduce((sum, s) => sum + s.value, 0);
-    const top = flatData[0];
-    insightEl.innerHTML = `An estimated <strong>${fmtNum(Math.round(total / 1000000 * 10) / 10)} million Americans</strong> face overlapping low access and low income — these communities face the greatest compounded access and affordability constraints. <strong>${top.name}</strong> leads with ~${fmtNum(top.value)} people (${top.pctOfPop}% of state population).`;
+  if (insightEl && enriched.length) {
+    const sorted = [...enriched].sort((a, b) => b.size - a.size);
+    const total = sorted.reduce((sum, s) => sum + s.size, 0);
+    const top = sorted[0];
+    insightEl.innerHTML = `An estimated <strong>${fmtNum(Math.round(total / 1000000 * 10) / 10)} million Americans</strong> face overlapping low access and low income — these communities face the greatest compounded access and affordability constraints. <strong>${top.name}</strong> leads with ~${fmtNum(top.size)} people (${top.pctOfPop}% of state population).`;
   }
 }
 
