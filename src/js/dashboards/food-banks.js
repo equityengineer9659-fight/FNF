@@ -14,6 +14,13 @@ import {
 
 const PAL = MAP_PALETTES.banks;
 
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 // -- Chart 1: Food Bank Density Map (choropleth) --
 function renderDensityMap(geoJSON, states) {
   const chart = createChart('chart-density-map');
@@ -42,7 +49,7 @@ function renderDensityMap(geoJSON, states) {
       }
     },
     visualMap: {
-      left: 'right', bottom: 20, min: 11, max: Math.ceil(Math.max(...states.map(s => s.perCapitaOrgs))),
+      left: 'right', bottom: 20, min: Math.floor(Math.min(...states.map(s => s.perCapitaOrgs))), max: Math.ceil(Math.max(...states.map(s => s.perCapitaOrgs))),
       text: ['Higher Density', 'Lower Density'], calculable: true,
       inRange: { color: [PAL.low, PAL.mid, PAL.high] },
       textStyle: { color: COLORS.text }
@@ -263,7 +270,7 @@ function renderEfficiency(states) {
         ...regionAvgs.map(r => ({
           name: r.name,
           value: [r.efficiency, r.density, r.avgRevPerOrg, r.insecurity, r.orgCount],
-          areaStyle: { color: REGION_COLORS[r.name].replace(')', ',0.2)').replace('rgb', 'rgba') },
+          areaStyle: { color: hexToRgba(REGION_COLORS[r.name], 0.2) },
           lineStyle: { color: REGION_COLORS[r.name], width: 2 },
           itemStyle: { color: REGION_COLORS[r.name] }
         }))
@@ -360,7 +367,7 @@ function renderCapacityGap(states) {
       name: s.name,
       insecurePersons: s.insecurePersons
     })),
-    symbolSize: (_, params) => Math.max(8, Math.sqrt(params.data.insecurePersons / 50000)),
+    symbolSize: (_, params) => Math.max(6, Math.min(35, Math.sqrt(params.data.insecurePersons / 10000))),
     itemStyle: { color, opacity: 0.85 },
     emphasis: { itemStyle: { opacity: 1 } },
     animationDuration: 2000

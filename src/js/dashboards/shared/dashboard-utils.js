@@ -231,9 +231,11 @@ export function initScrollReveal() {
   elements.forEach(el => observer.observe(el));
 }
 
-// -- Responsive resize --
+// -- Responsive resize (debounced) --
+let resizeTimer = null;
 export function handleResize() {
-  charts.forEach(c => c.resize());
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => charts.forEach(c => c.resize()), 150);
 }
 
 // -- Fetch with fallback: try live API, fall back to static JSON --

@@ -12,16 +12,16 @@ import {
 } from './shared/dashboard-utils.js';
 
 // ── Vulnerability Index computation ──
-function computeVulnerabilityIndex(states) {
+export function computeVulnerabilityIndex(states) {
   const maxMealCost = Math.max(...states.map(s => s.mealCost || 0));
   return states.map(s => {
-    const score = (s.rate * 0.4) + (s.povertyRate * 0.3) + ((s.mealCost / maxMealCost) * 30);
+    const score = (s.rate * 0.4) + (s.povertyRate * 0.3) + ((s.mealCost / maxMealCost) * 0.3);
     return { ...s, vulnerabilityIndex: Math.round(score * 100) / 100 };
   });
 }
 
 // ── Chart 1: Vulnerability Map (choropleth) ──
-function renderVulnerabilityMap(statesWithIndex, geoJSON) {
+function renderVulnerabilityMap(statesWithIndex, geoJSON, national) {
   const chart = createChart('chart-vulnerability-map');
   if (!chart) return;
 
@@ -88,10 +88,10 @@ function renderVulnerabilityMap(statesWithIndex, geoJSON) {
     : '';
   if (insightEl) insightEl.textContent = defaultInsightText;
 
-  // Click insight: state click updates callout with per-state narrative
-  const natRate = statesWithIndex.reduce((s, x) => s + x.rate, 0) / statesWithIndex.length;
+  // Click insight: use authoritative national values, not unweighted state means
+  const natRate = national?.foodInsecurityRate || statesWithIndex.reduce((s, x) => s + x.rate, 0) / statesWithIndex.length;
   const natPoverty = statesWithIndex.reduce((s, x) => s + x.povertyRate, 0) / statesWithIndex.length;
-  const natMealCost = statesWithIndex.reduce((s, x) => s + x.mealCost, 0) / statesWithIndex.length;
+  const natMealCost = national?.averageMealCost || statesWithIndex.reduce((s, x) => s + x.mealCost, 0) / statesWithIndex.length;
 
   chart.on('click', (params) => {
     if (!params.data || !insightEl) return;
@@ -202,19 +202,28 @@ function renderSnapGap(fiStates, snapStates) {
 }
 
 // ── Chart 3: Food Price Impact (YoY Inflation) ──
-function renderPriceImpact(blsData) {
+export function renderPriceImpact(blsData) {
   const chart = createChart('chart-price-impact');
   if (!chart || !blsData?.series) return;
 
   const foodHome = blsData.series.find(s => s.name === 'Food at Home');
   if (!foodHome) return;
 
-  // Compute YoY % for each month (skip first 12)
-  const data = foodHome.data.filter(d => d.value !== null);
-  const yoyData = data.slice(12).map((d, i) => ({
-    date: d.date,
-    value: Math.round((d.value - data[i].value) / data[i].value * 10000) / 100
-  }));
+  // Compute YoY % using date-keyed lookback (robust to null gaps)
+  const validData = foodHome.data.filter(d => d.value !== null);
+  const dataByDate = {};
+  validData.forEach(d => { dataByDate[d.date] = d.value; });
+
+  const yoyData = validData.filter(d => {
+    const [y, m] = d.date.split('-').map(Number);
+    const priorDate = `${y - 1}-${String(m).padStart(2, '0')}`;
+    return dataByDate[priorDate] !== undefined;
+  }).map(d => {
+    const [y, m] = d.date.split('-').map(Number);
+    const priorDate = `${y - 1}-${String(m).padStart(2, '0')}`;
+    const prior = dataByDate[priorDate];
+    return { date: d.date, value: Math.round((d.value - prior) / prior * 10000) / 100 };
+  });
 
   const dates = yoyData.map(d => d.date);
 
@@ -358,36 +367,35 @@ async function init() {
   initScrollReveal();
 
   try {
-    const [fiRes, snapRes, blsRes, bankRes, geoRes] = await Promise.all([
+    const [fiRes, snapRes, blsRes, geoRes] = await Promise.all([
       fetch('/data/food-insecurity-state.json'),
       fetch('/data/snap-participation.json'),
       fetch('/data/bls-food-cpi.json'),
-      fetch('/data/food-bank-summary.json'),
       fetch('/data/us-states-geo.json')
     ]);
 
-    if (!fiRes.ok || !snapRes.ok || !blsRes.ok || !bankRes.ok || !geoRes.ok) {
+    if (!fiRes.ok || !snapRes.ok || !blsRes.ok || !geoRes.ok) {
       throw new Error('Failed to load one or more data files');
     }
 
-    const [fiData, snapData, blsData, , geoJSON] = await Promise.all([
-      fiRes.json(), snapRes.json(), blsRes.json(), bankRes.json(), geoRes.json()
+    const [fiData, snapData, blsData, geoJSON] = await Promise.all([
+      fiRes.json(), snapRes.json(), blsRes.json(), geoRes.json()
     ]);
 
     const statesWithIndex = computeVulnerabilityIndex(fiData.states);
 
     // Update SNAP coverage KPI dynamically
     // Formula: SNAP participants ÷ (participants + coverage gap) — eligible-population denominator (USDA FNS)
-    const totalInsecure = fiData.national.foodInsecurePersons;
     const totalSnap = snapData.national.snapParticipants;
-    const snapCoverage = ((totalSnap / totalInsecure) * 100).toFixed(1);
+    const coverageGap = snapData.national.coverageGap;
+    const snapCoverage = ((totalSnap / (totalSnap + coverageGap)) * 100).toFixed(1);
     const snapKpiEl = document.getElementById('snap-coverage-kpi');
     if (snapKpiEl) {
       snapKpiEl.dataset.target = snapCoverage;
     }
 
     // Render all 4 charts
-    renderVulnerabilityMap(statesWithIndex, geoJSON);
+    renderVulnerabilityMap(statesWithIndex, geoJSON, fiData.national);
     renderSnapGap(fiData.states, snapData.stateCoverage.states);
     renderPriceImpact(blsData);
     renderWorstStates(statesWithIndex);

@@ -129,7 +129,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `dashboards/nonprofit-directory.js` — Nonprofit Directory search (ProPublica API, debounced search, state filter, pagination)
   - `dashboards/nonprofit-profile.js` — Nonprofit Profile with 6 ECharts (revenue trend, composition, expenses vs revenue, assets/liabilities, compensation, efficiency radar) + dynamic data-driven descriptions with conditional insights
 - **Production**: Source maps disabled, ESLint `no-console` rule enforced
-- **Unit Tests**: ~161 tests across 9 test files (vitest)
+- **Unit Tests**: ~286 tests across 19 test files (vitest)
 
 ### PHP Backend (SiteGround)
 - **Location**: `public/api/` (copied to `dist/api/` during build)

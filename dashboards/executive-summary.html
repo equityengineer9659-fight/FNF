@@ -168,11 +168,11 @@
             <p class="dashboard-hero__positioning">Vulnerability mapping, coverage gaps, price trends, and state rankings drawn from USDA, Census, BLS, and Feeding America data.</p>
             <div class="dashboard-hero__stats" aria-label="Key national statistics">
                 <div class="dashboard-stat" title="State-level totals (41.8M) differ from the national figure (47.9M) due to methodological differences between USDA's national household survey and Feeding America's state-level model.">
-                    <span class="dashboard-stat__number" data-target="12.8" data-suffix="%">12.8%</span>
+                    <span class="dashboard-stat__number" id="food-insecurity-kpi" data-target="13.7" data-suffix="%">13.7%</span>
                     <p class="dashboard-stat__label">National Insecurity Rate</p>
                 </div>
                 <div class="dashboard-stat" title="SNAP participants ÷ (SNAP participants + coverage gap). Coverage gap = eligible food-insecure persons not receiving SNAP (USDA FNS). State totals (~39–41M) differ from the national figure because some participants are counted federally.">
-                    <span class="dashboard-stat__number" id="snap-coverage-kpi" data-target="95.4" data-suffix="%">95.4%</span>
+                    <span class="dashboard-stat__number" id="snap-coverage-kpi" data-target="83.7" data-suffix="%">83.7%</span>
                     <p class="dashboard-stat__label">SNAP Coverage Rate</p>
                 </div>
                 <div class="dashboard-stat">
@@ -205,7 +205,7 @@
                         <p class="dashboard-info__text">Grant writers can use this single metric to identify where need is greatest and funding most impactful.</p>
                         <div class="dashboard-info__meta">
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Sources</span> USDA ERS, Feeding America, U.S. Census Bureau ACS</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Index Formula</span> (Insecurity &times; 0.4) + (Poverty &times; 0.3) + (Meal Cost &times; 0.3)</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Note</span> Weights are editorial, not statistically derived. Small weight changes may shift individual state rankings.</div>
                         </div>
@@ -231,7 +231,7 @@
                         <p class="dashboard-info__text">States with strong outreach programs show SNAP coverage meeting or exceeding food-insecure populations. The gap reveals where enrollment efforts and policy changes can make the biggest impact.</p>
                         <div class="dashboard-info__meta">
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Sources</span> USDA FNS SNAP Data Tables &amp; Feeding America Map the Meal Gap 2024</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024</div>
                         </div>
                         <div id="snap-gap-insight" class="dashboard-info__insight"></div>
                     </div>
@@ -280,7 +280,7 @@
                         <p class="dashboard-info__text">For grant applications, these rankings help identify <strong>target geographies</strong> where federal and foundation funding is most needed and most defensible.</p>
                         <div class="dashboard-info__meta">
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Sources</span> USDA ERS, Feeding America, U.S. Census Bureau ACS</div>
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2022</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024</div>
                         </div>
                         <div id="worst-states-insight" class="dashboard-info__insight"></div>
                     </div>
@@ -386,7 +386,7 @@
                         <div class="dashboard-methodology__row">
                             <div class="dashboard-methodology__item">
                                 <h3>Data Currency</h3>
-                                <p>Food insecurity and poverty rates reflect <strong>2022</strong>. BLS food prices update monthly via live API. SNAP participation uses FY2022-2023 administrative data. The USDA ERS food security report was discontinued after 2024; Feeding America continues annually.</p>
+                                <p>Food insecurity and poverty rates reflect <strong>2024</strong> (Feeding America Map the Meal Gap). BLS food prices update monthly via live API. SNAP participation uses 2024 Feeding America estimates. The USDA ERS food security report was discontinued after 2024; Feeding America continues annually.</p>
                             </div>
                             <div class="dashboard-methodology__item">
                                 <h3>About This Dashboard</h3>

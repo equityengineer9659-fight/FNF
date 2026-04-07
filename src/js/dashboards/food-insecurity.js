@@ -71,7 +71,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
       Poverty Rate: ${d.povertyRate}%<br/>
       Persons: ${fmtNum(d.persons)}<br/>
       Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
-      Avg Meal Cost: $${d.mealCost}`;
+      Avg Meal Cost: $${d.mealCost} <span style="opacity:0.7">(state avg)</span>`;
   }
 
   // Show national (state-level) view
@@ -87,7 +87,10 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
     if (mapLabel) mapLabel.textContent = '';
     currentStateName = '';
     const mapInsight = document.getElementById('map-insight');
-    if (mapInsight) mapInsight.textContent = 'Mississippi leads the nation at 18.7% \u2014 nearly 1 in 5 residents.';
+    if (mapInsight) {
+      const worst = data.states.reduce((a, b) => (b.rate > a.rate ? b : a), data.states[0]);
+      mapInsight.textContent = `${worst.name} leads the nation at ${worst.rate}% \u2014 nearly 1 in ${Math.round(100 / worst.rate)} residents.`;
+    }
     const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
     if (hint) hint.textContent = 'Hover for state details \u2014 click any state for county breakdown';
 
@@ -170,7 +173,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
       const mapLabel = document.getElementById('map-state-label');
       if (mapLabel) mapLabel.textContent = stateName;
       const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
-      if (hint) hint.textContent = 'County rates are modeled estimates (poverty regression), not survey data \u2014 click Back for state-level survey data';
+      if (hint) hint.textContent = 'County rates are modeled estimates (County Health Rankings 2025), not direct survey data \u2014 click Back for state-level survey data';
 
       chart.hideLoading();
 
@@ -278,7 +281,11 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
   // Back button
   const backBtn = document.getElementById('map-back-btn');
   if (backBtn) {
-    backBtn.addEventListener('click', () => showNational());
+    backBtn.addEventListener('click', () => {
+      showNational();
+      const mapEl = document.getElementById('chart-map');
+      if (mapEl) mapEl.focus();
+    });
   }
 
   // Metric selector
@@ -323,6 +330,7 @@ function initCountySearch(mapController) {
 
     if (!countyIndex || query.length < 2) {
       resultsList.setAttribute('data-visible', 'false');
+      input.setAttribute('aria-expanded', 'false');
       resultsList.innerHTML = '';
       return;
     }
@@ -339,6 +347,7 @@ function initCountySearch(mapController) {
     if (matches.length === 0) {
       resultsList.innerHTML = '<li style="color:rgba(255,255,255,0.4)">No counties found</li>';
       resultsList.setAttribute('data-visible', 'true');
+      input.setAttribute('aria-expanded', 'true');
       return;
     }
 
@@ -346,6 +355,7 @@ function initCountySearch(mapController) {
       `<li role="option" data-fips="${m.stateFips}" data-county="${m.name}" data-state="${m.stateName}" id="search-opt-${i}">${m.name}<span class="search-state">${m.stateName}</span></li>`
     ).join('');
     resultsList.setAttribute('data-visible', 'true');
+    input.setAttribute('aria-expanded', 'true');
 
     // Click handler for results
     resultsList.querySelectorAll('li[role="option"]').forEach(li => {
@@ -355,6 +365,7 @@ function initCountySearch(mapController) {
         const countyName = li.dataset.county;
         input.value = `${countyName}, ${sName}`;
         resultsList.setAttribute('data-visible', 'false');
+        input.setAttribute('aria-expanded', 'false');
         if (mapController) mapController.drillDown(sName, sFips, countyName);
       });
     });
@@ -595,7 +606,8 @@ function renderBar(data) {
         { name: 'SNAP Usage', max: 100 }
       ],
       shape: 'polygon', splitNumber: 4,
-      axisName: { color: COLORS.text, fontSize: 11 },
+      axisName: { color: COLORS.text, fontSize: window.innerWidth < 640 ? 9 : 11 },
+      radius: window.innerWidth < 640 ? '55%' : '65%',
       splitLine: { lineStyle: { color: COLORS.gridLine } },
       splitArea: { areaStyle: { color: ['rgba(0,212,255,0.02)', 'rgba(0,212,255,0.05)'] } },
       axisLine: { lineStyle: { color: COLORS.gridLine } }
@@ -821,7 +833,7 @@ function renderSnap(data) {
       ...TOOLTIP_STYLE
     },
     legend: {
-      data: ['Food Insecurity Rate (2024)', 'SNAP Coverage (FY2023)'],
+      data: ['Food Insecurity Rate (2024)', 'SNAP Coverage (FY2024)'],
       textStyle: { color: COLORS.text },
       top: 5
     },
