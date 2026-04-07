@@ -349,11 +349,24 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--stacked">
                     <div class="dashboard-chart-row__chart">
-                        <div id="double-burden-breadcrumb" style="display:flex;align-items:center;gap:2px;padding:6px 0;min-height:30px"></div>
-                        <div id="chart-double-burden" class="dashboard-chart" role="img" aria-label="Heatmap showing population in low-income and low-access tracts, with continuous color gradient by severity"></div>
+                        <!-- Mode toggle + encoding key -->
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px">
+                            <div id="double-burden-mode-toggle" role="group" aria-label="Visualization mode" style="display:inline-flex;gap:0;border:1px solid rgba(255,255,255,0.12);border-radius:6px;overflow:hidden">
+                                <button class="dashboard-metric-btn dashboard-metric-btn--active" data-db-mode="treemap" aria-pressed="true" style="border-radius:5px 0 0 5px;border:none;margin:0">Total Affected</button>
+                                <button class="dashboard-metric-btn" data-db-mode="tiles" aria-pressed="false" style="border-radius:0 5px 5px 0;border:none;border-left:1px solid rgba(255,255,255,0.08);margin:0">Rate Comparison</button>
+                            </div>
+                            <p id="db-encoding-treemap" style="margin:0;font-size:0.72rem;color:rgba(255,255,255,0.5);text-align:center;letter-spacing:0.01em"><span style="color:rgba(255,255,255,0.7)">Size</span> = affected population (&#8730; scaled) &nbsp;&middot;&nbsp; <span style="color:rgba(255,255,255,0.7)">Color</span> = % of state population</p>
+                            <p id="db-encoding-tiles" style="display:none;margin:0;font-size:0.72rem;color:rgba(255,255,255,0.5);text-align:center;letter-spacing:0.01em">Equal tile size &nbsp;&middot;&nbsp; <span style="color:rgba(255,255,255,0.7)">Color</span> = % of state population affected</p>
+                        </div>
+                        <!-- Mode A: D3 Treemap -->
+                        <div id="double-burden-breadcrumb" style="display:flex;align-items:center;gap:2px;padding:4px 0;min-height:26px"></div>
+                        <div id="chart-double-burden" class="dashboard-chart" role="img" aria-label="Treemap showing estimated low-income low-access population by state, sized by affected count and colored by rate"></div>
+                        <!-- Mode B: Equal tiles -->
+                        <div id="chart-double-burden-tiles" style="display:none;padding:4px 0;" role="region" aria-label="Equal-tile rate comparison of low-income low-access population by state"></div>
+                        <!-- Shared legend -->
                         <div id="treemap-legend-access" class="dashboard-chart__legend"></div>
                         <div id="double-burden-region-legend" style="display:flex;justify-content:center;gap:16px;margin-top:4px;flex-wrap:wrap"></div>
-                        <p class="dashboard-chart__hint">Click a region to zoom in. Click breadcrumb to zoom out.</p>
+                        <p id="db-hint-text" class="dashboard-chart__hint" style="font-size:0.7rem;opacity:0.45;margin-top:6px">Click a region to zoom in. Click breadcrumb to zoom out.</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Where Poverty and Low Access Overlap</h3>

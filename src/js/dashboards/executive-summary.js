@@ -13,7 +13,7 @@ import {
 
 // ── Vulnerability Index computation ──
 export function computeVulnerabilityIndex(states) {
-  const maxMealCost = Math.max(...states.map(s => s.mealCost || 0));
+  const maxMealCost = Math.max(...states.map(s => s.mealCost || 0)) || 1;
   return states.map(s => {
     const score = (s.rate * 0.4) + (s.povertyRate * 0.3) + ((s.mealCost / maxMealCost) * 0.3);
     return { ...s, vulnerabilityIndex: Math.round(score * 100) / 100 };
@@ -190,7 +190,7 @@ function renderSnapGap(fiStates, snapStates) {
 
   // Dynamic insight
   const insightEl = document.getElementById('snap-gap-insight');
-  if (insightEl) {
+  if (insightEl && joined.length) {
     const biggestGap = joined.reduce((max, d) => {
       const gap = d.foodInsecure - d.snapParticipants;
       return gap > (max.foodInsecure - max.snapParticipants) ? d : max;

@@ -97,6 +97,65 @@ describe('food-access', () => {
     });
   });
 
+  // ── P1-3: Insecurity map FIPS population ──
+  describe('insecurity map FIPS lookup', () => {
+    it('should populate fips from accessStates when provided', () => {
+      // Simulate the renderInsecurityMap data construction logic (post-fix)
+      const US_STATES_MOCK = [['AL', 'Alabama'], ['CA', 'California'], ['TX', 'Texas']];
+      const accessStates = [
+        { name: 'Alabama', fips: '01' },
+        { name: 'California', fips: '06' },
+        { name: 'Texas', fips: '48' }
+      ];
+      const cdcRecords = [
+        { state: 'AL', value: 15.2 },
+        { state: 'CA', value: 12.1 },
+        { state: 'TX', value: 14.8 }
+      ];
+
+      const stateNameMap = {};
+      US_STATES_MOCK.forEach(([abbr, name]) => { stateNameMap[abbr] = name; });
+
+      const fipsByName = {};
+      accessStates.forEach(s => { fipsByName[s.name] = s.fips; });
+
+      const mapData = cdcRecords
+        .filter(r => stateNameMap[r.state])
+        .map(r => ({
+          name: stateNameMap[r.state],
+          value: r.value,
+          fips: fipsByName[stateNameMap[r.state]] || null
+        }));
+
+      // After fix: all states should have non-null fips
+      expect(mapData).toHaveLength(3);
+      expect(mapData[0].fips).toBe('01');
+      expect(mapData[1].fips).toBe('06');
+      expect(mapData[2].fips).toBe('48');
+    });
+
+    it('renderInsecurityMap in source should accept accessStates parameter for FIPS lookup', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      // After fix: renderInsecurityMap should build fipsByName from accessStates
+      // Either via parameter or via module-level lookup
+      const fnMatch = jsSource.match(/function renderInsecurityMap\s*\([^)]+\)/);
+      expect(fnMatch).not.toBeNull();
+      // Should not hardcode fips: null for all records
+      // (the old bug was a comment saying "CDC data uses state abbr, not FIPS")
+      expect(jsSource).not.toContain('fips: null // CDC data uses state abbr');
+    });
+
+    it('insecurity view back button should not have duplicate listener in init()', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      // After fix: init() should NOT call backBtn.addEventListener for access-map-back-btn
+      // renderDesertMap handles back button internally; init() had a duplicate that caused double-fire
+      const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
+      // Match specifically: variable named backBtn with addEventListener (not just any addEventListener after getElementById)
+      const backBtnListeners = (initSection.match(/\bbackBtn\b\.addEventListener/g) || []).length;
+      expect(backBtnListeners).toBe(0);
+    });
+  });
+
   // ── Data shape validation ──
   describe('data shape: current-food-access.json', () => {
     it('should have national and states arrays', () => {

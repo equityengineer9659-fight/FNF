@@ -360,8 +360,14 @@ function updateBreadcrumb(el, node, root, renderFn) {
       span.style.cursor = 'default';
       span.style.background = 'rgba(255,255,255,0.05)';
       span.style.fontWeight = '500';
+      span.setAttribute('aria-current', 'true');
     } else {
-      span.addEventListener('click', () => renderFn(p));
+      span.setAttribute('role', 'button');
+      span.setAttribute('tabindex', '0');
+      span.setAttribute('aria-label', `Navigate to ${p.data.name}`);
+      const activate = () => renderFn(p);
+      span.addEventListener('click', activate);
+      span.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); } });
       span.addEventListener('mouseenter', () => { span.style.color = '#818CF8'; span.style.background = 'rgba(129,140,248,0.1)'; });
       span.addEventListener('mouseleave', () => { span.style.color = 'rgba(255,255,255,0.55)'; span.style.background = 'none'; });
     }
@@ -470,4 +476,4 @@ export function createRankNorm(values) {
   };
 }
 
-export { HEATMAP_REGION_COLORS };
+export { HEATMAP_REGION_COLORS, sampleGradient, tileTextColor, tileSubTextColor };

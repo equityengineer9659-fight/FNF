@@ -534,6 +534,12 @@ function rebuildPurchasingPowerSeries() {
   if (!ppChartInstance || !ppBaseOption) return;
 
   const option = JSON.parse(JSON.stringify(ppBaseOption));
+  // Restore LinearGradient instances lost by JSON serialization (class instances become plain objects)
+  ppBaseOption.series.forEach((baseSeries, i) => {
+    if (baseSeries.areaStyle?.color?.colorStops && option.series[i]) {
+      option.series[i].areaStyle.color = baseSeries.areaStyle.color;
+    }
+  });
 
   // Add FRED overlays
   activeFredOverlays.forEach((overlay) => {

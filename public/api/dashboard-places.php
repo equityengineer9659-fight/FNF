@@ -169,9 +169,9 @@ if ($type === 'food-insecurity-county') {
     $whereClause = "measureid in ('" . $measureIn . "')";
 
     $params = [
-        '$select' => 'stateabbr,measure,avg(data_value) as avg_value',
+        '$select' => 'stateabbr,measureid,avg(data_value) as avg_value',
         '$where'  => $whereClause,
-        '$group'  => 'stateabbr,measure',
+        '$group'  => 'stateabbr,measureid',
         '$limit'  => 500
     ];
 
@@ -189,15 +189,16 @@ if ($type === 'food-insecurity-county') {
     // Group by state, with each measure as a field
     $stateData = [];
     foreach ($rows as $row) {
-        if (!isset($row['stateabbr']) || !isset($row['measure']) || !isset($row['avg_value'])) continue;
+        if (!isset($row['stateabbr']) || !isset($row['measureid']) || !isset($row['avg_value'])) continue;
 
         $st = $row['stateabbr'];
         if (!isset($stateData[$st])) {
             $stateData[$st] = ['state' => $st];
         }
 
-        // Use measure short code as key (lowercase)
-        $key = strtolower($row['measure']);
+        // Use measureid as key (lowercase) — e.g. "obesity", "diabetes", "housinsec"
+        // This ensures JS can access p.obesity, p.diabetes, etc. without long-form names
+        $key = strtolower($row['measureid']);
         $stateData[$st][$key] = round(floatval($row['avg_value']), 1);
     }
 

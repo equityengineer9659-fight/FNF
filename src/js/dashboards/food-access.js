@@ -13,7 +13,8 @@ import {
 } from './shared/dashboard-utils.js';
 
 import {
-  createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm, HEATMAP_REGION_COLORS
+  createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm,
+  HEATMAP_REGION_COLORS, sampleGradient, tileTextColor, tileSubTextColor
 } from './shared/d3-heatmap.js';
 
 const PAL = MAP_PALETTES.access;
@@ -435,27 +436,195 @@ function renderVehicle(states) {
   });
 }
 
-// -- Chart 5: Low-Income + Low-Access (Treemap) --
+// -- Chart 5: Low-Income + Low-Access (Two-Mode Visualization) --
+
+// Outlier threshold: top 20% by norm get a subtle accent
+const DB_OUTLIER_THRESHOLD = 0.80;
+
+/** Create or reuse a shared tooltip element for Mode B tiles */
+function ensureDbTileTip() {
+  let tip = document.getElementById('db-tile-tip');
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.id = 'db-tile-tip';
+    tip.style.cssText = 'position:fixed;background:rgba(10,15,30,0.97);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 14px;font-size:13px;color:#E2E8F0;pointer-events:none;opacity:0;transition:opacity 0.12s;z-index:9999;max-width:240px;line-height:1.55;box-shadow:0 8px 24px rgba(0,0,0,0.55)';
+    document.body.appendChild(tip);
+  }
+  return tip;
+}
+
+/** Render Mode B: equal-sized tiles sorted by rate desc, grouped by region */
+function renderDoubleBurdenTiles(enriched, rankNorm) {
+  const container = document.getElementById('chart-double-burden-tiles');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const tip = ensureDbTileTip();
+  const regionOrder = ['South', 'Midwest', 'West', 'Northeast'];
+
+  // Determine grid columns from container width for balanced rows
+  const containerWidth = container.parentElement?.clientWidth || 700;
+  const tileW = 112, tileH = 72, gap = 5;
+  const cols = Math.max(4, Math.floor((containerWidth + gap) / (tileW + gap)));
+
+  regionOrder.forEach((region, ri) => {
+    const states = enriched
+      .filter(s => s.region === region)
+      .sort((a, b) => parseFloat(b.pctOfPop) - parseFloat(a.pctOfPop));
+    if (!states.length) return;
+
+    const rc = HEATMAP_REGION_COLORS[region] || '#888';
+    const section = document.createElement('div');
+    section.style.cssText = ri < regionOrder.length - 1
+      ? 'margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.04)'
+      : 'margin-bottom:6px';
+
+    // Region header — prominent but clean
+    const header = document.createElement('div');
+    header.style.cssText = `font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:${rc};margin-bottom:8px;padding:3px 10px;border-left:3px solid ${rc};display:flex;align-items:center;gap:8px`;
+    header.textContent = region;
+    const count = document.createElement('span');
+    count.style.cssText = 'font-size:0.68rem;font-weight:400;opacity:0.5;text-transform:none;letter-spacing:0';
+    count.textContent = `${states.length} states`;
+    header.appendChild(count);
+    section.appendChild(header);
+
+    // CSS Grid — fixed columns, balanced rows, no orphan tiles
+    const grid = document.createElement('div');
+    grid.style.cssText = `display:grid;grid-template-columns:repeat(${cols},1fr);gap:${gap}px`;
+
+    states.forEach(d => {
+      const norm = rankNorm(parseFloat(d.pctOfPop) || 0);
+      const rgb = sampleGradient(norm);
+      const bg = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+      const fg = tileTextColor(norm);
+      const subFg = tileSubTextColor(norm);
+      const isOutlier = norm >= DB_OUTLIER_THRESHOLD;
+
+      const tile = document.createElement('div');
+      tile.style.cssText = [
+        `min-height:${tileH}px;border-radius:6px;padding:8px 10px`,
+        `background:${bg}`,
+        'display:flex;flex-direction:column;justify-content:space-between',
+        isOutlier
+          ? 'border:1.5px solid rgba(253,224,71,0.35);box-shadow:0 0 8px rgba(253,224,71,0.08)'
+          : 'border:1px solid rgba(255,255,255,0.06)',
+        'box-sizing:border-box;cursor:default;position:relative',
+        'transition:transform 0.12s,box-shadow 0.12s'
+      ].join(';');
+
+      const nameDiv = document.createElement('div');
+      nameDiv.style.cssText = `font-size:0.72rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:${fg};line-height:1.2`;
+      nameDiv.textContent = d.name;
+      nameDiv.title = d.name;
+
+      const pctDiv = document.createElement('div');
+      pctDiv.style.cssText = `font-size:1.15rem;font-weight:700;line-height:1.1;color:${fg}${isOutlier ? ';text-shadow:0 0 6px rgba(253,224,71,0.2)' : ''}`;
+      pctDiv.textContent = d.pctOfPop + '%';
+
+      const countDiv = document.createElement('div');
+      countDiv.style.cssText = `font-size:0.64rem;color:${subFg};line-height:1.2`;
+      countDiv.textContent = fmtNum(d.estimate) + ' people';
+
+      tile.append(nameDiv, pctDiv, countDiv);
+
+      tile.addEventListener('mouseenter', (e) => {
+        tile.style.transform = 'scale(1.04)';
+        tile.style.boxShadow = '0 4px 16px rgba(0,0,0,0.45)';
+        tile.style.zIndex = '2';
+        const rc2 = HEATMAP_REGION_COLORS[d.region] || '#888';
+        tip.innerHTML = `<strong style="font-size:14px">${d.name}</strong>
+          <span style="margin-left:5px;background:${rc2};width:8px;height:8px;border-radius:2px;display:inline-block;vertical-align:middle"></span><br/>
+          <span style="color:#818CF8">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
+          <span style="color:#818CF8">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:6px 0">
+          <span style="opacity:0.6;font-size:0.88em">Population: ${fmtNum(d.population)}<br/>Low-Access Tracts: ${d.lowAccessPct}%</span>`;
+        tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
+        tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
+        tip.style.opacity = '1';
+      });
+      tile.addEventListener('mousemove', (e) => {
+        tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
+        tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
+      });
+      tile.addEventListener('mouseleave', () => {
+        tile.style.transform = '';
+        tile.style.boxShadow = isOutlier ? '0 0 8px rgba(253,224,71,0.08)' : '';
+        tile.style.zIndex = '';
+        tip.style.opacity = '0';
+      });
+
+      grid.appendChild(tile);
+    });
+
+    section.appendChild(grid);
+    container.appendChild(section);
+  });
+}
+
+/** Wire the Total Affected / Rate Comparison toggle */
+function initDoubleBurdenModeToggle() {
+  const toggleContainer = document.getElementById('double-burden-mode-toggle');
+  if (!toggleContainer) return;
+
+  toggleContainer.querySelectorAll('[data-db-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.dbMode;
+      toggleContainer.querySelectorAll('[data-db-mode]').forEach(b => {
+        b.classList.toggle('dashboard-metric-btn--active', b === btn);
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+
+      const treemapEl = document.getElementById('chart-double-burden');
+      const tilesEl = document.getElementById('chart-double-burden-tiles');
+      const breadcrumb = document.getElementById('double-burden-breadcrumb');
+      const encodingTree = document.getElementById('db-encoding-treemap');
+      const encodingTile = document.getElementById('db-encoding-tiles');
+      const hintEl = document.getElementById('db-hint-text');
+      const regionLegend = document.getElementById('double-burden-region-legend');
+
+      const isTreemap = mode === 'treemap';
+      if (treemapEl) treemapEl.style.display = isTreemap ? '' : 'none';
+      if (breadcrumb) breadcrumb.style.display = isTreemap ? '' : 'none';
+      if (tilesEl) tilesEl.style.display = isTreemap ? 'none' : '';
+      if (encodingTree) encodingTree.style.display = isTreemap ? '' : 'none';
+      if (encodingTile) encodingTile.style.display = isTreemap ? 'none' : '';
+      // Region chips redundant in tiles mode — tiles already have labeled region sections
+      if (regionLegend) regionLegend.style.display = isTreemap ? '' : 'none';
+      if (hintEl) hintEl.textContent = isTreemap
+        ? 'Click a region to zoom in. Click breadcrumb to zoom out.'
+        : 'Sorted by rate within each region. Hover for details.';
+    });
+  });
+}
+
 function renderDoubleBurden(states) {
   const container = document.getElementById('chart-double-burden');
   if (!container) return;
 
-  // Pre-compute data for hierarchy and insight
+  // Pre-compute data: sort within each region by estimate DESC for treemap readability
   const enriched = [];
   Object.entries(REGIONS).forEach(([region, stateNames]) => {
     states
       .filter(s => stateNames.includes(s.name))
+      .sort((a, b) => {
+        const ea = Math.round((a.lowAccessPopulation || 0) * ((a.povertyRate || 0) / 100));
+        const eb = Math.round((b.lowAccessPopulation || 0) * ((b.povertyRate || 0) / 100));
+        return eb - ea;
+      })
       .forEach(s => {
         const pop = s.totalPopulation || s.population || 0;
         const estimate = Math.round((s.lowAccessPopulation || 0) * ((s.povertyRate || 0) / 100));
         const pct = pop > 0 ? (estimate / pop) * 100 : 0;
         enriched.push({
-          name: s.name, size: estimate,
+          // sqrt scaling: reduces extreme size ratio (TX/WY from 120:1 to 11:1)
+          name: s.name, size: Math.sqrt(Math.max(1, estimate)),
+          estimate,
           pctOfPop: pct.toFixed(1),
           population: pop,
           lowAccessPct: s.lowAccessPct,
           region,
-          label2: fmtNum(estimate) + '  ' + pct.toFixed(1) + '%'
+          label2: pct.toFixed(1) + '%'
         });
       });
   });
@@ -464,58 +633,60 @@ function renderDoubleBurden(states) {
   const pctMin = Math.min(...pctValues), pctMax = Math.max(...pctValues);
   const rankNorm = createRankNorm(pctValues);
 
-  const hierarchyData = {
-    name: 'United States',
-    children: Object.keys(REGIONS).map(region => ({
-      name: region,
-      children: enriched.filter(s => s.region === region)
-    }))
-  };
-
+  // Mode A: D3 Treemap (size = √population, color = rank-normalized rate)
   createD3Heatmap({
     containerId: 'chart-double-burden',
     breadcrumbId: 'double-burden-breadcrumb',
-    hierarchyData,
+    hierarchyData: {
+      name: 'United States',
+      children: Object.keys(REGIONS).map(region => ({
+        name: region,
+        children: enriched.filter(s => s.region === region)
+      }))
+    },
     tooltipFn: (leaf) => {
       const d = leaf.data;
       const region = leaf.parent ? leaf.parent.data.name : d.region;
       const rc = HEATMAP_REGION_COLORS[region] || '#888';
-      return `<strong>${d.name}</strong>
+      return `<strong style="font-size:14px">${d.name}</strong>
         <span style="margin-left:6px;display:inline-flex;align-items:center">
           <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
           <span style="color:${rc}">${region}</span>
         </span><br/>
-        <span style="color:#818CF8;font-weight:500">Low-Income Low-Access (est.):</span> <strong>${fmtNum(leaf.value)}</strong><br/>
-        <span style="color:#818CF8;font-weight:500">Share of State Pop:</span> <strong>${d.pctOfPop}%</strong>
-        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:7px 0">
-        Population: ${fmtNum(d.population)}<br/>
-        Low-Access Tracts: ${d.lowAccessPct}% of tracts`;
+        <span style="color:#818CF8;font-weight:500">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
+        <span style="color:#818CF8;font-weight:500">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:6px 0">
+        <span style="opacity:0.6;font-size:0.92em">Population: ${fmtNum(d.population)}<br/>
+        Low-Access Tracts: ${d.lowAccessPct}%</span>`;
     },
-    normFn: (leaf) => {
-      const pct = parseFloat(leaf.data.pctOfPop) || 0;
-      return rankNorm(pct);
-    }
+    normFn: (leaf) => rankNorm(parseFloat(leaf.data.pctOfPop) || 0)
   });
 
-  // Populate legends
+  // Mode B: equal tiles (pre-rendered, toggled by CSS display)
+  renderDoubleBurdenTiles(enriched, rankNorm);
+
+  // Shared legend (visible in both modes)
   buildHeatmapLegend(
     document.getElementById('treemap-legend-access'),
     pctMin, pctMax, v => v.toFixed(1) + '%'
   );
   buildRegionChips(document.getElementById('double-burden-region-legend'));
 
-  // Update insight text
+  // Wire toggle
+  initDoubleBurdenModeToggle();
+
+  // Insight text
   const insightEl = document.getElementById('double-burden-insight');
   if (insightEl && enriched.length) {
-    const sorted = [...enriched].sort((a, b) => b.size - a.size);
-    const total = sorted.reduce((sum, s) => sum + s.size, 0);
-    const top = sorted[0];
-    insightEl.innerHTML = `An estimated <strong>${fmtNum(Math.round(total / 1000000 * 10) / 10)} million Americans</strong> face overlapping low access and low income — these communities face the greatest compounded access and affordability constraints. <strong>${top.name}</strong> leads with ~${fmtNum(top.size)} people (${top.pctOfPop}% of state population).`;
+    const total = enriched.reduce((sum, s) => sum + s.estimate, 0);
+    const topRate = [...enriched].sort((a, b) => parseFloat(b.pctOfPop) - parseFloat(a.pctOfPop))[0];
+    const topCount = [...enriched].sort((a, b) => b.estimate - a.estimate)[0];
+    insightEl.innerHTML = `An estimated <strong>${fmtNum(Math.round(total / 1000000 * 10) / 10)} million Americans</strong> face overlapping low food access and low income. <strong>${topRate.name}</strong> has the highest rate (${topRate.pctOfPop}%); <strong>${topCount.name}</strong> has the most in absolute terms (~${fmtNum(topCount.estimate)}).`;
   }
 }
 
 // -- Food Insecurity Map (CDC PLACES data, 2023) --
-function renderInsecurityMap(geoJSON, cdcRecords) {
+function renderInsecurityMap(geoJSON, cdcRecords, accessStates = []) {
   const chart = getOrCreateChart('chart-desert-map');
   if (!chart) return;
 
@@ -523,12 +694,16 @@ function renderInsecurityMap(geoJSON, cdcRecords) {
   const stateNameMap = {};
   US_STATES.forEach(([abbr, name]) => { stateNameMap[abbr] = name; });
 
+  // Build FIPS lookup from access data so county drill-down works in insecurity view
+  const fipsByName = {};
+  accessStates.forEach(s => { if (s.name && s.fips) fipsByName[s.name] = s.fips; });
+
   const mapData = cdcRecords
     .filter(r => stateNameMap[r.state])
     .map(r => ({
       name: stateNameMap[r.state],
       value: r.value,
-      fips: null // CDC data uses state abbr, not FIPS — drill-down uses different path
+      fips: fipsByName[stateNameMap[r.state]] || null
     }));
 
   const albersProjection = { project: p => p, unproject: p => p };
@@ -1100,7 +1275,7 @@ function renderAccessInsecurity(accessStates, fiStates, accessData) {
         // Show prompt to select a state
         chart.setOption({
           title: { text: 'Select a state above to view county-level data', left: 'center', top: 'center', textStyle: { color: COLORS.textMuted, fontSize: 14 } },
-          legend: { show: false }, visualMap: undefined, series: []
+          legend: { show: false }, visualMap: null, series: []
         }, true);
         const insightEl = document.getElementById('access-insecurity-insight');
         if (insightEl) insightEl.textContent = 'Choose a state from the dropdown to see county-level correlation between food deserts and food insecurity.';
@@ -1117,7 +1292,7 @@ function renderAccessInsecurity(accessStates, fiStates, accessData) {
       if (!code) {
         chart.setOption({
           title: { text: 'Select a state above to view county-level data', left: 'center', top: 'center', textStyle: { color: COLORS.textMuted, fontSize: 14 } },
-          legend: { show: false }, visualMap: undefined, series: []
+          legend: { show: false }, visualMap: null, series: []
         }, true);
         return;
       }
@@ -1321,7 +1496,7 @@ async function init() {
 
       if (view === 'insecurity' && cdcInsecurityData?.records) {
         if (mapCtrl) mapCtrl.setDrillDown(true);
-        renderInsecurityMap(geoJSON, cdcInsecurityData.records);
+        renderInsecurityMap(geoJSON, cdcInsecurityData.records, currentAccessData?.states || []);
         const el = document.getElementById('info-insecurity-mode'); if (el) el.style.display = '';
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
         updateFreshness('access', cdcInsecurityData);
@@ -1433,16 +1608,6 @@ async function init() {
         if (chart) chart.hideLoading();
       }
     };
-
-    // Wire back button for deserts mode
-    const backBtn = document.getElementById('access-map-back-btn');
-    if (backBtn) {
-      backBtn.addEventListener('click', () => {
-        if (currentMapView === 'deserts') {
-          switchMapView('deserts');
-        }
-      });
-    }
 
     initScrollReveal();
     window.addEventListener('resize', handleResize);

@@ -86,16 +86,19 @@ describe('food-banks', () => {
       const html = readHTML('food-banks.html');
 
       const ms = bankData.states.find(s => s.name === 'Mississippi');
-      if (ms) {
-        const computed = Math.round(ms.totalRevenue / ms.foodInsecurePersons);
+      expect(ms).toBeDefined();
 
-        // Extract the hardcoded value from HTML
-        const match = html.match(/\$(\d+)\s*(?:per|\/)\s*(?:food[- ]?insecure|person)/i);
-        if (match) {
-          const hardcoded = parseInt(match[1], 10);
-          expect(hardcoded).toBe(computed);
-        }
-      }
+      // Derive insecure persons the same way food-banks.js does (population × insecurity rate)
+      const insecurePersons = Math.round((ms.population || 0) * ((ms.foodInsecurityRate || 0) / 100));
+      expect(insecurePersons).toBeGreaterThan(0);
+
+      const computed = Math.round(ms.totalRevenue / insecurePersons);
+
+      // Extract the hardcoded dollar-per-person value from HTML insight text
+      const match = html.match(/\$(\d{3,})\s*(?:in food bank revenue per food[- ]?insecure|per food[- ]?insecure person)/i);
+      expect(match).not.toBeNull();
+      const hardcoded = parseInt(match[1], 10);
+      expect(hardcoded).toBe(computed);
     });
   });
 

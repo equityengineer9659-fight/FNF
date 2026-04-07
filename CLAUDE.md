@@ -121,15 +121,16 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
   - `expertise-accordion.js` — mobile accordion for about page
   - `dashboards/shared/dashboard-utils.js` — shared ECharts setup, colors, MAP_PALETTES, formatters, linearRegression, US_STATES, `updateFreshness()` (two-state: `_static` → "Data: year", else → "Live"), `animateCounters()` (respects prefers-reduced-motion, integer-aware)
+  - `dashboards/shared/d3-heatmap.js` — D3 zoomable heatmap module. Exports: `createD3Heatmap()`, `buildHeatmapLegend()`, `buildRegionChips()`, `createRankNorm()` (rank-based normalization preventing outlier compression), `sampleGradient()`, `tileTextColor()`, `tileSubTextColor()`, `HEATMAP_REGION_COLORS`. 7-stop value gradient, SVG per-tile depth gradient, adaptive text contrast, keyboard-accessible breadcrumbs.
   - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (12 charts: map with SNAP Coverage metric + county drill-down, trend with markLine annotations, radar, scatter, SDOH, demographics, income river, meal cost bar, CPI trend, SNAP coverage bars, Triple Burden Index, State Deep-Dive KPI panel). Loads current-food-access.json + food-bank-summary.json for cross-dataset features.
-  - `dashboards/food-access.js` — Food Access & Deserts dashboard. **Map toggle**: Food Deserts ↔ SNAP Retailers on single chart instance (drill-down only in desert mode)
+  - `dashboards/food-access.js` — Food Access & Deserts dashboard. **Map toggle**: Food Deserts ↔ Food Insecurity ↔ SNAP Retailers on single chart instance (drill-down in deserts + insecurity modes). **Double Burden dual-mode**: "Total Affected" (D3 treemap, √-scaled area) and "Rate Comparison" (equal CSS Grid tiles, sorted by rate) with toggle, outlier emphasis on top-20% states.
   - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard (Sankey data from `snap-participation.json`). 5 KPI gauges (coverage, lunch, benefit, gap, affordability shortfall). SNAP Purchasing Power Index line on trend chart.
-  - `dashboards/food-prices.js` — Food Prices & Affordability dashboard (live BLS regional CPI data). CPI vs Food Insecurity dual-axis chart (loads food-insecurity-state.json for trend overlay).
-  - `dashboards/food-banks.js` — Food Bank Landscape dashboard. Regression line suppressed when |r| < 0.2. Need-Capacity Gap scatter (revenue per insecure person vs insecurity rate).
+  - `dashboards/food-prices.js` — Food Prices & Affordability dashboard (live BLS regional CPI data). CPI vs Food Insecurity dual-axis chart (loads food-insecurity-state.json for trend overlay). FRED item-level CPI toggles (gradient restoration after JSON clone).
+  - `dashboards/food-banks.js` — Food Bank Landscape dashboard. Revenue heatmap (D3, `createRankNorm`). Regression line suppressed when |r| < 0.2 with dynamic insight text. Need-Capacity Gap scatter (revenue per insecure person vs insecurity rate).
   - `dashboards/nonprofit-directory.js` — Nonprofit Directory search (ProPublica API, debounced search, state filter, pagination)
   - `dashboards/nonprofit-profile.js` — Nonprofit Profile with 6 ECharts (revenue trend, composition, expenses vs revenue, assets/liabilities, compensation, efficiency radar) + dynamic data-driven descriptions with conditional insights
 - **Production**: Source maps disabled, ESLint `no-console` rule enforced
-- **Unit Tests**: ~286 tests across 19 test files (vitest)
+- **Unit Tests**: ~318 tests across 20 test files (vitest)
 
 ### PHP Backend (SiteGround)
 - **Location**: `public/api/` (copied to `dist/api/` during build)
