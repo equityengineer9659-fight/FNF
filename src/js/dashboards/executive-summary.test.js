@@ -221,4 +221,14 @@ describe('executive-summary', () => {
       expect(parseFloat(participantBased)).toBeCloseTo(83.7, 0);
     });
   });
+
+  // ── CODX #1: Methodology text must match code ──
+  describe('methodology text accuracy', () => {
+    it('should show "× 0.3" for meal cost weight, not "× 30"', () => {
+      const html = readHTML('executive-summary.html');
+      // The methodology section should reference 0.3 (30%), not 30
+      expect(html).toMatch(/normalized meal cost\s*&times;\s*0\.3/i);
+      expect(html).not.toMatch(/normalized meal cost\s*&times;\s*30\)/i);
+    });
+  });
 });
