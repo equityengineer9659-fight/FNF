@@ -90,7 +90,7 @@ function renderDesertMap(geoJSON, states, accessData) {
     chart.setOption({
       tooltip: { trigger: 'item', ...TOOLTIP_STYLE, formatter: stateTooltip },
       visualMap: {
-        left: 'right', bottom: 20, min: 7, max: 24,
+        left: 'right', bottom: 20, min: 20, max: 65,
         text: ['More Deserts', 'Fewer Deserts'], calculable: true,
         inRange: { color: [PAL.low, PAL.mid, PAL.high] },
         textStyle: { color: COLORS.text }
@@ -633,7 +633,9 @@ function renderDoubleBurden(states) {
   });
 
   const pctValues = enriched.map(s => parseFloat(s.pctOfPop));
+  if (!pctValues.length) return;
   const pctMin = Math.min(...pctValues), pctMax = Math.max(...pctValues);
+  if (!isFinite(pctMin) || !isFinite(pctMax)) return;
   const rankNorm = createRankNorm(pctValues);
 
   // Mode A: D3 Treemap (size = √population, color = rank-normalized rate)
@@ -1045,7 +1047,7 @@ function drawAccessInsecurityScatter(chart, points, { xLabel, yLabel, tooltipFn,
     itemWidth: 10, itemHeight: 10
   } : { show: false };
 
-  const visualMapOpt = regionBased ? undefined : [{
+  const visualMapOpt = regionBased ? null : [{
     show: true, dimension: 1, min: 5, max: 30,
     inRange: { color: ['#22d3ee', '#facc15', '#ef4444'] },
     text: ['High Insecurity', 'Low'],

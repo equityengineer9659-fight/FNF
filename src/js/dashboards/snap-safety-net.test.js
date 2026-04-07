@@ -186,6 +186,16 @@ describe('snap-safety-net', () => {
     });
   });
 
+  // ── B-1: Hero stats must be updated from JSON ──
+  describe('hero stat dynamic updates', () => {
+    it('init() should update hero data-target from snapData.national', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
+      expect(initSection).toContain('snapParticipants');
+      expect(initSection).toContain('dashboard-stat__number');
+    });
+  });
+
   // ── Fix 11: Gauge aria-labels must include computed values ──
   describe('gauge accessibility', () => {
     it('JS should update gauge aria-label with computed value', () => {
@@ -206,6 +216,38 @@ describe('snap-safety-net', () => {
       expect(html).toContain('aria-live');
       const toggleSection = html.match(/id="snap-map-toggle-container"[^>]*/);
       expect(toggleSection).toBeTruthy();
+    });
+  });
+
+  // ── Fix 32: CDC gray states tooltip fallback ──
+  describe('CDC gray states tooltip', () => {
+    it('CDC tooltip should show fallback text for states without data', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      expect(jsSource).toContain('No CDC survey data');
+    });
+  });
+
+  // ── Batch 7: Sankey balance ──
+  describe('Sankey balance verification', () => {
+    it('left side should equal right side (conservation of people)', () => {
+      const data = readJSON('snap-participation.json');
+      const { nodes, links } = data.sankey;
+
+      // Sum sources (left-most nodes = nodes with no incoming links)
+      const targets = new Set(links.map(l => l.target));
+      const sources = new Set(links.map(l => l.source));
+      const leftNodes = [...sources].filter(s => !targets.has(s));
+      const rightNodes = [...targets].filter(t => !sources.has(t));
+
+      const leftTotal = leftNodes.reduce((sum, n) => {
+        return sum + links.filter(l => l.source === n).reduce((s, l) => s + l.value, 0);
+      }, 0);
+      const rightTotal = rightNodes.reduce((sum, n) => {
+        return sum + links.filter(l => l.target === n).reduce((s, l) => s + l.value, 0);
+      }, 0);
+
+      expect(leftTotal).toBeCloseTo(rightTotal, 0);
+      expect(nodes.length).toBeGreaterThan(0);
     });
   });
 

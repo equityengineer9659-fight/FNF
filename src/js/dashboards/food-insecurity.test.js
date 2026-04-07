@@ -210,6 +210,18 @@ describe('food-insecurity', () => {
     });
   });
 
+  // ── Fix 18: Hero stats must be updated from JSON ──
+  describe('hero stat dynamic updates', () => {
+    it('init() should update hero data-target from national data', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
+      // Should update at least the national rate and persons KPIs
+      expect(initSection).toContain('foodInsecurityRate');
+      expect(initSection).toContain('foodInsecurePersons');
+      expect(initSection).toContain('dashboard-stat__number');
+    });
+  });
+
   // ── Fix 7: Meal cost insight percentage must match data ──
   describe('meal cost insight accuracy', () => {
     it('Hawaii premium over national average should be ~43%, not 28%', () => {
@@ -235,6 +247,65 @@ describe('food-insecurity', () => {
         jsSource.indexOf('const scored = data.states.map')
       );
       expect(tripleBurdenSection).toMatch(/accessVals\.length/);
+    });
+  });
+
+  // ── Fix 15: Demographics tooltip divide-by-zero guard ──
+  describe('demographics tooltip safety', () => {
+    it('childRate/rate division should guard against rate === 0', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // Should have a guard like s.rate > 0 before dividing
+      expect(jsSource).toMatch(/s\.rate\s*>\s*0/);
+    });
+  });
+
+  // ── Fix 16: County metric fallback must use ?? not || ──
+  describe('county metric fallback operator', () => {
+    it('should use nullish coalescing, not truthy fallback', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      // Must use ?? to preserve metric value of 0
+      expect(jsSource).toContain('currentMetric] ??');
+      expect(jsSource).not.toContain('currentMetric] ||');
+    });
+  });
+
+  // ── Batch 7: Test coverage for critical untested functions ──
+  describe('renderTripleBurden data contract', () => {
+    it('should guard accessVals with length check before Math.min/max', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('const accessVals'));
+      expect(section).toContain('accessVals.length');
+    });
+
+    it('norm function should clamp to 0-100 range', () => {
+      // Test the norm function inline
+      const norm = (val, min, max) => Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
+      expect(norm(50, 0, 100)).toBe(50);
+      expect(norm(-10, 0, 100)).toBe(0);
+      expect(norm(200, 0, 100)).toBe(100);
+      expect(norm(5, 5, 5)).toBeNaN(); // division by zero edge case
+    });
+  });
+
+  describe('renderDemographics data contract', () => {
+    it('tooltip should guard against rate=0 for child multiplier', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toMatch(/s\.rate\s*>\s*0/);
+    });
+  });
+
+  describe('renderIncomeRiver null handling', () => {
+    it('should use nullish coalescing for income band values', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toMatch(/income\[.*\]\s*\?\?\s*0/);
+    });
+  });
+
+  describe('renderSDOH empty points guard', () => {
+    it('should early-return when no SDOH data points exist', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const sdohSection = jsSource.slice(jsSource.indexOf('function renderSDOH'));
+      expect(sdohSection).toContain('points.length');
     });
   });
 

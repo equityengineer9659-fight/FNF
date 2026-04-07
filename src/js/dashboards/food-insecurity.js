@@ -155,7 +155,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
         .filter(f => f.properties.rate != null)
         .map(f => ({
           name: f.properties.name,
-          value: f.properties[currentMetric] || f.properties.rate,
+          value: f.properties[currentMetric] ?? f.properties.rate,
           ...f.properties
         }));
 
@@ -1220,7 +1220,7 @@ function renderDemographics(data) {
         const s = sorted.find(st => st.name === name);
         if (!s) return '';
         const gap = (s.childRate - s.rate).toFixed(1);
-        const multiplier = (s.childRate / s.rate).toFixed(2);
+        const multiplier = s.rate > 0 ? (s.childRate / s.rate).toFixed(2) : 'N/A';
         return `<strong>${name}</strong><br/>Overall: ${s.rate}%<br/>Children: ${s.childRate}%<br/>Gap: +${gap} pp (${multiplier}x)`;
       }
     },
@@ -1548,7 +1548,15 @@ async function init() {
     // Store for live Census upgrade
     window._fnfStateData = data;
 
-    // Animate hero counters
+    // Sync hero stat data-targets from live JSON
+    const nat = data.national;
+    document.querySelectorAll('.dashboard-hero .dashboard-stat__number').forEach(el => {
+      const label = el.nextElementSibling?.textContent?.trim() || '';
+      if (label.includes('Food Insecure') && label.includes('Rate')) el.dataset.target = nat.foodInsecurityRate.toFixed(1);
+      else if (label.includes('Americans')) el.dataset.target = (nat.foodInsecurePersons / 1e6).toFixed(1);
+      else if (label.includes('Children')) el.dataset.target = (nat.foodInsecureChildren / 1e6).toFixed(1);
+      else if (label.includes('Meals')) el.dataset.target = (nat.annualMealGap / 1e9).toFixed(1);
+    });
     animateCounters();
 
     // Render all charts

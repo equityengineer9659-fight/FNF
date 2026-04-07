@@ -238,6 +238,17 @@ describe('executive-summary', () => {
     });
   });
 
+  // ── Fix 13: Per-chart error handling ──
+  describe('per-chart error isolation', () => {
+    it('each render call should be wrapped in its own try/catch', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
+      // Count try blocks — should have at least 4 (one per render) plus the outer
+      const tryCount = (initSection.match(/try\s*\{/g) || []).length;
+      expect(tryCount).toBeGreaterThanOrEqual(5);
+    });
+  });
+
   // ── Audit 2026-04-07 #3: Dynamic insight containers need aria-live ──
   describe('aria-live on dynamic insights', () => {
     it('executive-summary: all dynamic insight containers should have aria-live', () => {

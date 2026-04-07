@@ -285,7 +285,7 @@ function applySnapMapView(view) {
         ...TOOLTIP_STYLE,
         formatter: params => {
           const d = params.data;
-          if (!d) return '';
+          if (!d) return `<strong style="font-size:14px">${params.name}</strong><br/><span style="color:${COLORS.textMuted}">No CDC survey data available for this state</span>`;
           let tip = `<strong style="font-size:14px">${d.name}</strong><br/>
             <span style="color:${COLORS.accent}">CDC Self-Reported SNAP:</span> ${d.cdcRate}%`;
           // Show admin comparison
@@ -716,6 +716,16 @@ async function init() {
     snapTrendData = snapData.trend;
     snapNationalData = snapData.national;
     snapBenefitTimeline = snapData.benefitTimeline?.data || null;
+
+    // Sync hero stat data-targets from live JSON
+    const sn = snapData.national;
+    document.querySelectorAll('.dashboard-hero .dashboard-stat__number').forEach(el => {
+      const label = el.nextElementSibling?.textContent?.trim() || '';
+      if (label.includes('SNAP Participants')) el.dataset.target = (sn.snapParticipants / 1e6).toFixed(1);
+      else if (label.includes('Avg Monthly')) el.dataset.target = String(sn.avgMonthlyBenefit);
+      else if (label.includes('Free Lunch')) el.dataset.target = String(sn.freeLunchPct);
+      else if (label.includes('Coverage Gap')) el.dataset.target = (sn.coverageGap / 1e6).toFixed(1);
+    });
     animateCounters();
     updateFreshness('snap', { _static: true, _dataYear: snapData.national.year || 2024 });
 

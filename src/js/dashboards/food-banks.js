@@ -412,6 +412,15 @@ async function init() {
     if (!bankRes.ok || !geoRes.ok) throw new Error('Failed to load data');
     const [bankData, geoJSON] = await Promise.all([bankRes.json(), geoRes.json()]);
 
+    // Sync hero stat data-targets from live JSON
+    const bn = bankData.national;
+    document.querySelectorAll('.dashboard-hero .dashboard-stat__number').forEach(el => {
+      const label = el.nextElementSibling?.textContent?.trim() || '';
+      if (label.includes('Assistance Orgs')) el.dataset.target = String(bn.totalOrganizations);
+      else if (label.includes('Revenue')) el.dataset.target = (bn.combinedRevenue / 1e9).toFixed(1);
+      else if (label.includes('Efficiency')) el.dataset.target = String(bn.avgEfficiencyRatio);
+      else if (label.includes('Under 100')) el.dataset.target = String(bn.statesUnder100);
+    });
     animateCounters();
     updateFreshness('banks', { _static: true, _dataYear: '2023/2024' });
     renderDensityMap(geoJSON, bankData.states);

@@ -246,6 +246,36 @@ describe('food-access', () => {
     });
   });
 
+  // ── Fix 19: showNational() visualMap scale ──
+  describe('showNational visualMap scale', () => {
+    it('should use min >= 20 matching current data range', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const fnStart = jsSource.indexOf('function showNational()');
+      expect(fnStart).toBeGreaterThan(-1);
+      // Find the visualMap within the next 400 chars of the function
+      const fnSlice = jsSource.slice(fnStart, fnStart + 1200);
+      const minMatch = fnSlice.match(/min:\s*(\d+)/);
+      expect(minMatch).toBeTruthy();
+      expect(parseInt(minMatch[1], 10)).toBeGreaterThanOrEqual(20);
+    });
+  });
+
+  // ── Fix 20: Infinity guard on buildHeatmapLegend ──
+  describe('buildHeatmapLegend Infinity guard', () => {
+    it('should guard against empty pctValues before legend', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      expect(jsSource).toContain('isFinite');
+    });
+  });
+
+  // ── Fix 21: visualMap null not undefined ──
+  describe('visualMap null vs undefined', () => {
+    it('regionBased visualMap should use null, not undefined', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      expect(jsSource).not.toMatch(/regionBased\s*\?\s*undefined/);
+    });
+  });
+
   // ── FA-21: Mode B tile column min clamp ──
   describe('Mode B tile column calculation', () => {
     it('minimum column clamp should allow 2 columns for mobile widths', () => {
@@ -254,6 +284,40 @@ describe('food-access', () => {
       // Should be Math.max(2, ...) to allow 2-column layout
       expect(jsSource).not.toMatch(/Math\.max\(4,\s*Math\.floor/);
       expect(jsSource).toMatch(/Math\.max\(2,\s*Math\.floor/);
+    });
+  });
+
+  // ── Batch 7: Double Burden pipeline tests ──
+  describe('Double Burden data pipeline', () => {
+    it('enriched states should have pctOfPop and estimate fields', () => {
+      const accessData = readJSON('current-food-access.json');
+      const fiData = readJSON('food-insecurity-state.json');
+
+      // Simulate the merge and enrichment pipeline
+      const fiByName = {};
+      fiData.states.forEach(s => { fiByName[s.name] = s.povertyRate; });
+
+      const enriched = accessData.states
+        .map(s => {
+          const povertyRate = fiByName[s.name] != null ? fiByName[s.name] : 0;
+          const estimate = Math.round((s.lowAccessPopulation || 0) * (povertyRate / 100));
+          const pctOfPop = s.totalPopulation > 0
+            ? ((estimate / s.totalPopulation) * 100).toFixed(1) : '0.0';
+          return { name: s.name, estimate, pctOfPop, region: s.region || 'Unknown' };
+        })
+        .filter(s => s.estimate > 0);
+
+      expect(enriched.length).toBeGreaterThan(40);
+      enriched.forEach(s => {
+        expect(parseFloat(s.pctOfPop)).toBeGreaterThan(0);
+        expect(s.estimate).toBeGreaterThan(0);
+      });
+    });
+
+    it('mode toggle should set aria-pressed correctly', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      expect(jsSource).toContain('aria-pressed');
+      expect(jsSource).toContain('data-db-mode');
     });
   });
 

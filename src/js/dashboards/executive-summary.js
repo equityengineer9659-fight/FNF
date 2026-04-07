@@ -398,11 +398,11 @@ async function init() {
     const fiKpiEl = document.getElementById('food-insecurity-kpi');
     if (fiKpiEl) fiKpiEl.dataset.target = fiData.national.foodInsecurityRate.toFixed(1);
 
-    // Render all 4 charts
-    renderVulnerabilityMap(statesWithIndex, geoJSON, fiData.national);
-    renderSnapGap(fiData.states, snapData.stateCoverage.states);
-    renderPriceImpact(blsData);
-    renderWorstStates(statesWithIndex);
+    // Render each chart independently so partial data can still render
+    try { renderVulnerabilityMap(statesWithIndex, geoJSON, fiData.national); } catch { /* partial render OK */ }
+    try { renderSnapGap(fiData.states, snapData.stateCoverage.states); } catch { /* partial render OK */ }
+    try { renderPriceImpact(blsData); } catch { /* partial render OK */ }
+    try { renderWorstStates(statesWithIndex); } catch { /* partial render OK */ }
 
     // Re-animate counters after dynamic KPI updates
     animateCounters();

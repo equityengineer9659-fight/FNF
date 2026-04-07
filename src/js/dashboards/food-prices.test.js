@@ -245,6 +245,15 @@ describe('food-prices', () => {
     });
   });
 
+  // ── Fix 28: Purchasing power insight language ──
+  describe('purchasing power insight text', () => {
+    it('should say "outpaced" not "keeping pace" when SNAP exceeds food CPI', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      expect(jsSource).toContain('outpaced');
+      expect(jsSource).not.toContain('keeping pace');
+    });
+  });
+
   // ── CODX #3: HTML metadata accuracy ──
   describe('affordability map metadata', () => {
     it('HTML data year should match JSON data year', () => {
