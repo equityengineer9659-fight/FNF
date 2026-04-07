@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 // Mock D3 modules — avoid importing real D3 in jsdom
 vi.mock('d3-hierarchy', () => {
@@ -229,6 +231,17 @@ describe('d3-heatmap', () => {
       expect(normFn({ value: 500 })).toBe(0);
       expect(normFn({ value: 4000 })).toBe(1);
       expect(normFn({ value: 2250 })).toBeCloseTo(0.5, 1);
+    });
+  });
+
+  // ── D3 heatmap resize re-layout ──
+  describe('resize re-layout', () => {
+    it('ResizeObserver should recompute treemap layout, not just update viewBox', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'd3-heatmap.js'), 'utf-8');
+      const roSection = jsSource.slice(jsSource.indexOf('ResizeObserver'));
+      // Must call treemap().size() with new dimensions, not just svg.attr('viewBox')
+      expect(roSection).toContain('treemap()');
+      expect(roSection).toContain('render(');
     });
   });
 });

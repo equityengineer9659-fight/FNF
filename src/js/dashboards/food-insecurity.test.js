@@ -360,6 +360,19 @@ describe('food-insecurity', () => {
     });
   });
 
+  // ── Fix 17: Map aria-label should update on metric change ──
+  describe('map aria-label metric updates', () => {
+    it('showNational should update chart-map aria-label with current metric name', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const showNationalBody = jsSource.slice(
+        jsSource.indexOf('function showNational()'),
+        jsSource.indexOf('function showNational()') + 1200
+      );
+      expect(showNationalBody).toContain('aria-label');
+      expect(showNationalBody).toContain('chart-map');
+    });
+  });
+
   // ── P3 #3: County search ARIA ──
   describe('county search accessibility', () => {
     it('search input should have combobox ARIA attributes', () => {

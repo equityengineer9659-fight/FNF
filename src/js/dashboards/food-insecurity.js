@@ -94,6 +94,10 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
     const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
     if (hint) hint.textContent = 'Hover for state details \u2014 click any state for county breakdown';
 
+    // Update map aria-label for current metric
+    const mapEl = document.getElementById('chart-map');
+    if (mapEl) mapEl.setAttribute('aria-label', `Choropleth map of ${cfg.name} across US states`);
+
     chart.setOption({
       tooltip: {
         trigger: 'item',

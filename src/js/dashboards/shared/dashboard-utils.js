@@ -174,6 +174,7 @@ export function createChart(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return null;
   const chart = echarts.init(container, null, { renderer: 'canvas' });
+  chart.setOption({ aria: { enabled: true, decal: { show: false } } });
   charts.push(chart);
   return chart;
 }

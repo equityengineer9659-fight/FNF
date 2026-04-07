@@ -321,6 +321,17 @@ describe('food-access', () => {
     });
   });
 
+  // ── Fix 23: Mode B tiles should recalculate columns on resize ──
+  describe('Mode B tile resize handling', () => {
+    it('should observe container resize to recalculate tile columns', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      // Must use ResizeObserver on the tile container to re-layout on width changes
+      expect(jsSource).toContain('ResizeObserver');
+      // The observer should target the tile container
+      expect(jsSource).toContain('chart-double-burden-tiles');
+    });
+  });
+
   // ── CODX #2: Insecurity tooltip should not promise drill-down ──
   describe('insecurity view drill-down promise', () => {
     it('insecurity tooltip should NOT say "Click for county breakdown"', () => {

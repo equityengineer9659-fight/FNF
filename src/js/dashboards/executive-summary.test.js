@@ -296,6 +296,22 @@ describe('executive-summary', () => {
     });
   });
 
+  // ── Fix 33: SNAP vintage disclosure ──
+  describe('SNAP vintage disclosure', () => {
+    it('methodology should disclose SNAP national vs state data year difference', () => {
+      const snapData = readJSON('snap-participation.json');
+      const html = readHTML('executive-summary.html');
+      const natYear = snapData.national.year;
+      const stateYear = snapData.stateCoverage?.year;
+      if (natYear !== stateYear) {
+        // Methodology must mention both years
+        expect(html).toContain(String(natYear));
+        expect(html).toContain(String(stateYear));
+        expect(html).toMatch(/SNAP.*national.*FY\d{4}|FY\d{4}.*national.*SNAP/i);
+      }
+    });
+  });
+
   // ── CODX #1: Methodology text must match code ──
   describe('methodology text accuracy', () => {
     it('should show "× 0.3" for meal cost weight, not "× 30"', () => {
