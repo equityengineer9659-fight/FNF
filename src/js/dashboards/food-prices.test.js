@@ -271,4 +271,136 @@ describe('food-prices', () => {
       expect(html).not.toMatch(/x\s*1,000,000/i);
     });
   });
+
+  // ── P4: renderCategories source contract ──
+  describe('renderCategories', () => {
+    it('should render multi-series CPI line chart with area gradients', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderCategories'),
+        jsSource.indexOf('function renderRegions')
+      );
+      expect(section).toContain('LinearGradient');
+      expect(section).toContain('areaStyle');
+      expect(section).toContain('series.map');
+    });
+
+    it('BLS CPI data should have multiple food categories', () => {
+      const data = readJSON('bls-regional-cpi.json');
+      expect(data.categories).toBeDefined();
+      expect(data.categories.series.length).toBeGreaterThan(3);
+    });
+  });
+
+  // ── P4: renderRegions source contract ──
+  describe('renderRegions', () => {
+    it('should render grouped bar chart with regional CPI comparison', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderRegions'),
+        jsSource.indexOf('function renderAffordabilityMap')
+      );
+      expect(section).toContain('bar');
+      expect(section).toContain('mealCost');
+    });
+
+    it('regional data should have at least 4 regions', () => {
+      const data = readJSON('bls-regional-cpi.json');
+      expect(data.regions.series.length).toBeGreaterThanOrEqual(4);
+    });
+  });
+
+  // ── P4: renderAffordabilityMap source contract ──
+  describe('renderAffordabilityMap', () => {
+    it('should use affordability index formula in tooltip', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderAffordabilityMap'),
+        jsSource.indexOf('function renderBurden')
+      );
+      expect(section).toContain('Affordability Index');
+      expect(section).toContain('mealCost');
+      expect(section).toContain('medianIncome');
+    });
+  });
+
+  // ── P4: renderBurden source contract ──
+  describe('renderBurden', () => {
+    it('should render sunburst chart from quintile data', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderBurden'),
+        jsSource.indexOf('function renderHomeVsAway')
+      );
+      expect(section).toContain('sunburst');
+      expect(section).toContain('quintiles');
+    });
+  });
+
+  // ── P4: renderHomeVsAway source contract ──
+  describe('renderHomeVsAway', () => {
+    it('should have connectNulls and government shutdown markArea', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderHomeVsAway'),
+        jsSource.indexOf('function renderYoYInflation')
+      );
+      expect(section).toContain('connectNulls');
+      expect(section).toContain('markArea');
+    });
+  });
+
+  // ── P4: renderYoYInflation source contract ──
+  describe('renderYoYInflation', () => {
+    it('should use date-keyed lookback for YoY computation', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderYoYInflation'),
+        jsSource.indexOf('function toggleFredOverlay')
+      );
+      expect(section).toContain('byDate');
+      expect(section).toContain('computeYoY');
+    });
+  });
+
+  // ── P4: toggleFredOverlay source contract ──
+  describe('toggleFredOverlay', () => {
+    it('should use FRED API for item-level prices', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function toggleFredOverlay'));
+      expect(section).toContain('fetchFredCpiItem');
+      expect(section).toContain('aria-pressed');
+    });
+  });
+
+  // ── P4: renderPurchasingPower source contract ──
+  describe('renderPurchasingPower', () => {
+    it('should show SNAP vs food CPI index comparison', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderPurchasingPower'),
+        jsSource.indexOf('function renderCpiVsInsecurity')
+      );
+      expect(section).toContain('SNAP Benefits');
+      expect(section).toContain('Food Prices (CPI)');
+      expect(section).toContain('snapIndexed');
+    });
+
+    it('should have markLine at last benefitTimeline date', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderPurchasingPower'));
+      expect(section).toContain('markLine');
+      expect(section).toContain('benefitTimeline');
+    });
+  });
+
+  // ── P4: renderCpiVsInsecurity source contract ──
+  describe('renderCpiVsInsecurity', () => {
+    it('should be a dual-axis chart with CPI and food insecurity', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderCpiVsInsecurity'));
+      expect(section).toContain('Food Insecurity');
+      expect(section).toContain('yAxis');
+    });
+  });
 });

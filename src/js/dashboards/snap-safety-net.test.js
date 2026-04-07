@@ -273,6 +273,138 @@ describe('snap-safety-net', () => {
     });
   });
 
+  // ── P4: renderSnapTrend source contract ──
+  describe('renderSnapTrend', () => {
+    it('should build BLS CPI overlay aligned to SNAP dates', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderSnapTrend'));
+      expect(section).toContain('cpiMap');
+      expect(section).toContain('cpiAligned');
+      expect(section).toContain('Purchasing Power');
+    });
+
+    it('should use benefitTimeline for time-varying PPI, not static benefit', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderSnapTrend'));
+      expect(section).toContain('getBenefitForDate');
+      expect(section).toContain('snapBenefitTimeline');
+    });
+  });
+
+  // ── P4: renderSnapMap source contract ──
+  describe('renderSnapMap', () => {
+    it('should support admin and CDC toggle views', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderSnapMap'));
+      expect(section).toContain('snapMapAdminData');
+      expect(section).toContain('applySnapMapView');
+    });
+
+    it('click insight should branch on coverage ratio thresholds', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderSnapMap'),
+        jsSource.indexOf('function applySnapMapView')
+      );
+      expect(section).toContain('ratio >= 100');
+      expect(section).toContain('ratio >= 80');
+      expect(section).toContain('ratio >= 60');
+    });
+  });
+
+  // ── P4: renderCoverageGap sankey source contract ──
+  describe('renderCoverageGap', () => {
+    it('should render sankey with data-driven nodes and links', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderCoverageGap'));
+      expect(section).toContain('sankey');
+      expect(section).toContain('nodes');
+      expect(section).toContain('links');
+    });
+  });
+
+  // ── P4: renderSchoolLunch source contract ──
+  describe('renderSchoolLunch', () => {
+    it('should sort states and take top 15', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderSchoolLunch'),
+        jsSource.indexOf('function renderSchoolLunch') + 600
+      );
+      expect(section).toContain('sort');
+      expect(section).toContain('slice(0, 15)');
+    });
+
+    it('school lunch data should have pct field for all states', () => {
+      const data = readJSON('snap-participation.json');
+      expect(data.schoolLunch).toBeDefined();
+      expect(data.schoolLunch.states.length).toBeGreaterThanOrEqual(15);
+      for (const s of data.schoolLunch.states) {
+        expect(s).toHaveProperty('name');
+        expect(s).toHaveProperty('pct');
+        expect(s.pct).toBeTypeOf('number');
+      }
+    });
+  });
+
+  // ── P4: renderBenefits source contract ──
+  describe('renderBenefits', () => {
+    it('should show top 20 states by benefit amount with coverage overlay', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderBenefits'));
+      expect(section).toContain('sort');
+      expect(section).toContain('coverageStates');
+    });
+  });
+
+  // ── P4: renderGauges source contract ──
+  describe('renderGauges', () => {
+    it('should render 5 gauges with correct IDs', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderGauges'));
+      expect(section).toContain('gauge-coverage');
+      expect(section).toContain('gauge-lunch');
+      expect(section).toContain('gauge-benefit');
+      expect(section).toContain('gauge-gap');
+      expect(section).toContain('gauge-affordability');
+    });
+
+    it('affordability gap should be computed from mealCostPerDay', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderGauges'));
+      expect(section).toContain('mealCostPerDay');
+      expect(section).toContain('monthlyFoodCost');
+      expect(section).toContain('affordabilityGap');
+    });
+  });
+
+  // ── P4: renderDemographicFlow source contract ──
+  describe('renderDemographicFlow', () => {
+    it('should use Census race/ethnicity data with SNAP rates', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderDemographicFlow'));
+      expect(section).toContain('race');
+      expect(section).toContain('snapData');
+    });
+  });
+
+  // ── P4: async fetch functions should fail silently ──
+  describe('async fetches fail silently', () => {
+    it('fetchBLSForSnap should have try/catch', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('async function fetchBLSForSnap'));
+      expect(section).toContain('try');
+      expect(section).toContain('catch');
+    });
+
+    it('fetchCDCPlacesSnap should have try/catch and show toggle on success', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('async function fetchCDCPlacesSnap'));
+      expect(section).toContain('try');
+      expect(section).toContain('snap-map-toggle-container');
+    });
+  });
+
   // ── P4: SNAP trend chart data contract ──
   describe('SNAP trend data contract', () => {
     it('trend data should span at least 10 years', () => {

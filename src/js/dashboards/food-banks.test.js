@@ -216,4 +216,95 @@ describe('food-banks', () => {
       }
     });
   });
+
+  // ── P4: renderDensityMap source contract ──
+  describe('renderDensityMap', () => {
+    it('should render choropleth with perCapitaOrgs metric', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderDensityMap'),
+        jsSource.indexOf('function renderVsInsecurity')
+      );
+      expect(section).toContain('perCapitaOrgs');
+      expect(section).toContain('map');
+    });
+
+    it('states should have perCapitaOrgs field', () => {
+      const data = readJSON('food-bank-summary.json');
+      for (const s of data.states) {
+        expect(s).toHaveProperty('perCapitaOrgs');
+        expect(s.perCapitaOrgs).toBeTypeOf('number');
+      }
+    });
+  });
+
+  // ── P4: renderVsInsecurity source contract ──
+  describe('renderVsInsecurity', () => {
+    it('should suppress regression when |r| < 0.2 with dynamic insight', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderVsInsecurity'),
+        jsSource.indexOf('function renderRevenue')
+      );
+      expect(section).toContain('showRegression');
+      expect(section).toContain('No statistically meaningful correlation');
+    });
+
+    it('should use REGION_COLORS for scatter series', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderVsInsecurity'),
+        jsSource.indexOf('function renderRevenue')
+      );
+      expect(section).toContain('REGION_COLORS');
+      expect(section).toContain('getRegion');
+    });
+  });
+
+  // ── P4: renderRevenue source contract ──
+  describe('renderRevenue', () => {
+    it('should use D3 heatmap with rank normalization', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderRevenue'),
+        jsSource.indexOf('function renderEfficiency')
+      );
+      expect(section).toContain('createD3Heatmap');
+      expect(section).toContain('createRankNorm');
+    });
+  });
+
+  // ── P4: renderDistribution source contract ──
+  describe('renderDistribution', () => {
+    it('should render bar chart of top 15 states by insecurity with density overlay', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderDistribution'),
+        jsSource.indexOf('function renderCapacityGap')
+      );
+      expect(section).toContain('foodInsecurityRate');
+      expect(section).toContain('perCapitaOrgs');
+      expect(section).toContain('slice(0, 15)');
+    });
+  });
+
+  // ── P4: renderCapacityGap source contract ──
+  describe('renderCapacityGap', () => {
+    it('should plot revenue per insecure person vs insecurity rate', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderCapacityGap'));
+      expect(section).toContain('scatter');
+      expect(section).toContain('foodInsecurityRate');
+      expect(section).toContain('totalRevenue');
+    });
+
+    it('states should have population for bubble sizing', () => {
+      const data = readJSON('food-bank-summary.json');
+      for (const s of data.states) {
+        expect(s).toHaveProperty('population');
+        expect(s.population).toBeTypeOf('number');
+        expect(s.population).toBeGreaterThan(0);
+      }
+    });
+  });
 });

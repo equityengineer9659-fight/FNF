@@ -416,6 +416,89 @@ describe('food-insecurity', () => {
     });
   });
 
+  // ── P4: renderMap source contract ──
+  describe('renderMap', () => {
+    it('should support 6 metric modes via metricConfig', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toContain('rate:');
+      expect(jsSource).toContain('childRate:');
+      expect(jsSource).toContain('persons:');
+      expect(jsSource).toContain('mealGap:');
+      expect(jsSource).toContain('mealCost:');
+      expect(jsSource).toContain('snapCoverage:');
+    });
+
+    it('should have county drill-down with back button', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toContain('map-back-btn');
+      expect(jsSource).toContain('drillDown');
+      expect(jsSource).toContain('showNational');
+    });
+  });
+
+  // ── P4: renderTrend source contract ──
+  describe('renderTrend', () => {
+    it('should have markLine annotations for historic events', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderTrend'));
+      expect(section).toContain('markLine');
+    });
+  });
+
+  // ── P4: renderBar (meal cost horizontal bar) source contract ──
+  describe('renderMealCost', () => {
+    it('should render horizontal bar with national avg markLine', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderMealCost'));
+      expect(section).toContain('bar');
+      expect(section).toContain('markLine');
+    });
+  });
+
+  // ── P4: renderScatter source contract ──
+  describe('renderScatter', () => {
+    it('should support adult and child poverty mode toggle', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderScatter'),
+        jsSource.indexOf('function renderScatter') + 800
+      );
+      expect(section).toContain('scatter');
+      expect(section).toContain('povertyRate');
+      expect(section).toContain('childPovertyRate');
+    });
+  });
+
+  // ── P4: renderSnap (SNAP coverage bars) source contract ──
+  describe('renderSnap', () => {
+    it('should compare SNAP participants vs food-insecure persons', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderSnap'));
+      expect(section).toContain('snapParticipation');
+      expect(section).toContain('persons');
+    });
+  });
+
+  // ── P4: initCountySearch source contract ──
+  describe('initCountySearch', () => {
+    it('should lazy-load county index and use ARIA combobox', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function initCountySearch'));
+      expect(section).toContain('county-index.json');
+      expect(section).toContain('county-search-results');
+    });
+  });
+
+  // ── P4: buildStateInsight source contract ──
+  describe('buildStateInsight', () => {
+    it('should compute cross-dataset KPIs for state narrative', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function buildStateInsight'));
+      expect(section).toContain('bankData');
+      expect(section).toContain('accessData');
+    });
+  });
+
   // ── P3 #3: County search ARIA ──
   describe('county search accessibility', () => {
     it('search input should have combobox ARIA attributes', () => {
