@@ -6,7 +6,7 @@
 
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
-  fmtNum, animateCounters, createChart, linearRegression,
+  fmtNum, animateCounters, createChart,
   initScrollReveal, handleResize, updateFreshness,
   REGIONS, REGION_COLORS, getRegion, addExportButton,
   initStateSelector, US_STATES
@@ -71,84 +71,58 @@ function renderDensityMap(geoJSON, states) {
   }, true);
 }
 
-// -- Chart 2: Food Banks vs Food Insecurity (scatter) --
+// -- Chart 2: Resource Gap by State (diverging bar) --
 function renderVsInsecurity(states) {
   const chart = createChart('chart-vs-insecurity');
   if (!chart) return;
 
-  const points = states.map(s => ({
-    value: [s.foodInsecurityRate, s.perCapitaOrgs],
-    name: s.name, totalRevenue: s.totalRevenue
-  }));
+  const stateData = states
+    .map(s => {
+      const insecurePersons = Math.round(s.population * s.foodInsecurityRate / 100);
+      const revPerInsecure = insecurePersons > 0 ? s.totalRevenue / insecurePersons : 0;
+      return { name: s.name, revPerInsecure };
+    })
+    .filter(s => s.revPerInsecure > 0);
 
-  const byRegion = {};
-  Object.keys(REGION_COLORS).forEach(r => { byRegion[r] = []; });
-  points.forEach(p => byRegion[getRegion(p.name)].push(p));
+  const nationalMean = Math.round(stateData.reduce((sum, s) => sum + s.revPerInsecure, 0) / stateData.length);
 
-  const reg = linearRegression(points.map(p => p.value));
-  const xs = points.map(p => p.value[0]);
-  const xMin = Math.min(...xs), xMax = Math.max(...xs);
-
-  // Only show regression line when correlation is meaningful (|r| >= 0.2)
-  const showRegression = Math.abs(reg.r) >= 0.2;
-  const rLine = showRegression ? {
-    symbol: 'none', silent: true,
-    lineStyle: { color: 'rgba(255,255,255,0.35)', type: 'dashed', width: 1.5 },
-    data: [[{ coord: [xMin, reg.slope * xMin + reg.intercept] }, { coord: [xMax, reg.slope * xMax + reg.intercept] }]],
-    label: { formatter: `r = ${reg.r.toFixed(2)}`, color: COLORS.textMuted, fontSize: 11, position: 'end' }
-  } : null;
-
-  const series = Object.entries(REGION_COLORS).map(([region, color], i) => ({
-    name: region, type: 'scatter',
-    data: byRegion[region],
-    symbolSize: (_, params) => Math.max(8, Math.sqrt(params.data.totalRevenue / 10000000)),
-    itemStyle: { color, opacity: 0.85 },
-    emphasis: { itemStyle: { opacity: 1 } },
-    animationDuration: 2000,
-    ...(i === 0 && rLine ? { markLine: rLine } : {})
-  }));
+  const withDeviation = stateData.map(s => ({
+    name: s.name,
+    deviation: Math.round(s.revPerInsecure - nationalMean),
+    revPerInsecure: Math.round(s.revPerInsecure)
+  })).sort((a, b) => a.deviation - b.deviation);
 
   chart.setOption({
-    legend: {
-      top: 5, right: 10,
-      textStyle: { color: COLORS.text, fontSize: 11 },
-      itemWidth: 10, itemHeight: 10
-    },
     tooltip: {
       ...TOOLTIP_STYLE,
-      formatter: params => {
-        const d = params.data;
-        const region = getRegion(d.name);
-        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>Food Insecurity: ${d.value[0]}%<br/>Density: ${d.value[1].toFixed(1)} per 100K<br/>Revenue: $${fmtNum(d.totalRevenue)}`;
-      }
+      formatter: params => `<strong>${params.name}</strong><br/>Rev/Insecure Person: $${params.data.revPerInsecure?.toLocaleString()}<br/>National Mean: $${nationalMean.toLocaleString()}<br/>Deviation: ${params.data.deviation >= 0 ? '+' : ''}$${params.data.deviation?.toLocaleString()}`
     },
-    grid: { left: 60, right: 20, top: 35, bottom: 50 },
+    grid: { left: 100, right: 40, top: 10, bottom: 30 },
     xAxis: {
-      name: 'Food Insecurity Rate (%)', nameLocation: 'center', nameGap: 35,
+      type: 'value', name: 'Deviation from Mean ($)', nameLocation: 'center', nameGap: 22,
       nameTextStyle: { color: COLORS.textMuted },
-      axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
+      axisLabel: { color: COLORS.textMuted, formatter: v => v >= 0 ? `+$${v}` : `-$${Math.abs(v)}` },
       splitLine: { lineStyle: { color: COLORS.gridLine } }
     },
     yAxis: {
-      name: 'Orgs per 100K',
-      nameTextStyle: { color: COLORS.textMuted },
-      axisLabel: { color: COLORS.textMuted },
-      splitLine: { lineStyle: { color: COLORS.gridLine } }
+      type: 'category', data: withDeviation.map(s => s.name),
+      axisLabel: { color: COLORS.text, fontSize: 9 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
     },
-    series
+    series: [{
+      type: 'bar', data: withDeviation.map(s => ({
+        value: s.deviation, revPerInsecure: s.revPerInsecure,
+        itemStyle: { color: s.deviation < 0 ? '#ef4444' : '#3b82f6' }
+      })),
+      barMaxWidth: 10, animationDuration: 2000
+    }]
   });
 
-  // Update insight text with correlation result or suppression note
   const insightEl = document.getElementById('vs-insecurity-insight');
   if (insightEl) {
-    if (showRegression) {
-      const rAbs = Math.abs(reg.r);
-      const strength = rAbs >= 0.6 ? 'strong' : rAbs >= 0.4 ? 'moderate' : 'weak';
-      const direction = reg.r > 0 ? 'positive' : 'negative';
-      insightEl.textContent = `${direction.charAt(0).toUpperCase() + direction.slice(1)} ${strength} correlation (r = ${reg.r.toFixed(2)}) — states with more insecurity tend to have ${reg.r > 0 ? 'more' : 'fewer'} food banks per capita.`;
-    } else {
-      insightEl.textContent = 'No statistically meaningful correlation found (|r| < 0.2) — food bank density does not reliably track food insecurity rate across states.';
-    }
+    const worst = withDeviation[0];
+    const best = withDeviation[withDeviation.length - 1];
+    insightEl.textContent = `Revenue per food-insecure person ranges from $${worst.revPerInsecure.toLocaleString()} (${worst.name}) to $${best.revPerInsecure.toLocaleString()} (${best.name}) against a national mean of $${nationalMean.toLocaleString()}. States in red receive less than the mean — the 10 most vulnerable states average just $${Math.round(withDeviation.slice(0, 10).reduce((s, d) => s + d.revPerInsecure, 0) / 10).toLocaleString()} per person.`;
   }
 }
 
@@ -419,7 +393,17 @@ async function init() {
       if (label.includes('Assistance Orgs')) el.dataset.target = String(bn.totalOrganizations);
       else if (label.includes('Revenue')) el.dataset.target = (bn.combinedRevenue / 1e9).toFixed(1);
       else if (label.includes('Efficiency')) el.dataset.target = String(bn.avgEfficiencyRatio);
-      else if (label.includes('Under 100')) el.dataset.target = String(bn.statesUnder100);
+      else if (label.includes('Worst 10')) {
+        const revPerInsecure = bankData.states
+          .map(s => {
+            const ip = Math.round(s.population * s.foodInsecurityRate / 100);
+            return ip > 0 ? s.totalRevenue / ip : Infinity;
+          })
+          .filter(v => v < Infinity)
+          .sort((a, b) => a - b)
+          .slice(0, 10);
+        el.dataset.target = Math.round(revPerInsecure.reduce((s, v) => s + v, 0) / revPerInsecure.length);
+      }
     });
     animateCounters();
     updateFreshness('banks', { _static: true, _dataYear: '2023/2024' });

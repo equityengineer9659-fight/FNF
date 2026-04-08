@@ -242,6 +242,7 @@ function applySnapMapView(view) {
             Food Insecure: ${fmtNum(d.foodInsecure)}<br/>
             Insecurity Rate: ${d.insecurityRate}%<br/>
             SNAP Rate: ${d.snapRate}%`;
+          tip += `<br/><span style="color:#ef4444">Unserved:</span> ${fmtNum(Math.max(0, d.foodInsecure - d.snapParticipants))}`;
           // Show CDC comparison if available
           if (snapMapCdcData) {
             const cdcMatch = snapMapCdcData.find(c => c.name === d.name);
@@ -545,6 +546,21 @@ function renderGauges(national) {
   });
 }
 
+function updatePurchasingPowerNote(national, blsData) {
+  const el = document.getElementById('purchasing-power-note');
+  if (!el || !blsData?.series) return;
+  const foodHome = blsData.series.find(s => s.name?.includes('Food at Home') || s.name?.includes('food at home'));
+  if (!foodHome?.data?.length) return;
+  const validData = foodHome.data.filter(d => d.value !== null);
+  const baseCPI = validData[0]?.value; // Jan 2018 baseline
+  const latestCPI = validData[validData.length - 1]?.value;
+  if (!baseCPI || !latestCPI) return;
+  const benefit = national.avgMonthlyBenefit || 188;
+  const realValue = Math.round(benefit * baseCPI / latestCPI);
+  const loss = benefit - realValue;
+  el.textContent = `In 2018 grocery prices, today's $${benefit} SNAP benefit buys only $${realValue} of food \u2014 a $${loss}/month real loss.`;
+}
+
 // -- Non-blocking: BLS CPI overlay for SNAP trend --
 let snapTrendData = null;
 let snapNationalData = null;
@@ -560,6 +576,7 @@ async function fetchBLSForSnap() {
       renderSnapTrend(snapTrendData, blsData, snapNationalData);
       updateFreshness('snap', blsData);
     }
+    if (snapNationalData) updatePurchasingPowerNote(snapNationalData, blsData);
   } catch { /* BLS is optional */ }
 }
 

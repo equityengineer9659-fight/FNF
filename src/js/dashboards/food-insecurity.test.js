@@ -515,6 +515,47 @@ describe('food-insecurity', () => {
     });
   });
 
+  // ── Poverty-Insecurity Divergence chart ──
+  describe('poverty-insecurity divergence chart', () => {
+    it('food-insecurity.html should have chart-divergence container', () => {
+      const html = readFileSync(resolve(__dirname, '../../../dashboards/food-insecurity.html'), 'utf-8');
+      expect(html).toContain('chart-divergence');
+    });
+
+    it('renderDivergence function should exist', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toContain('function renderDivergence');
+    });
+
+    it('init should call renderDivergence between demographics and meal cost', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const initStart = jsSource.indexOf('async function init(');
+      const initSection = jsSource.slice(initStart);
+      const demoIdx = initSection.indexOf('renderDemographics(');
+      const divIdx = initSection.indexOf('renderDivergence(');
+      const mealIdx = initSection.indexOf('renderMealCost(');
+      expect(divIdx).toBeGreaterThan(demoIdx);
+      expect(divIdx).toBeLessThan(mealIdx);
+    });
+
+    it('divergence values should have both positive and negative states', () => {
+      const data = JSON.parse(readFileSync(resolve(__dirname, '../../../public/data/food-insecurity-state.json'), 'utf-8'));
+      const divergences = data.states.map(s => +(s.rate - s.povertyRate).toFixed(1));
+      expect(divergences.filter(d => d > 0).length).toBeGreaterThan(0);
+      expect(divergences.filter(d => d < 0).length).toBeGreaterThan(0);
+    });
+
+    it('renderDivergence should create a horizontal bar chart', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const fnStart = jsSource.indexOf('function renderDivergence');
+      const fnEnd = jsSource.indexOf('\nfunction', fnStart + 1);
+      const section = jsSource.slice(fnStart, fnEnd > fnStart ? fnEnd : fnStart + 2000);
+      expect(section).toContain('type: \'bar\'');
+      expect(section).toContain('chart-divergence');
+      expect(section).toContain('povertyRate');
+    });
+  });
+
   // ── CODX: Combobox ARIA completeness ──
   describe('combobox ARIA completeness', () => {
     it('keyboard handler should set aria-activedescendant', () => {

@@ -763,6 +763,54 @@ function initScatterToggle() {
   });
 }
 
+// -- Poverty-Insecurity Divergence (horizontal diverging bar) --
+function renderDivergence(data) {
+  const chart = createChart('chart-divergence');
+  if (!chart) return;
+
+  const divergences = data.states
+    .map(s => ({ name: s.name, divergence: +(s.rate - s.povertyRate).toFixed(1), rate: s.rate, povertyRate: s.povertyRate }))
+    .sort((a, b) => a.divergence - b.divergence);
+
+  chart.setOption({
+    tooltip: {
+      ...TOOLTIP_STYLE,
+      formatter: params => {
+        const s = divergences.find(d => d.name === params.name);
+        return `<strong>${params.name}</strong><br/>Insecurity Rate: ${s?.rate}%<br/>Poverty Rate: ${s?.povertyRate}%<br/>Divergence: ${s?.divergence >= 0 ? '+' : ''}${s?.divergence} pp`;
+      }
+    },
+    grid: { left: 110, right: 40, top: 10, bottom: 30 },
+    xAxis: {
+      type: 'value', name: 'Divergence (pp)', nameLocation: 'center', nameGap: 22,
+      nameTextStyle: { color: COLORS.textMuted },
+      axisLabel: { color: COLORS.textMuted, formatter: v => v >= 0 ? `+${v}` : String(v) },
+      splitLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    yAxis: {
+      type: 'category', data: divergences.map(s => s.name),
+      axisLabel: { color: COLORS.text, fontSize: 9 },
+      axisLine: { lineStyle: { color: COLORS.gridLine } }
+    },
+    series: [{
+      type: 'bar',
+      data: divergences.map(s => ({
+        value: s.divergence,
+        itemStyle: { color: s.divergence >= 0 ? '#ef4444' : '#3b82f6' }
+      })),
+      barMaxWidth: 10,
+      animationDuration: 2000
+    }]
+  });
+
+  const insightEl = document.getElementById('divergence-insight');
+  if (insightEl) {
+    const worst = divergences[divergences.length - 1];
+    const best = divergences[0];
+    insightEl.textContent = `${worst.name} (+${worst.divergence} pp) has the highest insecurity above its poverty rate, suggesting additional drivers beyond income. ${best.name} (${best.divergence} pp) outperforms its poverty prediction most, likely reflecting stronger safety net participation.`;
+  }
+}
+
 // -- Meal Cost by State (horizontal bar) --
 function renderMealCost(data) {
   const chart = createChart('chart-meal-cost');
@@ -1596,6 +1644,7 @@ async function init() {
     renderScatter(data);
     initScatterToggle();
     renderDemographics(data);
+    renderDivergence(data);
     renderMealCost(data);
 
     // Accessible table

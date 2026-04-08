@@ -21,7 +21,15 @@ function renderCategories(data) {
   if (!chart || !data.series) return;
 
   const series = data.series.map(s => ({ ...s, data: s.data.filter(d => d.value !== null) }));
-  const dates = series[0].data.map(d => d.date);
+  // Normalize each series to Jan 2018 = 100 for visual comparison
+  const normalizedSeries = series.map(s => {
+    const firstValue = s.data[0]?.value;
+    if (!firstValue) return s;
+    return { ...s, data: s.data.map(d => ({
+      ...d, value: d.value !== null ? Math.round((d.value / firstValue) * 100 * 100) / 100 : null
+    }))};
+  });
+  const dates = normalizedSeries[0].data.map(d => d.date);
   const lineColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', '#f59e0b', '#ec4899', COLORS.primary];
   const areaColors = [
     ['rgba(255,107,53,0.2)', 'rgba(255,107,53,0.02)'],
@@ -38,11 +46,11 @@ function renderCategories(data) {
       trigger: 'axis', ...TOOLTIP_STYLE,
       formatter: params => { let tip = `<strong>${params[0].axisValue}</strong><br/>`; params.forEach(p => { tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`; }); return tip; }
     },
-    legend: { data: series.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 }, top: 5 },
+    legend: { data: normalizedSeries.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 }, top: 5 },
     grid: { left: 50, right: 20, top: 45, bottom: 30 },
     xAxis: { type: 'category', data: dates, boundaryGap: false, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
-    yAxis: { type: 'value', name: 'CPI Index', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
-    series: series.map((s, i) => ({
+    yAxis: { type: 'value', name: 'Index (Jan 2018 = 100)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
+    series: normalizedSeries.map((s, i) => ({
       name: s.name, type: 'line', smooth: true, symbol: 'none',
       lineStyle: { width: 2, color: lineColors[i] },
       areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: areaColors[i][0] }, { offset: 1, color: areaColors[i][1] }]) },

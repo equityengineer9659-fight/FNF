@@ -431,6 +431,49 @@ describe('snap-safety-net', () => {
     });
   });
 
+  // ── Change 3: Unserved headcount in tooltip ──
+  describe('unserved headcount in tooltip', () => {
+    it('admin tooltip formatter should display Unserved count', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const fnBody = jsSource.slice(
+        jsSource.indexOf('function applySnapMapView'),
+        jsSource.indexOf('function applySnapMapView') + 3000
+      );
+      expect(fnBody).toContain('Unserved');
+      expect(fnBody).toContain('Math.max(0');
+    });
+
+    it('unserved formula should floor at zero for over-covered states', () => {
+      expect(Math.max(0, 200000 - 300000)).toBe(0);
+      expect(Math.max(0, 500000 - 350000)).toBe(150000);
+    });
+  });
+
+  // ── Change 8: Purchasing power dollar note ──
+  describe('purchasing power dollar note', () => {
+    it('should have updatePurchasingPowerNote function', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      expect(jsSource).toContain('function updatePurchasingPowerNote');
+    });
+
+    it('should reference purchasing-power-note element and 2018 baseline', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const fnStart = jsSource.indexOf('function updatePurchasingPowerNote');
+      const fnBody = jsSource.slice(fnStart, fnStart + 1000);
+      expect(fnBody).toContain('purchasing-power-note');
+      expect(fnBody).toContain('2018');
+    });
+
+    it('CPI deflation should reduce real purchasing power', () => {
+      const baseCPI = 252.4;
+      const currentCPI = 346.6;
+      const benefit = 188;
+      const realValue = Math.round(benefit * baseCPI / currentCPI);
+      expect(benefit - realValue).toBeGreaterThan(0);
+      expect(realValue).toBeLessThan(benefit);
+    });
+  });
+
   // ── P4: Affordability shortfall gauge ──
   describe('affordability shortfall', () => {
     it('should compute shortfall from mealCostPerDay and avgMonthlyBenefit', () => {

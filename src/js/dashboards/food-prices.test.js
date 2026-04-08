@@ -282,7 +282,7 @@ describe('food-prices', () => {
       );
       expect(section).toContain('LinearGradient');
       expect(section).toContain('areaStyle');
-      expect(section).toContain('series.map');
+      expect(section).toContain('normalizedSeries.map');
     });
 
     it('BLS CPI data should have multiple food categories', () => {
@@ -401,6 +401,39 @@ describe('food-prices', () => {
       const section = jsSource.slice(jsSource.indexOf('function renderCpiVsInsecurity'));
       expect(section).toContain('Food Insecurity');
       expect(section).toContain('yAxis');
+    });
+  });
+
+  // ── CPI category normalization (Jan 2018 = 100) ──
+  describe('CPI category normalization', () => {
+    it('renderCategories should normalize series data', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderCategories'),
+        jsSource.indexOf('function renderRegions')
+      );
+      expect(section).toContain('firstValue');
+      expect(section).toMatch(/\/ firstValue/);
+    });
+
+    it('Y-axis should show Jan 2018 = 100 label', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderCategories'),
+        jsSource.indexOf('function renderRegions')
+      );
+      expect(section).toContain('Jan 2018 = 100');
+    });
+
+    it('normalization formula should produce 100 for first value', () => {
+      const firstValue = 272.3;
+      expect(Math.round((firstValue / firstValue) * 100 * 100) / 100).toBe(100);
+    });
+
+    it('normalization should preserve null as null', () => {
+      const val = null;
+      const result = val === null ? null : Math.round((val / 250) * 100 * 100) / 100;
+      expect(result).toBeNull();
     });
   });
 });

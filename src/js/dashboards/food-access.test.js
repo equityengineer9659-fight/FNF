@@ -466,6 +466,31 @@ describe('food-access', () => {
     });
   });
 
+  // ── Urban low-access hero stat ──
+  describe('urban low-access hero stat', () => {
+    it('hero stats HTML should include Urban Low-Access Rate label', () => {
+      const html = readFileSync(resolve(htmlDir, 'food-access.html'), 'utf-8');
+      expect(html).toContain('Urban Low-Access Rate');
+    });
+
+    it('JS should sync urban low-access rate to hero stat', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
+      expect(initSection).toContain('label.includes(\'Urban Low-Access\')');
+    });
+  });
+
+  // ── Reframe access-insecurity insight text ──
+  describe('access-insecurity insight reframing', () => {
+    it('state-level weak correlation text should reference poverty as dominant predictor', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const fnMatch = jsSource.match(/function updateAccessInsecurityInsight[\s\S]*?^}/m);
+      const fnBody = fnMatch ? fnMatch[0] : '';
+      expect(fnBody).toContain('poverty');
+      expect(fnBody).toContain('does not independently');
+    });
+  });
+
   // ── CODX #2: Insecurity tooltip should not promise drill-down ──
   describe('insecurity view drill-down promise', () => {
     it('insecurity tooltip should NOT say "Click for county breakdown"', () => {
