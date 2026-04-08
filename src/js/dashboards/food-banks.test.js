@@ -175,18 +175,15 @@ describe('food-banks', () => {
     });
   });
 
-  describe('regression suppression', () => {
-    it('should suppress regression line when |r| < 0.2', () => {
+  describe('diverging bar replaces scatter', () => {
+    it('renderVsInsecurity should use bar chart, not scatter', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
-      expect(jsSource).toMatch(/Math\.abs\(.*r.*\)\s*>=?\s*0\.2/);
-    });
-
-    it('current data should have |r| < 0.2 for density vs insecurity', () => {
-      const { linearRegression } = require('./shared/dashboard-utils.js');
-      const data = readJSON('food-bank-summary.json');
-      const points = data.states.map(s => [s.foodInsecurityRate, s.perCapitaOrgs]);
-      const { r } = linearRegression(points);
-      expect(Math.abs(r)).toBeLessThan(0.2);
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderVsInsecurity'),
+        jsSource.indexOf('function renderRevenue')
+      );
+      expect(section).toContain('type: \'bar\'');
+      expect(section).not.toContain('type: \'scatter\'');
     });
   });
 
@@ -204,6 +201,72 @@ describe('food-banks', () => {
       const match = html.match(/id="vs-insecurity-insight"[^>]*/);
       expect(match).toBeTruthy();
       expect(match[0]).toContain('aria-live');
+    });
+  });
+
+  // ── Change 4: resource gap diverging bar chart ──
+  describe('resource gap diverging bar chart', () => {
+    it('renderVsInsecurity should create a bar chart with deviation data', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderVsInsecurity'),
+        jsSource.indexOf('function renderRevenue')
+      );
+      expect(section).toContain('type: \'bar\'');
+      expect(section).toContain('deviation');
+      expect(section).toContain('chart-vs-insecurity');
+    });
+
+    it('should compute national mean and state deviations', () => {
+      const data = JSON.parse(readFileSync(resolve(__dirname, '../../../public/data/food-bank-summary.json'), 'utf-8'));
+      const stateRevPerInsecure = data.states
+        .map(s => {
+          const ip = Math.round(s.population * s.foodInsecurityRate / 100);
+          return { name: s.name, val: ip > 0 ? s.totalRevenue / ip : 0 };
+        })
+        .filter(s => s.val > 0);
+      const mean = stateRevPerInsecure.reduce((s, st) => s + st.val, 0) / stateRevPerInsecure.length;
+      const above = stateRevPerInsecure.filter(s => s.val > mean);
+      const below = stateRevPerInsecure.filter(s => s.val < mean);
+      expect(above.length).toBeGreaterThan(0);
+      expect(below.length).toBeGreaterThan(0);
+      expect(mean).toBeGreaterThan(500);
+    });
+
+    it('HTML should describe Resource Gap', () => {
+      const html = readFileSync(resolve(__dirname, '../../../dashboards/food-banks.html'), 'utf-8');
+      const chartSection = html.slice(html.indexOf('chart-vs-insecurity') - 500, html.indexOf('chart-vs-insecurity') + 500);
+      expect(chartSection.toLowerCase()).toContain('resource gap');
+    });
+  });
+
+  // ── Change 5: worst-10 rev/insecure-person hero stat ──
+  describe('worst-10 rev/insecure-person hero stat', () => {
+    it('hero stats HTML should show Worst 10 instead of Under 100', () => {
+      const html = readFileSync(resolve(__dirname, '../../../dashboards/food-banks.html'), 'utf-8');
+      expect(html).toContain('Worst 10');
+      expect(html).not.toContain('Under 100 Food Banks');
+    });
+
+    it('JS should compute worst-10 rev per insecure person', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
+      expect(initSection).toContain('Worst 10');
+    });
+
+    it('worst-10 avg should be reasonable', () => {
+      const data = JSON.parse(readFileSync(resolve(__dirname, '../../../public/data/food-bank-summary.json'), 'utf-8'));
+      const revPerInsecure = data.states
+        .map(s => {
+          const ip = Math.round(s.population * s.foodInsecurityRate / 100);
+          return ip > 0 ? s.totalRevenue / ip : Infinity;
+        })
+        .filter(v => v < Infinity)
+        .sort((a, b) => a - b)
+        .slice(0, 10);
+      const avg = Math.round(revPerInsecure.reduce((s, v) => s + v, 0) / revPerInsecure.length);
+      expect(avg).toBeGreaterThan(0);
+      expect(avg).toBeLessThan(2000);
     });
   });
 
@@ -248,26 +311,27 @@ describe('food-banks', () => {
     });
   });
 
-  // ── P4: renderVsInsecurity source contract ──
+  // ── P4: renderVsInsecurity source contract (diverging bar) ──
   describe('renderVsInsecurity', () => {
-    it('should suppress regression when |r| < 0.2 with dynamic insight', () => {
+    it('should compute deviation from national mean for diverging bar', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
       const section = jsSource.slice(
         jsSource.indexOf('function renderVsInsecurity'),
         jsSource.indexOf('function renderRevenue')
       );
-      expect(section).toContain('showRegression');
-      expect(section).toContain('No statistically meaningful correlation');
+      expect(section).toContain('deviation');
+      expect(section).toContain('nationalMean');
+      expect(section).toContain('type: \'bar\'');
     });
 
-    it('should use REGION_COLORS for scatter series', () => {
+    it('should update vs-insecurity-insight with dynamic range text', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
       const section = jsSource.slice(
         jsSource.indexOf('function renderVsInsecurity'),
         jsSource.indexOf('function renderRevenue')
       );
-      expect(section).toContain('REGION_COLORS');
-      expect(section).toContain('getRegion');
+      expect(section).toContain('vs-insecurity-insight');
+      expect(section).toContain('revPerInsecure');
     });
   });
 

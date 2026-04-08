@@ -292,19 +292,15 @@ function renderUrbanRural(states) {
     series: [
       {
         name: 'Low-Access Rate', type: 'bar', yAxisIndex: 0, barWidth: '28%',
-        data: [
-          { value: urbanRate, itemStyle: { color: COLORS.primary } },
-          { value: ruralRate, itemStyle: { color: COLORS.accent } }
-        ],
+        itemStyle: { color: COLORS.primary },
+        data: [urbanRate, ruralRate],
         label: { show: true, position: 'top', formatter: '{c}%', color: COLORS.text, fontSize: 11 },
         animationDuration: 1800
       },
       {
         name: 'Avg Distance', type: 'bar', yAxisIndex: 1, barWidth: '28%',
-        data: [
-          { value: urbanDist, itemStyle: { color: 'rgba(0,212,255,0.45)' } },
-          { value: ruralDist, itemStyle: { color: 'rgba(255,140,0,0.55)' } }
-        ],
+        itemStyle: { color: COLORS.accent },
+        data: [urbanDist, ruralDist],
         label: { show: true, position: 'top', formatter: '{c} mi', color: COLORS.text, fontSize: 11 },
         animationDuration: 1800
       }
@@ -1104,7 +1100,7 @@ function updateAccessInsecurityInsight(reg, mode, countyCount, stateName) {
     }
   } else {
     if (Math.abs(reg.r) < 0.4) {
-      insightEl.textContent = `${strength} state-level correlation (r = ${reg.r.toFixed(2)}). Low-access prevalence alone does not explain much of the variation in food insecurity across states. State averages can mask stronger patterns at the county or neighborhood level.`;
+      insightEl.textContent = `${strength} state-level correlation (r = ${reg.r.toFixed(2)}). Poverty (r = 0.931) is the dominant predictor of food insecurity — low food access does not independently drive hunger at the state level. However, access compounds poverty in specific regions where residents face both income and geographic barriers.`;
     } else {
       insightEl.textContent = `${strength} correlation (r = ${reg.r.toFixed(2)}). Low-access prevalence and food insecurity do move together across states, but the relationship is imperfect — local factors like poverty, employment, and income likely play a major role.`;
     }
@@ -1454,7 +1450,11 @@ async function init() {
       const label = el.nextElementSibling?.textContent?.trim() || '';
       if (label.includes('Low-Access Population')) el.dataset.target = (nat.lowAccessPopulation / 1e6).toFixed(1);
       else if (label.includes('Low-Access Tracts') && !label.includes('%')) el.dataset.target = String(nat.lowAccessTracts);
-      else if (label.includes('Avg Distance')) el.dataset.target = nat.avgDistance.toFixed(1);
+      else if (label.includes('Urban Low-Access')) {
+        const totalUrban = curStates.reduce((s, st) => s + (st.urbanLowAccess || 0), 0);
+        const totalTracts = curStates.reduce((s, st) => s + (st.totalTracts || 0), 0);
+        el.dataset.target = totalTracts > 0 ? Math.round(totalUrban / totalTracts * 100) : 44;
+      }
       else if (label.includes('Tracts Low-Access')) el.dataset.target = String(nat.lowAccessPct);
     });
 

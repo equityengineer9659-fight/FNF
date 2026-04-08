@@ -368,6 +368,28 @@
             </div>
         </section>
 
+        <!-- Poverty-Insecurity Divergence -->
+        <section class="dashboard-section scroll-reveal" aria-label="Poverty versus insecurity divergence by state">
+            <div class="dashboard-card">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">Poverty-Insecurity Divergence</h2>
+                </div>
+                <div class="dashboard-chart-row">
+                    <div class="dashboard-chart-row__chart">
+                        <div id="chart-divergence" class="dashboard-chart" role="img" aria-label="Horizontal diverging bar chart showing the gap between food insecurity rate and poverty rate by state"></div>
+                    </div>
+                    <div class="dashboard-chart-row__info">
+                        <h3 class="dashboard-info__title">Where Does Insecurity Exceed Poverty?</h3>
+                        <p class="dashboard-info__text">States to the <strong>right of zero</strong> have food insecurity rates exceeding their poverty rates &mdash; suggesting safety net programs are insufficient or near-poverty households are also affected. States to the <strong>left</strong> outperform their poverty prediction, potentially due to stronger SNAP coverage or food bank networks.</p>
+                        <div class="dashboard-info__meta">
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> USDA ERS &amp; Feeding America, 2024</div>
+                        </div>
+                        <div id="divergence-insight" class="dashboard-info__insight" aria-live="polite"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- 4d. Income Distribution ThemeRiver (live Census ACS, non-blocking) -->
         <section id="section-income-river" class="dashboard-section scroll-reveal" style="display:none" aria-label="Income distribution across states sorted by food insecurity">
             <div class="dashboard-card">

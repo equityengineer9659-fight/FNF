@@ -161,8 +161,8 @@
                     <p class="dashboard-stat__label">Avg Efficiency Ratio</p>
                 </div>
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number" data-target="1" data-suffix=" state">1 state</span>
-                    <p class="dashboard-stat__label">Under 100 Food Banks</p>
+                    <span class="dashboard-stat__number" data-target="880" data-prefix="$" data-suffix="">$880</span>
+                    <p class="dashboard-stat__label">Rev/Person (Worst 10)</p>
                 </div>
             </div>
         </section>
@@ -196,18 +196,18 @@
         <!-- Chart 2: Food Banks vs Food Insecurity -->
         <section class="dashboard-section scroll-reveal" aria-label="Food banks versus food insecurity">
             <div class="dashboard-card">
-                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Resources vs. Need</h2></div>
+                <div class="dashboard-card__header"><h2 class="dashboard-card__title">Resource Gap by State</h2></div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-vs-insecurity" class="dashboard-chart" role="img" aria-label="Scatter plot showing food bank density versus food insecurity rate"></div>
+                        <div id="chart-vs-insecurity" class="dashboard-chart" role="img" aria-label="Diverging bar chart showing revenue per insecure person deviation from national mean"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
-                        <h3 class="dashboard-info__title">Do Resources Match Need?</h3>
-                        <p class="dashboard-info__text">In an ideal world, states with more food insecurity would have more food banks per capita. This scatter plot tests that assumption — and reveals <strong>surprising gaps</strong>.</p>
-                        <p class="dashboard-info__text">Some of the most food-insecure states (Mississippi, Louisiana) have <strong>below-average food bank density</strong>. Meanwhile, well-resourced states like Vermont and Maine have dense networks despite lower insecurity rates.</p>
+                        <h3 class="dashboard-info__title">Where Funding Falls Short</h3>
+                        <p class="dashboard-info__text">This diverging bar chart shows how each state's <strong>revenue per food-insecure person</strong> compares to the national mean. States in <strong style="color:#ef4444">red</strong> receive less than average — these are the most under-resourced.</p>
+                        <p class="dashboard-info__text">States in <strong style="color:#3b82f6">blue</strong> exceed the national mean. The gap between the best- and worst-funded states reveals where food bank investment is most urgently needed.</p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> ProPublica (orgs) + Feeding America (insecurity)</span>
-                            <span class="meta-item"><strong>Bubble Size</strong> Total revenue of food assistance orgs</span>
+                            <span class="meta-item"><strong>Metric</strong> Revenue per food-insecure person, deviation from national mean</span>
                         </div>
                         <div id="vs-insecurity-insight" class="dashboard-info__insight" aria-live="polite">The correlation between need and resources is weak — infrastructure often follows wealth, not hunger.</div>
                     </div>
