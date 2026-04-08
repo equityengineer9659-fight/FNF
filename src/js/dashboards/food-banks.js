@@ -301,7 +301,7 @@ function renderDistribution(states) {
         itemStyle: {
           borderRadius: [0, 3, 3, 0],
           color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            { offset: 0, color: PAL.mid }, { offset: 1, color: PAL.high }
+            { offset: 0, color: '#f59e0b' }, { offset: 1, color: COLORS.accent }
           ])
         },
         animationDuration: 1500

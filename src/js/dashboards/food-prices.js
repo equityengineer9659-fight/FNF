@@ -246,9 +246,15 @@ function renderBurden(quintiles) {
     tooltip: {
       ...TOOLTIP_STYLE,
       formatter: p => {
-        const parent = p.treePathInfo && p.treePathInfo.length > 1 ? p.treePathInfo[1].name : '';
+        const parent = p.treePathInfo && p.treePathInfo.length > 1
+          ? p.treePathInfo[p.treePathInfo.length - 2].name : '';
         return `<strong>${p.name}</strong>${parent ? `<br/>(${parent})` : ''}<br/>Food Share: ${p.value.toFixed(1)}%`;
       }
+    },
+    legend: {
+      data: quintiles.map(qi => qi.label),
+      textStyle: { color: COLORS.text, fontSize: 10 },
+      top: 5
     },
     series: [{
       type: 'sunburst', data: data, radius: ['15%', '80%'],
@@ -763,13 +769,14 @@ function renderCpiVsInsecurity(blsData, fiTrend) {
     dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 20, bottom: 10, textStyle: { color: COLORS.textMuted }, borderColor: COLORS.gridLine, fillerColor: 'rgba(0,212,255,0.1)' }],
     xAxis: { type: 'category', data: cpiDates, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
     yAxis: [
-      { type: 'value', name: 'CPI Index', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
-      { type: 'value', name: 'Insecurity (%)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted, formatter: '{value}%' }, splitLine: { show: false }, position: 'right' }
+      { type: 'value', name: 'CPI Index', nameTextStyle: { color: COLORS.accent }, axisLabel: { color: COLORS.accent }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
+      { type: 'value', name: 'Insecurity (%)', nameTextStyle: { color: COLORS.primary }, axisLabel: { color: COLORS.primary, formatter: '{value}%' }, splitLine: { show: false }, position: 'right' }
     ],
     series: [
       {
         name: 'Food CPI', type: 'line', data: cpiValues, smooth: true, symbol: 'none',
         lineStyle: { width: 2.5, color: COLORS.accent },
+        itemStyle: { color: COLORS.accent },
         areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(255,107,53,0.15)' }, { offset: 1, color: 'rgba(255,107,53,0.01)' }]) }
       },
       {

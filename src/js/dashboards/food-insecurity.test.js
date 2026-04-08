@@ -579,4 +579,71 @@ describe('food-insecurity', () => {
       expect(outsideBlock).toContain('aria-expanded');
     });
   });
+
+  // ── UI/UX Audit: Legend/Label/Color Consistency ──
+  describe('legend/label/color consistency', () => {
+    it('radar chart should use "Most Affected" / "Least Affected" not "Top 5" / "Bottom 5"', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const radarSection = jsSource.slice(jsSource.indexOf('Radar:'), jsSource.indexOf('Scatter:'));
+      expect(radarSection).not.toContain('Bottom 5');
+      expect(radarSection).toContain('Least Affected');
+      expect(radarSection).toContain('Most Affected');
+    });
+
+    it('divergence chart should have a color key explaining red/blue encoding', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const divSection = jsSource.slice(
+        jsSource.indexOf('function renderDivergence'),
+        jsSource.indexOf('function renderMealCost')
+      );
+      // Must have some form of color legend/subtitle
+      const hasColorKey = divSection.includes('subtext') || divSection.includes('legend');
+      expect(hasColorKey).toBe(true);
+    });
+
+    it('SNAP chart tooltip should have a formatter with % units', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const snapSection = jsSource.slice(
+        jsSource.indexOf('function renderSnap'),
+        jsSource.indexOf('function renderFoodPrices')
+      );
+      expect(snapSection).toContain('formatter');
+      expect(snapSection).toMatch(/formatter.*%/s);
+    });
+
+    it('Food Prices legend should be built conditionally based on data availability', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const priceSection = jsSource.slice(
+        jsSource.indexOf('function renderFoodPrices'),
+        jsSource.indexOf('function renderFoodPrices') + 1500
+      );
+      // Legend items should be conditional, not hardcoded 3 items
+      expect(priceSection).not.toMatch(/data:\s*\[\s*'Food at Home',\s*'Food Away from Home',\s*'All Items'\s*\]/);
+    });
+
+    it('SNAP chart food insecurity bars should use COLORS.primary (blue), not amber/red gradient', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const snapSection = jsSource.slice(
+        jsSource.indexOf('function renderSnap'),
+        jsSource.indexOf('function renderFoodPrices')
+      );
+      // The food insecurity rate series should NOT use PAL.mid/PAL.high (amber/red)
+      const fiSeries = snapSection.slice(
+        snapSection.indexOf('name: \'Food Insecurity Rate'),
+        snapSection.indexOf('name: \'SNAP Coverage')
+      );
+      expect(fiSeries).not.toContain('PAL.mid');
+      expect(fiSeries).not.toContain('PAL.high');
+    });
+
+    it('Triple Burden tooltip should not use bare #f59e0b hex', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const tbSection = jsSource.slice(
+        jsSource.indexOf('function renderTripleBurden'),
+        jsSource.indexOf('function renderTripleBurden') + 3000
+      );
+      // Should use a named constant, not bare hex
+      expect(tbSection).not.toMatch(/color.*['"]#f59e0b['"]/);
+    });
+  });
 });

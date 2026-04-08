@@ -436,4 +436,40 @@ describe('food-prices', () => {
       expect(result).toBeNull();
     });
   });
+
+  // ── UI/UX Audit: Legend/Label/Color Consistency ──
+  describe('legend/label/color consistency', () => {
+    it('Food CPI series in renderCpiVsInsecurity should have itemStyle', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderCpiVsInsecurity'));
+      const foodCpiBlock = section.slice(section.indexOf('name: \'Food CPI\''), section.indexOf('name: \'Food Insecurity Rate\''));
+      expect(foodCpiBlock).toContain('itemStyle');
+    });
+
+    it('dual-axis Y-axes should be color-coded to match their series', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(jsSource.indexOf('function renderCpiVsInsecurity'));
+      const yAxisBlock = section.slice(section.indexOf('yAxis: ['), section.indexOf('series: ['));
+      // At least one axis should use COLORS.accent or COLORS.primary for nameTextStyle
+      expect(yAxisBlock).toMatch(/nameTextStyle.*COLORS\.(accent|primary)/s);
+    });
+
+    it('sunburst should have a legend component', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderBurden'),
+        jsSource.indexOf('function renderHomeVsAway')
+      );
+      expect(section).toContain('legend');
+    });
+
+    it('regional chart baseline series legend should have explicit itemStyle.color', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf-8');
+      const section = jsSource.slice(
+        jsSource.indexOf('function renderRegions'),
+        jsSource.indexOf('function renderAffordabilityMap')
+      );
+      expect(section).toMatch(/legend[\s\S]*?itemStyle/);
+    });
+  });
 });

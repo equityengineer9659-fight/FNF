@@ -487,4 +487,32 @@ describe('snap-safety-net', () => {
       expect(shortfall).toBeGreaterThan(0);
     });
   });
+
+  // ── UI/UX Audit: Legend/Label/Color Consistency ──
+  describe('legend/label/color consistency', () => {
+    it('CDC map visualMap should use PAL.low (red) for min, not PAL.high (green)', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const cdcIdx = jsSource.indexOf('CDC Self-Reported');
+      expect(cdcIdx).toBeGreaterThan(-1);
+      const cdcSection = jsSource.slice(cdcIdx - 200, cdcIdx + 800);
+      // inRange color array should start with PAL.low (red for low self-report = potential stigma)
+      expect(cdcSection).toMatch(/inRange:\s*\{\s*color:\s*\[PAL\.low/);
+    });
+
+    it('gauge section copy should say "five" not "four"', () => {
+      const html = readFileSync(resolve(__dirname, '../../../dashboards/snap-safety-net.html'), 'utf-8');
+      expect(html).not.toContain('These four numbers');
+      expect(html).toContain('These five numbers');
+    });
+
+    it('SNAP trend markArea labels should not use PAL.low for COVID zone', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      const markAreaSection = jsSource.slice(
+        jsSource.indexOf('markArea:'),
+        jsSource.indexOf('markArea:') + 800
+      );
+      // COVID zone label should use informational color, not PAL.low (danger red)
+      expect(markAreaSection).not.toMatch(/color:\s*PAL\.low/);
+    });
+  });
 });

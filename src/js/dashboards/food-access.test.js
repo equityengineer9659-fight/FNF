@@ -507,4 +507,42 @@ describe('food-access', () => {
       expect(html).not.toMatch(/class="dashboard-chart__hint"[^>]*>.*click any state for county breakdown/i);
     });
   });
+
+  // ── UI/UX Audit: Legend/Label/Color Consistency ──
+  describe('legend/label/color consistency', () => {
+    it('county scatter visualMap should use PAL palette, not hardcoded hex', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      expect(jsSource).not.toContain('\'#22d3ee\'');
+    });
+
+    it('county drill-down visualMap text should say "Fewer Low-Access" not just "Fewer"', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const countySection = jsSource.slice(
+        jsSource.indexOf('function renderLowAccessCounty'),
+        jsSource.indexOf('function renderLowAccessCounty') + 2500
+      );
+      expect(countySection).not.toMatch(/text:.*'Fewer'\s*\]/);
+      expect(countySection).toContain('Fewer Low-Access');
+    });
+
+    it('showNational series name should match renderLowAccessMap', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const nationalSection = jsSource.slice(
+        jsSource.indexOf('function showNational'),
+        jsSource.indexOf('function showNational') + 2000
+      );
+      expect(nationalSection).toContain('name: \'Low-Access Tracts (%)\'');
+      expect(nationalSection).not.toContain('name: \'Food Desert Rate\'');
+    });
+
+    it('SNAP Retailers map should use MAP_PALETTES.snap for color semantics', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
+      const snapSection = jsSource.slice(
+        jsSource.indexOf('function renderSnapRetailers'),
+        jsSource.indexOf('function renderSnapRetailers') + 2000
+      );
+      // Should use snap palette (red→green) not inverted access palette
+      expect(snapSection).toContain('MAP_PALETTES.snap');
+    });
+  });
 });

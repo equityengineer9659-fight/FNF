@@ -6,7 +6,7 @@
 
 import { treemap, hierarchy } from 'd3-hierarchy';
 import { select } from 'd3-selection';
-import { fmtNum } from './dashboard-utils.js';
+import { fmtNum, REGION_COLORS } from './dashboard-utils.js';
 
 // ═══════════════════════════════════════════════════════
 //  THEME TOKENS
@@ -157,12 +157,13 @@ export function buildHeatmapLegend(container, minVal, maxVal, formatFn) {
       </div>
       <span style="font-size:0.82rem;color:#fff;font-weight:600;opacity:0.88;min-width:40px;padding-top:2px">High</span>
     </div>
+    <div style="text-align:center;font-size:0.7rem;color:rgba(225,232,240,0.4);margin-top:2px">Color distributed by rank (not linear scale)</div>
   `;
 }
 
 export function buildRegionChips(container) {
   if (!container) return;
-  container.innerHTML = Object.entries(HEATMAP_REGION_COLORS).map(([region, color]) =>
+  container.innerHTML = Object.entries(REGION_COLORS).map(([region, color]) =>
     `<span style="display:inline-flex;align-items:center;gap:5px;font-size:0.75rem;color:rgba(255,255,255,0.55);margin-right:16px"><span style="width:10px;height:10px;border-radius:2px;background:${color};display:inline-block;opacity:0.6"></span>${region}</span>`
   ).join('');
 }

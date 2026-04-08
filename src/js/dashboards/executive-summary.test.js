@@ -433,4 +433,31 @@ describe('executive-summary', () => {
       expect(html).not.toMatch(/normalized meal cost\s*&times;\s*30\)/i);
     });
   });
+
+  // ── UI/UX Audit: Legend/Label/Color Consistency ──
+  describe('legend/label/color consistency', () => {
+    it('price impact peak claim should say "above 11%" not "above 13%"', () => {
+      const html = readHTML('executive-summary.html');
+      expect(html).not.toContain('peaking above 13%');
+      expect(html).toContain('peaking above 11%');
+    });
+
+    it('Chart 3 series name should include "YoY" to match tooltip label', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      const priceSection = jsSource.slice(
+        jsSource.indexOf('function renderPriceImpact'),
+        jsSource.indexOf('function renderWorstStates')
+      );
+      expect(priceSection).toContain('name: \'Food at Home YoY\'');
+    });
+
+    it('vulnerability map emphasis should use border highlight, not areaColor override', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      const mapSection = jsSource.slice(
+        jsSource.indexOf('function renderVulnerabilityMap'),
+        jsSource.indexOf('function renderSnapGap')
+      );
+      expect(mapSection).not.toContain('areaColor: COLORS.secondary');
+    });
+  });
 });
