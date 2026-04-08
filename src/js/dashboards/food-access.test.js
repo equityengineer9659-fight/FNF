@@ -346,7 +346,6 @@ describe('food-access', () => {
     });
 
     it('all 51 county GeoJSON files should have correct properties', () => {
-      const fipsDir = resolve(dataDir, 'counties');
       // Spot-check 4 states
       const checks = ['06', '12', '36', '48']; // CA, FL, NY, TX
       for (const fips of checks) {
