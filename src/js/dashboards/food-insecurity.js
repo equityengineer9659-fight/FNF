@@ -392,12 +392,17 @@ function initCountySearch(mapController) {
       return;
     } else if (e.key === 'Escape') {
       resultsList.setAttribute('data-visible', 'false');
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
       return;
     } else {
       return;
     }
 
     items.forEach((li, i) => li.setAttribute('aria-selected', i === selectedIdx ? 'true' : 'false'));
+    if (items[selectedIdx]) {
+      input.setAttribute('aria-activedescendant', items[selectedIdx].id);
+    }
     items[selectedIdx]?.scrollIntoView({ block: 'nearest' });
   });
 
@@ -405,6 +410,8 @@ function initCountySearch(mapController) {
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.dashboard-search__wrapper')) {
       resultsList.setAttribute('data-visible', 'false');
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
     }
   });
 }

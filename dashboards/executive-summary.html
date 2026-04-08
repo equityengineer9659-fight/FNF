@@ -55,8 +55,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Orbitron font for logo -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <!-- Critical CSS -->
     <link rel="stylesheet" href="/src/css/critical-inline.css">
     <!-- Fonts -->
@@ -160,8 +158,9 @@
     </nav>
 
     <!-- Main Content -->
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
         <!-- Hero Section -->
+        <div id="dashboard-error" class="dashboard-error" role="alert" hidden></div>
         <section class="dashboard-hero" aria-label="Food insecurity executive summary">
             <h1 class="slds-text-heading_large">Food Insecurity at a Glance</h1>
             <p class="dashboard-hero__subtitle">The elevator pitch for grant writers — one URL that connects the entire food insecurity story</p>

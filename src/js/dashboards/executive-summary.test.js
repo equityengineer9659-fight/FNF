@@ -183,11 +183,13 @@ describe('executive-summary', () => {
     });
   });
 
-  // ── P1 #9: Dead fetch removal ──
-  describe('dead fetch check', () => {
-    it('should not fetch food-bank-summary.json (unused in executive summary)', () => {
+  // ── P1 #9: Dead fetch removal (reversed — now food-bank-orgs KPI is data-driven) ──
+  describe('dynamic KPI fetch check', () => {
+    it('should fetch food-bank-summary.json to update food-bank-orgs-kpi dynamically', () => {
       const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
-      expect(jsSource).not.toContain('food-bank-summary.json');
+      expect(jsSource).toContain('food-bank-summary.json');
+      expect(jsSource).toContain('food-bank-orgs-kpi');
+      expect(jsSource).toContain('totalOrganizations');
     });
 
     it('SNAP KPI formula should use coverageGap, not foodInsecurePersons', () => {
@@ -377,6 +379,48 @@ describe('executive-summary', () => {
       expect(mapSection).toContain('primary driver');
       // Should have CSV export
       expect(mapSection).toContain('addExportButton');
+    });
+  });
+
+  // ── CODX: Error banner for production users ──
+  describe('error banner for production users', () => {
+    it('catch block should show an error UI element, not just console.log', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      expect(jsSource).toContain('dashboard-error');
+    });
+  });
+
+  // ── CODX: Main tabindex for skip-link ──
+  describe('accessibility: main tabindex', () => {
+    it('main#main-content should have tabindex="-1" for skip-link target', () => {
+      const html = readHTML('executive-summary.html');
+      expect(html).toMatch(/id="main-content"[^>]*tabindex="-1"/);
+    });
+  });
+
+  // ── CODX: No redundant Google Fonts links ──
+  describe('redundant Google Fonts links', () => {
+    it('no dashboard HTML should have the redundant single-weight Orbitron link', () => {
+      const dashboards = [
+        'executive-summary.html', 'food-insecurity.html', 'food-access.html',
+        'snap-safety-net.html', 'food-prices.html', 'food-banks.html',
+        'nonprofit-directory.html', 'nonprofit-profile.html', 'chart-preview.html'
+      ];
+      for (const file of dashboards) {
+        const html = readHTML(file);
+        expect(html, `${file} should not have redundant single-weight Orbitron`)
+          .not.toContain('Orbitron:wght@700&display=swap');
+      }
+    });
+  });
+
+  // ── CODX: .htaccess cache directory protection ──
+  describe('htaccess cache security', () => {
+    it('should deny access to _cache directory', () => {
+      const htaccess = readFileSync(
+        resolve(__dirname, '../../../public/.htaccess'), 'utf-8'
+      );
+      expect(htaccess).toContain('_cache');
     });
   });
 

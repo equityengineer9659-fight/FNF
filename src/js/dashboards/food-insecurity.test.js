@@ -514,4 +514,28 @@ describe('food-insecurity', () => {
       expect(hasAriaAutocomplete).toBe(true);
     });
   });
+
+  // ── CODX: Combobox ARIA completeness ──
+  describe('combobox ARIA completeness', () => {
+    it('keyboard handler should set aria-activedescendant', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).toContain('aria-activedescendant');
+    });
+
+    it('Escape key should set aria-expanded to false', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const escapeIdx = jsSource.indexOf('e.key === \'Escape\'');
+      expect(escapeIdx).toBeGreaterThan(-1);
+      const escapeBlock = jsSource.slice(escapeIdx, escapeIdx + 250);
+      expect(escapeBlock).toContain('aria-expanded');
+    });
+
+    it('outside-click handler should set aria-expanded to false', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const outsideIdx = jsSource.indexOf('Close on outside click');
+      expect(outsideIdx).toBeGreaterThan(-1);
+      const outsideBlock = jsSource.slice(outsideIdx, outsideIdx + 250);
+      expect(outsideBlock).toContain('aria-expanded');
+    });
+  });
 });
