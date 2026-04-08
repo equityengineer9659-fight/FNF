@@ -96,7 +96,7 @@ function renderDesertMap(geoJSON, states, accessData) {
         textStyle: { color: COLORS.text }
       },
       series: [{
-        name: 'Food Desert Rate', type: 'map', map: 'USA-access', roam: false,
+        name: 'Low-Access Tracts (%)', type: 'map', map: 'USA-access', roam: false,
         projection: albersProjection, aspectScale: 1, zoom: 1.1, top: 10, left: 'center',
         emphasis: {
           label: { show: true, color: COLORS.text, fontSize: 12, fontWeight: 'bold' },
@@ -226,7 +226,7 @@ function renderDesertMap(geoJSON, states, accessData) {
   return { drillDown, showNational, setDrillDown: (v) => { drillDownEnabled = v; } };
 }
 
-// -- Chart 2: Urban vs Rural (Donut) --
+// -- Chart 2: Urban vs Rural (Grouped Bar) --
 function renderUrbanRural(states) {
   const chart = getOrCreateChart('chart-urban-rural');
   if (!chart) return;
@@ -770,8 +770,8 @@ function renderSnapRetailers(geoJSON, retailerData, accessStates) {
   const accessByFips = {};
   accessStates.forEach(s => { accessByFips[s.fips] = s; });
 
-  // Inverted access palette: more retailers = greener (good), fewer = orange (concern)
-  const palInverted = { low: PAL.high, mid: PAL.mid, high: PAL.low };
+  // SNAP palette: red (fewer/danger) → amber → green (more/safe) — semantically clear
+  const palSnap = MAP_PALETTES.snap;
 
   const mapData = retailerData.states.map(s => {
     const access = accessByFips[s.fips] || {};
@@ -820,7 +820,7 @@ function renderSnapRetailers(geoJSON, retailerData, accessStates) {
       left: 'right', bottom: 20,
       min: 58, max: 125,
       text: ['More Retailers', 'Fewer Retailers'], calculable: true,
-      inRange: { color: [palInverted.low, palInverted.mid, palInverted.high] },
+      inRange: { color: [palSnap.low, palSnap.mid, palSnap.high] },
       textStyle: { color: COLORS.text }
     },
     series: [{
@@ -943,7 +943,7 @@ function renderLowAccessCounty(countyGeo, countyData) {
     },
     visualMap: {
       left: 'right', bottom: 20, min: 0, max: 100,
-      text: ['More Low-Access', 'Fewer'], calculable: true,
+      text: ['More Low-Access', 'Fewer Low-Access'], calculable: true,
       inRange: { color: [PAL.low, PAL.mid, PAL.high] },
       textStyle: { color: COLORS.text }
     },
@@ -1056,7 +1056,7 @@ function drawAccessInsecurityScatter(chart, points, { xLabel, yLabel, tooltipFn,
 
   const visualMapOpt = regionBased ? null : [{
     show: true, dimension: 1, min: 5, max: 30,
-    inRange: { color: ['#22d3ee', '#facc15', '#ef4444'] },
+    inRange: { color: [PAL.low, PAL.mid, PAL.high] },
     text: ['High Insecurity', 'Low'],
     textStyle: { color: COLORS.textMuted, fontSize: 10 },
     right: 10, top: 10, calculable: false, itemWidth: 12, itemHeight: 80

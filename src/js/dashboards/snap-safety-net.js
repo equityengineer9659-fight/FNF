@@ -116,8 +116,8 @@ function renderSnapTrend(trendData, blsData, snapNational) {
       markArea: {
         silent: true,
         data: [
-          [{ xAxis: '2020-03', itemStyle: { color: 'rgba(239,68,68,0.15)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: PAL.low, fontSize: 9, position: 'insideTopRight', padding: [4, 8, 0, 0] } }, { xAxis: '2023-03' }],
-          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(251,191,36,0.12)' }, label: { show: true, formatter: 'Post-Emergency', color: PAL.mid, fontSize: 9, position: 'insideTopLeft', padding: [4, 0, 0, 8] } }, { xAxis: '2025-12' }]
+          [{ xAxis: '2020-03', itemStyle: { color: 'rgba(239,68,68,0.15)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: COLORS.secondary, fontSize: 9, position: 'insideTopRight', padding: [4, 8, 0, 0] } }, { xAxis: '2023-03' }],
+          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(251,191,36,0.12)' }, label: { show: true, formatter: 'Post-Emergency', color: COLORS.accent, fontSize: 9, position: 'insideTopLeft', padding: [4, 0, 0, 8] } }, { xAxis: '2025-12' }]
         ]
       },
       animationDuration: 2000
@@ -306,7 +306,7 @@ function applySnapMapView(view) {
         min: 3, max: 25,
         text: ['High Self-Report', 'Low Self-Report'],
         calculable: true,
-        inRange: { color: [PAL.high, PAL.mid, PAL.low] },
+        inRange: { color: [PAL.low, PAL.mid, PAL.high] },
         textStyle: { color: COLORS.text }
       },
       series: [{

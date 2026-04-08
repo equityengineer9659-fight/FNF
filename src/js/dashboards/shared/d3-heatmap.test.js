@@ -129,9 +129,11 @@ describe('d3-heatmap', () => {
       expect(container.innerHTML).toContain('West');
     });
 
-    it('should include color swatches for each region', () => {
+    it('should include color swatches using REGION_COLORS (full-saturation, matching scatter/radar)', () => {
       buildRegionChips(container);
-      for (const color of Object.values(HEATMAP_REGION_COLORS)) {
+      // Chips now use REGION_COLORS from dashboard-utils for cross-chart consistency
+      const REGION_COLORS = { Northeast: '#60a5fa', Midwest: '#f59e0b', South: '#f87171', West: '#34d399' };
+      for (const color of Object.values(REGION_COLORS)) {
         expect(container.innerHTML).toContain(color);
       }
     });

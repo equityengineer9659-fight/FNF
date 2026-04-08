@@ -381,4 +381,32 @@ describe('food-banks', () => {
       }
     });
   });
+
+  // ── UI/UX Audit: Legend/Label/Color Consistency ──
+  describe('legend/label/color consistency', () => {
+    it('distribution chart sidebar should not mention "orange bar" if series uses teal/blue', () => {
+      const html = readHTML('food-banks.html');
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const distSection = jsSource.slice(
+        jsSource.indexOf('function renderDistribution'),
+        jsSource.indexOf('function renderCapacityGap')
+      );
+      // If HTML says "orange bar", the JS must use an orange-family color
+      if (html.includes('orange bar')) {
+        const hasOrange = distSection.includes('COLORS.accent') || distSection.includes('#ff6b35') || distSection.includes('#f59e0b');
+        expect(hasOrange).toBe(true);
+      }
+    });
+
+    it('region chips should use same colors as REGION_COLORS for scatter/radar', () => {
+      const d3Source = readFileSync(resolve(__dirname, 'shared/d3-heatmap.js'), 'utf-8');
+      const chipFn = d3Source.slice(
+        d3Source.indexOf('export function buildRegionChips'),
+        d3Source.indexOf('export function buildRegionChips') + 500
+      );
+      // Chips must NOT use desaturated HEATMAP_REGION_COLORS
+      expect(chipFn).not.toContain('#93B8DE');
+      expect(chipFn).not.toContain('#D1B862');
+    });
+  });
 });

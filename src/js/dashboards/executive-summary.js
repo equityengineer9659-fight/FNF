@@ -70,7 +70,7 @@ function renderVulnerabilityMap(statesWithIndex, geoJSON, national) {
         borderWidth: COLORS.mapBorderWidth
       },
       emphasis: {
-        itemStyle: { areaColor: COLORS.secondary },
+        itemStyle: { borderColor: COLORS.secondary, borderWidth: 2 },
         label: { show: true, color: '#fff', fontSize: 12 }
       },
       label: { show: false },
@@ -256,7 +256,7 @@ export function renderPriceImpact(blsData) {
       splitLine: { lineStyle: { color: COLORS.gridLine } }
     },
     series: [{
-      name: 'Food at Home', type: 'line',
+      name: 'Food at Home YoY', type: 'line',
       data: yoyData.map(d => d.value), smooth: true, symbol: 'none',
       lineStyle: { width: 3, color: COLORS.accent },
       itemStyle: { color: COLORS.accent },

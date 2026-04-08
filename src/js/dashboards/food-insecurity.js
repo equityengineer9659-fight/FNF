@@ -12,6 +12,7 @@ import {
 } from './shared/dashboard-utils.js';
 
 const PAL = MAP_PALETTES.insecurity;
+const LOW_ACCESS_COLOR = '#f59e0b'; // amber — used in Triple Burden + State Deep-Dive
 
 // -- Map Chart with County Drill-Down --
 function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
@@ -579,9 +580,9 @@ function renderTrend(data) {
   });
 }
 
-// -- Radar: Top 5 vs Bottom 5 States --
-function renderBar(data) {
-  const chart = createChart('chart-bar');
+// -- Radar: Most Affected vs Least Affected States --
+function renderRadar(data) {
+  const chart = createChart('chart-radar');
   if (!chart) return;
 
   const sorted = [...data.states].sort((a, b) => b.rate - a.rate);
@@ -605,7 +606,7 @@ function renderBar(data) {
   chart.setOption({
     tooltip: { ...TOOLTIP_STYLE },
     legend: {
-      data: [`Top 5 (${top5.map(s => s.name).join(', ')})`, `Bottom 5 (${bottom5.map(s => s.name).join(', ')})`],
+      data: [`Most Affected (${top5.map(s => s.name).join(', ')})`, `Least Affected (${bottom5.map(s => s.name).join(', ')})`],
       textStyle: { color: COLORS.text, fontSize: 10 }, bottom: 0
     },
     radar: {
@@ -626,8 +627,8 @@ function renderBar(data) {
     series: [{
       type: 'radar',
       data: [
-        { value: top5Avg, name: `Top 5 (${top5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(239,68,68,0.25)' }, lineStyle: { color: PAL.high, width: 2 }, itemStyle: { color: PAL.high } },
-        { value: bot5Avg, name: `Bottom 5 (${bottom5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(96,165,250,0.25)' }, lineStyle: { color: PAL.low, width: 2 }, itemStyle: { color: PAL.low } }
+        { value: top5Avg, name: `Most Affected (${top5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(239,68,68,0.25)' }, lineStyle: { color: PAL.high, width: 2 }, itemStyle: { color: PAL.high } },
+        { value: bot5Avg, name: `Least Affected (${bottom5.map(s => s.name).join(', ')})`, areaStyle: { color: 'rgba(96,165,250,0.25)' }, lineStyle: { color: PAL.low, width: 2 }, itemStyle: { color: PAL.low } }
       ]
     }]
   });
@@ -773,6 +774,11 @@ function renderDivergence(data) {
     .sort((a, b) => a.divergence - b.divergence);
 
   chart.setOption({
+    title: {
+      subtext: '\u25a0 Red: insecurity > poverty   \u25a0 Blue: poverty > insecurity',
+      subtextStyle: { color: 'rgba(255,255,255,0.5)', fontSize: 11 },
+      top: 0, left: 'center'
+    },
     tooltip: {
       ...TOOLTIP_STYLE,
       formatter: params => {
@@ -780,7 +786,7 @@ function renderDivergence(data) {
         return `<strong>${params.name}</strong><br/>Insecurity Rate: ${s?.rate}%<br/>Poverty Rate: ${s?.povertyRate}%<br/>Divergence: ${s?.divergence >= 0 ? '+' : ''}${s?.divergence} pp`;
       }
     },
-    grid: { left: 110, right: 40, top: 10, bottom: 30 },
+    grid: { left: 110, right: 40, top: 25, bottom: 30 },
     xAxis: {
       type: 'value', name: 'Divergence (pp)', nameLocation: 'center', nameGap: 22,
       nameTextStyle: { color: COLORS.textMuted },
@@ -889,7 +895,14 @@ function renderSnap(data) {
   chart.setOption({
     tooltip: {
       trigger: 'axis',
-      ...TOOLTIP_STYLE
+      ...TOOLTIP_STYLE,
+      formatter: params => {
+        let tip = `<strong>${params[0].name}</strong><br/>`;
+        params.forEach(p => {
+          if (p.value != null) tip += `${p.marker} ${p.seriesName}: <strong>${p.value}%</strong><br/>`;
+        });
+        return tip;
+      }
     },
     legend: {
       data: ['Food Insecurity Rate (2024)', 'SNAP Coverage (FY2024)'],
@@ -917,8 +930,8 @@ function renderSnap(data) {
         itemStyle: {
           borderRadius: [0, 3, 3, 0],
           color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            { offset: 0, color: PAL.mid },
-            { offset: 1, color: PAL.high }
+            { offset: 0, color: 'rgba(1,118,211,0.7)' },
+            { offset: 1, color: COLORS.primary }
           ])
         },
         animationDuration: 1500
@@ -967,7 +980,7 @@ function renderFoodPrices(blsData) {
       }
     },
     legend: {
-      data: ['Food at Home', 'Food Away from Home', 'All Items'],
+      data: ['Food at Home', ...(foodAway ? ['Food Away from Home'] : []), ...(allItems ? ['All Items'] : [])],
       textStyle: { color: COLORS.text },
       top: 5
     },
@@ -1468,7 +1481,7 @@ function renderTripleBurden(data, accessData) {
         const s = scored.find(x => x.name === name);
         return `<strong>${name}</strong><br/>`
           + `<span style="color:${COLORS.accent}">■</span> Food Insecurity: ${s.rate}% (score: ${s.fiScore.toFixed(0)})<br/>`
-          + `<span style="color:#f59e0b">■</span> Low Access: ${s.accessPct}% (score: ${s.accessScore.toFixed(0)})<br/>`
+          + `<span style="color:${LOW_ACCESS_COLOR}">■</span> Low Access: ${s.accessPct}% (score: ${s.accessScore.toFixed(0)})<br/>`
           + `<span style="color:${COLORS.secondary}">■</span> SNAP Gap: ${100 - Math.min(s.coverage, 100)}% uncovered (score: ${s.coverageGapScore.toFixed(0)})<br/>`
           + `<strong>Composite: ${s.total.toFixed(0)}/300</strong>`;
       }
@@ -1499,7 +1512,7 @@ function renderTripleBurden(data, accessData) {
       {
         name: 'Low Access', type: 'bar', stack: 'total',
         data: scored.map(s => s.accessScore).reverse(),
-        itemStyle: { color: '#f59e0b' }
+        itemStyle: { color: LOW_ACCESS_COLOR }
       },
       {
         name: 'SNAP Coverage Gap', type: 'bar', stack: 'total',
@@ -1571,7 +1584,7 @@ function renderStateDeepDive(stateCode, data, accessData, bankData) {
     { label: 'Child Rate', value: fi.childRate + '%', color: '#f87171', sub: `vs ${data.national.childFoodInsecurityRate}% national` },
     { label: 'Meal Cost', value: '$' + fi.mealCost, color: COLORS.secondary, sub: `vs $${data.national.averageMealCost} national` },
     { label: 'SNAP Coverage', value: coverage + '%', color: COLORS.primary, sub: coverage > 100 ? 'Exceeds insecure pop' : 'Of insecure pop covered' },
-    { label: 'Low-Access Tracts', value: accessPct, color: '#f59e0b', sub: access ? `${(access.urbanLowAccess + access.ruralLowAccess).toLocaleString()} tracts` : '' },
+    { label: 'Low-Access Tracts', value: accessPct, color: LOW_ACCESS_COLOR, sub: access ? `${(access.urbanLowAccess + access.ruralLowAccess).toLocaleString()} tracts` : '' },
     { label: 'Food Bank Density', value: density, color: '#34d399', sub: bank ? `per 100K (${bank.orgCount} orgs)` : '' }
   ];
 
@@ -1640,7 +1653,7 @@ async function init() {
       renderStateDeepDive(stateCode, data, accessData, bankData);
     });
     renderTrend(data);
-    renderBar(data);
+    renderRadar(data);
     renderScatter(data);
     initScatterToggle();
     renderDemographics(data);
