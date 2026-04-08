@@ -43,18 +43,16 @@ for (const dashboard of dashboards) {
 
     test('Chart containers have non-zero dimensions', async ({ page }) => {
       await page.goto(dashboard.url);
-      // Wait for JS to initialize charts
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
       await page.waitForTimeout(2000);
 
-      // Find chart containers (ECharts renders into divs with specific IDs)
-      const chartContainers = page.locator('[id^="chart-"], [id^="map-"], .dashboard-card__chart');
+      // Match only .dashboard-chart divs (not map-* buttons/selects/labels)
+      const chartContainers = page.locator('[id^="chart-"].dashboard-chart, .dashboard-card__chart');
       const count = await chartContainers.count();
 
       if (count > 0) {
         const firstChart = chartContainers.first();
         const box = await firstChart.boundingBox();
-        // At least one chart should have rendered with visible dimensions
         if (box) {
           expect(box.width).toBeGreaterThan(0);
           expect(box.height).toBeGreaterThan(0);

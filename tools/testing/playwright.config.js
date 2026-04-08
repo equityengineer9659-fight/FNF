@@ -1,6 +1,75 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
 
+// Local: chromium-desktop only (~2 min). CI: all 9 browser/viewport combos.
+const allProjects = [
+  // Desktop browsers
+  {
+    name: 'chromium-desktop',
+    use: {
+      ...devices['Desktop Chrome'],
+      viewport: { width: 1920, height: 1080 },
+    },
+  },
+  {
+    name: 'firefox-desktop',
+    use: {
+      ...devices['Desktop Firefox'],
+      viewport: { width: 1920, height: 1080 },
+    },
+  },
+  {
+    name: 'webkit-desktop',
+    use: {
+      ...devices['Desktop Safari'],
+      viewport: { width: 1920, height: 1080 },
+    },
+  },
+
+  // Tablet viewports
+  {
+    name: 'chromium-tablet',
+    use: {
+      ...devices['iPad Pro'],
+    },
+  },
+  {
+    name: 'firefox-tablet',
+    use: {
+      ...devices['iPad Pro'],
+      browserName: 'firefox',
+    },
+  },
+  {
+    name: 'webkit-tablet',
+    use: {
+      ...devices['iPad Pro'],
+    },
+  },
+
+  // Mobile viewports
+  {
+    name: 'chromium-mobile',
+    use: {
+      ...devices['iPhone 14 Pro Max'],
+    },
+  },
+  {
+    name: 'firefox-mobile',
+    use: {
+      browserName: 'firefox',
+      viewport: { width: 430, height: 932 },
+      hasTouch: true,
+    },
+  },
+  {
+    name: 'webkit-mobile',
+    use: {
+      ...devices['iPhone 14 Pro Max'],
+    },
+  },
+];
+
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -32,73 +101,8 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
 
-  /* Configure projects for major browsers */
-  projects: [
-    // Desktop browsers
-    {
-      name: 'chromium-desktop',
-      use: {
-        ...devices['Desktop Chrome'],
-        viewport: { width: 1920, height: 1080 },
-      },
-    },
-    {
-      name: 'firefox-desktop',
-      use: {
-        ...devices['Desktop Firefox'],
-        viewport: { width: 1920, height: 1080 },
-      },
-    },
-    {
-      name: 'webkit-desktop',
-      use: {
-        ...devices['Desktop Safari'],
-        viewport: { width: 1920, height: 1080 },
-      },
-    },
-
-    // Tablet viewports
-    {
-      name: 'chromium-tablet',
-      use: {
-        ...devices['iPad Pro'],
-      },
-    },
-    {
-      name: 'firefox-tablet',
-      use: {
-        ...devices['iPad Pro'],
-        browserName: 'firefox',
-      },
-    },
-    {
-      name: 'webkit-tablet',
-      use: {
-        ...devices['iPad Pro'],
-      },
-    },
-
-    // Mobile viewports
-    {
-      name: 'chromium-mobile',
-      use: {
-        ...devices['iPhone 14 Pro Max'],
-      },
-    },
-    {
-      name: 'firefox-mobile',
-      use: {
-        ...devices['iPhone 14 Pro Max'],
-        browserName: 'firefox',
-      },
-    },
-    {
-      name: 'webkit-mobile',
-      use: {
-        ...devices['iPhone 14 Pro Max'],
-      },
-    },
-  ],
+  /* Local: chromium-desktop only. CI: full matrix. Override with --project flag. */
+  projects: process.env.CI ? allProjects : [allProjects[0]],
 
   /* Run your local dev server before starting the tests */
   webServer: {

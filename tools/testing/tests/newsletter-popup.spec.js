@@ -120,9 +120,10 @@ test.describe('Newsletter Popup', () => {
     const modal = page.locator('.fnf-newsletter-modal');
     await expect(modal).toBeVisible({ timeout: 3000 });
 
-    // Submit with empty email
+    // Dispatch submit programmatically to bypass native HTML5 required validation
+    // (clicking the button triggers browser validation which blocks the JS handler)
     const form = modal.locator('.fnf-email-form');
-    await form.locator('.fnf-submit-btn').click();
+    await form.evaluate(el => el.dispatchEvent(new Event('submit', { cancelable: true })));
 
     // Validation error should appear
     const error = modal.locator('.fnf-newsletter-validation-error');
