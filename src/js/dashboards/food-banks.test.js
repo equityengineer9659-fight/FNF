@@ -197,6 +197,16 @@ describe('food-banks', () => {
     });
   });
 
+  // ── CODX: vs-insecurity-insight aria-live ──
+  describe('vs-insecurity-insight aria-live', () => {
+    it('should have aria-live="polite" for screen reader announcements', () => {
+      const html = readHTML('food-banks.html');
+      const match = html.match(/id="vs-insecurity-insight"[^>]*/);
+      expect(match).toBeTruthy();
+      expect(match[0]).toContain('aria-live');
+    });
+  });
+
   // ── Data shape validation ──
   describe('data shape: food-bank-summary.json', () => {
     it('should have national aggregate and states array', () => {

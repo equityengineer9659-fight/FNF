@@ -367,19 +367,20 @@ async function init() {
   initScrollReveal();
 
   try {
-    const [fiRes, snapRes, blsRes, geoRes] = await Promise.all([
+    const [fiRes, snapRes, blsRes, geoRes, bankRes] = await Promise.all([
       fetch('/data/food-insecurity-state.json'),
       fetch('/data/snap-participation.json'),
       fetch('/data/bls-food-cpi.json'),
-      fetch('/data/us-states-geo.json')
+      fetch('/data/us-states-geo.json'),
+      fetch('/data/food-bank-summary.json')
     ]);
 
-    if (!fiRes.ok || !snapRes.ok || !blsRes.ok || !geoRes.ok) {
+    if (!fiRes.ok || !snapRes.ok || !blsRes.ok || !geoRes.ok || !bankRes.ok) {
       throw new Error('Failed to load one or more data files');
     }
 
-    const [fiData, snapData, blsData, geoJSON] = await Promise.all([
-      fiRes.json(), snapRes.json(), blsRes.json(), geoRes.json()
+    const [fiData, snapData, blsData, geoJSON, bankData] = await Promise.all([
+      fiRes.json(), snapRes.json(), blsRes.json(), geoRes.json(), bankRes.json()
     ]);
 
     const statesWithIndex = computeVulnerabilityIndex(fiData.states);
@@ -398,6 +399,12 @@ async function init() {
     const fiKpiEl = document.getElementById('food-insecurity-kpi');
     if (fiKpiEl) fiKpiEl.dataset.target = fiData.national.foodInsecurityRate.toFixed(1);
 
+    // Update food bank orgs KPI dynamically from totalOrganizations
+    const bankKpiEl = document.getElementById('food-bank-orgs-kpi');
+    if (bankKpiEl) {
+      bankKpiEl.dataset.target = (bankData.national.totalOrganizations / 1000).toFixed(1);
+    }
+
     // Render each chart independently so partial data can still render
     try { renderVulnerabilityMap(statesWithIndex, geoJSON, fiData.national); } catch { /* partial render OK */ }
     try { renderSnapGap(fiData.states, snapData.stateCoverage.states); } catch { /* partial render OK */ }
@@ -412,6 +419,11 @@ async function init() {
     if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
       // eslint-disable-next-line no-console
       console.error('Executive Summary Dashboard error:', err);
+    }
+    const errorEl = document.getElementById('dashboard-error');
+    if (errorEl) {
+      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
+      errorEl.hidden = false;
     }
   }
 

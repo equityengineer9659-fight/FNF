@@ -12,3 +12,6 @@ ErrorDocument 404 /404.html
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
 </IfModule>
+
+# Deny access to PHP cache directory
+RedirectMatch 403 ^/_cache/
