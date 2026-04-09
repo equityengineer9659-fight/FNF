@@ -21,7 +21,7 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap">
     <!-- SLDS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css" integrity="sha384-ucbUkoNV4qcPSHz6TOzBUkDEMV/BBBcr7t59dWtuKS6itUk+yR7fYMkvjGgF1qlG" crossorigin="anonymous">
     <!-- Main CSS -->
     <link rel="stylesheet" href="src/css/main.css">
 </head>
@@ -30,13 +30,25 @@
 
     <!-- Navigation -->
     <nav class="fnf-nav" aria-label="Main navigation">
+        <!-- Hidden checkbox for CSS-only mobile toggle -->
         <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
+
         <div class="fnf-nav__container">
+            <!-- Header Row: Logo, Company Name, Mobile Toggle -->
             <div class="fnf-nav__top-row">
+                <!-- Logo Section -->
                 <div class="fnf-nav__logo">
-                    <a href="index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">FNF</a>
+                    <a href="/index.html" class="fnf-nav__brand" aria-label="Food-N-Force Home">
+                        FNF
+                    </a>
                 </div>
-                <div class="fnf-nav__title">Food-N-Force</div>
+
+                <!-- Company Name (Center) -->
+                <div class="fnf-nav__title">
+                    Food-N-Force
+                </div>
+
+                <!-- Mobile Toggle Button -->
                 <label for="nav-toggle" class="fnf-nav__toggle" aria-label="Toggle mobile menu">
                     <svg class="hamburger-svg" width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <rect y="0" width="24" height="2" fill="#ffffff"/>
@@ -45,23 +57,47 @@
                     </svg>
                 </label>
             </div>
+
+            <!-- Desktop Navigation Menu - Inside container -->
             <ul class="fnf-nav__menu">
-                <li class="fnf-nav__item"><a href="index.html" class="fnf-nav__link">Home</a></li>
-                <li class="fnf-nav__item"><a href="services.html" class="fnf-nav__link">Services</a></li>
-                <li class="fnf-nav__item"><a href="resources.html" class="fnf-nav__link">Resources</a></li>
-                <li class="fnf-nav__item"><a href="impact.html" class="fnf-nav__link">Impact</a></li>
-                <li class="fnf-nav__item"><a href="contact.html" class="fnf-nav__link">Contact</a></li>
-                <li class="fnf-nav__item"><a href="about.html" class="fnf-nav__link">About Us</a></li>
-            </ul>
+            <li class="fnf-nav__item">
+                <a href="/index.html" class="fnf-nav__link">Home</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/services.html" class="fnf-nav__link">Services</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/resources.html" class="fnf-nav__link">Resources</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link">Dashboards</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/impact.html" class="fnf-nav__link">Impact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/contact.html" class="fnf-nav__link">Contact</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/blog.html" class="fnf-nav__link">Blog</a>
+            </li>
+            <li class="fnf-nav__item">
+                <a href="/about.html" class="fnf-nav__link">About Us</a>
+            </li>
+        </ul>
         </div>
+
+        <!-- Mobile Menu -->
         <div class="fnf-nav__mobile">
             <ul class="fnf-nav__mobile-menu">
-                <li><a href="index.html" class="fnf-nav__mobile-link">Home</a></li>
-                <li><a href="services.html" class="fnf-nav__mobile-link">Services</a></li>
-                <li><a href="resources.html" class="fnf-nav__mobile-link">Resources</a></li>
-                <li><a href="impact.html" class="fnf-nav__mobile-link">Impact</a></li>
-                <li><a href="contact.html" class="fnf-nav__mobile-link">Contact</a></li>
-                <li><a href="about.html" class="fnf-nav__mobile-link">About Us</a></li>
+                <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link">Dashboards</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link">Blog</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link">About Us</a></li>
             </ul>
         </div>
     </nav>
