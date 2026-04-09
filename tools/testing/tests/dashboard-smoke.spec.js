@@ -14,6 +14,10 @@ const dashboards = [
   { url: '/dashboards/food-prices.html', name: 'Food Prices' },
   { url: '/dashboards/food-banks.html', name: 'Food Banks' },
   { url: '/dashboards/nonprofit-directory.html', name: 'Nonprofit Directory' },
+  // P2-18: nonprofit-profile was previously absent from the smoke matrix;
+  // it renders six ECharts and should be covered by the same page-load /
+  // chart-rendered assertions as the rest of the dashboards.
+  { url: '/dashboards/nonprofit-profile.html?ein=952036884', name: 'Nonprofit Profile' },
 ];
 
 for (const dashboard of dashboards) {
