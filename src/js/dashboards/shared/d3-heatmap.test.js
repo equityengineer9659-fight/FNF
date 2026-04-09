@@ -236,6 +236,32 @@ describe('d3-heatmap', () => {
     });
   });
 
+  // P2-27: dominant-baseline="central" must always be paired with dy="0.35em"
+  describe('SVG text baseline Firefox fallback (P2-27)', () => {
+    it('every dominant-baseline="central" is paired with dy="0.35em"', () => {
+      const src = readFileSync(resolve(__dirname, 'd3-heatmap.js'), 'utf-8');
+      const matches = src.match(/\.attr\('dominant-baseline',\s*'central'\)[^;]*/g) || [];
+      expect(matches.length).toBeGreaterThan(0);
+      matches.forEach(chain => {
+        expect(chain, 'dy="0.35em" fallback missing next to dominant-baseline').toMatch(/dy',\s*'0\.35em'/);
+      });
+    });
+  });
+
+  // P2-28: hover filter must attach to the tile <g>, not the <rect>
+  describe('hover filter target (P2-28)', () => {
+    it('hover filter is applied via tg.style, not the rect', () => {
+      const src = readFileSync(resolve(__dirname, 'd3-heatmap.js'), 'utf-8');
+      const rectBlock = src.slice(
+        src.indexOf('const rect = tg.append(\'rect\')'),
+        src.indexOf('const rect = tg.append(\'rect\')') + 500
+      );
+      expect(rectBlock).not.toContain('mouseenter');
+      expect(rectBlock).not.toContain('transition');
+      expect(src).toMatch(/tg\.style\('transition',\s*'filter/);
+    });
+  });
+
   // ── D3 heatmap resize re-layout ──
   describe('resize re-layout', () => {
     it('ResizeObserver should recompute treemap layout, not just update viewBox', () => {
