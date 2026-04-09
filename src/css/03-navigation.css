@@ -38,7 +38,7 @@
 
 .fnf-nav__brand:hover {transform:translateY(-2px) scale(1.02);filter:drop-shadow(0 6px 24px rgba(16,179,255,0.35));color:transparent;text-shadow:none}
 
-.fnf-nav__brand::after {content:"F-n-F";position:absolute;width:3rem;height:3rem;border-radius:0.75rem;display:grid;place-items:center;background:rgba(1,31,63,0.55);box-shadow:inset 0 0 15px rgba(0,0,0,0.35),0 0 0 1px rgba(255,255,255,0.12);backdrop-filter:blur(8px) saturate(120%);font-family:Orbitron,'Salesforce Sans',Arial,sans-serif;font-weight:700;letter-spacing:0.06em;font-size:0.8rem;line-height:1;color:var(--fnf-color-white);text-shadow:0.5px 0.5px 0 rgba(255,255,255,0.15),2px 2px 6px rgba(0,0,0,0.7);z-index:1}
+.fnf-nav__brand::after {content:"F-n-F";position:absolute;width:3rem;height:3rem;border-radius:0.75rem;display:grid;place-items:center;background:rgba(1,31,63,0.55);box-shadow:inset 0 0 15px rgba(0,0,0,0.35),0 0 0 1px rgba(255,255,255,0.12);-webkit-backdrop-filter:blur(8px) saturate(120%);backdrop-filter:blur(8px) saturate(120%);font-family:Orbitron,'Salesforce Sans',Arial,sans-serif;font-weight:700;letter-spacing:0.06em;font-size:0.8rem;line-height:1;color:var(--fnf-color-white);text-shadow:0.5px 0.5px 0 rgba(255,255,255,0.15),2px 2px 6px rgba(0,0,0,0.7);z-index:1}
 
 /* --- Site title --- */
 .fnf-nav__title {position:absolute;left:50%;transform:translateX(-50%);order:2;color:var(--fnf-color-white);font-family:var(--slds-font-family-heading);font-size:40px;font-weight:700;letter-spacing:1px;text-align:center;margin:0;z-index:5}

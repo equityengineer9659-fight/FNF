@@ -106,7 +106,9 @@
     "> 1%",
     "last 2 versions",
     "not dead",
-    "not ie 11"
+    "not ie 11",
+    "iOS >= 15",
+    "Safari >= 15"
   ],
   "engines": {
     "node": ">=20.0.0",

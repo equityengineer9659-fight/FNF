@@ -31,7 +31,7 @@
     text-transform: uppercase;
     text-decoration: none;
     box-shadow: 0 14px 32px rgba(1, 118, 211, 0.28);
-    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter: blur(6px);
     overflow: hidden;
     margin: 0 auto 1rem;
     transition: transform var(--transition-medium, 0.3s ease),
