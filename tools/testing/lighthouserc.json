@@ -16,9 +16,9 @@
         "http://localhost:4173/dashboards/food-prices.html",
         "http://localhost:4173/dashboards/food-banks.html"
       ],
-      "startServerCommand": "npm run dev",
-      "startServerReadyPattern": "Available on:",
-      "startServerReadyTimeout": 30000,
+      "startServerCommand": "npm run build && npm run preview",
+      "startServerReadyPattern": "Local:",
+      "startServerReadyTimeout": 120000,
       "numberOfRuns": 3
     },
     "assert": {
