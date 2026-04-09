@@ -10,7 +10,14 @@
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
+require_once __DIR__ . '/_cors.php';
+
+// Only allow GET requests
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
 
 $cacheDir = __DIR__ . '/../_cache/dashboard';
 if (!is_dir($cacheDir)) {
@@ -41,7 +48,7 @@ if ($state !== '' && !in_array($state, $validStates)) {
 if ($page < 0) $page = 0;
 
 // Cache key
-$cacheKey = md5($query . '|' . $state . '|' . $page);
+$cacheKey = hash('sha256', $query . '|' . $state . '|' . $page);
 $cacheFile = "{$cacheDir}/nonprofit-search-{$cacheKey}.json";
 $cacheTTL = 86400; // 24 hours
 

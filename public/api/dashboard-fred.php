@@ -12,7 +12,14 @@
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
+require_once __DIR__ . '/_cors.php';
+
+// Only allow GET requests
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
 
 // API key required for FRED
 @include __DIR__ . '/_config.php';
@@ -20,7 +27,7 @@ require_once __DIR__ . '/_rate-limiter.php';
 
 if (!defined('FRED_API_KEY') || FRED_API_KEY === '' || FRED_API_KEY === 'your-fred-api-key-here') {
     http_response_code(503);
-    echo json_encode(['error' => 'FRED API key not configured']);
+    echo json_encode(['error' => 'Service temporarily unavailable']);
     exit;
 }
 
@@ -99,7 +106,7 @@ switch ($type) {
 }
 
 // -- Cache check --
-$cacheKey = 'fred-' . md5($type . '|' . $seriesId);
+$cacheKey = 'fred-' . hash('sha256', $type . '|' . $seriesId);
 $cacheFile = "{$cacheDir}/{$cacheKey}.json";
 
 if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
@@ -144,8 +151,10 @@ rateLimitIncrement('fred');
 $raw = json_decode($response, true);
 if (!$raw || !isset($raw['observations'])) {
     // FRED returns error_code for invalid series
-    $errMsg = isset($raw['error_message']) ? $raw['error_message'] : 'Invalid FRED response';
-    returnStaleOrError($cacheFile, $errMsg);
+    // Log upstream error server-side; return generic message to client
+    $upstreamErr = isset($raw['error_message']) ? $raw['error_message'] : 'unknown';
+    error_log('FRED API error: ' . $upstreamErr);
+    returnStaleOrError($cacheFile, 'Data temporarily unavailable');
 }
 
 // -- Parse observations --
