@@ -135,6 +135,25 @@ describe('PHP API Proxy Security', () => {
       expect(src).toContain('VALID_STATE_ABBRS');
     });
 
+    // P2-05: EIN validation must be exactly 9 digits (matches nonprofit-org.php)
+    it('charity-navigator.php EIN validation requires exactly 9 digits (P2-05)', () => {
+      const src = readPhp('charity-navigator.php');
+      expect(src).toMatch(/strlen\(\$ein\)\s*!==?\s*9/);
+      expect(src).not.toMatch(/strlen\(\$ein\)\s*<\s*2/);
+    });
+
+    // P2-41: Mapbox proxy must not persist raw query string in cache payload
+    it('mapbox-geocode.php cache payload omits raw query (P2-41)', () => {
+      const src = readPhp('mapbox-geocode.php');
+      const cachedBlock = src.slice(
+        src.indexOf('$cachedPayload'),
+        src.indexOf('file_put_contents($cacheFile, json_encode($cachedPayload))') + 80
+      );
+      expect(cachedBlock).not.toMatch(/'query'\s*=>/);
+      // But the outbound (non-cached) response still carries the current query
+      expect(src).toMatch(/\$result\['query'\]\s*=\s*\$query/);
+    });
+
     it('_validation.php should exist with 51 state abbreviations', () => {
       const src = readPhp('_validation.php');
       expect(src).toBeDefined();

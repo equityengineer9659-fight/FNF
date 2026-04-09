@@ -44,11 +44,11 @@ if (!defined('CHARITY_NAVIGATOR_API_KEY') || CHARITY_NAVIGATOR_API_KEY === '' ||
     exit;
 }
 
-// Validate EIN — digits only
+// Validate EIN — must be exactly 9 digits (matches nonprofit-org.php)
 $ein = isset($_GET['ein']) ? preg_replace('/[^0-9]/', '', $_GET['ein']) : '';
-if ($ein === '' || strlen($ein) < 2) {
+if (strlen($ein) !== 9) {
     http_response_code(400);
-    echo json_encode(['error' => 'Provide a valid EIN parameter']);
+    echo json_encode(['error' => 'Provide a valid 9-digit EIN parameter']);
     exit;
 }
 
