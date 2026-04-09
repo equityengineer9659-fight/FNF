@@ -1,7 +1,7 @@
 ---
 name: seo-auditor
 description: Audit pages for SEO quality — JSON-LD structured data completeness, sitemap coverage, meta tag quality, and Lighthouse SEO scores. Use after adding a new page or publishing content.
-tools: Read, Grep, Glob, Bash, mcp__lighthouse__*
+tools: Read, Grep, Glob, Bash, WebFetch, mcp__lighthouse__*
 model: sonnet
 ---
 

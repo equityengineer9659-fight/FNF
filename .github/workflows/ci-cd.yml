@@ -20,10 +20,10 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: ''
@@ -59,7 +59,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload Build Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
@@ -76,7 +76,7 @@ jobs:
 
     steps:
       - name: Download Build Artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
@@ -130,6 +130,14 @@ jobs:
           scp -P "$SSH_PORT" /tmp/_config.php "${SSH_USER}@${SSH_HOST}:${CONFIG_PATH}"
           rm -f /tmp/_config.php
 
+          # Verify _config.php landed with valid contents — guards against
+          # silent scp failures that would leave PHP proxies returning 500
+          # (audit 2026-04-09, P0-4)
+          ssh -p "$SSH_PORT" "${SSH_USER}@${SSH_HOST}" \
+            "test -f '$CONFIG_PATH' && grep -q 'BLS_API_KEY' '$CONFIG_PATH'" \
+            || { echo "::error::_config.php upload verification failed — dashboard PHP proxies will return 500"; exit 1; }
+          echo "✅ _config.php verified on server"
+
           # Flush LiteSpeed page cache (stored in .lscache/ directory)
           ssh -p "$SSH_PORT" "${SSH_USER}@${SSH_HOST}" "rm -rf ~/www/food-n-force.com/public_html/.lscache/ 2>/dev/null && echo 'LiteSpeed cache cleared' || echo 'No .lscache found'" || true
           # Flush Memcached if available (SiteGround managed cache)
@@ -139,10 +147,17 @@ jobs:
 
       - name: Post-Deployment Health Check
         run: |
-          sleep 15
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://food-n-force.com)
-          if [ "$STATUS" -eq 200 ]; then
-            echo "✅ Deployment successful — site is live"
-          else
-            echo "⚠️ Site returned HTTP $STATUS — please verify manually"
-          fi
+          # Retry up to 6 times (90s total) — LiteSpeed cache warm-up after
+          # flush can briefly return 202 before settling on 200.
+          sleep 10
+          STATUS=0
+          for i in 1 2 3 4 5 6; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://food-n-force.com)
+            if [ "$STATUS" -eq 200 ]; then
+              echo "✅ Deployment successful — site is live (attempt $i)"
+              exit 0
+            fi
+            echo "Attempt $i: site returned HTTP $STATUS — retrying in 15s..."
+            sleep 15
+          done
+          echo "⚠️ Site returned HTTP $STATUS after 6 attempts — please verify manually"

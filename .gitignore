@@ -18,6 +18,7 @@ Thumbs.db
 .lighthouse/
 .lighthouseci/
 lighthouse-reports/
+performance-reports/
 playwright-report/
 test-results/
 coverage/

@@ -1,7 +1,7 @@
 ---
 name: cross-page-consistency
 description: Validate cross-page consistency across all 17 HTML pages — SEO meta tags, navigation links, Read Next cards, article references, and shared component integrity. Use after content changes to catch broken references.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, WebFetch
 model: sonnet
 ---
 
