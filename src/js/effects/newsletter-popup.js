@@ -93,6 +93,11 @@ class NewsletterPopup {
         >
         <button type="submit" class="fnf-submit-btn">Subscribe</button>
       </form>
+      <p class="fnf-privacy-note">
+        We only use your email to send our monthly newsletter. We never sell or
+        share it, and you can unsubscribe with one click from any email.
+        Questions? <a href="/contact.html" class="fnf-privacy-link">Contact us</a>.
+      </p>
     `;
 
     modal.appendChild(modalContent);

@@ -355,6 +355,20 @@ describe('NewsletterPopup', () => {
     });
   });
 
+  // P2-42: Newsletter modal must carry a visible privacy disclosure
+  describe('privacy disclosure (P2-42)', () => {
+    it('modal renders a .fnf-privacy-note paragraph on open', () => {
+      document.body.classList.add('fnf-page--about');
+      const popup = new NewsletterPopup();
+      popup.openModal();
+      const note = document.querySelector('.fnf-privacy-note');
+      expect(note, 'privacy note missing from modal').toBeTruthy();
+      expect(note.textContent).toMatch(/only use your email/i);
+      expect(note.textContent).toMatch(/unsubscribe/i);
+      popup.closeModal();
+    });
+  });
+
   describe('destroy', () => {
     it('should remove scroll listener and close modal', () => {
       document.body.classList.add('fnf-page--about');
