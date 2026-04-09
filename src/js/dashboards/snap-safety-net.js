@@ -15,7 +15,6 @@ const PAL = MAP_PALETTES.snap;
 
 // -- Chart 1: SNAP Trend with Policy Zones (Area) + optional BLS CPI overlay --
 let snapTrendChart = null;
-let snapTrendDates = null; // eslint-disable-line no-unused-vars
 
 function renderSnapTrend(trendData, blsData, snapNational) {
   if (!snapTrendChart) snapTrendChart = createChart('chart-snap-trend');
@@ -23,7 +22,6 @@ function renderSnapTrend(trendData, blsData, snapNational) {
 
   const dates = trendData.data.map(d => d.date);
   const values = trendData.data.map(d => d.value);
-  snapTrendDates = dates;
 
   // Build BLS CPI overlay aligned to SNAP dates
   let cpiSeries = [];
@@ -136,7 +134,7 @@ function renderSnapTrend(trendData, blsData, snapNational) {
 let snapMapChart = null;
 let snapMapAdminData = null;
 let snapMapCdcData = null;
-let snapMapActiveView = 'admin'; // eslint-disable-line no-unused-vars
+let snapMapActiveView = 'admin';
 
 export const SNAP_MAP_DEFAULT_INSIGHT = 'Wyoming has the lowest administrative coverage ratio at 46.9%. When CDC self-reported data loads, compare the two views \u2014 states where self-reported is notably lower than administrative suggest stigma or under-reporting of benefits.';
 
