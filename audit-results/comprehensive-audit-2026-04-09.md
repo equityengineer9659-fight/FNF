@@ -9,16 +9,12 @@
 
 ---
 
-## Remediation Status (updated 2026-04-09)
+## Remediation Status (updated 2026-04-09, end of P2 session)
 
-- **P0 (4 items)**: ALL FIXED and merged to master via PR #43 (commits 783243d, 55c7924, 63569af on the feature branch). P0-3 rotation intentionally skipped after verified no-exposure analysis; template `_config.example.php` added instead.
-- **P1 (~29 items)**:
-  - **16 PRs merged to feature branch** (#46–#61): P1-01, 02, 03, 04, 05, 06, 07, 08, 09, 10 (partial), 12, 13, 14, 19, 21, 22, 23, 24, 25, 26
-  - **4 items deferred** with documented follow-up plan (memory `project_p1_deferred_2026_04_09.md`): P1-11 (CSS bundle), P1-15/16/17 (test overhaul), P1-18 (renderMap split), P1-28 (Vite 6 bump)
-  - **P1-20 downgraded**: the `cdc` branch of `snapMapActiveView` IS reachable via the HTML toggle button (not dead code)
-  - **P1-29 rejected**: live-server removal declined by user (dev-only, dev-only CVE, zero production impact)
-  - **P1-27 awaiting upstream**: basic-ftp CVE, transitive via puppeteer/playwright, dev-only
-- **P2/P3 (~65 items)**: not yet addressed — pull from Consolidated Remediation Plan below when scheduling future work
+- **P0 (4 items)**: ALL FIXED and merged to master via PR #43 (commits 783243d, 55c7924, 63569af). P0-3 rotation intentionally skipped after verified no-exposure analysis; template `_config.example.php` added instead.
+- **P1 (~29 items)**: 16 PRs bundled and merged to master as PR #62. 4 items deferred (see `project_p1_deferred_2026_04_09.md`): P1-11 (CSS bundle), P1-15/16/17 (test overhaul), P1-18 (renderMap split), P1-28 (Vite 6 bump). P1-20 downgraded (not dead code). P1-29 rejected (dev-only). P1-27 awaiting upstream.
+- **P2 (45 items)**: **12 bundled PRs (#63–#74) opened, not yet merged** as of session end. 36 of 45 items landed across the 12 PRs. PR #70 initially failed CI on P2-32 (`cache: 'npm'` needs checked-in lockfile, gitignored here); reverted in commit `49b179a`, rest of PR ships. 9 items deferred (see `project_p2_deferred_2026_04_09.md`): P2-14 (Sentry Replay), P2-17/19/20 (test expansion bundle), P2-21/22 (food-access refactors), P2-32 (npm cache, needs lockfile policy), P2-40 (53-article blog CTA mass edit), P2-43 (GA4 infra check), P2-45 (same as P1-28).
+- **P3 (~25 items)**: not yet addressed — next session. Use the P3 resume prompt in `C:\Users\luetk\.claude\plans\crispy-sparking-stallman.md` (triages to Jira stories, does NOT implement unless explicitly asked).
 
 ---
 
