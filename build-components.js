@@ -249,7 +249,7 @@ function buildComponents() {
   console.log('🔨 Building HTML components...\n');
 
   // Core pages at root
-  const corePages = ['index', 'about', 'services', 'resources', 'impact', 'contact', 'blog'];
+  const corePages = ['index', 'about', 'services', 'resources', 'impact', 'contact', 'blog', '404'];
 
   // Hub pages at root (not articles, not core)
   const hubPages = ['case-studies', 'templates-tools'];
