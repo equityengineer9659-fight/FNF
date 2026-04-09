@@ -157,6 +157,7 @@
         </div>
     </nav>
 
+
     <!-- Main Content -->
     <main id="main-content" tabindex="-1">
         <!-- Hero Section -->
@@ -167,19 +168,19 @@
             <p class="dashboard-hero__positioning">Vulnerability mapping, coverage gaps, price trends, and state rankings drawn from USDA, Census, BLS, and Feeding America data.</p>
             <div class="dashboard-hero__stats" aria-label="Key national statistics">
                 <div class="dashboard-stat" title="State-level totals (41.8M) differ from the national figure (47.9M) due to methodological differences between USDA's national household survey and Feeding America's state-level model.">
-                    <span class="dashboard-stat__number" id="food-insecurity-kpi" data-target="13.7" data-suffix="%">13.7%</span>
+                    <span class="dashboard-stat__number" role="status" aria-live="off" id="food-insecurity-kpi" data-target="13.7" data-suffix="%">13.7%</span>
                     <p class="dashboard-stat__label">National Insecurity Rate</p>
                 </div>
                 <div class="dashboard-stat" title="SNAP participants ÷ (SNAP participants + coverage gap). Coverage gap = eligible food-insecure persons not receiving SNAP (USDA FNS). State totals (~39–41M) differ from the national figure because some participants are counted federally.">
-                    <span class="dashboard-stat__number" id="snap-coverage-kpi" data-target="83.7" data-suffix="%">83.7%</span>
+                    <span class="dashboard-stat__number" role="status" aria-live="off" id="snap-coverage-kpi" data-target="83.7" data-suffix="%">83.7%</span>
                     <p class="dashboard-stat__label">SNAP Coverage Rate</p>
                 </div>
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number" id="food-bank-orgs-kpi" data-target="61.3" data-suffix="K">61.3K</span>
+                    <span class="dashboard-stat__number" role="status" aria-live="off" id="food-bank-orgs-kpi" data-target="61.3" data-suffix="K">61.3K</span>
                     <p class="dashboard-stat__label">Food Bank Orgs</p>
                 </div>
                 <div class="dashboard-stat">
-                    <span class="dashboard-stat__number" id="kpi-cpi-yoy" data-target="3.1" data-suffix="%">3.1%</span>
+                    <span class="dashboard-stat__number" role="status" aria-live="off" id="kpi-cpi-yoy" data-target="3.1" data-suffix="%">3.1%</span>
                     <p class="dashboard-stat__label">Food CPI YoY Change</p>
                 </div>
             </div>
@@ -294,15 +295,15 @@
                 <h2 class="dashboard-narrative__heading">How Organizations Use These Insights</h2>
                 <div class="dashboard-insights__grid">
                     <div class="dashboard-insights__card">
-                        <div class="dashboard-insights__card-title">Grant Writers</div>
+                        <h3 class="dashboard-insights__card-title">Grant Writers</h3>
                         <p class="dashboard-insights__card-text">Use this single URL to show funders the full scope of hunger in your service area — vulnerability scores, coverage gaps, and price pressure in one compelling narrative.</p>
                     </div>
                     <div class="dashboard-insights__card">
-                        <div class="dashboard-insights__card-title">Executive Directors</div>
+                        <h3 class="dashboard-insights__card-title">Executive Directors</h3>
                         <p class="dashboard-insights__card-text">Share with board members and stakeholders as a quick-reference briefing on national food insecurity trends, SNAP coverage shortfalls, and rising costs.</p>
                     </div>
                     <div class="dashboard-insights__card">
-                        <div class="dashboard-insights__card-title">Policy Advocates</div>
+                        <h3 class="dashboard-insights__card-title">Policy Advocates</h3>
                         <p class="dashboard-insights__card-text">Cite the vulnerability index and SNAP gap data in testimony, op-eds, and legislative briefings. Every chart links to authoritative federal data sources.</p>
                     </div>
                 </div>
