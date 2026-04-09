@@ -59,6 +59,12 @@
   background: rgba(0, 212, 255, 0.08);
 }
 
+.dashboard-tabs__tab:focus-visible {
+  outline: 2px solid var(--fnf-secondary, #00d4ff);
+  outline-offset: 2px;
+  color: #fff;
+}
+
 /* Mobile: horizontal scroll */
 @media (width <= 768px) {
   .dashboard-tabs__container {
@@ -255,6 +261,13 @@
 }
 
 .dashboard-back-btn:hover {
+  background: var(--fnf-secondary, #00d4ff);
+  color: #000;
+}
+
+.dashboard-back-btn:focus-visible {
+  outline: 2px solid var(--fnf-secondary, #00d4ff);
+  outline-offset: 2px;
   background: var(--fnf-secondary, #00d4ff);
   color: #000;
 }
