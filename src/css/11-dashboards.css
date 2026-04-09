@@ -813,6 +813,29 @@
   line-height: 1.5;
 }
 
+/* Above-fold CTA inside hero (P1-24) */
+.dashboard-hero__cta {
+  max-width: 720px;
+  margin: 2rem auto 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.dashboard-hero__cta a {
+  color: #4ecdc4;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.dashboard-hero__cta a:hover,
+.dashboard-hero__cta a:focus-visible {
+  color: #fff;
+}
+
 /* How Organizations Use These Insights panel */
 .dashboard-insights {
   padding: 2.5rem 0;
