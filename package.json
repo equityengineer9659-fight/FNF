@@ -69,6 +69,7 @@
   "author": "Food-N-Force",
   "license": "MIT",
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.86.1",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.40.0",
     "@testing-library/dom": "^10.4.1",
@@ -119,7 +120,6 @@
     "src/**/*.js": "eslint"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.80.0",
     "@sentry/browser": "^10.17.0",
     "d3-color": "^3.1.0",
     "d3-format": "^3.1.2",
