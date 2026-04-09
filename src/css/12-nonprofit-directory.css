@@ -12,7 +12,7 @@
   align-items: center;
   flex-wrap: wrap;
   background: var(--glass-bg-strong, rgba(45, 55, 65, 0.6));
-  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter: blur(16px);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -160,7 +160,7 @@
 
 .directory-org-card {
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 1.5rem;

@@ -11,7 +11,7 @@
 
 .slds-button_outline-brand:hover,.slds-button_outline-brand:focus{background:var(--fnf-primary);color:var(--slds-c-text-inverse);transform:translateY(-2px);box-shadow:var(--slds-shadow-medium)}
 
-.focus-area-card,.measurable-card,.service-card,.resource-card,.expertise-card,.value-card{width:100%;max-width:none;min-width:280px;height:100%;min-height:300px;max-height:none;margin:0 auto;padding:1.5rem;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;text-align:center;background:var(--glass-bg-strong);backdrop-filter:var(--glass-blur);border-radius:var(--slds-border-radius-large);border:1px solid rgba(100,120,140,.3);box-shadow:0 8px 32px rgba(0,0,0,.3);transition:all .3s ease}
+.focus-area-card,.measurable-card,.service-card,.resource-card,.expertise-card,.value-card{width:100%;max-width:none;min-width:280px;height:100%;min-height:300px;max-height:none;margin:0 auto;padding:1.5rem;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;text-align:center;background:var(--glass-bg-strong);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border-radius:var(--slds-border-radius-large);border:1px solid rgba(100,120,140,.3);box-shadow:0 8px 32px rgba(0,0,0,.3);transition:all .3s ease}
 
 .focus-area-card{min-height:280px}
 
@@ -70,7 +70,7 @@
 
 .impact-numbers-dark > *{position:relative;z-index:10}
 
-.stat-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--glass-bg-light);backdrop-filter:var(--glass-blur);border-radius:var(--slds-border-radius-large);border:1px solid var(--glass-border);padding:var(--slds-spacing-large);transition:all var(--transition-medium);min-height:180px;justify-content:center}
+.stat-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--glass-bg-light);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border-radius:var(--slds-border-radius-large);border:1px solid var(--glass-border);padding:var(--slds-spacing-large);transition:all var(--transition-medium);min-height:180px;justify-content:center}
 
 .stat-card:hover{background:rgba(45,55,65,.35);border-color:rgba(255,255,255,.2);transform:translateY(-4px)}
 

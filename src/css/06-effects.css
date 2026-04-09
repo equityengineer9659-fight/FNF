@@ -4,7 +4,7 @@
 
 .fnf-particle-container{position:fixed;top:0;left:0;width:100vw;height:100vh;overflow:visible;pointer-events:none;z-index:7500}
 
-.fnf-glass{background:var(--glass-bg-primary);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--slds-border-radius-large);box-shadow:var(--slds-shadow-large)}
+.fnf-glass{background:var(--glass-bg-primary);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--slds-border-radius-large);box-shadow:var(--slds-shadow-large)}
 
 .fnf-glass--strong{background:var(--glass-bg-secondary);box-shadow:var(--slds-shadow-x-large)}
 
