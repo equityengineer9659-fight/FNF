@@ -15,7 +15,6 @@ const PAL = MAP_PALETTES.snap;
 
 // -- Chart 1: SNAP Trend with Policy Zones (Area) + optional BLS CPI overlay --
 let snapTrendChart = null;
-let snapTrendDates = null; // eslint-disable-line no-unused-vars
 
 function renderSnapTrend(trendData, blsData, snapNational) {
   if (!snapTrendChart) snapTrendChart = createChart('chart-snap-trend');
@@ -23,7 +22,6 @@ function renderSnapTrend(trendData, blsData, snapNational) {
 
   const dates = trendData.data.map(d => d.date);
   const values = trendData.data.map(d => d.value);
-  snapTrendDates = dates;
 
   // Build BLS CPI overlay aligned to SNAP dates
   let cpiSeries = [];
@@ -136,7 +134,7 @@ function renderSnapTrend(trendData, blsData, snapNational) {
 let snapMapChart = null;
 let snapMapAdminData = null;
 let snapMapCdcData = null;
-let snapMapActiveView = 'admin'; // eslint-disable-line no-unused-vars
+let snapMapActiveView = 'admin';
 
 export const SNAP_MAP_DEFAULT_INSIGHT = 'Wyoming has the lowest administrative coverage ratio at 46.9%. When CDC self-reported data loads, compare the two views \u2014 states where self-reported is notably lower than administrative suggest stigma or under-reporting of benefits.';
 
@@ -802,6 +800,11 @@ async function init() {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
     });
+    const errorEl = document.getElementById('dashboard-error');
+    if (errorEl) {
+      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
+      errorEl.hidden = false;
+    }
   }
 }
 

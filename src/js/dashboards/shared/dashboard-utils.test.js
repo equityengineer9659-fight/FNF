@@ -266,6 +266,21 @@ describe('dashboard-utils', () => {
       expect(el.classList.contains('freshness--live')).toBe(true);
     });
 
+    it('should show Cached for _stale data', () => {
+      updateFreshness('test', { _stale: true });
+      const el = document.getElementById('freshness-test');
+      expect(el.textContent).toBe('Cached');
+      expect(el.classList.contains('freshness--cached')).toBe(true);
+      expect(el.classList.contains('freshness--live')).toBe(false);
+    });
+
+    it('should prefer _static over _stale when both set', () => {
+      updateFreshness('test', { _static: true, _stale: true, _dataYear: '2023' });
+      const el = document.getElementById('freshness-test');
+      expect(el.textContent).toBe('Data: 2023');
+      expect(el.classList.contains('freshness--static')).toBe(true);
+    });
+
     it('should handle missing element gracefully', () => {
       expect(() => updateFreshness('nonexistent', {})).not.toThrow();
     });

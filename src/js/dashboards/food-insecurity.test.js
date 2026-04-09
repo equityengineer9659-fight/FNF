@@ -349,14 +349,21 @@ describe('food-insecurity', () => {
   });
 
   // ── Audit 2026-04-07 #2: SNAP legend vs series name consistency ──
+  // Updated by P1-05 (2026-04-09): label changed from FY2024 to "FA 2023 est."
+  // because data is Feeding America 2023 model estimates, not FY2024 admin data.
   describe('SNAP legend/series name consistency', () => {
-    it('all SNAP Coverage year references should be consistent', () => {
+    it('all SNAP Coverage label references should be consistent', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
-      const yearRefs = [...jsSource.matchAll(/SNAP Coverage \(FY(\d{4})\)/g)].map(m => m[1]);
-      // All year references for SNAP Coverage should be the same
-      expect(yearRefs.length).toBeGreaterThan(0);
-      const uniqueYears = [...new Set(yearRefs)];
-      expect(uniqueYears).toHaveLength(1);
+      const labelRefs = [...jsSource.matchAll(/SNAP Coverage \(([^)]+)\)/g)].map(m => m[1]);
+      expect(labelRefs.length).toBeGreaterThan(0);
+      const uniqueLabels = [...new Set(labelRefs)];
+      expect(uniqueLabels).toHaveLength(1);
+    });
+
+    it('SNAP Coverage label should disclose Feeding America 2023 vintage, not FY2024', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      expect(jsSource).not.toMatch(/SNAP Coverage \(FY2024\)/);
+      expect(jsSource).toMatch(/SNAP Coverage \(FA 2023 est\.\)/);
     });
   });
 

@@ -7,7 +7,7 @@
 import * as echarts from 'echarts/core';
 import {
   MapChart, BarChart, LineChart, ScatterChart,
-  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart, GaugeChart, ThemeRiverChart
+  PieChart, RadarChart, SankeyChart, SunburstChart, GaugeChart, ThemeRiverChart
 } from 'echarts/charts';
 import {
   TitleComponent,
@@ -27,7 +27,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 // Register all needed components
 echarts.use([
   MapChart, BarChart, LineChart, ScatterChart,
-  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart, GaugeChart, ThemeRiverChart,
+  PieChart, RadarChart, SankeyChart, SunburstChart, GaugeChart, ThemeRiverChart,
   TitleComponent, TooltipComponent, VisualMapComponent,
   GeoComponent, GridComponent, LegendComponent, DataZoomComponent,
   RadarComponent, MarkLineComponent, MarkAreaComponent, SingleAxisComponent,
@@ -197,9 +197,12 @@ export function updateFreshness(source, info) {
   const el = document.getElementById(`freshness-${source}`);
   if (!el) return;
   el.classList.remove('freshness--static', 'freshness--cached', 'freshness--live');
-  if (info._static) {
+  if (info?._static) {
     el.textContent = `Data: ${info._dataYear || 'Static'}`;
     el.classList.add('freshness--static');
+  } else if (info?._stale) {
+    el.textContent = 'Cached';
+    el.classList.add('freshness--cached');
   } else {
     el.textContent = 'Live';
     el.classList.add('freshness--live');

@@ -156,6 +156,7 @@
             <strong>Data Notice:</strong> State coverage data is from 2024 (Feeding America Map the Meal Gap). National trend data extends through November 2025. SNAP program data is from USDA Food &amp; Nutrition Service (FY2025 data as of March 2026). School lunch free/reduced breakdown from FNS Child Nutrition Tables (FY2023). CDC PLACES self-reported SNAP data loads on demand via toggle.
         </div>
         <!-- Hero Section -->
+        <div id="dashboard-error" class="dashboard-error" role="alert" hidden></div>
         <section class="dashboard-hero" aria-label="SNAP and safety net key statistics">
             <h1 class="slds-text-heading_large">SNAP &amp; Safety Net</h1>
             <p class="dashboard-hero__subtitle">Are government programs reaching those who need them?</p>
@@ -178,6 +179,7 @@
                     <p class="dashboard-stat__label">Coverage Gap</p>
                 </div>
             </div>
+            <p class="dashboard-hero__cta">Closing SNAP coverage gaps in your community? <a href="/contact.html">Talk with us about enrollment workflows &rarr;</a></p>
         </section>
 
         <!-- Chart 1: SNAP Participation Trend -->
@@ -263,15 +265,15 @@
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-coverage-gap" class="dashboard-chart" role="img" aria-label="Sankey diagram showing how 44.2 million food-insecure Americans flow through safety net programs to coverage outcomes"></div>
+                        <div id="chart-coverage-gap" class="dashboard-chart" role="img" aria-label="Sankey diagram showing how 44.2 million food-insecure Americans (2022 vintage) flow through safety net programs to coverage outcomes"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Who Falls Through the Cracks?</h3>
                         <p class="dashboard-info__text">
-                            This flow diagram traces <strong>44.2 million food-insecure Americans</strong> from who they are (children, seniors, working adults), through which safety net program catches them, to whether their food needs are actually met.
+                            This flow diagram traces <strong>44.2 million food-insecure Americans (2022)</strong> from who they are (children, seniors, working adults), through which safety net program catches them, to whether their food needs are actually met. <em>(2024 national total is 47.9M; Sankey uses the 2022 vintage to match the demographic flow methodology.)</em>
                         </p>
                         <p class="dashboard-info__text">
-                            <strong>10.5 million people receive no assistance at all</strong> — and nearly all of them remain in crisis. Even among those enrolled in SNAP, only 60% have their food needs fully met. Working-age adults are the most underserved: 8 million have zero safety net coverage.
+                            <strong>10.5 million people (2022) receive no assistance at all</strong> — and nearly all of them remain in crisis. Even among those enrolled in SNAP, only 60% have their food needs fully met. Working-age adults are the most underserved: 8 million have zero safety net coverage.
                         </p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> USDA FNS, Feeding America, Census ACS (modeled estimates)</span>
@@ -279,7 +281,7 @@
                             <span class="meta-item"><strong>Read as</strong> Left → Middle → Right: who they are → what helps them → whether it's enough</span>
                         </div>
                         <div class="dashboard-info__insight">
-                            12.7 million Americans remain in food crisis — and 83% of them either have no program or rely solely on food banks.
+                            12.7 million Americans (2022) remain in food crisis — and 83% of them either have no program or rely solely on food banks.
                         </div>
                     </div>
                 </div>
@@ -411,7 +413,7 @@
                         <p class="dashboard-info__text">Food insecurity does not affect all communities equally. <strong>Black and Hispanic Americans face food insecurity at 2-3x the rate of White Americans</strong> — linked to systemic disparities in income, employment, and wealth.</p>
                         <p class="dashboard-info__text">This flow diagram traces how each demographic group moves through the safety net: from population share to food insecurity to coverage or gaps. For federal grants, equity analysis is not optional — it is required.</p>
                         <div class="dashboard-info__meta">
-                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Census ACS B03002 (race/ethnicity) + USDA ERS 2022 (insecurity rates by race)</div>
+                            <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Source</span> Census ACS B03002 (race/ethnicity) + USDA ERS 2022 (insecurity rates by race — race-disaggregated series discontinued 2024)</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> Annually via Census API</div>
                         </div>
                         <div id="demographic-flow-insight" class="dashboard-info__insight" aria-live="polite"></div>

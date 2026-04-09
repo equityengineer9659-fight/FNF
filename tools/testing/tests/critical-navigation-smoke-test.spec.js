@@ -118,7 +118,8 @@ test.describe('Critical Navigation Smoke Tests', () => {
 
     // Click a link — menu should close (JS handles this)
     await mobileLinks.nth(1).click();
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
+    await expect(page.locator('h1').first()).toBeVisible();
 
     console.log('✅ Mobile menu links PASSED');
   });

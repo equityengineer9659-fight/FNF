@@ -74,9 +74,9 @@ export async function initSentry() {
     });
 
     // Set user context (anonymous by default)
+    // ip_address intentionally omitted — sendDefaultPii: false above enforces no IP collection
     Sentry.setUser({
       id: 'anonymous',
-      ip_address: '{{auto}}', // Let Sentry auto-detect IP
     });
 
     // Set global tags

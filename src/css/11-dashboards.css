@@ -13,7 +13,7 @@
   top: 0;
   z-index: 9;
   background: linear-gradient(180deg, rgba(10, 25, 47, 0.95) 0%, rgba(10, 25, 47, 0.88) 100%);
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(0, 212, 255, 0.15);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
@@ -57,6 +57,12 @@
   font-weight: 600;
   border-bottom-color: var(--fnf-secondary, #00d4ff);
   background: rgba(0, 212, 255, 0.08);
+}
+
+.dashboard-tabs__tab:focus-visible {
+  outline: 2px solid var(--fnf-secondary, #00d4ff);
+  outline-offset: 2px;
+  color: #fff;
 }
 
 /* Mobile: horizontal scroll */
@@ -130,9 +136,7 @@
 
 .dashboard-stat {
   background: var(--glass-bg-strong, rgba(255,255,255,0.1));
-  backdrop-filter: var(--glass-blur, blur(10px));
-  /* stylelint-disable-next-line property-no-vendor-prefix -- Safari requires -webkit prefix for backdrop-filter */
-  -webkit-backdrop-filter: var(--glass-blur, blur(10px));
+  -webkit-backdrop-filter:var(--glass-blur, blur(10px));backdrop-filter: var(--glass-blur, blur(10px));
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: var(--fnf-border-radius-medium, 0.5rem);
   padding: 1.25rem 1.75rem;
@@ -170,9 +174,7 @@
 /* Dashboard Cards — glassmorphism */
 .dashboard-card {
   background: var(--glass-bg-light, rgba(255,255,255,0.06));
-  backdrop-filter: var(--glass-blur, blur(10px));
-  /* stylelint-disable-next-line property-no-vendor-prefix -- Safari requires -webkit prefix for backdrop-filter */
-  -webkit-backdrop-filter: var(--glass-blur, blur(10px));
+  -webkit-backdrop-filter:var(--glass-blur, blur(10px));backdrop-filter: var(--glass-blur, blur(10px));
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--fnf-border-radius-medium, 0.5rem);
   padding: 1.5rem;
@@ -259,6 +261,13 @@
   color: #000;
 }
 
+.dashboard-back-btn:focus-visible {
+  outline: 2px solid var(--fnf-secondary, #00d4ff);
+  outline-offset: 2px;
+  background: var(--fnf-secondary, #00d4ff);
+  color: #000;
+}
+
 /* Metric Selector */
 .dashboard-select {
   background: rgba(255,255,255,0.08);
@@ -289,7 +298,7 @@
 .dashboard-search {
   text-align: center;
   background: var(--glass-bg-strong, rgba(45, 55, 65, 0.6));
-  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter: blur(16px);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -712,7 +721,7 @@
 
 .dashboard-metric-btn {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter: blur(8px);
   color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 2rem;
@@ -811,6 +820,29 @@
   color: rgba(255, 255, 255, 0.6);
   text-align: center;
   line-height: 1.5;
+}
+
+/* Above-fold CTA inside hero (P1-24) */
+.dashboard-hero__cta {
+  max-width: 720px;
+  margin: 2rem auto 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.dashboard-hero__cta a {
+  color: #4ecdc4;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.dashboard-hero__cta a:hover,
+.dashboard-hero__cta a:focus-visible {
+  color: #fff;
 }
 
 /* How Organizations Use These Insights panel */

@@ -734,7 +734,19 @@ function renderScatter(data, mode, source) {
   const insightEl = document.getElementById('scatter-insight');
   if (insightEl) {
     const strength = Math.abs(reg.r) >= 0.7 ? 'Strong' : Math.abs(reg.r) >= 0.4 ? 'Moderate' : 'Weak';
-    const label = isChild ? 'child poverty is a leading predictor of child food insecurity' : 'poverty is the #1 predictor of food insecurity';
+    // P1-04: derive the qualitative label from the live r-value rather than asserting
+    // "#1 predictor" unconditionally. Superlative only used when correlation is strong.
+    const isStrong = Math.abs(reg.r) >= 0.7;
+    const subject = isChild ? 'child poverty' : 'poverty';
+    const object = isChild ? 'child food insecurity' : 'food insecurity';
+    let label;
+    if (isStrong) {
+      label = `${subject} is a leading predictor of ${object}`;
+    } else if (Math.abs(reg.r) >= 0.4) {
+      label = `${subject} is a meaningful contributor to ${object}, alongside other drivers`;
+    } else {
+      label = `${subject} shows only a weak statistical link to ${object} in the current data`;
+    }
     insightEl.textContent = `${strength} positive correlation (r \u2248 ${reg.r.toFixed(2)}) \u2014 ${label}. (${srcTag})`;
   }
 }
@@ -905,7 +917,7 @@ function renderSnap(data) {
       }
     },
     legend: {
-      data: ['Food Insecurity Rate (2024)', 'SNAP Coverage (FY2024)'],
+      data: ['Food Insecurity Rate (2024)', 'SNAP Coverage (FA 2023 est.)'],
       textStyle: { color: COLORS.text },
       top: 5
     },
@@ -937,7 +949,7 @@ function renderSnap(data) {
         animationDuration: 1500
       },
       {
-        name: 'SNAP Coverage (FY2024)',
+        name: 'SNAP Coverage (FA 2023 est.)',
         type: 'bar',
         data: snapCoverageRatio.reverse(),
         barWidth: '35%',
@@ -1054,7 +1066,7 @@ function renderFoodPrices(blsData) {
 const SDOH_METRICS = [
   { key: 'uninsuredPct', label: 'Uninsured Rate', axis: 'Uninsured (%)', source: 'census', insight: 'Lack of health insurance is associated with higher food insecurity — medical costs may crowd out food budgets.' },
   { key: 'collegePct', label: 'College Education', axis: 'Bachelor\'s+ (%)', source: 'census', insight: 'Higher education correlates with lower food insecurity — the association likely reflects differences in income and employment stability.', invert: true },
-  { key: 'unemploymentPct', label: 'Unemployment', axis: 'Unemployment Rate (%)', source: 'census', insight: 'Job loss is the strongest predictor of food insecurity — unemployed workers are 3x more likely to be food insecure than employed peers.' },
+  { key: 'unemploymentPct', label: 'Unemployment', axis: 'Unemployment Rate (%)', source: 'census', insight: 'Unemployment is strongly associated with food insecurity — states with higher joblessness consistently show elevated food insecurity rates in the scatter above.' },
   { key: 'noVehiclePct', label: 'No Vehicle', axis: 'Workers Without Vehicle (%)', source: 'census', insight: 'Transportation barriers are linked to reduced access to affordable food — workers without vehicles face both job and food access challenges.' },
   { key: 'housingBurdenPct', label: 'Housing Burden', axis: 'Severe Housing Cost Burden (%)', source: 'census', insight: 'When rent exceeds 50% of income, food budgets are often the first to shrink — housing cost is closely linked to hunger.' },
   { key: 'obesity', label: 'Adult Obesity (CDC)', axis: 'Obesity Prevalence (%)', source: 'places', insight: 'States with higher food insecurity tend to have higher obesity rates — this may reflect limited access to nutritious options when budgets are tight.' },
@@ -1701,6 +1713,11 @@ async function init() {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
     });
+    const errorEl = document.getElementById('dashboard-error');
+    if (errorEl) {
+      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
+      errorEl.hidden = false;
+    }
   }
 }
 
