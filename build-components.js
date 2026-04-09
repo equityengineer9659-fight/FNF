@@ -277,6 +277,10 @@ function buildComponents() {
   });
 
   // Dashboard pages under dashboards/
+  // P2-30: dashboards/chart-preview.html is INTENTIONALLY omitted — it is a
+  // developer-only harness used to preview individual ECharts configurations.
+  // Vite builds it and pa11y excludes it, but nav/footer/script injection are
+  // intentionally stale (it has no production nav).
   const dashboardPages = ['executive-summary', 'food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks', 'nonprofit-directory', 'nonprofit-profile'];
 
   dashboardPages.forEach(page => {

@@ -122,6 +122,23 @@ export default defineConfig({
         changeOrigin: true,
         secure: true
       },
+      // P2-31: Form endpoints (contact, newsletter, CSRF). Previously missing
+      // so any local form interaction 404'd against the Vite dev server.
+      '/api/csrf-token.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
+      '/api/contact.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
+      '/api/newsletter.php': {
+        target: 'https://food-n-force.com',
+        changeOrigin: true,
+        secure: true
+      },
       // Nonprofit proxies — rewrite to ProPublica API directly
       '/api/nonprofit-search.php': {
         target: 'https://projects.propublica.org',

@@ -26,6 +26,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          # P2-32 NOTE: actions/setup-node's npm cache requires a checked-in
+          # lockfile to hash. package-lock.json is gitignored in this repo
+          # (see .gitignore), so `cache: 'npm'` fails with "Dependencies
+          # lock file is not found". Leaving cache disabled until the
+          # lockfile policy is revisited — this restores the pre-P2-32
+          # behaviour so CI unblocks.
           cache: ''
 
       - name: Install Dependencies
@@ -73,6 +79,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: quality-checks
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # P2-33: Serialize deploys so two rapid merges to master can't race
+    # rsync + scp against SiteGround's public_html/. `cancel-in-progress: false`
+    # preserves in-flight deploys — new pushes wait in line.
+    concurrency:
+      group: deploy-siteground
+      cancel-in-progress: false
 
     steps:
       - name: Download Build Artifact

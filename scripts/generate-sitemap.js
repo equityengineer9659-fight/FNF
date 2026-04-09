@@ -32,6 +32,8 @@ const blogArticles = glob.sync('*.html', { cwd: join(__dirname, '..', 'blog') })
   .map(f => ({ path: `blog/${f}`, priority: '0.7', changefreq: 'monthly' }));
 
 // Dashboard pages (static — different priorities)
+// P2-29: nonprofit-profile.html is intentionally excluded — it renders noindex
+// (dynamic, loads a single org from ProPublica by query param). Do not add it.
 const dashboardPages = [
   { path: 'dashboards/executive-summary.html', priority: '0.9', changefreq: 'monthly' },
   { path: 'dashboards/food-insecurity.html', priority: '0.8', changefreq: 'monthly' },
