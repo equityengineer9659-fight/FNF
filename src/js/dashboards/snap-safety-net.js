@@ -120,6 +120,13 @@ function renderSnapTrend(trendData, blsData, snapNational) {
           [{ xAxis: '2023-03', itemStyle: { color: 'rgba(251,191,36,0.12)' }, label: { show: true, formatter: 'Post-Emergency', color: COLORS.accent, fontSize: 9, position: 'insideTopLeft', padding: [4, 0, 0, 8] } }, { xAxis: '2025-12' }]
         ]
       },
+      markLine: {
+        silent: true,
+        symbol: 'none',
+        lineStyle: { type: 'dashed', color: COLORS.textMuted, width: 1, opacity: 0.6 },
+        label: { fontSize: 9, color: COLORS.textMuted, position: 'insideEndTop', rotate: 45, overflow: 'truncate', width: 120 },
+        data: trendData.events?.map(e => ({ xAxis: e.date, label: { formatter: () => e.label } })) || []
+      },
       animationDuration: 2000
     }, ...cpiSeries]
   }, true);
