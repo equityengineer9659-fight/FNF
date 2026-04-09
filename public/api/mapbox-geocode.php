@@ -66,6 +66,8 @@ if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
     $data = json_decode($cached, true);
     if ($data) {
         $data['_cached'] = true;
+        // P2-41: re-attach current query to response (query is never stored in cache)
+        $data['query'] = $query;
         echo json_encode($data);
         exit;
     }
@@ -97,6 +99,7 @@ if ($response === false) {
         if ($data) {
             $data['_cached'] = true;
             $data['_stale'] = true;
+            $data['query'] = $query;
             echo json_encode($data);
             exit;
         }
@@ -127,16 +130,17 @@ $results = array_map(function($f) {
     ];
 }, $raw['features']);
 
-$result = [
+// P2-41: Write cache WITHOUT the raw query string (privacy — addresses can be PII)
+$cachedPayload = [
     'source' => 'Mapbox Geocoding API v6',
     'fetchedAt' => date('c'),
-    'query' => $query,
     'results' => $results
 ];
-
-// Write cache
-file_put_contents($cacheFile, json_encode($result));
+file_put_contents($cacheFile, json_encode($cachedPayload));
 rateLimitIncrement('mapbox');
 
+// Response (not cached) still echoes the query for client round-trip convenience
+$result = $cachedPayload;
+$result['query'] = $query;
 $result['_cached'] = false;
 echo json_encode($result);
