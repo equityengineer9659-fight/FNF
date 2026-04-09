@@ -504,6 +504,16 @@ describe('executive-summary', () => {
       }
     });
 
+    // P2-18: Playwright smoke matrix must include nonprofit-profile
+    it('Playwright smoke matrix covers dashboards/nonprofit-profile.html (P2-18)', () => {
+      const spec = readFileSync(
+        resolve(__dirname, '../../../tools/testing/tests/dashboard-smoke.spec.js'),
+        'utf-8'
+      );
+      expect(spec).toMatch(/\/dashboards\/nonprofit-profile\.html/);
+      expect(spec).toMatch(/name:\s*'Nonprofit Profile'/);
+    });
+
     it('all dashboard HTML files should have consistent author meta', () => {
       const dashboardDir = resolve(__dirname, '../../../dashboards');
       const files = [
