@@ -188,18 +188,23 @@ function renderTile(parent, defs, x, y, w, h, leaf, normFn, tooltipFn, onClick, 
   grad.append('stop').attr('offset', '0%').attr('stop-color', topColor);
   grad.append('stop').attr('offset', '100%').attr('stop-color', botColor);
 
-  const rect = tg.append('rect')
-    .attr('x', x).attr('y', y).attr('width', w).attr('height', h)
-    .attr('fill', `url(#${gradId})`)
-    .attr('stroke', THEME.tileStroke).attr('stroke-width', THEME.tileStrokeWidth)
-    .attr('rx', THEME.tileRadius)
-    .style('cursor', onClick ? 'pointer' : 'default')
-    .style('transition', 'filter 0.15s')
+  // P2-28: Apply hover `filter: brightness + drop-shadow` to the parent <g>
+  // rather than the <rect>. Safari has compositing quirks when a filter is
+  // applied directly to a <rect>; applying to the group is well-supported
+  // and also gives the text nodes the same hover feedback.
+  tg.style('transition', 'filter 0.15s')
     .on('mousemove', (e) => showTooltip(e, tooltipFn(leaf)))
     .on('mouseleave', function () { hideTooltip(); select(this).style('filter', null); })
     .on('mouseenter', function () {
       select(this).style('filter', `brightness(${THEME.hoverBrightness}) drop-shadow(${THEME.hoverShadow})`);
     });
+
+  const rect = tg.append('rect')
+    .attr('x', x).attr('y', y).attr('width', w).attr('height', h)
+    .attr('fill', `url(#${gradId})`)
+    .attr('stroke', THEME.tileStroke).attr('stroke-width', THEME.tileStrokeWidth)
+    .attr('rx', THEME.tileRadius)
+    .style('cursor', onClick ? 'pointer' : 'default');
 
   if (onClick) rect.on('click', (e) => { e.stopPropagation(); onClick(); });
 
@@ -225,10 +230,13 @@ function renderTile(parent, defs, x, y, w, h, leaf, normFn, tooltipFn, onClick, 
 
   const hasRoom2 = h > (isZoomed ? 36 : 28);
 
+  // P2-27: dominant-baseline="central" is not honoured by Firefox <93;
+  // dy="0.35em" provides an equivalent centred baseline as a graceful fallback.
   if (w > 18 && h > 12) {
     tg.append('text')
       .attr('x', x + w / 2).attr('y', y + h / 2 - (hasRoom2 ? (isZoomed ? 7 : 5) : 0))
-      .text(displayName).attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+      .text(displayName).attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central').attr('dy', '0.35em')
       .attr('fill', textCol).attr('font-size', nameSize + 'px').attr('font-weight', nameWeight)
       .attr('letter-spacing', '-0.02em')
       .style('pointer-events', 'none').style('text-shadow', shadow);
@@ -238,7 +246,8 @@ function renderTile(parent, defs, x, y, w, h, leaf, normFn, tooltipFn, onClick, 
     tg.append('text')
       .attr('x', x + w / 2).attr('y', y + h / 2 + (isZoomed ? 9 : 7))
       .text(leaf.data.label2 || fmtNum(leaf.value))
-      .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central').attr('dy', '0.35em')
       .attr('fill', subCol).attr('font-size', valSize + 'px').attr('font-weight', valWeight)
       .style('pointer-events', 'none').style('text-shadow', shadow);
   }
@@ -247,7 +256,8 @@ function renderTile(parent, defs, x, y, w, h, leaf, normFn, tooltipFn, onClick, 
     tg.append('text')
       .attr('x', x + w / 2).attr('y', y + h / 2 + 24)
       .text(leaf.data.label3)
-      .attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central').attr('dy', '0.35em')
       .attr('fill', subCol).attr('font-size', '10px')
       .style('pointer-events', 'none').style('text-shadow', shadow);
   }
