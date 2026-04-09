@@ -6,7 +6,7 @@
 
 import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
-  fmtNum, animateCounters, createChart, linearRegression,
+  fmtNum, animateCounters, createChart, getOrCreateChart, linearRegression,
   initScrollReveal, handleResize, updateFreshness,
   REGIONS, REGION_COLORS, getRegion, addExportButton,
   initStateSelector, US_STATES
@@ -21,14 +21,6 @@ const PAL = MAP_PALETTES.access;
 
 // Module-level cache: restored when back button resets to national desert view
 let _lowAccessDefaultInsight = '';
-
-/** Get existing chart instance or create new one (safe for re-renders) */
-function getOrCreateChart(id) {
-  const el = document.getElementById(id);
-  if (!el) return null;
-  return echarts.getInstanceByDom(el) || createChart(id);
-}
-
 
 // -- Chart 1: Food Desert Map (choropleth) with County Drill-Down --
 function renderDesertMap(geoJSON, states, accessData) {

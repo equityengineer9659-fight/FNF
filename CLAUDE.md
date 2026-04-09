@@ -249,6 +249,11 @@ Custom agents in `.claude/agents/` tailored to this project:
 - CSSOM property assignment (`element.style`) is CSP-compliant — only HTML `style=""` attributes and `<style>` tags are blocked
 - SLDS CDN has SRI hash (auto-added by `build-components.js`)
 
+### Browser Compatibility
+- **Minimum supported**: Safari 15+, Firefox 87+, Chrome 90+ (matches the `AbortController` signal pattern used across `src/js/effects/*` and `main.js`)
+- `backdrop-filter` always shipped with the `-webkit-backdrop-filter` prefix (glassmorphism protected rule)
+- No CSS nesting, `:has()`, container queries, or `color-mix()` until all three targets support them
+
 ## Configuration Files
 - `tools/testing/html-validate.json` — HTML validation rules
 - `tools/testing/lighthouserc.json` — Performance audit config

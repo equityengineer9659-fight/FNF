@@ -40,6 +40,10 @@ const VALUE_STOPS = [
 ];
 
 // ── Region accents — desaturated for secondary role ──
+// P2-25: This is intentionally a DIFFERENT palette from the bright
+// REGION_COLORS exported by shared/dashboard-utils.js. The D3 heatmap
+// tiles already carry a saturated 7-stop value gradient; using the bright
+// region swatches here would clash with the primary encoding. Keep both.
 const HEATMAP_REGION_COLORS = {
   Northeast: '#93B8DE',
   Midwest:   '#D1B862',
