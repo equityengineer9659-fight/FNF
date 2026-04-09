@@ -15,8 +15,12 @@
   # Cache Control
   Cache-Control: public, max-age=31536000, immutable
 
-/*.html
-  Cache-Control: public, max-age=3600, must-revalidate
+# HTML caching is intentionally NOT declared here.
+# public/.htaccess is the authoritative source for HTML cache rules
+# (HTML must be no-cache — see memory: project_deployment_caching.md).
+# A /*.html rule here would activate on any CDN (Cloudflare) layer and
+# serve stale HTML against hashed asset URLs, breaking the site.
+# Audit 2026-04-09, P0-2.
 
 /*.css
   Cache-Control: public, max-age=31536000, immutable
