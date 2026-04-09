@@ -876,6 +876,11 @@ async function init() {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
     });
+    const errorEl = document.getElementById('dashboard-error');
+    if (errorEl) {
+      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
+      errorEl.hidden = false;
+    }
   }
 }
 
