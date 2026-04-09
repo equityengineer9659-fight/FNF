@@ -165,6 +165,31 @@
   line-height: 1.6;
 }
 
+/* P2-42: Privacy disclosure line in newsletter modal */
+.fnf-privacy-note {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin: 1rem 0 0;
+  text-align: center;
+}
+
+.fnf-privacy-link {
+  color: #00d4ff;
+  text-decoration: underline;
+}
+
+.fnf-privacy-link:hover,
+.fnf-privacy-link:focus {
+  opacity: 0.85;
+}
+
+.fnf-privacy-link:focus-visible {
+  outline: 2px solid #00d4ff;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
 .fnf-email-form {
   display: flex;
   gap: 1rem;
