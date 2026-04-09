@@ -652,5 +652,59 @@ describe('food-insecurity', () => {
       // Should use a named constant, not bare hex
       expect(tbSection).not.toMatch(/color.*['"]#f59e0b['"]/);
     });
+
+    // P2-04: Triple Burden tooltip must explain the /300 denominator
+    it('Triple Burden tooltip explains the 0-300 composite scale', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
+      const tbSection = jsSource.slice(
+        jsSource.indexOf('function renderTripleBurden'),
+        jsSource.indexOf('function renderTripleBurden') + 4000
+      );
+      expect(tbSection).toMatch(/\/300/);
+      // Matches either literal en-dash, the \u2013 JS escape, or ASCII hyphen
+      expect(tbSection).toMatch(/0(?:\\u2013|[\u2013-])100/);
+      expect(tbSection).toMatch(/composite/i);
+    });
+  });
+
+  // P2-01: Known BLS data gaps must be documented in the static JSON
+  describe('BLS food CPI known gaps metadata', () => {
+    it('bls-food-cpi.json documents the 2025-10 shutdown gap', () => {
+      const bls = JSON.parse(
+        readFileSync(resolve(__dirname, '../../../public/data/bls-food-cpi.json'), 'utf-8')
+      );
+      expect(Array.isArray(bls.knownGaps)).toBe(true);
+      const gap = bls.knownGaps.find(g => g.date === '2025-10');
+      expect(gap).toBeTruthy();
+      expect(gap.reason).toMatch(/appropriations|shutdown/i);
+      expect(gap.affectedSeries).toContain('CUUR0000SAF1');
+      // Null entries in each series should still be present (renderers filter them)
+      for (const series of bls.series) {
+        const oct2025 = series.data.find(d => d.date === '2025-10');
+        expect(oct2025).toBeTruthy();
+        expect(oct2025.value).toBeNull();
+      }
+    });
+  });
+
+  // P2-03: Child rate multiplier documentation must match PHP implementation (1.4x)
+  describe('Child rate multiplier documentation', () => {
+    it('food-insecurity.html documents the 1.4x multiplier (matches dashboard-census.php)', () => {
+      const html = readFileSync(
+        resolve(__dirname, '../../../dashboards/food-insecurity.html'),
+        'utf-8'
+      );
+      // Methodology card must reference the 1.4x multiplier, not the stale 1.3-1.6x range
+      expect(html).toMatch(/1\.4x multiplier/);
+      expect(html).not.toMatch(/1\.3-1\.6x multiplier/);
+    });
+
+    it('dashboard-census.php still implements fiRate * 1.4 (must stay in sync with HTML)', () => {
+      const php = readFileSync(
+        resolve(__dirname, '../../../public/api/dashboard-census.php'),
+        'utf-8'
+      );
+      expect(php).toMatch(/fiRate \* 1\.4/);
+    });
   });
 });

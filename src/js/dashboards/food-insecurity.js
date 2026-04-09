@@ -1495,7 +1495,8 @@ function renderTripleBurden(data, accessData) {
           + `<span style="color:${COLORS.accent}">■</span> Food Insecurity: ${s.rate}% (score: ${s.fiScore.toFixed(0)})<br/>`
           + `<span style="color:${LOW_ACCESS_COLOR}">■</span> Low Access: ${s.accessPct}% (score: ${s.accessScore.toFixed(0)})<br/>`
           + `<span style="color:${COLORS.secondary}">■</span> SNAP Gap: ${100 - Math.min(s.coverage, 100)}% uncovered (score: ${s.coverageGapScore.toFixed(0)})<br/>`
-          + `<strong>Composite: ${s.total.toFixed(0)}/300</strong>`;
+          + `<strong>Composite: ${s.total.toFixed(0)}/300</strong>`
+          + `<br/><span style="color:${COLORS.textMuted};font-size:11px">Scale: three 0\u2013100 component scores, summed for a 0\u2013300 composite.</span>`;
       }
     },
     legend: {
