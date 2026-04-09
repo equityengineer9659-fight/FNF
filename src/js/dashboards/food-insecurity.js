@@ -14,6 +14,11 @@ import {
 const PAL = MAP_PALETTES.insecurity;
 const LOW_ACCESS_COLOR = '#f59e0b'; // amber — used in Triple Burden + State Deep-Dive
 
+// P2-24: Module-scope cache for state food-insecurity data. Previously lived on
+// _stateData as a cross-function data bus within this module — lifted
+// to module scope so it can't leak to other scripts or be clobbered globally.
+let _stateData = null;
+
 // -- Map Chart with County Drill-Down --
 function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
   const chart = createChart('chart-map');
@@ -771,7 +776,7 @@ function initScatterToggle() {
     btn.classList.add('dashboard-metric-btn--active');
     btn.setAttribute('aria-pressed', 'true');
 
-    const currentData = window._fnfStateData;
+    const currentData = _stateData;
     if (currentData) renderScatter(currentData, btn.dataset.scatterMode);
   });
 }
@@ -1223,7 +1228,7 @@ async function fetchSDOHData() {
     if (sdoh.error || !sdoh.states) return;
 
     sdohData = sdoh;
-    const fiData = window._fnfStateData;
+    const fiData = _stateData;
     if (!fiData || !fiData.states) return;
 
     renderSDOH(sdoh, fiData, SDOH_METRICS[0].key);
@@ -1256,7 +1261,7 @@ async function fetchCDCPlacesData() {
 
     // Wait for SDOH data — PLACES merges into it
     if (!sdohData || !sdohData.states) return;
-    const fiData = window._fnfStateData;
+    const fiData = _stateData;
     if (!fiData || !fiData.states) return;
 
     // Merge CDC fields into existing SDOH state records
@@ -1631,7 +1636,7 @@ async function init() {
     const [data, geoJSON] = await Promise.all([dataRes.json(), geoRes.json()]);
 
     // Store for live Census upgrade
-    window._fnfStateData = data;
+    _stateData = data;
 
     // Sync hero stat data-targets from live JSON
     const nat = data.national;
@@ -1765,7 +1770,7 @@ async function _trySAIPE() {
     saipeData.records.forEach(r => { saipeByFips[r.fips] = r; });
 
     // Merge SAIPE poverty data into existing state records
-    const data = window._fnfStateData;
+    const data = _stateData;
     if (!data || !data.states) return false;
 
     data.states = data.states.map(s => {
@@ -1799,7 +1804,7 @@ async function _tryACSFallback() {
     censusData.records.forEach(r => { censusByFips[r.fips] = r; });
 
     // Merge fresher poverty data into existing state records
-    const data = window._fnfStateData;
+    const data = _stateData;
     if (!data || !data.states) return;
 
     data.states = data.states.map(s => {

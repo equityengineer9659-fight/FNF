@@ -41,7 +41,9 @@ class ParticleSystem {
     // Mouse interaction
     this.mouse = { x: null, y: null, radius: this.config.mouseRadius };
 
-    // AbortController for event listener cleanup
+    // AbortController for event listener cleanup.
+    // P2-26: `addEventListener(..., { signal })` requires Safari 15+ / Firefox 87+
+    // / Chrome 90+. See CLAUDE.md "Browser Compatibility" for the supported range.
     this.abortController = new AbortController();
 
     this.init();

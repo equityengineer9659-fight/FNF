@@ -393,6 +393,50 @@ describe('dashboard-utils', () => {
     });
   });
 
+  // P2-23: getOrCreateChart must be exported from shared utils (not food-access.js)
+  describe('getOrCreateChart shared export (P2-23)', () => {
+    it('dashboard-utils.js exports getOrCreateChart', () => {
+      const src = readFileSync(resolve(__dirname, 'dashboard-utils.js'), 'utf-8');
+      expect(src).toMatch(/export function getOrCreateChart/);
+    });
+
+    it('food-access.js imports getOrCreateChart from shared utils (no local copy)', () => {
+      const src = readFileSync(
+        resolve(__dirname, '../food-access.js'), 'utf-8'
+      );
+      expect(src).toMatch(/getOrCreateChart/);
+      expect(src).not.toMatch(/function getOrCreateChart\s*\(/);
+    });
+  });
+
+  // P2-24: window._fnfStateData must be gone from food-insecurity.js
+  describe('food-insecurity.js module-scope cache (P2-24)', () => {
+    it('no window._fnfStateData references', () => {
+      const src = readFileSync(
+        resolve(__dirname, '../food-insecurity.js'), 'utf-8'
+      );
+      expect(src).not.toMatch(/window\._fnfStateData/);
+      expect(src).toMatch(/let _stateData\s*=\s*null/);
+    });
+  });
+
+  // P2-25: Both region color palettes must exist and be documented
+  describe('REGION_COLORS vs HEATMAP_REGION_COLORS docs (P2-25)', () => {
+    it('dashboard-utils.js documents the intentional palette split', () => {
+      const src = readFileSync(resolve(__dirname, 'dashboard-utils.js'), 'utf-8');
+      const idx = src.indexOf('export const REGION_COLORS');
+      const context = src.slice(Math.max(0, idx - 500), idx);
+      expect(context).toMatch(/HEATMAP_REGION_COLORS/);
+    });
+
+    it('d3-heatmap.js documents the intentional palette split', () => {
+      const src = readFileSync(resolve(__dirname, 'd3-heatmap.js'), 'utf-8');
+      const idx = src.indexOf('const HEATMAP_REGION_COLORS');
+      const context = src.slice(Math.max(0, idx - 500), idx);
+      expect(context).toMatch(/REGION_COLORS/);
+    });
+  });
+
   // ── ECharts aria enabled on all charts ──
   describe('createChart aria support', () => {
     it('should call setOption with aria enabled immediately after init', () => {

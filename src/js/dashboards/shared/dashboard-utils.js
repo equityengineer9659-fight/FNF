@@ -81,6 +81,11 @@ export const REGIONS = {
   West: ['Alaska','Arizona','California','Colorado','Hawaii','Idaho','Montana','Nevada','New Mexico','Oregon','Utah','Washington','Wyoming']
 };
 
+// P2-25: Bright saturated region palette — used for ECharts legends, scatter plots,
+// and region chips. There is a SECOND, DESATURATED palette exported as
+// `HEATMAP_REGION_COLORS` from shared/d3-heatmap.js specifically for the D3
+// heatmap tiles, where the brighter swatches here would clash with the 7-stop
+// value gradient. Do NOT consolidate the two without also re-tuning the heatmap.
 export const REGION_COLORS = {
   Northeast: '#60a5fa',
   Midwest: '#f59e0b',
@@ -178,6 +183,14 @@ export function createChart(containerId) {
   chart.setOption({ aria: { enabled: true, decal: { show: false } } });
   charts.push(chart);
   return chart;
+}
+
+// -- Get existing chart instance or create a new one (safe for re-renders) --
+// P2-23: Lifted from food-access.js for shared use across dashboards.
+export function getOrCreateChart(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return null;
+  return echarts.getInstanceByDom(el) || createChart(containerId);
 }
 
 // -- Dispose all chart instances (call on page unload to free memory) --
