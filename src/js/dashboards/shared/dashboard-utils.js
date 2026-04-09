@@ -161,7 +161,8 @@ export function animateCounters() {
         requestAnimationFrame(tick);
       } else {
         el.textContent = prefix + target + suffix;
-        el.setAttribute('role', 'status');
+        // P2-09: role="status" is now static in HTML; only flip aria-live back on
+        // so the final value announces without spamming the screen reader every tick.
         el.setAttribute('aria-live', 'polite');
       }
     }

@@ -1,4 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Mock ECharts before importing dashboard-utils (it imports echarts at top level)
 vi.mock('echarts/core', () => ({
@@ -335,6 +340,56 @@ describe('dashboard-utils', () => {
 
     it('should not throw if charts array is empty', () => {
       expect(() => disposeAllCharts()).not.toThrow();
+    });
+  });
+
+  // P2-09: animateCounters must not assign role dynamically
+  describe('animateCounters static role="status" (P2-09)', () => {
+    it('source does not call setAttribute(\'role\', \'status\') anywhere', () => {
+      const src = readFileSync(resolve(__dirname, 'dashboard-utils.js'), 'utf-8');
+      expect(src).not.toMatch(/setAttribute\(\s*['"]role['"]\s*,\s*['"]status['"]\s*\)/);
+    });
+  });
+
+  // P2-06/09: static ARIA + heading semantics across dashboard HTML
+  describe('Dashboard HTML static ARIA (P2-06, P2-09)', () => {
+    const dashboards = [
+      'executive-summary', 'food-access', 'food-banks', 'food-insecurity',
+      'food-prices', 'nonprofit-directory', 'snap-safety-net'
+    ];
+
+    dashboards.forEach(name => {
+      it(`${name}.html: dashboard-insights__card-title uses <h3> (P2-06)`, () => {
+        const html = readFileSync(
+          resolve(__dirname, `../../../../dashboards/${name}.html`),
+          'utf-8'
+        );
+        expect(html).not.toMatch(/<div class="dashboard-insights__card-title"/);
+        expect(html).toMatch(/<h3 class="dashboard-insights__card-title"/);
+      });
+
+      it(`${name}.html: dashboard-stat__number has static role="status" (P2-09)`, () => {
+        const html = readFileSync(
+          resolve(__dirname, `../../../../dashboards/${name}.html`),
+          'utf-8'
+        );
+        const numberSpans = html.match(/<span [^>]*class="dashboard-stat__number"[^>]*>/g) || [];
+        expect(numberSpans.length).toBeGreaterThan(0);
+        numberSpans.forEach(span => {
+          expect(span).toMatch(/role="status"/);
+        });
+      });
+    });
+  });
+
+  // P2-08: .fnf-nav__link must have :focus-visible outline for keyboard users
+  describe('Navigation focus-visible (P2-08)', () => {
+    it('03-navigation.css defines .fnf-nav__link:focus-visible outline', () => {
+      const css = readFileSync(
+        resolve(__dirname, '../../../css/03-navigation.css'),
+        'utf-8'
+      );
+      expect(css).toMatch(/\.fnf-nav__link:focus-visible\s*\{[^}]*outline:/);
     });
   });
 
