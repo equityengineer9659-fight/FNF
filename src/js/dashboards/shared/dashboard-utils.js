@@ -7,7 +7,7 @@
 import * as echarts from 'echarts/core';
 import {
   MapChart, BarChart, LineChart, ScatterChart,
-  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart, GaugeChart, ThemeRiverChart
+  PieChart, RadarChart, SankeyChart, SunburstChart, GaugeChart, ThemeRiverChart
 } from 'echarts/charts';
 import {
   TitleComponent,
@@ -27,7 +27,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 // Register all needed components
 echarts.use([
   MapChart, BarChart, LineChart, ScatterChart,
-  PieChart, RadarChart, SankeyChart, SunburstChart, TreemapChart, GaugeChart, ThemeRiverChart,
+  PieChart, RadarChart, SankeyChart, SunburstChart, GaugeChart, ThemeRiverChart,
   TitleComponent, TooltipComponent, VisualMapComponent,
   GeoComponent, GridComponent, LegendComponent, DataZoomComponent,
   RadarComponent, MarkLineComponent, MarkAreaComponent, SingleAxisComponent,
