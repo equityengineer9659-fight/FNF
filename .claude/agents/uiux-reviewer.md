@@ -1,7 +1,7 @@
 ---
 name: uiux-reviewer
 description: Review UI/UX quality across pages — visual consistency, responsive layout, glassmorphism effects, spacing, typography, and user flow. Use after visual changes or new page additions to catch design regressions.
-tools: Read, Grep, Glob, Bash, mcp__playwright__*, mcp__lighthouse__*
+tools: Read, Grep, Glob, Bash, Skill, mcp__playwright__*, mcp__lighthouse__*
 model: sonnet
 ---
 

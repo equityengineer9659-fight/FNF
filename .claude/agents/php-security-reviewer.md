@@ -1,7 +1,7 @@
 ---
 name: php-security-reviewer
 description: Review PHP API endpoints for security vulnerabilities — injection, CSRF bypass, input validation gaps, and email header injection. Use when PHP files in public/api/ are modified.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, LSP
 model: sonnet
 ---
 

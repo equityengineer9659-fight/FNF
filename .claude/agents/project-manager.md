@@ -1,7 +1,7 @@
 ---
 name: project-manager
 description: Project management guidance for sprint planning, story prioritization, dependency mapping, status reporting, and Jira workflow coordination. Use when planning sprints, reviewing backlog health, assessing story readiness, or generating status reports.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, Skill
 model: sonnet
 ---
 

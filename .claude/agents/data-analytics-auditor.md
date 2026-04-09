@@ -1,7 +1,7 @@
 ---
 name: data-analytics-auditor
 description: Audit dashboard data pipelines, JSON datasets, PHP API proxies, and chart calculations for accuracy, freshness, and consistency. Use proactively after data files change or when dashboard correctness is questioned.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, WebFetch, Skill
 model: sonnet
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: technical-architect
 description: Project-specific architectural guidance for significant changes — enforces SLDS CDN constraints, SiteGround hosting limits, glassmorphism protection rules, and 4-phase plan alignment. Use before starting any non-trivial structural change.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, WebFetch
 model: sonnet
 ---
 

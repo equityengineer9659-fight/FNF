@@ -1,7 +1,7 @@
 ---
 name: data-scientist
 description: Analyze dashboard datasets for trends, anomalies, correlations, and improvement opportunities. Use proactively after data updates or when seeking to enhance dashboard insights, visualizations, or data storytelling.
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, Skill
 model: sonnet
 ---
 
