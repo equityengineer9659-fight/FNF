@@ -139,10 +139,17 @@ jobs:
 
       - name: Post-Deployment Health Check
         run: |
-          sleep 15
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://food-n-force.com)
-          if [ "$STATUS" -eq 200 ]; then
-            echo "✅ Deployment successful — site is live"
-          else
-            echo "⚠️ Site returned HTTP $STATUS — please verify manually"
-          fi
+          # Retry up to 6 times (90s total) — LiteSpeed cache warm-up after
+          # flush can briefly return 202 before settling on 200.
+          sleep 10
+          STATUS=0
+          for i in 1 2 3 4 5 6; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://food-n-force.com)
+            if [ "$STATUS" -eq 200 ]; then
+              echo "✅ Deployment successful — site is live (attempt $i)"
+              exit 0
+            fi
+            echo "Attempt $i: site returned HTTP $STATUS — retrying in 15s..."
+            sleep 15
+          done
+          echo "⚠️ Site returned HTTP $STATUS after 6 attempts — please verify manually"
