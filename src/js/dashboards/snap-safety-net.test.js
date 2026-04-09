@@ -515,4 +515,33 @@ describe('snap-safety-net', () => {
       expect(markAreaSection).not.toMatch(/color:\s*PAL\.low/);
     });
   });
+
+  // ── Batch 4: SNAP Policy Event Annotations ──
+  describe('SNAP policy event annotations', () => {
+    it('snap-participation.json has trend.events array with 7 entries', () => {
+      const data = JSON.parse(readFileSync(resolve(__dirname, '../../../public/data/snap-participation.json'), 'utf-8'));
+      expect(data.trend.events).toBeDefined();
+      expect(Array.isArray(data.trend.events)).toBe(true);
+      expect(data.trend.events).toHaveLength(7);
+    });
+
+    it('each event has date (YYYY-MM) and label (string) fields', () => {
+      const data = JSON.parse(readFileSync(resolve(__dirname, '../../../public/data/snap-participation.json'), 'utf-8'));
+      for (const event of data.trend.events) {
+        expect(event.date).toMatch(/^\d{4}-\d{2}$/);
+        expect(typeof event.label).toBe('string');
+        expect(event.label.length).toBeGreaterThan(0);
+      }
+    });
+
+    it('snap-safety-net.js references trendData.events for markLine', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
+      expect(jsSource).toContain('markLine');
+      // Should reference events from trendData
+      const markLineIdx = jsSource.indexOf('markLine');
+      expect(markLineIdx).toBeGreaterThan(-1);
+      const markLineSection = jsSource.slice(markLineIdx, markLineIdx + 500);
+      expect(markLineSection).toMatch(/events/);
+    });
+  });
 });

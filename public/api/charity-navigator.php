@@ -13,7 +13,14 @@
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
+require_once __DIR__ . '/_cors.php';
+
+// Only allow GET requests
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
 
 @include __DIR__ . '/_config.php';
 require_once __DIR__ . '/_rate-limiter.php';
@@ -33,7 +40,7 @@ if (!rateLimitCheck('charity-navigator', 'daily', 90000)) {
 // Check API key configuration
 if (!defined('CHARITY_NAVIGATOR_API_KEY') || CHARITY_NAVIGATOR_API_KEY === '' || CHARITY_NAVIGATOR_API_KEY === 'your-charity-navigator-key-here') {
     http_response_code(503);
-    echo json_encode(['error' => 'Charity Navigator API not configured', '_notConfigured' => true]);
+    echo json_encode(['error' => 'Service temporarily unavailable', '_notConfigured' => true]);
     exit;
 }
 

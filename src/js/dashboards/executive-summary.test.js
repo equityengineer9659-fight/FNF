@@ -460,4 +460,40 @@ describe('executive-summary', () => {
       expect(mapSection).not.toContain('areaColor: COLORS.secondary');
     });
   });
+
+  // ── Strategic Audit: Lighthouse CI + Author Meta ──
+  describe('infrastructure quality', () => {
+    it('Lighthouse CI config should include all 6 dashboard URLs', () => {
+      const lhrc = JSON.parse(readFileSync(
+        resolve(__dirname, '../../../tools/testing/lighthouserc.json'), 'utf-8'
+      ));
+      const urls = lhrc.ci.collect.url;
+      const dashboards = [
+        'executive-summary', 'food-insecurity', 'food-access',
+        'snap-safety-net', 'food-prices', 'food-banks',
+      ];
+      for (const d of dashboards) {
+        expect(urls.some(u => u.includes(`dashboards/${d}.html`)),
+          `Lighthouse CI missing ${d}`).toBe(true);
+      }
+    });
+
+    it('all dashboard HTML files should have consistent author meta', () => {
+      const dashboardDir = resolve(__dirname, '../../../dashboards');
+      const files = [
+        'executive-summary.html', 'food-insecurity.html', 'food-access.html',
+        'snap-safety-net.html', 'food-prices.html', 'food-banks.html',
+        'nonprofit-directory.html', 'nonprofit-profile.html',
+      ];
+      for (const file of files) {
+        const html = readFileSync(resolve(dashboardDir, file), 'utf-8');
+        expect(html, `${file} has wrong author meta`).toContain(
+          '<meta name="author" content="Food-N-Force">'
+        );
+        expect(html, `${file} has old "Team" author`).not.toContain(
+          'Food-N-Force Team'
+        );
+      }
+    });
+  });
 });

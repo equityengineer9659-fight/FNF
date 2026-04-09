@@ -13,9 +13,17 @@
 
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
+require_once __DIR__ . '/_cors.php';
+
+// Only allow GET requests
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
 
 require_once __DIR__ . '/_rate-limiter.php';
+require_once __DIR__ . '/_validation.php';
 
 $cacheDir = __DIR__ . '/../_cache/dashboard';
 if (!is_dir($cacheDir)) {
@@ -30,6 +38,13 @@ $validTypes = ['food-insecurity', 'food-insecurity-county', 'health-indicators',
 if (!in_array($type, $validTypes)) {
     http_response_code(400);
     echo json_encode(['error' => 'Invalid type. Use: ' . implode(', ', $validTypes)]);
+    exit;
+}
+
+// Validate state against allowlist
+if ($stateAbbr !== '' && !in_array($stateAbbr, VALID_STATE_ABBRS, true)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid state abbreviation']);
     exit;
 }
 

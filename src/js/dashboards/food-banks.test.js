@@ -409,4 +409,41 @@ describe('food-banks', () => {
       expect(chipFn).not.toContain('#D1B862');
     });
   });
+
+  // ── Batch 5: Operating Reserves in Revenue Heatmap ──
+  describe('operating reserves', () => {
+    it('all states in food-bank-summary.json should have totalExpenses as a positive number', () => {
+      const data = readJSON('food-bank-summary.json');
+      for (const s of data.states) {
+        expect(s).toHaveProperty('totalExpenses');
+        expect(s.totalExpenses).toBeTypeOf('number');
+        expect(s.totalExpenses).toBeGreaterThan(0);
+      }
+    });
+
+    it('operating reserve calculation should be correct for Alabama', () => {
+      const data = readJSON('food-bank-summary.json');
+      const al = data.states.find(s => s.name === 'Alabama');
+      const reserve = ((al.totalRevenue - al.totalExpenses) / al.totalRevenue * 100).toFixed(1);
+      expect(Number(reserve)).toBeCloseTo(5.4, 0);
+    });
+
+    it('revenue heatmap should include totalExpenses in hierarchy data', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const revenueSection = jsSource.slice(
+        jsSource.indexOf('function renderRevenue'),
+        jsSource.indexOf('function renderEfficiency')
+      );
+      expect(revenueSection).toContain('totalExpenses');
+    });
+
+    it('revenue heatmap tooltip should show operating reserve', () => {
+      const jsSource = readFileSync(resolve(__dirname, 'food-banks.js'), 'utf-8');
+      const revenueSection = jsSource.slice(
+        jsSource.indexOf('function renderRevenue'),
+        jsSource.indexOf('function renderEfficiency')
+      );
+      expect(revenueSection).toMatch(/[Oo]perating [Rr]eserve/);
+    });
+  });
 });

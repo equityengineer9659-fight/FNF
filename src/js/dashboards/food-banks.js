@@ -149,9 +149,11 @@ function renderRevenue(states) {
         .map(s => {
           const insecure = Math.round(s.population * s.foodInsecurityRate / 100);
           const rev = insecure > 0 ? Math.round(s.totalRevenue / insecure) : 0;
+          const reservePct = s.totalRevenue > 0 ? ((s.totalRevenue - s.totalExpenses) / s.totalRevenue * 100) : 0;
           return {
             name: s.name, size: rev,
-            totalRevenue: s.totalRevenue, efficiency: s.programExpenseRatio,
+            totalRevenue: s.totalRevenue, totalExpenses: s.totalExpenses,
+            efficiency: s.programExpenseRatio, reservePct: reservePct.toFixed(1),
             orgCount: s.orgCount, insecurePersons: insecure,
             insecurityRate: s.foodInsecurityRate, region,
             label2: '$' + fmtNum(rev) + '/person',
@@ -178,6 +180,7 @@ function renderRevenue(states) {
         <span style="color:#818CF8;font-weight:500">Program Efficiency:</span> <strong>${d.efficiency}%</strong>
         <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:7px 0">
         Total Revenue: $${fmtNum(d.totalRevenue)}<br/>
+        Operating Reserve: <strong style="color:${Number(d.reservePct) < 5 ? '#ef4444' : '#22c55e'}">${d.reservePct}%</strong><br/>
         Organizations: ${fmtNum(d.orgCount)}<br/>
         Insecure Pop: ${fmtNum(d.insecurePersons)}<br/>
         Insecurity Rate: ${d.insecurityRate}%`;
