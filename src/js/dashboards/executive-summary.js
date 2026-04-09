@@ -156,7 +156,7 @@ function renderSnapGap(fiStates, snapStates) {
     },
     legend: {
       data: ['Food-Insecure Population', 'SNAP Participants'],
-      textStyle: { color: COLORS.textMuted },
+      textStyle: { color: COLORS.text },
       top: 0
     },
     grid: { top: 40, right: 20, bottom: 30, left: 60, containLabel: true },

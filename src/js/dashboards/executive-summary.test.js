@@ -478,6 +478,57 @@ describe('executive-summary', () => {
       }
     });
 
+    // P2-11: SNAP coverage gap legend should use text (not textMuted) for consistency
+    it('executive-summary SNAP gap legend uses COLORS.text (P2-11)', () => {
+      const src = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
+      // renderCoverageGap legend must not dim text with textMuted
+      const renderFn = src.slice(
+        src.indexOf('function renderSnapGap'),
+        src.indexOf('function renderSnapGap') + 3500
+      );
+      expect(renderFn).toContain('\'Food-Insecure Population\', \'SNAP Participants\'');
+      expect(renderFn).toMatch(/textStyle:\s*\{\s*color:\s*COLORS\.text\s*\}/);
+    });
+
+    // P2-10: nonprofit-directory counters must use data-suffix, not unrecognized data-format
+    it('nonprofit-directory hero stats use data-suffix (P2-10)', () => {
+      const html = readFileSync(
+        resolve(__dirname, '../../../dashboards/nonprofit-directory.html'), 'utf-8'
+      );
+      expect(html).not.toMatch(/data-format="thousand"/);
+      expect(html).not.toMatch(/data-format="plus"/);
+      expect(html).toMatch(/data-target="60" data-suffix="K\+"/);
+      expect(html).toMatch(/data-target="50" data-suffix="\+"/);
+    });
+
+    // P2-12: SNAP gauges must have min-height to prevent collapse
+    it('snap-safety-net gauge containers declare min-height (P2-12)', () => {
+      const html = readFileSync(
+        resolve(__dirname, '../../../dashboards/snap-safety-net.html'), 'utf-8'
+      );
+      // Every inline "height:200px" on a gauge must now also specify min-height
+      const gaugeRegex = /<div id="gauge-[^"]+" class="dashboard-chart" style="([^"]+)"/g;
+      const matches = [...html.matchAll(gaugeRegex)];
+      expect(matches.length).toBeGreaterThanOrEqual(5);
+      matches.forEach(m => {
+        expect(m[1]).toContain('min-height:200px');
+      });
+    });
+
+    // P2-13: food-prices.html must escape & in title and og:title
+    it('food-prices.html title and og:title escape bare & (P2-13)', () => {
+      const html = readFileSync(
+        resolve(__dirname, '../../../dashboards/food-prices.html'), 'utf-8'
+      );
+      const titleLine = html.match(/<title>[^<]+<\/title>/)[0];
+      const ogTitleLine = html.match(/<meta property="og:title" content="[^"]+"/)[0];
+      // Must not contain bare & (only &amp; permitted)
+      expect(titleLine).not.toMatch(/ & /);
+      expect(ogTitleLine).not.toMatch(/ & /);
+      expect(titleLine).toContain('&amp;');
+      expect(ogTitleLine).toContain('&amp;');
+    });
+
     it('all dashboard HTML files should have consistent author meta', () => {
       const dashboardDir = resolve(__dirname, '../../../dashboards');
       const files = [
