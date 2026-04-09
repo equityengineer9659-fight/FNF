@@ -92,7 +92,8 @@ test.describe('Contact Form', () => {
     });
 
     await page.goto('/contact.html');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
+    await expect(page.locator('h1')).toBeVisible();
 
     // Filter out expected errors (network requests to local API, canvas init on mobile)
     const realErrors = errors.filter(

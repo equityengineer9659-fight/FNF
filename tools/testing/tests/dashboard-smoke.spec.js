@@ -65,7 +65,7 @@ for (const dashboard of dashboards) {
       page.on('pageerror', (err) => errors.push(err.message));
 
       await page.goto(dashboard.url);
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
       // Allow time for async chart rendering
       await page.waitForTimeout(3000);
 
