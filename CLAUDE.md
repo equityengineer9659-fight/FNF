@@ -131,7 +131,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `dashboards/nonprofit-profile.js` — Nonprofit Profile with 6 ECharts (revenue trend, composition, expenses vs revenue, assets/liabilities, compensation, efficiency radar) + dynamic data-driven descriptions with conditional insights
 - **Production**: Source maps disabled, ESLint `no-console` rule enforced
 - **ESLint 10.x** with flat config (`eslint.config.js`)
-- **Unit Tests**: ~318 tests across 20 test files (vitest)
+- **Unit Tests**: ~569 tests across 22 test files (vitest)
 
 ### PHP Backend (SiteGround)
 - **Location**: `public/api/` (copied to `dist/api/` during build)
