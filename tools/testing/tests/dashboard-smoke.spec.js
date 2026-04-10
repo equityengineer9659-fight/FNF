@@ -64,6 +64,28 @@ for (const dashboard of dashboards) {
       }
     });
 
+    test('Renders correctly at mobile viewport (375px)', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 });
+      await page.goto(dashboard.url);
+      await page.waitForLoadState('domcontentloaded');
+
+      // Dashboard cards should be visible and not overflowing
+      const cards = page.locator('.dashboard-card');
+      const count = await cards.count();
+      if (count > 0) {
+        const firstCard = cards.first();
+        const box = await firstCard.boundingBox();
+        if (box) {
+          expect(box.width).toBeGreaterThan(0);
+          expect(box.width).toBeLessThanOrEqual(375);
+        }
+      }
+
+      // No horizontal scrollbar — body should not exceed viewport width
+      const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
+      expect(bodyWidth).toBeLessThanOrEqual(375 + 1); // 1px tolerance for rounding
+    });
+
     test('No JavaScript errors on page load', async ({ page }) => {
       const errors = [];
       page.on('pageerror', (err) => errors.push(err.message));

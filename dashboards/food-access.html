@@ -38,7 +38,21 @@
         "description": "Interactive dashboard mapping food deserts across America — where grocery stores are scarce, transportation is limited, and healthy food is out of reach.",
         "url": "https://food-n-force.com/dashboards/food-access.html",
         "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
-        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://food-n-force.com" }
+        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+        "mainEntity": {
+            "@type": "Dataset",
+            "name": "U.S. Food Access Research Atlas Data",
+            "description": "County-level food desert indicators, grocery store access metrics, and transportation barriers across the United States.",
+            "url": "https://food-n-force.com/dashboards/food-access.html",
+            "creator": { "@type": "Organization", "name": "USDA Economic Research Service", "url": "https://www.ers.usda.gov" },
+            "license": "https://www.usa.gov/government-works",
+            "spatialCoverage": "United States",
+            "distribution": {
+                "@type": "DataDownload",
+                "encodingFormat": "application/json",
+                "contentUrl": "https://food-n-force.com/data/current-food-access.json"
+            }
+        }
     }
     </script>
 

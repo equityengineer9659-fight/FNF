@@ -27,12 +27,27 @@
 
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org", "@type": "WebPage",
+        "@context": "https://schema.org",
+        "@type": "WebPage",
         "name": "Food Bank Landscape Dashboard",
         "description": "Interactive dashboard exploring America's food bank network — density, financials, program efficiency, and alignment with need.",
         "url": "https://food-n-force.com/dashboards/food-banks.html",
         "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
-        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://food-n-force.com" }
+        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+        "mainEntity": {
+            "@type": "Dataset",
+            "name": "U.S. Food Bank Financial and Operational Data",
+            "description": "Food bank density, IRS 990 financial data, program efficiency metrics, and need-capacity alignment across the United States.",
+            "url": "https://food-n-force.com/dashboards/food-banks.html",
+            "creator": { "@type": "Organization", "name": "Internal Revenue Service", "url": "https://www.irs.gov" },
+            "license": "https://www.usa.gov/government-works",
+            "spatialCoverage": "United States",
+            "distribution": {
+                "@type": "DataDownload",
+                "encodingFormat": "application/json",
+                "contentUrl": "https://food-n-force.com/data/food-bank-summary.json"
+            }
+        }
     }
     </script>
 

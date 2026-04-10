@@ -14,7 +14,9 @@
         "http://localhost:4173/dashboards/food-access.html",
         "http://localhost:4173/dashboards/snap-safety-net.html",
         "http://localhost:4173/dashboards/food-prices.html",
-        "http://localhost:4173/dashboards/food-banks.html"
+        "http://localhost:4173/dashboards/food-banks.html",
+        "http://localhost:4173/dashboards/nonprofit-directory.html",
+        "http://localhost:4173/dashboards/nonprofit-profile.html?ein=952036884"
       ],
       "startServerCommand": "npm run build && npm run preview",
       "startServerReadyPattern": "Local:",

@@ -38,7 +38,21 @@
         "description": "Interactive dashboard exploring SNAP participation, coverage gaps, school lunch reach, and safety net effectiveness across America.",
         "url": "https://food-n-force.com/dashboards/snap-safety-net.html",
         "publisher": { "@type": "Organization", "name": "Food-N-Force", "url": "https://food-n-force.com" },
-        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://food-n-force.com" }
+        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+        "mainEntity": {
+            "@type": "Dataset",
+            "name": "U.S. SNAP Participation and Safety Net Data",
+            "description": "SNAP participation trends, coverage gaps, school lunch program reach, and safety net effectiveness metrics across the United States.",
+            "url": "https://food-n-force.com/dashboards/snap-safety-net.html",
+            "creator": { "@type": "Organization", "name": "USDA Food and Nutrition Service", "url": "https://www.fns.usda.gov" },
+            "license": "https://www.usa.gov/government-works",
+            "spatialCoverage": "United States",
+            "distribution": {
+                "@type": "DataDownload",
+                "encodingFormat": "application/json",
+                "contentUrl": "https://food-n-force.com/data/snap-participation.json"
+            }
+        }
     }
     </script>
 

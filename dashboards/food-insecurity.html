@@ -42,7 +42,22 @@
             "name": "Food-N-Force",
             "url": "https://food-n-force.com"
         },
-        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://food-n-force.com" }
+        "isPartOf": { "@type": "WebSite", "name": "Food-N-Force", "url": "https://food-n-force.com" },
+        "mainEntity": {
+            "@type": "Dataset",
+            "name": "U.S. Food Insecurity State-Level Data",
+            "description": "State-level food insecurity rates, meal gap estimates, and trend data across the United States.",
+            "url": "https://food-n-force.com/dashboards/food-insecurity.html",
+            "creator": { "@type": "Organization", "name": "USDA Economic Research Service", "url": "https://www.ers.usda.gov" },
+            "license": "https://www.usa.gov/government-works",
+            "temporalCoverage": "2015/2023",
+            "spatialCoverage": "United States",
+            "distribution": {
+                "@type": "DataDownload",
+                "encodingFormat": "application/json",
+                "contentUrl": "https://food-n-force.com/data/food-insecurity-state.json"
+            }
+        }
     }
     </script>
 
