@@ -9,12 +9,18 @@
 
 ---
 
-## Remediation Status (updated 2026-04-09, end of P2 session)
+## Remediation Status (updated 2026-04-10, mid P3 session)
 
 - **P0 (4 items)**: ALL FIXED and merged to master via PR #43 (commits 783243d, 55c7924, 63569af). P0-3 rotation intentionally skipped after verified no-exposure analysis; template `_config.example.php` added instead.
 - **P1 (~29 items)**: 16 PRs bundled and merged to master as PR #62. 4 items deferred (see `project_p1_deferred_2026_04_09.md`): P1-11 (CSS bundle), P1-15/16/17 (test overhaul), P1-18 (renderMap split), P1-28 (Vite 6 bump). P1-20 downgraded (not dead code). P1-29 rejected (dev-only). P1-27 awaiting upstream.
 - **P2 (45 items)**: **12 bundled PRs (#63–#74) opened, not yet merged** as of session end. 36 of 45 items landed across the 12 PRs. PR #70 initially failed CI on P2-32 (`cache: 'npm'` needs checked-in lockfile, gitignored here); reverted in commit `49b179a`, rest of PR ships. 9 items deferred (see `project_p2_deferred_2026_04_09.md`): P2-14 (Sentry Replay), P2-17/19/20 (test expansion bundle), P2-21/22 (food-access refactors), P2-32 (npm cache, needs lockfile policy), P2-40 (53-article blog CTA mass edit), P2-43 (GA4 infra check), P2-45 (same as P1-28).
-- **P3 (~25 items)**: not yet addressed — next session. Use the P3 resume prompt in `C:\Users\luetk\.claude\plans\crispy-sparking-stallman.md` (triages to Jira stories, does NOT implement unless explicitly asked).
+- **P3 (27 items)**: **In progress** — see `C:\Users\luetk\.claude\plans\piped-stirring-willow.md` for the 10-session plan. As of 2026-04-10:
+  - **Sessions 1–4 merged**: PRs #76 (security/config P3-02/23/25/26), #77 (services hero P3-17), #78 (code quality P3-01/04/05/12/14/21), #79 (SEO/schema P3-06/07/09).
+  - **Already-fixed / obsolete**: P3-03 (cache-cleanup fail-closed already landed in d29b75b), P3-14 (createD3Heatmap JSDoc already landed in P2 #68).
+  - **Rejected (won't-fix)**: P3-18 (contact CTA "Send Message" — kept per user direction), P3-27 (SLDS/fonts render-blocking — documented architectural constraint).
+  - **Deferred (own session needed)**: P3-19 (testimonial attribution — needs client permission), P3-20 (Salesforce credentials — needs user input), P3-08 + P3-11 + P3-16 (Sessions 5/6 — Dataset JSON-LD + Lighthouse CI URLs, deferred per user).
+  - **Dismissed as cosmetic / not-worth-the-effort**: **P3-22** (blog read-time badges, 53-file mass edit, polish-only) — tracked as **KAN-99** in Jira with full rationale and revisit conditions. P3-15 (ParticleSystem fps stale — dev-only instrumentation, touches protected particle loop, rejected).
+  - **Pending in this session**: P3-13 (state-selector inline style verify), P3-10 (food-access silent catch — overriding the P2-17 deferral with explicit narrow scope), P3-24 (Sentry minor bump — 1-line, no sentry.js changes).
 
 ---
 
