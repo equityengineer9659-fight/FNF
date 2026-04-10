@@ -35,8 +35,11 @@ function readJSON(filename) {
   return JSON.parse(readFileSync(resolve(dataDir, filename), 'utf-8'));
 }
 
-function readHTML(filename) {
-  return readFileSync(resolve(htmlDir, filename), 'utf-8');
+/** Parse HTML file into a jsdom document for DOM-based assertions */
+function parseHTML(filename) {
+  const html = readFileSync(resolve(htmlDir, filename), 'utf-8');
+  const parser = new DOMParser();
+  return parser.parseFromString(html, 'text/html');
 }
 
 describe('food-insecurity', () => {
@@ -212,12 +215,13 @@ describe('food-insecurity', () => {
   describe('meal cost insight accuracy', () => {
     it('Hawaii premium over national average should be ~43%, not 28%', () => {
       const fiData = readJSON('food-insecurity-state.json');
-      const html = readHTML('food-insecurity.html');
+      const doc = parseHTML('food-insecurity.html');
       const hawaii = fiData.states.find(s => s.name === 'Hawaii');
       const nationalAvg = fiData.national.averageMealCost;
       const actualPremium = Math.round((hawaii.mealCost / nationalAvg - 1) * 100);
-      expect(html).toContain(`${actualPremium}% above the national average`);
-      expect(html).not.toContain('28% above the national average');
+      const bodyText = doc.body.textContent;
+      expect(bodyText).toContain(`${actualPremium}% above the national average`);
+      expect(bodyText).not.toContain('28% above the national average');
     });
   });
 
@@ -346,10 +350,10 @@ describe('food-insecurity', () => {
   // ── Map aria-label metric updates ──
   describe('map aria-label metric updates', () => {
     it('food-insecurity.html chart-map container should have aria-label', () => {
-      const html = readHTML('food-insecurity.html');
-      const mapMatch = html.match(/id="chart-map"[^>]*/);
-      expect(mapMatch).toBeTruthy();
-      expect(mapMatch[0]).toContain('aria-label');
+      const doc = parseHTML('food-insecurity.html');
+      const chartMap = doc.getElementById('chart-map');
+      expect(chartMap).not.toBeNull();
+      expect(chartMap.getAttribute('aria-label')).toBeTruthy();
     });
   });
 
@@ -467,23 +471,25 @@ describe('food-insecurity', () => {
   // ── P3 #3: County search ARIA ──
   describe('county search accessibility', () => {
     it('search input should have combobox ARIA attributes', () => {
-      const html = readHTML('food-insecurity.html');
-      expect(html).toContain('role="combobox"');
-      expect(html).toContain('aria-expanded');
-      expect(html).toContain('aria-autocomplete');
+      const doc = parseHTML('food-insecurity.html');
+      const combobox = doc.querySelector('[role="combobox"]');
+      expect(combobox).not.toBeNull();
+      expect(combobox.hasAttribute('aria-expanded')).toBe(true);
+      expect(combobox.hasAttribute('aria-autocomplete')).toBe(true);
     });
 
     it('search results should have listbox role', () => {
-      const html = readHTML('food-insecurity.html');
-      expect(html).toContain('role="listbox"');
+      const doc = parseHTML('food-insecurity.html');
+      const listbox = doc.querySelector('[role="listbox"]');
+      expect(listbox).not.toBeNull();
     });
   });
 
   // ── Poverty-Insecurity Divergence chart ──
   describe('poverty-insecurity divergence chart', () => {
     it('food-insecurity.html should have chart-divergence container', () => {
-      const html = readHTML('food-insecurity.html');
-      expect(html).toContain('chart-divergence');
+      const doc = parseHTML('food-insecurity.html');
+      expect(doc.getElementById('chart-divergence')).not.toBeNull();
     });
 
     it('divergence values should have both positive and negative states', () => {
@@ -680,7 +686,7 @@ describe('food-insecurity', () => {
     });
 
     it('food-insecurity.html should have containers for all 12 chart types', () => {
-      const html = readHTML('food-insecurity.html');
+      const doc = parseHTML('food-insecurity.html');
       const chartIds = [
         'chart-map', 'chart-trend', 'chart-radar', 'chart-scatter',
         'chart-demographics', 'chart-divergence', 'chart-meal-cost',
@@ -688,7 +694,7 @@ describe('food-insecurity', () => {
         'chart-triple-burden',
       ];
       for (const id of chartIds) {
-        expect(html).toContain(`id="${id}"`);
+        expect(doc.getElementById(id)).not.toBeNull();
       }
     });
   });
@@ -713,9 +719,10 @@ describe('food-insecurity', () => {
   // P2-03: Child rate multiplier documentation must match PHP implementation (1.4x)
   describe('Child rate multiplier documentation', () => {
     it('food-insecurity.html documents the 1.4x multiplier (matches dashboard-census.php)', () => {
-      const html = readHTML('food-insecurity.html');
-      expect(html).toMatch(/1\.4x multiplier/);
-      expect(html).not.toMatch(/1\.3-1\.6x multiplier/);
+      const doc = parseHTML('food-insecurity.html');
+      const bodyText = doc.body.textContent;
+      expect(bodyText).toMatch(/1\.4x multiplier/);
+      expect(bodyText).not.toMatch(/1\.3-1\.6x multiplier/);
     });
 
     it('dashboard-census.php still implements fiRate * 1.4 (must stay in sync with HTML)', () => {
