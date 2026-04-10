@@ -58,6 +58,31 @@ describe('food-access', () => {
     });
   });
 
+  // ── P3-10: drillDownLowAccess catch must surface a visible error ──
+  describe('drillDownLowAccess error fallback (P3-10)', () => {
+    it('catch block should call setOption with a "Could not load county data" title', () => {
+      const jsSource = readFileSync(
+        resolve(__dirname, 'food-access.js'), 'utf-8'
+      );
+
+      // Locate the drillDownLowAccess function definition.
+      const fnStart = jsSource.indexOf('const drillDownLowAccess');
+      expect(fnStart).toBeGreaterThan(-1);
+
+      // Slice forward to the next top-level function/declaration to bound the search.
+      const fnEnd = jsSource.indexOf('initScrollReveal();', fnStart);
+      expect(fnEnd).toBeGreaterThan(fnStart);
+      const fnBody = jsSource.slice(fnStart, fnEnd);
+
+      // The catch block must NOT be the legacy `catch { if (chart) chart.hideLoading(); }`
+      // — that's the silent failure the audit flagged. It must surface a visible error.
+      expect(fnBody).toContain('Could not load county data for ${stateName}');
+
+      // And it must still hide the loading spinner so the UI doesn't get stuck.
+      expect(fnBody).toMatch(/catch[\s\S]*chart\.hideLoading\(\)[\s\S]*Could not load county data/);
+    });
+  });
+
   // ── P1 #18: County filter truthy bug (same pattern as food-insecurity) ──
   describe('county filter', () => {
     it('should not drop features with rate === 0', () => {

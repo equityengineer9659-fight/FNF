@@ -1615,7 +1615,16 @@ async function init() {
           insightEl.textContent = `${stateName} has ${pct}% of its census tracts classified as low-access, affecting ${fmtNum(pop)} residents. The average distance to the nearest grocery store is ${dist} miles \u2014 ${distSentence}`;
         }
       } catch {
-        if (chart) chart.hideLoading();
+        // P3-10: surface a visible error instead of silently leaving the
+        // map in its previous state. Matches the existing fallback pattern
+        // used by renderAccessInsecurity county drill at line ~1208.
+        if (chart) {
+          chart.hideLoading();
+          chart.setOption({
+            title: { text: `Could not load county data for ${stateName}`, left: 'center', top: 'center', textStyle: { color: COLORS.textMuted, fontSize: 14 } },
+            series: []
+          }, true);
+        }
       }
     };
 
