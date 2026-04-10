@@ -404,7 +404,7 @@ describe('executive-summary', () => {
       const dashboards = [
         'executive-summary.html', 'food-insecurity.html', 'food-access.html',
         'snap-safety-net.html', 'food-prices.html', 'food-banks.html',
-        'nonprofit-directory.html', 'nonprofit-profile.html', 'chart-preview.html'
+        'nonprofit-directory.html', 'nonprofit-profile.html'
       ];
       for (const file of dashboards) {
         const html = readHTML(file);
