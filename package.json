@@ -69,7 +69,7 @@
   "author": "Food-N-Force",
   "license": "MIT",
   "devDependencies": {
-    "@anthropic-ai/sdk": "^0.86.1",
+    "@anthropic-ai/sdk": "^0.87.0",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.40.0",
     "@testing-library/dom": "^10.4.1",
