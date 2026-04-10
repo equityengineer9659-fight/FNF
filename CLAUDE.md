@@ -130,11 +130,13 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `dashboards/nonprofit-directory.js` — Nonprofit Directory search (ProPublica API, debounced search, state filter, pagination)
   - `dashboards/nonprofit-profile.js` — Nonprofit Profile with 6 ECharts (revenue trend, composition, expenses vs revenue, assets/liabilities, compensation, efficiency radar) + dynamic data-driven descriptions with conditional insights
 - **Production**: Source maps disabled, ESLint `no-console` rule enforced
+- **ESLint pinned at 8.x** — v9+ requires migrating `.eslintrc.cjs` → `eslint.config.js` (flat config). Major bumps blocked in `.github/dependabot.yml` ignore list. Migration tracked as a future session.
 - **Unit Tests**: ~318 tests across 20 test files (vitest)
 
 ### PHP Backend (SiteGround)
 - **Location**: `public/api/` (copied to `dist/api/` during build)
 - **Deployment**: GitHub Actions → SSH/rsync to SiteGround `public_html/`
+- **Stack**: nginx reverse proxy in front of Apache backend. Responses say `Server: nginx` but `public/.htaccess` (Apache mod_headers) is what sets headers. There is no nginx config to edit.
 - **Endpoints**: 3 form endpoints (`contact.php`, `newsletter.php`, `csrf-token.php`) + 10 dashboard API proxies (BLS, Census, SDOH, SAIPE, PLACES, FRED, ProPublica search/org, Mapbox, Charity Navigator) + `cache-cleanup.php` (cron). Full inventory with cache TTLs in memory: `project_dashboard.md`
 - **Security**: Rate limiting (60s cooldown), CSRF validation (`hash_equals()`), honeypot field, input sanitization (`htmlspecialchars()`), email validation (`FILTER_VALIDATE_EMAIL`), CRLF header injection prevention
 - **Recipient**: All form emails to `hello@food-n-force.com`
@@ -245,14 +247,22 @@ Custom agents in `.claude/agents/` tailored to this project:
 - Only 9 `!important` declarations remain (utility classes and accessibility media queries)
 
 ### CSP Compliance
-- `_headers` CSP forbids `unsafe-inline` for both scripts and styles
-- CSSOM property assignment (`element.style`) is CSP-compliant — only HTML `style=""` attributes and `<style>` tags are blocked
+- **NOT yet enforced in production.** `_headers` (Netlify format) is dead code on SiteGround Apache; CSP migration to `.htaccess` is pending PR B (see `project_security_headers_2026_04_10.md` memory)
+- HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy are live in production via `public/.htaccess` `Header always set` directives (PR #95, 2026-04-10)
+- When CSP lands it will use `style-src 'self'` (no unsafe-inline) — any new inline `style=""` attribute or `<style>` block will need to be migrated first
 - SLDS CDN has SRI hash (auto-added by `build-components.js`)
+- Sentry DSN host for `connect-src`: `o4510112854704128.ingest.us.sentry.io`
 
 ### Browser Compatibility
 - **Minimum supported**: Safari 15+, Firefox 87+, Chrome 90+ (matches the `AbortController` signal pattern used across `src/js/effects/*` and `main.js`)
 - `backdrop-filter` always shipped with the `-webkit-backdrop-filter` prefix (glassmorphism protected rule)
 - No CSS nesting, `:has()`, container queries, or `color-mix()` until all three targets support them
+
+### Verifying production state
+- **Don't trust config files alone.** `_headers` was dead for months; nobody noticed because nobody curl'd the live site.
+- Canonical header check: `curl -sI https://food-n-force.com/dashboards/food-insecurity.html`
+- Canonical body check: `curl -s https://food-n-force.com/<path> | head -50`
+- For investigations into "is X actually enforced?", always verify against the wire before editing config files.
 
 ## Configuration Files
 - `tools/testing/html-validate.json` — HTML validation rules
@@ -261,7 +271,8 @@ Custom agents in `.claude/agents/` tailored to this project:
 - `.pa11yci.json` — Pa11y accessibility testing (WCAG2AA, all public pages)
 - `config/token_map.json` — SLDS compliance token mappings
 - `vite.config.js` — Vite build system
-- `_headers` — Security headers and CSP policy
+- `public/.htaccess` — Apache config; **the actual production source of truth** for security headers, cache rules, and 404 routing on SiteGround
+- `_headers` — DEAD CODE (Netlify format, ignored by Apache); kept until CSP migration completes, then deletable
 
 ## Documentation
 - `docs/README.md` — Documentation navigation hub
