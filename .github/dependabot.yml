@@ -16,8 +16,6 @@ updates:
       - "dependencies"
       - "npm"
       - "automated"
-    reviewers:
-      - "@your-github-username"
     commit-message:
       prefix: "chore"
       include: "scope"

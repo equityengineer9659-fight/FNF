@@ -36,7 +36,7 @@
     "validate:html": "html-validate --config tools/testing/html-validate.json \"*.html\"",
     "validate:slds": "node tools/deployment/slds-compliance-check.js",
     "validate:build": "node tools/deployment/verify-build.js",
-    "security": "npm audit --audit-level critical",
+    "security": "npm audit --audit-level high",
     "deps:check": "node tools/dependencies/check-updates.js",
     "deps:update": "node tools/dependencies/auto-update.js",
     "deps:security": "npm audit fix",
