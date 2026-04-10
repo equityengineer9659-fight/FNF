@@ -174,7 +174,7 @@ describe('SmartScroll', () => {
   describe('createScrollToTopButton', () => {
     it('should create a scroll-to-top button in the DOM', () => {
       createNavDOM();
-      new SmartScroll(); // eslint-disable-line no-new
+      new SmartScroll();  
 
       const button = document.querySelector('.fnf-scroll-to-top');
       expect(button).toBeTruthy();
@@ -205,7 +205,7 @@ describe('SmartScroll', () => {
   describe('createScrollProgressBar', () => {
     it('should create progress bar elements in the DOM', () => {
       createNavDOM();
-      new SmartScroll(); // eslint-disable-line no-new
+      new SmartScroll();  
 
       expect(document.querySelector('.scroll-progress-container')).toBeTruthy();
       expect(document.querySelector('.scroll-progress-bar')).toBeTruthy();

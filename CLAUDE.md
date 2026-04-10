@@ -130,7 +130,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
   - `dashboards/nonprofit-directory.js` — Nonprofit Directory search (ProPublica API, debounced search, state filter, pagination)
   - `dashboards/nonprofit-profile.js` — Nonprofit Profile with 6 ECharts (revenue trend, composition, expenses vs revenue, assets/liabilities, compensation, efficiency radar) + dynamic data-driven descriptions with conditional insights
 - **Production**: Source maps disabled, ESLint `no-console` rule enforced
-- **ESLint pinned at 8.x** — v9+ requires migrating `.eslintrc.cjs` → `eslint.config.js` (flat config). Major bumps blocked in `.github/dependabot.yml` ignore list. Migration tracked as a future session.
+- **ESLint 10.x** with flat config (`eslint.config.js`)
 - **Unit Tests**: ~318 tests across 20 test files (vitest)
 
 ### PHP Backend (SiteGround)

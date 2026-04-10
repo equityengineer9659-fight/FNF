@@ -46,7 +46,7 @@ describe('Counter System', () => {
         takeRecords() { return []; }
       };
 
-      new CounterAnimator(); // eslint-disable-line no-new
+      new CounterAnimator();  
       // Should observe 2 elements (stat-number and fnf-stat-number, not other-class)
       expect(observeSpy).toHaveBeenCalledTimes(2);
     });
