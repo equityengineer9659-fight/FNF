@@ -319,7 +319,6 @@ describe('food-prices', () => {
       // At minimum needs Food at Home and Food Away from Home
       const seriesNames = data.categories?.series?.map(s => s.name) || [];
       const hasHome = seriesNames.some(n => /home/i.test(n));
-      const hasAway = seriesNames.some(n => /away|restaurant|dining/i.test(n));
       // Either the categories have both, or verify the regions data covers the gap
       expect(seriesNames.length).toBeGreaterThan(0);
       // Document: at least one of home/away series should exist
