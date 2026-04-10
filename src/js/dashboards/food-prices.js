@@ -100,7 +100,7 @@ function renderRegions(data, mealCost) {
       }
     },
     legend: {
-      data: [startLabel, `Latest (${latestYear})`],
+      data: [{ name: startLabel, itemStyle: { color: 'rgba(255,255,255,0.6)' } }, `Latest (${latestYear})`],
       textStyle: { color: COLORS.text },
       top: 5
     },
