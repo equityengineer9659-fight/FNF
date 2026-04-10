@@ -904,6 +904,11 @@ function renderSnap(data) {
   const chart = createChart('chart-snap');
   if (!chart) return;
 
+  const FI_YEAR = '2024';
+  const SNAP_YEAR = 'FA 2023 est.';
+  const fiLabel = `Food Insecurity Rate (${FI_YEAR})`;
+  const snapLabel = `SNAP Coverage (${SNAP_YEAR})`;
+
   // Top 15 states by food insecurity, showing SNAP participation alongside
   const sorted = [...data.states].sort((a, b) => b.rate - a.rate).slice(0, 15);
   const names = sorted.map(s => s.name);
@@ -923,7 +928,7 @@ function renderSnap(data) {
       }
     },
     legend: {
-      data: ['Food Insecurity Rate (2024)', 'SNAP Coverage (FA 2023 est.)'],
+      data: [fiLabel, snapLabel],
       textStyle: { color: COLORS.text },
       top: 5
     },
@@ -941,7 +946,7 @@ function renderSnap(data) {
     },
     series: [
       {
-        name: 'Food Insecurity Rate (2024)',
+        name: fiLabel,
         type: 'bar',
         data: rates.reverse(),
         barWidth: '35%',
@@ -955,7 +960,7 @@ function renderSnap(data) {
         animationDuration: 1500
       },
       {
-        name: 'SNAP Coverage (FA 2023 est.)',
+        name: snapLabel,
         type: 'bar',
         data: snapCoverageRatio.reverse(),
         barWidth: '35%',

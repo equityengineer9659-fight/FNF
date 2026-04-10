@@ -42,11 +42,6 @@ export async function initSentry() {
       // Set sample rate for performance monitoring (10% of transactions)
       tracesSampleRate: 0.1,
 
-      // Session Replay sample rate (10% of sessions)
-      replaysSessionSampleRate: 0.1,
-      // Session Replay on error (100% of sessions with errors)
-      replaysOnErrorSampleRate: 1.0,
-
       // Filter out errors from browser extensions
       beforeSend(event, hint) {
         // Filter out errors from browser extensions

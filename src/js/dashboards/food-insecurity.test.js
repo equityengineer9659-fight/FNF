@@ -363,7 +363,7 @@ describe('food-insecurity', () => {
     it('SNAP Coverage label should disclose Feeding America 2023 vintage, not FY2024', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf-8');
       expect(jsSource).not.toMatch(/SNAP Coverage \(FY2024\)/);
-      expect(jsSource).toMatch(/SNAP Coverage \(FA 2023 est\.\)/);
+      expect(jsSource).toMatch(/SNAP_YEAR = 'FA 2023 est\.'/);
     });
   });
 
