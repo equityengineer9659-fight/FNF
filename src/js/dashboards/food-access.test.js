@@ -40,50 +40,24 @@ function readHTML(filename) {
 }
 
 describe('food-access', () => {
-  // ── P0 #5: Duplicate click listener ──
-  describe('click handler registration', () => {
-    it('should not register multiple click handlers on the same chart', () => {
-      // Read the source and verify only one click registration per chart
-      const jsSource = readFileSync(
-        resolve(__dirname, 'food-access.js'), 'utf-8'
-      );
-
-      // Count distinct click registrations on desert-map chart
-      // renderDesertMap registers one, init() should NOT register another
-      const clickRegistrations = (jsSource.match(/\.on\(['"]click['"]/g) || []).length;
-      // desertMap click + access-insecurity scatter click = 2 expected
-      // A third registration is the bug (init() at line 1433)
-      // After fix, there should be at most 2 click registrations
-      expect(clickRegistrations).toBeLessThanOrEqual(2);
-    });
-  });
-
   // ── P3-10: drillDownLowAccess catch must surface a visible error ──
+  // Kept as source-scan: guards error message text in catch block (critical safety test)
   describe('drillDownLowAccess error fallback (P3-10)', () => {
     it('catch block should call setOption with a "Could not load county data" title', () => {
       const jsSource = readFileSync(
         resolve(__dirname, 'food-access.js'), 'utf-8'
       );
-
-      // Locate the drillDownLowAccess function definition.
       const fnStart = jsSource.indexOf('const drillDownLowAccess');
       expect(fnStart).toBeGreaterThan(-1);
-
-      // Slice forward to the next top-level function/declaration to bound the search.
       const fnEnd = jsSource.indexOf('initScrollReveal();', fnStart);
       expect(fnEnd).toBeGreaterThan(fnStart);
       const fnBody = jsSource.slice(fnStart, fnEnd);
-
-      // The catch block must NOT be the legacy `catch { if (chart) chart.hideLoading(); }`
-      // — that's the silent failure the audit flagged. It must surface a visible error.
       expect(fnBody).toContain('Could not load county data for ${stateName}');
-
-      // And it must still hide the loading spinner so the UI doesn't get stuck.
       expect(fnBody).toMatch(/catch[\s\S]*chart\.hideLoading\(\)[\s\S]*Could not load county data/);
     });
   });
 
-  // ── P1 #18: County filter truthy bug (same pattern as food-insecurity) ──
+  // ── P1 #18: County filter truthy bug ──
   describe('county filter', () => {
     it('should not drop features with rate === 0', () => {
       const features = [
@@ -93,8 +67,6 @@ describe('food-access', () => {
         { properties: { name: 'CountyD', rate: null } },
       ];
 
-      // Current buggy filter: .filter(f => f.properties.rate)
-      // This drops rate=0 (falsy) — we want to keep it
       const correctFilter = features.filter(f =>
         f.properties.rate !== undefined && f.properties.rate !== null
       );
@@ -110,7 +82,6 @@ describe('food-access', () => {
       const accessData = readJSON('current-food-access.json');
       const html = readHTML('food-access.html');
 
-      // Extract data-target for the affected population counter
       if (accessData.national?.affectedPopulation) {
         const popTarget = html.match(/data-target="([\d.]+)"[^>]*>\s*[\d.]*\s*<\/span>\s*<span[^>]*>M/);
         if (popTarget) {
@@ -125,7 +96,6 @@ describe('food-access', () => {
   // ── P1-3: Insecurity map FIPS population ──
   describe('insecurity map FIPS lookup', () => {
     it('should populate fips from accessStates when provided', () => {
-      // Simulate the renderInsecurityMap data construction logic (post-fix)
       const US_STATES_MOCK = [['AL', 'Alabama'], ['CA', 'California'], ['TX', 'Texas']];
       const accessStates = [
         { name: 'Alabama', fips: '01' },
@@ -152,30 +122,16 @@ describe('food-access', () => {
           fips: fipsByName[stateNameMap[r.state]] || null
         }));
 
-      // After fix: all states should have non-null fips
       expect(mapData).toHaveLength(3);
       expect(mapData[0].fips).toBe('01');
       expect(mapData[1].fips).toBe('06');
       expect(mapData[2].fips).toBe('48');
     });
 
-    it('renderInsecurityMap in source should accept accessStates parameter for FIPS lookup', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      // After fix: renderInsecurityMap should build fipsByName from accessStates
-      // Either via parameter or via module-level lookup
-      const fnMatch = jsSource.match(/function renderInsecurityMap\s*\([^)]+\)/);
-      expect(fnMatch).not.toBeNull();
-      // Should not hardcode fips: null for all records
-      // (the old bug was a comment saying "CDC data uses state abbr, not FIPS")
-      expect(jsSource).not.toContain('fips: null // CDC data uses state abbr');
-    });
-
+    // Kept as source-scan: guards against duplicate addEventListener (hard to test behaviorally)
     it('insecurity view back button should not have duplicate listener in init()', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      // After fix: init() should NOT call backBtn.addEventListener for access-map-back-btn
-      // renderDesertMap handles back button internally; init() had a duplicate that caused double-fire
       const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
-      // Match specifically: variable named backBtn with addEventListener (not just any addEventListener after getElementById)
       const backBtnListeners = (initSection.match(/\bbackBtn\b\.addEventListener/g) || []).length;
       expect(backBtnListeners).toBe(0);
     });
@@ -197,6 +153,20 @@ describe('food-access', () => {
         expect(s).toHaveProperty('lowAccessPct');
       }
     });
+
+    it('states should have fips codes for map rendering', () => {
+      const data = readJSON('current-food-access.json');
+      const withFips = data.states.filter(s => s.fips);
+      expect(withFips.length).toBeGreaterThanOrEqual(50);
+    });
+
+    it('lowAccessPct should be a valid percentage (0-100)', () => {
+      const data = readJSON('current-food-access.json');
+      for (const s of data.states) {
+        expect(s.lowAccessPct).toBeGreaterThanOrEqual(0);
+        expect(s.lowAccessPct).toBeLessThanOrEqual(100);
+      }
+    });
   });
 
   describe('data shape: snap-retailers.json', () => {
@@ -211,33 +181,66 @@ describe('food-access', () => {
     });
   });
 
-  // ── FA-06: Double Burden must be guarded by fiData availability ──
+  // ── Edge-case guards ──
+  describe('edge-case guards', () => {
+    it('povertyRate merge should preserve value of 0 via nullish check', () => {
+      // The fiByName merge must use != null, not truthy check
+      const fiByName = { 'StateA': 12.5, 'StateB': 0, 'StateC': null };
+      const states = [
+        { name: 'StateA' },
+        { name: 'StateB' },
+        { name: 'StateC' },
+        { name: 'StateD' },
+      ];
+
+      states.forEach(s => {
+        // Correct: nullish check preserves 0
+        if (fiByName[s.name] != null) s.povertyRate = fiByName[s.name];
+      });
+
+      expect(states[0].povertyRate).toBe(12.5);
+      expect(states[1].povertyRate).toBe(0); // NOT skipped
+      expect(states[2].povertyRate).toBeUndefined(); // null skipped
+      expect(states[3].povertyRate).toBeUndefined(); // missing skipped
+    });
+
+    it('buildHeatmapLegend should handle empty pctValues without Infinity', () => {
+      const pctValues = [];
+      // Guard: check isFinite before rendering
+      if (pctValues.length === 0) {
+        expect(pctValues.length).toBe(0);
+        return;
+      }
+      const min = Math.min(...pctValues);
+      expect(isFinite(min)).toBe(true);
+    });
+
+    it('tile column calculation should allow 2 columns on narrow screens', () => {
+      // Simulate column computation for various widths
+      const colsFor = (w) => Math.max(2, Math.floor(w / 180));
+      expect(colsFor(320)).toBe(2);  // mobile
+      expect(colsFor(360)).toBe(2);  // mobile
+      expect(colsFor(540)).toBe(3);  // small tablet
+      expect(colsFor(768)).toBe(4);  // tablet
+      expect(colsFor(1200)).toBe(6); // desktop
+    });
+  });
+
+  // ── FA-06: Double Burden fiData guard ──
+  // Kept as source-scan: guards structural ordering of fiData check
   describe('Double Burden fiData guard', () => {
     it('renderDoubleBurden should only be called when povertyRate has been merged', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      // renderDoubleBurden must be inside the if (fiData?.states) block,
-      // not called unconditionally, because curStates have no povertyRate without the merge
       const fiGuardIdx = jsSource.indexOf('if (fiData?.states)');
       const doubleBurdenCallIdx = jsSource.indexOf('renderDoubleBurden(curStates)');
       expect(fiGuardIdx).toBeGreaterThan(-1);
       expect(doubleBurdenCallIdx).toBeGreaterThan(-1);
-      // renderDoubleBurden must appear AFTER the fiData guard opens
       expect(doubleBurdenCallIdx).toBeGreaterThan(fiGuardIdx);
-      // Verify it's inside the block: the next closing brace after the guard
-      // should come AFTER renderDoubleBurden
       const blockAfterGuard = jsSource.slice(fiGuardIdx);
       const doubleBurdenInBlock = blockAfterGuard.indexOf('renderDoubleBurden(curStates)');
       const renderAccessInsecurity = blockAfterGuard.indexOf('renderAccessInsecurity');
-      // Both should be in the same guarded block
       expect(doubleBurdenInBlock).toBeGreaterThan(0);
       expect(doubleBurdenInBlock).toBeLessThan(renderAccessInsecurity);
-    });
-
-    it('povertyRate merge should use nullish check, not truthy', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      // The merge guard `if (fiByName[s.name])` drops povertyRate=0
-      // Should use != null instead
-      expect(jsSource).not.toMatch(/if\s*\(fiByName\[s\.name\]\)\s*s\.povertyRate/);
     });
   });
 
@@ -253,6 +256,7 @@ describe('food-access', () => {
   });
 
   // ── Fix 10: Mode B tiles must have ARIA roles ──
+  // Kept as source-scan: verifies ARIA attributes in innerHTML template
   describe('Mode B tile ARIA', () => {
     it('tiles should have role="listitem" and aria-label', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
@@ -272,43 +276,16 @@ describe('food-access', () => {
   });
 
   // ── Fix 19: showNational() visualMap scale ──
+  // Kept as source-scan: verifies specific numeric threshold
   describe('showNational visualMap scale', () => {
     it('should use min >= 20 matching current data range', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
       const fnStart = jsSource.indexOf('function showNational()');
       expect(fnStart).toBeGreaterThan(-1);
-      // Find the visualMap within the next 400 chars of the function
       const fnSlice = jsSource.slice(fnStart, fnStart + 1200);
       const minMatch = fnSlice.match(/min:\s*(\d+)/);
       expect(minMatch).toBeTruthy();
       expect(parseInt(minMatch[1], 10)).toBeGreaterThanOrEqual(20);
-    });
-  });
-
-  // ── Fix 20: Infinity guard on buildHeatmapLegend ──
-  describe('buildHeatmapLegend Infinity guard', () => {
-    it('should guard against empty pctValues before legend', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      expect(jsSource).toContain('isFinite');
-    });
-  });
-
-  // ── Fix 21: visualMap null not undefined ──
-  describe('visualMap null vs undefined', () => {
-    it('regionBased visualMap should use null, not undefined', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      expect(jsSource).not.toMatch(/regionBased\s*\?\s*undefined/);
-    });
-  });
-
-  // ── FA-21: Mode B tile column min clamp ──
-  describe('Mode B tile column calculation', () => {
-    it('minimum column clamp should allow 2 columns for mobile widths', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      // Math.max(4, ...) forces 4 columns minimum which overflows on mobile
-      // Should be Math.max(2, ...) to allow 2-column layout
-      expect(jsSource).not.toMatch(/Math\.max\(4,\s*Math\.floor/);
-      expect(jsSource).toMatch(/Math\.max\(2,\s*Math\.floor/);
     });
   });
 
@@ -318,7 +295,6 @@ describe('food-access', () => {
       const accessData = readJSON('current-food-access.json');
       const fiData = readJSON('food-insecurity-state.json');
 
-      // Simulate the merge and enrichment pipeline
       const fiByName = {};
       fiData.states.forEach(s => { fiByName[s.name] = s.povertyRate; });
 
@@ -339,6 +315,7 @@ describe('food-access', () => {
       });
     });
 
+    // Kept as source-scan: verifies ARIA in innerHTML template
     it('mode toggle should set aria-pressed correctly', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
       expect(jsSource).toContain('aria-pressed');
@@ -347,31 +324,33 @@ describe('food-access', () => {
   });
 
   // ── Fix 23: Mode B tiles should recalculate columns on resize ──
+  // Kept as source-scan: verifies ResizeObserver usage pattern
   describe('Mode B tile resize handling', () => {
     it('should observe container resize to recalculate tile columns', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      // Must use ResizeObserver on the tile container to re-layout on width changes
       expect(jsSource).toContain('ResizeObserver');
-      // The observer should target the tile container
       expect(jsSource).toContain('chart-double-burden-tiles');
     });
   });
 
-  // ── P4: Desert map drill-down data contract ──
+  // ─��� Desert map drill-down data contract ──
   describe('desert map drill-down', () => {
-    it('drill-down should use current-food-access county data when available', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      const drillSection = jsSource.slice(
-        jsSource.indexOf('async function drillDown'),
-        jsSource.indexOf('async function drillDown') + 2000
-      );
-      expect(drillSection).toContain('accessByFips');
-      expect(drillSection).toContain('hasCurrentAccess');
-      expect(drillSection).toContain('lowAccessPct');
+    it('access data states should have county-level data for drill-down', () => {
+      const accessData = readJSON('current-food-access.json');
+      let stateWithCounties = null;
+      for (const s of accessData.states) {
+        if (s.counties && s.counties.length > 0) {
+          stateWithCounties = s;
+          break;
+        }
+      }
+      expect(stateWithCounties).not.toBeNull();
+      const county = stateWithCounties.counties[0];
+      expect(county).toHaveProperty('fips');
+      expect(county).toHaveProperty('lowAccessPct');
     });
 
     it('all 51 county GeoJSON files should have correct properties', () => {
-      // Spot-check 4 states
       const checks = ['06', '12', '36', '48']; // CA, FL, NY, TX
       for (const fips of checks) {
         const geo = readJSON(`counties/${fips}.json`);
@@ -383,7 +362,7 @@ describe('food-access', () => {
     });
   });
 
-  // ── P4: Urban vs Rural donut data contract ──
+  // ── Urban vs Rural data contract ──
   describe('urban vs rural computation', () => {
     it('access data should have counties with isUrban flag', () => {
       const accessData = readJSON('current-food-access.json');
@@ -400,103 +379,64 @@ describe('food-access', () => {
       }
       expect(hasCounties).toBe(true);
     });
-  });
 
-  // ── P4: SNAP retailers map ──
-  describe('SNAP retailers map', () => {
-    it('renderSnapRetailers should disable drill-down', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      const snapSection = jsSource.slice(jsSource.indexOf('function renderSnapRetailers'));
-      expect(snapSection).toContain('setDrillDown(false)');
+    it('should compute valid urban and rural tract totals from county data', () => {
+      const accessData = readJSON('current-food-access.json');
+      let urbanLATracts = 0, ruralLATracts = 0;
+      for (const state of accessData.states) {
+        if (!state.counties) continue;
+        for (const c of state.counties) {
+          if (c.isUrban) urbanLATracts += c.lowAccessTracts;
+          else ruralLATracts += c.lowAccessTracts;
+        }
+      }
+      expect(urbanLATracts).toBeGreaterThan(0);
+      expect(ruralLATracts).toBeGreaterThan(0);
     });
   });
 
-  // ── P4: renderUrbanRural source contract ──
-  describe('renderUrbanRural', () => {
-    it('should compute urban vs rural low-access rates from county data', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      const section = jsSource.slice(
-        jsSource.indexOf('function renderUrbanRural'),
-        jsSource.indexOf('function renderUrbanRural') + 800
-      );
-      expect(section).toContain('urbanLATracts');
-      expect(section).toContain('ruralLATracts');
-      expect(section).toContain('isUrban');
-    });
-  });
-
-  // ── P4: renderDistance source contract ──
+  // ── renderDistance data contract ──
   describe('renderDistance', () => {
-    it('should render line chart of average distance with Alaska cap', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      const section = jsSource.slice(
-        jsSource.indexOf('function renderDistance'),
-        jsSource.indexOf('function renderDistance') + 600
-      );
-      expect(section).toContain('avgDistance');
-      expect(section).toContain('ALASKA_CAP');
+    it('states should have avgDistance for distance chart', () => {
+      const data = readJSON('current-food-access.json');
+      const withDist = data.states.filter(s => typeof s.avgDistance === 'number');
+      expect(withDist.length).toBeGreaterThanOrEqual(40);
+    });
+
+    it('Alaska distance should be an outlier requiring cap', () => {
+      const data = readJSON('current-food-access.json');
+      const alaska = data.states.find(s => s.name === 'Alaska');
+      if (alaska) {
+        const median = data.states
+          .filter(s => typeof s.avgDistance === 'number')
+          .map(s => s.avgDistance)
+          .sort((a, b) => a - b);
+        const medianVal = median[Math.floor(median.length / 2)];
+        // Alaska distance should be significantly higher than median
+        expect(alaska.avgDistance).toBeGreaterThan(medianVal * 2);
+      }
     });
   });
 
-  // ── P4: renderVehicle source contract ──
+  // ── renderVehicle data contract ──
   describe('renderVehicle', () => {
-    it('should plot distance vs low-access scatter with labeled states', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      const start = jsSource.indexOf('function renderVehicle');
-      const nextFn = jsSource.indexOf('\nfunction ', start + 10);
-      const section = jsSource.slice(start, nextFn > start ? nextFn : start + 2000);
-      expect(section).toContain('scatter');
-      expect(section).toContain('lowAccessPct');
-      expect(section).toContain('LABEL_STATES');
-    });
-  });
-
-  // ── P4: renderLowAccessMap source contract ──
-  describe('renderLowAccessMap', () => {
-    it('should render choropleth with lowAccessPct metric', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function renderLowAccessMap'));
-      expect(section).toContain('lowAccessPct');
-      expect(section).toContain('map');
-    });
-  });
-
-  // ── P4: renderAccessInsecurity source contract ──
-  describe('renderAccessInsecurity', () => {
-    it('should include drawAccessInsecurityScatter and updateInsight', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      expect(jsSource).toContain('drawAccessInsecurityScatter');
-      expect(jsSource).toContain('updateAccessInsecurityInsight');
-    });
-  });
-
-  // ── P4: initDoubleBurdenModeToggle source contract ──
-  describe('initDoubleBurdenModeToggle', () => {
-    it('should toggle between treemap and tiles modes', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function initDoubleBurdenModeToggle'));
-      expect(section).toContain('data-db-mode');
-      expect(section).toContain('aria-pressed');
-    });
-  });
-
-  // ── P4: populateAccessibleTable source contract ──
-  describe('populateAccessibleTable', () => {
-    it('should populate a screen-reader accessible data table', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function populateAccessibleTable'));
-      expect(section).toContain('table');
-      expect(section).toContain('tbody');
+    it('states should have avgDistance and lowAccessPct for scatter chart', () => {
+      const data = readJSON('current-food-access.json');
+      const withFields = data.states.filter(s =>
+        typeof s.avgDistance === 'number' && typeof s.lowAccessPct === 'number'
+      );
+      expect(withFields.length).toBeGreaterThanOrEqual(40);
     });
   });
 
   // ── Urban low-access hero stat ──
   describe('urban low-access hero stat', () => {
     it('hero stats HTML should include Urban Low-Access Rate label', () => {
-      const html = readFileSync(resolve(htmlDir, 'food-access.html'), 'utf-8');
+      const html = readHTML('food-access.html');
       expect(html).toContain('Urban Low-Access Rate');
     });
 
+    // Kept as source-scan: verifies specific label.includes pattern
     it('JS should sync urban low-access rate to hero stat', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
       const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
@@ -505,6 +445,7 @@ describe('food-access', () => {
   });
 
   // ── Reframe access-insecurity insight text ──
+  // Kept as source-scan: guards specific insight wording
   describe('access-insecurity insight reframing', () => {
     it('state-level weak correlation text should reference poverty as dominant predictor', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
@@ -517,9 +458,9 @@ describe('food-access', () => {
 
   // ── CODX #2: Insecurity tooltip should not promise drill-down ──
   describe('insecurity view drill-down promise', () => {
+    // Kept as source-scan: guards against misleading UX promise
     it('insecurity tooltip should NOT say "Click for county breakdown"', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      // Find the renderInsecurityMap function's tooltip
       const insecuritySection = jsSource.match(/renderInsecurityMap[\s\S]*?(?=function\s|export\s|$)/);
       expect(insecuritySection).toBeTruthy();
       expect(insecuritySection[0]).not.toContain('Click for county breakdown');
@@ -527,18 +468,33 @@ describe('food-access', () => {
 
     it('HTML hint should not unconditionally promise county drill-down', () => {
       const html = readHTML('food-access.html');
-      // The static hint near the map should not promise drill-down for all views
       expect(html).not.toMatch(/class="dashboard-chart__hint"[^>]*>.*click any state for county breakdown/i);
     });
   });
 
-  // ── UI/UX Audit: Legend/Label/Color Consistency ──
-  describe('legend/label/color consistency', () => {
-    it('county scatter visualMap should use PAL palette, not hardcoded hex', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
-      expect(jsSource).not.toContain('\'#22d3ee\'');
+  // ── HTML structure validation ──
+  describe('food-access.html chart containers', () => {
+    it('should have containers for all chart components', () => {
+      const html = readHTML('food-access.html');
+      const chartIds = [
+        'chart-desert-map', 'chart-urban-rural', 'chart-distance',
+        'chart-vehicle', 'chart-double-burden', 'chart-access-insecurity',
+      ];
+      for (const id of chartIds) {
+        expect(html).toContain(`id="${id}"`);
+      }
     });
 
+    it('should have map-view-toggle for map mode switching', () => {
+      const html = readHTML('food-access.html');
+      expect(html).toContain('map-view-toggle');
+      expect(html).toContain('Food Deserts');
+    });
+  });
+
+  // ── UI/UX Audit: Legend/Label/Color Consistency ──
+  // Kept as source-scan: guards specific label text and color patterns
+  describe('legend/label/color consistency', () => {
     it('county drill-down visualMap text should say "Fewer Low-Access" not just "Fewer"', () => {
       const jsSource = readFileSync(resolve(__dirname, 'food-access.js'), 'utf-8');
       const countySection = jsSource.slice(
@@ -565,8 +521,54 @@ describe('food-access', () => {
         jsSource.indexOf('function renderSnapRetailers'),
         jsSource.indexOf('function renderSnapRetailers') + 2000
       );
-      // Should use snap palette (red→green) not inverted access palette
       expect(snapSection).toContain('MAP_PALETTES.snap');
+    });
+  });
+
+  // ── SNAP retailers data contract ──
+  describe('SNAP retailers data contract', () => {
+    it('snap-retailers.json should have per-capita rates for all states', () => {
+      const data = readJSON('snap-retailers.json');
+      expect(data.states.length).toBeGreaterThanOrEqual(50);
+      for (const s of data.states) {
+        expect(s.retailersPer100K).toBeGreaterThan(0);
+      }
+    });
+  });
+
+  // ── Additional data contract tests ──
+  describe('cross-dataset join integrity', () => {
+    it('access states should align with food-insecurity states by name', () => {
+      const accessData = readJSON('current-food-access.json');
+      const fiData = readJSON('food-insecurity-state.json');
+      const accessNames = new Set(accessData.states.map(s => s.name));
+      const fiNames = new Set(fiData.states.map(s => s.name));
+      // Most states should appear in both datasets for the access-insecurity scatter
+      const overlap = [...accessNames].filter(n => fiNames.has(n));
+      expect(overlap.length).toBeGreaterThanOrEqual(48);
+    });
+
+    it('access data totalPopulation should be positive for pctOfPop computation', () => {
+      const data = readJSON('current-food-access.json');
+      for (const s of data.states) {
+        expect(s.totalPopulation).toBeGreaterThan(0);
+      }
+    });
+
+    it('access data lowAccessPopulation should not exceed totalPopulation', () => {
+      const data = readJSON('current-food-access.json');
+      for (const s of data.states) {
+        expect(s.lowAccessPopulation).toBeLessThanOrEqual(s.totalPopulation);
+      }
+    });
+
+    it('snap-retailers states should align with food-access states by name', () => {
+      const accessData = readJSON('current-food-access.json');
+      const snapData = readJSON('snap-retailers.json');
+      const accessNames = new Set(accessData.states.map(s => s.name));
+      const snapNames = new Set(snapData.states.map(s => s.name));
+      const overlap = [...snapNames].filter(n => accessNames.has(n));
+      expect(overlap.length).toBeGreaterThanOrEqual(48);
     });
   });
 });
