@@ -415,9 +415,9 @@ async function init() {
     animateCounters();
 
   } catch (err) {
-    // eslint-disable-next-line no-console -- error boundary
+     
     if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-      // eslint-disable-next-line no-console
+       
       console.error('Executive Summary Dashboard error:', err);
     }
     const errorEl = document.getElementById('dashboard-error');
