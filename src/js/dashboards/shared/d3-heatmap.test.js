@@ -94,10 +94,9 @@ describe('d3-heatmap', () => {
       expect(container.innerHTML).toContain('$4000');
     });
 
-    it('should include the gradient bar with correct colors', () => {
+    it('should include the gradient bar CSS class', () => {
       buildHeatmapLegend(container, 0, 100, v => v.toFixed(0));
-      expect(container.innerHTML).toContain('#312E81');
-      expect(container.innerHTML).toContain('#FDE047');
+      expect(container.querySelector('.csp-heatmap-legend-bar')).not.toBeNull();
     });
 
     it('should render 6 tick marks (min + 5 steps)', () => {

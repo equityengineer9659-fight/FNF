@@ -137,7 +137,7 @@ function renderResults(data, container) {
     return `<article class="directory-org-card">
       <a href="/dashboards/nonprofit-profile.html?ein=${org.ein}" class="directory-org-card__name">${escapeHtml(org.name)}</a>
       <span class="directory-org-card__location">${escapeHtml(org.city || '')}, ${org.state || ''}</span>
-      <span class="directory-org-card__location" style="font-size:0.78rem;color:rgba(255,255,255,0.4)">${escapeHtml(ntee)}</span>
+      <span class="directory-org-card__ntee">${escapeHtml(ntee)}</span>
       <div class="directory-org-card__badges">${categoryBadge}${revBadge}${nteeBadge}</div>
     </article>`;
   }).join('');

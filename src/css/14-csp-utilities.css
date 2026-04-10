@@ -421,3 +421,179 @@
 .dashboard-list-item--muted {
   color: rgba(255, 255, 255, 0.4);
 }
+
+/* ==========================================================================
+   CSP INLINE-STYLE MIGRATION — ECharts Tooltip Text Colors
+   These replace style="color:${COLORS.xxx}" in ECharts formatter strings.
+   Values match dashboard-utils.js COLORS constants exactly.
+   ========================================================================== */
+
+/* COLORS.secondary (#00d4ff) */
+.csp-text-secondary { color: #00d4ff; }
+
+/* COLORS.secondary + small font — source notes, "click to see counties" */
+.csp-text-secondary-sm { color: #00d4ff; font-size: 11px; }
+
+/* COLORS.accent (#ff6b35) */
+.csp-text-accent { color: #ff6b35; }
+
+/* COLORS.textMuted rgba(255,255,255,0.65) */
+.csp-text-muted { color: rgba(255, 255, 255, 0.65); }
+
+/* COLORS.textMuted + 11px — source attributions, footnotes */
+.csp-text-muted-sm { color: rgba(255, 255, 255, 0.65); font-size: 11px; }
+
+/* COLORS.textMuted + 10px — Alaska cap note, dense/urban subtitle */
+.csp-text-muted-xs { color: rgba(255, 255, 255, 0.65); font-size: 10px; }
+
+/* LOW_ACCESS_COLOR (#f59e0b) — Triple Burden chart legend */
+.csp-text-low-access { color: #f59e0b; }
+
+/* ==========================================================================
+   CSP INLINE-STYLE MIGRATION — Region Color Text
+   Replace style="color:${REGION_COLORS[region]}" with class="${REGION_CLASS[region]}"
+   ========================================================================== */
+
+.csp-text-region-northeast { color: #60a5fa; }
+
+.csp-text-region-midwest { color: #f59e0b; }
+
+.csp-text-region-south { color: #f87171; }
+
+.csp-text-region-west { color: #34d399; }
+
+/* Heatmap-palette region text (muted tones for D3 heatmap tooltips) */
+.csp-text-hm-northeast { color: #93B8DE; }
+
+.csp-text-hm-midwest { color: #D1B862; }
+
+.csp-text-hm-south { color: #D08A8A; }
+
+.csp-text-hm-west { color: #74BFA0; }
+
+/* ==========================================================================
+   CSP INLINE-STYLE MIGRATION — Tooltip Layout Helpers
+   ========================================================================== */
+
+/* Inline-flex wrapper for region swatch + label in tooltip (food-access/food-banks) */
+.csp-tooltip-inline-flex {
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* SVG swatch dot in ECharts tooltip — provides margin around the inline SVG */
+.csp-swatch {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* DOM swatch dot (Pattern B — color set via post-render CSSOM) */
+.csp-swatch-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+/* Gap font-size modifier for snap-safety-net CDC/Admin gap value */
+.csp-text-gap-sm { font-size: 12px; }
+
+/* Bold medium label — food-prices tooltip state name */
+.csp-text-bold-md {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   CSP INLINE-STYLE MIGRATION — D3 Heatmap Legend (buildHeatmapLegend)
+   ========================================================================== */
+
+.csp-heatmap-legend-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.csp-heatmap-legend-label {
+  font-size: 0.82rem;
+  color: #fff;
+  font-weight: 600;
+  opacity: 0.88;
+  min-width: 40px;
+  padding-top: 2px;
+}
+
+.csp-heatmap-legend-label--right { text-align: right; }
+
+.csp-heatmap-legend-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 320px;
+}
+
+.csp-heatmap-legend-bar {
+  width: 100%;
+  height: 16px;
+  border-radius: 8px;
+  background: linear-gradient(to right, #312E81, #4338CA, #6366F1, #8B5CF6, #EC4899, #F97316, #FDE047);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.csp-heatmap-legend-ticks {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+
+.csp-heatmap-legend-tick {
+  font-size: 0.74rem;
+  color: rgba(225, 232, 240, 0.7);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.csp-heatmap-legend-note {
+  text-align: center;
+  font-size: 0.7rem;
+  color: rgba(225, 232, 240, 0.4);
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   CSP INLINE-STYLE MIGRATION — D3 Heatmap Region Chips (buildRegionChips)
+   Dot color set via post-render CSSOM: el.style.backgroundColor = el.dataset.color
+   ========================================================================== */
+
+.csp-region-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin-right: 16px;
+}
+
+.csp-region-chip__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   CSP INLINE-STYLE MIGRATION — Nonprofit Directory NTEE label
+   Replaces style="font-size:0.78rem;color:rgba(255,255,255,0.4)" on line 140
+   ========================================================================== */
+
+.directory-org-card__ntee {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.4);
+}

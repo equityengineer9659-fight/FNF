@@ -51,6 +51,14 @@ const HEATMAP_REGION_COLORS = {
   West:      '#74BFA0',
 };
 
+// CSP-safe class lookup — maps region name to CSS class for inline-style-free tooltips
+const HEATMAP_REGION_CLASS = {
+  Northeast: 'csp-text-hm-northeast',
+  Midwest:   'csp-text-hm-midwest',
+  South:     'csp-text-hm-south',
+  West:      'csp-text-hm-west',
+};
+
 // ═══════════════════════════════════════════════════════
 //  COLOR ENGINE
 // ═══════════════════════════════════════════════════════
@@ -150,26 +158,29 @@ export function buildHeatmapLegend(container, minVal, maxVal, formatFn) {
   let ticks = '';
   for (let i = 0; i <= steps; i++) {
     const v = minVal + (maxVal - minVal) * (i / steps);
-    ticks += `<span style="font-size:0.74rem;color:rgba(225,232,240,0.7);font-variant-numeric:tabular-nums;font-weight:500">${formatFn(v)}</span>`;
+    ticks += `<span class="csp-heatmap-legend-tick">${formatFn(v)}</span>`;
   }
   container.innerHTML = `
-    <div style="display:flex;align-items:flex-start;justify-content:center;gap:14px;margin-top:8px">
-      <span style="font-size:0.82rem;color:#fff;font-weight:600;opacity:0.88;min-width:40px;text-align:right;padding-top:2px">Low</span>
-      <div style="display:flex;flex-direction:column;gap:5px;width:320px">
-        <div style="width:100%;height:16px;border-radius:8px;background:linear-gradient(to right,#312E81,#4338CA,#6366F1,#8B5CF6,#EC4899,#F97316,#FDE047);border:1px solid rgba(255,255,255,0.06);box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
-        <div style="display:flex;justify-content:space-between;padding:0 2px">${ticks}</div>
+    <div class="csp-heatmap-legend-wrapper">
+      <span class="csp-heatmap-legend-label csp-heatmap-legend-label--right">Low</span>
+      <div class="csp-heatmap-legend-bar-wrapper">
+        <div class="csp-heatmap-legend-bar"></div>
+        <div class="csp-heatmap-legend-ticks">${ticks}</div>
       </div>
-      <span style="font-size:0.82rem;color:#fff;font-weight:600;opacity:0.88;min-width:40px;padding-top:2px">High</span>
+      <span class="csp-heatmap-legend-label">High</span>
     </div>
-    <div style="text-align:center;font-size:0.7rem;color:rgba(225,232,240,0.4);margin-top:2px">Color distributed by rank (not linear scale)</div>
+    <div class="csp-heatmap-legend-note">Color distributed by rank (not linear scale)</div>
   `;
 }
 
 export function buildRegionChips(container) {
   if (!container) return;
   container.innerHTML = Object.entries(REGION_COLORS).map(([region, color]) =>
-    `<span style="display:inline-flex;align-items:center;gap:5px;font-size:0.75rem;color:rgba(255,255,255,0.55);margin-right:16px"><span style="width:10px;height:10px;border-radius:2px;background:${color};display:inline-block;opacity:0.6"></span>${region}</span>`
+    `<span class="csp-region-chip"><span class="csp-region-chip__dot" data-color="${color}"></span>${region}</span>`
   ).join('');
+  container.querySelectorAll('[data-color]').forEach(el => {
+    el.style.backgroundColor = el.dataset.color;
+  });
 }
 
 // ═══════════════════════════════════════════════════════
@@ -508,4 +519,4 @@ export function createRankNorm(values) {
   };
 }
 
-export { HEATMAP_REGION_COLORS, sampleGradient, tileTextColor, tileSubTextColor };
+export { HEATMAP_REGION_COLORS, HEATMAP_REGION_CLASS, sampleGradient, tileTextColor, tileSubTextColor };

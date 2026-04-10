@@ -8,7 +8,7 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
   updateFreshness, initScrollReveal, handleResize,
-  REGION_COLORS, getRegion, addExportButton, US_STATES
+  REGION_COLORS, REGION_CLASS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
 import { initStateSelector } from './shared/state-selector.js';
 
@@ -57,14 +57,14 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
     const d = params.data;
     if (!d) return '';
     return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-      <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.rate}%<br/>
-      <span style="color:${COLORS.accent}">Child Rate:</span> ${d.childRate}%<br/>
+      <span class="csp-text-secondary">Food Insecurity:</span> ${d.rate}%<br/>
+      <span class="csp-text-accent">Child Rate:</span> ${d.childRate}%<br/>
       Persons: ${fmtNum(d.persons)}<br/>
       Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
       Avg Meal Cost: $${d.mealCost}<br/>
       Poverty Rate: ${d.povertyRate}%<br/>
       SNAP: ${fmtNum(d.snapParticipation)} (${d.snapCoverage || '—'}% coverage)<br/>
-      <span style="color:${COLORS.secondary};font-size:11px">Click to see counties</span>`;
+      <span class="csp-text-secondary-sm">Click to see counties</span>`;
   }
 
   // County tooltip formatter
@@ -73,8 +73,8 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
     if (!d) return '';
     return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
       Population: ${fmtNum(d.population || 0)}<br/>
-      <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.rate}%<br/>
-      <span style="color:${COLORS.accent}">Child Rate:</span> ${d.childRate}%<br/>
+      <span class="csp-text-secondary">Food Insecurity:</span> ${d.rate}%<br/>
+      <span class="csp-text-accent">Child Rate:</span> ${d.childRate}%<br/>
       Poverty Rate: ${d.povertyRate}%<br/>
       Persons: ${fmtNum(d.persons)}<br/>
       Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
@@ -478,7 +478,7 @@ function renderTrend(data) {
         const idx = params[0].dataIndex;
         const isProjected = hasProjections && idx >= firstProjectedIdx;
         const sourceLabel = isProjected ? 'Projected (Columbia University)' : 'Official USDA Data';
-        let tip = `<strong>${params[0].axisValue}</strong> <span style="color:${COLORS.textMuted};font-size:11px">${sourceLabel}</span><br/>`;
+        let tip = `<strong>${params[0].axisValue}</strong> <span class="csp-text-muted-sm">${sourceLabel}</span><br/>`;
         // Deduplicate: only show one entry per series name (actual and projected overlap)
         const seen = new Set();
         params.forEach(p => {
@@ -487,7 +487,7 @@ function renderTrend(data) {
           seen.add(baseName);
           const arr = baseName === 'Overall Rate' ? rates : childRates;
           const yoy = idx > 0 ? (p.value - arr[idx - 1]).toFixed(1) : null;
-          const yoyStr = yoy !== null ? ` (<span style="color:${yoy >= 0 ? COLORS.accent : '#22c55e'}">${yoy >= 0 ? '+' : ''}${yoy}pp</span>)` : '';
+          const yoyStr = yoy !== null ? ` (<span class="${yoy >= 0 ? 'csp-text-accent' : 'text-data-success'}">${yoy >= 0 ? '+' : ''}${yoy}pp</span>)` : '';
           tip += `${p.marker} ${baseName}: <strong>${p.value}%</strong>${yoyStr}<br/>`;
         });
         return tip;
@@ -715,7 +715,7 @@ function renderScatter(data, mode, source) {
         const region = getRegion(d.name);
         const pLabel = isChild ? 'Child Poverty' : 'Poverty';
         const fiLabel = isChild ? 'Child Food Insecurity' : 'Food Insecurity';
-        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>${pLabel}: ${d.value[0]}%<br/>${fiLabel}: ${d.value[1]}%<br/><span style="color:${COLORS.textMuted};font-size:11px">Source: ${srcTag}</span>`;
+        return `<strong>${d.name}</strong> <span class="${REGION_CLASS[region] || ''}">(${region})</span><br/>${pLabel}: ${d.value[0]}%<br/>${fiLabel}: ${d.value[1]}%<br/><span class="csp-text-muted-sm">Source: ${srcTag}</span>`;
       }
     },
     grid: { left: 55, right: 20, top: 35, bottom: 45 },
@@ -853,7 +853,7 @@ function renderMealCost(data) {
         const p = params[0];
         const region = getRegion(p.name);
         const diff = ((p.value - natAvg) / natAvg * 100).toFixed(0);
-        return `<strong>${p.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>Meal Cost: <strong>$${p.value}</strong><br/>${p.value > natAvg ? '+' : ''}${diff}% vs national avg ($${natAvg})`;
+        return `<strong>${p.name}</strong> <span class="${REGION_CLASS[region] || ''}">(${region})</span><br/>Meal Cost: <strong>$${p.value}</strong><br/>${p.value > natAvg ? '+' : ''}${diff}% vs national avg ($${natAvg})`;
       }
     },
     grid: { left: 110, right: 30, top: 10, bottom: 30 },
@@ -1148,7 +1148,7 @@ function renderSDOH(sdoh, fiData, metricKey) {
       formatter: params => {
         const d = params.data;
         const region = getRegion(d.name);
-        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>${metric.axis}: ${d.value[0]}%<br/>Food Insecurity: ${d.value[1]}%`;
+        return `<strong>${d.name}</strong> <span class="${REGION_CLASS[region] || ''}">(${region})</span><br/>${metric.axis}: ${d.value[0]}%<br/>Food Insecurity: ${d.value[1]}%`;
       }
     },
     grid: { left: 55, right: 20, top: 35, bottom: 45 },
@@ -1401,7 +1401,7 @@ function renderIncomeRiver(sdoh, fiData) {
         if (!state) return '';
         let html = `<strong>${state.name}</strong> (FI: ${state.fiRate}%)<br/>`;
         params.forEach(p => {
-          html += `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${p.color};margin-right:4px;"></span>${p.dimensionNames?.[1] || p.seriesName}: ${p.value[1]}%<br/>`;
+          html += `<svg class="csp-swatch" width="8" height="8"><circle cx="4" cy="4" r="4" fill="${p.color}"/></svg>${p.dimensionNames?.[1] || p.seriesName}: ${p.value[1]}%<br/>`;
         });
         return html;
       }
@@ -1498,11 +1498,11 @@ function renderTripleBurden(data, accessData) {
         const name = params[0].name;
         const s = scored.find(x => x.name === name);
         return `<strong>${name}</strong><br/>`
-          + `<span style="color:${COLORS.accent}">■</span> Food Insecurity: ${s.rate}% (score: ${s.fiScore.toFixed(0)})<br/>`
-          + `<span style="color:${LOW_ACCESS_COLOR}">■</span> Low Access: ${s.accessPct}% (score: ${s.accessScore.toFixed(0)})<br/>`
-          + `<span style="color:${COLORS.secondary}">■</span> SNAP Gap: ${100 - Math.min(s.coverage, 100)}% uncovered (score: ${s.coverageGapScore.toFixed(0)})<br/>`
+          + `<span class="csp-text-accent">■</span> Food Insecurity: ${s.rate}% (score: ${s.fiScore.toFixed(0)})<br/>`
+          + `<span class="csp-text-low-access">■</span> Low Access: ${s.accessPct}% (score: ${s.accessScore.toFixed(0)})<br/>`
+          + `<span class="csp-text-secondary">■</span> SNAP Gap: ${100 - Math.min(s.coverage, 100)}% uncovered (score: ${s.coverageGapScore.toFixed(0)})<br/>`
           + `<strong>Composite: ${s.total.toFixed(0)}/300</strong>`
-          + `<br/><span style="color:${COLORS.textMuted};font-size:11px">Scale: three 0\u2013100 component scores, summed for a 0\u2013300 composite.</span>`;
+          + '<br/><span class="csp-text-muted-sm">Scale: three 0\u2013100 component scores, summed for a 0\u2013300 composite.</span>';
       }
     },
     legend: {

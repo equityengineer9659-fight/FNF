@@ -243,7 +243,7 @@ function applySnapMapView(view) {
           const d = params.data;
           if (!d) return '';
           let tip = `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-            <span style="color:${COLORS.secondary}">Coverage Ratio:</span> ${d.value.toFixed(1)}%<br/>
+            <span class="csp-text-secondary">Coverage Ratio:</span> ${d.value.toFixed(1)}%<br/>
             SNAP Participants: ${fmtNum(d.snapParticipants)}<br/>
             Food Insecure: ${fmtNum(d.foodInsecure)}<br/>
             Insecurity Rate: ${d.insecurityRate}%<br/>
@@ -254,11 +254,11 @@ function applySnapMapView(view) {
             const cdcMatch = snapMapCdcData.find(c => c.name === d.name);
             if (cdcMatch) {
               const gap = (d.snapRate - cdcMatch.cdcRate).toFixed(1);
-              tip += `<br/><span style="color:${COLORS.accent}">CDC Self-Reported:</span> ${cdcMatch.cdcRate}%`;
-              tip += `<br/><span style="color:${COLORS.textMuted};font-size:11px">Gap: ${gap > 0 ? '+' : ''}${gap}pp (admin ${gap > 0 ? '>' : '<'} self-reported)</span>`;
+              tip += `<br/><span class="csp-text-accent">CDC Self-Reported:</span> ${cdcMatch.cdcRate}%`;
+              tip += `<br/><span class="csp-text-muted-sm">Gap: ${gap > 0 ? '+' : ''}${gap}pp (admin ${gap > 0 ? '>' : '<'} self-reported)</span>`;
             }
           }
-          tip += `<br/><span style="color:${COLORS.textMuted};font-size:11px">&gt;100% = SNAP exceeds insecure population</span>`;
+          tip += '<br/><span class="csp-text-muted-sm">&gt;100% = SNAP exceeds insecure population</span>';
           return tip;
         }
       },
@@ -292,18 +292,18 @@ function applySnapMapView(view) {
         ...TOOLTIP_STYLE,
         formatter: params => {
           const d = params.data;
-          if (!d) return `<strong class="fnf-tooltip-label">${params.name}</strong><br/><span style="color:${COLORS.textMuted}">No CDC survey data available for this state</span>`;
+          if (!d) return `<strong class="fnf-tooltip-label">${params.name}</strong><br/><span class="csp-text-muted">No CDC survey data available for this state</span>`;
           let tip = `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-            <span style="color:${COLORS.accent}">CDC Self-Reported SNAP:</span> ${d.cdcRate}%`;
+            <span class="csp-text-accent">CDC Self-Reported SNAP:</span> ${d.cdcRate}%`;
           // Show admin comparison
           const adminMatch = snapMapAdminData?.find(a => a.name === d.name);
           if (adminMatch) {
-            tip += `<br/><span style="color:${COLORS.secondary}">Administrative SNAP Rate:</span> ${adminMatch.snapRate}%`;
+            tip += `<br/><span class="csp-text-secondary">Administrative SNAP Rate:</span> ${adminMatch.snapRate}%`;
             const gap = (adminMatch.snapRate - d.cdcRate).toFixed(1);
-            const gapColor = gap > 0 ? '#fbbf24' : gap < 0 ? '#ef4444' : '#22c55e';
-            tip += `<br/><span style="color:${gapColor};font-size:12px">${formatCdcAdminGap(adminMatch.snapRate, d.cdcRate)}</span>`;
+            const gapCls = gap > 0 ? 'text-data-warning' : gap < 0 ? 'text-data-negative' : 'text-data-success';
+            tip += `<br/><span class="csp-text-gap-sm ${gapCls}">${formatCdcAdminGap(adminMatch.snapRate, d.cdcRate)}</span>`;
           }
-          tip += `<br/><span style="color:${COLORS.textMuted};font-size:11px">Source: CDC PLACES BRFSS Survey</span>`;
+          tip += '<br/><span class="csp-text-muted-sm">Source: CDC PLACES BRFSS Survey</span>';
           return tip;
         }
       },

@@ -100,6 +100,14 @@ export const REGION_COLORS = {
   West: '#34d399'
 };
 
+// CSP-safe class lookup — maps region name to CSS class for inline-style-free tooltips
+export const REGION_CLASS = {
+  Northeast: 'csp-text-region-northeast',
+  Midwest:   'csp-text-region-midwest',
+  South:     'csp-text-region-south',
+  West:      'csp-text-region-west'
+};
+
 export function getRegion(stateName) {
   for (const [region, states] of Object.entries(REGIONS)) {
     if (states.includes(stateName)) return region;

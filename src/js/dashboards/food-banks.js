@@ -8,12 +8,12 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES, LEGEND_TEXT_STYLE,
   fmtNum, animateCounters, createChart,
   initScrollReveal, handleResize, updateFreshness,
-  REGIONS, REGION_COLORS, getRegion, addExportButton, US_STATES
+  REGIONS, REGION_COLORS, REGION_CLASS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
 import { initStateSelector } from './shared/state-selector.js';
 
 import {
-  createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm, HEATMAP_REGION_COLORS
+  createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm, HEATMAP_REGION_COLORS, HEATMAP_REGION_CLASS
 } from './shared/d3-heatmap.js';
 
 const PAL = MAP_PALETTES.banks;
@@ -46,7 +46,7 @@ function renderDensityMap(geoJSON, states) {
         const d = params.data;
         if (!d) return '';
         return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-          <span style="color:${COLORS.secondary}">Density:</span> ${d.value.toFixed(1)} orgs per 100K<br/>
+          <span class="csp-text-secondary">Density:</span> ${d.value.toFixed(1)} orgs per 100K<br/>
           Total Orgs: ${fmtNum(d.orgCount)}<br/>
           Revenue: $${fmtNum(d.totalRevenue)}<br/>
           Food Insecurity: ${d.foodInsecurityRate}%`;
@@ -172,15 +172,15 @@ function renderRevenue(states) {
       const region = leaf.parent ? leaf.parent.data.name : d.region;
       const rc = HEATMAP_REGION_COLORS[region] || '#888';
       return `<strong>${d.name}</strong>
-        <span style="margin-left:6px;display:inline-flex;align-items:center">
-          <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
-          <span style="color:${rc}">${region}</span>
+        <span class="csp-tooltip-inline-flex">
+          <svg class="csp-swatch" width="8" height="8"><rect rx="2" width="8" height="8" fill="${rc}"/></svg>
+          <span class="${HEATMAP_REGION_CLASS[region] || ''}">${region}</span>
         </span><br/>
         <span class="text-accent-indigo fnf-tooltip-label">$ per Person in Need:</span> <strong>$${fmtNum(leaf.value)}</strong><br/>
         <span class="text-accent-indigo fnf-tooltip-label">Program Efficiency:</span> <strong>${d.efficiency}%</strong>
         <hr class="fnf-tooltip-divider">
         Total Revenue: $${fmtNum(d.totalRevenue)}<br/>
-        Operating Reserve: <strong style="color:${Number(d.reservePct) < 5 ? '#ef4444' : '#22c55e'}">${d.reservePct}%</strong><br/>
+        Operating Reserve: <strong class="${Number(d.reservePct) < 5 ? 'text-data-negative' : 'text-data-success'}">${d.reservePct}%</strong><br/>
         Organizations: ${fmtNum(d.orgCount)}<br/>
         Insecure Pop: ${fmtNum(d.insecurePersons)}<br/>
         Insecurity Rate: ${d.insecurityRate}%`;
@@ -359,7 +359,7 @@ function renderCapacityGap(states) {
       ...TOOLTIP_STYLE,
       formatter: params => {
         const d = params.data;
-        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[getRegion(d.name)]}">(${getRegion(d.name)})</span><br/>Food Insecurity: ${d.value[0]}%<br/>Revenue/Insecure Person: <strong>$${d.value[1].toLocaleString()}</strong><br/>Food-Insecure Pop: ${fmtNum(d.insecurePersons)}`;
+        return `<strong>${d.name}</strong> <span class="${REGION_CLASS[getRegion(d.name)] || ''}">(${getRegion(d.name)})</span><br/>Food Insecurity: ${d.value[0]}%<br/>Revenue/Insecure Person: <strong>$${d.value[1].toLocaleString()}</strong><br/>Food-Insecure Pop: ${fmtNum(d.insecurePersons)}`;
       }
     },
     grid: { left: 70, right: 20, top: 35, bottom: 50 },
