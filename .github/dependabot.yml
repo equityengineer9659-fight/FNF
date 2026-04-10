@@ -25,6 +25,12 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "lighthouse"
         update-types: ["version-update:semver-major"]
+      # ESLint v9+ removed legacy .eslintrc.* support and requires the new
+      # flat config format (eslint.config.js). The migration is non-trivial
+      # and tracked as deferred work — see audit-results memory. Hold the
+      # major bump until that migration is scheduled.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
     groups:
       # Group ESLint updates together
       eslint:
