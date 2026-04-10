@@ -79,7 +79,6 @@
     "http://localhost:4173/dashboards/food-insecurity.html",
     "http://localhost:4173/dashboards/food-banks.html",
     "http://localhost:4173/dashboards/food-access.html",
-    "http://localhost:4173/dashboards/executive-summary.html",
-    "http://localhost:4173/dashboards/chart-preview.html"
+    "http://localhost:4173/dashboards/executive-summary.html"
   ]
 }
