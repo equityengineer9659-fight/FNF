@@ -24,7 +24,6 @@ test-results/
 coverage/
 _regression-test/
 .sfdx/
-package-lock.json
 
 # Claude Code session artifacts (keep settings, agents, skills, output-styles tracked)
 .claude/*
