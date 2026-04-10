@@ -41,11 +41,18 @@ function readJSON(filename) {
   return JSON.parse(readFileSync(resolve(dataDir, filename), 'utf-8'));
 }
 
-/** Parse HTML file into a jsdom document for DOM-based assertions */
+/** Parse HTML file from dashboards/ into a jsdom document for DOM-based assertions */
 function parseHTML(filename) {
   const html = readFileSync(resolve(htmlDir, filename), 'utf-8');
   const parser = new DOMParser();
   return parser.parseFromString(html, 'text/html');
+}
+
+/** Parse HTML file from the repo root into a jsdom document for DOM-based assertions */
+function parseRootHTML(filename) {
+  const rootDir = resolve(__dirname, '../../..');
+  const html = readFileSync(resolve(rootDir, filename), 'utf-8');
+  return new DOMParser().parseFromString(html, 'text/html');
 }
 
 describe('executive-summary', () => {
@@ -287,8 +294,7 @@ describe('executive-summary', () => {
         expect(bodyText).toContain(String(natYear));
         expect(bodyText).toContain(String(stateYear));
         // Verify SNAP + national + FY year mentioned together in methodology
-        const html = readFileSync(resolve(htmlDir, 'executive-summary.html'), 'utf-8');
-        expect(html).toMatch(/SNAP.*national.*FY\d{4}|FY\d{4}.*national.*SNAP/i);
+        expect(bodyText).toMatch(/SNAP.*national.*FY\d{4}|FY\d{4}.*national.*SNAP/i);
       }
     });
   });
@@ -459,11 +465,8 @@ describe('executive-summary', () => {
     });
 
     it('case-studies.html and templates-tools.html meta author is consistent (P2-15)', () => {
-      const rootDir = resolve(__dirname, '../../..');
       for (const file of ['case-studies.html', 'templates-tools.html']) {
-        const doc = new DOMParser().parseFromString(
-          readFileSync(resolve(rootDir, file), 'utf-8'), 'text/html'
-        );
+        const doc = parseRootHTML(file);
         const authorMeta = doc.querySelector('meta[name="author"]');
         expect(authorMeta, `${file} missing author meta`).not.toBeNull();
         expect(authorMeta.getAttribute('content'), `${file} author meta`).toBe('Food-N-Force');
