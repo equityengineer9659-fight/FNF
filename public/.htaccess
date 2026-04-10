@@ -1,6 +1,21 @@
 ErrorDocument 404 /404.html
 
 <IfModule mod_headers.c>
+  # Security headers — applied to every response.
+  # Originally written into _headers (Netlify format) but SiteGround's
+  # Apache backend ignores that file, so this is the actual source of
+  # truth in production. Keep _headers and this block in sync.
+  #
+  # Content-Security-Policy is intentionally NOT set here yet — it
+  # requires migrating remaining inline styles (audit P3-13) and
+  # vetting all external resources (Mapbox tiles, fonts CDN, Sentry
+  # ingest). Tracked as a follow-up in audit-results.
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+
   <FilesMatch "\.html$">
     Header set Cache-Control "no-store, no-cache, must-revalidate"
     Header set Pragma "no-cache"
