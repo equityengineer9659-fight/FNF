@@ -135,5 +135,8 @@
     "pngjs": "^7.0.0",
     "topojson-client": "^3.1.0",
     "us-atlas": "^3.0.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.60.0"
   }
 }
