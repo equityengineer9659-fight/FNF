@@ -167,13 +167,15 @@
             <p class="dashboard-hero__subtitle">The elevator pitch for grant writers — one URL that connects the entire food insecurity story</p>
             <p class="dashboard-hero__positioning">Vulnerability mapping, coverage gaps, price trends, and state rankings drawn from USDA, Census, BLS, and Feeding America data.</p>
             <div class="dashboard-hero__stats" aria-label="Key national statistics">
-                <div class="dashboard-stat" title="State-level totals (41.8M) differ from the national figure (47.9M) due to methodological differences between USDA's national household survey and Feeding America's state-level model.">
+                <div class="dashboard-stat" tabindex="0" aria-describedby="kpi-fi-method" title="State-level totals (41.8M) differ from the national figure (47.9M) due to methodological differences between USDA's national household survey and Feeding America's state-level model.">
                     <span class="dashboard-stat__number" role="status" aria-live="off" id="food-insecurity-kpi" data-target="13.7" data-suffix="%">13.7%</span>
                     <p class="dashboard-stat__label">National Insecurity Rate</p>
+                    <span id="kpi-fi-method" class="slds-assistive-text">Methodology: State-level totals (41.8M) differ from the national figure (47.9M) due to methodological differences between USDA's national household survey and Feeding America's state-level model.</span>
                 </div>
-                <div class="dashboard-stat" title="SNAP participants ÷ (SNAP participants + coverage gap). Coverage gap = eligible food-insecure persons not receiving SNAP (USDA FNS). State totals (~39–41M) differ from the national figure because some participants are counted federally.">
+                <div class="dashboard-stat" tabindex="0" aria-describedby="kpi-snap-method" title="SNAP participants ÷ (SNAP participants + coverage gap). Coverage gap = eligible food-insecure persons not receiving SNAP (USDA FNS). State totals (~39–41M) differ from the national figure because some participants are counted federally.">
                     <span class="dashboard-stat__number" role="status" aria-live="off" id="snap-coverage-kpi" data-target="83.7" data-suffix="%">83.7%</span>
                     <p class="dashboard-stat__label">SNAP Coverage Rate</p>
+                    <span id="kpi-snap-method" class="slds-assistive-text">Methodology: SNAP participants divided by SNAP participants plus coverage gap. Coverage gap is eligible food-insecure persons not receiving SNAP, per USDA FNS. State totals (39 to 41 million) differ from the national figure because some participants are counted federally.</span>
                 </div>
                 <div class="dashboard-stat">
                     <span class="dashboard-stat__number" role="status" aria-live="off" id="food-bank-orgs-kpi" data-target="61.3" data-suffix="K">61.3K</span>

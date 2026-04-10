@@ -8,8 +8,9 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
   updateFreshness, initScrollReveal, handleResize,
-  REGION_COLORS, getRegion, addExportButton, initStateSelector, US_STATES
+  REGION_COLORS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
+import { initStateSelector } from './shared/state-selector.js';
 
 const PAL = MAP_PALETTES.insecurity;
 const LOW_ACCESS_COLOR = '#f59e0b'; // amber — used in Triple Burden + State Deep-Dive

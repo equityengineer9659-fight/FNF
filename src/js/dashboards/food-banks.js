@@ -5,12 +5,12 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
+  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES, LEGEND_TEXT_STYLE,
   fmtNum, animateCounters, createChart,
   initScrollReveal, handleResize, updateFreshness,
-  REGIONS, REGION_COLORS, getRegion, addExportButton,
-  initStateSelector, US_STATES
+  REGIONS, REGION_COLORS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
+import { initStateSelector } from './shared/state-selector.js';
 
 import {
   createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm, HEATMAP_REGION_COLORS
@@ -216,7 +216,7 @@ function renderEfficiency(states, national) {
 
   chart.setOption({
     tooltip: { ...TOOLTIP_STYLE },
-    legend: { data: ['National Avg', ...regionAvgs.map(r => r.name)], textStyle: { color: COLORS.text }, bottom: 0 },
+    legend: { data: ['National Avg', ...regionAvgs.map(r => r.name)], textStyle: LEGEND_TEXT_STYLE, bottom: 0 },
     radar: {
       indicator: [
         { name: 'Efficiency (%)', max: 90 }, { name: 'Density\n(per 100K)', max: 40 },
@@ -354,7 +354,7 @@ function renderCapacityGap(states) {
   }));
 
   chart.setOption({
-    legend: { top: 5, right: 10, textStyle: { color: COLORS.text, fontSize: 11 }, itemWidth: 10, itemHeight: 10 },
+    legend: { top: 5, right: 10, textStyle: LEGEND_TEXT_STYLE, itemWidth: 10, itemHeight: 10 },
     tooltip: {
       ...TOOLTIP_STYLE,
       formatter: params => {

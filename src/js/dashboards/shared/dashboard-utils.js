@@ -56,6 +56,13 @@ export const COLORS = {
   mapHigh: '#e74c3c'
 };
 
+// Shared ECharts legend text style — keeps font sizing consistent across all
+// dashboards. Audit P3-05: previously inconsistent (10px / 11px / unset).
+export const LEGEND_TEXT_STYLE = {
+  color: COLORS.text,
+  fontSize: 11
+};
+
 // Per-dashboard map palettes — each dashboard gets a unique color identity
 export const MAP_PALETTES = {
   insecurity: { low: '#60a5fa', mid: '#fbbf24', high: '#ef4444' },  // blue → amber → red
@@ -363,38 +370,7 @@ export function addExportButton(containerId, filename, getDataFn) {
 }
 
 // -- State Profile Deep-Dive Selector --
-export function getSelectedState() {
-  return new URLSearchParams(window.location.search).get('state') || '';
-}
-
-export function initStateSelector(containerId, onSelect) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  const selected = getSelectedState();
-
-  const wrapper = document.createElement('div');
-  wrapper.className = 'dashboard-state-selector';
-  wrapper.innerHTML = `
-    <label for="state-deep-dive" style="color:rgba(255,255,255,0.6);font-size:12px;margin-right:0.5rem;">Focus on state:</label>
-    <select id="state-deep-dive" style="padding:0.4rem 0.6rem;border-radius:4px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:13px;">
-      <option value="">All States</option>
-      ${US_STATES.map(([code, name]) => `<option value="${code}"${code === selected ? ' selected' : ''}>${name}</option>`).join('')}
-    </select>
-  `;
-
-  container.appendChild(wrapper);
-
-  const select = wrapper.querySelector('select');
-  select.addEventListener('change', () => {
-    const val = select.value;
-    const url = new URL(window.location);
-    if (val) url.searchParams.set('state', val);
-    else url.searchParams.delete('state');
-    window.history.replaceState({}, '', url);
-    if (onSelect) onSelect(val);
-  });
-
-  // Trigger initial selection if URL has state param
-  if (selected && onSelect) onSelect(selected);
-}
+// Moved to ./state-selector.js per audit P3-12. Re-exported here for any
+// external consumer that still imports from dashboard-utils.js (the five
+// dashboard modules import from state-selector.js directly).
+export { getSelectedState, initStateSelector } from './state-selector.js';

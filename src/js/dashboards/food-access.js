@@ -5,12 +5,12 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
+  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES, LEGEND_TEXT_STYLE,
   fmtNum, animateCounters, createChart, getOrCreateChart, linearRegression,
   initScrollReveal, handleResize, updateFreshness,
-  REGIONS, REGION_COLORS, getRegion, addExportButton,
-  initStateSelector, US_STATES
+  REGIONS, REGION_COLORS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
+import { initStateSelector } from './shared/state-selector.js';
 
 import {
   createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm,
@@ -260,7 +260,7 @@ function renderUrbanRural(states) {
           Avg Distance to Store: <strong>${distP?.value} mi</strong>`;
       }
     },
-    legend: { data: ['Low-Access Rate', 'Avg Distance'], textStyle: { color: COLORS.text }, bottom: 0 },
+    legend: { data: ['Low-Access Rate', 'Avg Distance'], textStyle: LEGEND_TEXT_STYLE, bottom: 0 },
     grid: { left: 60, right: 60, top: 30, bottom: 50 },
     xAxis: {
       type: 'category', data: ['Urban', 'Rural'],
@@ -390,7 +390,7 @@ function renderVehicle(states) {
   }));
 
   chart.setOption({
-    legend: { top: 5, right: 10, textStyle: { color: COLORS.text, fontSize: 11 }, itemWidth: 10, itemHeight: 10 },
+    legend: { top: 5, right: 10, textStyle: LEGEND_TEXT_STYLE, itemWidth: 10, itemHeight: 10 },
     tooltip: {
       ...TOOLTIP_STYLE,
       formatter: params => {
