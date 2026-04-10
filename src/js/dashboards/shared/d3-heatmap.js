@@ -395,16 +395,6 @@ function updateBreadcrumb(el, node, root, renderFn) {
 // ═══════════════════════════════════════════════════════
 
 /**
- * Create a zoomable D3 heatmap inside a container element.
- *
- * @param {Object} options
- * @param {string} options.containerId - ID of the chart container div
- * @param {string} [options.breadcrumbId] - ID of the breadcrumb container div
- * @param {Object} options.hierarchyData - { name, children: [{ name, children: [...] }] }
- * @param {Function} options.tooltipFn - (leaf) => HTML string
- * @param {Function} options.normFn - (leaf) => number 0..1 (normalized value for color)
- */
-/**
  * Render a zoomable D3 treemap heatmap into a container element.
  *
  * @param {object} params
