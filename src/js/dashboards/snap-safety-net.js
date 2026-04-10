@@ -8,8 +8,9 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
   initScrollReveal, handleResize, updateFreshness, addExportButton,
-  initStateSelector, US_STATES
+  US_STATES
 } from './shared/dashboard-utils.js';
+import { initStateSelector } from './shared/state-selector.js';
 
 const PAL = MAP_PALETTES.snap;
 
@@ -719,7 +720,7 @@ function renderDemographicFlow(sdoh, snapData) {
   if (insightEl) {
     const blackShare = (raceGroups['Black/African American'] / totalPop * 100).toFixed(0);
     const blackFIShare = (raceGroups['Black/African American'] * fiRates['Black/African American'] / 100 / totalFI * 100).toFixed(0);
-    insightEl.textContent = `Black Americans are ${blackShare}% of the population but ${blackFIShare}% of the food-insecure population — a ${(blackFIShare / blackShare).toFixed(1)}x overrepresentation driven by systemic income and employment disparities.`;
+    insightEl.textContent = `Black Americans are ${blackShare}% of the population but ${blackFIShare}% of the food-insecure population — a ${(blackFIShare / blackShare).toFixed(1)}x overrepresentation associated with systemic income and employment disparities.`;
   }
 }
 

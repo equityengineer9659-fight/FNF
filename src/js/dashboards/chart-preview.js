@@ -4,7 +4,7 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
+  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES, LEGEND_TEXT_STYLE,
   fmtNum, createChart, REGIONS, REGION_COLORS, getRegion
 } from './shared/dashboard-utils.js';
 
@@ -43,7 +43,7 @@ function renderRadarStates(data) {
     tooltip: { ...TOOLTIP_STYLE },
     legend: {
       data: [`Top 5 (${top5.map(s => s.name).join(', ')})`, `Bottom 5 (${bottom5.map(s => s.name).join(', ')})`],
-      textStyle: { color: COLORS.text, fontSize: 10 }, bottom: 0
+      textStyle: LEGEND_TEXT_STYLE, bottom: 0
     },
     radar: {
       indicator: [
@@ -138,7 +138,7 @@ function renderDonutUrban(accessData) {
 
   chart.setOption({
     tooltip: { ...TOOLTIP_STYLE, formatter: p => `${p.name}: <strong>${fmtNum(p.value)}</strong> tracts (${p.percent.toFixed(1)}%)` },
-    legend: { data: ['Urban Low-Access', 'Rural Low-Access'], textStyle: { color: COLORS.text }, bottom: 0 },
+    legend: { data: ['Urban Low-Access', 'Rural Low-Access'], textStyle: LEGEND_TEXT_STYLE, bottom: 0 },
     series: [
       {
         type: 'pie', radius: ['40%', '70%'], center: ['50%', '45%'],
@@ -400,7 +400,7 @@ function renderStackedArea(priceData) {
         return tip;
       }
     },
-    legend: { data: series.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 }, top: 5 },
+    legend: { data: series.map(s => s.name), textStyle: LEGEND_TEXT_STYLE, top: 5 },
     grid: { left: 50, right: 20, top: 45, bottom: 30 },
     xAxis: {
       type: 'category', data: dates, boundaryGap: false,
@@ -454,7 +454,7 @@ function renderUnstackedArea(priceData) {
         return tip;
       }
     },
-    legend: { data: series.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 }, top: 5 },
+    legend: { data: series.map(s => s.name), textStyle: LEGEND_TEXT_STYLE, top: 5 },
     grid: { left: 50, right: 20, top: 45, bottom: 30 },
     xAxis: {
       type: 'category', data: dates, boundaryGap: false,

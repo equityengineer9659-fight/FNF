@@ -395,14 +395,20 @@ function updateBreadcrumb(el, node, root, renderFn) {
 // ═══════════════════════════════════════════════════════
 
 /**
- * Create a zoomable D3 heatmap inside a container element.
+ * Render a zoomable D3 treemap heatmap into a container element.
  *
- * @param {Object} options
- * @param {string} options.containerId - ID of the chart container div
- * @param {string} [options.breadcrumbId] - ID of the breadcrumb container div
- * @param {Object} options.hierarchyData - { name, children: [{ name, children: [...] }] }
- * @param {Function} options.tooltipFn - (leaf) => HTML string
- * @param {Function} options.normFn - (leaf) => number 0..1 (normalized value for color)
+ * @param {object} params
+ * @param {string} params.containerId - DOM id of the SVG host element.
+ * @param {string} params.breadcrumbId - DOM id of the breadcrumb host element
+ *   that receives the keyboard-accessible region/leaf navigation chain.
+ * @param {{name: string, value?: number, children?: object[]}} params.hierarchyData
+ *   Nested hierarchy with one level of region groups containing leaf entries.
+ * @param {(d: object) => string} params.tooltipFn - HTML string builder invoked
+ *   for hover tooltips on leaf tiles.
+ * @param {(value: number) => number} params.normFn - Normalization function
+ *   that maps a raw leaf value to a [0, 1] gradient stop. Use `createRankNorm`
+ *   for outlier-resistant rank-based normalization.
+ * @returns {void}
  */
 export function createD3Heatmap({ containerId, breadcrumbId, hierarchyData, tooltipFn, normFn }) {
   const container = document.getElementById(containerId);

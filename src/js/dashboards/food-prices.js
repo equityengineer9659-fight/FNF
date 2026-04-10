@@ -5,11 +5,12 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
+  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES, LEGEND_TEXT_STYLE,
   animateCounters, createChart,
   updateFreshness, initScrollReveal, handleResize, addExportButton,
-  initStateSelector, US_STATES
+  US_STATES
 } from './shared/dashboard-utils.js';
+import { initStateSelector } from './shared/state-selector.js';
 
 const PAL = MAP_PALETTES.prices;
 let _snapBenefits = null;
@@ -46,7 +47,7 @@ function renderCategories(data) {
       trigger: 'axis', ...TOOLTIP_STYLE,
       formatter: params => { let tip = `<strong>${params[0].axisValue}</strong><br/>`; params.forEach(p => { tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`; }); return tip; }
     },
-    legend: { data: normalizedSeries.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 }, top: 5 },
+    legend: { data: normalizedSeries.map(s => s.name), textStyle: LEGEND_TEXT_STYLE, top: 5 },
     grid: { left: 50, right: 20, top: 45, bottom: 30 },
     xAxis: { type: 'category', data: dates, boundaryGap: false, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
     yAxis: { type: 'value', name: 'Index (Jan 2018 = 100)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
@@ -764,7 +765,7 @@ function renderCpiVsInsecurity(blsData, fiTrend) {
         return tip;
       }
     },
-    legend: { data: ['Food CPI', 'Food Insecurity Rate'], textStyle: { color: COLORS.text }, top: 5 },
+    legend: { data: ['Food CPI', 'Food Insecurity Rate'], textStyle: LEGEND_TEXT_STYLE, top: 5 },
     grid: { left: 55, right: 55, top: 35, bottom: 60 },
     dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 20, bottom: 10, textStyle: { color: COLORS.textMuted }, borderColor: COLORS.gridLine, fillerColor: 'rgba(0,212,255,0.1)' }],
     xAxis: { type: 'category', data: cpiDates, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
