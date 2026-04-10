@@ -8,13 +8,13 @@ import {
   echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES, LEGEND_TEXT_STYLE,
   fmtNum, animateCounters, createChart, getOrCreateChart, linearRegression,
   initScrollReveal, handleResize, updateFreshness,
-  REGIONS, REGION_COLORS, getRegion, addExportButton, US_STATES
+  REGIONS, REGION_COLORS, REGION_CLASS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
 import { initStateSelector } from './shared/state-selector.js';
 
 import {
   createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm,
-  HEATMAP_REGION_COLORS, sampleGradient, tileTextColor, tileSubTextColor
+  HEATMAP_REGION_COLORS, HEATMAP_REGION_CLASS, sampleGradient, tileTextColor, tileSubTextColor
 } from './shared/d3-heatmap.js';
 
 const PAL = MAP_PALETTES.access;
@@ -36,11 +36,11 @@ function renderDesertMap(geoJSON, states, accessData) {
     const d = params.data;
     if (!d) return '';
     return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-      <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
+      <span class="csp-text-secondary">Low-Access Tracts:</span> ${d.value}%<br/>
       Population: ${fmtNum(d.population)}<br/>
       Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>
       Avg Distance: ${d.avgDistance} mi<br/>
-      <span style="color:${COLORS.secondary};font-size:11px">Click to see counties</span>`;
+      <span class="csp-text-secondary-sm">Click to see counties</span>`;
   }
 
   function countyTooltip(params) {
@@ -49,7 +49,7 @@ function renderDesertMap(geoJSON, states, accessData) {
     // Enhanced tooltip when current food access data is available
     if (d._currentData) {
       let html = `<strong class="fnf-tooltip-label">${d.name}</strong><br/>`;
-      html += `<span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.lowAccessTracts} of ${d.totalTracts} (${d.value}%)<br/>`;
+      html += `<span class="csp-text-secondary">Low-Access Tracts:</span> ${d.lowAccessTracts} of ${d.totalTracts} (${d.value}%)<br/>`;
       if (d.lowAccessPopulation) html += `Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>`;
       if (d.avgDistance) html += `Avg Distance to Store: ${d.avgDistance} mi<br/>`;
       html += `Type: ${d.isUrban ? 'Urban' : 'Rural'}`;
@@ -57,7 +57,7 @@ function renderDesertMap(geoJSON, states, accessData) {
     }
     return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
       Population: ${fmtNum(d.population || 0)}<br/>
-      ${d.povertyRate != null ? `<span style="color:${COLORS.secondary}">Poverty Rate:</span> ${d.povertyRate}%<br/>` : ''}
+      ${d.povertyRate != null ? `<span class="csp-text-secondary">Poverty Rate:</span> ${d.povertyRate}%<br/>` : ''}
       ${d.rate != null ? `Food Insecurity: ${d.rate}%<br/>` : ''}
       ${d.mealCost != null ? `Avg Meal Cost: $${d.mealCost}` : ''}`;
   }
@@ -317,7 +317,7 @@ function renderDistance(states) {
       trigger: 'axis', ...TOOLTIP_STYLE,
       formatter: p => {
         const raw = rawDistances[p[0].dataIndex];
-        const capped = raw > ALASKA_CAP ? ` <span style="font-size:10px;color:${COLORS.textMuted}">(capped at ${ALASKA_CAP} mi for scale)</span>` : '';
+        const capped = raw > ALASKA_CAP ? ` <span class="csp-text-muted-xs">(capped at ${ALASKA_CAP} mi for scale)</span>` : '';
         return `<strong>${p[0].name}</strong><br/>Avg centroid distance: <strong>${raw} mi</strong>${capped}`;
       }
     },
@@ -397,11 +397,11 @@ function renderVehicle(states) {
         const d = params.data;
         const region = getRegion(d.name);
         const note = d.value[0] < 1
-          ? `<br/><span style="font-size:10px;color:${COLORS.textMuted}">Dense/urban — stores within walking distance</span>`
+          ? '<br/><span class="csp-text-muted-xs">Dense/urban — stores within walking distance</span>'
           : d.value[0] > 3
-            ? `<br/><span style="font-size:10px;color:${COLORS.textMuted}">Rural distance barrier — car essential for food access</span>`
+            ? '<br/><span class="csp-text-muted-xs">Rural distance barrier — car essential for food access</span>'
             : '';
-        return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>
+        return `<strong>${d.name}</strong> <span class="${REGION_CLASS[region] || ''}">(${region})</span><br/>
           Avg Distance to Store: ${d.value[0]} mi<br/>
           Low-Access Tracts: ${d.value[1]}% of tracts<br/>
           Population: ${fmtNum(d.population)}${note}`;
@@ -525,11 +525,12 @@ function renderDoubleBurdenTiles(enriched, rankNorm) {
         tile.style.zIndex = '2';
         const rc2 = HEATMAP_REGION_COLORS[d.region] || '#888';
         tip.innerHTML = `<strong class="fnf-tooltip-label">${d.name}</strong>
-          <span style="margin-left:5px;background:${rc2};width:8px;height:8px;border-radius:2px;display:inline-block;vertical-align:middle"></span><br/>
+          <span class="csp-swatch-dot" data-color="${rc2}"></span><br/>
           <span class="text-accent-indigo">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
           <span class="text-accent-indigo">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
           <hr class="fnf-tooltip-divider">
           <span class="fnf-tooltip-muted">Population: ${fmtNum(d.population)}<br/>Low-Access Tracts: ${d.lowAccessPct}%</span>`;
+        tip.querySelectorAll('[data-color]').forEach(el => { el.style.backgroundColor = el.dataset.color; });
         tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
         tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
         tip.style.opacity = '1';
@@ -642,9 +643,9 @@ function renderDoubleBurden(states) {
       const region = leaf.parent ? leaf.parent.data.name : d.region;
       const rc = HEATMAP_REGION_COLORS[region] || '#888';
       return `<strong class="fnf-tooltip-label">${d.name}</strong>
-        <span style="margin-left:6px;display:inline-flex;align-items:center">
-          <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
-          <span style="color:${rc}">${region}</span>
+        <span class="csp-tooltip-inline-flex">
+          <svg class="csp-swatch" width="8" height="8"><rect rx="2" width="8" height="8" fill="${rc}"/></svg>
+          <span class="${HEATMAP_REGION_CLASS[region] || ''}">${region}</span>
         </span><br/>
         <span class="text-accent-indigo">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
         <span class="text-accent-indigo">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
@@ -719,9 +720,9 @@ function renderInsecurityMap(geoJSON, cdcRecords, accessStates = []) {
         const d = params.data;
         if (!d) return '';
         return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-          <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.value}%<br/>
-          <span style="color:${COLORS.secondary};font-size:11px">Source: CDC PLACES 2023</span><br/>
-          <span style="color:${COLORS.textMuted};font-size:11px">Use Food Deserts view for county drill-down</span>`;
+          <span class="csp-text-secondary">Food Insecurity:</span> ${d.value}%<br/>
+          <span class="csp-text-secondary-sm">Source: CDC PLACES 2023</span><br/>
+          <span class="csp-text-muted-sm">Use Food Deserts view for county drill-down</span>`;
       }
     },
     visualMap: {
@@ -795,7 +796,7 @@ function renderSnapRetailers(geoJSON, retailerData, accessStates) {
         const d = params.data;
         if (!d) return '';
         return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-          <span style="color:${COLORS.secondary}">Retailers per 100K:</span> <strong>${d.value}</strong><br/>
+          <span class="csp-text-secondary">Retailers per 100K:</span> <strong>${d.value}</strong><br/>
           Total Authorized: ${fmtNum(d.totalRetailers)}<br/>
           <span class="fnf-tooltip-muted">--- Store Types ---</span><br/>
           Supermarkets: ${fmtNum(d.supermarkets)}<br/>
@@ -804,7 +805,7 @@ function renderSnapRetailers(geoJSON, retailerData, accessStates) {
           Convenience: ${fmtNum(d.convenience)}<br/>
           Small Grocery: ${fmtNum(d.smallGrocery)}<br/>
           Farmers Markets: ${fmtNum(d.farmersMarkets)}<br/>
-          <span style="color:${COLORS.secondary}">Full-Service Stores:</span> ${d.superPct}%<br/>
+          <span class="csp-text-secondary">Full-Service Stores:</span> ${d.superPct}%<br/>
           <span class="fnf-tooltip-muted">Food Deserts: ${d.lowAccessPct}%</span>`;
       }
     },
@@ -860,11 +861,11 @@ function renderLowAccessMap(geoJSON, accessData) {
         const d = params.data;
         if (!d) return '';
         return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-          <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
+          <span class="csp-text-secondary">Low-Access Tracts:</span> ${d.value}%<br/>
           Population: ${fmtNum(d.totalPopulation)}<br/>
           Low-Access Pop: ${fmtNum(d.lowAccessPopulation)}<br/>
           Avg Distance: ${d.avgDistance} mi<br/>
-          <span style="color:${COLORS.secondary};font-size:11px">Click to see counties</span>`;
+          <span class="csp-text-secondary-sm">Click to see counties</span>`;
       }
     },
     visualMap: {
@@ -926,7 +927,7 @@ function renderLowAccessCounty(countyGeo, countyData) {
         const d = params.data;
         if (!d) return '';
         return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-          <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
+          <span class="csp-text-secondary">Low-Access Tracts:</span> ${d.value}%<br/>
           Tracts: ${d.lowAccessTracts} of ${d.totalTracts}<br/>
           Low-Access Pop: ${fmtNum(d.lowAccessPopulation)}<br/>
           Avg Distance: ${d.avgDistance} mi<br/>
@@ -1120,7 +1121,7 @@ function renderStateScatter(chart, accessStates, fiStates) {
     tooltipFn: params => {
       const d = params.data;
       const region = getRegion(d.name);
-      return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>Food Deserts: ${d.value[0]}%<br/>Food Insecurity: ${d.value[1]}%`;
+      return `<strong>${d.name}</strong> <span class="${REGION_CLASS[region] || ''}">(${region})</span><br/>Food Deserts: ${d.value[0]}%<br/>Food Insecurity: ${d.value[1]}%`;
     }
   });
 
@@ -1376,7 +1377,7 @@ async function fetchSDOHAccess(accessStates) {
         formatter: params => {
           const d = params.data;
           const region = getRegion(d.name);
-          return `<strong>${d.name}</strong> <span style="color:${REGION_COLORS[region]}">(${region})</span><br/>` +
+          return `<strong>${d.name}</strong> <span class="${REGION_CLASS[region] || ''}">(${region})</span><br/>` +
             `Housing Burden (50%+): ${d.value[0]}%<br/>` +
             `Food Deserts: ${d.value[1]}%<br/>` +
             `No Vehicle: ${d.noVehicle}%<br/>` +

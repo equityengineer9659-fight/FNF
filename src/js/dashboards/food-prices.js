@@ -93,8 +93,8 @@ function renderRegions(data, mealCost) {
         if (idx >= 0) {
           const baseMealCost = mealCost || 3.58;
           const dollarImpact = (baseMealCost * changesPct[idx] / 100).toFixed(2);
-          tip += `<span style="color:${COLORS.secondary}">Change: +${changesPct[idx]}%</span><br/>`;
-          tip += `<span style="color:${COLORS.accent}">Impact: +$${dollarImpact}/meal since ${startLabel}</span>`;
+          tip += `<span class="csp-text-secondary">Change: +${changesPct[idx]}%</span><br/>`;
+          tip += `<span class="csp-text-accent">Impact: +$${dollarImpact}/meal since ${startLabel}</span>`;
         }
         return tip;
       }
@@ -185,11 +185,11 @@ function renderAffordabilityMap(geoJSON, stateData) {
       formatter: params => {
         const d = params.data;
         if (!d) return '';
-        return `<strong style="font-size:14px">${d.name}</strong><br/>
-          <span style="color:${COLORS.secondary}">Affordability Index:</span> ${d.value.toFixed(1)}<br/>
+        return `<strong class="csp-text-bold-md">${d.name}</strong><br/>
+          <span class="csp-text-secondary">Affordability Index:</span> ${d.value.toFixed(1)}<br/>
           Avg Meal Cost: $${d.mealCost}/meal<br/>
           Median Household Income: $${d.medianIncome.toLocaleString()}<br/>
-          <span style="color:${COLORS.textMuted};font-size:11px">Index = annual 3-meal food cost per $1,000 income. Higher = less affordable. Source: Feeding America 2024 + Census ACS 2023.</span>`;
+          <span class="csp-text-muted-sm">Index = annual 3-meal food cost per $1,000 income. Higher = less affordable. Source: Feeding America 2024 + Census ACS 2023.</span>`;
       }
     },
     visualMap: {
@@ -299,7 +299,7 @@ function renderHomeVsAway(blsData) {
           if (src && p.dataIndex >= 12) {
             const priorVal = src.data[p.dataIndex - 12].value;
             const yoyPct = ((p.value - priorVal) / priorVal * 100).toFixed(1);
-            yoyStr = ` <span style="color:${Number(yoyPct) >= 0 ? COLORS.accent : '#22c55e'}">(${Number(yoyPct) >= 0 ? '+' : ''}${yoyPct}% YoY)</span>`;
+            yoyStr = ` <span class="${Number(yoyPct) >= 0 ? 'csp-text-accent' : 'text-data-success'}">(${Number(yoyPct) >= 0 ? '+' : ''}${yoyPct}% YoY)</span>`;
           }
           tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong>${yoyStr}<br/>`;
         });

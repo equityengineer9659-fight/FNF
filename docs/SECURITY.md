@@ -5,7 +5,7 @@ This document outlines the security measures implemented for the Food-N-Force we
 
 ## Security Headers
 
-### Production Headers (via `_headers` file)
+### Production Headers (via `public/.htaccess`)
 - **X-Frame-Options**: DENY - Prevents clickjacking attacks
 - **X-Content-Type-Options**: nosniff - Prevents MIME type sniffing
 - **X-XSS-Protection**: 0 - Disabled (deprecated, CSP is preferred)
@@ -14,7 +14,7 @@ This document outlines the security measures implemented for the Food-N-Force we
 - **Permissions-Policy**: Restricts access to browser features
 
 ### Content Security Policy (CSP)
-Current implementation uses a strict CSP with **no `unsafe-inline`** for scripts or styles:
+Current implementation uses a strict CSP with **no `unsafe-inline`** for scripts. Styles include `'unsafe-inline'` as a temporary safety net (to be removed after production observation):
 - `default-src 'self'` - Only allow resources from same origin by default
 - `script-src 'self'` - Scripts from same origin only (no inline scripts)
 - `style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com` - Styles from same origin, Google Fonts, and SLDS CDN
@@ -81,7 +81,7 @@ The site uses PHP endpoints hosted on SiteGround for server-side form processing
 ## Implementation Details
 
 ### Production Deployment
-Security headers are defined in the `_headers` file and applied at the hosting level.
+Security headers are defined in `public/.htaccess` (Apache `Header always set` directives) and applied by SiteGround's Apache backend.
 
 ### Local Development
 For local development, a CSP meta tag can be added to HTML files from `src/security/csp-meta.html`.

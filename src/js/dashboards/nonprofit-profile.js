@@ -241,12 +241,11 @@ function renderRevenueTrend(data) {
         const p = params[0];
         const idx = p.dataIndex;
         let tip = `<strong>${p.name}</strong><br/>`;
-        tip += `<span style="color:${COLORS.secondary}">Revenue:</span> <strong>${fmtCurrency(p.value)}</strong>`;
+        tip += `<span class="csp-text-secondary">Revenue:</span> <strong>${fmtCurrency(p.value)}</strong>`;
         if (idx > 0 && data.revenue[idx - 1] > 0) {
           const change = ((data.revenue[idx] - data.revenue[idx - 1]) / data.revenue[idx - 1] * 100).toFixed(1);
           const arrow = change >= 0 ? '\u25B2' : '\u25BC';
-          const color = change >= 0 ? '#22c55e' : '#ef4444';
-          tip += `<br/><span style="color:${color}">${arrow} ${change}% YoY</span>`;
+          tip += `<br/><span class="${change >= 0 ? 'text-data-success' : 'text-data-negative'}">${arrow} ${change}% YoY</span>`;
         }
         return tip;
       }
@@ -467,11 +466,10 @@ function renderExpensesVsRevenue(data) {
         const exp = data.expenses[idx];
         const diff = rev - exp;
         const label = diff >= 0 ? 'Surplus' : 'Deficit';
-        const color = diff >= 0 ? '#22c55e' : '#ef4444';
         return `<strong>${data.years[idx]}</strong><br/>` +
           `Revenue: <strong>${fmtCurrency(rev)}</strong><br/>` +
           `Expenses: <strong>${fmtCurrency(exp)}</strong><br/>` +
-          `<span style="color:${color}">${label}: <strong>${fmtCurrency(Math.abs(diff))}</strong></span>`;
+          `<span class="${diff >= 0 ? 'text-data-success' : 'text-data-negative'}">${label}: <strong>${fmtCurrency(Math.abs(diff))}</strong></span>`;
       }
     },
     legend: {
