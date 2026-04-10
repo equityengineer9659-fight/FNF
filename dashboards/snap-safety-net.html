@@ -226,7 +226,7 @@
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
                         <div id="snap-map-cdc-status" aria-live="polite" class="slds-assistive-text"></div>
-                        <div id="snap-map-toggle-container" style="display:none;text-align:center;padding:0.5rem 0;" role="group" aria-label="Toggle SNAP data source">
+                        <div id="snap-map-toggle-container" class="dashboard-toggle-container hidden" role="group" aria-label="Toggle SNAP data source">
                             <button id="snap-map-toggle-admin" class="dashboard-metric-btn dashboard-metric-btn--active" aria-pressed="true">Administrative (FNS)</button>
                             <button id="snap-map-toggle-cdc" class="dashboard-metric-btn" aria-pressed="false">Self-Reported (CDC)</button>
                         </div>
@@ -362,21 +362,21 @@
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                        <div class="dashboard-gauge-grid">
                             <div>
-                                <div id="gauge-coverage" class="dashboard-chart" style="height:200px;min-height:200px" role="img" aria-label="Gauge showing SNAP coverage ratio"></div>
+                                <div id="gauge-coverage" class="dashboard-chart dashboard-gauge" role="img" aria-label="Gauge showing SNAP coverage ratio"></div>
                             </div>
                             <div>
-                                <div id="gauge-lunch" class="dashboard-chart" style="height:200px;min-height:200px" role="img" aria-label="Gauge showing school lunch participation rate"></div>
+                                <div id="gauge-lunch" class="dashboard-chart dashboard-gauge" role="img" aria-label="Gauge showing school lunch participation rate"></div>
                             </div>
                             <div>
-                                <div id="gauge-benefit" class="dashboard-chart" style="height:200px;min-height:200px" role="img" aria-label="Gauge showing average monthly SNAP benefit"></div>
+                                <div id="gauge-benefit" class="dashboard-chart dashboard-gauge" role="img" aria-label="Gauge showing average monthly SNAP benefit"></div>
                             </div>
                             <div>
-                                <div id="gauge-gap" class="dashboard-chart" style="height:200px;min-height:200px" role="img" aria-label="Gauge showing safety net coverage gap in millions"></div>
+                                <div id="gauge-gap" class="dashboard-chart dashboard-gauge" role="img" aria-label="Gauge showing safety net coverage gap in millions"></div>
                             </div>
                             <div>
-                                <div id="gauge-affordability" class="dashboard-chart" style="height:200px;min-height:200px" role="img" aria-label="Gauge showing monthly food cost shortfall versus SNAP benefit"></div>
+                                <div id="gauge-affordability" class="dashboard-chart dashboard-gauge" role="img" aria-label="Gauge showing monthly food cost shortfall versus SNAP benefit"></div>
                             </div>
                         </div>
                         <p id="purchasing-power-note" class="dashboard-info__insight" aria-live="polite"></p>
@@ -399,7 +399,7 @@
         </section>
 
         <!-- Chart 7: Demographic Safety Net Flow (live Census ACS, non-blocking) -->
-        <section id="section-demographic-flow" class="dashboard-section scroll-reveal" style="display:none" aria-label="Demographic breakdown of safety net coverage">
+        <section id="section-demographic-flow" class="dashboard-section scroll-reveal hidden" aria-label="Demographic breakdown of safety net coverage">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
                     <h2 class="dashboard-card__title">Who Falls Through the Safety Net?</h2>
@@ -407,7 +407,7 @@
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-demographic-flow" class="dashboard-chart" style="height:400px" role="img" aria-label="Sankey diagram showing demographic flow from race/ethnicity through food insecurity into safety net coverage"></div>
+                        <div id="chart-demographic-flow" class="dashboard-chart dashboard-chart--tall" role="img" aria-label="Sankey diagram showing demographic flow from race/ethnicity through food insecurity into safety net coverage"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Equity in the Safety Net</h3>

@@ -36,8 +36,8 @@ export function initStateSelector(containerId, onSelect) {
   const wrapper = document.createElement('div');
   wrapper.className = 'dashboard-state-selector';
   wrapper.innerHTML = `
-    <label for="state-deep-dive" style="color:rgba(255,255,255,0.6);font-size:12px;margin-right:0.5rem;">Focus on state:</label>
-    <select id="state-deep-dive" style="padding:0.4rem 0.6rem;border-radius:4px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:13px;">
+    <label for="state-deep-dive" class="dashboard-state-selector__label">Focus on state:</label>
+    <select id="state-deep-dive" class="dashboard-state-selector__select">
       <option value="">All States</option>
       ${US_STATES.map(([code, name]) => `<option value="${code}"${code === selected ? ' selected' : ''}>${name}</option>`).join('')}
     </select>

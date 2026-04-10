@@ -175,7 +175,7 @@
         <section class="dashboard-section scroll-reveal" aria-label="Food bank density by state">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Food Bank Density</h2><span id="freshness-banks" class="dashboard-freshness"></span><div id="state-selector-container"></div></div>
-                <div id="density-reconciliation" class="dashboard-data-notice" role="note" style="display:none"></div>
+                <div id="density-reconciliation" class="dashboard-data-notice hidden" role="note"></div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
                         <div id="chart-density-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food banks per 100,000 residents by state"></div>
@@ -206,8 +206,8 @@
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Where Funding Falls Short</h3>
-                        <p class="dashboard-info__text">This diverging bar chart shows how each state's <strong>revenue per food-insecure person</strong> compares to the national mean. States in <strong style="color:#ef4444">red</strong> receive less than average — these are the most under-resourced.</p>
-                        <p class="dashboard-info__text">States in <strong style="color:#3b82f6">blue</strong> exceed the national mean. The gap between the best- and worst-funded states reveals where food bank investment is most urgently needed.</p>
+                        <p class="dashboard-info__text">This diverging bar chart shows how each state's <strong>revenue per food-insecure person</strong> compares to the national mean. States in <strong class="text-data-negative">red</strong> receive less than average — these are the most under-resourced.</p>
+                        <p class="dashboard-info__text">States in <strong class="text-data-positive">blue</strong> exceed the national mean. The gap between the best- and worst-funded states reveals where food bank investment is most urgently needed.</p>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> ProPublica (orgs) + Feeding America (insecurity)</span>
                             <span class="meta-item"><strong>Metric</strong> Revenue per food-insecure person, deviation from national mean</span>
@@ -224,10 +224,10 @@
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue Per Person in Need</h2></div>
                 <div class="dashboard-chart-row dashboard-chart-row--stacked">
                     <div class="dashboard-chart-row__chart">
-                        <div id="revenue-breadcrumb" style="display:flex;align-items:center;gap:2px;padding:6px 0;min-height:30px"></div>
+                        <div id="revenue-breadcrumb" class="dashboard-breadcrumb"></div>
                         <div id="chart-revenue" class="dashboard-chart" role="img" aria-label="Heatmap showing food bank revenue per food-insecure person by state, with continuous color gradient from low to high"></div>
                         <div id="treemap-legend-banks" class="dashboard-chart__legend"></div>
-                        <div id="revenue-region-legend" style="display:flex;justify-content:center;gap:16px;margin-top:4px;flex-wrap:wrap"></div>
+                        <div id="revenue-region-legend" class="dashboard-region-legend"></div>
                         <p class="dashboard-chart__hint">Click a region to zoom in. Click breadcrumb to zoom out.</p>
                     </div>
                     <div class="dashboard-chart-row__info">

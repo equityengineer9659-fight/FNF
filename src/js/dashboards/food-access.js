@@ -35,7 +35,7 @@ function renderDesertMap(geoJSON, states, accessData) {
   function stateTooltip(params) {
     const d = params.data;
     if (!d) return '';
-    return `<strong style="font-size:14px">${d.name}</strong><br/>
+    return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
       <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
       Population: ${fmtNum(d.population)}<br/>
       Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>
@@ -48,14 +48,14 @@ function renderDesertMap(geoJSON, states, accessData) {
     if (!d) return '';
     // Enhanced tooltip when current food access data is available
     if (d._currentData) {
-      let html = `<strong style="font-size:14px">${d.name}</strong><br/>`;
+      let html = `<strong class="fnf-tooltip-label">${d.name}</strong><br/>`;
       html += `<span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.lowAccessTracts} of ${d.totalTracts} (${d.value}%)<br/>`;
       if (d.lowAccessPopulation) html += `Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>`;
       if (d.avgDistance) html += `Avg Distance to Store: ${d.avgDistance} mi<br/>`;
       html += `Type: ${d.isUrban ? 'Urban' : 'Rural'}`;
       return html;
     }
-    return `<strong style="font-size:14px">${d.name}</strong><br/>
+    return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
       Population: ${fmtNum(d.population || 0)}<br/>
       ${d.povertyRate != null ? `<span style="color:${COLORS.secondary}">Poverty Rate:</span> ${d.povertyRate}%<br/>` : ''}
       ${d.rate != null ? `Food Insecurity: ${d.rate}%<br/>` : ''}
@@ -524,12 +524,12 @@ function renderDoubleBurdenTiles(enriched, rankNorm) {
         tile.style.boxShadow = '0 4px 16px rgba(0,0,0,0.45)';
         tile.style.zIndex = '2';
         const rc2 = HEATMAP_REGION_COLORS[d.region] || '#888';
-        tip.innerHTML = `<strong style="font-size:14px">${d.name}</strong>
+        tip.innerHTML = `<strong class="fnf-tooltip-label">${d.name}</strong>
           <span style="margin-left:5px;background:${rc2};width:8px;height:8px;border-radius:2px;display:inline-block;vertical-align:middle"></span><br/>
-          <span style="color:#818CF8">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
-          <span style="color:#818CF8">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
-          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:6px 0">
-          <span style="opacity:0.6;font-size:0.88em">Population: ${fmtNum(d.population)}<br/>Low-Access Tracts: ${d.lowAccessPct}%</span>`;
+          <span class="text-accent-indigo">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
+          <span class="text-accent-indigo">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
+          <hr class="fnf-tooltip-divider">
+          <span class="fnf-tooltip-muted">Population: ${fmtNum(d.population)}<br/>Low-Access Tracts: ${d.lowAccessPct}%</span>`;
         tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
         tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
         tip.style.opacity = '1';
@@ -641,15 +641,15 @@ function renderDoubleBurden(states) {
       const d = leaf.data;
       const region = leaf.parent ? leaf.parent.data.name : d.region;
       const rc = HEATMAP_REGION_COLORS[region] || '#888';
-      return `<strong style="font-size:14px">${d.name}</strong>
+      return `<strong class="fnf-tooltip-label">${d.name}</strong>
         <span style="margin-left:6px;display:inline-flex;align-items:center">
           <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
           <span style="color:${rc}">${region}</span>
         </span><br/>
-        <span style="color:#818CF8;font-weight:500">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
-        <span style="color:#818CF8;font-weight:500">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
-        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:6px 0">
-        <span style="opacity:0.6;font-size:0.92em">Population: ${fmtNum(d.population)}<br/>
+        <span class="text-accent-indigo">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
+        <span class="text-accent-indigo">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
+        <hr class="fnf-tooltip-divider">
+        <span class="fnf-tooltip-muted">Population: ${fmtNum(d.population)}<br/>
         Low-Access Tracts: ${d.lowAccessPct}%</span>`;
     },
     normFn: (leaf) => rankNorm(parseFloat(leaf.data.pctOfPop) || 0)
@@ -718,7 +718,7 @@ function renderInsecurityMap(geoJSON, cdcRecords, accessStates = []) {
       formatter: params => {
         const d = params.data;
         if (!d) return '';
-        return `<strong style="font-size:14px">${d.name}</strong><br/>
+        return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
           <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.value}%<br/>
           <span style="color:${COLORS.secondary};font-size:11px">Source: CDC PLACES 2023</span><br/>
           <span style="color:${COLORS.textMuted};font-size:11px">Use Food Deserts view for county drill-down</span>`;
@@ -794,10 +794,10 @@ function renderSnapRetailers(geoJSON, retailerData, accessStates) {
       formatter: params => {
         const d = params.data;
         if (!d) return '';
-        return `<strong style="font-size:14px">${d.name}</strong><br/>
+        return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
           <span style="color:${COLORS.secondary}">Retailers per 100K:</span> <strong>${d.value}</strong><br/>
           Total Authorized: ${fmtNum(d.totalRetailers)}<br/>
-          <span style="font-size:11px;color:rgba(255,255,255,0.7)">--- Store Types ---</span><br/>
+          <span class="fnf-tooltip-muted">--- Store Types ---</span><br/>
           Supermarkets: ${fmtNum(d.supermarkets)}<br/>
           Super Stores: ${fmtNum(d.superStores)}<br/>
           Large Grocery: ${fmtNum(d.largeGrocery)}<br/>
@@ -805,7 +805,7 @@ function renderSnapRetailers(geoJSON, retailerData, accessStates) {
           Small Grocery: ${fmtNum(d.smallGrocery)}<br/>
           Farmers Markets: ${fmtNum(d.farmersMarkets)}<br/>
           <span style="color:${COLORS.secondary}">Full-Service Stores:</span> ${d.superPct}%<br/>
-          <span style="color:rgba(255,255,255,0.5)">Food Deserts: ${d.lowAccessPct}%</span>`;
+          <span class="fnf-tooltip-muted">Food Deserts: ${d.lowAccessPct}%</span>`;
       }
     },
     visualMap: {
@@ -859,7 +859,7 @@ function renderLowAccessMap(geoJSON, accessData) {
       formatter: params => {
         const d = params.data;
         if (!d) return '';
-        return `<strong style="font-size:14px">${d.name}</strong><br/>
+        return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
           <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
           Population: ${fmtNum(d.totalPopulation)}<br/>
           Low-Access Pop: ${fmtNum(d.lowAccessPopulation)}<br/>
@@ -925,7 +925,7 @@ function renderLowAccessCounty(countyGeo, countyData) {
       formatter: params => {
         const d = params.data;
         if (!d) return '';
-        return `<strong style="font-size:14px">${d.name}</strong><br/>
+        return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
           <span style="color:${COLORS.secondary}">Low-Access Tracts:</span> ${d.value}%<br/>
           Tracts: ${d.lowAccessTracts} of ${d.totalTracts}<br/>
           Low-Access Pop: ${fmtNum(d.lowAccessPopulation)}<br/>
@@ -1235,8 +1235,8 @@ function renderAccessInsecurity(accessStates, fiStates, accessData) {
   selectorWrap.id = 'ai-county-selector';
   selectorWrap.style.cssText = 'display:none;margin-top:0.5rem;text-align:center;';
   selectorWrap.innerHTML = `
-    <label for="ai-state-select" style="color:rgba(255,255,255,0.6);font-size:12px;margin-right:0.5rem;">Select a state:</label>
-    <select id="ai-state-select" style="padding:0.4rem 0.6rem;border-radius:4px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:13px;">
+    <label for="ai-state-select" class="dashboard-state-selector__label">Select a state:</label>
+    <select id="ai-state-select" class="dashboard-state-selector__select">
       <option value="">Choose a state...</option>
       ${US_STATES.map(([code, name]) => `<option value="${code}">${name}</option>`).join('')}
     </select>
@@ -1646,7 +1646,7 @@ async function init() {
 
   } catch {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
     });
     const errorEl = document.getElementById('dashboard-error');
     if (errorEl) {

@@ -875,7 +875,7 @@ async function init() {
 
   } catch (err) {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
     });
     const errorEl = document.getElementById('dashboard-error');
     if (errorEl) {

@@ -1,0 +1,423 @@
+/**
+ * 14-csp-utilities.css
+ *
+ * Utility classes for Content-Security-Policy (CSP) inline-style migration.
+ *
+ * Context: Production is enabling CSP (Report-Only first) that blocks all
+ * inline `style=""` attributes. Every inline style in HTML files and JS
+ * template literals must be replaced with a CSS class defined here.
+ *
+ * Rules:
+ * - Do NOT use @layer (blocked by SLDS CDN dependency).
+ * - Glassmorphism rgba values are copied EXACTLY from source — do not round.
+ * - No !important unless explicitly documented with a reason below.
+ */
+
+/* ==========================================================================
+   VISIBILITY
+   ========================================================================== */
+
+/**
+ * .hidden — replaces `style="display:none"` on elements toggled by JS.
+ *
+ * No !important here by design. JS teammates MUST use classList.remove('hidden')
+ * to show elements — NOT element.style.display = '' — because setting an empty
+ * inline style leaves the class rule in effect (display:none stays). Using
+ * classList is the correct CSP-safe toggle pattern.
+ *
+ * CSSOM: element.style.display = 'none' (inline) outranks this class rule, so
+ * any JS that sets display:none directly still works. The class covers the
+ * static initial-hidden case in HTML.
+ */
+.hidden {
+  display: none;
+}
+
+/* ==========================================================================
+   STATE SELECTOR  (replaces inline styles in state-selector.js:39-40)
+   ========================================================================== */
+
+.dashboard-state-selector__label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  margin-right: 0.5rem;
+}
+
+.dashboard-state-selector__select {
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08); /* GLASSMORPHISM PROTECTED — exact value required */
+  color: #fff;
+  font-size: 13px;
+}
+
+/* ==========================================================================
+   INSIGHT / ERROR / NOTES  (exec-summary.js:200, food-insecurity.html:527)
+   ========================================================================== */
+
+/* Replaces <em style="font-size:0.85em;opacity:0.7"> in executive-summary.js */
+.dashboard-insight-note {
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+/* Replaces <p style="color:rgba(255,255,255,0.5);text-align:center;width:100%;padding:2rem;">
+   Select a state... pattern used across dashboards for empty/error states */
+.dashboard-error-state {
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  width: 100%;
+  padding: 2rem;
+}
+
+/* ==========================================================================
+   NONPROFIT DIRECTORY RESULT CARDS
+   (replaces template literal inline styles in nonprofit-directory.js:249-254)
+   ========================================================================== */
+
+.help-result-card {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: rgba(255, 255, 255, 0.05); /* GLASSMORPHISM PROTECTED — exact value required */
+  border-radius: 6px;
+  border-left: 3px solid var(--fnf-primary, #0176d3);
+}
+
+.help-result-card__title {
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.help-result-card__title-link {
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.4);
+}
+
+.help-result-card__meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.help-result-card__profile-link {
+  color: var(--fnf-secondary, #00d4ff);
+}
+
+/* ==========================================================================
+   NONPROFIT DIRECTORY SEARCH PANEL  (nonprofit-directory.html:207,212,213)
+   ========================================================================== */
+
+/* Replaces style="padding: 1rem;" on the search panel wrapper */
+.dashboard-search-panel {
+  padding: 1rem;
+}
+
+/* Replaces style="color:rgba(255,255,255,0.6); font-size:13px; margin-top:0.75rem;" */
+.dashboard-search-status {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  margin-top: 0.75rem;
+}
+
+/* Replaces style="max-height:400px; overflow-y:auto; margin-top:1rem;" */
+.dashboard-search-results {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+
+/* ==========================================================================
+   INDEX.HTML DISCLAIMER  (index.html:395)
+   ========================================================================== */
+
+/* Replaces style="opacity: 0.7;" on the disclaimer <p> */
+.disclaimer-note {
+  opacity: 0.7;
+}
+
+/* Replaces style="color:inherit;text-decoration:underline;" on disclaimer anchors */
+.link-inherit {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   ECHARTS TOOLTIP DECORATION  (used by dashboard JS tooltip formatters)
+   ========================================================================== */
+
+/* For <strong> labels in tooltip HTML strings */
+.fnf-tooltip-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Dynamic color via CSS custom prop set from JS:
+   element.style.setProperty('--tooltip-accent', '#ff0000') */
+.fnf-tooltip-value {
+  color: var(--tooltip-accent, #fff);
+}
+
+/* Secondary / muted tooltip text */
+.fnf-tooltip-muted {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Horizontal rule between tooltip sections */
+.fnf-tooltip-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+/* ==========================================================================
+   DASHBOARD HTML STATIC LAYOUT ATTRS
+   (from grepping dashboards/*.html for style= occurrences)
+   ========================================================================== */
+
+/* food-access.html:184 — map-view-toggle
+   Replaces style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;" */
+.dashboard-map-view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* food-access.html:356 — double-burden-mode-toggle
+   Replaces style="display:inline-flex;gap:0;border:1px solid rgba(255,255,255,0.12);border-radius:6px;overflow:hidden" */
+.dashboard-db-toggle-group {
+  display: inline-flex;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* food-access.html:357 — first button in toggle group
+   Replaces style="border-radius:5px 0 0 5px;border:none;margin:0" */
+.dashboard-db-toggle-btn--first {
+  border-radius: 5px 0 0 5px;
+  border: none;
+  margin: 0;
+}
+
+/* food-access.html:358 — last button in toggle group
+   Replaces style="border-radius:0 5px 5px 0;border:none;border-left:1px solid rgba(255,255,255,0.08);margin:0" */
+.dashboard-db-toggle-btn--last {
+  border-radius: 0 5px 5px 0;
+  border: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 0;
+}
+
+/* food-access.html:360-361 — encoding hint paragraphs below double-burden toggle
+   Replaces style="margin:0;font-size:0.72rem;color:rgba(255,255,255,0.5);text-align:center;letter-spacing:0.01em" */
+.dashboard-encoding-hint {
+  margin: 0;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+/* food-access.html:360-361 — emphasized spans within encoding hints
+   Replaces style="color:rgba(255,255,255,0.7)" */
+.dashboard-encoding-hint__em {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* food-access.html:364, food-banks.html:227 — D3 heatmap breadcrumb row
+   Covers both variants (4px padding / 6px padding — use the larger for consistency) */
+.dashboard-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  min-height: 30px;
+}
+
+/* food-access.html:370, food-banks.html:230 — region-legend row
+   Replaces style="display:flex;justify-content:center;gap:16px;margin-top:4px;flex-wrap:wrap" */
+.dashboard-region-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+/* food-access.html:371 — hint text below double-burden chart
+   NOTE: existing .dashboard-chart__hint has different values (color, size, opacity)
+   so this is a distinct modifier for the smaller/dimmer variant used in food-access */
+.dashboard-chart__hint--faint {
+  font-size: 0.7rem;
+  opacity: 0.45;
+  margin-top: 6px;
+}
+
+/* food-insecurity.html:402 — income river chart (min/max height constraints)
+   Replaces style="min-height:350px; height:50vh; max-height:600px" */
+.dashboard-chart--river {
+  min-height: 350px;
+  height: 50vh;
+  max-height: 600px;
+}
+
+/* snap-safety-net.html:229 — toggle container (text-align + padding; display:none handled by .hidden)
+   Replaces the non-hidden portion of style="display:none;text-align:center;padding:0.5rem 0;" */
+.dashboard-toggle-container {
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+/* snap-safety-net.html:365 — KPI gauge grid
+   Replaces style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;" */
+.dashboard-gauge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+/* snap-safety-net.html:367-379 — individual ECharts gauge containers
+   Replaces style="height:200px;min-height:200px" */
+.dashboard-gauge {
+  height: 200px;
+  min-height: 200px;
+}
+
+/* snap-safety-net.html:410 — demographic-flow tall chart
+   Replaces style="height:400px" */
+.dashboard-chart--tall {
+  height: 400px;
+}
+
+/* nonprofit-profile.html:340 — inline compensation gauge (small, centered)
+   Replaces the dimension portion of style="display:none;width:160px;height:120px;margin:0 auto 0.75rem"
+   Pair with .hidden for initial hidden state */
+.profile-gauge--small {
+  width: 160px;
+  height: 120px;
+  margin: 0 auto 0.75rem;
+}
+
+/* ==========================================================================
+   DATA VISUALIZATION INLINE COLORS  (food-banks.html:209-210)
+   These replace inline style="color:#ef4444" / style="color:#3b82f6" on
+   <strong> elements used as chart legend labels in the diverging bar section.
+   ========================================================================== */
+
+/* "Under-resourced" / below-mean state label color */
+.text-data-negative {
+  color: #ef4444;
+}
+
+/* "Above average" / above-mean state label color */
+.text-data-positive {
+  color: #3b82f6;
+}
+
+/* ==========================================================================
+   DASHBOARD KPI PANEL  (food-insecurity.js renderStateDeepDive)
+   JS sets --kpi-color per card via el.style.setProperty('--kpi-color', color)
+   after innerHTML insertion — no inline style attr involved.
+   ========================================================================== */
+
+/* Grid wrapper for the state deep-dive KPI cards */
+.dashboard-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+/* Individual KPI card — GLASSMORPHISM PROTECTED: rgba values must remain exact */
+.dashboard-kpi-card {
+  background: rgba(255, 255, 255, 0.04); /* GLASSMORPHISM PROTECTED — exact value required */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.dashboard-kpi-card__label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+/* Dynamic color slot: JS calls el.style.setProperty('--kpi-color', color) */
+.dashboard-kpi-card__value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--kpi-color, #fff);
+}
+
+.dashboard-kpi-card__sub {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 0.25rem;
+}
+
+/* Muted paragraph below the KPI grid */
+.dashboard-kpi-insight {
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   STATIC ACCENT COLORS  (tooltip labels across multiple dashboards)
+   ========================================================================== */
+
+/* Indigo accent — food-access.js:529-530,649-650 and food-banks.js:179-180 */
+.text-accent-indigo {
+  color: #818CF8;
+}
+
+/* Success green — snap-safety-net.js:402 "Free lunch" label */
+.text-data-success {
+  color: #22c55e;
+}
+
+/* Warning amber — snap-safety-net.js:403 "Reduced lunch" label */
+.text-data-warning {
+  color: #fbbf24;
+}
+
+/* ==========================================================================
+   FOOD-ACCESS LAYOUT HELPERS  (food-access.html remaining gaps)
+   ========================================================================== */
+
+/* food-access.html:355 — wrapper that stacks double-burden toggle + encoding hints
+   Replaces style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px" */
+.dashboard-toggle-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* food-access.html:367 — chart-double-burden-tiles container
+   Replaces style="display:none;padding:4px 0;" — display:none handled by .hidden */
+.dashboard-tile-grid-padded {
+  padding: 4px 0;
+}
+
+/* ==========================================================================
+   MUTED LIST ITEM  (dashboard-js-alpha empty states)
+
+   Using a dedicated class (rgba 0.4) rather than reusing .fnf-tooltip-muted
+   (rgba 0.6) — the 0.4 alpha matches the current visual and keeps the
+   tooltip palette distinct from general UI muted text.
+   ========================================================================== */
+
+.dashboard-list-item--muted {
+  color: rgba(255, 255, 255, 0.4);
+}
