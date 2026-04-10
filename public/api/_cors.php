@@ -30,8 +30,11 @@ if ($allowed) {
 header('Vary: Origin');
 
 // Handle OPTIONS preflight
+// Callers may set $_corsAllowedMethods before include() to override the default
+// (e.g. form endpoints that accept POST). Default is the dashboard proxy case.
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    header('Access-Control-Allow-Methods: GET, OPTIONS');
+    $allowedMethods = isset($_corsAllowedMethods) ? $_corsAllowedMethods : 'GET, OPTIONS';
+    header('Access-Control-Allow-Methods: ' . $allowedMethods);
     header('Access-Control-Allow-Headers: Content-Type');
     header('Access-Control-Max-Age: 86400');
     http_response_code(204);
