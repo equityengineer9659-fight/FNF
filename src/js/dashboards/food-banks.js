@@ -45,7 +45,7 @@ function renderDensityMap(geoJSON, states) {
       formatter: params => {
         const d = params.data;
         if (!d) return '';
-        return `<strong style="font-size:14px">${d.name}</strong><br/>
+        return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
           <span style="color:${COLORS.secondary}">Density:</span> ${d.value.toFixed(1)} orgs per 100K<br/>
           Total Orgs: ${fmtNum(d.orgCount)}<br/>
           Revenue: $${fmtNum(d.totalRevenue)}<br/>
@@ -176,9 +176,9 @@ function renderRevenue(states) {
           <span style="background:${rc};width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px"></span>
           <span style="color:${rc}">${region}</span>
         </span><br/>
-        <span style="color:#818CF8;font-weight:500">$ per Person in Need:</span> <strong>$${fmtNum(leaf.value)}</strong><br/>
-        <span style="color:#818CF8;font-weight:500">Program Efficiency:</span> <strong>${d.efficiency}%</strong>
-        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:7px 0">
+        <span class="text-accent-indigo fnf-tooltip-label">$ per Person in Need:</span> <strong>$${fmtNum(leaf.value)}</strong><br/>
+        <span class="text-accent-indigo fnf-tooltip-label">Program Efficiency:</span> <strong>${d.efficiency}%</strong>
+        <hr class="fnf-tooltip-divider">
         Total Revenue: $${fmtNum(d.totalRevenue)}<br/>
         Operating Reserve: <strong style="color:${Number(d.reservePct) < 5 ? '#ef4444' : '#22c55e'}">${d.reservePct}%</strong><br/>
         Organizations: ${fmtNum(d.orgCount)}<br/>
@@ -444,7 +444,7 @@ async function init() {
     window.addEventListener('resize', handleResize);
   } catch {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
     });
     const errorEl = document.getElementById('dashboard-error');
     if (errorEl) {

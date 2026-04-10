@@ -197,7 +197,7 @@ function renderSnapGap(fiStates, snapStates) {
     }, joined[0]);
     const gapSize = biggestGap.foodInsecure - biggestGap.snapParticipants;
     const overCovered = joined.filter(d => d.snapParticipants >= d.foodInsecure);
-    insightEl.innerHTML = `${biggestGap.name} has the largest absolute gap: ${fmtNum(Math.abs(gapSize))} food-insecure people without SNAP coverage. ${overCovered.length} of 15 states show SNAP coverage meeting or exceeding insecure populations. <em style="font-size:0.85em;opacity:0.7">Note: SNAP participants and food-insecure persons are not the same population — eligibility rules, income limits, and immigration status mean many food-insecure individuals cannot access SNAP.</em>`;
+    insightEl.innerHTML = `${biggestGap.name} has the largest absolute gap: ${fmtNum(Math.abs(gapSize))} food-insecure people without SNAP coverage. ${overCovered.length} of 15 states show SNAP coverage meeting or exceeding insecure populations. <em class="dashboard-insight-note">Note: SNAP participants and food-insecure persons are not the same population — eligibility rules, income limits, and immigration status mean many food-insecure individuals cannot access SNAP.</em>`;
   }
 }
 

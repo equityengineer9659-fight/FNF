@@ -242,13 +242,13 @@ function applySnapMapView(view) {
         formatter: params => {
           const d = params.data;
           if (!d) return '';
-          let tip = `<strong style="font-size:14px">${d.name}</strong><br/>
+          let tip = `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
             <span style="color:${COLORS.secondary}">Coverage Ratio:</span> ${d.value.toFixed(1)}%<br/>
             SNAP Participants: ${fmtNum(d.snapParticipants)}<br/>
             Food Insecure: ${fmtNum(d.foodInsecure)}<br/>
             Insecurity Rate: ${d.insecurityRate}%<br/>
             SNAP Rate: ${d.snapRate}%`;
-          tip += `<br/><span style="color:#ef4444">Unserved:</span> ${fmtNum(Math.max(0, d.foodInsecure - d.snapParticipants))}`;
+          tip += `<br/><span class="text-data-negative">Unserved:</span> ${fmtNum(Math.max(0, d.foodInsecure - d.snapParticipants))}`;
           // Show CDC comparison if available
           if (snapMapCdcData) {
             const cdcMatch = snapMapCdcData.find(c => c.name === d.name);
@@ -292,8 +292,8 @@ function applySnapMapView(view) {
         ...TOOLTIP_STYLE,
         formatter: params => {
           const d = params.data;
-          if (!d) return `<strong style="font-size:14px">${params.name}</strong><br/><span style="color:${COLORS.textMuted}">No CDC survey data available for this state</span>`;
-          let tip = `<strong style="font-size:14px">${d.name}</strong><br/>
+          if (!d) return `<strong class="fnf-tooltip-label">${params.name}</strong><br/><span style="color:${COLORS.textMuted}">No CDC survey data available for this state</span>`;
+          let tip = `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
             <span style="color:${COLORS.accent}">CDC Self-Reported SNAP:</span> ${d.cdcRate}%`;
           // Show admin comparison
           const adminMatch = snapMapAdminData?.find(a => a.name === d.name);
@@ -399,8 +399,8 @@ function renderSchoolLunch(lunchData) {
         const d = p.data;
         let tip = `<strong>${d.name}</strong><br/>Free/Reduced Lunch: <strong>${d.value}%</strong>`;
         if (d.freePct != null && d.reducedPct != null) {
-          tip += `<br/><span style="color:#22c55e">Free (&lt;130% FPL):</span> <strong>${d.freePct}%</strong>`;
-          tip += `<br/><span style="color:#fbbf24">Reduced (130-185% FPL):</span> <strong>${d.reducedPct}%</strong>`;
+          tip += `<br/><span class="text-data-success">Free (&lt;130% FPL):</span> <strong>${d.freePct}%</strong>`;
+          tip += `<br/><span class="text-data-warning">Reduced (130-185% FPL):</span> <strong>${d.reducedPct}%</strong>`;
         }
         return tip;
       }
@@ -799,7 +799,7 @@ async function init() {
 
   } catch {
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
     });
     const errorEl = document.getElementById('dashboard-error');
     if (errorEl) {

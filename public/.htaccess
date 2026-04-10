@@ -6,10 +6,12 @@ ErrorDocument 404 /404.html
   # Apache backend ignores that file, so this is the actual source of
   # truth in production. Keep _headers and this block in sync.
   #
-  # Content-Security-Policy is intentionally NOT set here yet — it
-  # requires migrating remaining inline styles (audit P3-13) and
-  # vetting all external resources (Mapbox tiles, fonts CDN, Sentry
-  # ingest). Tracked as a follow-up in audit-results.
+  # Content-Security-Policy — Report-Only mode first.
+  # Inline styles migrated to CSS classes (P3-13 + CSP migration PR).
+  # All external resources inventoried: fonts CDN, SLDS CDN, Sentry ingest.
+  # All API calls proxied through /api/*.php (same-origin).
+  # Will upgrade to enforcing Content-Security-Policy after 48h observation.
+  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://o4510112854704128.ingest.us.sentry.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
   Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
   Header always set X-Frame-Options "DENY"
   Header always set X-Content-Type-Options "nosniff"

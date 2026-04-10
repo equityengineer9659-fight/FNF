@@ -155,7 +155,7 @@
                 <span id="org-status" class="profile-header__meta-badge">&mdash;</span>
             </div>
             <!-- Charity Navigator Rating (populated by JS, hidden if API not configured or org not rated) -->
-            <div id="cn-rating-section" class="profile-cn-rating" style="display:none" aria-label="Charity Navigator rating">
+            <div id="cn-rating-section" class="profile-cn-rating hidden" aria-label="Charity Navigator rating">
                 <div class="profile-cn-rating__score">
                     <div id="chart-cn-gauge" class="profile-cn-gauge"></div>
                 </div>
@@ -191,17 +191,17 @@
         </section>
 
         <!-- Profile Summary (populated dynamically by JS) -->
-        <section id="profile-summary" class="dashboard-section" style="display:none" aria-label="Organization summary">
+        <section id="profile-summary" class="dashboard-section hidden" aria-label="Organization summary">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Organization Profile</h2></div>
                 <div class="profile-summary__layout">
                     <div class="profile-summary__description">
                         <p class="dashboard-info__text" id="profile-summary-text">Loading summary...</p>
-                        <div class="dashboard-info__insight" id="profile-summary-insight" style="display:none"></div>
+                        <div class="dashboard-info__insight hidden" id="profile-summary-insight"></div>
                     </div>
                     <div class="profile-summary__contact" id="profile-contact">
                         <h3 class="profile-contact__heading">Contact Information</h3>
-                        <div class="profile-contact__item" id="contact-person" style="display:none">
+                        <div class="profile-contact__item hidden" id="contact-person">
                             <span class="profile-contact__label">Contact</span>
                             <span class="profile-contact__value" id="contact-person-value"></span>
                         </div>
@@ -239,12 +239,12 @@
         </div>
 
         <!-- Error State -->
-        <div id="profile-error" class="directory-empty-state" style="display:none">
+        <div id="profile-error" class="directory-empty-state hidden">
             <p>Unable to load organization data. <a href="/dashboards/nonprofit-directory.html">Return to directory</a></p>
         </div>
 
         <!-- Chart 1: Revenue Trend -->
-        <section class="dashboard-section scroll-reveal" aria-label="Revenue over time" id="section-revenue-trend" style="display:none">
+        <section class="dashboard-section scroll-reveal hidden" aria-label="Revenue over time" id="section-revenue-trend">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue Trend</h2></div>
                 <div class="dashboard-chart-row">
@@ -254,7 +254,7 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Revenue Over Time</h3>
                         <p class="dashboard-info__text" id="info-text-revenue-trend">Loading analysis...</p>
-                        <div class="dashboard-info__insight" id="info-insight-revenue-trend" style="display:none"></div>
+                        <div class="dashboard-info__insight hidden" id="info-insight-revenue-trend"></div>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
                             <span class="meta-item" id="info-meta-revenue-trend"></span>
@@ -265,7 +265,7 @@
         </section>
 
         <!-- Chart 2: Revenue Composition -->
-        <section class="dashboard-section scroll-reveal" aria-label="Revenue composition" id="section-revenue-composition" style="display:none">
+        <section class="dashboard-section scroll-reveal hidden" aria-label="Revenue composition" id="section-revenue-composition">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Revenue Composition</h2></div>
                 <div class="dashboard-chart-row">
@@ -275,7 +275,7 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Where the Money Comes From</h3>
                         <p class="dashboard-info__text" id="info-text-revenue-composition">Loading analysis...</p>
-                        <div class="dashboard-info__insight" id="info-insight-revenue-composition" style="display:none"></div>
+                        <div class="dashboard-info__insight hidden" id="info-insight-revenue-composition"></div>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
                             <span class="meta-item" id="info-meta-revenue-composition"></span>
@@ -286,7 +286,7 @@
         </section>
 
         <!-- Chart 3: Expenses vs Revenue -->
-        <section class="dashboard-section scroll-reveal" aria-label="Expenses versus revenue" id="section-expenses-vs-revenue" style="display:none">
+        <section class="dashboard-section scroll-reveal hidden" aria-label="Expenses versus revenue" id="section-expenses-vs-revenue">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Expenses vs Revenue</h2></div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
@@ -296,7 +296,7 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Operating Surplus or Deficit</h3>
                         <p class="dashboard-info__text" id="info-text-expenses">Loading analysis...</p>
-                        <div class="dashboard-info__insight" id="info-insight-expenses" style="display:none"></div>
+                        <div class="dashboard-info__insight hidden" id="info-insight-expenses"></div>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
                             <span class="meta-item" id="info-meta-expenses"></span>
@@ -307,7 +307,7 @@
         </section>
 
         <!-- Chart 4: Asset & Liability Growth -->
-        <section class="dashboard-section scroll-reveal" aria-label="Assets and liabilities over time" id="section-assets-liabilities" style="display:none">
+        <section class="dashboard-section scroll-reveal hidden" aria-label="Assets and liabilities over time" id="section-assets-liabilities">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Assets &amp; Liabilities</h2></div>
                 <div class="dashboard-chart-row">
@@ -317,7 +317,7 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Balance Sheet Growth</h3>
                         <p class="dashboard-info__text" id="info-text-assets">Loading analysis...</p>
-                        <div class="dashboard-info__insight" id="info-insight-assets" style="display:none"></div>
+                        <div class="dashboard-info__insight hidden" id="info-insight-assets"></div>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
                             <span class="meta-item" id="info-meta-assets"></span>
@@ -328,7 +328,7 @@
         </section>
 
         <!-- Chart 5: Compensation Analysis -->
-        <section class="dashboard-section scroll-reveal" aria-label="Compensation analysis" id="section-compensation" style="display:none">
+        <section class="dashboard-section scroll-reveal hidden" aria-label="Compensation analysis" id="section-compensation">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Compensation Analysis</h2></div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
@@ -337,9 +337,9 @@
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">People Costs</h3>
-                        <div id="chart-compensation-gauge" class="profile-gauge" style="display:none;width:160px;height:120px;margin:0 auto 0.75rem"></div>
+                        <div id="chart-compensation-gauge" class="profile-gauge hidden profile-gauge--small"></div>
                         <p class="dashboard-info__text" id="info-text-compensation">Loading analysis...</p>
-                        <div class="dashboard-info__insight" id="info-insight-compensation" style="display:none"></div>
+                        <div class="dashboard-info__insight hidden" id="info-insight-compensation"></div>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
                             <span class="meta-item" id="info-meta-compensation"></span>
@@ -350,7 +350,7 @@
         </section>
 
         <!-- Chart 6: Operational Efficiency -->
-        <section class="dashboard-section scroll-reveal" aria-label="Operational efficiency metrics" id="section-fundraising" style="display:none">
+        <section class="dashboard-section scroll-reveal hidden" aria-label="Operational efficiency metrics" id="section-fundraising">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">Operational Efficiency</h2></div>
                 <div class="dashboard-chart-row">
@@ -360,7 +360,7 @@
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">How Efficiently Does It Operate?</h3>
                         <p class="dashboard-info__text" id="info-text-efficiency">Loading analysis...</p>
-                        <div class="dashboard-info__insight" id="info-insight-efficiency" style="display:none"></div>
+                        <div class="dashboard-info__insight hidden" id="info-insight-efficiency"></div>
                         <div class="dashboard-info__meta">
                             <span class="meta-item"><strong>Source</strong> IRS Form 990 via ProPublica</span>
                             <span class="meta-item" id="info-meta-efficiency"></span>
@@ -371,7 +371,7 @@
         </section>
 
         <!-- Peer Comparison (non-blocking, loaded from ProPublica search) -->
-        <section class="dashboard-section scroll-reveal" aria-label="Peer comparison analysis" id="section-peer-comparison" style="display:none">
+        <section class="dashboard-section scroll-reveal hidden" aria-label="Peer comparison analysis" id="section-peer-comparison">
             <div class="dashboard-card">
                 <div class="dashboard-card__header"><h2 class="dashboard-card__title">How Does This Org Compare?</h2></div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">

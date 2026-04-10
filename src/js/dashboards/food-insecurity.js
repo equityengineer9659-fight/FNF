@@ -56,7 +56,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
   function stateTooltip(params) {
     const d = params.data;
     if (!d) return '';
-    return `<strong style="font-size:14px">${d.name}</strong><br/>
+    return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
       <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.rate}%<br/>
       <span style="color:${COLORS.accent}">Child Rate:</span> ${d.childRate}%<br/>
       Persons: ${fmtNum(d.persons)}<br/>
@@ -71,14 +71,14 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
   function countyTooltip(params) {
     const d = params.data;
     if (!d) return '';
-    return `<strong style="font-size:14px">${d.name}</strong><br/>
+    return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
       Population: ${fmtNum(d.population || 0)}<br/>
       <span style="color:${COLORS.secondary}">Food Insecurity:</span> ${d.rate}%<br/>
       <span style="color:${COLORS.accent}">Child Rate:</span> ${d.childRate}%<br/>
       Poverty Rate: ${d.povertyRate}%<br/>
       Persons: ${fmtNum(d.persons)}<br/>
       Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
-      Avg Meal Cost: $${d.mealCost} <span style="opacity:0.7">(state avg)</span>`;
+      Avg Meal Cost: $${d.mealCost} <span class="fnf-tooltip-muted">(state avg)</span>`;
   }
 
   // Show national (state-level) view
@@ -356,7 +356,7 @@ function initCountySearch(mapController) {
     }
 
     if (matches.length === 0) {
-      resultsList.innerHTML = '<li style="color:rgba(255,255,255,0.4)">No counties found</li>';
+      resultsList.innerHTML = '<li class="dashboard-list-item--muted">No counties found</li>';
       resultsList.setAttribute('data-visible', 'true');
       input.setAttribute('aria-expanded', 'true');
       return;
@@ -1608,17 +1608,22 @@ function renderStateDeepDive(stateCode, data, accessData, bankData) {
   ];
 
   panel.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;width:100%;padding:0.5rem 0;">
+    <div class="dashboard-kpi-grid">
       ${kpis.map(k => `
-        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:1rem;text-align:center;">
-          <div style="font-size:0.7rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;">${k.label}</div>
-          <div style="font-size:1.6rem;font-weight:700;color:${k.color};">${k.value}</div>
-          <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;">${k.sub}</div>
+        <div class="dashboard-kpi-card">
+          <div class="dashboard-kpi-card__label">${k.label}</div>
+          <div class="dashboard-kpi-card__value">${k.value}</div>
+          <div class="dashboard-kpi-card__sub">${k.sub}</div>
         </div>
       `).join('')}
     </div>
-    <p style="margin:1rem 0 0;font-size:0.85rem;line-height:1.6;color:rgba(255,255,255,0.75);">${buildStateInsight(fi, data, stateName)}</p>
+    <p class="dashboard-kpi-insight">${buildStateInsight(fi, data, stateName)}</p>
   `;
+  // Set dynamic KPI colors via CSSOM (CSP-compliant)
+  kpis.forEach((k, i) => {
+    const valueEl = panel.querySelectorAll('.dashboard-kpi-card__value')[i];
+    if (valueEl) valueEl.style.setProperty('--kpi-color', k.color);
+  });
 }
 
 // -- Init --
@@ -1718,7 +1723,7 @@ async function init() {
   } catch (err) {
     // Show error in chart containers
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 2rem;">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
     });
     const errorEl = document.getElementById('dashboard-error');
     if (errorEl) {

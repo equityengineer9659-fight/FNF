@@ -207,7 +207,7 @@
                     <div id="state-selector-container"></div>
                         <span id="map-state-label" class="dashboard-map__state-label"></span>
                         <div class="dashboard-card__controls">
-                            <button id="map-back-btn" class="dashboard-back-btn" style="display:none" aria-label="Back to national view">Back to National</button>
+                            <button id="map-back-btn" class="dashboard-back-btn hidden" aria-label="Back to national view">Back to National</button>
                             <label for="map-metric" class="slds-assistive-text">Select metric</label>
                             <select id="map-metric" class="dashboard-select">
                                 <option value="rate">Food Insecurity Rate (%)</option>
@@ -318,7 +318,7 @@
         </section>
 
         <!-- 4b. Social Determinants of Health (live Census ACS data, non-blocking) -->
-        <section id="section-sdoh" class="dashboard-section scroll-reveal" style="display:none" aria-label="Social determinants affecting food insecurity">
+        <section id="section-sdoh" class="dashboard-section scroll-reveal hidden" aria-label="Social determinants affecting food insecurity">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
                     <h2 class="dashboard-card__title">Social Determinants of Food Insecurity</h2>
@@ -391,7 +391,7 @@
         </section>
 
         <!-- 4d. Income Distribution ThemeRiver (live Census ACS, non-blocking) -->
-        <section id="section-income-river" class="dashboard-section scroll-reveal" style="display:none" aria-label="Income distribution across states sorted by food insecurity">
+        <section id="section-income-river" class="dashboard-section scroll-reveal hidden" aria-label="Income distribution across states sorted by food insecurity">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
                     <h2 class="dashboard-card__title">Income &amp; Hunger: The River of Inequality</h2>
@@ -399,7 +399,7 @@
                 </div>
                 <div class="dashboard-chart-row dashboard-chart-row--reverse">
                     <div class="dashboard-chart-row__chart">
-                        <div id="chart-income-river" class="dashboard-chart" style="min-height:350px; height:50vh; max-height:600px" role="img" aria-label="Theme river chart showing income distribution bands across states sorted by food insecurity rate"></div>
+                        <div id="chart-income-river" class="dashboard-chart dashboard-chart--river" role="img" aria-label="Theme river chart showing income distribution bands across states sorted by food insecurity rate"></div>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Follow the Money</h3>
@@ -517,14 +517,14 @@
         </section>
 
         <!-- 9. State Deep-Dive KPI Panel -->
-        <section id="section-state-deepdive" class="dashboard-section scroll-reveal" aria-label="State deep-dive comparison" style="display:none">
+        <section id="section-state-deepdive" class="dashboard-section scroll-reveal hidden" aria-label="State deep-dive comparison">
             <div class="dashboard-card">
                 <div class="dashboard-card__header">
                     <h2 class="dashboard-card__title">State Deep-Dive Comparison</h2>
                 </div>
                 <div class="dashboard-data-notice" role="note">KPIs combine Food Insecurity (2024), Food Access (modeled for 2026), and Food Bank (2023 IRS 990) data.</div>
                 <div id="state-deepdive-panel" class="dashboard-chart-row">
-                    <p style="color:rgba(255,255,255,0.5);text-align:center;width:100%;padding:2rem;">Select a state from the dropdown above to see cross-dataset metrics.</p>
+                    <p class="dashboard-error-state">Select a state from the dropdown above to see cross-dataset metrics.</p>
                 </div>
             </div>
         </section>

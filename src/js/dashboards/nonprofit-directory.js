@@ -246,12 +246,12 @@ function initFindHelp() {
           const revenueStr = revenue ? `$${fmtNum(revenue)}` : '';
           const profileUrl = ein ? `/dashboards/nonprofit-profile.html?ein=${ein}` : '';
 
-          return `<div style="padding:0.75rem; margin-bottom:0.5rem; background:rgba(255,255,255,0.05); border-radius:6px; border-left:3px solid var(--fnf-primary, #0176d3);">
-            <div style="font-weight:600; color:#fff; margin-bottom:0.25rem;">${profileUrl ? `<a href="${profileUrl}" style="color:#fff; text-decoration:none; border-bottom:1px dotted rgba(255,255,255,0.4);">${name}</a>` : name}</div>
-            <div style="font-size:12px; color:rgba(255,255,255,0.6);">
+          return `<div class="help-result-card">
+            <div class="help-result-card__title">${profileUrl ? `<a href="${profileUrl}" class="help-result-card__title-link">${name}</a>` : name}</div>
+            <div class="help-result-card__meta">
               ${city}${city && state ? ', ' : ''}${state}
               ${revenueStr ? ` &middot; Revenue: ${revenueStr}` : ''}
-              ${profileUrl ? ` &middot; <a href="${profileUrl}" style="color:var(--fnf-secondary, #00d4ff);">View Profile</a>` : ''}
+              ${profileUrl ? ` &middot; <a href="${profileUrl}" class="help-result-card__profile-link">View Profile</a>` : ''}
             </div>
           </div>`;
         }).join('');
