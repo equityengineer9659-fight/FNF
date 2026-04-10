@@ -71,7 +71,7 @@ function renderDesertMap(geoJSON, states, accessData) {
     }));
 
     const backBtn = document.getElementById('access-map-back-btn');
-    if (backBtn) backBtn.style.display = 'none';
+    if (backBtn) backBtn.classList.add('hidden');
     const mapLabel = document.getElementById('access-map-state-label');
     if (mapLabel) mapLabel.textContent = '';
     const hint = document.querySelector('#chart-desert-map + .dashboard-chart__hint');
@@ -167,7 +167,7 @@ function renderDesertMap(geoJSON, states, accessData) {
       currentView = stateFips;
 
       const backBtn = document.getElementById('access-map-back-btn');
-      if (backBtn) backBtn.style.display = '';
+      if (backBtn) backBtn.classList.remove('hidden');
       const mapLabel = document.getElementById('access-map-state-label');
       if (mapLabel) mapLabel.textContent = stateName;
       const hint = document.querySelector('#chart-desert-map + .dashboard-chart__hint');
@@ -578,9 +578,9 @@ function initDoubleBurdenModeToggle() {
       const isTreemap = mode === 'treemap';
       if (treemapEl) treemapEl.style.display = isTreemap ? '' : 'none';
       if (breadcrumb) breadcrumb.style.display = isTreemap ? '' : 'none';
-      if (tilesEl) tilesEl.style.display = isTreemap ? 'none' : '';
+      if (tilesEl) tilesEl.classList.toggle('hidden', isTreemap);
       if (encodingTree) encodingTree.style.display = isTreemap ? '' : 'none';
-      if (encodingTile) encodingTile.style.display = isTreemap ? 'none' : '';
+      if (encodingTile) encodingTile.classList.toggle('hidden', !isTreemap);
       // Region chips redundant in tiles mode — tiles already have labeled region sections
       if (regionLegend) regionLegend.style.display = isTreemap ? '' : 'none';
       if (hintEl) hintEl.textContent = isTreemap
@@ -1501,34 +1501,34 @@ async function init() {
       if (mapEl) mapEl.setAttribute('aria-label', mapLabels[view] || mapLabels.deserts);
 
       // Hide all info panels first
-      infoPanels.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+      infoPanels.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
       if (freshAccess) freshAccess.style.display = '';
-      if (freshSnap) freshSnap.style.display = 'none';
+      if (freshSnap) freshSnap.classList.add('hidden');
 
       if (view === 'insecurity' && cdcInsecurityData?.records) {
         if (mapCtrl) mapCtrl.setDrillDown(false);
         renderInsecurityMap(geoJSON, cdcInsecurityData.records, currentAccessData?.states || []);
-        const el = document.getElementById('info-insecurity-mode'); if (el) el.style.display = '';
+        const el = document.getElementById('info-insecurity-mode'); if (el) el.classList.remove('hidden');
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
         updateFreshness('access', cdcInsecurityData);
       } else if (view === 'snap' && snapRetailerData?.states) {
         if (mapCtrl) mapCtrl.setDrillDown(false);
         renderSnapRetailers(geoJSON, snapRetailerData, curStates);
-        const el = document.getElementById('info-snap-mode'); if (el) el.style.display = '';
+        const el = document.getElementById('info-snap-mode'); if (el) el.classList.remove('hidden');
         if (hint) hint.textContent = 'Hover for retailer breakdown by store type';
         if (freshAccess) freshAccess.style.display = 'none';
-        if (freshSnap) freshSnap.style.display = '';
+        if (freshSnap) freshSnap.classList.remove('hidden');
       } else if (view === 'deserts' && currentAccessData?.states) {
         // Low Access (Current) — computed from FNS + Census tract data
         if (mapCtrl) mapCtrl.setDrillDown(true);
         renderLowAccessMap(geoJSON, currentAccessData);
-        const el = document.getElementById('info-desert-mode'); if (el) el.style.display = '';
+        const el = document.getElementById('info-desert-mode'); if (el) el.classList.remove('hidden');
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
         updateFreshness('access', { _static: true, _dataYear: 'Current' });
       } else {
         // Fallback: show static data if computed data unavailable
         if (mapCtrl) { mapCtrl.setDrillDown(true); mapCtrl.showNational(); }
-        const el = document.getElementById('info-desert-mode'); if (el) el.style.display = '';
+        const el = document.getElementById('info-desert-mode'); if (el) el.classList.remove('hidden');
         if (hint) hint.textContent = 'Hover for state details — click any state for county breakdown';
         updateFreshness('access', { _static: true, _dataYear: 'Current' });
       }
@@ -1595,7 +1595,7 @@ async function init() {
         renderLowAccessCounty(countyGeo, stateAccess.counties);
 
         const backBtn = document.getElementById('access-map-back-btn');
-        if (backBtn) backBtn.style.display = '';
+        if (backBtn) backBtn.classList.remove('hidden');
         const mapLabel = document.getElementById('access-map-state-label');
         if (mapLabel) mapLabel.textContent = stateName;
 

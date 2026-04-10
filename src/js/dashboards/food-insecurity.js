@@ -89,7 +89,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
 
     // Hide back button
     const backBtn = document.getElementById('map-back-btn');
-    if (backBtn) backBtn.style.display = 'none';
+    if (backBtn) backBtn.classList.add('hidden');
     const mapLabel = document.getElementById('map-state-label');
     if (mapLabel) mapLabel.textContent = '';
     currentStateName = '';
@@ -180,7 +180,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
 
       // Show back button
       const backBtn = document.getElementById('map-back-btn');
-      if (backBtn) backBtn.style.display = '';
+      if (backBtn) backBtn.classList.remove('hidden');
       const mapLabel = document.getElementById('map-state-label');
       if (mapLabel) mapLabel.textContent = stateName;
       const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
