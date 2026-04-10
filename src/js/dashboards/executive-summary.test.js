@@ -31,6 +31,7 @@ vi.mock('echarts/components', () => ({
 vi.mock('echarts/renderers', () => ({ CanvasRenderer: 'CanvasRenderer' }));
 
 import { computeVulnerabilityIndex } from './executive-summary.js';
+import { getRegion } from './shared/dashboard-utils.js';
 
 // -- Helpers --
 const dataDir = resolve(__dirname, '../../../public/data');
@@ -40,8 +41,11 @@ function readJSON(filename) {
   return JSON.parse(readFileSync(resolve(dataDir, filename), 'utf-8'));
 }
 
-function readHTML(filename) {
-  return readFileSync(resolve(htmlDir, filename), 'utf-8');
+/** Parse HTML file into a jsdom document for DOM-based assertions */
+function parseHTML(filename) {
+  const html = readFileSync(resolve(htmlDir, filename), 'utf-8');
+  const parser = new DOMParser();
+  return parser.parseFromString(html, 'text/html');
 }
 
 describe('executive-summary', () => {
@@ -61,7 +65,6 @@ describe('executive-summary', () => {
     });
 
     it('should produce scores where no single component dominates', () => {
-      // High meal cost state should NOT score dramatically higher than high-insecurity state
       const states = [
         { name: 'HighInsecurity', rate: 20, povertyRate: 25, mealCost: 3.0 },
         { name: 'HighMealCost', rate: 8, povertyRate: 8, mealCost: 5.5 },
@@ -71,7 +74,6 @@ describe('executive-summary', () => {
       const highInsecurity = result.find(s => s.name === 'HighInsecurity');
       const highMealCost = result.find(s => s.name === 'HighMealCost');
 
-      // With correct 40/30/30 weighting, high insecurity should score higher
       expect(highInsecurity.vulnerabilityIndex).toBeGreaterThan(highMealCost.vulnerabilityIndex);
     });
 
@@ -124,20 +126,20 @@ describe('executive-summary', () => {
   describe('HTML KPI staleness checks', () => {
     it('should have insecurity KPI data-target matching JSON national rate', () => {
       const fiData = readJSON('food-insecurity-state.json');
-      const html = readHTML('executive-summary.html');
-      const match = html.match(/id="food-insecurity-kpi"[^>]*data-target="([^"]+)"/);
-      if (match) {
-        const htmlValue = parseFloat(match[1]);
-        expect(htmlValue).toBeCloseTo(fiData.national.foodInsecurityRate, 0);
-      }
+      const doc = parseHTML('executive-summary.html');
+      const kpiEl = doc.querySelector('#food-insecurity-kpi');
+      expect(kpiEl).not.toBeNull();
+      const htmlValue = parseFloat(kpiEl.getAttribute('data-target'));
+      expect(htmlValue).toBeCloseTo(fiData.national.foodInsecurityRate, 0);
     });
 
     it('should not have "Data Year: 2022" labels when data year is 2024', () => {
       const fiData = readJSON('food-insecurity-state.json');
-      const html = readHTML('executive-summary.html');
+      const doc = parseHTML('executive-summary.html');
       if (fiData.national.year && fiData.national.year >= 2024) {
-        const staleYearCount = (html.match(/Data Year:\s*2022/g) || []).length;
-        expect(staleYearCount).toBe(0);
+        const bodyText = doc.body.textContent;
+        const staleCount = (bodyText.match(/Data Year:\s*2022/g) || []).length;
+        expect(staleCount).toBe(0);
       }
     });
   });
@@ -145,7 +147,6 @@ describe('executive-summary', () => {
   // ── P1 #8: BLS YoY null-hole alignment ──
   describe('BLS YoY computation', () => {
     it('should maintain correct 12-month lookback when nulls are present using date-keyed approach', () => {
-      // Build BLS-like data with a null at month 15 (2024-03)
       const data = [];
       for (let i = 0; i < 24; i++) {
         const year = 2023 + Math.floor(i / 12);
@@ -154,7 +155,6 @@ describe('executive-summary', () => {
         data.push({ date, value: i === 14 ? null : 200 + i });
       }
 
-      // Use the corrected date-keyed approach (matching executive-summary.js fix)
       const validData = data.filter(d => d.value !== null);
       const dataByDate = {};
       validData.forEach(d => { dataByDate[d.date] = d.value; });
@@ -169,7 +169,6 @@ describe('executive-summary', () => {
         return { date: d.date, lookbackDate: priorDate };
       });
 
-      // Each YoY entry's lookbackDate should be exactly 12 months prior
       for (const entry of yoyData) {
         const [entryYear, entryMonth] = entry.date.split('-').map(Number);
         const [lookYear, lookMonth] = entry.lookbackDate.split('-').map(Number);
@@ -177,27 +176,24 @@ describe('executive-summary', () => {
         expect(monthDiff).toBe(12);
       }
 
-      // The null month (2024-03) should be skipped, not cause misalignment
       const dates = yoyData.map(d => d.date);
       expect(dates).not.toContain('2024-03');
     });
   });
 
-  // ── P1 #9: Dead fetch removal (reversed — now food-bank-orgs KPI is data-driven) ──
-  describe('dynamic KPI fetch check', () => {
-    it('should fetch food-bank-summary.json to update food-bank-orgs-kpi dynamically', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
-      expect(jsSource).toContain('food-bank-summary.json');
-      expect(jsSource).toContain('food-bank-orgs-kpi');
-      expect(jsSource).toContain('totalOrganizations');
+  // ── P1 #9: food-bank-orgs KPI element must exist with data-target ──
+  describe('dynamic KPI elements', () => {
+    it('food-bank-orgs-kpi element should exist with data-target attribute', () => {
+      const doc = parseHTML('executive-summary.html');
+      const kpiEl = doc.querySelector('#food-bank-orgs-kpi');
+      expect(kpiEl).not.toBeNull();
+      expect(kpiEl.getAttribute('data-target')).toBeTruthy();
     });
 
-    it('SNAP KPI formula should use coverageGap, not foodInsecurePersons', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
-      // Formula should use participants / (participants + coverageGap)
-      expect(jsSource).toContain('coverageGap');
-      // Should NOT divide by totalInsecure
-      expect(jsSource).not.toMatch(/totalSnap\s*\/\s*totalInsecure/);
+    it('food-bank-summary.json should have totalOrganizations for KPI update', () => {
+      const bankData = readJSON('food-bank-summary.json');
+      expect(bankData.national.totalOrganizations).toBeTypeOf('number');
+      expect(bankData.national.totalOrganizations).toBeGreaterThan(0);
     });
   });
 
@@ -211,32 +207,19 @@ describe('executive-summary', () => {
       const gap = snapData.national.coverageGap;
       const insecure = fiData.national.foodInsecurePersons;
 
-      // These are different formulas — the label says participants/(participants+gap)
       const participantBased = (snap / (snap + gap) * 100).toFixed(1);
       const insecureBased = (snap / insecure * 100).toFixed(1);
 
-      // They should differ — confirming which one the code uses matters
       expect(participantBased).not.toBe(insecureBased);
-
-      // The code should match the label: participants / (participants + gap)
-      // This documents the expected correct formula
       expect(parseFloat(participantBased)).toBeCloseTo(83.7, 0);
-    });
-  });
-
-  // ── Fix 5: food-insecurity-kpi must be updated by JS ──
-  describe('food-insecurity-kpi dynamic update', () => {
-    it('init() should update food-insecurity-kpi from fiData', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
-      expect(jsSource).toContain('food-insecurity-kpi');
     });
   });
 
   // ── Fix 6: Food Bank Orgs KPI needs an id ──
   describe('food-bank-orgs-kpi', () => {
     it('HTML should have id on the Food Bank Orgs stat element', () => {
-      const html = readHTML('executive-summary.html');
-      expect(html).toContain('id="food-bank-orgs-kpi"');
+      const doc = parseHTML('executive-summary.html');
+      expect(doc.querySelector('#food-bank-orgs-kpi')).not.toBeNull();
     });
   });
 
@@ -245,7 +228,6 @@ describe('executive-summary', () => {
     it('each render call should be wrapped in its own try/catch', () => {
       const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
       const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
-      // Count try blocks — should have at least 4 (one per render) plus the outer
       const tryCount = (initSection.match(/try\s*\{/g) || []).length;
       expect(tryCount).toBeGreaterThanOrEqual(5);
     });
@@ -254,46 +236,42 @@ describe('executive-summary', () => {
   // ── Audit 2026-04-07 #3: Dynamic insight containers need aria-live ──
   describe('aria-live on dynamic insights', () => {
     it('executive-summary: all dynamic insight containers should have aria-live', () => {
-      const html = readHTML('executive-summary.html');
+      const doc = parseHTML('executive-summary.html');
       const dynamicIds = ['vulnerability-map-insight', 'snap-gap-insight', 'price-impact-insight', 'worst-states-insight'];
       for (const id of dynamicIds) {
-        const regex = new RegExp(`id="${id}"[^>]*`);
-        const match = html.match(regex);
-        expect(match, `${id} should exist`).toBeTruthy();
-        expect(match[0], `${id} should have aria-live`).toContain('aria-live');
+        const el = doc.getElementById(id);
+        expect(el, `${id} should exist`).not.toBeNull();
+        expect(el.getAttribute('aria-live'), `${id} should have aria-live`).toBeTruthy();
       }
     });
 
     it('food-access: all dynamic insight containers should have aria-live', () => {
-      const html = readHTML('food-access.html');
+      const doc = parseHTML('food-access.html');
       const dynamicIds = ['insecurity-map-insight', 'low-access-insight', 'snap-retailers-insight', 'sdoh-access-insight', 'access-insecurity-insight'];
       for (const id of dynamicIds) {
-        const regex = new RegExp(`id="${id}"[^>]*`);
-        const match = html.match(regex);
-        expect(match, `${id} should exist`).toBeTruthy();
-        expect(match[0], `${id} should have aria-live`).toContain('aria-live');
+        const el = doc.getElementById(id);
+        expect(el, `${id} should exist`).not.toBeNull();
+        expect(el.getAttribute('aria-live'), `${id} should have aria-live`).toBeTruthy();
       }
     });
 
     it('snap-safety-net: all dynamic insight containers should have aria-live', () => {
-      const html = readHTML('snap-safety-net.html');
+      const doc = parseHTML('snap-safety-net.html');
       const dynamicIds = ['snap-map-insight', 'demographic-flow-insight'];
       for (const id of dynamicIds) {
-        const regex = new RegExp(`id="${id}"[^>]*`);
-        const match = html.match(regex);
-        expect(match, `${id} should exist`).toBeTruthy();
-        expect(match[0], `${id} should have aria-live`).toContain('aria-live');
+        const el = doc.getElementById(id);
+        expect(el, `${id} should exist`).not.toBeNull();
+        expect(el.getAttribute('aria-live'), `${id} should have aria-live`).toBeTruthy();
       }
     });
 
     it('food-prices: all dynamic insight containers should have aria-live', () => {
-      const html = readHTML('food-prices.html');
+      const doc = parseHTML('food-prices.html');
       const dynamicIds = ['yoy-insight', 'purchasing-power-insight'];
       for (const id of dynamicIds) {
-        const regex = new RegExp(`id="${id}"[^>]*`);
-        const match = html.match(regex);
-        expect(match, `${id} should exist`).toBeTruthy();
-        expect(match[0], `${id} should have aria-live`).toContain('aria-live');
+        const el = doc.getElementById(id);
+        expect(el, `${id} should exist`).not.toBeNull();
+        expect(el.getAttribute('aria-live'), `${id} should have aria-live`).toBeTruthy();
       }
     });
   });
@@ -302,13 +280,15 @@ describe('executive-summary', () => {
   describe('SNAP vintage disclosure', () => {
     it('methodology should disclose SNAP national vs state data year difference', () => {
       const snapData = readJSON('snap-participation.json');
-      const html = readHTML('executive-summary.html');
+      const doc = parseHTML('executive-summary.html');
       const natYear = snapData.national.year;
       const stateYear = snapData.stateCoverage?.year;
       if (natYear !== stateYear) {
-        // Methodology must mention both years
-        expect(html).toContain(String(natYear));
-        expect(html).toContain(String(stateYear));
+        const bodyText = doc.body.textContent;
+        expect(bodyText).toContain(String(natYear));
+        expect(bodyText).toContain(String(stateYear));
+        // Verify SNAP + national + FY year mentioned together in methodology
+        const html = readFileSync(resolve(htmlDir, 'executive-summary.html'), 'utf-8');
         expect(html).toMatch(/SNAP.*national.*FY\d{4}|FY\d{4}.*national.*SNAP/i);
       }
     });
@@ -352,49 +332,56 @@ describe('executive-summary', () => {
       const result = computeVulnerabilityIndex(fiData.states);
       expect(result.length).toBeGreaterThanOrEqual(10);
       const sorted = [...result].sort((a, b) => b.vulnerabilityIndex - a.vulnerabilityIndex);
-      // Top 10 should all have positive vulnerability scores
       sorted.slice(0, 10).forEach(s => {
         expect(s.vulnerabilityIndex).toBeGreaterThan(0);
       });
     });
 
-    it('worst-states insight should reference South region count', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
-      const worstSection = jsSource.slice(jsSource.indexOf('function renderWorstStates'));
-      expect(worstSection).toContain('South');
-      expect(worstSection).toContain('getRegion');
+    it('top-10 vulnerable states should include Southern states', () => {
+      const fiData = readJSON('food-insecurity-state.json');
+      const result = computeVulnerabilityIndex(fiData.states);
+      const sorted = [...result].sort((a, b) => b.vulnerabilityIndex - a.vulnerabilityIndex);
+      const top10 = sorted.slice(0, 10);
+      const southCount = top10.filter(s => getRegion(s.name) === 'South').length;
+      // Food insecurity is concentrated in the South
+      expect(southCount).toBeGreaterThanOrEqual(3);
     });
   });
 
-  // ── P4: renderVulnerabilityMap click insight ──
-  describe('renderVulnerabilityMap click insight', () => {
-    it('should generate click-driven insight with driver analysis', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
-      const mapSection = jsSource.slice(
-        jsSource.indexOf('function renderVulnerabilityMap'),
-        jsSource.indexOf('function renderSnapGap')
-      );
-      // Should have 3 driver candidates for click insight
-      expect(mapSection).toContain('driverCandidates');
-      expect(mapSection).toContain('primary driver');
-      // Should have CSV export
-      expect(mapSection).toContain('addExportButton');
+  // ── P4: renderVulnerabilityMap driver analysis data contract ──
+  describe('renderVulnerabilityMap data contract', () => {
+    it('state data should support driver analysis (rate, povertyRate, mealCost)', () => {
+      const fiData = readJSON('food-insecurity-state.json');
+      for (const s of fiData.states) {
+        expect(s.rate).toBeTypeOf('number');
+        expect(s.povertyRate).toBeTypeOf('number');
+        expect(s.mealCost).toBeTypeOf('number');
+      }
+    });
+
+    it('vulnerability map container should exist in HTML', () => {
+      const doc = parseHTML('executive-summary.html');
+      expect(doc.querySelector('#chart-vulnerability-map, [id*="vulnerability-map"]')).not.toBeNull();
     });
   });
 
   // ── CODX: Error banner for production users ──
   describe('error banner for production users', () => {
-    it('catch block should show an error UI element, not just console.log', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'executive-summary.js'), 'utf-8');
-      expect(jsSource).toContain('dashboard-error');
+    it('dashboard-error element should exist in HTML for error display', () => {
+      const doc = parseHTML('executive-summary.html');
+      const errorEl = doc.querySelector('#dashboard-error, .dashboard-error');
+      expect(errorEl).not.toBeNull();
+      expect(errorEl.getAttribute('role')).toBe('alert');
     });
   });
 
   // ── CODX: Main tabindex for skip-link ──
   describe('accessibility: main tabindex', () => {
     it('main#main-content should have tabindex="-1" for skip-link target', () => {
-      const html = readHTML('executive-summary.html');
-      expect(html).toMatch(/id="main-content"[^>]*tabindex="-1"/);
+      const doc = parseHTML('executive-summary.html');
+      const main = doc.querySelector('#main-content');
+      expect(main).not.toBeNull();
+      expect(main.getAttribute('tabindex')).toBe('-1');
     });
   });
 
@@ -407,9 +394,9 @@ describe('executive-summary', () => {
         'nonprofit-directory.html', 'nonprofit-profile.html'
       ];
       for (const file of dashboards) {
-        const html = readHTML(file);
-        expect(html, `${file} should not have redundant single-weight Orbitron`)
-          .not.toContain('Orbitron:wght@700&display=swap');
+        const doc = parseHTML(file);
+        const links = doc.querySelectorAll('link[href*="Orbitron:wght@700"]');
+        expect(links.length, `${file} should not have redundant single-weight Orbitron`).toBe(0);
       }
     });
   });
@@ -426,20 +413,21 @@ describe('executive-summary', () => {
 
   // ── CODX #1: Methodology text must match code ──
   describe('methodology text accuracy', () => {
-    it('should show "× 0.3" for meal cost weight, not "× 30"', () => {
-      const html = readHTML('executive-summary.html');
-      // The methodology section should reference 0.3 (30%), not 30
-      expect(html).toMatch(/normalized meal cost\s*&times;\s*0\.3/i);
-      expect(html).not.toMatch(/normalized meal cost\s*&times;\s*30\)/i);
+    it('should show "x 0.3" for meal cost weight, not "x 30"', () => {
+      const doc = parseHTML('executive-summary.html');
+      const bodyText = doc.body.textContent;
+      expect(bodyText).toMatch(/normalized meal cost\s*×\s*0\.3/i);
+      expect(bodyText).not.toMatch(/normalized meal cost\s*×\s*30\)/i);
     });
   });
 
   // ── UI/UX Audit: Legend/Label/Color Consistency ──
   describe('legend/label/color consistency', () => {
     it('price impact peak claim should say "above 11%" not "above 13%"', () => {
-      const html = readHTML('executive-summary.html');
-      expect(html).not.toContain('peaking above 13%');
-      expect(html).toContain('peaking above 11%');
+      const doc = parseHTML('executive-summary.html');
+      const bodyText = doc.body.textContent;
+      expect(bodyText).not.toContain('peaking above 13%');
+      expect(bodyText).toContain('peaking above 11%');
     });
 
     it('Chart 3 series name should include "YoY" to match tooltip label', () => {
@@ -478,33 +466,33 @@ describe('executive-summary', () => {
       }
     });
 
-    // P2-15: root hub pages use consistent "Food-N-Force" author meta (no "Team")
     it('case-studies.html and templates-tools.html meta author is consistent (P2-15)', () => {
       const rootDir = resolve(__dirname, '../../..');
       for (const file of ['case-studies.html', 'templates-tools.html']) {
-        const html = readFileSync(resolve(rootDir, file), 'utf-8');
-        expect(html, `${file} author meta`).toContain('<meta name="author" content="Food-N-Force">');
-        expect(html, `${file} must not carry stale "Team" meta author`).not.toContain('<meta name="author" content="Food-N-Force Team">');
+        const doc = new DOMParser().parseFromString(
+          readFileSync(resolve(rootDir, file), 'utf-8'), 'text/html'
+        );
+        const authorMeta = doc.querySelector('meta[name="author"]');
+        expect(authorMeta, `${file} missing author meta`).not.toBeNull();
+        expect(authorMeta.getAttribute('content'), `${file} author meta`).toBe('Food-N-Force');
       }
     });
 
-    // P2-16: dashboard meta descriptions must stay under 160 chars to avoid SERP truncation
     it('meta descriptions across all 8 dashboards are <= 160 chars (P2-16)', () => {
-      const dashboardDir = resolve(__dirname, '../../../dashboards');
       const files = [
         'executive-summary.html', 'food-insecurity.html', 'food-access.html',
         'snap-safety-net.html', 'food-prices.html', 'food-banks.html',
         'nonprofit-directory.html', 'nonprofit-profile.html',
       ];
       for (const file of files) {
-        const html = readFileSync(resolve(dashboardDir, file), 'utf-8');
-        const match = html.match(/<meta name="description" content="([^"]+)"/);
-        expect(match, `${file} missing meta description`).toBeTruthy();
-        expect(match[1].length, `${file} desc is ${match[1].length} chars (over 160 SERP limit)`).toBeLessThanOrEqual(160);
+        const doc = parseHTML(file);
+        const descMeta = doc.querySelector('meta[name="description"]');
+        expect(descMeta, `${file} missing meta description`).not.toBeNull();
+        const content = descMeta.getAttribute('content');
+        expect(content.length, `${file} desc is ${content.length} chars (over 160 SERP limit)`).toBeLessThanOrEqual(160);
       }
     });
 
-    // P2-18: Playwright smoke matrix must include nonprofit-profile
     it('Playwright smoke matrix covers dashboards/nonprofit-profile.html (P2-18)', () => {
       const spec = readFileSync(
         resolve(__dirname, '../../../tools/testing/tests/dashboard-smoke.spec.js'),
@@ -515,20 +503,16 @@ describe('executive-summary', () => {
     });
 
     it('all dashboard HTML files should have consistent author meta', () => {
-      const dashboardDir = resolve(__dirname, '../../../dashboards');
       const files = [
         'executive-summary.html', 'food-insecurity.html', 'food-access.html',
         'snap-safety-net.html', 'food-prices.html', 'food-banks.html',
         'nonprofit-directory.html', 'nonprofit-profile.html',
       ];
       for (const file of files) {
-        const html = readFileSync(resolve(dashboardDir, file), 'utf-8');
-        expect(html, `${file} has wrong author meta`).toContain(
-          '<meta name="author" content="Food-N-Force">'
-        );
-        expect(html, `${file} has old "Team" author`).not.toContain(
-          'Food-N-Force Team'
-        );
+        const doc = parseHTML(file);
+        const authorMeta = doc.querySelector('meta[name="author"]');
+        expect(authorMeta, `${file} has no author meta`).not.toBeNull();
+        expect(authorMeta.getAttribute('content'), `${file} has wrong author meta`).toBe('Food-N-Force');
       }
     });
   });

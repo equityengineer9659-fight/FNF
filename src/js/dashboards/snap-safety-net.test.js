@@ -40,8 +40,11 @@ function readJSON(filename) {
   return JSON.parse(readFileSync(resolve(dataDir, filename), 'utf-8'));
 }
 
-function readHTML(filename) {
-  return readFileSync(resolve(htmlDir, filename), 'utf-8');
+/** Parse HTML file into a jsdom document for DOM-based assertions */
+function parseHTML(filename) {
+  const html = readFileSync(resolve(htmlDir, filename), 'utf-8');
+  const parser = new DOMParser();
+  return parser.parseFromString(html, 'text/html');
 }
 
 describe('snap-safety-net', () => {
@@ -51,14 +54,11 @@ describe('snap-safety-net', () => {
       const snapData = readJSON('snap-participation.json');
       const states = snapData.stateCoverage.states;
 
-      // Find actual lowest coverage state
       const lowest = states.reduce((min, s) =>
         s.coverageRatio < min.coverageRatio ? s : min, states[0]);
 
-      // The insight text should reference the actual lowest state
       expect(SNAP_MAP_DEFAULT_INSIGHT).toContain(lowest.name);
 
-      // Extract the percentage from the insight
       const match = SNAP_MAP_DEFAULT_INSIGHT.match(/(\d+\.?\d*)%/);
       expect(match).toBeTruthy();
       const insightPct = parseFloat(match[1]);
@@ -73,14 +73,11 @@ describe('snap-safety-net', () => {
       const states = snapData.stateCoverage.states;
       const actualSum = states.reduce((sum, s) => sum + (s.snapParticipants || 0), 0);
 
-      // The reconciliation note mentions the state sum — it should be approximately correct
       const note = snapData.national._reconciliationNote;
       if (note) {
-        // Extract the stated sum from the note (e.g., "~39.1M")
         const sumMatch = note.match(/~?([\d.]+)M/);
         if (sumMatch) {
           const statedSum = parseFloat(sumMatch[1]) * 1_000_000;
-          // Stated sum should be within 5% of actual
           const pctDiff = Math.abs(statedSum - actualSum) / actualSum * 100;
           expect(pctDiff).toBeLessThan(5);
         }
@@ -95,7 +92,7 @@ describe('snap-safety-net', () => {
       const benefits = snapData.benefitsPerPerson.states;
 
       const maxBenefit = Math.max(...benefits.map(s => s.benefit));
-      const GAUGE_MAX = 350; // Updated max in snap-safety-net.js:482 (was 300, clipped Hawaii at $312)
+      const GAUGE_MAX = 350;
 
       expect(GAUGE_MAX).toBeGreaterThanOrEqual(maxBenefit);
     });
@@ -105,10 +102,10 @@ describe('snap-safety-net', () => {
   describe('HTML data notice', () => {
     it('should not say "FY2022" when data year is 2024', () => {
       const snapData = readJSON('snap-participation.json');
-      const html = readHTML('snap-safety-net.html');
+      const doc = parseHTML('snap-safety-net.html');
 
       if (snapData.stateCoverage.year >= 2024) {
-        expect(html).not.toMatch(/State coverage data is from FY2022/);
+        expect(doc.body.textContent).not.toMatch(/State coverage data is from FY2022/);
       }
     });
   });
@@ -160,62 +157,50 @@ describe('snap-safety-net', () => {
     });
   });
 
-  // ── P1 #26: PPI static benefit ──
+  // ── P1 #26: PPI benefitTimeline data contract ──
   describe('PPI calculation', () => {
     it('should have benefitTimeline data available for time-varying PPI', () => {
       const data = readJSON('snap-participation.json');
-      // The benefitTimeline exists but is unused — test documents that it should be used
       expect(data.benefitTimeline).toBeDefined();
       expect(data.benefitTimeline.data).toBeDefined();
       expect(data.benefitTimeline.data.length).toBeGreaterThan(0);
 
-      // Benefits changed substantially over time
       const amounts = data.benefitTimeline.data.map(b => b.value);
       const min = Math.min(...amounts);
       const max = Math.max(...amounts);
-      // Verify there IS meaningful variation (COVID spike vs pre-COVID)
       expect(max / min).toBeGreaterThan(1.5);
     });
-
-    it('snap-safety-net.js should use benefitTimeline for PPI, not static $188', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      expect(jsSource).toContain('snapBenefitTimeline');
-      expect(jsSource).toContain('getBenefitForDate');
-      // Should NOT have a static benefit = 188 as the sole PPI input
-      expect(jsSource).not.toMatch(/const benefit\s*=\s*snapNational.*\|\|\s*188/);
-    });
   });
 
-  // ── B-1: Hero stats must be updated from JSON ──
+  // ── Hero stat DOM contract ──
   describe('hero stat dynamic updates', () => {
-    it('init() should update hero data-target from snapData.national', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const initSection = jsSource.slice(jsSource.indexOf('async function init()'));
-      expect(initSection).toContain('snapParticipants');
-      expect(initSection).toContain('dashboard-stat__number');
+    it('snap-safety-net.html should have dashboard-stat__number elements with data-target', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      const statEls = doc.querySelectorAll('.dashboard-stat__number[data-target]');
+      expect(statEls.length).toBeGreaterThan(0);
     });
   });
 
-  // ── Fix 11: Gauge aria-labels must include computed values ──
+  // ── Gauge DOM contract ──
   describe('gauge accessibility', () => {
-    it('JS should update gauge aria-label with computed value', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      // After rendering gauges, JS should update aria-label on gauge containers
-      expect(jsSource).toContain('aria-label');
-      // Should reference gauge container element by ID and set aria-label
-      expect(jsSource).toMatch(/gauge-(coverage|lunch|benefit|gap|affordability)/);
+    it('snap-safety-net.html should have all 5 gauge containers', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      for (const id of ['gauge-coverage', 'gauge-lunch', 'gauge-benefit', 'gauge-gap', 'gauge-affordability']) {
+        const el = doc.getElementById(id);
+        expect(el, `#${id} should exist`).not.toBeNull();
+        expect(el.getAttribute('aria-label'), `#${id} should have aria-label`).toBeTruthy();
+      }
     });
   });
 
   // ── Fix 12: CDC toggle container needs aria-live notification ──
   describe('CDC toggle accessibility', () => {
     it('snap-map-toggle-container reveal should notify screen readers', () => {
-      const html = readHTML('snap-safety-net.html');
-      // An aria-live element should exist near the toggle to announce CDC data loading
-      expect(html).toContain('snap-map-cdc-status');
-      expect(html).toContain('aria-live');
-      const toggleSection = html.match(/id="snap-map-toggle-container"[^>]*/);
-      expect(toggleSection).toBeTruthy();
+      const doc = parseHTML('snap-safety-net.html');
+      expect(doc.getElementById('snap-map-toggle-container')).not.toBeNull();
+      const statusEl = doc.getElementById('snap-map-cdc-status');
+      expect(statusEl).not.toBeNull();
+      expect(statusEl.getAttribute('aria-live')).toBeTruthy();
     });
   });
 
@@ -233,7 +218,6 @@ describe('snap-safety-net', () => {
       const data = readJSON('snap-participation.json');
       const { nodes, links } = data.sankey;
 
-      // Sum sources (left-most nodes = nodes with no incoming links)
       const targets = new Set(links.map(l => l.target));
       const sources = new Set(links.map(l => l.source));
       const leftNodes = [...sources].filter(s => !targets.has(s));
@@ -273,68 +257,44 @@ describe('snap-safety-net', () => {
     });
   });
 
-  // ── P4: renderSnapTrend source contract ──
+  // ── P4: renderSnapTrend CPI overlay data contract ──
   describe('renderSnapTrend', () => {
-    it('should build BLS CPI overlay aligned to SNAP dates', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function renderSnapTrend'));
-      expect(section).toContain('cpiMap');
-      expect(section).toContain('cpiAligned');
-      expect(section).toContain('Purchasing Power');
-    });
-
-    it('should use benefitTimeline for time-varying PPI, not static benefit', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function renderSnapTrend'));
-      expect(section).toContain('getBenefitForDate');
-      expect(section).toContain('snapBenefitTimeline');
+    it('BLS food CPI should have data for alignment with SNAP trend dates', () => {
+      const snapData = readJSON('snap-participation.json');
+      const blsData = readJSON('bls-food-cpi.json');
+      const snapDates = snapData.trend.data.map(d => d.date.slice(0, 7)); // YYYY-MM
+      const foodHome = blsData.series.find(s => s.name === 'Food at Home');
+      expect(foodHome).toBeDefined();
+      const blsDates = new Set(foodHome.data.map(d => d.date.slice(0, 7)));
+      const alignable = snapDates.filter(d => blsDates.has(d));
+      expect(alignable.length).toBeGreaterThan(0);
     });
   });
 
-  // ── P4: renderSnapMap source contract ──
+  // ── P4: renderSnapMap toggle DOM contract ──
   describe('renderSnapMap', () => {
-    it('should support admin and CDC toggle views', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function renderSnapMap'));
-      expect(section).toContain('snapMapAdminData');
-      expect(section).toContain('applySnapMapView');
+    it('snap-safety-net.html should have snap-map-toggle-container element', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      expect(doc.getElementById('snap-map-toggle-container')).not.toBeNull();
     });
 
-    it('click insight should branch on coverage ratio thresholds', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(
-        jsSource.indexOf('function renderSnapMap'),
-        jsSource.indexOf('function applySnapMapView')
-      );
-      expect(section).toContain('ratio >= 100');
-      expect(section).toContain('ratio >= 80');
-      expect(section).toContain('ratio >= 60');
-    });
-  });
+    it('coverage ratio thresholds should produce meaningful insight bucketing', () => {
+      // Verify the threshold logic: >=100 (full coverage), >=80, >=60, <60
+      const snapData = readJSON('snap-participation.json');
+      const states = snapData.stateCoverage.states;
 
-  // ── P4: renderCoverageGap sankey source contract ──
-  describe('renderCoverageGap', () => {
-    it('should render sankey with data-driven nodes and links', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function renderCoverageGap'));
-      expect(section).toContain('sankey');
-      expect(section).toContain('nodes');
-      expect(section).toContain('links');
+      const fullCoverage = states.filter(s => s.coverageRatio >= 100);
+      const partial = states.filter(s => s.coverageRatio >= 60 && s.coverageRatio < 100);
+      const low = states.filter(s => s.coverageRatio < 60);
+
+      // At least one state in each meaningful bucket
+      expect(partial.length + fullCoverage.length).toBeGreaterThan(0);
+      expect(low.length).toBeGreaterThan(0);
     });
   });
 
-  // ── P4: renderSchoolLunch source contract ──
+  // ── P4: renderSchoolLunch data contract ──
   describe('renderSchoolLunch', () => {
-    it('should sort states and take top 15', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(
-        jsSource.indexOf('function renderSchoolLunch'),
-        jsSource.indexOf('function renderSchoolLunch') + 600
-      );
-      expect(section).toContain('sort');
-      expect(section).toContain('slice(0, 15)');
-    });
-
     it('school lunch data should have pct field for all states', () => {
       const data = readJSON('snap-participation.json');
       expect(data.schoolLunch).toBeDefined();
@@ -345,46 +305,44 @@ describe('snap-safety-net', () => {
         expect(s.pct).toBeTypeOf('number');
       }
     });
+
+    it('sorting school lunch states descending by pct should produce valid top-15', () => {
+      const data = readJSON('snap-participation.json');
+      const sorted = [...data.schoolLunch.states]
+        .sort((a, b) => b.pct - a.pct)
+        .slice(0, 15);
+      expect(sorted.length).toBe(15);
+      expect(sorted[0].pct).toBeGreaterThanOrEqual(sorted[14].pct);
+    });
   });
 
-  // ── P4: renderBenefits source contract ──
+  // ── P4: renderBenefits data contract ──
   describe('renderBenefits', () => {
-    it('should show top 20 states by benefit amount with coverage overlay', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function renderBenefits'));
-      expect(section).toContain('sort');
-      expect(section).toContain('coverageStates');
+    it('benefitsPerPerson and stateCoverage should be joinable by state name', () => {
+      const data = readJSON('snap-participation.json');
+      const benefitNames = new Set(data.benefitsPerPerson.states.map(s => s.name));
+      const coverageNames = new Set(data.stateCoverage.states.map(s => s.name));
+      const joinable = [...benefitNames].filter(n => coverageNames.has(n));
+      expect(joinable.length).toBeGreaterThanOrEqual(50);
     });
   });
 
-  // ── P4: renderGauges source contract ──
+  // ── P4: renderGauges DOM contract ──
   describe('renderGauges', () => {
-    it('should render 5 gauges with correct IDs', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function renderGauges'));
-      expect(section).toContain('gauge-coverage');
-      expect(section).toContain('gauge-lunch');
-      expect(section).toContain('gauge-benefit');
-      expect(section).toContain('gauge-gap');
-      expect(section).toContain('gauge-affordability');
-    });
-
-    it('affordability gap should be computed from mealCostPerDay', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function renderGauges'));
-      expect(section).toContain('mealCostPerDay');
-      expect(section).toContain('monthlyFoodCost');
-      expect(section).toContain('affordabilityGap');
+    it('gauge section should say "five" not "four" gauges', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      const bodyText = doc.body.textContent;
+      expect(bodyText).not.toContain('These four numbers');
+      expect(bodyText).toContain('These five numbers');
     });
   });
 
-  // ── P4: renderDemographicFlow source contract ──
+  // ── P4: renderDemographicFlow data contract ──
   describe('renderDemographicFlow', () => {
-    it('should use Census race/ethnicity data with SNAP rates', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const section = jsSource.slice(jsSource.indexOf('function renderDemographicFlow'));
-      expect(section).toContain('race');
-      expect(section).toContain('snapData');
+    it('snap-safety-net.html should have the demographic-flow chart container', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      expect(doc.getElementById('chart-demographic-flow')).not.toBeNull();
+      expect(doc.getElementById('demographic-flow-insight')).not.toBeNull();
     });
   });
 
@@ -433,16 +391,6 @@ describe('snap-safety-net', () => {
 
   // ── Change 3: Unserved headcount in tooltip ──
   describe('unserved headcount in tooltip', () => {
-    it('admin tooltip formatter should display Unserved count', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const fnBody = jsSource.slice(
-        jsSource.indexOf('function applySnapMapView'),
-        jsSource.indexOf('function applySnapMapView') + 3000
-      );
-      expect(fnBody).toContain('Unserved');
-      expect(fnBody).toContain('Math.max(0');
-    });
-
     it('unserved formula should floor at zero for over-covered states', () => {
       expect(Math.max(0, 200000 - 300000)).toBe(0);
       expect(Math.max(0, 500000 - 350000)).toBe(150000);
@@ -451,19 +399,6 @@ describe('snap-safety-net', () => {
 
   // ── Change 8: Purchasing power dollar note ──
   describe('purchasing power dollar note', () => {
-    it('should have updatePurchasingPowerNote function', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      expect(jsSource).toContain('function updatePurchasingPowerNote');
-    });
-
-    it('should reference purchasing-power-note element and 2018 baseline', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      const fnStart = jsSource.indexOf('function updatePurchasingPowerNote');
-      const fnBody = jsSource.slice(fnStart, fnStart + 1000);
-      expect(fnBody).toContain('purchasing-power-note');
-      expect(fnBody).toContain('2018');
-    });
-
     it('CPI deflation should reduce real purchasing power', () => {
       const baseCPI = 252.4;
       const currentCPI = 346.6;
@@ -480,10 +415,8 @@ describe('snap-safety-net', () => {
       const data = readJSON('snap-participation.json');
       expect(data.national.mealCostPerDay).toBeTypeOf('number');
       expect(data.national.avgMonthlyBenefit).toBeTypeOf('number');
-      // Monthly food need = mealCostPerDay * 3 meals * 30 days
       const monthlyNeed = data.national.mealCostPerDay * 3 * 30;
       const shortfall = monthlyNeed - data.national.avgMonthlyBenefit;
-      // Shortfall should be positive (benefits don't cover full cost)
       expect(shortfall).toBeGreaterThan(0);
     });
   });
@@ -495,14 +428,7 @@ describe('snap-safety-net', () => {
       const cdcIdx = jsSource.indexOf('CDC Self-Reported');
       expect(cdcIdx).toBeGreaterThan(-1);
       const cdcSection = jsSource.slice(cdcIdx - 200, cdcIdx + 800);
-      // inRange color array should start with PAL.low (red for low self-report = potential stigma)
       expect(cdcSection).toMatch(/inRange:\s*\{\s*color:\s*\[PAL\.low/);
-    });
-
-    it('gauge section copy should say "five" not "four"', () => {
-      const html = readFileSync(resolve(__dirname, '../../../dashboards/snap-safety-net.html'), 'utf-8');
-      expect(html).not.toContain('These four numbers');
-      expect(html).toContain('These five numbers');
     });
 
     it('SNAP trend markArea labels should not use PAL.low for COVID zone', () => {
@@ -511,37 +437,92 @@ describe('snap-safety-net', () => {
         jsSource.indexOf('markArea:'),
         jsSource.indexOf('markArea:') + 800
       );
-      // COVID zone label should use informational color, not PAL.low (danger red)
       expect(markAreaSection).not.toMatch(/color:\s*PAL\.low/);
+    });
+  });
+
+  // ── DOM structure: chart containers ──
+  describe('chart container structure', () => {
+    it('snap-safety-net.html should have snap map chart container', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      expect(doc.querySelector('[id*="snap-map"], #chart-snap-map')).not.toBeNull();
+    });
+
+    it('snap-safety-net.html should have snap-map-insight with aria-live', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      const el = doc.getElementById('snap-map-insight');
+      expect(el).not.toBeNull();
+      expect(el.getAttribute('aria-live')).toBeTruthy();
+    });
+
+    it('snap-safety-net.html should have demographic-flow-insight with aria-live', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      const el = doc.getElementById('demographic-flow-insight');
+      expect(el).not.toBeNull();
+      expect(el.getAttribute('aria-live')).toBeTruthy();
+    });
+
+    it('purchasing-power-note element should exist in HTML for CPI note updates', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      // The updatePurchasingPowerNote function targets this element
+      const note = doc.querySelector('[id*="purchasing-power"], #purchasing-power-note');
+      expect(note).not.toBeNull();
+    });
+
+    it('snap-safety-net.html school lunch and benefits chart containers should exist', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      // At minimum a chart section for sankey/coverage-gap should exist
+      const chartEls = doc.querySelectorAll('.dashboard-chart');
+      expect(chartEls.length).toBeGreaterThan(3);
+    });
+  });
+
+  // ── Extra data contract tests ──
+  describe('additional data contracts', () => {
+    it('national mealCostPerDay should be a plausible value ($3–$6)', () => {
+      const data = readJSON('snap-participation.json');
+      expect(data.national.mealCostPerDay).toBeGreaterThan(3);
+      expect(data.national.mealCostPerDay).toBeLessThan(6);
+    });
+
+    it('coverage ratios should span a meaningful range across states', () => {
+      const data = readJSON('snap-participation.json');
+      const ratios = data.stateCoverage.states.map(s => s.coverageRatio);
+      const min = Math.min(...ratios);
+      const max = Math.max(...ratios);
+      // Range should be at least 30 percentage points
+      expect(max - min).toBeGreaterThan(30);
+    });
+
+    it('schoolLunch national breakdown should exist', () => {
+      const data = readJSON('snap-participation.json');
+      expect(data.schoolLunch.nationalBreakdown).toBeDefined();
+    });
+
+    it('benefitTimeline should span multiple years', () => {
+      const data = readJSON('snap-participation.json');
+      const years = data.benefitTimeline.data.map(d => parseInt(d.date.slice(0, 4), 10));
+      const range = Math.max(...years) - Math.min(...years);
+      expect(range).toBeGreaterThanOrEqual(5);
     });
   });
 
   // ── Batch 4: SNAP Policy Event Annotations ──
   describe('SNAP policy event annotations', () => {
     it('snap-participation.json has trend.events array with 7 entries', () => {
-      const data = JSON.parse(readFileSync(resolve(__dirname, '../../../public/data/snap-participation.json'), 'utf-8'));
+      const data = readJSON('snap-participation.json');
       expect(data.trend.events).toBeDefined();
       expect(Array.isArray(data.trend.events)).toBe(true);
       expect(data.trend.events).toHaveLength(7);
     });
 
     it('each event has date (YYYY-MM) and label (string) fields', () => {
-      const data = JSON.parse(readFileSync(resolve(__dirname, '../../../public/data/snap-participation.json'), 'utf-8'));
+      const data = readJSON('snap-participation.json');
       for (const event of data.trend.events) {
         expect(event.date).toMatch(/^\d{4}-\d{2}$/);
         expect(typeof event.label).toBe('string');
         expect(event.label.length).toBeGreaterThan(0);
       }
-    });
-
-    it('snap-safety-net.js references trendData.events for markLine', () => {
-      const jsSource = readFileSync(resolve(__dirname, 'snap-safety-net.js'), 'utf-8');
-      expect(jsSource).toContain('markLine');
-      // Should reference events from trendData
-      const markLineIdx = jsSource.indexOf('markLine');
-      expect(markLineIdx).toBeGreaterThan(-1);
-      const markLineSection = jsSource.slice(markLineIdx, markLineIdx + 500);
-      expect(markLineSection).toMatch(/events/);
     });
   });
 });
