@@ -26,13 +26,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          # P2-32 NOTE: actions/setup-node's npm cache requires a checked-in
-          # lockfile to hash. package-lock.json is gitignored in this repo
-          # (see .gitignore), so `cache: 'npm'` fails with "Dependencies
-          # lock file is not found". Leaving cache disabled until the
-          # lockfile policy is revisited — this restores the pre-P2-32
-          # behaviour so CI unblocks.
-          cache: ''
+          cache: 'npm'
 
       - name: Install Dependencies
         run: npm install
