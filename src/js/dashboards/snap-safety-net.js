@@ -104,7 +104,7 @@ function renderSnapTrend(trendData, blsData, snapNational) {
       }
     },
     legend: { data: legendData, textStyle: { color: COLORS.text }, top: 5 },
-    grid: { left: 55, right: blsData ? 55 : 20, top: 30, bottom: 60 },
+    grid: { left: 55, right: blsData ? 55 : 20, top: 45, bottom: 60 },
     dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 20, bottom: 10, textStyle: { color: COLORS.textMuted }, borderColor: COLORS.gridLine, fillerColor: 'rgba(0,212,255,0.1)' }],
     xAxis: { type: 'category', data: dates, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
     yAxis: yAxes,
@@ -115,15 +115,15 @@ function renderSnapTrend(trendData, blsData, snapNational) {
       markArea: {
         silent: true,
         data: [
-          [{ xAxis: '2020-03', itemStyle: { color: 'rgba(239,68,68,0.15)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: COLORS.secondary, fontSize: 9, position: 'insideTopRight', padding: [4, 8, 0, 0] } }, { xAxis: '2023-03' }],
-          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(251,191,36,0.12)' }, label: { show: true, formatter: 'Post-Emergency', color: COLORS.accent, fontSize: 9, position: 'insideTopLeft', padding: [4, 0, 0, 8] } }, { xAxis: '2025-12' }]
+          [{ xAxis: '2020-03', itemStyle: { color: 'rgba(239,68,68,0.15)' }, label: { show: true, formatter: 'COVID Emergency\nAllotments', color: COLORS.secondary, fontSize: 8, position: 'insideTopRight', padding: [2, 6, 0, 0] } }, { xAxis: '2023-03' }],
+          [{ xAxis: '2023-03', itemStyle: { color: 'rgba(251,191,36,0.12)' }, label: { show: true, formatter: 'Post-Emergency', color: COLORS.accent, fontSize: 8, position: 'insideTopLeft', padding: [2, 0, 0, 6] } }, { xAxis: '2025-12' }]
         ]
       },
       markLine: {
         silent: true,
         symbol: 'none',
         lineStyle: { type: 'dashed', color: COLORS.textMuted, width: 1, opacity: 0.6 },
-        label: { fontSize: 9, color: COLORS.textMuted, position: 'insideEndTop', rotate: 45, overflow: 'truncate', width: 120 },
+        label: { show: false },
         data: trendData.events?.map(e => ({ xAxis: e.date, label: { formatter: () => e.label } })) || []
       },
       animationDuration: 2000

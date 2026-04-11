@@ -47,8 +47,8 @@ function renderCategories(data) {
       trigger: 'axis', ...TOOLTIP_STYLE,
       formatter: params => { let tip = `<strong>${params[0].axisValue}</strong><br/>`; params.forEach(p => { tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`; }); return tip; }
     },
-    legend: { data: normalizedSeries.map(s => s.name), textStyle: LEGEND_TEXT_STYLE, top: 5 },
-    grid: { left: 50, right: 20, top: 45, bottom: 30 },
+    legend: { data: normalizedSeries.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 }, top: 5, itemWidth: 12, itemHeight: 8, itemGap: 8 },
+    grid: { left: 50, right: 20, top: 55, bottom: 30 },
     xAxis: { type: 'category', data: dates, boundaryGap: false, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
     yAxis: { type: 'value', name: 'Index (Jan 2018 = 100)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
     series: normalizedSeries.map((s, i) => ({
@@ -358,8 +358,8 @@ function renderHomeVsAway(blsData) {
         markArea: {
           silent: true,
           itemStyle: { color: 'rgba(156,163,175,0.12)', borderWidth: 0 },
-          label: { color: COLORS.textMuted, fontSize: 10, position: 'insideTop' },
-          data: [[{ xAxis: '2025-10', name: 'Gov\'t shutdown\ndata gap' }, { xAxis: '2025-11' }]]
+          label: { color: COLORS.textMuted, fontSize: 9, position: 'insideTop', offset: [0, 5] },
+          data: [[{ xAxis: '2025-10', name: 'Gov\'t shutdown\ndata gap' }, { xAxis: '2026-01' }]]
         }
       },
       ...(foodAway ? [{

@@ -517,6 +517,8 @@ function renderTrend(data) {
     yAxis: {
       type: 'value',
       name: 'Rate (%)',
+      nameLocation: 'middle',
+      nameGap: 35,
       nameTextStyle: { color: COLORS.textMuted },
       axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
       splitLine: { lineStyle: { color: COLORS.gridLine } }
@@ -1413,7 +1415,8 @@ function renderIncomeRiver(sdoh, fiData) {
         if (!state) return '';
         let html = `<strong>${state.name}</strong> (FI: ${state.fiRate}%)<br/>`;
         params.forEach(p => {
-          html += `<svg class="csp-swatch" width="8" height="8"><circle cx="4" cy="4" r="4" fill="${p.color}"/></svg>${p.dimensionNames?.[1] || p.seriesName}: ${p.value[1]}%<br/>`;
+          const bandName = p.value[2] || p.dimensionNames?.[1] || p.seriesName;
+          html += `<svg class="csp-swatch" width="8" height="8"><circle cx="4" cy="4" r="4" fill="${p.color}"/></svg>${bandName}: ${p.value[1]}%<br/>`;
         });
         return html;
       }
@@ -1451,7 +1454,7 @@ function renderIncomeRiver(sdoh, fiData) {
       type: 'themeRiver',
       data: riverData,
       label: { show: false },
-      emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.3)' } },
+      emphasis: { label: { show: false }, itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.3)' } },
       color: INCOME_BANDS.map(b => b.color)
     }]
   });

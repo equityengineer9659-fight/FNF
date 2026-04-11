@@ -305,6 +305,8 @@
   padding: 1.75rem;
   max-width: 600px;
   margin: 0 auto;
+  position: relative;
+  z-index: 10;
 }
 
 .dashboard-search__label {
@@ -318,7 +320,7 @@
 .dashboard-search__wrapper {
   position: relative;
   margin: 0 auto;
-  z-index: 100;
+  z-index: 200;
 }
 
 .dashboard-search__input {
@@ -354,7 +356,7 @@
   border-radius: 0 0 0.5rem 0.5rem;
   max-height: 240px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 200;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -761,14 +763,26 @@
 .dashboard-metric-separator {
   display: flex;
   align-items: center;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(0, 212, 255, 0.7);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 0.25rem 0.5rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.18);
-  margin-left: 0.25rem;
+  padding: 0.25rem 0.6rem;
+  border-left: 2px solid rgba(0, 212, 255, 0.35);
+  margin-left: 0.35rem;
+}
+
+@media (width <= 768px) {
+  .dashboard-metric-separator {
+    flex-basis: 100%;
+    justify-content: center;
+    border-left: none;
+    border-top: 1px solid rgba(0, 212, 255, 0.25);
+    margin-left: 0;
+    padding-top: 0.5rem;
+    margin-top: 0.25rem;
+  }
 }
 
 /* Scroll Reveal Animations */

@@ -80,6 +80,7 @@ export const TOOLTIP_STYLE = {
   backgroundColor: 'rgba(10,10,30,0.92)',
   borderColor: COLORS.secondary,
   borderWidth: 1,
+  confine: true,
   textStyle: { color: COLORS.text, fontSize: 13 }
 };
 

@@ -37,10 +37,15 @@
    STATE SELECTOR  (replaces inline styles in state-selector.js:39-40)
    ========================================================================== */
 
+.dashboard-state-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .dashboard-state-selector__label {
   color: rgba(255, 255, 255, 0.6);
   font-size: 12px;
-  margin-right: 0.5rem;
 }
 
 .dashboard-state-selector__select {
