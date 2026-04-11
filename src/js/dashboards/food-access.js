@@ -442,6 +442,74 @@ function ensureDbTileTip() {
   return tip;
 }
 
+/** Create a single tile DOM element for Mode B double-burden visualization */
+function createDoubleBurdenTile(d, rankNorm, tip) {
+  const norm = rankNorm(parseFloat(d.pctOfPop) || 0);
+  const rgb = sampleGradient(norm);
+  const bg = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+  const fg = tileTextColor(norm);
+  const subFg = tileSubTextColor(norm);
+  const isOutlier = norm >= DB_OUTLIER_THRESHOLD;
+
+  const tile = document.createElement('div');
+  tile.style.cssText = [
+    'min-height:72px;border-radius:6px;padding:8px 10px',
+    `background:${bg}`,
+    'display:flex;flex-direction:column;justify-content:space-between',
+    isOutlier
+      ? 'border:1.5px solid rgba(253,224,71,0.35);box-shadow:0 0 8px rgba(253,224,71,0.08)'
+      : 'border:1px solid rgba(255,255,255,0.06)',
+    'box-sizing:border-box;cursor:default;position:relative',
+    'transition:transform 0.12s,box-shadow 0.12s'
+  ].join(';');
+
+  const nameDiv = document.createElement('div');
+  nameDiv.style.cssText = `font-size:0.72rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:${fg};line-height:1.2`;
+  nameDiv.textContent = d.name;
+  nameDiv.title = d.name;
+
+  const pctDiv = document.createElement('div');
+  pctDiv.style.cssText = `font-size:1.15rem;font-weight:700;line-height:1.1;color:${fg}${isOutlier ? ';text-shadow:0 0 6px rgba(253,224,71,0.2)' : ''}`;
+  pctDiv.textContent = d.pctOfPop + '%';
+
+  const countDiv = document.createElement('div');
+  countDiv.style.cssText = `font-size:0.64rem;color:${subFg};line-height:1.2`;
+  countDiv.textContent = fmtNum(d.estimate) + ' people';
+
+  tile.append(nameDiv, pctDiv, countDiv);
+  tile.setAttribute('role', 'listitem');
+  tile.setAttribute('aria-label', `${d.name}: ${d.pctOfPop}% of population, ${fmtNum(d.estimate)} people`);
+
+  tile.addEventListener('mouseenter', (e) => {
+    tile.style.transform = 'scale(1.04)';
+    tile.style.boxShadow = '0 4px 16px rgba(0,0,0,0.45)';
+    tile.style.zIndex = '2';
+    const rc2 = HEATMAP_REGION_COLORS[d.region] || '#888';
+    tip.innerHTML = `<strong class="fnf-tooltip-label">${d.name}</strong>
+      <span class="csp-swatch-dot" data-color="${rc2}"></span><br/>
+      <span class="text-accent-indigo">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
+      <span class="text-accent-indigo">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
+      <hr class="fnf-tooltip-divider">
+      <span class="fnf-tooltip-muted">Population: ${fmtNum(d.population)}<br/>Low-Access Tracts: ${d.lowAccessPct}%</span>`;
+    tip.querySelectorAll('[data-color]').forEach(el => { el.style.backgroundColor = el.dataset.color; });
+    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
+    tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
+    tip.style.opacity = '1';
+  });
+  tile.addEventListener('mousemove', (e) => {
+    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
+    tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
+  });
+  tile.addEventListener('mouseleave', () => {
+    tile.style.transform = '';
+    tile.style.boxShadow = isOutlier ? '0 0 8px rgba(253,224,71,0.08)' : '';
+    tile.style.zIndex = '';
+    tip.style.opacity = '0';
+  });
+
+  return tile;
+}
+
 /** Render Mode B: equal-sized tiles sorted by rate desc, grouped by region */
 function renderDoubleBurdenTiles(enriched, rankNorm) {
   const container = document.getElementById('chart-double-burden-tiles');
@@ -451,10 +519,9 @@ function renderDoubleBurdenTiles(enriched, rankNorm) {
   const tip = ensureDbTileTip();
   const regionOrder = ['South', 'Midwest', 'West', 'Northeast'];
 
-  // Determine grid columns from container width for balanced rows
   const containerWidth = container.parentElement?.clientWidth || 700;
-  const tileW = 112, tileH = 72, gap = 5;
-  const cols = Math.max(2, Math.floor((containerWidth + gap) / (tileW + gap)));
+  const gap = 5;
+  const cols = Math.max(2, Math.floor((containerWidth + gap) / (112 + gap)));
 
   regionOrder.forEach((region, ri) => {
     const states = enriched
@@ -468,7 +535,6 @@ function renderDoubleBurdenTiles(enriched, rankNorm) {
       ? 'margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.04)'
       : 'margin-bottom:6px';
 
-    // Region header — prominent but clean
     const header = document.createElement('div');
     header.style.cssText = `font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:${rc};margin-bottom:8px;padding:3px 10px;border-left:3px solid ${rc};display:flex;align-items:center;gap:8px`;
     header.textContent = region;
@@ -478,77 +544,11 @@ function renderDoubleBurdenTiles(enriched, rankNorm) {
     header.appendChild(count);
     section.appendChild(header);
 
-    // CSS Grid — fixed columns, balanced rows, no orphan tiles
     const grid = document.createElement('div');
     grid.style.cssText = `display:grid;grid-template-columns:repeat(${cols},1fr);gap:${gap}px`;
     grid.setAttribute('role', 'list');
 
-    states.forEach(d => {
-      const norm = rankNorm(parseFloat(d.pctOfPop) || 0);
-      const rgb = sampleGradient(norm);
-      const bg = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-      const fg = tileTextColor(norm);
-      const subFg = tileSubTextColor(norm);
-      const isOutlier = norm >= DB_OUTLIER_THRESHOLD;
-
-      const tile = document.createElement('div');
-      tile.style.cssText = [
-        `min-height:${tileH}px;border-radius:6px;padding:8px 10px`,
-        `background:${bg}`,
-        'display:flex;flex-direction:column;justify-content:space-between',
-        isOutlier
-          ? 'border:1.5px solid rgba(253,224,71,0.35);box-shadow:0 0 8px rgba(253,224,71,0.08)'
-          : 'border:1px solid rgba(255,255,255,0.06)',
-        'box-sizing:border-box;cursor:default;position:relative',
-        'transition:transform 0.12s,box-shadow 0.12s'
-      ].join(';');
-
-      const nameDiv = document.createElement('div');
-      nameDiv.style.cssText = `font-size:0.72rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:${fg};line-height:1.2`;
-      nameDiv.textContent = d.name;
-      nameDiv.title = d.name;
-
-      const pctDiv = document.createElement('div');
-      pctDiv.style.cssText = `font-size:1.15rem;font-weight:700;line-height:1.1;color:${fg}${isOutlier ? ';text-shadow:0 0 6px rgba(253,224,71,0.2)' : ''}`;
-      pctDiv.textContent = d.pctOfPop + '%';
-
-      const countDiv = document.createElement('div');
-      countDiv.style.cssText = `font-size:0.64rem;color:${subFg};line-height:1.2`;
-      countDiv.textContent = fmtNum(d.estimate) + ' people';
-
-      tile.append(nameDiv, pctDiv, countDiv);
-      tile.setAttribute('role', 'listitem');
-      tile.setAttribute('aria-label', `${d.name}: ${d.pctOfPop}% of population, ${fmtNum(d.estimate)} people`);
-
-      tile.addEventListener('mouseenter', (e) => {
-        tile.style.transform = 'scale(1.04)';
-        tile.style.boxShadow = '0 4px 16px rgba(0,0,0,0.45)';
-        tile.style.zIndex = '2';
-        const rc2 = HEATMAP_REGION_COLORS[d.region] || '#888';
-        tip.innerHTML = `<strong class="fnf-tooltip-label">${d.name}</strong>
-          <span class="csp-swatch-dot" data-color="${rc2}"></span><br/>
-          <span class="text-accent-indigo">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
-          <span class="text-accent-indigo">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
-          <hr class="fnf-tooltip-divider">
-          <span class="fnf-tooltip-muted">Population: ${fmtNum(d.population)}<br/>Low-Access Tracts: ${d.lowAccessPct}%</span>`;
-        tip.querySelectorAll('[data-color]').forEach(el => { el.style.backgroundColor = el.dataset.color; });
-        tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
-        tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
-        tip.style.opacity = '1';
-      });
-      tile.addEventListener('mousemove', (e) => {
-        tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
-        tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
-      });
-      tile.addEventListener('mouseleave', () => {
-        tile.style.transform = '';
-        tile.style.boxShadow = isOutlier ? '0 0 8px rgba(253,224,71,0.08)' : '';
-        tile.style.zIndex = '';
-        tip.style.opacity = '0';
-      });
-
-      grid.appendChild(tile);
-    });
+    states.forEach(d => grid.appendChild(createDoubleBurdenTile(d, rankNorm, tip)));
 
     section.appendChild(grid);
     container.appendChild(section);
@@ -1411,9 +1411,40 @@ async function fetchSDOHAccess(accessStates) {
   } catch { /* SDOH is optional — fail silently */ }
 }
 
+/** Sync hero stat data-target values from live JSON data */
+function syncHeroStats(nat, curStates) {
+  const heroTargets = document.querySelectorAll('.dashboard-hero .dashboard-stat__number');
+  heroTargets.forEach(el => {
+    const label = el.nextElementSibling?.textContent?.trim() || '';
+    if (label.includes('Low-Access Population')) el.dataset.target = (nat.lowAccessPopulation / 1e6).toFixed(1);
+    else if (label.includes('Low-Access Tracts') && !label.includes('%')) el.dataset.target = String(nat.lowAccessTracts);
+    else if (label.includes('Urban Low-Access')) {
+      const totalUrban = curStates.reduce((s, st) => s + (st.urbanLowAccess || 0), 0);
+      const totalTracts = curStates.reduce((s, st) => s + (st.totalTracts || 0), 0);
+      el.dataset.target = totalTracts > 0 ? Math.round(totalUrban / totalTracts * 100) : 44;
+    }
+    else if (label.includes('Tracts Low-Access')) el.dataset.target = String(nat.lowAccessPct);
+  });
+}
+
+/** Build narrative insight text for a state drill-down (used by drillDownLowAccess) */
+function buildLowAccessInsight(stateName, stateAccess) {
+  const pct = stateAccess.lowAccessPct;
+  const pop = stateAccess.lowAccessPopulation;
+  const dist = stateAccess.avgDistance;
+  let distSentence;
+  if (dist < 1.0) {
+    distSentence = 'well within urban norms, suggesting the burden here is concentrated in specific pockets rather than statewide.';
+  } else if (dist < 3.0) {
+    distSentence = `near the national average of 2.1 miles, masking county-level variation across ${stateName}.`;
+  } else {
+    distSentence = `nearly ${(dist / 2.1).toFixed(1)}\xd7 the national average of 2.1 miles, a strong signal of rural food desert conditions.`;
+  }
+  return `${stateName} has ${pct}% of its census tracts classified as low-access, affecting ${fmtNum(pop)} residents. The average distance to the nearest grocery store is ${dist} miles \u2014 ${distSentence}`;
+}
+
 async function init() {
   try {
-    // Load current-access data + GeoJSON + food insecurity + SNAP retailers
     const [currentAccessRes, geoRes, fiRes, snapRetailRes] = await Promise.all([
       fetch('/data/current-food-access.json'),
       fetch('/data/us-states-geo.json'),
@@ -1425,10 +1456,8 @@ async function init() {
     const fiData = fiRes.ok ? await fiRes.json() : null;
     const snapRetailerData = snapRetailRes.ok ? await snapRetailRes.json() : null;
 
-    // Normalize totalPopulation → population for chart compatibility
     const curStates = currentAccessData.states.map(s => ({ ...s, population: s.totalPopulation }));
 
-    // Merge poverty rate from food-insecurity-state.json for Double Burden estimate
     if (fiData?.states) {
       const fiByName = {};
       fiData.states.forEach(s => { fiByName[s.name] = s.povertyRate; });
@@ -1436,22 +1465,7 @@ async function init() {
     }
 
     updateFreshness('access', { _static: true, _dataYear: 'Current' });
-
-    // Sync hero stats from live data
-    const nat = currentAccessData.national;
-    const heroTargets = document.querySelectorAll('.dashboard-hero .dashboard-stat__number');
-    heroTargets.forEach(el => {
-      const label = el.nextElementSibling?.textContent?.trim() || '';
-      if (label.includes('Low-Access Population')) el.dataset.target = (nat.lowAccessPopulation / 1e6).toFixed(1);
-      else if (label.includes('Low-Access Tracts') && !label.includes('%')) el.dataset.target = String(nat.lowAccessTracts);
-      else if (label.includes('Urban Low-Access')) {
-        const totalUrban = curStates.reduce((s, st) => s + (st.urbanLowAccess || 0), 0);
-        const totalTracts = curStates.reduce((s, st) => s + (st.totalTracts || 0), 0);
-        el.dataset.target = totalTracts > 0 ? Math.round(totalUrban / totalTracts * 100) : 44;
-      }
-      else if (label.includes('Tracts Low-Access')) el.dataset.target = String(nat.lowAccessPct);
-    });
-
+    syncHeroStats(currentAccessData.national, curStates);
     animateCounters();
     const mapCtrl = renderDesertMap(geoJSON, currentAccessData.states, currentAccessData);
     renderUrbanRural(curStates);
@@ -1600,21 +1614,9 @@ async function init() {
         const mapLabel = document.getElementById('access-map-state-label');
         if (mapLabel) mapLabel.textContent = stateName;
 
-        // Update insight callout with state-level narrative
         const insightEl = document.getElementById('low-access-insight');
         if (insightEl && stateAccess) {
-          const pct = stateAccess.lowAccessPct;
-          const pop = stateAccess.lowAccessPopulation;
-          const dist = stateAccess.avgDistance;
-          let distSentence;
-          if (dist < 1.0) {
-            distSentence = 'well within urban norms, suggesting the burden here is concentrated in specific pockets rather than statewide.';
-          } else if (dist < 3.0) {
-            distSentence = `near the national average of 2.1 miles, masking county-level variation across ${stateName}.`;
-          } else {
-            distSentence = `nearly ${(dist / 2.1).toFixed(1)}\xd7 the national average of 2.1 miles, a strong signal of rural food desert conditions.`;
-          }
-          insightEl.textContent = `${stateName} has ${pct}% of its census tracts classified as low-access, affecting ${fmtNum(pop)} residents. The average distance to the nearest grocery store is ${dist} miles \u2014 ${distSentence}`;
+          insightEl.textContent = buildLowAccessInsight(stateName, stateAccess);
         }
       } catch {
         // P3-10: surface a visible error instead of silently leaving the
