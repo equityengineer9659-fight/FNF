@@ -5,7 +5,7 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
+  echarts, COLORS, accentRgba, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart,
   initScrollReveal, handleResize,
   getRegion, addExportButton
@@ -262,8 +262,8 @@ export function renderPriceImpact(blsData) {
       itemStyle: { color: COLORS.accent },
       areaStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: 'rgba(255,107,53,0.3)' },
-          { offset: 1, color: 'rgba(255,107,53,0.02)' }
+          { offset: 0, color: accentRgba(0.3) },
+          { offset: 1, color: accentRgba(0.02) }
         ])
       },
       markLine: {
