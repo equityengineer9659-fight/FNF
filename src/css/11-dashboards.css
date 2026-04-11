@@ -408,7 +408,7 @@
 }
 
 .dashboard-chart-row--stacked .dashboard-chart {
-  height: 560px;
+  height: 480px;
 }
 
 .dashboard-chart-row--stacked .dashboard-chart-row__info {
@@ -761,28 +761,16 @@
 }
 
 .dashboard-metric-separator {
-  display: flex;
-  align-items: center;
-  color: rgba(0, 212, 255, 0.7);
-  font-size: 0.72rem;
+  width: 100%;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.65rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.25rem 0.6rem;
-  border-left: 2px solid rgba(0, 212, 255, 0.35);
-  margin-left: 0.35rem;
-}
-
-@media (width <= 768px) {
-  .dashboard-metric-separator {
-    flex-basis: 100%;
-    justify-content: center;
-    border-left: none;
-    border-top: 1px solid rgba(0, 212, 255, 0.25);
-    margin-left: 0;
-    padding-top: 0.5rem;
-    margin-top: 0.25rem;
-  }
+  padding: 0.15rem 0;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Scroll Reveal Animations */

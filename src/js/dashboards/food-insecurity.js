@@ -962,8 +962,8 @@ function renderSnap(data) {
         itemStyle: {
           borderRadius: [0, 3, 3, 0],
           color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            { offset: 0, color: 'rgba(1,118,211,0.7)' },
-            { offset: 1, color: COLORS.primary }
+            { offset: 0, color: accentRgba(0.6) },
+            { offset: 1, color: COLORS.accent }
           ])
         },
         animationDuration: 1500
@@ -976,7 +976,7 @@ function renderSnap(data) {
         itemStyle: {
           borderRadius: [0, 3, 3, 0],
           color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            { offset: 0, color: COLORS.primary },
+            { offset: 0, color: 'rgba(0,212,255,0.5)' },
             { offset: 1, color: COLORS.secondary }
           ])
         },
@@ -1210,7 +1210,7 @@ function initSDOHButtons(sdoh, fiData) {
   }).join('');
 
   if (placesAvailable && placesMetrics.length) {
-    html += '<span class="dashboard-metric-separator" aria-hidden="true">Health Outcomes</span>';
+    html += '<div class="dashboard-metric-separator" aria-hidden="true">Health Outcomes</div>';
     html += placesMetrics.map(m => {
       const isActive = m.key === activeKey;
       return `<button class="dashboard-metric-btn${isActive ? ' dashboard-metric-btn--active' : ''}" data-sdoh-metric="${m.key}" aria-pressed="${isActive}">${m.label}</button>`;

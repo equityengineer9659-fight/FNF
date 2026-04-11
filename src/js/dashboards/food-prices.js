@@ -47,8 +47,12 @@ function renderCategories(data) {
       trigger: 'axis', ...TOOLTIP_STYLE,
       formatter: params => { let tip = `<strong>${params[0].axisValue}</strong><br/>`; params.forEach(p => { tip += `${p.marker} ${p.seriesName}: <strong>${p.value}</strong><br/>`; }); return tip; }
     },
-    legend: { data: normalizedSeries.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 }, top: 5, itemWidth: 12, itemHeight: 8, itemGap: 8 },
-    grid: { left: 50, right: 20, top: 55, bottom: 30 },
+    legend: {
+      data: normalizedSeries.map(s => s.name), textStyle: { color: COLORS.text, fontSize: 10 },
+      orient: 'vertical', right: 0, top: 30, itemWidth: 10, itemHeight: 8, itemGap: 4,
+      formatter: n => n.replace(' & Related', '').replace(', Poultry & Fish', '').replace('Nonalcoholic beverages', 'Non-alc. Bev.').replace('Other Food at Home', 'Other').replace('All Food at Home', 'All Food')
+    },
+    grid: { left: 50, right: 155, top: 10, bottom: 30 },
     xAxis: { type: 'category', data: dates, boundaryGap: false, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
     yAxis: { type: 'value', name: 'Index (Jan 2018 = 100)', nameTextStyle: { color: COLORS.textMuted }, axisLabel: { color: COLORS.textMuted }, splitLine: { lineStyle: { color: COLORS.gridLine } } },
     series: normalizedSeries.map((s, i) => ({
@@ -173,12 +177,7 @@ function renderAffordabilityMap(geoJSON, stateData) {
   }));
 
   chart.setOption({
-    title: {
-      text: '',
-      subtext: 'Index = annual meal cost per $1,000 of median income · Data: 2024 (Feeding America + Census ACS)',
-      subtextStyle: { color: COLORS.textMuted, fontSize: 11 },
-      top: 0, left: 'center'
-    },
+    title: { show: false },
     tooltip: {
       trigger: 'item',
       ...TOOLTIP_STYLE,
@@ -357,9 +356,9 @@ function renderHomeVsAway(blsData) {
         },
         markArea: {
           silent: true,
-          itemStyle: { color: 'rgba(156,163,175,0.12)', borderWidth: 0 },
-          label: { color: COLORS.textMuted, fontSize: 9, position: 'insideTop', offset: [0, 5] },
-          data: [[{ xAxis: '2025-10', name: 'Gov\'t shutdown\ndata gap' }, { xAxis: '2026-01' }]]
+          itemStyle: { color: 'rgba(156,163,175,0.18)', borderWidth: 1, borderColor: 'rgba(156,163,175,0.3)' },
+          label: { color: '#9ca3af', fontSize: 10, fontWeight: 'bold', position: 'insideTopLeft', padding: [6, 0, 0, 6] },
+          data: [[{ xAxis: '2025-10', name: 'Gov\'t shutdown\ndata gap' }, { xAxis: '2026-03' }]]
         }
       },
       ...(foodAway ? [{

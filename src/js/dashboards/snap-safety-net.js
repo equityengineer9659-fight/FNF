@@ -103,8 +103,8 @@ function renderSnapTrend(trendData, blsData, snapNational) {
         return tip;
       }
     },
-    legend: { data: legendData, textStyle: { color: COLORS.text }, top: 5 },
-    grid: { left: 55, right: blsData ? 55 : 20, top: 45, bottom: 60 },
+    legend: { data: legendData, textStyle: { color: COLORS.text, fontSize: 11 }, top: 0, itemGap: 8, itemWidth: 12, itemHeight: 8 },
+    grid: { left: 55, right: blsData ? 55 : 20, top: 40, bottom: 60 },
     dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 20, bottom: 10, textStyle: { color: COLORS.textMuted }, borderColor: COLORS.gridLine, fillerColor: 'rgba(0,212,255,0.1)' }],
     xAxis: { type: 'category', data: dates, axisLabel: { color: COLORS.textMuted, rotate: 45, fontSize: 10 }, axisLine: { lineStyle: { color: COLORS.gridLine } } },
     yAxis: yAxes,
@@ -350,8 +350,8 @@ function renderCoverageGap(sankeyData) {
     title: {
       text: '',
       subtext: 'Modeled estimates · USDA FNS, Feeding America, Census ACS · 2022 data',
-      subtextStyle: { color: COLORS.textMuted, fontSize: 11 },
-      top: 0, left: 'center'
+      subtextStyle: { color: COLORS.textMuted, fontSize: 10 },
+      top: -5, left: 'center'
     },
     tooltip: {
       ...TOOLTIP_STYLE,
@@ -453,9 +453,9 @@ function renderBenefits(benefitData, coverageStates) {
     },
     legend: {
       data: ['Avg Benefit ($/mo)', 'Food Insecurity Rate (%)'],
-      textStyle: { color: COLORS.text }, top: 5
+      textStyle: { color: COLORS.text, fontSize: 10 }, top: -5, itemWidth: 12, itemHeight: 8
     },
-    grid: { left: 120, right: 50, top: 40, bottom: 30 },
+    grid: { left: 120, right: 50, top: 30, bottom: 30 },
     xAxis: [
       {
         type: 'value', name: 'Benefit ($)',
