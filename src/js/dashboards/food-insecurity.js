@@ -249,8 +249,12 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
       const mapInsight = document.getElementById('map-insight');
       if (mapInsight && worst && stateObj) {
         const cfg = MAP_METRICS[currentMetric];
-        const diffStr = buildCountyInsight(worst.name, worst.value, stateObj, currentMetric)
-          ? ` — ${(worst.value - (stateObj[currentMetric] ?? stateObj.rate)).toFixed(currentMetric === 'mealCost' ? 2 : 1).replace(/^([^-])/, '+$1')}${currentMetric === 'mealCost' ? '' : cfg.suffix} vs. state avg` : '';
+        const stateVal = stateObj[currentMetric] ?? stateObj.rate;
+        const diff = typeof worst.value === 'number' && typeof stateVal === 'number'
+          ? (worst.value - stateVal).toFixed(currentMetric === 'mealCost' ? 2 : 1)
+          : null;
+        const sign = diff !== null && diff >= 0 ? '+' : '';
+        const diffStr = diff !== null ? ` — ${sign}${diff}${currentMetric === 'mealCost' ? '' : cfg.suffix} vs. state avg` : '';
         mapInsight.textContent = `Within ${stateName}, ${worst.name} has the highest ${cfg.name.toLowerCase()} at ${fmtMetricVal(worst.value, currentMetric)}${diffStr} (modeled estimate).`;
       }
 
