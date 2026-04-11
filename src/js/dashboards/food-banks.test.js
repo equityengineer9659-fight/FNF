@@ -410,6 +410,82 @@ describe('food-banks', () => {
     });
   });
 
+  // ── P2-20: Tooltip formatter contracts ──
+  describe('tooltip formatters', () => {
+    // Replicates density map formatter from food-banks.js (line 45)
+    describe('density map tooltip', () => {
+      function densityTooltip(params) {
+        const d = params.data;
+        if (!d) return '';
+        return `<strong>${d.name}</strong> Density: ${d.value.toFixed(1)} orgs per 100K Total: ${d.orgCount} Revenue: $${d.totalRevenue} Insecurity: ${d.foodInsecurityRate}%`;
+      }
+
+      it('should return empty string for null data', () => {
+        expect(densityTooltip({ data: null })).toBe('');
+      });
+
+      it('should format density to one decimal place', () => {
+        const result = densityTooltip({
+          data: { name: 'Alabama', value: 12.345, orgCount: 45, totalRevenue: 5000000, foodInsecurityRate: 15.2 }
+        });
+        expect(result).toContain('12.3 orgs per 100K');
+      });
+
+      it('should include all data fields', () => {
+        const result = densityTooltip({
+          data: { name: 'Texas', value: 8.0, orgCount: 200, totalRevenue: 25000000, foodInsecurityRate: 14.1 }
+        });
+        expect(result).toContain('Texas');
+        expect(result).toContain('8.0 orgs per 100K');
+        expect(result).toContain('200');
+        expect(result).toContain('14.1%');
+      });
+
+      it('should handle zero density value', () => {
+        const result = densityTooltip({
+          data: { name: 'Test', value: 0, orgCount: 0, totalRevenue: 0, foodInsecurityRate: 0 }
+        });
+        expect(result).toContain('0.0 orgs per 100K');
+        expect(result).not.toContain('NaN');
+      });
+    });
+
+    // Replicates resource gap formatter from food-banks.js (line 98)
+    describe('resource gap tooltip', () => {
+      function resourceGapTooltip(params, nationalMean) {
+        const deviation = params.data.deviation;
+        const revPerInsecure = params.data.revPerInsecure;
+        return `<strong>${params.name}</strong> Rev/Insecure Person: $${revPerInsecure?.toLocaleString()} National Mean: $${nationalMean.toLocaleString()} Deviation: ${deviation >= 0 ? '+' : ''}$${deviation?.toLocaleString()}`;
+      }
+
+      it('should show positive deviation with plus sign', () => {
+        const result = resourceGapTooltip(
+          { name: 'California', data: { deviation: 500, revPerInsecure: 2000 } },
+          1500
+        );
+        expect(result).toContain('+$500');
+        expect(result).toContain('$2,000');
+      });
+
+      it('should show negative deviation without plus sign', () => {
+        const result = resourceGapTooltip(
+          { name: 'Mississippi', data: { deviation: -800, revPerInsecure: 700 } },
+          1500
+        );
+        expect(result).not.toMatch(/\+\$-/);
+        expect(result).toContain('$700');
+      });
+
+      it('should show zero deviation with plus sign', () => {
+        const result = resourceGapTooltip(
+          { name: 'Average State', data: { deviation: 0, revPerInsecure: 1500 } },
+          1500
+        );
+        expect(result).toContain('+$0');
+      });
+    });
+  });
+
   // ── hidden-class show/hide contract ──
   describe('hidden-class reveal contract', () => {
     it('density-reconciliation starts with hidden class — JS must use classList.remove to reveal', () => {

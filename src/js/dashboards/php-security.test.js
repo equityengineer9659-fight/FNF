@@ -128,6 +128,131 @@ describe('PHP API Proxy Security', () => {
     });
   });
 
+  // ── Upstream Error Handling (P2-19) ──
+  describe('upstream error handling', () => {
+    const DATA_PROXIES = [
+      'dashboard-bls.php', 'dashboard-census.php', 'dashboard-fred.php',
+      'dashboard-places.php', 'dashboard-saipe.php', 'dashboard-sdoh.php',
+      'mapbox-geocode.php', 'nonprofit-org.php', 'nonprofit-search.php',
+    ];
+
+    it('all data proxies should return 502 on upstream failure', () => {
+      for (const file of DATA_PROXIES) {
+        const src = readPhp(file);
+        expect(src, `${file} missing 502 error code`).toContain('http_response_code(502)');
+      }
+    });
+
+    it('502 responses should include a JSON error key', () => {
+      for (const file of DATA_PROXIES) {
+        const src = readPhp(file);
+        const lines = src.split('\n');
+        const errorResponseLines = lines.filter(
+          l => l.includes('http_response_code(502)') ||
+            (l.includes('json_encode') && l.includes('\'error\'') && !l.includes('error_message'))
+        );
+        expect(errorResponseLines.length, `${file} missing JSON error response near 502`).toBeGreaterThan(0);
+      }
+    });
+
+    it('proxies with returnStaleOrError should check file_exists before returning 502', () => {
+      const staleProxies = ['dashboard-bls.php', 'dashboard-places.php', 'dashboard-fred.php'];
+      for (const file of staleProxies) {
+        const src = readPhp(file);
+        expect(src, `${file} missing returnStaleOrError`).toContain('function returnStaleOrError(');
+        // returnStaleOrError should check file_exists for cache fallback
+        const fnBody = src.slice(src.indexOf('function returnStaleOrError'));
+        expect(fnBody, `${file} returnStaleOrError missing file_exists check`).toContain('file_exists(');
+      }
+    });
+
+    it('returnStaleOrError should set _stale and _cached flags on stale responses', () => {
+      const staleProxies = ['dashboard-bls.php', 'dashboard-places.php', 'dashboard-fred.php'];
+      for (const file of staleProxies) {
+        const src = readPhp(file);
+        const fnBody = src.slice(src.indexOf('function returnStaleOrError'));
+        expect(fnBody, `${file} missing _stale flag`).toContain('\'_stale\'');
+        expect(fnBody, `${file} missing _cached flag`).toContain('\'_cached\'');
+      }
+    });
+
+    it('proxies without returnStaleOrError should still return 502 with json_encode error', () => {
+      const directErrorProxies = [
+        'dashboard-census.php', 'dashboard-saipe.php', 'dashboard-sdoh.php',
+        'nonprofit-org.php', 'nonprofit-search.php',
+      ];
+      for (const file of directErrorProxies) {
+        const src = readPhp(file);
+        expect(src, `${file} missing 502`).toContain('http_response_code(502)');
+        const errorLines = src.split('\n').filter(
+          l => l.includes('json_encode') && l.includes('\'error\'')
+        );
+        expect(errorLines.length, `${file} missing json error response`).toBeGreaterThan(0);
+      }
+    });
+  });
+
+  // ── Rate Limit Guards (P2-19) ──
+  describe('rate limit guards', () => {
+    const RATE_LIMITED_PROXIES = [
+      'dashboard-bls.php', 'dashboard-fred.php', 'dashboard-places.php',
+      'dashboard-saipe.php', 'mapbox-geocode.php', 'charity-navigator.php',
+    ];
+
+    it('rate-limited proxies should require _rate-limiter.php', () => {
+      for (const file of RATE_LIMITED_PROXIES) {
+        const src = readPhp(file);
+        expect(src, `${file} missing rate limiter require`).toMatch(
+          /require_once.*_rate-limiter\.php/
+        );
+      }
+    });
+
+    it('rate-limited proxies should call rateLimitCheck before API calls', () => {
+      for (const file of RATE_LIMITED_PROXIES) {
+        const src = readPhp(file);
+        expect(src, `${file} missing rateLimitCheck`).toContain('rateLimitCheck(');
+      }
+    });
+
+    it('rate-limited proxies should call rateLimitIncrement after successful API calls', () => {
+      for (const file of RATE_LIMITED_PROXIES) {
+        const src = readPhp(file);
+        expect(src, `${file} missing rateLimitIncrement`).toContain('rateLimitIncrement(');
+      }
+    });
+
+    it('rate limit failure should return an error code or fall back to stale cache', () => {
+      for (const file of RATE_LIMITED_PROXIES) {
+        const src = readPhp(file);
+        const hasStale = src.includes('returnStaleOrError');
+        const has503 = src.includes('http_response_code(503)');
+        const has429 = src.includes('http_response_code(429)');
+        expect(
+          hasStale || has503 || has429,
+          `${file} has no fallback path for rate limit exhaustion`
+        ).toBe(true);
+      }
+    });
+
+    it('_rate-limiter.php should use file locking for atomic increments', () => {
+      const src = readPhp('_rate-limiter.php');
+      expect(src).toContain('flock(');
+      expect(src).toContain('LOCK_EX');
+    });
+
+    it('_rate-limiter.php rateLimitCheck should handle missing counter file gracefully', () => {
+      const src = readPhp('_rate-limiter.php');
+      const fnBody = src.slice(
+        src.indexOf('function rateLimitCheck('),
+        src.indexOf('function rateLimitCount(')
+      );
+      expect(fnBody).toContain('file_exists');
+      // Missing file should return true (within limit)
+      expect(fnBody).toMatch(/if\s*\(\s*!file_exists[\s\S]*?return\s+true/);
+    });
+  });
+
   // ── Input validation ──
   describe('input validation', () => {
     it('dashboard-places.php should validate state against allowlist', () => {

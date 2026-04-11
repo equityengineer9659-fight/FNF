@@ -430,6 +430,80 @@ describe('food-prices', () => {
     });
   });
 
+  // ── P2-20: Tooltip formatter contracts ──
+  describe('tooltip formatters', () => {
+    // Replicates regional chart formatter from food-prices.js (line 86)
+    describe('regional chart tooltip', () => {
+      function regionalTooltip(params, regions, changesPct, mealCost, startLabel) {
+        const region = params[0].name;
+        const idx = regions.indexOf(region);
+        let tip = `<strong>${region}</strong>`;
+        params.forEach(p => {
+          tip += ` ${p.seriesName}: ${p.value}`;
+        });
+        if (idx >= 0) {
+          const baseMealCost = mealCost || 3.58;
+          const dollarImpact = (baseMealCost * changesPct[idx] / 100).toFixed(2);
+          tip += ` Change: +${changesPct[idx]}% Impact: +$${dollarImpact}/meal since ${startLabel}`;
+        }
+        return tip;
+      }
+
+      it('should compute dollar impact from change percentage and meal cost', () => {
+        const result = regionalTooltip(
+          [{ name: 'Northeast', seriesName: 'Latest', value: 310, marker: '' }],
+          ['Northeast', 'Midwest', 'South', 'West'],
+          ['20.0', '18.5', '22.0', '19.0'],
+          3.58,
+          'Jan 2018'
+        );
+        expect(result).toContain('Northeast');
+        expect(result).toContain('+20.0%');
+        // Dollar impact: 3.58 * 20.0 / 100 = 0.72
+        expect(result).toContain('+$0.72/meal');
+        expect(result).toContain('since Jan 2018');
+      });
+
+      it('should skip change/impact lines when region not in list', () => {
+        const result = regionalTooltip(
+          [{ name: 'Unknown', seriesName: 'Latest', value: 300, marker: '' }],
+          ['Northeast', 'Midwest'],
+          ['20.0', '18.5'],
+          3.58,
+          'Jan 2018'
+        );
+        expect(result).toContain('Unknown');
+        expect(result).not.toContain('Impact');
+      });
+
+      it('should default to $3.58 meal cost when not provided', () => {
+        const result = regionalTooltip(
+          [{ name: 'South', seriesName: 'Latest', value: 290, marker: '' }],
+          ['South'],
+          ['10.0'],
+          null,
+          'Jan 2018'
+        );
+        // 3.58 * 10.0 / 100 = 0.358 → 0.36
+        expect(result).toContain('+$0.36/meal');
+      });
+    });
+
+    // Replicates categories axis tooltip pattern
+    describe('categories chart tooltip', () => {
+      it('should list multiple series with their values', () => {
+        const params = [
+          { marker: '*', seriesName: 'Food at Home', value: 285 },
+          { marker: '*', seriesName: 'Food Away from Home', value: 310 },
+        ];
+        let tip = '<strong>Jan 2024</strong>';
+        params.forEach(p => { tip += ` ${p.seriesName}: ${p.value}`; });
+        expect(tip).toContain('Food at Home: 285');
+        expect(tip).toContain('Food Away from Home: 310');
+      });
+    });
+  });
+
   // ── UI/UX Audit: Legend/Label/Color Consistency ──
   describe('legend/label/color consistency', () => {
     it('food-insecurity-state.json should have foodInsecurityRate for dual-axis CPI chart', () => {

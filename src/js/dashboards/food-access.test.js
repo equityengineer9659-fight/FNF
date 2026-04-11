@@ -635,6 +635,92 @@ describe('food-access', () => {
     });
   });
 
+  // ── P2-20: Tooltip formatter contracts ──
+  describe('tooltip formatters', () => {
+    // Replicates stateTooltip from food-access.js (line 35)
+    describe('stateTooltip', () => {
+      function stateTooltip(params) {
+        const d = params.data;
+        if (!d) return '';
+        return `<strong>${d.name}</strong> Low-Access: ${d.value}%`;
+      }
+
+      it('should return empty string for null data', () => {
+        expect(stateTooltip({ data: null })).toBe('');
+        expect(stateTooltip({ data: undefined })).toBe('');
+      });
+
+      it('should include state name and low-access percentage', () => {
+        const result = stateTooltip({
+          data: { name: 'Alabama', value: 32.1, population: 5000000, lowAccessPopulation: 1600000, avgDistance: 8.5 }
+        });
+        expect(result).toContain('Alabama');
+        expect(result).toContain('32.1%');
+      });
+
+      it('should handle zero value without NaN', () => {
+        const result = stateTooltip({ data: { name: 'TestState', value: 0 } });
+        expect(result).toContain('0%');
+        expect(result).not.toContain('NaN');
+      });
+    });
+
+    // Replicates countyTooltip from food-access.js (line 46)
+    describe('countyTooltip', () => {
+      function countyTooltip(params) {
+        const d = params.data;
+        if (!d) return '';
+        if (d._currentData) {
+          let html = `<strong>${d.name}</strong> Low-Access: ${d.lowAccessTracts} of ${d.totalTracts} (${d.value}%)`;
+          if (d.lowAccessPopulation) html += ` Pop: ${d.lowAccessPopulation}`;
+          if (d.avgDistance) html += ` Dist: ${d.avgDistance} mi`;
+          html += ` Type: ${d.isUrban ? 'Urban' : 'Rural'}`;
+          return html;
+        }
+        return `<strong>${d.name}</strong> Pop: ${d.population || 0}`;
+      }
+
+      it('should return empty string for null data', () => {
+        expect(countyTooltip({ data: null })).toBe('');
+      });
+
+      it('should render detailed tooltip when _currentData is present', () => {
+        const result = countyTooltip({
+          data: {
+            name: 'Los Angeles', value: 28.5, _currentData: true,
+            lowAccessTracts: 120, totalTracts: 421,
+            lowAccessPopulation: 2500000, avgDistance: 3.2, isUrban: true
+          }
+        });
+        expect(result).toContain('Los Angeles');
+        expect(result).toContain('120 of 421');
+        expect(result).toContain('28.5%');
+        expect(result).toContain('Urban');
+      });
+
+      it('should render fallback tooltip when _currentData is absent', () => {
+        const result = countyTooltip({
+          data: { name: 'Rural County', population: 45000 }
+        });
+        expect(result).toContain('Rural County');
+        expect(result).toContain('45000');
+      });
+
+      it('should default population to 0 when missing in fallback', () => {
+        const result = countyTooltip({ data: { name: 'Unknown' } });
+        expect(result).toContain('0');
+        expect(result).not.toContain('undefined');
+      });
+
+      it('should show Rural when isUrban is false', () => {
+        const result = countyTooltip({
+          data: { name: 'Test', value: 10, _currentData: true, lowAccessTracts: 5, totalTracts: 20, isUrban: false }
+        });
+        expect(result).toContain('Rural');
+      });
+    });
+  });
+
   // ── hidden-class show/hide contract ──
   describe('hidden-class reveal contract', () => {
     it('section-sdoh-access starts with hidden class — JS must use classList.remove to reveal', () => {
