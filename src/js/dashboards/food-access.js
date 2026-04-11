@@ -1319,7 +1319,7 @@ async function fetchSDOHAccess(accessStates) {
     if (sdoh.error || !sdoh.states) return;
 
     const section = document.getElementById('section-sdoh-access');
-    if (section) section.style.display = '';
+    if (section) section.classList.remove('hidden');
 
     const chart = createChart('chart-sdoh-access');
     if (!chart) return;
@@ -1502,7 +1502,7 @@ async function init() {
 
       // Hide all info panels first
       infoPanels.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
-      if (freshAccess) freshAccess.style.display = '';
+      if (freshAccess) freshAccess.classList.remove('hidden');
       if (freshSnap) freshSnap.classList.add('hidden');
 
       if (view === 'insecurity' && cdcInsecurityData?.records) {
@@ -1516,7 +1516,7 @@ async function init() {
         renderSnapRetailers(geoJSON, snapRetailerData, curStates);
         const el = document.getElementById('info-snap-mode'); if (el) el.classList.remove('hidden');
         if (hint) hint.textContent = 'Hover for retailer breakdown by store type';
-        if (freshAccess) freshAccess.style.display = 'none';
+        if (freshAccess) freshAccess.classList.add('hidden');
         if (freshSnap) freshSnap.classList.remove('hidden');
       } else if (view === 'deserts' && currentAccessData?.states) {
         // Low Access (Current) — computed from FNS + Census tract data

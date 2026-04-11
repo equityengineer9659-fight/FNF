@@ -1092,7 +1092,7 @@ let sdohChart = null;
 function renderSDOH(sdoh, fiData, metricKey) {
   const metric = SDOH_METRICS.find(m => m.key === metricKey) || SDOH_METRICS[0];
   const section = document.getElementById('section-sdoh');
-  if (section) section.style.display = '';
+  if (section) section.classList.remove('hidden');
 
   if (!sdohChart) {
     sdohChart = createChart('chart-sdoh');
@@ -1373,7 +1373,7 @@ const INCOME_BANDS = [
 
 function renderIncomeRiver(sdoh, fiData) {
   const section = document.getElementById('section-income-river');
-  if (section) section.style.display = '';
+  if (section) section.classList.remove('hidden');
 
   const chart = createChart('chart-income-river');
   if (!chart) return;
@@ -1585,7 +1585,7 @@ function renderStateDeepDive(stateCode, data, accessData, bankData) {
   if (!section || !panel) return;
 
   if (!stateCode) {
-    section.style.display = 'none';
+    section.classList.add('hidden');
     return;
   }
 
@@ -1597,7 +1597,7 @@ function renderStateDeepDive(stateCode, data, accessData, bankData) {
   const bank = bankData?.states?.find(s => s.name === stateName);
 
   if (!fi) return;
-  section.style.display = '';
+  section.classList.remove('hidden');
 
   const coverage = fi.persons > 0 ? Math.round((fi.snapParticipation / fi.persons) * 100) : 'N/A';
   const accessPct = access ? access.lowAccessPct + '%' : 'N/A';

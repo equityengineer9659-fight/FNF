@@ -520,4 +520,21 @@ describe('snap-safety-net', () => {
       }
     });
   });
+
+  // ── hidden-class show/hide contract ──
+  describe('hidden-class reveal contract', () => {
+    it('snap-map-toggle-container starts with hidden class — JS must use classList.remove to reveal', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      const el = doc.getElementById('snap-map-toggle-container');
+      expect(el).not.toBeNull();
+      expect(el.classList.contains('hidden')).toBe(true);
+    });
+
+    it('section-demographic-flow starts with hidden class — JS must use classList.remove to reveal', () => {
+      const doc = parseHTML('snap-safety-net.html');
+      const section = doc.getElementById('section-demographic-flow');
+      expect(section).not.toBeNull();
+      expect(section.classList.contains('hidden')).toBe(true);
+    });
+  });
 });

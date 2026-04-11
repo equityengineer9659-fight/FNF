@@ -414,7 +414,7 @@ async function init() {
     // Surface reconciliation note if present in data
     if (bankData.national?._reconciliationNote) {
       const el = document.getElementById('density-reconciliation');
-      if (el) { el.textContent = bankData.national._reconciliationNote; el.style.display = ''; }
+      if (el) { el.textContent = bankData.national._reconciliationNote; el.classList.remove('hidden'); }
     }
     renderVsInsecurity(bankData.states);
     renderRevenue(bankData.states);

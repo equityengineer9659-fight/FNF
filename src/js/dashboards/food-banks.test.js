@@ -409,4 +409,14 @@ describe('food-banks', () => {
       expect(Number(reserve)).toBeCloseTo(5.4, 0);
     });
   });
+
+  // ── hidden-class show/hide contract ──
+  describe('hidden-class reveal contract', () => {
+    it('density-reconciliation starts with hidden class — JS must use classList.remove to reveal', () => {
+      const doc = parseHTML('food-banks.html');
+      const el = doc.getElementById('density-reconciliation');
+      expect(el).not.toBeNull();
+      expect(el.classList.contains('hidden')).toBe(true);
+    });
+  });
 });

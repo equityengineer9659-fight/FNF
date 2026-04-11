@@ -38,7 +38,7 @@ async function fetchCharityNavigator(ein) {
     if (!section) return;
 
     // Show the section
-    section.style.display = '';
+    section.classList.remove('hidden');
 
     // Render gauge chart for overall score
     const score = org.overallRating?.score;
@@ -223,7 +223,7 @@ function hasData(arr) {
 // -- Helper: show a chart section and create chart (must show BEFORE echarts.init) --
 function showAndCreateChart(sectionId, chartId) {
   const section = document.getElementById(sectionId);
-  if (section) section.style.display = '';
+  if (section) section.classList.remove('hidden');
   return createChart(chartId);
 }
 
@@ -758,7 +758,7 @@ function renderCompensation(data) {
   // Compensation gauge (most recent year)
   const gaugeContainer = document.getElementById('chart-compensation-gauge');
   if (gaugeContainer) {
-    gaugeContainer.style.display = '';
+    gaugeContainer.classList.remove('hidden');
     const gaugeChart = echarts.init(gaugeContainer, null, { renderer: 'canvas' });
 
     const compPct = compPctOfExpenses[compPctOfExpenses.length - 1];
@@ -929,7 +929,7 @@ function showInsight(id, text) {
   const el = document.getElementById(id);
   if (el && text) {
     el.textContent = text;
-    el.style.display = '';
+    el.classList.remove('hidden');
   }
 }
 
@@ -937,7 +937,7 @@ function showInsight(id, text) {
 function describeProfile(org, data, orgName) {
   const section = document.getElementById('profile-summary');
   if (!section) return;
-  section.style.display = '';
+  section.classList.remove('hidden');
 
   const n = data.years.length;
   const i = n - 1;
@@ -952,7 +952,7 @@ function describeProfile(org, data, orgName) {
     if (cleaned) {
       setText('contact-person-value', toTitleCase(cleaned));
       const personEl = document.getElementById('contact-person');
-      if (personEl) personEl.style.display = '';
+      if (personEl) personEl.classList.remove('hidden');
     }
   }
   setText('contact-address-value', org.address ? toTitleCase(org.address) : '\u2014');
@@ -1366,7 +1366,7 @@ function showError(msg) {
   if (errorEl) {
     const p = errorEl.querySelector('p');
     if (p) p.textContent = msg;
-    errorEl.style.display = '';
+    errorEl.classList.remove('hidden');
   }
 }
 
@@ -1389,7 +1389,7 @@ async function fetchPeerComparison(org, data) {
     if (peers.length < 3) return; // Not enough peers for meaningful comparison
 
     const section = document.getElementById('section-peer-comparison');
-    if (section) section.style.display = '';
+    if (section) section.classList.remove('hidden');
 
     const chart = createChart('chart-peer-comparison');
     if (!chart) return;
