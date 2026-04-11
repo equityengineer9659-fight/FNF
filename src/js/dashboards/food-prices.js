@@ -5,7 +5,7 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES, LEGEND_TEXT_STYLE,
+  echarts, COLORS, accentRgba, TOOLTIP_STYLE, MAP_PALETTES, LEGEND_TEXT_STYLE,
   animateCounters, createChart,
   updateFreshness, initScrollReveal, handleResize, addExportButton,
   US_STATES
@@ -33,7 +33,7 @@ function renderCategories(data) {
   const dates = normalizedSeries[0].data.map(d => d.date);
   const lineColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', '#f59e0b', '#ec4899', COLORS.primary];
   const areaColors = [
-    ['rgba(255,107,53,0.2)', 'rgba(255,107,53,0.02)'],
+    [accentRgba(0.2), accentRgba(0.02)],
     ['rgba(0,212,255,0.2)', 'rgba(0,212,255,0.02)'],
     ['rgba(167,139,250,0.2)', 'rgba(167,139,250,0.02)'],
     ['rgba(52,211,153,0.2)', 'rgba(52,211,153,0.02)'],
@@ -351,8 +351,8 @@ function renderHomeVsAway(blsData) {
         symbol: 'none',
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(255,107,53,0.2)' },
-            { offset: 1, color: 'rgba(255,107,53,0.01)' }
+            { offset: 0, color: accentRgba(0.2) },
+            { offset: 1, color: accentRgba(0.01) }
           ])
         },
         markArea: {
@@ -460,8 +460,8 @@ function renderYoYInflation(blsData) {
         itemStyle: { color: COLORS.accent },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(255,107,53,0.15)' },
-            { offset: 1, color: 'rgba(255,107,53,0)' }
+            { offset: 0, color: accentRgba(0.15) },
+            { offset: 1, color: accentRgba(0) }
           ])
         }
       },
@@ -656,8 +656,8 @@ function renderPurchasingPower(blsData, snapBenefits) {
         itemStyle: { color: COLORS.accent },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(255,107,53,0.15)' },
-            { offset: 1, color: 'rgba(255,107,53,0)' }
+            { offset: 0, color: accentRgba(0.15) },
+            { offset: 1, color: accentRgba(0) }
           ])
         }
       },
@@ -778,7 +778,7 @@ function renderCpiVsInsecurity(blsData, fiTrend) {
         name: 'Food CPI', type: 'line', data: cpiValues, smooth: true, symbol: 'none',
         lineStyle: { width: 2.5, color: COLORS.accent },
         itemStyle: { color: COLORS.accent },
-        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(255,107,53,0.15)' }, { offset: 1, color: 'rgba(255,107,53,0.01)' }]) }
+        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: accentRgba(0.15) }, { offset: 1, color: accentRgba(0.01) }]) }
       },
       {
         name: 'Food Insecurity Rate', type: 'line', yAxisIndex: 1, data: fiAligned,

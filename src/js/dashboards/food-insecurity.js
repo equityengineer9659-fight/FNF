@@ -5,7 +5,7 @@
  */
 
 import {
-  echarts, COLORS, TOOLTIP_STYLE, MAP_PALETTES,
+  echarts, COLORS, accentRgba, TOOLTIP_STYLE, MAP_PALETTES,
   fmtNum, animateCounters, createChart, linearRegression,
   updateFreshness, initScrollReveal, handleResize,
   REGION_COLORS, REGION_CLASS, getRegion, addExportButton, US_STATES
@@ -1046,8 +1046,8 @@ function renderFoodPrices(blsData) {
         symbol: 'none',
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: 'rgba(255,107,53,0.2)' },
-            { offset: 1, color: 'rgba(255,107,53,0.01)' }
+            { offset: 0, color: accentRgba(0.2) },
+            { offset: 1, color: accentRgba(0.01) }
           ])
         }
       },

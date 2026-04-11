@@ -56,6 +56,9 @@ export const COLORS = {
   mapHigh: '#e74c3c'
 };
 
+/** Returns `rgba(255,107,53,<a>)` — the COLORS.accent (#ff6b35) at any opacity. */
+export function accentRgba(a) { return `rgba(255,107,53,${a})`; }
+
 // Shared ECharts legend text style — keeps font sizing consistent across all
 // dashboards. Audit P3-05: previously inconsistent (10px / 11px / unset).
 export const LEGEND_TEXT_STYLE = {
