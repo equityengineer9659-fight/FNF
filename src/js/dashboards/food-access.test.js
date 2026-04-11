@@ -634,4 +634,21 @@ describe('food-access', () => {
       expect(overlap.length).toBeGreaterThanOrEqual(48);
     });
   });
+
+  // ── hidden-class show/hide contract ──
+  describe('hidden-class reveal contract', () => {
+    it('section-sdoh-access starts with hidden class — JS must use classList.remove to reveal', () => {
+      const doc = parseHTML('food-access.html');
+      const section = doc.getElementById('section-sdoh-access');
+      expect(section).not.toBeNull();
+      expect(section.classList.contains('hidden')).toBe(true);
+    });
+
+    it('freshness-snap-retailers starts with hidden class — JS must use classList to toggle', () => {
+      const doc = parseHTML('food-access.html');
+      const el = doc.getElementById('freshness-snap-retailers');
+      expect(el).not.toBeNull();
+      expect(el.classList.contains('hidden')).toBe(true);
+    });
+  });
 });

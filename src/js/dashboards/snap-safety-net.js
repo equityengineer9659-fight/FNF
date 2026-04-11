@@ -608,7 +608,7 @@ async function fetchCDCPlacesSnap() {
 
     // Show the toggle buttons now that CDC data is available
     const toggleContainer = document.getElementById('snap-map-toggle-container');
-    if (toggleContainer) toggleContainer.style.display = '';
+    if (toggleContainer) toggleContainer.classList.remove('hidden');
     const cdcStatus = document.getElementById('snap-map-cdc-status');
     if (cdcStatus) cdcStatus.textContent = 'CDC self-reported data loaded. Toggle available to compare administrative and self-reported SNAP data.';
 
@@ -629,7 +629,7 @@ async function fetchDemographicData(snapData) {
     if (!sdoh.states.some(s => s.race)) return;
 
     const section = document.getElementById('section-demographic-flow');
-    if (section) section.style.display = '';
+    if (section) section.classList.remove('hidden');
 
     renderDemographicFlow(sdoh, snapData);
     updateFreshness('demographic-flow', sdoh);

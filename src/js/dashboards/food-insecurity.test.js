@@ -733,4 +733,42 @@ describe('food-insecurity', () => {
       expect(php).toMatch(/fiRate \* 1\.4/);
     });
   });
+
+  // ── hidden-class show/hide contract ──
+  describe('hidden-class reveal contract', () => {
+    it('section-sdoh starts with hidden class — JS must use classList.remove to reveal', () => {
+      const doc = parseHTML('food-insecurity.html');
+      const section = doc.getElementById('section-sdoh');
+      expect(section).not.toBeNull();
+      expect(section.classList.contains('hidden')).toBe(true);
+    });
+
+    it('section-income-river starts with hidden class — JS must use classList.remove to reveal', () => {
+      const doc = parseHTML('food-insecurity.html');
+      const section = doc.getElementById('section-income-river');
+      expect(section).not.toBeNull();
+      expect(section.classList.contains('hidden')).toBe(true);
+    });
+
+    it('section-state-deepdive starts with hidden class — JS must use classList.remove to reveal', () => {
+      const doc = parseHTML('food-insecurity.html');
+      const section = doc.getElementById('section-state-deepdive');
+      expect(section).not.toBeNull();
+      expect(section.classList.contains('hidden')).toBe(true);
+    });
+
+    it('classList.remove("hidden") reveals an element; style.display="" does not', () => {
+      // Documents the exact regression: CSP migration added .hidden class but JS used style.display=""
+      const el = document.createElement('div');
+      el.classList.add('hidden');
+
+      // Wrong pattern (the bug): clearing inline style has no effect on the CSS class
+      el.style.display = '';
+      expect(el.classList.contains('hidden')).toBe(true);
+
+      // Correct pattern (the fix)
+      el.classList.remove('hidden');
+      expect(el.classList.contains('hidden')).toBe(false);
+    });
+  });
 });
