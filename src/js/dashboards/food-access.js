@@ -22,6 +22,37 @@ const PAL = MAP_PALETTES.access;
 // Module-level cache: restored when back button resets to national desert view
 let _lowAccessDefaultInsight = '';
 
+// Desert map state tooltip (pure — depends only on fmtNum)
+function desertStateTooltip(params) {
+  const d = params.data;
+  if (!d) return '';
+  return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
+    <span class="csp-text-secondary">Low-Access Tracts:</span> ${d.value}%<br/>
+    Population: ${fmtNum(d.population)}<br/>
+    Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>
+    Avg Distance: ${d.avgDistance} mi<br/>
+    <span class="csp-text-secondary-sm">Click to see counties</span>`;
+}
+
+// Desert map county tooltip (pure — depends only on fmtNum)
+function desertCountyTooltip(params) {
+  const d = params.data;
+  if (!d) return '';
+  if (d._currentData) {
+    let html = `<strong class="fnf-tooltip-label">${d.name}</strong><br/>`;
+    html += `<span class="csp-text-secondary">Low-Access Tracts:</span> ${d.lowAccessTracts} of ${d.totalTracts} (${d.value}%)<br/>`;
+    if (d.lowAccessPopulation) html += `Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>`;
+    if (d.avgDistance) html += `Avg Distance to Store: ${d.avgDistance} mi<br/>`;
+    html += `Type: ${d.isUrban ? 'Urban' : 'Rural'}`;
+    return html;
+  }
+  return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
+    Population: ${fmtNum(d.population || 0)}<br/>
+    ${d.povertyRate != null ? `<span class="csp-text-secondary">Poverty Rate:</span> ${d.povertyRate}%<br/>` : ''}
+    ${d.rate != null ? `Food Insecurity: ${d.rate}%<br/>` : ''}
+    ${d.mealCost != null ? `Avg Meal Cost: $${d.mealCost}` : ''}`;
+}
+
 // -- Chart 1: Food Desert Map (choropleth) with County Drill-Down --
 function renderDesertMap(geoJSON, states, accessData) {
   const chart = getOrCreateChart('chart-desert-map');
@@ -31,36 +62,6 @@ function renderDesertMap(geoJSON, states, accessData) {
   echarts.registerMap('USA-access', geoJSON);
 
   let currentView = 'national';
-
-  function stateTooltip(params) {
-    const d = params.data;
-    if (!d) return '';
-    return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-      <span class="csp-text-secondary">Low-Access Tracts:</span> ${d.value}%<br/>
-      Population: ${fmtNum(d.population)}<br/>
-      Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>
-      Avg Distance: ${d.avgDistance} mi<br/>
-      <span class="csp-text-secondary-sm">Click to see counties</span>`;
-  }
-
-  function countyTooltip(params) {
-    const d = params.data;
-    if (!d) return '';
-    // Enhanced tooltip when current food access data is available
-    if (d._currentData) {
-      let html = `<strong class="fnf-tooltip-label">${d.name}</strong><br/>`;
-      html += `<span class="csp-text-secondary">Low-Access Tracts:</span> ${d.lowAccessTracts} of ${d.totalTracts} (${d.value}%)<br/>`;
-      if (d.lowAccessPopulation) html += `Low-Access Population: ${fmtNum(d.lowAccessPopulation)}<br/>`;
-      if (d.avgDistance) html += `Avg Distance to Store: ${d.avgDistance} mi<br/>`;
-      html += `Type: ${d.isUrban ? 'Urban' : 'Rural'}`;
-      return html;
-    }
-    return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-      Population: ${fmtNum(d.population || 0)}<br/>
-      ${d.povertyRate != null ? `<span class="csp-text-secondary">Poverty Rate:</span> ${d.povertyRate}%<br/>` : ''}
-      ${d.rate != null ? `Food Insecurity: ${d.rate}%<br/>` : ''}
-      ${d.mealCost != null ? `Avg Meal Cost: $${d.mealCost}` : ''}`;
-  }
 
   function showNational() {
     currentView = 'national';
@@ -80,7 +81,7 @@ function renderDesertMap(geoJSON, states, accessData) {
     if (lowAccessInsight && _lowAccessDefaultInsight) lowAccessInsight.innerHTML = _lowAccessDefaultInsight;
 
     chart.setOption({
-      tooltip: { trigger: 'item', ...TOOLTIP_STYLE, formatter: stateTooltip },
+      tooltip: { trigger: 'item', ...TOOLTIP_STYLE, formatter: desertStateTooltip },
       visualMap: {
         left: 'right', bottom: 20, min: 20, max: 65,
         text: ['More Deserts', 'Fewer Deserts'], calculable: true,
@@ -176,7 +177,7 @@ function renderDesertMap(geoJSON, states, accessData) {
       chart.hideLoading();
 
       chart.setOption({
-        tooltip: { trigger: 'item', ...TOOLTIP_STYLE, formatter: countyTooltip },
+        tooltip: { trigger: 'item', ...TOOLTIP_STYLE, formatter: desertCountyTooltip },
         visualMap: {
           min, max, text: vmText, calculable: true,
           inRange: { color: [PAL.low, PAL.mid, PAL.high] },
