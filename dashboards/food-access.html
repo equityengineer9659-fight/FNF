@@ -368,21 +368,21 @@
                         <!-- Mode toggle + encoding key -->
                         <div class="dashboard-toggle-stack">
                             <div id="double-burden-mode-toggle" class="dashboard-db-toggle-group" role="group" aria-label="Visualization mode">
-                                <button class="dashboard-metric-btn dashboard-metric-btn--active dashboard-db-toggle-btn--first" data-db-mode="treemap" aria-pressed="true">Total Affected</button>
-                                <button class="dashboard-metric-btn dashboard-db-toggle-btn--last" data-db-mode="tiles" aria-pressed="false">Rate Comparison</button>
+                                <button class="dashboard-metric-btn dashboard-metric-btn--active dashboard-db-toggle-btn--first" data-db-mode="tiles" aria-pressed="true">Rate Comparison</button>
+                                <button class="dashboard-metric-btn dashboard-db-toggle-btn--last" data-db-mode="treemap" aria-pressed="false">Total Affected</button>
                             </div>
-                            <p id="db-encoding-treemap" class="dashboard-encoding-hint"><span class="dashboard-encoding-hint__em">Size</span> = affected population (&#8730; scaled) &nbsp;&middot;&nbsp; <span class="dashboard-encoding-hint__em">Color</span> = % of state population</p>
-                            <p id="db-encoding-tiles" class="dashboard-encoding-hint hidden">Equal tile size &nbsp;&middot;&nbsp; <span class="dashboard-encoding-hint__em">Color</span> = % of state population affected</p>
+                            <p id="db-encoding-treemap" class="dashboard-encoding-hint hidden"><span class="dashboard-encoding-hint__em">Size</span> = affected population (&#8730; scaled) &nbsp;&middot;&nbsp; <span class="dashboard-encoding-hint__em">Color</span> = % of state population</p>
+                            <p id="db-encoding-tiles" class="dashboard-encoding-hint">Equal tile size &nbsp;&middot;&nbsp; <span class="dashboard-encoding-hint__em">Color</span> = % of state population affected</p>
                         </div>
-                        <!-- Mode A: D3 Treemap -->
-                        <div id="double-burden-breadcrumb" class="dashboard-breadcrumb"></div>
-                        <div id="chart-double-burden" class="dashboard-chart" role="region" aria-label="Treemap showing estimated low-income low-access population by state, sized by affected count and colored by rate"></div>
-                        <!-- Mode B: Equal tiles -->
-                        <div id="chart-double-burden-tiles" class="hidden dashboard-tile-grid-padded" role="region" aria-label="Equal-tile rate comparison of low-income low-access population by state"></div>
+                        <!-- Mode A: D3 Treemap (hidden by default) -->
+                        <div id="double-burden-breadcrumb" class="dashboard-breadcrumb" style="display:none"></div>
+                        <div id="chart-double-burden" class="dashboard-chart" style="display:none" role="region" aria-label="Treemap showing estimated low-income low-access population by state, sized by affected count and colored by rate"></div>
+                        <!-- Mode B: Equal tiles (default) -->
+                        <div id="chart-double-burden-tiles" class="dashboard-tile-grid-padded" role="region" aria-label="Equal-tile rate comparison of low-income low-access population by state"></div>
                         <!-- Shared legend -->
                         <div id="treemap-legend-access" class="dashboard-chart__legend"></div>
-                        <div id="double-burden-region-legend" class="dashboard-region-legend"></div>
-                        <p id="db-hint-text" class="dashboard-chart__hint dashboard-chart__hint--faint">Click a region to zoom in. Click breadcrumb to zoom out.</p>
+                        <div id="double-burden-region-legend" class="dashboard-region-legend" style="display:none"></div>
+                        <p id="db-hint-text" class="dashboard-chart__hint dashboard-chart__hint--faint">Sorted by rate within each region. Hover for details.</p>
                     </div>
                     <div class="dashboard-chart-row__info">
                         <h3 class="dashboard-info__title">Where Poverty and Low Access Overlap</h3>

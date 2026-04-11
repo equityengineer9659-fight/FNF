@@ -578,6 +578,7 @@ function initDoubleBurdenModeToggle() {
 
       const isTreemap = mode === 'treemap';
       if (treemapEl) treemapEl.style.display = isTreemap ? '' : 'none';
+      if (isTreemap && treemapEl?._renderTreemapOnce) treemapEl._renderTreemapOnce();
       if (breadcrumb) breadcrumb.style.display = isTreemap ? '' : 'none';
       if (tilesEl) tilesEl.classList.toggle('hidden', isTreemap);
       if (encodingTree) encodingTree.style.display = isTreemap ? '' : 'none';
@@ -628,34 +629,42 @@ function renderDoubleBurden(states) {
   if (!isFinite(pctMin) || !isFinite(pctMax)) return;
   const rankNorm = createRankNorm(pctValues);
 
-  // Mode A: D3 Treemap (size = √population, color = rank-normalized rate)
-  createD3Heatmap({
-    containerId: 'chart-double-burden',
-    breadcrumbId: 'double-burden-breadcrumb',
-    hierarchyData: {
-      name: 'United States',
-      children: Object.keys(REGIONS).map(region => ({
-        name: region,
-        children: enriched.filter(s => s.region === region)
-      }))
-    },
-    tooltipFn: (leaf) => {
-      const d = leaf.data;
-      const region = leaf.parent ? leaf.parent.data.name : d.region;
-      const rc = HEATMAP_REGION_COLORS[region] || '#888';
-      return `<strong class="fnf-tooltip-label">${d.name}</strong>
-        <span class="csp-tooltip-inline-flex">
-          <svg class="csp-swatch" width="8" height="8"><rect rx="2" width="8" height="8" fill="${rc}"/></svg>
-          <span class="${HEATMAP_REGION_CLASS[region] || ''}">${region}</span>
-        </span><br/>
-        <span class="text-accent-indigo">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
-        <span class="text-accent-indigo">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
-        <hr class="fnf-tooltip-divider">
-        <span class="fnf-tooltip-muted">Population: ${fmtNum(d.population)}<br/>
-        Low-Access Tracts: ${d.lowAccessPct}%</span>`;
-    },
-    normFn: (leaf) => rankNorm(parseFloat(leaf.data.pctOfPop) || 0)
-  });
+  // Mode A: D3 Treemap — deferred until user switches to treemap mode
+  // (container starts hidden; D3 needs visible dimensions to layout)
+  let treemapRendered = false;
+  const renderTreemapOnce = () => {
+    if (treemapRendered) return;
+    treemapRendered = true;
+    createD3Heatmap({
+      containerId: 'chart-double-burden',
+      breadcrumbId: 'double-burden-breadcrumb',
+      hierarchyData: {
+        name: 'United States',
+        children: Object.keys(REGIONS).map(region => ({
+          name: region,
+          children: enriched.filter(s => s.region === region)
+        }))
+      },
+      tooltipFn: (leaf) => {
+        const d = leaf.data;
+        const region = leaf.parent ? leaf.parent.data.name : d.region;
+        const rc = HEATMAP_REGION_COLORS[region] || '#888';
+        return `<strong class="fnf-tooltip-label">${d.name}</strong>
+          <span class="csp-tooltip-inline-flex">
+            <svg class="csp-swatch" width="8" height="8"><rect rx="2" width="8" height="8" fill="${rc}"/></svg>
+            <span class="${HEATMAP_REGION_CLASS[region] || ''}">${region}</span>
+          </span><br/>
+          <span class="text-accent-indigo">% of State Pop:</span> <strong>${d.pctOfPop}%</strong><br/>
+          <span class="text-accent-indigo">Est. Affected:</span> <strong>${fmtNum(d.estimate)}</strong>
+          <hr class="fnf-tooltip-divider">
+          <span class="fnf-tooltip-muted">Population: ${fmtNum(d.population)}<br/>
+          Low-Access Tracts: ${d.lowAccessPct}%</span>`;
+      },
+      normFn: (leaf) => rankNorm(parseFloat(leaf.data.pctOfPop) || 0)
+    });
+  };
+  // Expose for the toggle handler
+  container._renderTreemapOnce = renderTreemapOnce;
 
   // Mode B: equal tiles (pre-rendered, toggled by CSS display)
   renderDoubleBurdenTiles(enriched, rankNorm);
@@ -1060,7 +1069,7 @@ function drawAccessInsecurityScatter(chart, points, { xLabel, yLabel, tooltipFn,
     legend: legendOpt,
     visualMap: visualMapOpt,
     tooltip: { ...TOOLTIP_STYLE, formatter: tooltipFn },
-    grid: { left: 55, right: 20, top: 35, bottom: 50 },
+    grid: { left: 55, right: regionBased ? 20 : 80, top: 35, bottom: 50 },
     xAxis: {
       name: xLabel, nameLocation: 'center', nameGap: 35,
       nameTextStyle: { color: COLORS.textMuted },

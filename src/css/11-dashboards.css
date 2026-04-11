@@ -305,6 +305,8 @@
   padding: 1.75rem;
   max-width: 600px;
   margin: 0 auto;
+  position: relative;
+  z-index: 10;
 }
 
 .dashboard-search__label {
@@ -318,7 +320,7 @@
 .dashboard-search__wrapper {
   position: relative;
   margin: 0 auto;
-  z-index: 100;
+  z-index: 200;
 }
 
 .dashboard-search__input {
@@ -354,7 +356,7 @@
   border-radius: 0 0 0.5rem 0.5rem;
   max-height: 240px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 200;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -406,7 +408,7 @@
 }
 
 .dashboard-chart-row--stacked .dashboard-chart {
-  height: 560px;
+  height: 480px;
 }
 
 .dashboard-chart-row--stacked .dashboard-chart-row__info {
@@ -759,16 +761,16 @@
 }
 
 .dashboard-metric-separator {
-  display: flex;
-  align-items: center;
+  width: 100%;
+  text-align: center;
   color: rgba(255, 255, 255, 0.45);
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.25rem 0.5rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.18);
-  margin-left: 0.25rem;
+  padding: 0.15rem 0;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Scroll Reveal Animations */

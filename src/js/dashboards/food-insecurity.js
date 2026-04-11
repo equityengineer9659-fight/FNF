@@ -517,6 +517,8 @@ function renderTrend(data) {
     yAxis: {
       type: 'value',
       name: 'Rate (%)',
+      nameLocation: 'middle',
+      nameGap: 35,
       nameTextStyle: { color: COLORS.textMuted },
       axisLabel: { color: COLORS.textMuted, formatter: '{value}%' },
       splitLine: { lineStyle: { color: COLORS.gridLine } }
@@ -960,8 +962,8 @@ function renderSnap(data) {
         itemStyle: {
           borderRadius: [0, 3, 3, 0],
           color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            { offset: 0, color: 'rgba(1,118,211,0.7)' },
-            { offset: 1, color: COLORS.primary }
+            { offset: 0, color: accentRgba(0.6) },
+            { offset: 1, color: COLORS.accent }
           ])
         },
         animationDuration: 1500
@@ -974,7 +976,7 @@ function renderSnap(data) {
         itemStyle: {
           borderRadius: [0, 3, 3, 0],
           color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            { offset: 0, color: COLORS.primary },
+            { offset: 0, color: 'rgba(0,212,255,0.5)' },
             { offset: 1, color: COLORS.secondary }
           ])
         },
@@ -1208,7 +1210,7 @@ function initSDOHButtons(sdoh, fiData) {
   }).join('');
 
   if (placesAvailable && placesMetrics.length) {
-    html += '<span class="dashboard-metric-separator" aria-hidden="true">Health Outcomes</span>';
+    html += '<div class="dashboard-metric-separator" aria-hidden="true">Health Outcomes</div>';
     html += placesMetrics.map(m => {
       const isActive = m.key === activeKey;
       return `<button class="dashboard-metric-btn${isActive ? ' dashboard-metric-btn--active' : ''}" data-sdoh-metric="${m.key}" aria-pressed="${isActive}">${m.label}</button>`;
@@ -1413,7 +1415,8 @@ function renderIncomeRiver(sdoh, fiData) {
         if (!state) return '';
         let html = `<strong>${state.name}</strong> (FI: ${state.fiRate}%)<br/>`;
         params.forEach(p => {
-          html += `<svg class="csp-swatch" width="8" height="8"><circle cx="4" cy="4" r="4" fill="${p.color}"/></svg>${p.dimensionNames?.[1] || p.seriesName}: ${p.value[1]}%<br/>`;
+          const bandName = p.value[2] || p.dimensionNames?.[1] || p.seriesName;
+          html += `<svg class="csp-swatch" width="8" height="8"><circle cx="4" cy="4" r="4" fill="${p.color}"/></svg>${bandName}: ${p.value[1]}%<br/>`;
         });
         return html;
       }
@@ -1451,7 +1454,7 @@ function renderIncomeRiver(sdoh, fiData) {
       type: 'themeRiver',
       data: riverData,
       label: { show: false },
-      emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.3)' } },
+      emphasis: { label: { show: false }, itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.3)' } },
       color: INCOME_BANDS.map(b => b.color)
     }]
   });
