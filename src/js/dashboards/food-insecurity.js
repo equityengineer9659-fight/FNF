@@ -20,71 +20,87 @@ const LOW_ACCESS_COLOR = '#f59e0b'; // amber — used in Triple Burden + State D
 // to module scope so it can't leak to other scripts or be clobbered globally.
 let _stateData = null;
 
+// Metric configuration shared across map views
+const MAP_METRICS = {
+  rate: { name: 'Food Insecurity Rate', suffix: '%', min: 8, max: 20 },
+  childRate: { name: 'Child Food Insecurity', suffix: '%', min: 10, max: 30 },
+  persons: { name: 'Food Insecure Persons', suffix: '', min: 0, max: 5000000 },
+  mealGap: { name: 'Annual Meal Gap', suffix: '', min: 0, max: 900000000 },
+  mealCost: { name: 'Average Meal Cost', suffix: '$', min: 3, max: 5.5 },
+  snapCoverage: { name: 'SNAP Coverage Ratio', suffix: '%', min: 40, max: 150 }
+};
+
+// State tooltip formatter (pure — depends only on fmtNum)
+function stateTooltip(params) {
+  const d = params.data;
+  if (!d) return '';
+  return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
+    <span class="csp-text-secondary">Food Insecurity:</span> ${d.rate}%<br/>
+    <span class="csp-text-accent">Child Rate:</span> ${d.childRate}%<br/>
+    Persons: ${fmtNum(d.persons)}<br/>
+    Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
+    Avg Meal Cost: $${d.mealCost}<br/>
+    Poverty Rate: ${d.povertyRate}%<br/>
+    SNAP: ${fmtNum(d.snapParticipation)} (${d.snapCoverage || '—'}% coverage)<br/>
+    <span class="csp-text-secondary-sm">Click to see counties</span>`;
+}
+
+// County tooltip formatter (pure — depends only on fmtNum)
+function countyTooltip(params) {
+  const d = params.data;
+  if (!d) return '';
+  return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
+    Population: ${fmtNum(d.population || 0)}<br/>
+    <span class="csp-text-secondary">Food Insecurity:</span> ${d.rate}%<br/>
+    <span class="csp-text-accent">Child Rate:</span> ${d.childRate}%<br/>
+    Poverty Rate: ${d.povertyRate}%<br/>
+    Persons: ${fmtNum(d.persons)}<br/>
+    Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
+    Avg Meal Cost: $${d.mealCost} <span class="fnf-tooltip-muted">(state avg)</span>`;
+}
+
+// Format a metric value for insight text (used by both drillDown and click handler)
+function fmtMetricVal(value, metricKey) {
+  const cfg = MAP_METRICS[metricKey];
+  if (metricKey === 'mealCost') return `$${value}`;
+  if (metricKey === 'persons' || metricKey === 'mealGap') return fmtNum(value);
+  return `${value}${cfg.suffix}`;
+}
+
+// Build insight text comparing a county value to its state average
+function buildCountyInsight(countyName, countyValue, stateObj, metricKey) {
+  const cfg = MAP_METRICS[metricKey];
+  const stateVal = stateObj[metricKey] ?? stateObj.rate;
+  const diff = typeof countyValue === 'number' && typeof stateVal === 'number'
+    ? (countyValue - stateVal).toFixed(metricKey === 'mealCost' ? 2 : 1)
+    : null;
+  const sign = diff !== null && diff >= 0 ? '+' : '';
+  const diffStr = diff !== null ? ` (${sign}${diff}${metricKey === 'mealCost' ? '' : cfg.suffix} vs. ${stateObj.name} avg of ${fmtMetricVal(stateVal, metricKey)})` : '';
+  return `${countyName}: ${cfg.name.toLowerCase()} ${fmtMetricVal(countyValue, metricKey)}${diffStr}. ~${fmtNum(stateObj.persons)} residents affected (modeled estimate).`;
+}
+
 // -- Map Chart with County Drill-Down --
 function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
   const chart = createChart('chart-map');
   if (!chart) return;
 
-  // Albers projection identity (data is pre-projected)
-  const albersProjection = {
-    project: (point) => point,
-    unproject: (point) => point
-  };
-
+  const albersProjection = { project: (point) => point, unproject: (point) => point };
   echarts.registerMap('USA', geoJSON);
 
-  // Compute SNAP coverage ratio per state and attach to state objects
+  // Compute SNAP coverage ratio per state
   data.states.forEach(s => {
     s.snapCoverage = s.persons > 0 ? Math.round((s.snapParticipation / s.persons) * 100) : 0;
   });
 
-  const metricConfig = {
-    rate: { name: 'Food Insecurity Rate', suffix: '%', min: 8, max: 20 },
-    childRate: { name: 'Child Food Insecurity', suffix: '%', min: 10, max: 30 },
-    persons: { name: 'Food Insecure Persons', suffix: '', min: 0, max: 5000000 },
-    mealGap: { name: 'Annual Meal Gap', suffix: '', min: 0, max: 900000000 },
-    mealCost: { name: 'Average Meal Cost', suffix: '$', min: 3, max: 5.5 },
-    snapCoverage: { name: 'SNAP Coverage Ratio', suffix: '%', min: 40, max: 150 }
-  };
-
-  // State for drill-down
+  // Drill-down state
   let currentView = 'national';
   let currentMetric = metric;
   let currentStateName = '';
 
-  // State tooltip formatter
-  function stateTooltip(params) {
-    const d = params.data;
-    if (!d) return '';
-    return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-      <span class="csp-text-secondary">Food Insecurity:</span> ${d.rate}%<br/>
-      <span class="csp-text-accent">Child Rate:</span> ${d.childRate}%<br/>
-      Persons: ${fmtNum(d.persons)}<br/>
-      Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
-      Avg Meal Cost: $${d.mealCost}<br/>
-      Poverty Rate: ${d.povertyRate}%<br/>
-      SNAP: ${fmtNum(d.snapParticipation)} (${d.snapCoverage || '—'}% coverage)<br/>
-      <span class="csp-text-secondary-sm">Click to see counties</span>`;
-  }
-
-  // County tooltip formatter
-  function countyTooltip(params) {
-    const d = params.data;
-    if (!d) return '';
-    return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
-      Population: ${fmtNum(d.population || 0)}<br/>
-      <span class="csp-text-secondary">Food Insecurity:</span> ${d.rate}%<br/>
-      <span class="csp-text-accent">Child Rate:</span> ${d.childRate}%<br/>
-      Poverty Rate: ${d.povertyRate}%<br/>
-      Persons: ${fmtNum(d.persons)}<br/>
-      Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
-      Avg Meal Cost: $${d.mealCost} <span class="fnf-tooltip-muted">(state avg)</span>`;
-  }
-
   // Show national (state-level) view
   function showNational() {
     currentView = 'national';
-    const cfg = metricConfig[currentMetric];
+    const cfg = MAP_METRICS[currentMetric];
     const mapData = data.states.map(s => ({ name: s.name, value: s[currentMetric], ...s }));
 
     // Hide back button
@@ -203,7 +219,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
           textStyle: { color: COLORS.text }
         },
         series: [{
-          name: metricConfig[currentMetric].name,
+          name: MAP_METRICS[currentMetric].name,
           type: 'map',
           map: mapName,
           roam: false,
@@ -227,20 +243,15 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
         }]
       }, true);
 
-      // Update insight callout with worst county in this state (by current metric)
+      // Update insight callout with worst county
       const worst = countyData.reduce((a, b) => (b.value ?? 0) > (a.value ?? 0) ? b : a, countyData[0]);
       const stateObj = data.states.find(s => s.name === stateName);
       const mapInsight = document.getElementById('map-insight');
       if (mapInsight && worst && stateObj) {
-        const cfg = metricConfig[currentMetric];
-        const fmtVal = v => currentMetric === 'mealCost' ? `$${v}` : currentMetric === 'persons' || currentMetric === 'mealGap' ? fmtNum(v) : `${v}${cfg.suffix}`;
-        const stateVal = stateObj[currentMetric] ?? stateObj.rate;
-        const diff = typeof worst.value === 'number' && typeof stateVal === 'number'
-          ? (worst.value - stateVal).toFixed(currentMetric === 'mealCost' ? 2 : 1)
-          : null;
-        const sign = diff !== null && diff >= 0 ? '+' : '';
-        const diffStr = diff !== null ? ` — ${sign}${diff}${currentMetric === 'mealCost' ? '' : cfg.suffix} vs. state avg` : '';
-        mapInsight.textContent = `Within ${stateName}, ${worst.name} has the highest ${cfg.name.toLowerCase()} at ${fmtVal(worst.value)}${diffStr} (modeled estimate).`;
+        const cfg = MAP_METRICS[currentMetric];
+        const diffStr = buildCountyInsight(worst.name, worst.value, stateObj, currentMetric)
+          ? ` — ${(worst.value - (stateObj[currentMetric] ?? stateObj.rate)).toFixed(currentMetric === 'mealCost' ? 2 : 1).replace(/^([^-])/, '+$1')}${currentMetric === 'mealCost' ? '' : cfg.suffix} vs. state avg` : '';
+        mapInsight.textContent = `Within ${stateName}, ${worst.name} has the highest ${cfg.name.toLowerCase()} at ${fmtMetricVal(worst.value, currentMetric)}${diffStr} (modeled estimate).`;
       }
 
       // Highlight specific county if requested (from search)
@@ -276,15 +287,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
       const stateObj = data.states.find(s => s.name === currentStateName);
       const insight = document.getElementById('map-insight');
       if (insight && d.value != null && stateObj) {
-        const cfg = metricConfig[currentMetric];
-        const fmtVal = v => currentMetric === 'mealCost' ? `$${v}` : currentMetric === 'persons' || currentMetric === 'mealGap' ? fmtNum(v) : `${v}${cfg.suffix}`;
-        const stateVal = stateObj[currentMetric] ?? stateObj.rate;
-        const diff = typeof d.value === 'number' && typeof stateVal === 'number'
-          ? (d.value - stateVal).toFixed(currentMetric === 'mealCost' ? 2 : 1)
-          : null;
-        const sign = diff !== null && diff >= 0 ? '+' : '';
-        const diffStr = diff !== null ? ` (${sign}${diff}${currentMetric === 'mealCost' ? '' : cfg.suffix} vs. ${currentStateName} avg of ${fmtVal(stateVal)})` : '';
-        insight.textContent = `${d.name}: ${cfg.name.toLowerCase()} ${fmtVal(d.value)}${diffStr}. ~${fmtNum(d.persons)} residents affected (modeled estimate).`;
+        insight.textContent = buildCountyInsight(d.name, d.value, stateObj, currentMetric);
       }
     }
   });
