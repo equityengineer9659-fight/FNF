@@ -28,23 +28,31 @@ export async function initSentry() {
   }
 
   try {
-    // Dynamic import to avoid issues in development
-    const Sentry = await import('@sentry/browser');
+    // Import via shim for tree-shaking — only re-exported APIs are bundled
+    const {
+      init, setUser, setTag,
+      captureException: _captureException,
+      captureMessage: _captureMessage,
+      addBreadcrumb: _addBreadcrumb,
+      globalHandlersIntegration, linkedErrorsIntegration,
+      dedupeIntegration, inboundFiltersIntegration
+    } = await import('./sentry-shim.js');
 
-    Sentry.init({
+    init({
       dsn,
       environment,
-
-      // Setting this option to true will send default PII data to Sentry
-      // (like IP addresses for geolocation)
       sendDefaultPii: false,
 
-      // Set sample rate for performance monitoring (10% of transactions)
-      tracesSampleRate: 0.1,
+      // Only load integrations we actually need — skip BrowserApiErrors,
+      // Breadcrumbs, FunctionToString, HttpContext to reduce bundle
+      integrations: [
+        globalHandlersIntegration(),
+        linkedErrorsIntegration(),
+        dedupeIntegration(),
+        inboundFiltersIntegration()
+      ],
 
-      // Filter out errors from browser extensions
       beforeSend(event, hint) {
-        // Filter out errors from browser extensions
         const error = hint.originalException;
         if (
           error &&
@@ -54,13 +62,10 @@ export async function initSentry() {
         ) {
           return null;
         }
-
         return event;
       },
 
-      // Add custom context
       beforeBreadcrumb(breadcrumb) {
-        // Don't capture console.log breadcrumbs
         if (breadcrumb.category === 'console' && breadcrumb.level === 'log') {
           return null;
         }
@@ -68,17 +73,12 @@ export async function initSentry() {
       },
     });
 
-    // Set user context (anonymous by default)
-    // ip_address intentionally omitted — sendDefaultPii: false above enforces no IP collection
-    Sentry.setUser({
-      id: 'anonymous',
-    });
+    // ip_address intentionally omitted — sendDefaultPii: false enforces no IP collection
+    setUser({ id: 'anonymous' });
+    setTag('website', 'food-n-force');
+    setTag('version', '2.0.0');
 
-    // Set global tags
-    Sentry.setTag('website', 'food-n-force');
-    Sentry.setTag('version', '2.0.0');
-
-    _sentry = Sentry;
+    _sentry = { captureException: _captureException, captureMessage: _captureMessage, addBreadcrumb: _addBreadcrumb };
 
   } catch (error) {
     console.error('[Sentry] Failed to initialize:', error);
