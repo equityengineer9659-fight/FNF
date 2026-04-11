@@ -55,134 +55,6 @@
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
         "timeout": 30000
-      },
-      {
-        "outputDir": "C:/Users/luetk/Desktop/Website/Website Next Version/test-results",
-        "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 4
-        },
-        "id": "firefox-desktop",
-        "name": "firefox-desktop",
-        "testDir": "C:/Users/luetk/Desktop/Website/Website Next Version/tools/testing/tests",
-        "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
-        "timeout": 30000
-      },
-      {
-        "outputDir": "C:/Users/luetk/Desktop/Website/Website Next Version/test-results",
-        "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 4
-        },
-        "id": "webkit-desktop",
-        "name": "webkit-desktop",
-        "testDir": "C:/Users/luetk/Desktop/Website/Website Next Version/tools/testing/tests",
-        "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
-        "timeout": 30000
-      },
-      {
-        "outputDir": "C:/Users/luetk/Desktop/Website/Website Next Version/test-results",
-        "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 4
-        },
-        "id": "chromium-tablet",
-        "name": "chromium-tablet",
-        "testDir": "C:/Users/luetk/Desktop/Website/Website Next Version/tools/testing/tests",
-        "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
-        "timeout": 30000
-      },
-      {
-        "outputDir": "C:/Users/luetk/Desktop/Website/Website Next Version/test-results",
-        "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 4
-        },
-        "id": "firefox-tablet",
-        "name": "firefox-tablet",
-        "testDir": "C:/Users/luetk/Desktop/Website/Website Next Version/tools/testing/tests",
-        "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
-        "timeout": 30000
-      },
-      {
-        "outputDir": "C:/Users/luetk/Desktop/Website/Website Next Version/test-results",
-        "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 4
-        },
-        "id": "webkit-tablet",
-        "name": "webkit-tablet",
-        "testDir": "C:/Users/luetk/Desktop/Website/Website Next Version/tools/testing/tests",
-        "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
-        "timeout": 30000
-      },
-      {
-        "outputDir": "C:/Users/luetk/Desktop/Website/Website Next Version/test-results",
-        "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 4
-        },
-        "id": "chromium-mobile",
-        "name": "chromium-mobile",
-        "testDir": "C:/Users/luetk/Desktop/Website/Website Next Version/tools/testing/tests",
-        "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
-        "timeout": 30000
-      },
-      {
-        "outputDir": "C:/Users/luetk/Desktop/Website/Website Next Version/test-results",
-        "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 4
-        },
-        "id": "firefox-mobile",
-        "name": "firefox-mobile",
-        "testDir": "C:/Users/luetk/Desktop/Website/Website Next Version/tools/testing/tests",
-        "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
-        "timeout": 30000
-      },
-      {
-        "outputDir": "C:/Users/luetk/Desktop/Website/Website Next Version/test-results",
-        "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 4
-        },
-        "id": "webkit-mobile",
-        "name": "webkit-mobile",
-        "testDir": "C:/Users/luetk/Desktop/Website/Website Next Version/tools/testing/tests",
-        "testIgnore": [],
-        "testMatch": [
-          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
-        ],
-        "timeout": 30000
       }
     ],
     "shard": null,
@@ -200,6 +72,261 @@
     }
   },
   "suites": [
+    {
+      "title": "contact-form.spec.js",
+      "file": "contact-form.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Contact Form",
+          "file": "contact-form.spec.js",
+          "line": 10,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Form fields are visible and accessible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3869,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:06.353Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "97203e29c2f9ea68820f-b9a101ae689266a4f493",
+              "file": "contact-form.spec.js",
+              "line": 17,
+              "column": 3
+            },
+            {
+              "title": "Submit button shows correct default text",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3734,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:06.335Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "97203e29c2f9ea68820f-810eeeafba24112e9958",
+              "file": "contact-form.spec.js",
+              "line": 32,
+              "column": 3
+            },
+            {
+              "title": "Honeypot field is hidden but present in DOM",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3679,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:06.354Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "97203e29c2f9ea68820f-f1e1b291dfdb14f0c283",
+              "file": "contact-form.spec.js",
+              "line": 38,
+              "column": 3
+            },
+            {
+              "title": "Form has required field validation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 6101,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:06.389Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "97203e29c2f9ea68820f-700726de7407d334846e",
+              "file": "contact-form.spec.js",
+              "line": 50,
+              "column": 3
+            },
+            {
+              "title": "Email field validates format",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2999,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:10.325Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "97203e29c2f9ea68820f-1c85898344dcd9080436",
+              "file": "contact-form.spec.js",
+              "line": 63,
+              "column": 3
+            },
+            {
+              "title": "Service dropdown has options",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2987,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:10.325Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "97203e29c2f9ea68820f-8b7fea0f3a024fa7f6a1",
+              "file": "contact-form.spec.js",
+              "line": 76,
+              "column": 3
+            },
+            {
+              "title": "No console errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3055,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:10.507Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "97203e29c2f9ea68820f-144c597417c66ee2bd14",
+              "file": "contact-form.spec.js",
+              "line": 84,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
     {
       "title": "critical-navigation-smoke-test.spec.js",
       "file": "critical-navigation-smoke-test.spec.js",
@@ -226,10 +353,10 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 6928,
+                      "duration": 2857,
                       "errors": [],
                       "stdout": [
                         {
@@ -238,7 +365,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:27.815Z",
+                      "startTime": "2026-04-11T00:54:12.988Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -267,7 +394,7 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 10904,
+                      "duration": 4802,
                       "errors": [],
                       "stdout": [
                         {
@@ -276,7 +403,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:27.819Z",
+                      "startTime": "2026-04-11T00:54:13.365Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -305,7 +432,7 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 8148,
+                      "duration": 2726,
                       "errors": [],
                       "stdout": [
                         {
@@ -314,7 +441,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:27.799Z",
+                      "startTime": "2026-04-11T00:54:13.384Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -340,10 +467,10 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6957,
+                      "duration": 2355,
                       "errors": [],
                       "stdout": [
                         {
@@ -352,7 +479,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:27.817Z",
+                      "startTime": "2026-04-11T00:54:13.636Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -378,10 +505,10 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 2127,
+                      "duration": 1905,
                       "errors": [],
                       "stdout": [
                         {
@@ -390,7 +517,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:35.164Z",
+                      "startTime": "2026-04-11T00:54:15.885Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -400,8 +527,2120 @@
               ],
               "id": "8fd316b0de11f6cf0047-969f6465cf8fb176f140",
               "file": "critical-navigation-smoke-test.spec.js",
-              "line": 126,
+              "line": 127,
               "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "dashboard-interactive.spec.js",
+      "file": "dashboard-interactive.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Food-Access Map-View Toggle",
+          "file": "dashboard-interactive.spec.js",
+          "line": 21,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Default state: Food Deserts button is active, others are not",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5506,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:16.097Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-388934825e612d7905d2",
+              "file": "dashboard-interactive.spec.js",
+              "line": 31,
+              "column": 3
+            },
+            {
+              "title": "Default state: Food Deserts info panel visible, others hidden",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 5545,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:16.187Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-eec3c210104c63043576",
+              "file": "dashboard-interactive.spec.js",
+              "line": 44,
+              "column": 3
+            },
+            {
+              "title": "Switching to Food Insecurity activates button and shows info panel",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 5928,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:18.160Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-e7fbb7cc69b118468f98",
+              "file": "dashboard-interactive.spec.js",
+              "line": 54,
+              "column": 3
+            },
+            {
+              "title": "Switching to SNAP Retailers activates button and shows info panel",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 6407,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:18.424Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-67f6ef729130a81bcd52",
+              "file": "dashboard-interactive.spec.js",
+              "line": 70,
+              "column": 3
+            },
+            {
+              "title": "Cycling back to Food Deserts restores active state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6514,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:21.683Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-a64d4c2a6af82cec4639",
+              "file": "dashboard-interactive.spec.js",
+              "line": 89,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Food-Access Double Burden Mode Toggle",
+          "file": "dashboard-interactive.spec.js",
+          "line": 109,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Default state: Total Affected (treemap) button active, treemap visible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 5925,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:21.773Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-2622f23e8f88204410ab",
+              "file": "dashboard-interactive.spec.js",
+              "line": 118,
+              "column": 3
+            },
+            {
+              "title": "Switching to Rate Comparison shows tiles, hides treemap",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 7340,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:24.171Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-2a54b804b2592042b503",
+              "file": "dashboard-interactive.spec.js",
+              "line": 132,
+              "column": 3
+            },
+            {
+              "title": "Switching back to Total Affected restores treemap",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 8703,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:24.892Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-fbf353f26e4b8856bee8",
+              "file": "dashboard-interactive.spec.js",
+              "line": 150,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Food-Insecurity County Drill-Down",
+          "file": "dashboard-interactive.spec.js",
+          "line": 174,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Default state: back button hidden, state label empty",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 6923,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:27.734Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-533700cbb995d764bdb0",
+              "file": "dashboard-interactive.spec.js",
+              "line": 183,
+              "column": 3
+            },
+            {
+              "title": "County search triggers drill-down: back button appears, state label set",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8286,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:28.292Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-b434ff43ab33672f77f5",
+              "file": "dashboard-interactive.spec.js",
+              "line": 191,
+              "column": 3
+            },
+            {
+              "title": "Back button resets to national view",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 8391,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:31.566Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6104194b1f02d0cd219-d753b2bca45d25f5cd74",
+              "file": "dashboard-interactive.spec.js",
+              "line": 218,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "dashboard-smoke.spec.js",
+      "file": "dashboard-smoke.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Executive Summary Dashboard",
+          "file": "dashboard-smoke.spec.js",
+          "line": 24,
+          "column": 8,
+          "specs": [
+            {
+              "title": "Page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4095,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:33.722Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-96baa26a806bbbbb26de",
+              "file": "dashboard-smoke.spec.js",
+              "line": 26,
+              "column": 5
+            },
+            {
+              "title": "Tab navigation bar is present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3210,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:34.739Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-ef6f721c24ea52546337",
+              "file": "dashboard-smoke.spec.js",
+              "line": 31,
+              "column": 5
+            },
+            {
+              "title": "Dashboard cards are rendered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2936,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:36.647Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-4722c1293d7f1047c4f7",
+              "file": "dashboard-smoke.spec.js",
+              "line": 39,
+              "column": 5
+            },
+            {
+              "title": "Chart containers have non-zero dimensions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 6217,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:37.869Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-59d6d08d22e55ad7405a",
+              "file": "dashboard-smoke.spec.js",
+              "line": 48,
+              "column": 5
+            },
+            {
+              "title": "Renders correctly at mobile viewport (375px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2506,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:37.990Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-4b7dc8db20f421d92eb9",
+              "file": "dashboard-smoke.spec.js",
+              "line": 67,
+              "column": 5
+            },
+            {
+              "title": "No JavaScript errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7484,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:39.624Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-e357a5809345d54ca10b",
+              "file": "dashboard-smoke.spec.js",
+              "line": 89,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Food Insecurity Dashboard",
+          "file": "dashboard-smoke.spec.js",
+          "line": 24,
+          "column": 8,
+          "specs": [
+            {
+              "title": "Page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3765,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:40.131Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-9afeb7a4a11890b526cd",
+              "file": "dashboard-smoke.spec.js",
+              "line": 26,
+              "column": 5
+            },
+            {
+              "title": "Tab navigation bar is present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 4195,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:40.535Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-7925f177af58684b61aa",
+              "file": "dashboard-smoke.spec.js",
+              "line": 31,
+              "column": 5
+            },
+            {
+              "title": "Dashboard cards are rendered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3405,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:43.951Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-4aed429cad189b4934a3",
+              "file": "dashboard-smoke.spec.js",
+              "line": 39,
+              "column": 5
+            },
+            {
+              "title": "Chart containers have non-zero dimensions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4890,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:44.130Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-ce54623b06d9c86a3acd",
+              "file": "dashboard-smoke.spec.js",
+              "line": 48,
+              "column": 5
+            },
+            {
+              "title": "Renders correctly at mobile viewport (375px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3060,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:44.756Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-847b675d534c91326830",
+              "file": "dashboard-smoke.spec.js",
+              "line": 67,
+              "column": 5
+            },
+            {
+              "title": "No JavaScript errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6262,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:47.161Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-1b50cba73a6d18544477",
+              "file": "dashboard-smoke.spec.js",
+              "line": 89,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Food Access Dashboard",
+          "file": "dashboard-smoke.spec.js",
+          "line": 24,
+          "column": 8,
+          "specs": [
+            {
+              "title": "Page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2808,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:47.409Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-8d08b633d7b58035f7db",
+              "file": "dashboard-smoke.spec.js",
+              "line": 26,
+              "column": 5
+            },
+            {
+              "title": "Tab navigation bar is present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2758,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:47.837Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-caca16d55d9c9a24e12b",
+              "file": "dashboard-smoke.spec.js",
+              "line": 31,
+              "column": 5
+            },
+            {
+              "title": "Dashboard cards are rendered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4490,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:49.068Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-f980e73c3bf4b3c4043e",
+              "file": "dashboard-smoke.spec.js",
+              "line": 39,
+              "column": 5
+            },
+            {
+              "title": "Chart containers have non-zero dimensions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 5065,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:50.248Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-0924144e5cc20be91e39",
+              "file": "dashboard-smoke.spec.js",
+              "line": 48,
+              "column": 5
+            },
+            {
+              "title": "Renders correctly at mobile viewport (375px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 4039,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:50.631Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-411ccf7906f94a3c7551",
+              "file": "dashboard-smoke.spec.js",
+              "line": 67,
+              "column": 5
+            },
+            {
+              "title": "No JavaScript errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9229,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:53.464Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-d9d164a3ee4453cf3aa9",
+              "file": "dashboard-smoke.spec.js",
+              "line": 89,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "SNAP Safety Net Dashboard",
+          "file": "dashboard-smoke.spec.js",
+          "line": 24,
+          "column": 8,
+          "specs": [
+            {
+              "title": "Page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 5555,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:53.629Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-1936bddf52af73849e7a",
+              "file": "dashboard-smoke.spec.js",
+              "line": 26,
+              "column": 5
+            },
+            {
+              "title": "Tab navigation bar is present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 6477,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:54.708Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-88732e1eb938e1ddb6d0",
+              "file": "dashboard-smoke.spec.js",
+              "line": 31,
+              "column": 5
+            },
+            {
+              "title": "Dashboard cards are rendered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4472,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:55.348Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-23d58d39d13e720acd02",
+              "file": "dashboard-smoke.spec.js",
+              "line": 39,
+              "column": 5
+            },
+            {
+              "title": "Chart containers have non-zero dimensions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4885,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:59.214Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-f7d63c7974d90687bd9a",
+              "file": "dashboard-smoke.spec.js",
+              "line": 48,
+              "column": 5
+            },
+            {
+              "title": "Renders correctly at mobile viewport (375px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3358,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:54:59.854Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-f19a495b0fc9def2f6e0",
+              "file": "dashboard-smoke.spec.js",
+              "line": 67,
+              "column": 5
+            },
+            {
+              "title": "No JavaScript errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 8178,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:01.218Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-0727b54d03db5577fa13",
+              "file": "dashboard-smoke.spec.js",
+              "line": 89,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Food Prices Dashboard",
+          "file": "dashboard-smoke.spec.js",
+          "line": 24,
+          "column": 8,
+          "specs": [
+            {
+              "title": "Page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2509,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:02.738Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-db2baf2609d12c94efdc",
+              "file": "dashboard-smoke.spec.js",
+              "line": 26,
+              "column": 5
+            },
+            {
+              "title": "Tab navigation bar is present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3392,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:03.245Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-6741d5ccc40ec2527f13",
+              "file": "dashboard-smoke.spec.js",
+              "line": 31,
+              "column": 5
+            },
+            {
+              "title": "Dashboard cards are rendered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 5394,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:04.134Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-bba06b57cc954924ad2b",
+              "file": "dashboard-smoke.spec.js",
+              "line": 39,
+              "column": 5
+            },
+            {
+              "title": "Chart containers have non-zero dimensions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5794,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:05.308Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-b49533aa6439a6b44db0",
+              "file": "dashboard-smoke.spec.js",
+              "line": 48,
+              "column": 5
+            },
+            {
+              "title": "Renders correctly at mobile viewport (375px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4444,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:06.671Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-6c9346dd5ce9fe9b88e1",
+              "file": "dashboard-smoke.spec.js",
+              "line": 67,
+              "column": 5
+            },
+            {
+              "title": "No JavaScript errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 6090,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:09.432Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-68e72a032143317b09ca",
+              "file": "dashboard-smoke.spec.js",
+              "line": 89,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Food Banks Dashboard",
+          "file": "dashboard-smoke.spec.js",
+          "line": 24,
+          "column": 8,
+          "specs": [
+            {
+              "title": "Page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3849,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:09.567Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-494e219085e5b966a9c8",
+              "file": "dashboard-smoke.spec.js",
+              "line": 26,
+              "column": 5
+            },
+            {
+              "title": "Tab navigation bar is present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4216,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:11.147Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-28bc6d032a08026d081c",
+              "file": "dashboard-smoke.spec.js",
+              "line": 31,
+              "column": 5
+            },
+            {
+              "title": "Dashboard cards are rendered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4340,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:11.156Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-0596f55ad332005d76bf",
+              "file": "dashboard-smoke.spec.js",
+              "line": 39,
+              "column": 5
+            },
+            {
+              "title": "Chart containers have non-zero dimensions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 5521,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:13.468Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-cc6f9f7289cb7755ddd7",
+              "file": "dashboard-smoke.spec.js",
+              "line": 48,
+              "column": 5
+            },
+            {
+              "title": "Renders correctly at mobile viewport (375px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2966,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:15.394Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-58362b336b9e8594c2f0",
+              "file": "dashboard-smoke.spec.js",
+              "line": 67,
+              "column": 5
+            },
+            {
+              "title": "No JavaScript errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 6919,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:15.553Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-88159d7bab6c453c8c20",
+              "file": "dashboard-smoke.spec.js",
+              "line": 89,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Nonprofit Directory Dashboard",
+          "file": "dashboard-smoke.spec.js",
+          "line": 24,
+          "column": 8,
+          "specs": [
+            {
+              "title": "Page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3850,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:15.557Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-17172b82c57f3b323dd4",
+              "file": "dashboard-smoke.spec.js",
+              "line": 26,
+              "column": 5
+            },
+            {
+              "title": "Tab navigation bar is present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3585,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:18.394Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-95a5450568341290323b",
+              "file": "dashboard-smoke.spec.js",
+              "line": 31,
+              "column": 5
+            },
+            {
+              "title": "Dashboard cards are rendered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3457,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:19.087Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-b389ac4713045b5700ae",
+              "file": "dashboard-smoke.spec.js",
+              "line": 39,
+              "column": 5
+            },
+            {
+              "title": "Chart containers have non-zero dimensions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6322,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:19.441Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-ccbd5d8fa7ee1482701b",
+              "file": "dashboard-smoke.spec.js",
+              "line": 48,
+              "column": 5
+            },
+            {
+              "title": "Renders correctly at mobile viewport (375px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3201,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:22.015Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-c5b9e7d347cdc2227864",
+              "file": "dashboard-smoke.spec.js",
+              "line": 67,
+              "column": 5
+            },
+            {
+              "title": "No JavaScript errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 6493,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:22.556Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-d2ee23d4bd3dfd88afd2",
+              "file": "dashboard-smoke.spec.js",
+              "line": 89,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "Nonprofit Profile Dashboard",
+          "file": "dashboard-smoke.spec.js",
+          "line": 24,
+          "column": 8,
+          "specs": [
+            {
+              "title": "Page loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3735,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:22.571Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-294004ca104608fd49c3",
+              "file": "dashboard-smoke.spec.js",
+              "line": 26,
+              "column": 5
+            },
+            {
+              "title": "Tab navigation bar is present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2128,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:25.301Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-fdeaa9e3b4dc7c54c6aa",
+              "file": "dashboard-smoke.spec.js",
+              "line": 31,
+              "column": 5
+            },
+            {
+              "title": "Dashboard cards are rendered",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2500,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:25.799Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-a78e003e69fc63134808",
+              "file": "dashboard-smoke.spec.js",
+              "line": 39,
+              "column": 5
+            },
+            {
+              "title": "Chart containers have non-zero dimensions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 5560,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:26.338Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-1beb6d35f7bd7f5b81f4",
+              "file": "dashboard-smoke.spec.js",
+              "line": 48,
+              "column": 5
+            },
+            {
+              "title": "Renders correctly at mobile viewport (375px)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1795,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:27.468Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-93820865487124537463",
+              "file": "dashboard-smoke.spec.js",
+              "line": 67,
+              "column": 5
+            },
+            {
+              "title": "No JavaScript errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6321,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:55:28.335Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3157e78a43e15888ad1a-5e2692d1f98489f126f9",
+              "file": "dashboard-smoke.spec.js",
+              "line": 89,
+              "column": 5
             }
           ]
         }
@@ -433,15 +2672,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 2103,
+                      "duration": 2794,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:35.337Z",
+                      "startTime": "2026-04-11T00:55:29.105Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -467,15 +2706,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 2791,
+                      "duration": 3809,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:36.560Z",
+                      "startTime": "2026-04-11T00:55:29.309Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -501,15 +2740,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 2865,
+                      "duration": 4073,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:37.400Z",
+                      "startTime": "2026-04-11T00:55:31.927Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -519,7 +2758,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-233e3d264d88daeaae14",
               "file": "gradient-icons.spec.js",
-              "line": 29,
+              "line": 30,
               "column": 7
             },
             {
@@ -535,15 +2774,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 3083,
+                      "duration": 3812,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:37.497Z",
+                      "startTime": "2026-04-11T00:55:32.020Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -553,7 +2792,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-334d283dbd5b9f15b8bb",
               "file": "gradient-icons.spec.js",
-              "line": 37,
+              "line": 39,
               "column": 7
             },
             {
@@ -569,15 +2808,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 5283,
+                      "duration": 4585,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:39.277Z",
+                      "startTime": "2026-04-11T00:55:33.145Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -587,7 +2826,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-0298dbcf94d1889dcf5f",
               "file": "gradient-icons.spec.js",
-              "line": 56,
+              "line": 61,
               "column": 7
             },
             {
@@ -603,15 +2842,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4973,
+                      "duration": 4579,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:39.424Z",
+                      "startTime": "2026-04-11T00:55:34.855Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -621,7 +2860,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-3b325b23c097b864338f",
               "file": "gradient-icons.spec.js",
-              "line": 64,
+              "line": 70,
               "column": 7
             },
             {
@@ -637,15 +2876,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 5335,
+                      "duration": 3979,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:40.318Z",
+                      "startTime": "2026-04-11T00:55:35.867Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -655,7 +2894,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-6d3ea2adaa3a5300c744",
               "file": "gradient-icons.spec.js",
-              "line": 72,
+              "line": 80,
               "column": 7
             },
             {
@@ -671,15 +2910,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 5917,
+                      "duration": 3970,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:40.620Z",
+                      "startTime": "2026-04-11T00:55:36.031Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -689,7 +2928,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-987fb42fd8c9896ede4f",
               "file": "gradient-icons.spec.js",
-              "line": 88,
+              "line": 97,
               "column": 7
             },
             {
@@ -705,15 +2944,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 6088,
+                      "duration": 4271,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:44.448Z",
+                      "startTime": "2026-04-11T00:55:37.758Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -723,7 +2962,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-3664a92cce57d576be83",
               "file": "gradient-icons.spec.js",
-              "line": 98,
+              "line": 109,
               "column": 7
             },
             {
@@ -739,15 +2978,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7918,
+                      "duration": 6758,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:44.616Z",
+                      "startTime": "2026-04-11T00:55:39.490Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -757,7 +2996,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-5bb5ae907b92124613b7",
               "file": "gradient-icons.spec.js",
-              "line": 109,
+              "line": 121,
               "column": 7
             },
             {
@@ -773,15 +3012,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 7882,
+                      "duration": 6736,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:45.684Z",
+                      "startTime": "2026-04-11T00:55:39.887Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -791,7 +3030,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-5d22960ea5206c6d31ba",
               "file": "gradient-icons.spec.js",
-              "line": 119,
+              "line": 132,
               "column": 7
             }
           ]
@@ -815,15 +3054,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 3933,
+                      "duration": 3460,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:46.565Z",
+                      "startTime": "2026-04-11T00:55:40.033Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -852,12 +3091,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 6035,
+                      "duration": 4208,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:50.528Z",
+                      "startTime": "2026-04-11T00:55:42.064Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -886,12 +3125,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 6240,
+                      "duration": 4077,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:50.582Z",
+                      "startTime": "2026-04-11T00:55:43.521Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -901,7 +3140,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-039b6cc80e8a831893f8",
               "file": "gradient-icons.spec.js",
-              "line": 29,
+              "line": 30,
               "column": 7
             },
             {
@@ -917,15 +3156,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5058,
+                      "duration": 4580,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:52.584Z",
+                      "startTime": "2026-04-11T00:55:46.281Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -935,7 +3174,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-492baab0ff4d590d775a",
               "file": "gradient-icons.spec.js",
-              "line": 37,
+              "line": 39,
               "column": 7
             },
             {
@@ -951,15 +3190,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 3751,
+                      "duration": 4620,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:53.606Z",
+                      "startTime": "2026-04-11T00:55:46.301Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -969,7 +3208,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-b8ffe7ecc5c6772eebb3",
               "file": "gradient-icons.spec.js",
-              "line": 56,
+              "line": 61,
               "column": 7
             },
             {
@@ -985,15 +3224,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 9472,
+                      "duration": 4295,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:56.601Z",
+                      "startTime": "2026-04-11T00:55:46.650Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1003,7 +3242,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-bcbb09bd3834868de4e0",
               "file": "gradient-icons.spec.js",
-              "line": 64,
+              "line": 70,
               "column": 7
             },
             {
@@ -1022,12 +3261,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 9227,
+                      "duration": 5229,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:56.865Z",
+                      "startTime": "2026-04-11T00:55:47.653Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1037,7 +3276,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-7d37e799474f283db8a1",
               "file": "gradient-icons.spec.js",
-              "line": 72,
+              "line": 80,
               "column": 7
             },
             {
@@ -1056,12 +3295,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9780,
+                      "duration": 4352,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:57.399Z",
+                      "startTime": "2026-04-11T00:55:50.897Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1071,7 +3310,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-6efc6f198dbd6efa673e",
               "file": "gradient-icons.spec.js",
-              "line": 88,
+              "line": 97,
               "column": 7
             },
             {
@@ -1087,15 +3326,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 9050,
+                      "duration": 4055,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:55:57.685Z",
+                      "startTime": "2026-04-11T00:55:50.955Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1105,7 +3344,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-95c04b9c23d39cce1ce8",
               "file": "gradient-icons.spec.js",
-              "line": 98,
+              "line": 109,
               "column": 7
             },
             {
@@ -1121,15 +3360,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 12430,
+                      "duration": 6066,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:06.134Z",
+                      "startTime": "2026-04-11T00:55:50.967Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1139,7 +3378,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-80dbaa0f79e6efcfabca",
               "file": "gradient-icons.spec.js",
-              "line": 109,
+              "line": 121,
               "column": 7
             },
             {
@@ -1158,12 +3397,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 13160,
+                      "duration": 6394,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:06.146Z",
+                      "startTime": "2026-04-11T00:55:52.937Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1173,7 +3412,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-b9defd88bf7f7502a3df",
               "file": "gradient-icons.spec.js",
-              "line": 119,
+              "line": 132,
               "column": 7
             }
           ]
@@ -1197,15 +3436,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 7447,
+                      "duration": 3114,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:06.782Z",
+                      "startTime": "2026-04-11T00:55:55.038Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1234,12 +3473,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 9286,
+                      "duration": 4062,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:07.250Z",
+                      "startTime": "2026-04-11T00:55:55.285Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1268,12 +3507,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 5287,
+                      "duration": 4383,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:14.291Z",
+                      "startTime": "2026-04-11T00:55:57.059Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1283,7 +3522,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-46fdea0caa30fb25fbde",
               "file": "gradient-icons.spec.js",
-              "line": 29,
+              "line": 30,
               "column": 7
             },
             {
@@ -1299,15 +3538,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 7674,
+                      "duration": 6161,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:16.611Z",
+                      "startTime": "2026-04-11T00:55:58.190Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1317,7 +3556,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-e0169617ff5398ca37d3",
               "file": "gradient-icons.spec.js",
-              "line": 37,
+              "line": 39,
               "column": 7
             },
             {
@@ -1333,15 +3572,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 5874,
+                      "duration": 5051,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:18.677Z",
+                      "startTime": "2026-04-11T00:55:59.369Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1351,7 +3590,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-d66be766ab7830b1563f",
               "file": "gradient-icons.spec.js",
-              "line": 56,
+              "line": 61,
               "column": 7
             },
             {
@@ -1367,15 +3606,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5141,
+                      "duration": 4868,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:19.363Z",
+                      "startTime": "2026-04-11T00:55:59.371Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1385,7 +3624,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-766794857d5d6444827f",
               "file": "gradient-icons.spec.js",
-              "line": 64,
+              "line": 70,
               "column": 7
             },
             {
@@ -1404,12 +3643,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 7657,
+                      "duration": 5919,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:19.631Z",
+                      "startTime": "2026-04-11T00:56:01.468Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1419,7 +3658,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-26c8d3814ee411e586b0",
               "file": "gradient-icons.spec.js",
-              "line": 72,
+              "line": 80,
               "column": 7
             },
             {
@@ -1438,12 +3677,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5051,
+                      "duration": 4647,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:24.354Z",
+                      "startTime": "2026-04-11T00:56:04.267Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1453,7 +3692,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-504c48d0e577dc593378",
               "file": "gradient-icons.spec.js",
-              "line": 88,
+              "line": 97,
               "column": 7
             },
             {
@@ -1469,15 +3708,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 3820,
+                      "duration": 4589,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:24.538Z",
+                      "startTime": "2026-04-11T00:56:04.397Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1487,7 +3726,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-250cdc123c8a3d450410",
               "file": "gradient-icons.spec.js",
-              "line": 98,
+              "line": 109,
               "column": 7
             },
             {
@@ -1503,15 +3742,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 5893,
+                      "duration": 7162,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:24.601Z",
+                      "startTime": "2026-04-11T00:56:04.447Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1521,7 +3760,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-9579b4181ac5713936b2",
               "file": "gradient-icons.spec.js",
-              "line": 109,
+              "line": 121,
               "column": 7
             },
             {
@@ -1540,12 +3779,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 10252,
+                      "duration": 7122,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:27.325Z",
+                      "startTime": "2026-04-11T00:56:07.435Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1555,7 +3794,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-fe7fd9d68442844684b6",
               "file": "gradient-icons.spec.js",
-              "line": 119,
+              "line": 132,
               "column": 7
             }
           ]
@@ -1579,15 +3818,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3656,
+                      "duration": 2460,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:28.402Z",
+                      "startTime": "2026-04-11T00:56:08.940Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1613,15 +3852,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 3395,
+                      "duration": 2893,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:29.460Z",
+                      "startTime": "2026-04-11T00:56:09.013Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1647,15 +3886,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3972,
+                      "duration": 2786,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:30.541Z",
+                      "startTime": "2026-04-11T00:56:11.439Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1665,7 +3904,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-f28a4cf95264bd01676a",
               "file": "gradient-icons.spec.js",
-              "line": 29,
+              "line": 30,
               "column": 7
             },
             {
@@ -1684,12 +3923,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 4798,
+                      "duration": 3071,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:32.100Z",
+                      "startTime": "2026-04-11T00:56:11.643Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1699,7 +3938,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-4829c5bb298a9bc6d85e",
               "file": "gradient-icons.spec.js",
-              "line": 37,
+              "line": 39,
               "column": 7
             },
             {
@@ -1715,15 +3954,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 4194,
+                      "duration": 2879,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:32.919Z",
+                      "startTime": "2026-04-11T00:56:11.937Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1733,7 +3972,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-7c08da62967207e9f56b",
               "file": "gradient-icons.spec.js",
-              "line": 56,
+              "line": 61,
               "column": 7
             },
             {
@@ -1749,15 +3988,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3740,
+                      "duration": 3265,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:34.552Z",
+                      "startTime": "2026-04-11T00:56:14.257Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1767,7 +4006,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-1f6e47dfcf954aa1fdfe",
               "file": "gradient-icons.spec.js",
-              "line": 64,
+              "line": 70,
               "column": 7
             },
             {
@@ -1783,15 +4022,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 5318,
+                      "duration": 3124,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:36.939Z",
+                      "startTime": "2026-04-11T00:56:14.585Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1801,7 +4040,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-835099812ab384070d89",
               "file": "gradient-icons.spec.js",
-              "line": 72,
+              "line": 80,
               "column": 7
             },
             {
@@ -1817,15 +4056,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 5168,
+                      "duration": 3170,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:37.160Z",
+                      "startTime": "2026-04-11T00:56:14.742Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1835,7 +4074,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-b19f84d8f95fe4bb2d7d",
               "file": "gradient-icons.spec.js",
-              "line": 88,
+              "line": 97,
               "column": 7
             },
             {
@@ -1851,15 +4090,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 4678,
+                      "duration": 3159,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:37.619Z",
+                      "startTime": "2026-04-11T00:56:14.846Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1869,7 +4108,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-c0fc219c6b178fb86bc6",
               "file": "gradient-icons.spec.js",
-              "line": 98,
+              "line": 109,
               "column": 7
             },
             {
@@ -1885,15 +4124,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5019,
+                      "duration": 4814,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:38.420Z",
+                      "startTime": "2026-04-11T00:56:17.558Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1903,7 +4142,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-440febc48fdc093b1bcc",
               "file": "gradient-icons.spec.js",
-              "line": 109,
+              "line": 121,
               "column": 7
             },
             {
@@ -1919,15 +4158,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 7482,
+                      "duration": 6334,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:42.299Z",
+                      "startTime": "2026-04-11T00:56:17.733Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1937,7 +4176,7 @@
               ],
               "id": "07a42f51354a5c12ca4e-ca7e772c1ffc94bfd8f5",
               "file": "gradient-icons.spec.js",
-              "line": 119,
+              "line": 132,
               "column": 7
             }
           ]
@@ -1961,15 +4200,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 5569,
+                      "duration": 3576,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:42.342Z",
+                      "startTime": "2026-04-11T00:56:17.938Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2003,15 +4242,15 @@
                   "projectName": "chromium-desktop",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 4775,
+                      "duration": 3454,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-03-26T10:56:42.371Z",
+                      "startTime": "2026-04-11T00:56:18.030Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2027,13 +4266,268 @@
           ]
         }
       ]
+    },
+    {
+      "title": "newsletter-popup.spec.js",
+      "file": "newsletter-popup.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Newsletter Popup",
+          "file": "newsletter-popup.spec.js",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Should NOT appear on non-about pages",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2730,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:56:21.535Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5ca567677ab2ea175676-65c01fdb4538efa2162e",
+              "file": "newsletter-popup.spec.js",
+              "line": 11,
+              "column": 3
+            },
+            {
+              "title": "Should appear after scrolling on about page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 1913,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:56:21.583Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5ca567677ab2ea175676-74c614590222fa0797d0",
+              "file": "newsletter-popup.spec.js",
+              "line": 23,
+              "column": 3
+            },
+            {
+              "title": "Modal has correct ARIA attributes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2187,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:56:22.545Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5ca567677ab2ea175676-128534ed176a26351744",
+              "file": "newsletter-popup.spec.js",
+              "line": 38,
+              "column": 3
+            },
+            {
+              "title": "Close button dismisses modal",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2771,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:56:23.525Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5ca567677ab2ea175676-20ba725ba5d82f878693",
+              "file": "newsletter-popup.spec.js",
+              "line": 55,
+              "column": 3
+            },
+            {
+              "title": "Escape key dismisses modal",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2477,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:56:24.120Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5ca567677ab2ea175676-a23b5bd6c76b12bbd96f",
+              "file": "newsletter-popup.spec.js",
+              "line": 75,
+              "column": 3
+            },
+            {
+              "title": "Email input and submit button are present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2288,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:56:24.290Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5ca567677ab2ea175676-2302b215a62ac5aa2351",
+              "file": "newsletter-popup.spec.js",
+              "line": 91,
+              "column": 3
+            },
+            {
+              "title": "Empty email shows validation error",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-desktop",
+                  "projectName": "chromium-desktop",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2364,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-11T00:56:24.791Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5ca567677ab2ea175676-66d9ecde93bca75c20f6",
+              "file": "newsletter-popup.spec.js",
+              "line": 111,
+              "column": 3
+            }
+          ]
+        }
+      ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-03-26T10:55:11.576Z",
-    "duration": 100215.121,
-    "expected": 51,
+    "startTime": "2026-04-11T00:54:04.278Z",
+    "duration": 143100.79499999998,
+    "expected": 124,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

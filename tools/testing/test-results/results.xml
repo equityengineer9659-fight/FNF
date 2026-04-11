@@ -1,128 +1,282 @@
-<testsuites id="" name="" tests="51" failures="0" skipped="0" errors="0" time="100.215121">
-<testsuite name="critical-navigation-smoke-test.spec.js" timestamp="2026-03-26T10:55:25.673Z" hostname="chromium-desktop" tests="5" failures="0" skipped="0" time="35.064" errors="0">
-<testcase name="Critical Navigation Smoke Tests › Mobile toggle functionality" classname="critical-navigation-smoke-test.spec.js" time="6.928">
+<testsuites id="" name="" tests="124" failures="0" skipped="0" errors="0" time="143.10079499999998">
+<testsuite name="contact-form.spec.js" timestamp="2026-04-11T00:54:04.747Z" hostname="chromium-desktop" tests="7" failures="0" skipped="0" time="26.424" errors="0">
+<testcase name="Contact Form › Form fields are visible and accessible" classname="contact-form.spec.js" time="3.869">
+</testcase>
+<testcase name="Contact Form › Submit button shows correct default text" classname="contact-form.spec.js" time="3.734">
+</testcase>
+<testcase name="Contact Form › Honeypot field is hidden but present in DOM" classname="contact-form.spec.js" time="3.679">
+</testcase>
+<testcase name="Contact Form › Form has required field validation" classname="contact-form.spec.js" time="6.101">
+</testcase>
+<testcase name="Contact Form › Email field validates format" classname="contact-form.spec.js" time="2.999">
+</testcase>
+<testcase name="Contact Form › Service dropdown has options" classname="contact-form.spec.js" time="2.987">
+</testcase>
+<testcase name="Contact Form › No console errors on page load" classname="contact-form.spec.js" time="3.055">
+</testcase>
+</testsuite>
+<testsuite name="critical-navigation-smoke-test.spec.js" timestamp="2026-04-11T00:54:04.747Z" hostname="chromium-desktop" tests="5" failures="0" skipped="0" time="14.645" errors="0">
+<testcase name="Critical Navigation Smoke Tests › Mobile toggle functionality" classname="critical-navigation-smoke-test.spec.js" time="2.857">
 <system-out>
 <![CDATA[✅ Mobile toggle functionality PASSED
 ]]>
 </system-out>
 </testcase>
-<testcase name="Critical Navigation Smoke Tests › Cross-page consistency" classname="critical-navigation-smoke-test.spec.js" time="10.904">
+<testcase name="Critical Navigation Smoke Tests › Cross-page consistency" classname="critical-navigation-smoke-test.spec.js" time="4.802">
 <system-out>
 <![CDATA[✅ Cross-page consistency PASSED
 ]]>
 </system-out>
 </testcase>
-<testcase name="Critical Navigation Smoke Tests › Desktop navigation visibility" classname="critical-navigation-smoke-test.spec.js" time="8.148">
+<testcase name="Critical Navigation Smoke Tests › Desktop navigation visibility" classname="critical-navigation-smoke-test.spec.js" time="2.726">
 <system-out>
 <![CDATA[✅ Desktop navigation visibility PASSED
 ]]>
 </system-out>
 </testcase>
-<testcase name="Critical Navigation Smoke Tests › Mobile menu links navigate correctly" classname="critical-navigation-smoke-test.spec.js" time="6.957">
+<testcase name="Critical Navigation Smoke Tests › Mobile menu links navigate correctly" classname="critical-navigation-smoke-test.spec.js" time="2.355">
 <system-out>
 <![CDATA[✅ Mobile menu links PASSED
 ]]>
 </system-out>
 </testcase>
-<testcase name="Critical Navigation Smoke Tests › Keyboard navigation - Escape closes menu" classname="critical-navigation-smoke-test.spec.js" time="2.127">
+<testcase name="Critical Navigation Smoke Tests › Keyboard navigation - Escape closes menu" classname="critical-navigation-smoke-test.spec.js" time="1.905">
 <system-out>
 <![CDATA[✅ Keyboard Escape PASSED
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="gradient-icons.spec.js" timestamp="2026-03-26T10:55:25.673Z" hostname="chromium-desktop" tests="46" failures="0" skipped="0" time="277.52" errors="0">
-<testcase name="index page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="2.103">
+<testsuite name="dashboard-interactive.spec.js" timestamp="2026-04-11T00:54:04.747Z" hostname="chromium-desktop" tests="11" failures="0" skipped="0" time="75.468" errors="0">
+<testcase name="Food-Access Map-View Toggle › Default state: Food Deserts button is active, others are not" classname="dashboard-interactive.spec.js" time="5.506">
 </testcase>
-<testcase name="index page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="2.791">
+<testcase name="Food-Access Map-View Toggle › Default state: Food Deserts info panel visible, others hidden" classname="dashboard-interactive.spec.js" time="5.545">
 </testcase>
-<testcase name="index page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="2.865">
+<testcase name="Food-Access Map-View Toggle › Switching to Food Insecurity activates button and shows info panel" classname="dashboard-interactive.spec.js" time="5.928">
 </testcase>
-<testcase name="index page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="3.083">
+<testcase name="Food-Access Map-View Toggle › Switching to SNAP Retailers activates button and shows info panel" classname="dashboard-interactive.spec.js" time="6.407">
 </testcase>
-<testcase name="index page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="5.283">
+<testcase name="Food-Access Map-View Toggle › Cycling back to Food Deserts restores active state" classname="dashboard-interactive.spec.js" time="6.514">
 </testcase>
-<testcase name="index page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="4.973">
+<testcase name="Food-Access Double Burden Mode Toggle › Default state: Total Affected (treemap) button active, treemap visible" classname="dashboard-interactive.spec.js" time="5.925">
 </testcase>
-<testcase name="index page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="5.335">
+<testcase name="Food-Access Double Burden Mode Toggle › Switching to Rate Comparison shows tiles, hides treemap" classname="dashboard-interactive.spec.js" time="7.34">
 </testcase>
-<testcase name="index page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="5.917">
+<testcase name="Food-Access Double Burden Mode Toggle › Switching back to Total Affected restores treemap" classname="dashboard-interactive.spec.js" time="8.703">
 </testcase>
-<testcase name="index page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="6.088">
+<testcase name="Food-Insecurity County Drill-Down › Default state: back button hidden, state label empty" classname="dashboard-interactive.spec.js" time="6.923">
 </testcase>
-<testcase name="index page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="7.918">
+<testcase name="Food-Insecurity County Drill-Down › County search triggers drill-down: back button appears, state label set" classname="dashboard-interactive.spec.js" time="8.286">
 </testcase>
-<testcase name="index page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="7.882">
+<testcase name="Food-Insecurity County Drill-Down › Back button resets to national view" classname="dashboard-interactive.spec.js" time="8.391">
 </testcase>
-<testcase name="services page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="3.933">
+</testsuite>
+<testsuite name="dashboard-smoke.spec.js" timestamp="2026-04-11T00:54:04.747Z" hostname="chromium-desktop" tests="48" failures="0" skipped="0" time="217.72" errors="0">
+<testcase name="Executive Summary Dashboard › Page loads successfully" classname="dashboard-smoke.spec.js" time="4.095">
 </testcase>
-<testcase name="services page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="6.035">
+<testcase name="Executive Summary Dashboard › Tab navigation bar is present" classname="dashboard-smoke.spec.js" time="3.21">
 </testcase>
-<testcase name="services page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="6.24">
+<testcase name="Executive Summary Dashboard › Dashboard cards are rendered" classname="dashboard-smoke.spec.js" time="2.936">
 </testcase>
-<testcase name="services page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="5.058">
+<testcase name="Executive Summary Dashboard › Chart containers have non-zero dimensions" classname="dashboard-smoke.spec.js" time="6.217">
 </testcase>
-<testcase name="services page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="3.751">
+<testcase name="Executive Summary Dashboard › Renders correctly at mobile viewport (375px)" classname="dashboard-smoke.spec.js" time="2.506">
 </testcase>
-<testcase name="services page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="9.472">
+<testcase name="Executive Summary Dashboard › No JavaScript errors on page load" classname="dashboard-smoke.spec.js" time="7.484">
 </testcase>
-<testcase name="services page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="9.227">
+<testcase name="Food Insecurity Dashboard › Page loads successfully" classname="dashboard-smoke.spec.js" time="3.765">
 </testcase>
-<testcase name="services page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="9.78">
+<testcase name="Food Insecurity Dashboard › Tab navigation bar is present" classname="dashboard-smoke.spec.js" time="4.195">
 </testcase>
-<testcase name="services page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="9.05">
+<testcase name="Food Insecurity Dashboard › Dashboard cards are rendered" classname="dashboard-smoke.spec.js" time="3.405">
 </testcase>
-<testcase name="services page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="12.43">
+<testcase name="Food Insecurity Dashboard › Chart containers have non-zero dimensions" classname="dashboard-smoke.spec.js" time="4.89">
 </testcase>
-<testcase name="services page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="13.16">
+<testcase name="Food Insecurity Dashboard › Renders correctly at mobile viewport (375px)" classname="dashboard-smoke.spec.js" time="3.06">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="7.447">
+<testcase name="Food Insecurity Dashboard › No JavaScript errors on page load" classname="dashboard-smoke.spec.js" time="6.262">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="9.286">
+<testcase name="Food Access Dashboard › Page loads successfully" classname="dashboard-smoke.spec.js" time="2.808">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="5.287">
+<testcase name="Food Access Dashboard › Tab navigation bar is present" classname="dashboard-smoke.spec.js" time="2.758">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="7.674">
+<testcase name="Food Access Dashboard › Dashboard cards are rendered" classname="dashboard-smoke.spec.js" time="4.49">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="5.874">
+<testcase name="Food Access Dashboard › Chart containers have non-zero dimensions" classname="dashboard-smoke.spec.js" time="5.065">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="5.141">
+<testcase name="Food Access Dashboard › Renders correctly at mobile viewport (375px)" classname="dashboard-smoke.spec.js" time="4.039">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="7.657">
+<testcase name="Food Access Dashboard › No JavaScript errors on page load" classname="dashboard-smoke.spec.js" time="9.229">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="5.051">
+<testcase name="SNAP Safety Net Dashboard › Page loads successfully" classname="dashboard-smoke.spec.js" time="5.555">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="3.82">
+<testcase name="SNAP Safety Net Dashboard › Tab navigation bar is present" classname="dashboard-smoke.spec.js" time="6.477">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="5.893">
+<testcase name="SNAP Safety Net Dashboard › Dashboard cards are rendered" classname="dashboard-smoke.spec.js" time="4.472">
 </testcase>
-<testcase name="resources page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="10.252">
+<testcase name="SNAP Safety Net Dashboard › Chart containers have non-zero dimensions" classname="dashboard-smoke.spec.js" time="4.885">
 </testcase>
-<testcase name="about page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="3.656">
+<testcase name="SNAP Safety Net Dashboard › Renders correctly at mobile viewport (375px)" classname="dashboard-smoke.spec.js" time="3.358">
 </testcase>
-<testcase name="about page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="3.395">
+<testcase name="SNAP Safety Net Dashboard › No JavaScript errors on page load" classname="dashboard-smoke.spec.js" time="8.178">
 </testcase>
-<testcase name="about page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="3.972">
+<testcase name="Food Prices Dashboard › Page loads successfully" classname="dashboard-smoke.spec.js" time="2.509">
 </testcase>
-<testcase name="about page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="4.798">
+<testcase name="Food Prices Dashboard › Tab navigation bar is present" classname="dashboard-smoke.spec.js" time="3.392">
 </testcase>
-<testcase name="about page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="4.194">
+<testcase name="Food Prices Dashboard › Dashboard cards are rendered" classname="dashboard-smoke.spec.js" time="5.394">
 </testcase>
-<testcase name="about page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="3.74">
+<testcase name="Food Prices Dashboard › Chart containers have non-zero dimensions" classname="dashboard-smoke.spec.js" time="5.794">
 </testcase>
-<testcase name="about page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="5.318">
+<testcase name="Food Prices Dashboard › Renders correctly at mobile viewport (375px)" classname="dashboard-smoke.spec.js" time="4.444">
 </testcase>
-<testcase name="about page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="5.168">
+<testcase name="Food Prices Dashboard › No JavaScript errors on page load" classname="dashboard-smoke.spec.js" time="6.09">
 </testcase>
-<testcase name="about page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="4.678">
+<testcase name="Food Banks Dashboard › Page loads successfully" classname="dashboard-smoke.spec.js" time="3.849">
 </testcase>
-<testcase name="about page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="5.019">
+<testcase name="Food Banks Dashboard › Tab navigation bar is present" classname="dashboard-smoke.spec.js" time="4.216">
 </testcase>
-<testcase name="about page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="7.482">
+<testcase name="Food Banks Dashboard › Dashboard cards are rendered" classname="dashboard-smoke.spec.js" time="4.34">
 </testcase>
-<testcase name="impact page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="5.569">
+<testcase name="Food Banks Dashboard › Chart containers have non-zero dimensions" classname="dashboard-smoke.spec.js" time="5.521">
 </testcase>
-<testcase name="contact page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="4.775">
+<testcase name="Food Banks Dashboard › Renders correctly at mobile viewport (375px)" classname="dashboard-smoke.spec.js" time="2.966">
+</testcase>
+<testcase name="Food Banks Dashboard › No JavaScript errors on page load" classname="dashboard-smoke.spec.js" time="6.919">
+</testcase>
+<testcase name="Nonprofit Directory Dashboard › Page loads successfully" classname="dashboard-smoke.spec.js" time="3.85">
+</testcase>
+<testcase name="Nonprofit Directory Dashboard › Tab navigation bar is present" classname="dashboard-smoke.spec.js" time="3.585">
+</testcase>
+<testcase name="Nonprofit Directory Dashboard › Dashboard cards are rendered" classname="dashboard-smoke.spec.js" time="3.457">
+</testcase>
+<testcase name="Nonprofit Directory Dashboard › Chart containers have non-zero dimensions" classname="dashboard-smoke.spec.js" time="6.322">
+</testcase>
+<testcase name="Nonprofit Directory Dashboard › Renders correctly at mobile viewport (375px)" classname="dashboard-smoke.spec.js" time="3.201">
+</testcase>
+<testcase name="Nonprofit Directory Dashboard › No JavaScript errors on page load" classname="dashboard-smoke.spec.js" time="6.493">
+</testcase>
+<testcase name="Nonprofit Profile Dashboard › Page loads successfully" classname="dashboard-smoke.spec.js" time="3.735">
+</testcase>
+<testcase name="Nonprofit Profile Dashboard › Tab navigation bar is present" classname="dashboard-smoke.spec.js" time="2.128">
+</testcase>
+<testcase name="Nonprofit Profile Dashboard › Dashboard cards are rendered" classname="dashboard-smoke.spec.js" time="2.5">
+</testcase>
+<testcase name="Nonprofit Profile Dashboard › Chart containers have non-zero dimensions" classname="dashboard-smoke.spec.js" time="5.56">
+</testcase>
+<testcase name="Nonprofit Profile Dashboard › Renders correctly at mobile viewport (375px)" classname="dashboard-smoke.spec.js" time="1.795">
+</testcase>
+<testcase name="Nonprofit Profile Dashboard › No JavaScript errors on page load" classname="dashboard-smoke.spec.js" time="6.321">
+</testcase>
+</testsuite>
+<testsuite name="gradient-icons.spec.js" timestamp="2026-04-11T00:54:04.747Z" hostname="chromium-desktop" tests="46" failures="0" skipped="0" time="202.765" errors="0">
+<testcase name="index page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="2.794">
+</testcase>
+<testcase name="index page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="3.809">
+</testcase>
+<testcase name="index page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="4.073">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="3.812">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="4.585">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="4.579">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="3.979">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="3.97">
+</testcase>
+<testcase name="index page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="4.271">
+</testcase>
+<testcase name="index page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="6.758">
+</testcase>
+<testcase name="index page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="6.736">
+</testcase>
+<testcase name="services page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="3.46">
+</testcase>
+<testcase name="services page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="4.208">
+</testcase>
+<testcase name="services page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="4.077">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="4.58">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="4.62">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="4.295">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="5.229">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="4.352">
+</testcase>
+<testcase name="services page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="4.055">
+</testcase>
+<testcase name="services page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="6.066">
+</testcase>
+<testcase name="services page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="6.394">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="3.114">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="4.062">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="4.383">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="6.161">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="5.051">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="4.868">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="5.919">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="4.647">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="4.589">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="7.162">
+</testcase>
+<testcase name="resources page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="7.122">
+</testcase>
+<testcase name="about page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="2.46">
+</testcase>
+<testcase name="about page - Gradient Icon System › should find correct number of icon elements" classname="gradient-icons.spec.js" time="2.893">
+</testcase>
+<testcase name="about page - Gradient Icon System › should hydrate all icons with gradient class" classname="gradient-icons.spec.js" time="2.786">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have accessible content in all icons (SVG or glyph fallback)" classname="gradient-icons.spec.js" time="3.071">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have aria-label on all icons" classname="gradient-icons.spec.js" time="2.879">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have role=img on all icons" classname="gradient-icons.spec.js" time="3.265">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have accessible text in all icons (SVG title or SR text)" classname="gradient-icons.spec.js" time="3.124">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have gradient background on icons" classname="gradient-icons.spec.js" time="3.17">
+</testcase>
+<testcase name="about page - Gradient Icon System › should have proper sizing on icons" classname="gradient-icons.spec.js" time="3.159">
+</testcase>
+<testcase name="about page - Gradient Icon System › should capture full page screenshot at 100% zoom" classname="gradient-icons.spec.js" time="4.814">
+</testcase>
+<testcase name="about page - Gradient Icon System › should capture full page screenshot at 25% zoom" classname="gradient-icons.spec.js" time="6.334">
+</testcase>
+<testcase name="impact page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="3.576">
+</testcase>
+<testcase name="contact page - Gradient Icon System › should load page successfully" classname="gradient-icons.spec.js" time="3.454">
+</testcase>
+</testsuite>
+<testsuite name="newsletter-popup.spec.js" timestamp="2026-04-11T00:54:04.747Z" hostname="chromium-desktop" tests="7" failures="0" skipped="0" time="16.73" errors="0">
+<testcase name="Newsletter Popup › Should NOT appear on non-about pages" classname="newsletter-popup.spec.js" time="2.73">
+</testcase>
+<testcase name="Newsletter Popup › Should appear after scrolling on about page" classname="newsletter-popup.spec.js" time="1.913">
+</testcase>
+<testcase name="Newsletter Popup › Modal has correct ARIA attributes" classname="newsletter-popup.spec.js" time="2.187">
+</testcase>
+<testcase name="Newsletter Popup › Close button dismisses modal" classname="newsletter-popup.spec.js" time="2.771">
+</testcase>
+<testcase name="Newsletter Popup › Escape key dismisses modal" classname="newsletter-popup.spec.js" time="2.477">
+</testcase>
+<testcase name="Newsletter Popup › Email input and submit button are present" classname="newsletter-popup.spec.js" time="2.288">
+</testcase>
+<testcase name="Newsletter Popup › Empty email shows validation error" classname="newsletter-popup.spec.js" time="2.364">
 </testcase>
 </testsuite>
 </testsuites>
