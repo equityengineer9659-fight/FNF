@@ -149,6 +149,45 @@ const components = {
     return scripts;
   },
 
+  blogCta: (categorySlug) => {
+    const ctaMap = {
+      tech: {
+        title: 'Ready to Build Your Technology Roadmap?',
+        text: 'Food-N-Force helps food banks and pantries select, implement, and optimize the right technology stack — from Salesforce to custom integrations — so your team can focus on the mission.'
+      },
+      ai: {
+        title: 'Ready to Put AI to Work for Your Mission?',
+        text: 'Food-N-Force helps food banks and pantries adopt AI responsibly — from demand forecasting to donor engagement — with implementations grounded in your data and your community\'s needs.'
+      },
+      implementation: {
+        title: 'Ready to Streamline Your Operations?',
+        text: 'Food-N-Force helps food banks and pantries implement proven workflows and systems that reduce manual effort, improve accuracy, and free your team to serve more families.'
+      },
+      insights: {
+        title: 'Ready to Stay Ahead of What\'s Coming?',
+        text: 'Food-N-Force tracks policy changes, funding shifts, and industry trends so food banks and pantries can plan proactively — not reactively — for the communities they serve.'
+      },
+      'case-studies': {
+        title: 'Ready to See Results Like These?',
+        text: 'Food-N-Force has helped food banks and pantries across the country transform their operations with Salesforce. Let\'s talk about what\'s possible for your organization.'
+      }
+    };
+    const cta = ctaMap[categorySlug] || ctaMap.tech;
+    return `        <!-- Article CTA -->
+        <section class="article-cta-section" aria-label="Next steps">
+            <div class="article-cta">
+                <h2 class="article-cta__title">${cta.title}</h2>
+                <p class="article-cta__text">
+                    ${cta.text}
+                </p>
+                <div class="article-cta__actions">
+                    <a href="/contact.html" class="resource-action">Get in Touch</a>
+                    <a href="/blog.html" class="article-cta__secondary">Explore More Articles</a>
+                </div>
+            </div>
+        </section>`;
+  },
+
   dashboardTabs: (currentPage) => {
     const tabs = [
       { slug: 'food-insecurity', label: 'Overview' },
@@ -175,8 +214,8 @@ ${items}
   }
 };
 
-// Process HTML files
-function processHtmlFile(filePath, pageName) {
+// Process HTML files — isBlogArticle controls CTA injection (blog/ articles only)
+function processHtmlFile(filePath, pageName, isBlogArticle = false) {
   let html;
   try {
     html = fs.readFileSync(filePath, 'utf-8');
@@ -210,6 +249,16 @@ function processHtmlFile(filePath, pageName) {
   if (footerPattern.test(html)) {
     html = html.replace(footerPattern, components.footer());
     console.log(`✅ Updated footer in ${pageName}`);
+  }
+
+  // Replace blog article CTA with category-aware template (blog articles only)
+  const ctaPattern = /        <!-- Article CTA -->[\s\S]*?<\/section>/;
+  if (isBlogArticle && ctaPattern.test(html)) {
+    // Extract category from article-category--SUFFIX class
+    const catMatch = html.match(/article-category--([\w-]+)/);
+    const categorySlug = catMatch ? catMatch[1] : 'tech';
+    html = html.replace(ctaPattern, components.blogCta(categorySlug));
+    console.log(`✅ Updated CTA in ${pageName} (category: ${categorySlug})`);
   }
 
   // Remove all existing script sections and duplicates first
@@ -270,7 +319,7 @@ function buildComponents() {
   articlePages.forEach(page => {
     const filePath = path.join(__dirname, 'blog', `${page}.html`);
     if (fs.existsSync(filePath)) {
-      processHtmlFile(filePath, page);
+      processHtmlFile(filePath, page, true);
     } else {
       console.warn(`⚠️  File not found: blog/${page}.html`);
     }

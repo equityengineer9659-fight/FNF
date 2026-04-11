@@ -152,7 +152,7 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
 ## Testing & Performance
 
 ### Performance Budgets
-- **CSS**: ~140KB minified (~28KB gzipped)
+- **CSS**: ~150KB minified (~25KB gzipped)
 - **JS Core**: ~53KB total (47KB main + 5KB effects, ~16KB gzipped)
 - **Dashboard**: ~15-25KB per dashboard JS + ~645KB ECharts chunk (~210KB gzipped, shared across all 5 dashboard pages)
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
