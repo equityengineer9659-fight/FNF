@@ -137,6 +137,6 @@
     "us-atlas": "^3.0.1"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.60.0"
+    "@rollup/rollup-linux-x64-gnu": "4.60.1"
   }
 }
