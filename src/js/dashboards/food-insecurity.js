@@ -80,7 +80,7 @@ function buildCountyInsight(countyName, countyValue, stateObj, metricKey) {
 }
 
 // -- Map Chart with County Drill-Down --
-function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
+function renderMap(geoJSON, data, metric = 'rate', onStateClick, onDrillDownComplete) {
   const chart = createChart('chart-map');
   if (!chart) return;
 
@@ -96,10 +96,12 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
   let currentView = 'national';
   let currentMetric = metric;
   let currentStateName = '';
+  let lastCountyData = null;
 
   // Show national (state-level) view
   function showNational() {
     currentView = 'national';
+    lastCountyData = null;
     const cfg = MAP_METRICS[currentMetric];
     const mapData = data.states.map(s => ({ name: s.name, value: s[currentMetric], ...s }));
 
@@ -165,6 +167,9 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
 
   // Drill down into a state's counties
   async function drillDown(stateName, stateFips, highlightCounty) {
+    // Clear stale county data so rapid state-A → state-B clicks don't flash
+    // A's top-3 in B's deep-dive panel during the ~300ms fetch gap.
+    lastCountyData = null;
     // Show loading
     chart.showLoading({ text: `Loading ${stateName} counties...`, color: COLORS.secondary, textColor: COLORS.text, maskColor: 'rgba(0,0,0,0.6)' });
 
@@ -185,6 +190,13 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
           value: f.properties[currentMetric] ?? f.properties.rate,
           ...f.properties
         }));
+      lastCountyData = countyData;
+
+      // Fire async callback so deep-dive panel can re-render with fresh county data
+      if (onDrillDownComplete) {
+        const matchedState = US_STATES.find(([, sn]) => sn === stateName);
+        if (matchedState) onDrillDownComplete(matchedState[0]);
+      }
 
       // Compute dynamic min/max for this state's counties
       const vals = countyData.map(c => c.value).filter(v => typeof v === 'number');
@@ -321,7 +333,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
     });
   }
 
-  return { chart, drillDown, showNational };
+  return { chart, drillDown, showNational, getCountyData: () => lastCountyData };
 }
 
 // -- County Search --
@@ -1596,7 +1608,7 @@ function buildStateInsight(fi, data, stateName) {
 }
 
 // -- State Deep-Dive Cross-Dataset KPI Panel --
-function renderStateDeepDive(stateCode, data, accessData, bankData) {
+function renderStateDeepDive(stateCode, data, accessData, bankData, countyData = null) {
   const section = document.getElementById('section-state-deepdive');
   const panel = document.getElementById('state-deepdive-panel');
   if (!section || !panel) return;
@@ -1640,6 +1652,14 @@ function renderStateDeepDive(stateCode, data, accessData, bankData) {
       `).join('')}
     </div>
     <p class="dashboard-kpi-insight">${buildStateInsight(fi, data, stateName)}</p>
+    ${countyData?.length ? `
+      <p class="dashboard-kpi-insight"><strong>Highest-need counties:</strong></p>
+      <ul class="dashboard-county-top3">
+        ${[...countyData].sort((a, b) => b.value - a.value).slice(0, 3).map(c =>
+    `<li>${c.name} — ${(+c.value).toFixed(1)}%</li>`
+  ).join('')}
+      </ul>
+    ` : ''}
   `;
   // Set dynamic KPI colors via CSSOM (CSP-compliant)
   kpis.forEach((k, i) => {
@@ -1686,7 +1706,10 @@ async function init() {
 
     // Render all charts
     const mapCtrl = renderMap(geoJSON, data, 'rate', (stateCode) => {
-      renderStateDeepDive(stateCode, data, accessData, bankData);
+      renderStateDeepDive(stateCode, data, accessData, bankData, mapCtrl.getCountyData());
+    }, (stateCode) => {
+      // Async re-render after county fetch completes — fixes first-click empty top-3
+      renderStateDeepDive(stateCode, data, accessData, bankData, mapCtrl.getCountyData());
     });
 
     // County search
@@ -1697,13 +1720,13 @@ async function init() {
     initStateSelector('state-selector-container', (stateCode) => {
       if (!stateCode) {
         mapCtrl.showNational();
-        renderStateDeepDive('', data, accessData, bankData);
+        renderStateDeepDive('', data, accessData, bankData, mapCtrl.getCountyData());
         return;
       }
       const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
       const match = data.states.find(s => s.name === stateName);
       if (match?.fips) mapCtrl.drillDown(match.name, match.fips);
-      renderStateDeepDive(stateCode, data, accessData, bankData);
+      renderStateDeepDive(stateCode, data, accessData, bankData, mapCtrl.getCountyData());
     });
     renderTrend(data);
     renderRadar(data);
@@ -1729,14 +1752,24 @@ async function init() {
       renderTripleBurden(data, accessData);
       // If state already selected via URL, render deep-dive now that data is loaded
       const urlState = new URLSearchParams(window.location.search).get('state');
-      if (urlState) renderStateDeepDive(urlState, data, accessData, bankData);
+      if (urlState) renderStateDeepDive(urlState, data, accessData, bankData, mapCtrl.getCountyData());
     });
 
-    // CSV export buttons
-    addExportButton('chart-map', 'food-insecurity-by-state.csv', () => ({
-      headers: ['State', 'Food Insecurity Rate (%)', 'Child Rate (%)', 'Persons', 'Meal Gap', 'Meal Cost ($)', 'Poverty Rate (%)', 'SNAP Participation'],
-      rows: data.states.map(s => [s.name, s.rate, s.childRate, s.persons, s.mealGap, s.mealCost, s.povertyRate, s.snapParticipation])
-    }));
+    // CSV export buttons — county-aware when drilled in
+    addExportButton('chart-map', 'food-insecurity-by-state.csv', () => {
+      const countyData = mapCtrl.getCountyData();
+      if (countyData) {
+        return {
+          filename: 'food-insecurity-counties.csv',
+          headers: ['County', 'Food Insecurity Rate (%)', 'Child Rate (%)', 'Meal Cost ($)'],
+          rows: countyData.map(c => [c.name, c.rate, c.childRate, c.mealCost])
+        };
+      }
+      return {
+        headers: ['State', 'Food Insecurity Rate (%)', 'Child Rate (%)', 'Persons', 'Meal Gap', 'Meal Cost ($)', 'Poverty Rate (%)', 'SNAP Participation'],
+        rows: data.states.map(s => [s.name, s.rate, s.childRate, s.persons, s.mealGap, s.mealCost, s.povertyRate, s.snapParticipation])
+      };
+    });
 
     // Scroll reveal
     initScrollReveal();

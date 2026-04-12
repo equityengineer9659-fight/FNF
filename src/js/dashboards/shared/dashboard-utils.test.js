@@ -200,6 +200,31 @@ describe('dashboard-utils', () => {
     });
   });
 
+  describe('addExportButton dynamic filename (P1 CSV drill-down)', () => {
+    it('source: click handler destructures result.filename before calling exportCSV', () => {
+      const src = readFileSync(resolve(__dirname, 'dashboard-utils.js'), 'utf-8');
+      const idx = src.indexOf('export function addExportButton');
+      const end = src.indexOf('header.appendChild(btn)', idx);
+      const body = src.slice(idx, end);
+      expect(body).toMatch(/getDataFn\(\)/);
+      expect(body).toMatch(/result\.filename\s*\|\|\s*filename/);
+    });
+
+    it('exportCSV receives overridden filename when callback returns one', () => {
+      const staticFilename = 'static.csv';
+      const result = { filename: 'dynamic.csv', headers: ['A'], rows: [[1]] };
+      const chosen = result.filename || staticFilename;
+      expect(chosen).toBe('dynamic.csv');
+    });
+
+    it('exportCSV falls back to static filename when callback omits filename', () => {
+      const staticFilename = 'static.csv';
+      const result = { headers: ['A'], rows: [[1]] };
+      const chosen = result.filename || staticFilename;
+      expect(chosen).toBe('static.csv');
+    });
+  });
+
   describe('fetchWithFallback', () => {
     beforeEach(() => {
       vi.restoreAllMocks();

@@ -1021,6 +1021,35 @@
   }
 }
 
+@media (width <= 390px) {
+  /* food-access: map-mode toggle wraps at 375px */
+  .dashboard-metric-btn {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  /* food-prices: FRED item toggle overflows at 375px */
+  .fred-toggle-btn {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* food-banks: D3 revenue heatmap clips right edge at 375px.
+     Scoped by ID because d3-heatmap.js:429 sets overflow:hidden
+     inline — !important is required to win over the inline style. */
+  #chart-revenue {
+    overflow-x: auto !important;
+  }
+
+  /* food-insecurity: drill-back button overlaps map header controls at 375px.
+     .dashboard-back-btn is used only in food-insecurity.html:225 (verified
+     via grep across dashboards/), so scoping by class is safe. */
+  .dashboard-back-btn {
+    position: static;
+    margin-bottom: 0.5rem;
+  }
+}
+
 @media (width <= 360px) {
   .dashboard-chart {
     height: 220px;
