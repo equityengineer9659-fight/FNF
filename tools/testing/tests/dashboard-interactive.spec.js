@@ -115,18 +115,22 @@ test.describe('Food-Access Double Burden Mode Toggle', () => {
     await page.waitForTimeout(2000);
   });
 
-  test('Default state: Total Affected (treemap) button active, treemap visible', async ({ page }) => {
+  test('Default state: Rate Comparison (tiles) button active, tiles visible', async ({ page }) => {
+    // Sync with the current default on master after PR #127 (a45f4f7) —
+    // the default active Double Burden mode is Rate Comparison (tiles), not
+    // Total Affected (treemap). dashboard-metric-btn--active lives on the
+    // tiles button in the source HTML.
     const treemapBtn = page.locator('button[data-db-mode="treemap"]');
     const tilesBtn = page.locator('button[data-db-mode="tiles"]');
     const treemapEl = page.locator('#chart-double-burden');
     const tilesEl = page.locator('#chart-double-burden-tiles');
 
-    await expect(treemapBtn).toHaveClass(/dashboard-metric-btn--active/);
-    await expect(treemapBtn).toHaveAttribute('aria-pressed', 'true');
-    await expect(tilesBtn).not.toHaveClass(/dashboard-metric-btn--active/);
-    await expect(tilesBtn).toHaveAttribute('aria-pressed', 'false');
-    await expect(treemapEl).toBeVisible();
-    await expect(tilesEl).not.toBeVisible();
+    await expect(tilesBtn).toHaveClass(/dashboard-metric-btn--active/);
+    await expect(tilesBtn).toHaveAttribute('aria-pressed', 'true');
+    await expect(treemapBtn).not.toHaveClass(/dashboard-metric-btn--active/);
+    await expect(treemapBtn).toHaveAttribute('aria-pressed', 'false');
+    await expect(tilesEl).toBeVisible();
+    await expect(treemapEl).not.toBeVisible();
   });
 
   test('Switching to Rate Comparison shows tiles, hides treemap', async ({ page }) => {
