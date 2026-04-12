@@ -22,6 +22,39 @@ const PAL = MAP_PALETTES.access;
 // Module-level cache: restored when back button resets to national desert view
 let _lowAccessDefaultInsight = '';
 
+/**
+ * Reset the "Focus on state" dropdown (`#state-deep-dive`) to "All States"
+ * and clear the `?state=` URL query parameter.
+ *
+ * Exported so unit tests can exercise the invariant in isolation and so the
+ * map-view toggle handler can keep the dropdown in sync with what the map
+ * actually shows. This matters because only the Food Deserts mode supports
+ * state drill-down — switching to Insecurity or SNAP Retailers would otherwise
+ * leave a stale state (e.g. "Texas") selected in the dropdown while the map
+ * snaps back to national view (audit P0-2).
+ *
+ * Safe to call in environments without `document` or when the element is
+ * missing — it silently no-ops.
+ *
+ * @returns {boolean} `true` when a reset was performed, `false` when the
+ *   dropdown was absent or already at "All States".
+ */
+export function resetStateFocusDropdown() {
+  if (typeof document === 'undefined') return false;
+  const select = document.getElementById('state-deep-dive');
+  if (!select) return false;
+  if (select.value === '') return false;
+  select.value = '';
+  try {
+    const url = new URL(window.location);
+    if (url.searchParams.has('state')) {
+      url.searchParams.delete('state');
+      window.history.replaceState({}, '', url);
+    }
+  } catch { /* URL API missing — ignore */ }
+  return true;
+}
+
 // Desert map state tooltip (pure — depends only on fmtNum)
 function desertStateTooltip(params) {
   const d = params.data;
@@ -1568,6 +1601,13 @@ async function init() {
         if (!btn) return;
         const view = btn.dataset.mapView;
         if (view === currentMapView) return;
+        // P0-2: State focus and map mode are orthogonal axes, and only the
+        // Food Deserts mode supports state drill-down. Reset the dropdown
+        // on any user-initiated mode change so the dropdown can never
+        // disagree with what the map is showing (e.g. "Texas" selected
+        // while map snaps back to national view after toggling to SNAP
+        // Retailers or Food Insecurity).
+        resetStateFocusDropdown();
         switchMapView(view);
       });
     }
