@@ -1359,6 +1359,12 @@ function describeEfficiency(data, orgName) {
 
 // -- Error state display --
 function showError(msg) {
+  // Audit 2026-04-12: the h1 used to stay on "Loading organization..." even
+  // after showError fired, so the error panel said "No organization specified"
+  // while the heading contradicted it. Update the heading in sync.
+  const nameEl = document.getElementById('org-name');
+  if (nameEl) nameEl.textContent = 'Organization not found';
+
   const loadingEl = document.getElementById('profile-loading');
   if (loadingEl) loadingEl.style.display = 'none';
 

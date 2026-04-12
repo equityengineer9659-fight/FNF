@@ -343,7 +343,12 @@ function initCountySearch(mapController) {
   });
 
   input.addEventListener('input', () => {
-    const query = input.value.trim().toLowerCase();
+    // Audit 2026-04-12: journey-auditor typed "imperial county" and got zero
+    // results. The stored name is "Imperial" (no suffix), so the raw query
+    // failed the .includes() check. Strip a trailing " county" suffix so both
+    // "imperial" and "imperial county" resolve to the same match set.
+    const rawQuery = input.value.trim().toLowerCase();
+    const query = rawQuery.replace(/\s+county$/i, '').trim();
     selectedIdx = -1;
 
     if (!countyIndex || query.length < 2) {
