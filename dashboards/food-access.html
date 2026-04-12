@@ -112,7 +112,7 @@
                 <a href="/resources.html" class="fnf-nav__link">Resources</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link">Dashboards</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/impact.html" class="fnf-nav__link">Impact</a>
@@ -135,7 +135,7 @@
                 <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
                 <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
                 <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
-                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">Dashboards</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link">Dashboards</a></li>
                 <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
                 <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
                 <li><a href="/blog.html" class="fnf-nav__mobile-link">Blog</a></li>
@@ -150,7 +150,7 @@
             <ul class="dashboard-tabs__list">
             <li><a href="/dashboards/food-insecurity.html" class="dashboard-tabs__tab">Overview</a></li>
             <li><a href="/dashboards/food-access.html" class="dashboard-tabs__tab" aria-current="page">Food Access</a></li>
-            <li><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab">SNAP & Safety Net</a></li>
+            <li><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab">SNAP &amp; Safety Net</a></li>
             <li><a href="/dashboards/food-prices.html" class="dashboard-tabs__tab">Food Prices</a></li>
             <li><a href="/dashboards/food-banks.html" class="dashboard-tabs__tab">Food Banks</a></li>
             <li><a href="/dashboards/nonprofit-directory.html" class="dashboard-tabs__tab">Nonprofit Directory</a></li>
@@ -167,7 +167,7 @@
             <h1 class="slds-text-heading_large">Food Access &amp; Deserts</h1>
             <p class="dashboard-hero__subtitle">Where is food hard to reach in America?</p>
             <p class="dashboard-hero__positioning">Mapping the gap between where people live and where food is available — so organizations can plan smarter outreach and mobile distribution.</p>
-            <div class="dashboard-hero__stats" aria-label="Key national statistics">
+            <div class="dashboard-hero__stats" role="group" aria-label="Key national statistics">
                 <div class="dashboard-stat">
                     <span class="dashboard-stat__number" role="status" aria-live="off" data-target="137.5" data-suffix="M">137.5M</span>
                     <p class="dashboard-stat__label">Low-Access Population</p>
@@ -196,15 +196,15 @@
                     <span id="freshness-access" class="dashboard-freshness"></span>
                     <span id="freshness-snap-retailers" class="dashboard-freshness hidden"></span>
                     <div id="map-view-toggle" class="dashboard-map-view-toggle" role="group" aria-label="Map view">
-                        <button class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="deserts" aria-pressed="true">Food Deserts</button>
-                        <button class="dashboard-metric-btn" data-map-view="insecurity" aria-pressed="false">Food Insecurity</button>
-                        <button class="dashboard-metric-btn" data-map-view="snap" aria-pressed="false">SNAP Retailers</button>
+                        <button type="button" class="dashboard-metric-btn dashboard-metric-btn--active" data-map-view="deserts" aria-pressed="true">Food Deserts</button>
+                        <button type="button" class="dashboard-metric-btn" data-map-view="insecurity" aria-pressed="false">Food Insecurity</button>
+                        <button type="button" class="dashboard-metric-btn" data-map-view="snap" aria-pressed="false">SNAP Retailers</button>
                     </div>
                     <div id="state-selector-container"></div>
                 </div>
                 <div class="dashboard-chart-row">
                     <div class="dashboard-chart-row__chart">
-                        <button id="access-map-back-btn" class="dashboard-map-back hidden" aria-label="Back to national view">&larr; Back to National View</button>
+                        <button type="button" id="access-map-back-btn" class="dashboard-map-back hidden" aria-label="Back to national view">&larr; Back to National View</button>
                         <span id="access-map-state-label" class="dashboard-map-label" aria-live="polite"></span>
                         <div id="chart-desert-map" class="dashboard-chart dashboard-chart--map" role="img" aria-label="Choropleth map showing food access data across US states"></div>
                         <p class="dashboard-chart__hint">Hover for state details — county drill-down available in Food Deserts view</p>
@@ -368,8 +368,8 @@
                         <!-- Mode toggle + encoding key -->
                         <div class="dashboard-toggle-stack">
                             <div id="double-burden-mode-toggle" class="dashboard-db-toggle-group" role="group" aria-label="Visualization mode">
-                                <button class="dashboard-metric-btn dashboard-metric-btn--active dashboard-db-toggle-btn--first" data-db-mode="tiles" aria-pressed="true">Rate Comparison</button>
-                                <button class="dashboard-metric-btn dashboard-db-toggle-btn--last" data-db-mode="treemap" aria-pressed="false">Total Affected</button>
+                                <button type="button" class="dashboard-metric-btn dashboard-metric-btn--active dashboard-db-toggle-btn--first" data-db-mode="tiles" aria-pressed="true">Rate Comparison</button>
+                                <button type="button" class="dashboard-metric-btn dashboard-db-toggle-btn--last" data-db-mode="treemap" aria-pressed="false">Total Affected</button>
                             </div>
                             <p id="db-encoding-treemap" class="dashboard-encoding-hint hidden"><span class="dashboard-encoding-hint__em">Size</span> = affected population (&#8730; scaled) &nbsp;&middot;&nbsp; <span class="dashboard-encoding-hint__em">Color</span> = % of state population</p>
                             <p id="db-encoding-tiles" class="dashboard-encoding-hint">Equal tile size &nbsp;&middot;&nbsp; <span class="dashboard-encoding-hint__em">Color</span> = % of state population affected</p>
