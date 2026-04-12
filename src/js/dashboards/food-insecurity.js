@@ -167,6 +167,9 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick, onDrillDownComp
 
   // Drill down into a state's counties
   async function drillDown(stateName, stateFips, highlightCounty) {
+    // Clear stale county data so rapid state-A → state-B clicks don't flash
+    // A's top-3 in B's deep-dive panel during the ~300ms fetch gap.
+    lastCountyData = null;
     // Show loading
     chart.showLoading({ text: `Loading ${stateName} counties...`, color: COLORS.secondary, textColor: COLORS.text, maskColor: 'rgba(0,0,0,0.6)' });
 
