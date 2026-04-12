@@ -375,8 +375,8 @@ export function addExportButton(containerId, filename, getDataFn) {
   btn.title = 'Export chart data as CSV';
   btn.setAttribute('aria-label', `Export ${filename} data as CSV`);
   btn.addEventListener('click', () => {
-    const { headers, rows } = getDataFn();
-    exportCSV(filename, headers, rows);
+    const result = getDataFn();
+    exportCSV(result.filename || filename, result.headers, result.rows);
   });
   header.appendChild(btn);
 }

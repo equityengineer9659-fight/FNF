@@ -96,10 +96,12 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
   let currentView = 'national';
   let currentMetric = metric;
   let currentStateName = '';
+  let lastCountyData = null;
 
   // Show national (state-level) view
   function showNational() {
     currentView = 'national';
+    lastCountyData = null;
     const cfg = MAP_METRICS[currentMetric];
     const mapData = data.states.map(s => ({ name: s.name, value: s[currentMetric], ...s }));
 
@@ -185,6 +187,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
           value: f.properties[currentMetric] ?? f.properties.rate,
           ...f.properties
         }));
+      lastCountyData = countyData;
 
       // Compute dynamic min/max for this state's counties
       const vals = countyData.map(c => c.value).filter(v => typeof v === 'number');
@@ -321,7 +324,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
     });
   }
 
-  return { chart, drillDown, showNational };
+  return { chart, drillDown, showNational, getCountyData: () => lastCountyData };
 }
 
 // -- County Search --
@@ -1732,11 +1735,21 @@ async function init() {
       if (urlState) renderStateDeepDive(urlState, data, accessData, bankData);
     });
 
-    // CSV export buttons
-    addExportButton('chart-map', 'food-insecurity-by-state.csv', () => ({
-      headers: ['State', 'Food Insecurity Rate (%)', 'Child Rate (%)', 'Persons', 'Meal Gap', 'Meal Cost ($)', 'Poverty Rate (%)', 'SNAP Participation'],
-      rows: data.states.map(s => [s.name, s.rate, s.childRate, s.persons, s.mealGap, s.mealCost, s.povertyRate, s.snapParticipation])
-    }));
+    // CSV export buttons — county-aware when drilled in
+    addExportButton('chart-map', 'food-insecurity-by-state.csv', () => {
+      const countyData = mapCtrl.getCountyData();
+      if (countyData) {
+        return {
+          filename: 'food-insecurity-counties.csv',
+          headers: ['County', 'Food Insecurity Rate (%)', 'Child Rate (%)', 'Meal Cost ($)'],
+          rows: countyData.map(c => [c.name, c.rate, c.childRate, c.mealCost])
+        };
+      }
+      return {
+        headers: ['State', 'Food Insecurity Rate (%)', 'Child Rate (%)', 'Persons', 'Meal Gap', 'Meal Cost ($)', 'Poverty Rate (%)', 'SNAP Participation'],
+        rows: data.states.map(s => [s.name, s.rate, s.childRate, s.persons, s.mealGap, s.mealCost, s.povertyRate, s.snapParticipation])
+      };
+    });
 
     // Scroll reveal
     initScrollReveal();
