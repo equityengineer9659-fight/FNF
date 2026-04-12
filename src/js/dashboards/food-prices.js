@@ -253,11 +253,9 @@ function renderBurden(quintiles) {
         return `<strong>${p.name}</strong>${parent ? `<br/>(${parent})` : ''}<br/>Food Share: ${p.value.toFixed(1)}%`;
       }
     },
-    legend: {
-      data: quintiles.map(qi => qi.label),
-      textStyle: { color: COLORS.text, fontSize: 10 },
-      top: 5
-    },
+    // No legend component: ECharts sunburst series do not bind to top-level
+    // legends, so passing legend.data produced 5 "data not found" warnings per
+    // render. Quintile labels remain visible in the inner ring via levels[1].
     series: [{
       type: 'sunburst', data: data, radius: ['15%', '80%'],
       label: { show: true, color: '#fff', fontSize: 10 },
