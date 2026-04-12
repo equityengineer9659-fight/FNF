@@ -51,7 +51,7 @@ function countyTooltip(params) {
   if (!d) return '';
   return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
     Population: ${fmtNum(d.population || 0)}<br/>
-    <span class="csp-text-secondary">Food Insecurity:</span> ${d.rate}%<br/>
+    <span class="csp-text-secondary">Food Insecurity:</span> ${d.rate}% <span class="fnf-tooltip-muted">(est.)</span><br/>
     <span class="csp-text-accent">Child Rate:</span> ${d.childRate}%<br/>
     Poverty Rate: ${d.povertyRate}%<br/>
     Persons: ${fmtNum(d.persons)}<br/>
