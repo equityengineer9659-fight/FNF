@@ -63,7 +63,7 @@ function renderCategories(data) {
       emphasis: { focus: 'series' },
       data: s.data.map(d => d.value), animationDuration: 2000
     }))
-  });
+  }, true);
 }
 
 // -- Chart 2: Regional Price Comparison (grouped bar) --
@@ -156,7 +156,7 @@ function renderRegions(data, mealCost) {
         animationDelay: 200
       }
     ]
-  });
+  }, true);
 }
 
 // -- Chart 3: Affordability Index Map (choropleth) --
@@ -391,7 +391,7 @@ function renderHomeVsAway(blsData) {
         symbol: 'none'
       }] : [])
     ]
-  });
+  }, true);
 }
 
 // -- Chart 6: Year-over-Year Inflation Rate --
@@ -481,7 +481,7 @@ function renderYoYInflation(blsData) {
         itemStyle: { color: 'rgba(255,255,255,0.3)' }
       }] : [])
     ]
-  });
+  }, true);
 
   // Dynamic insight
   const peak = homeYoY.reduce((max, d) => d.value > max.value ? d : max, homeYoY[0]);
@@ -686,7 +686,7 @@ function renderPurchasingPower(blsData, snapBenefits) {
     ]
   };
 
-  chart.setOption(option);
+  chart.setOption(option, true);
 
   // Store for FRED overlay support
   ppChartInstance = chart;
@@ -886,14 +886,14 @@ async function init() {
 
   } catch (err) {
     clearTimeout(timeoutId);
+    const msg = err?.name === 'AbortError'
+      ? 'Dashboard data took too long to load. Check your connection or try again later.'
+      : 'Unable to load dashboard data. If the problem persists, try refreshing the page.';
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = `<p class="dashboard-error-state">${msg}</p>`;
     });
     const errorEl = document.getElementById('dashboard-error');
-    if (errorEl) {
-      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
-      errorEl.hidden = false;
-    }
+    if (errorEl) { errorEl.textContent = msg; errorEl.hidden = false; }
   }
 }
 

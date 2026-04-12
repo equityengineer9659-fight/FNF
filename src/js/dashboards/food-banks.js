@@ -449,16 +449,16 @@ async function init() {
 
     initScrollReveal();
     window.addEventListener('resize', handleResize);
-  } catch {
+  } catch (err) {
     clearTimeout(timeoutId);
+    const msg = err?.name === 'AbortError'
+      ? 'Dashboard data took too long to load. Check your connection or try again later.'
+      : 'Unable to load dashboard data. If the problem persists, try refreshing the page.';
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = `<p class="dashboard-error-state">${msg}</p>`;
     });
     const errorEl = document.getElementById('dashboard-error');
-    if (errorEl) {
-      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
-      errorEl.hidden = false;
-    }
+    if (errorEl) { errorEl.textContent = msg; errorEl.hidden = false; }
   }
 }
 
