@@ -1371,6 +1371,49 @@ function showError(msg) {
 }
 
 // -- Peer Comparison (non-blocking) --
+/**
+ * Hydrate peer revenue from the org endpoint.
+ *
+ * P0-1 bug: ProPublica's /search.json does NOT return `total_revenue` on
+ * organization records, so the original single-pass filter
+ * (`p.total_revenue > 0`) dropped every peer and the section stayed hidden.
+ *
+ * Fix: take the first 10 candidates after filtering out the target EIN, then
+ * hit `/api/nonprofit-org.php?ein=X` per peer in parallel and pull
+ * `filings_with_data[0].totrevenue` (this is ProPublica's actual field name
+ * on the org endpoint, NOT `total_revenue`). Each fetch is independently
+ * wrapped so a single rejection doesn't collapse Promise.all.
+ *
+ * Exported for unit testing (see nonprofit-profile-peer-hydration.test.js).
+ *
+ * @param {Object} searchData - Response body from /api/nonprofit-search.php
+ * @param {string} ownEin - EIN of the organization being profiled (excluded)
+ * @returns {Promise<Array<{ein:string, strein?:string, name:string, totrevenue:number}>>}
+ */
+export async function hydratePeerRevenues(searchData, ownEin) {
+  const candidates = (searchData?.organizations || [])
+    .filter(p => p.ein !== ownEin && p.strein !== ownEin)
+    .slice(0, 10);
+
+  const hydrated = await Promise.all(
+    candidates.map(peer => {
+      const peerEin = peer.ein || peer.strein;
+      if (!peerEin) return null;
+      return fetch(`/api/nonprofit-org.php?ein=${encodeURIComponent(peerEin)}`)
+        .then(res => (res && res.ok ? res.json() : null))
+        .then(json => {
+          const filing = json?.filings_with_data?.[0];
+          const totrevenue = Number(filing?.totrevenue);
+          if (!Number.isFinite(totrevenue) || totrevenue <= 0) return null;
+          return { ...peer, totrevenue };
+        })
+        .catch(() => null);
+    })
+  );
+
+  return hydrated.filter(Boolean);
+}
+
 async function fetchPeerComparison(org, data) {
   try {
     const state = org.state;
@@ -1382,9 +1425,9 @@ async function fetchPeerComparison(org, data) {
     if (!res.ok) return;
     const searchData = await res.json();
 
-    const peers = (searchData.organizations || [])
-      .filter(p => p.ein !== ein && p.total_revenue > 0)
-      .slice(0, 25);
+    // Hydrate peer revenues from the org endpoint (search endpoint doesn't
+    // return total_revenue — P0-1 regression fix).
+    const peers = await hydratePeerRevenues(searchData, ein);
 
     if (peers.length < 3) return; // Not enough peers for meaningful comparison
 
@@ -1398,8 +1441,8 @@ async function fetchPeerComparison(org, data) {
     const latestIdx = data.years.length - 1;
     const thisRevenue = data.revenue[latestIdx] || 0;
 
-    // Peer medians
-    const peerRevenues = peers.map(p => p.total_revenue).sort((a, b) => a - b);
+    // Peer medians — use hydrated `totrevenue` field (org endpoint schema).
+    const peerRevenues = peers.map(p => p.totrevenue).sort((a, b) => a - b);
     const medianRevenue = peerRevenues[Math.floor(peerRevenues.length / 2)];
 
     const orgName = toTitleCase(org.name);
