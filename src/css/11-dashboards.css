@@ -503,6 +503,14 @@
   line-height: 1.5;
 }
 
+/* food-prices insights populated after async BLS/FRED fetch.
+   Reserve ~2 lines of copy so the empty-to-filled swap doesn't shift
+   downstream content (contributes to CLS 0.056 → 0 target). */
+#yoy-insight,
+#purchasing-power-insight {
+  min-height: 4.5rem;
+}
+
 /* Chart Containers */
 .dashboard-chart {
   width: 100%;
@@ -1071,6 +1079,11 @@
   gap: 0.5rem;
   justify-content: center;
   padding: 0.75rem 0 0.25rem;
+
+  /* Reserve space for 4 toggle buttons injected by JS after BLS fetch.
+     Empty-to-filled transition was the dominant CLS source on food-prices
+     (~50-90px shift pushing the next chart row). Two-row height covers 375px wrap. */
+  min-height: 5.5rem;
 }
 
 .fred-toggle-btn {
