@@ -14,7 +14,7 @@ import { initStateSelector } from './shared/state-selector.js';
 
 import {
   createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm,
-  HEATMAP_REGION_COLORS, HEATMAP_REGION_CLASS, sampleGradient, tileTextColor, tileSubTextColor
+  HEATMAP_REGION_COLORS, HEATMAP_REGION_CLASS, sampleGradient
 } from './shared/d3-heatmap.js';
 
 const PAL = MAP_PALETTES.access;
@@ -446,9 +446,13 @@ function ensureDbTileTip() {
 function createDoubleBurdenTile(d, rankNorm, tip) {
   const norm = rankNorm(parseFloat(d.pctOfPop) || 0);
   const rgb = sampleGradient(norm);
-  const bg = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-  const fg = tileTextColor(norm);
-  const subFg = tileSubTextColor(norm);
+  // Darken the bright value gradient so white text always meets WCAG AA 4.5:1.
+  // The shared gradient's mid/high stops (purple/orange/yellow) fall in a
+  // contrast dead zone when used raw — multiplying by 0.45 keeps the hue
+  // progression intact while pushing every stop comfortably under L=0.18.
+  const bg = `rgb(${Math.round(rgb[0] * 0.45)},${Math.round(rgb[1] * 0.45)},${Math.round(rgb[2] * 0.45)})`;
+  const fg = '#FFFFFF';
+  const subFg = 'rgba(255,255,255,0.85)';
   const isOutlier = norm >= DB_OUTLIER_THRESHOLD;
 
   const tile = document.createElement('div');
