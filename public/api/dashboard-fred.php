@@ -54,6 +54,8 @@ $fips = isset($_GET['fips']) ? preg_replace('/[^0-9]/', '', $_GET['fips']) : '';
 
 // Sanitize series ID (alphanumeric only)
 $seriesParam = isset($_GET['series']) ? preg_replace('/[^A-Za-z0-9]/', '', $_GET['series']) : '';
+// cap: cache-spam guard (dashboard final audit 2026-04-12) — real FRED IDs are ~14 chars (APUS0000701111)
+$seriesParam = substr($seriesParam, 0, 30);
 
 // Validate required parameters per type
 if (($type === 'snap-county' || $type === 'county-econ') && strlen($fips) !== 5) {

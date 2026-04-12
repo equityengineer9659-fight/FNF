@@ -26,6 +26,8 @@ if (!is_dir($cacheDir)) {
 
 // Validate and sanitize parameters
 $query = isset($_GET['q']) ? trim($_GET['q']) : '';
+// cap: cache-spam guard (dashboard final audit 2026-04-12) — ProPublica search tokens are short
+$query = substr($query, 0, 100);
 $state = isset($_GET['state']) ? strtoupper(trim($_GET['state'])) : '';
 $page = isset($_GET['page']) ? intval($_GET['page']) : 0;
 
