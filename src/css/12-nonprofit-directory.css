@@ -135,6 +135,16 @@
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
 }
 
+/* Audit 2026-04-12: keyboard users had no visible focus indicator on the
+   popular-search chips. Mirror the hover state so Tab/Shift-Tab traversal
+   makes the focused chip obvious without adding a second visual language. */
+.directory-chip:focus-visible {
+  outline: none;
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.7);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.6);
+}
+
 .directory-chip:active {
   transform: scale(0.97);
 }
