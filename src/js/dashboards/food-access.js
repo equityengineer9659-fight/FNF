@@ -1490,13 +1490,20 @@ function buildLowAccessInsight(stateName, stateAccess) {
 }
 
 async function init() {
+  // Silent-hang guard (2026-04-12 audit, cluster B): a never-resolving fetch
+  // on a bad network used to leave the dashboard blank forever. AbortController
+  // + 15000ms timeout kicks the Promise.all into the catch branch so the
+  // existing error UI fires instead.
+  const abortCtrl = new AbortController();
+  const timeoutId = setTimeout(() => abortCtrl.abort(), 15000);
   try {
     const [currentAccessRes, geoRes, fiRes, snapRetailRes] = await Promise.all([
-      fetch('/data/current-food-access.json'),
-      fetch('/data/us-states-geo.json'),
-      fetch('/data/food-insecurity-state.json'),
-      fetch('/data/snap-retailers.json')
+      fetch('/data/current-food-access.json', { signal: abortCtrl.signal }),
+      fetch('/data/us-states-geo.json', { signal: abortCtrl.signal }),
+      fetch('/data/food-insecurity-state.json', { signal: abortCtrl.signal }),
+      fetch('/data/snap-retailers.json', { signal: abortCtrl.signal })
     ]);
+    clearTimeout(timeoutId);
     if (!currentAccessRes.ok || !geoRes.ok) throw new Error('Failed to load data');
     const [currentAccessData, geoJSON] = await Promise.all([currentAccessRes.json(), geoRes.json()]);
     const fiData = fiRes.ok ? await fiRes.json() : null;
@@ -1702,6 +1709,7 @@ async function init() {
       .catch(() => { /* CDC unavailable — desert map stays as default */ });
 
   } catch {
+    clearTimeout(timeoutId);
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
     });

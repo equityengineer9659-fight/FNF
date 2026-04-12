@@ -6,7 +6,7 @@
 
 import {
   echarts, COLORS, accentRgba, TOOLTIP_STYLE, MAP_PALETTES, LEGEND_TEXT_STYLE,
-  animateCounters, createChart,
+  animateCounters, createChart, getOrCreateChart,
   updateFreshness, initScrollReveal, handleResize, addExportButton,
   US_STATES
 } from './shared/dashboard-utils.js';
@@ -18,7 +18,8 @@ let avgMealCost = 3.58;
 
 // -- Chart 1: Food Prices by Category (Overlapping Lines with Area) --
 function renderCategories(data) {
-  const chart = createChart('chart-categories');
+  // getOrCreateChart: re-called from fetchLiveRegional() when live BLS data arrives
+  const chart = getOrCreateChart('chart-categories');
   if (!chart || !data.series) return;
 
   const series = data.series.map(s => ({ ...s, data: s.data.filter(d => d.value !== null) }));
@@ -67,7 +68,8 @@ function renderCategories(data) {
 
 // -- Chart 2: Regional Price Comparison (grouped bar) --
 function renderRegions(data, mealCost) {
-  const chart = createChart('chart-regions');
+  // getOrCreateChart: re-called from fetchLiveRegional() when live BLS data arrives
+  const chart = getOrCreateChart('chart-regions');
   if (!chart || !data.series) return;
 
   // Use most recent data point for each region
@@ -273,7 +275,8 @@ function renderBurden(quintiles) {
 
 // -- Chart 5: Food at Home vs Away Trends (line) --
 function renderHomeVsAway(blsData) {
-  const chart = createChart('chart-home-vs-away');
+  // getOrCreateChart: re-called from fetchLiveBLS() when live BLS data arrives
+  const chart = getOrCreateChart('chart-home-vs-away');
   if (!chart || !blsData || !blsData.series) return;
 
   // Use connectNulls instead of filtering so gaps from known events (e.g. gov't shutdown Oct-Nov 2025) are bridged visually
@@ -393,7 +396,8 @@ function renderHomeVsAway(blsData) {
 
 // -- Chart 6: Year-over-Year Inflation Rate --
 function renderYoYInflation(blsData) {
-  const chart = createChart('chart-yoy-inflation');
+  // getOrCreateChart: re-called from fetchLiveBLS() when live BLS data arrives
+  const chart = getOrCreateChart('chart-yoy-inflation');
   if (!chart || !blsData?.series) return;
 
   const foodHome = blsData.series.find(s => s.name === 'Food at Home');
@@ -581,7 +585,8 @@ function rebuildPurchasingPowerSeries() {
 
 // -- Chart 7: SNAP Purchasing Power --
 function renderPurchasingPower(blsData, snapBenefits) {
-  const chart = createChart('chart-purchasing-power');
+  // getOrCreateChart: re-called from fetchLiveBLS() when live BLS data arrives
+  const chart = getOrCreateChart('chart-purchasing-power');
   if (!chart || !blsData?.series || !snapBenefits?.length) return;
 
   const foodHome = blsData.series.find(s => s.name === 'Food at Home');
@@ -791,14 +796,21 @@ function renderCpiVsInsecurity(blsData, fiTrend) {
 
 // -- Init --
 async function init() {
+  // Silent-hang guard (2026-04-12 audit, cluster B): a never-resolving fetch
+  // on a bad network used to leave the dashboard blank forever. AbortController
+  // + 15000ms timeout kicks the Promise.all into the catch branch so the
+  // existing error UI fires instead.
+  const abortCtrl = new AbortController();
+  const timeoutId = setTimeout(() => abortCtrl.abort(), 15000);
   try {
     // Load all data in parallel
     const [regionalRes, geoRes, blsRes, snapRes] = await Promise.all([
-      fetch('/data/bls-regional-cpi.json'),
-      fetch('/data/us-states-geo.json'),
-      fetch('/data/bls-food-cpi.json'),
-      fetch('/data/snap-participation.json')
+      fetch('/data/bls-regional-cpi.json', { signal: abortCtrl.signal }),
+      fetch('/data/us-states-geo.json', { signal: abortCtrl.signal }),
+      fetch('/data/bls-food-cpi.json', { signal: abortCtrl.signal }),
+      fetch('/data/snap-participation.json', { signal: abortCtrl.signal })
     ]);
+    clearTimeout(timeoutId);
 
     if (!regionalRes.ok || !geoRes.ok) {
       throw new Error('Failed to load dashboard data');
@@ -873,6 +885,7 @@ async function init() {
     fetchLiveRegional();
 
   } catch (err) {
+    clearTimeout(timeoutId);
     document.querySelectorAll('.dashboard-chart').forEach(el => {
       el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
     });
