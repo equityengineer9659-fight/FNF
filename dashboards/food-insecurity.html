@@ -160,7 +160,7 @@
             <ul class="dashboard-tabs__list">
             <li><a href="/dashboards/food-insecurity.html" class="dashboard-tabs__tab" aria-current="page">Overview</a></li>
             <li><a href="/dashboards/food-access.html" class="dashboard-tabs__tab">Food Access</a></li>
-            <li><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab">SNAP & Safety Net</a></li>
+            <li><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab">SNAP &amp; Safety Net</a></li>
             <li><a href="/dashboards/food-prices.html" class="dashboard-tabs__tab">Food Prices</a></li>
             <li><a href="/dashboards/food-banks.html" class="dashboard-tabs__tab">Food Banks</a></li>
             <li><a href="/dashboards/nonprofit-directory.html" class="dashboard-tabs__tab">Nonprofit Directory</a></li>
@@ -181,7 +181,7 @@
             <h1 class="slds-text-heading_large">Food Insecurity in America</h1>
             <p class="dashboard-hero__subtitle">An interactive look at hunger across the United States</p>
             <p class="dashboard-hero__positioning">Interactive dashboards that help food relief organizations understand demand, access barriers, affordability pressure, and operational capacity.</p>
-            <div class="dashboard-hero__stats" aria-label="Key national statistics">
+            <div class="dashboard-hero__stats" role="group" aria-label="Key national statistics">
                 <div class="dashboard-stat">
                     <span class="dashboard-stat__number" role="status" aria-live="off" data-target="47.9" data-suffix="M">47.9M</span>
                     <p class="dashboard-stat__label">Americans Food Insecure</p>
@@ -222,7 +222,7 @@
                     <div id="state-selector-container"></div>
                         <span id="map-state-label" class="dashboard-map__state-label"></span>
                         <div class="dashboard-card__controls">
-                            <button id="map-back-btn" class="dashboard-back-btn hidden" aria-label="Back to national view">Back to National</button>
+                            <button type="button" id="map-back-btn" class="dashboard-back-btn hidden" aria-label="Back to national view">Back to National</button>
                             <label for="map-metric" class="slds-assistive-text">Select metric</label>
                             <select id="map-metric" class="dashboard-select">
                                 <option value="rate">Food Insecurity Rate (%)</option>
@@ -326,7 +326,7 @@
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Data Year</span> 2024 food insecurity; 2023 SAIPE/ACS poverty estimates</div>
                             <div class="dashboard-info__meta-item"><span class="dashboard-info__label">Updated</span> SAIPE: annually each December. ACS fallback: annually each December. USDA ERS: terminated after ERR-358 (2024 data)</div>
                         </div>
-                        <div id="scatter-insight" class="dashboard-info__insight" aria-live="polite">Strong positive correlation (r &asymp; 0.92) — poverty is the #1 predictor of food insecurity.</div>
+                        <div id="scatter-insight" class="dashboard-info__insight" aria-live="polite">Loading correlation from live data…</div>
                     </div>
                 </div>
             </div>

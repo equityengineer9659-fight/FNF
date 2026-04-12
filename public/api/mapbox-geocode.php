@@ -47,6 +47,8 @@ if (!defined('MAPBOX_ACCESS_TOKEN') || MAPBOX_ACCESS_TOKEN === '') {
 
 // Validate query
 $query = isset($_GET['q']) ? trim($_GET['q']) : '';
+// cap: cache-spam guard (dashboard final audit 2026-04-12) — forward-geocode queries are short place names
+$query = substr($query, 0, 200);
 if ($query === '' || strlen($query) < 2) {
     http_response_code(400);
     echo json_encode(['error' => 'Provide a search query (q) of at least 2 characters']);

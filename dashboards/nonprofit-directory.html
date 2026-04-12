@@ -91,7 +91,7 @@
                 <a href="/resources.html" class="fnf-nav__link">Resources</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link">Dashboards</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/impact.html" class="fnf-nav__link">Impact</a>
@@ -114,7 +114,7 @@
                 <li><a href="/index.html" class="fnf-nav__mobile-link">Home</a></li>
                 <li><a href="/services.html" class="fnf-nav__mobile-link">Services</a></li>
                 <li><a href="/resources.html" class="fnf-nav__mobile-link">Resources</a></li>
-                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">Dashboards</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link">Dashboards</a></li>
                 <li><a href="/impact.html" class="fnf-nav__mobile-link">Impact</a></li>
                 <li><a href="/contact.html" class="fnf-nav__mobile-link">Contact</a></li>
                 <li><a href="/blog.html" class="fnf-nav__mobile-link">Blog</a></li>
@@ -129,7 +129,7 @@
             <ul class="dashboard-tabs__list">
             <li><a href="/dashboards/food-insecurity.html" class="dashboard-tabs__tab">Overview</a></li>
             <li><a href="/dashboards/food-access.html" class="dashboard-tabs__tab">Food Access</a></li>
-            <li><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab">SNAP & Safety Net</a></li>
+            <li><a href="/dashboards/snap-safety-net.html" class="dashboard-tabs__tab">SNAP &amp; Safety Net</a></li>
             <li><a href="/dashboards/food-prices.html" class="dashboard-tabs__tab">Food Prices</a></li>
             <li><a href="/dashboards/food-banks.html" class="dashboard-tabs__tab">Food Banks</a></li>
             <li><a href="/dashboards/nonprofit-directory.html" class="dashboard-tabs__tab" aria-current="page">Nonprofit Directory</a></li>
@@ -145,7 +145,7 @@
             <h1 class="slds-text-heading_large">Nonprofit Directory</h1>
             <p class="dashboard-hero__subtitle">Search over 60,000 food assistance organizations — explore profiles, financials, and IRS 990 data</p>
             <p class="dashboard-hero__positioning">Empowering food banks, funders, and policymakers with transparent financial data to benchmark performance and identify partnership opportunities.</p>
-            <div class="dashboard-hero__stats" aria-label="Directory statistics">
+            <div class="dashboard-hero__stats" role="group" aria-label="Directory statistics">
                 <div class="dashboard-stat">
                     <span class="dashboard-stat__number" role="status" aria-live="off" data-target="60" data-suffix="K+">60K+</span>
                     <p class="dashboard-stat__label">Organizations</p>
@@ -175,14 +175,14 @@
                     <select id="directory-state-select" class="directory-search-bar__select" aria-label="Filter by state">
                         <option value="">All States</option>
                     </select>
-                    <button id="directory-search-btn" class="directory-search-bar__btn">Search</button>
+                    <button type="button" id="directory-search-btn" class="directory-search-bar__btn">Search</button>
                 </div>
                 <div class="directory-search-chips" aria-label="Popular searches">
-                    <button class="directory-chip" data-query="Food Bank">Food Bank</button>
-                    <button class="directory-chip" data-query="Food Pantry">Food Pantry</button>
-                    <button class="directory-chip" data-query="Meals on Wheels">Meals on Wheels</button>
-                    <button class="directory-chip" data-query="Feeding America">Feeding America</button>
-                    <button class="directory-chip" data-query="Hunger Relief">Hunger Relief</button>
+                    <button type="button" class="directory-chip" data-query="Food Bank">Food Bank</button>
+                    <button type="button" class="directory-chip" data-query="Food Pantry">Food Pantry</button>
+                    <button type="button" class="directory-chip" data-query="Meals on Wheels">Meals on Wheels</button>
+                    <button type="button" class="directory-chip" data-query="Feeding America">Feeding America</button>
+                    <button type="button" class="directory-chip" data-query="Hunger Relief">Hunger Relief</button>
                 </div>
                 <div id="directory-results-count" class="directory-results-count" aria-live="polite"></div>
             </div>
@@ -207,7 +207,7 @@
                         <div class="dashboard-search-panel">
                             <div class="directory-search-bar">
                                 <input type="text" id="help-search-input" class="directory-search-bar__input" placeholder="Enter your address, city, or zip code..." aria-label="Address search">
-                                <button id="help-search-btn" class="directory-search-bar__btn">Find Near Me</button>
+                                <button type="button" id="help-search-btn" class="directory-search-bar__btn">Find Near Me</button>
                             </div>
                             <div id="help-search-status" role="status" aria-live="polite" class="dashboard-search-status"></div>
                             <div id="help-search-results" class="dashboard-search-results"></div>

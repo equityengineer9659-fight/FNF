@@ -22,6 +22,39 @@ const PAL = MAP_PALETTES.access;
 // Module-level cache: restored when back button resets to national desert view
 let _lowAccessDefaultInsight = '';
 
+/**
+ * Reset the "Focus on state" dropdown (`#state-deep-dive`) to "All States"
+ * and clear the `?state=` URL query parameter.
+ *
+ * Exported so unit tests can exercise the invariant in isolation and so the
+ * map-view toggle handler can keep the dropdown in sync with what the map
+ * actually shows. This matters because only the Food Deserts mode supports
+ * state drill-down — switching to Insecurity or SNAP Retailers would otherwise
+ * leave a stale state (e.g. "Texas") selected in the dropdown while the map
+ * snaps back to national view (audit P0-2).
+ *
+ * Safe to call in environments without `document` or when the element is
+ * missing — it silently no-ops.
+ *
+ * @returns {boolean} `true` when a reset was performed, `false` when the
+ *   dropdown was absent or already at "All States".
+ */
+export function resetStateFocusDropdown() {
+  if (typeof document === 'undefined') return false;
+  const select = document.getElementById('state-deep-dive');
+  if (!select) return false;
+  if (select.value === '') return false;
+  select.value = '';
+  try {
+    const url = new URL(window.location);
+    if (url.searchParams.has('state')) {
+      url.searchParams.delete('state');
+      window.history.replaceState({}, '', url);
+    }
+  } catch { /* URL API missing — ignore */ }
+  return true;
+}
+
 // Desert map state tooltip (pure — depends only on fmtNum)
 function desertStateTooltip(params) {
   const d = params.data;
@@ -482,9 +515,20 @@ function createDoubleBurdenTile(d, rankNorm, tip) {
 
   tile.append(nameDiv, pctDiv, countDiv);
   tile.setAttribute('role', 'listitem');
-  tile.setAttribute('aria-label', `${d.name}: ${d.pctOfPop}% of population, ${fmtNum(d.estimate)} people`);
+  // Audit 2026-04-12: tiles used to be browse-only via mouse hover, so
+  // keyboard and screen-reader users got nothing. tabindex=0 makes each tile
+  // reachable via Tab. The aria-label already carries the headline figure,
+  // but we extend it here to include the same facts the hover tooltip shows
+  // (population + low-access tracts) so the screen reader announcement is
+  // parity with the visual tooltip.
+  tile.setAttribute('tabindex', '0');
+  tile.setAttribute(
+    'aria-label',
+    `${d.name}: ${d.pctOfPop}% of population, ${fmtNum(d.estimate)} people. ` +
+    `Total population ${fmtNum(d.population)}, low-access tracts ${d.lowAccessPct}%.`
+  );
 
-  tile.addEventListener('mouseenter', (e) => {
+  const showTip = (anchorX, anchorY) => {
     tile.style.transform = 'scale(1.04)';
     tile.style.boxShadow = '0 4px 16px rgba(0,0,0,0.45)';
     tile.style.zIndex = '2';
@@ -496,20 +540,33 @@ function createDoubleBurdenTile(d, rankNorm, tip) {
       <hr class="fnf-tooltip-divider">
       <span class="fnf-tooltip-muted">Population: ${fmtNum(d.population)}<br/>Low-Access Tracts: ${d.lowAccessPct}%</span>`;
     tip.querySelectorAll('[data-color]').forEach(el => { el.style.backgroundColor = el.dataset.color; });
-    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
-    tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
+    tip.style.left = Math.min(anchorX + 14, window.innerWidth - 260) + 'px';
+    tip.style.top = Math.min(anchorY - 10, window.innerHeight - 200) + 'px';
     tip.style.opacity = '1';
-  });
-  tile.addEventListener('mousemove', (e) => {
-    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
-    tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
-  });
-  tile.addEventListener('mouseleave', () => {
+  };
+
+  const hideTip = () => {
     tile.style.transform = '';
     tile.style.boxShadow = isOutlier ? '0 0 8px rgba(253,224,71,0.08)' : '';
     tile.style.zIndex = '';
     tip.style.opacity = '0';
+  };
+
+  tile.addEventListener('mouseenter', (e) => showTip(e.clientX, e.clientY));
+  tile.addEventListener('mousemove', (e) => {
+    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 260) + 'px';
+    tip.style.top = Math.min(e.clientY - 10, window.innerHeight - 200) + 'px';
   });
+  tile.addEventListener('mouseleave', hideTip);
+
+  // Keyboard parity: Tab focus shows the same tooltip anchored at the tile's
+  // top-right corner; blur hides it. No Enter/Space handler because the tile
+  // is purely informational — no click action to mirror.
+  tile.addEventListener('focus', () => {
+    const rect = tile.getBoundingClientRect();
+    showTip(rect.right, rect.top);
+  });
+  tile.addEventListener('blur', hideTip);
 
   return tile;
 }
@@ -1457,13 +1514,20 @@ function buildLowAccessInsight(stateName, stateAccess) {
 }
 
 async function init() {
+  // Silent-hang guard (2026-04-12 audit, cluster B): a never-resolving fetch
+  // on a bad network used to leave the dashboard blank forever. AbortController
+  // + 15000ms timeout kicks the Promise.all into the catch branch so the
+  // existing error UI fires instead.
+  const abortCtrl = new AbortController();
+  const timeoutId = setTimeout(() => abortCtrl.abort(), 15000);
   try {
     const [currentAccessRes, geoRes, fiRes, snapRetailRes] = await Promise.all([
-      fetch('/data/current-food-access.json'),
-      fetch('/data/us-states-geo.json'),
-      fetch('/data/food-insecurity-state.json'),
-      fetch('/data/snap-retailers.json')
+      fetch('/data/current-food-access.json', { signal: abortCtrl.signal }),
+      fetch('/data/us-states-geo.json', { signal: abortCtrl.signal }),
+      fetch('/data/food-insecurity-state.json', { signal: abortCtrl.signal }),
+      fetch('/data/snap-retailers.json', { signal: abortCtrl.signal })
     ]);
+    clearTimeout(timeoutId);
     if (!currentAccessRes.ok || !geoRes.ok) throw new Error('Failed to load data');
     const [currentAccessData, geoJSON] = await Promise.all([currentAccessRes.json(), geoRes.json()]);
     const fiData = fiRes.ok ? await fiRes.json() : null;
@@ -1568,6 +1632,13 @@ async function init() {
         if (!btn) return;
         const view = btn.dataset.mapView;
         if (view === currentMapView) return;
+        // P0-2: State focus and map mode are orthogonal axes, and only the
+        // Food Deserts mode supports state drill-down. Reset the dropdown
+        // on any user-initiated mode change so the dropdown can never
+        // disagree with what the map is showing (e.g. "Texas" selected
+        // while map snaps back to national view after toggling to SNAP
+        // Retailers or Food Insecurity).
+        resetStateFocusDropdown();
         switchMapView(view);
       });
     }
@@ -1661,15 +1732,16 @@ async function init() {
       })
       .catch(() => { /* CDC unavailable — desert map stays as default */ });
 
-  } catch {
+  } catch (err) {
+    clearTimeout(timeoutId);
+    const msg = err?.name === 'AbortError'
+      ? 'Dashboard data took too long to load. Check your connection or try again later.'
+      : 'Unable to load dashboard data. If the problem persists, try refreshing the page.';
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = `<p class="dashboard-error-state">${msg}</p>`;
     });
     const errorEl = document.getElementById('dashboard-error');
-    if (errorEl) {
-      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
-      errorEl.hidden = false;
-    }
+    if (errorEl) { errorEl.textContent = msg; errorEl.hidden = false; }
   }
 }
 

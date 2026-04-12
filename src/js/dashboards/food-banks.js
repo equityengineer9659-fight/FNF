@@ -381,11 +381,18 @@ function renderCapacityGap(states) {
 
 // -- Init --
 async function init() {
+  // Silent-hang guard (2026-04-12 audit, cluster B): a never-resolving fetch
+  // on a bad network used to leave the dashboard blank forever. AbortController
+  // + 15000ms timeout kicks the Promise.all into the catch branch so the
+  // existing error UI fires instead.
+  const abortCtrl = new AbortController();
+  const timeoutId = setTimeout(() => abortCtrl.abort(), 15000);
   try {
     const [bankRes, geoRes] = await Promise.all([
-      fetch('/data/food-bank-summary.json'),
-      fetch('/data/us-states-geo.json')
+      fetch('/data/food-bank-summary.json', { signal: abortCtrl.signal }),
+      fetch('/data/us-states-geo.json', { signal: abortCtrl.signal })
     ]);
+    clearTimeout(timeoutId);
     if (!bankRes.ok || !geoRes.ok) throw new Error('Failed to load data');
     const [bankData, geoJSON] = await Promise.all([bankRes.json(), geoRes.json()]);
 
@@ -442,15 +449,16 @@ async function init() {
 
     initScrollReveal();
     window.addEventListener('resize', handleResize);
-  } catch {
+  } catch (err) {
+    clearTimeout(timeoutId);
+    const msg = err?.name === 'AbortError'
+      ? 'Dashboard data took too long to load. Check your connection or try again later.'
+      : 'Unable to load dashboard data. If the problem persists, try refreshing the page.';
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = `<p class="dashboard-error-state">${msg}</p>`;
     });
     const errorEl = document.getElementById('dashboard-error');
-    if (errorEl) {
-      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
-      errorEl.hidden = false;
-    }
+    if (errorEl) { errorEl.textContent = msg; errorEl.hidden = false; }
   }
 }
 

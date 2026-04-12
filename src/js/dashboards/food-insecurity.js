@@ -6,7 +6,7 @@
 
 import {
   echarts, COLORS, accentRgba, TOOLTIP_STYLE, MAP_PALETTES,
-  fmtNum, animateCounters, createChart, linearRegression,
+  fmtNum, animateCounters, createChart, getOrCreateChart, linearRegression,
   updateFreshness, initScrollReveal, handleResize,
   REGION_COLORS, REGION_CLASS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
@@ -200,7 +200,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
       const mapLabel = document.getElementById('map-state-label');
       if (mapLabel) mapLabel.textContent = stateName;
       const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
-      if (hint) hint.textContent = 'County rates are modeled estimates (County Health Rankings 2025), not direct survey data \u2014 click Back for state-level survey data';
+      if (hint) hint.textContent = 'County rates are internal estimates derived from state poverty data (not a direct survey) \u2014 click Back for state-level survey data';
 
       chart.hideLoading();
 
@@ -343,7 +343,12 @@ function initCountySearch(mapController) {
   });
 
   input.addEventListener('input', () => {
-    const query = input.value.trim().toLowerCase();
+    // Audit 2026-04-12: journey-auditor typed "imperial county" and got zero
+    // results. The stored name is "Imperial" (no suffix), so the raw query
+    // failed the .includes() check. Strip a trailing " county" suffix so both
+    // "imperial" and "imperial county" resolve to the same match set.
+    const rawQuery = input.value.trim().toLowerCase();
+    const query = rawQuery.replace(/\s+county$/i, '').trim();
     selectedIdx = -1;
 
     if (!countyIndex || query.length < 2) {
@@ -658,7 +663,8 @@ function renderScatter(data, mode, source) {
   if (mode) _scatterMode = mode;
   if (source) _scatterSource = source;
 
-  const chart = createChart('chart-scatter');
+  // getOrCreateChart: re-called from _trySAIPE()/_tryACSFallback() when live Census data arrives
+  const chart = getOrCreateChart('chart-scatter');
   if (!chart) return;
 
   const isChild = _scatterMode === 'child';
@@ -749,8 +755,8 @@ function renderScatter(data, mode, source) {
   const insightEl = document.getElementById('scatter-insight');
   if (insightEl) {
     const strength = Math.abs(reg.r) >= 0.7 ? 'Strong' : Math.abs(reg.r) >= 0.4 ? 'Moderate' : 'Weak';
-    // P1-04: derive the qualitative label from the live r-value rather than asserting
-    // "#1 predictor" unconditionally. Superlative only used when correlation is strong.
+    // P1-04: derive the qualitative label from the live r-value rather than making a
+    // hard-ranked superlative claim unconditionally. Strong wording only when r is strong.
     const isStrong = Math.abs(reg.r) >= 0.7;
     const subject = isChild ? 'child poverty' : 'poverty';
     const object = isChild ? 'child food insecurity' : 'food insecurity';
@@ -989,7 +995,8 @@ function renderSnap(data) {
 
 // -- Food Price Trend (BLS CPI data) --
 function renderFoodPrices(blsData) {
-  const chart = createChart('chart-food-prices');
+  // getOrCreateChart: re-called from fetchBLSData() on both static-path and live-path renders
+  const chart = getOrCreateChart('chart-food-prices');
   if (!chart || !blsData || !blsData.series) return;
 
   // Find each series
@@ -1079,7 +1086,7 @@ function renderFoodPrices(blsData) {
         symbol: 'none'
       }] : [])
     ]
-  });
+  }, true);
 }
 
 // -- SDOH Scatter (live Census ACS data, non-blocking) --
@@ -1643,12 +1650,19 @@ function renderStateDeepDive(stateCode, data, accessData, bankData) {
 
 // -- Init --
 async function init() {
+  // Silent-hang guard (2026-04-12 audit, cluster B): a never-resolving fetch
+  // on a bad network used to leave the dashboard blank forever. AbortController
+  // + 15000ms timeout kicks the Promise.all into the catch branch so the
+  // existing error UI fires instead.
+  const abortCtrl = new AbortController();
+  const timeoutId = setTimeout(() => abortCtrl.abort(), 15000);
   try {
     // Load core data (static JSON — always available)
     const [dataRes, geoRes] = await Promise.all([
-      fetch('/data/food-insecurity-state.json'),
-      fetch('/data/us-states-geo.json')
+      fetch('/data/food-insecurity-state.json', { signal: abortCtrl.signal }),
+      fetch('/data/us-states-geo.json', { signal: abortCtrl.signal })
     ]);
+    clearTimeout(timeoutId);
 
     if (!dataRes.ok || !geoRes.ok) {
       throw new Error('Failed to load dashboard data');
@@ -1736,15 +1750,15 @@ async function init() {
     fetchSDOHData();
 
   } catch (err) {
-    // Show error in chart containers
+    clearTimeout(timeoutId);
+    const msg = err?.name === 'AbortError'
+      ? 'Dashboard data took too long to load. Check your connection or try again later.'
+      : 'Unable to load dashboard data. If the problem persists, try refreshing the page.';
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = `<p class="dashboard-error-state">${msg}</p>`;
     });
     const errorEl = document.getElementById('dashboard-error');
-    if (errorEl) {
-      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
-      errorEl.hidden = false;
-    }
+    if (errorEl) { errorEl.textContent = msg; errorEl.hidden = false; }
   }
 }
 

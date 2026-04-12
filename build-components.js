@@ -11,28 +11,10 @@ import { glob } from 'glob';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Pages that should highlight "Dashboards" in navigation
-const dashboardSubpages = [
-  'executive-summary', 'food-insecurity', 'food-access', 'snap-safety-net', 'food-prices', 'food-banks',
-  'nonprofit-directory', 'nonprofit-profile',
-];
-
-// Pages that should highlight "Blog" in navigation — auto-discovered from blog/ directory
-const blogSubpages = [
-  'blog',
-  ...glob.sync('*.html', { cwd: path.join(__dirname, 'blog') })
-    .map(f => f.replace('.html', '')),
-];
-
-// Pages that should highlight "Resources" in navigation
-// Only the resources page itself and hub pages — NOT blog articles or dashboards
-const resourcesSubpages = [
-  'resources',
-  // Hub pages
-  'case-studies', 'templates-tools',
-];
-
-// Component definitions — all hrefs use absolute paths so they work from any subdirectory
+// Component definitions — all hrefs use absolute paths so they work from any subdirectory.
+// aria-current="page" is only emitted on the link whose href matches the CURRENT page
+// (not all pages in a "section"), per WAI-ARIA 1.2: a11y tools announce "current page"
+// on a link that leaves the page otherwise.
 const components = {
   navigation: (currentPage) => `    <!-- Navigation -->
     <nav class="fnf-nav" aria-label="Main navigation">
@@ -73,10 +55,10 @@ const components = {
                 <a href="/services.html" class="fnf-nav__link"${currentPage === 'services' ? ' aria-current="page"' : ''}>Services</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/resources.html" class="fnf-nav__link"${resourcesSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Resources</a>
+                <a href="/resources.html" class="fnf-nav__link"${currentPage === 'resources' ? ' aria-current="page"' : ''}>Resources</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link"${dashboardSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Dashboards</a>
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link"${currentPage === 'food-insecurity' ? ' aria-current="page"' : ''}>Dashboards</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/impact.html" class="fnf-nav__link"${currentPage === 'impact' ? ' aria-current="page"' : ''}>Impact</a>
@@ -85,7 +67,7 @@ const components = {
                 <a href="/contact.html" class="fnf-nav__link"${currentPage === 'contact' ? ' aria-current="page"' : ''}>Contact</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/blog.html" class="fnf-nav__link"${blogSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Blog</a>
+                <a href="/blog.html" class="fnf-nav__link"${currentPage === 'blog' ? ' aria-current="page"' : ''}>Blog</a>
             </li>
             <li class="fnf-nav__item">
                 <a href="/about.html" class="fnf-nav__link"${currentPage === 'about' ? ' aria-current="page"' : ''}>About Us</a>
@@ -98,11 +80,11 @@ const components = {
             <ul class="fnf-nav__mobile-menu">
                 <li><a href="/index.html" class="fnf-nav__mobile-link"${currentPage === 'index' ? ' aria-current="page"' : ''}>Home</a></li>
                 <li><a href="/services.html" class="fnf-nav__mobile-link"${currentPage === 'services' ? ' aria-current="page"' : ''}>Services</a></li>
-                <li><a href="/resources.html" class="fnf-nav__mobile-link"${resourcesSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Resources</a></li>
-                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link"${dashboardSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Dashboards</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link"${currentPage === 'resources' ? ' aria-current="page"' : ''}>Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link"${currentPage === 'food-insecurity' ? ' aria-current="page"' : ''}>Dashboards</a></li>
                 <li><a href="/impact.html" class="fnf-nav__mobile-link"${currentPage === 'impact' ? ' aria-current="page"' : ''}>Impact</a></li>
                 <li><a href="/contact.html" class="fnf-nav__mobile-link"${currentPage === 'contact' ? ' aria-current="page"' : ''}>Contact</a></li>
-                <li><a href="/blog.html" class="fnf-nav__mobile-link"${blogSubpages.includes(currentPage) ? ' aria-current="page"' : ''}>Blog</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link"${currentPage === 'blog' ? ' aria-current="page"' : ''}>Blog</a></li>
                 <li><a href="/about.html" class="fnf-nav__mobile-link"${currentPage === 'about' ? ' aria-current="page"' : ''}>About Us</a></li>
             </ul>
         </div>
@@ -192,7 +174,7 @@ const components = {
     const tabs = [
       { slug: 'food-insecurity', label: 'Overview' },
       { slug: 'food-access', label: 'Food Access' },
-      { slug: 'snap-safety-net', label: 'SNAP & Safety Net' },
+      { slug: 'snap-safety-net', label: 'SNAP &amp; Safety Net' },
       { slug: 'food-prices', label: 'Food Prices' },
       { slug: 'food-banks', label: 'Food Banks' },
       { slug: 'nonprofit-directory', label: 'Nonprofit Directory' },
@@ -213,6 +195,40 @@ ${items}
     </nav>`;
   }
 };
+
+/**
+ * Apply accessibility fixups to arbitrary HTML. Run on every processed page
+ * so that hand-authored source HTML cannot regress on these specific a11y bugs:
+ *   - Bug 2: `<div class="dashboard-hero__stats" aria-label="...">` is spec-invalid
+ *            without a role; add `role="group"`.
+ *   - Bug 3: `<button>` without an explicit `type` defaults to `submit`;
+ *            add `type="button"`.
+ * Intended to be idempotent — re-running on already-fixed HTML is a no-op.
+ */
+function postProcessA11y(html) {
+  // Bug 2: add role="group" to `<div class="dashboard-hero__stats" aria-label=...>`
+  // that do not already have a role attribute. Matches the common tag shape used
+  // across all 8 dashboard pages. Idempotent — a div that already carries
+  // role="group" is skipped by the negative lookahead.
+  html = html.replace(
+    /<div class="dashboard-hero__stats"(?! role=)(?![^>]*\srole=)( aria-label=)/g,
+    '<div class="dashboard-hero__stats" role="group"$1'
+  );
+
+  // Bug 3: add type="button" to <button> tags that don't already declare a type.
+  // We scan the full start-tag `<button ...>` and inject `type="button"` right
+  // after the word `button` if no `type=` is present. Idempotent — buttons that
+  // already have type="button" or type="submit" are left alone.
+  html = html.replace(
+    /<button\b([^>]*)>/g,
+    (match, attrs) => {
+      if (/\btype\s*=/.test(attrs)) return match;
+      return `<button type="button"${attrs}>`;
+    }
+  );
+
+  return html;
+}
 
 // Process HTML files — isBlogArticle controls CTA injection (blog/ articles only)
 function processHtmlFile(filePath, pageName, isBlogArticle = false) {
@@ -273,6 +289,10 @@ function processHtmlFile(filePath, pageName, isBlogArticle = false) {
     html = html.replace(scriptSectionPattern, components.scripts(pageName) + '\n');
     console.log(`✅ Updated scripts in ${pageName}`);
   }
+
+  // Apply accessibility fixups to the full document (runs after structural
+  // replacements so injected components also get the treatment).
+  html = postProcessA11y(html);
 
   // Ensure SLDS CDN link has correct SRI hash
   const sldsUrl = 'https://cdnjs.cloudflare.com/ajax/libs/design-system/2.22.2/styles/salesforce-lightning-design-system.min.css';
@@ -340,7 +360,18 @@ function buildComponents() {
   console.log('\n✨ Component build complete!');
 }
 
-// Run if called directly
-buildComponents();
+// Run if called directly (not when imported as a module, e.g., by tests)
+const isMainModule = (() => {
+  try {
+    return import.meta.url === `file://${process.argv[1]}`
+      || fileURLToPath(import.meta.url) === path.resolve(process.argv[1] || '');
+  } catch {
+    return false;
+  }
+})();
 
-export { buildComponents };
+if (isMainModule) {
+  buildComponents();
+}
+
+export { buildComponents, components, postProcessA11y };
