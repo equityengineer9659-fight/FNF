@@ -200,7 +200,7 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
       const mapLabel = document.getElementById('map-state-label');
       if (mapLabel) mapLabel.textContent = stateName;
       const hint = document.querySelector('#chart-map + .dashboard-chart__hint');
-      if (hint) hint.textContent = 'County rates are modeled estimates (County Health Rankings 2025), not direct survey data \u2014 click Back for state-level survey data';
+      if (hint) hint.textContent = 'County rates are internal estimates derived from state poverty data (not a direct survey) \u2014 click Back for state-level survey data';
 
       chart.hideLoading();
 
@@ -750,8 +750,8 @@ function renderScatter(data, mode, source) {
   const insightEl = document.getElementById('scatter-insight');
   if (insightEl) {
     const strength = Math.abs(reg.r) >= 0.7 ? 'Strong' : Math.abs(reg.r) >= 0.4 ? 'Moderate' : 'Weak';
-    // P1-04: derive the qualitative label from the live r-value rather than asserting
-    // "#1 predictor" unconditionally. Superlative only used when correlation is strong.
+    // P1-04: derive the qualitative label from the live r-value rather than making a
+    // hard-ranked superlative claim unconditionally. Strong wording only when r is strong.
     const isStrong = Math.abs(reg.r) >= 0.7;
     const subject = isChild ? 'child poverty' : 'poverty';
     const object = isChild ? 'child food insecurity' : 'food insecurity';
