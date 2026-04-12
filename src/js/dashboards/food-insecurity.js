@@ -80,7 +80,7 @@ function buildCountyInsight(countyName, countyValue, stateObj, metricKey) {
 }
 
 // -- Map Chart with County Drill-Down --
-function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
+function renderMap(geoJSON, data, metric = 'rate', onStateClick, onDrillDownComplete) {
   const chart = createChart('chart-map');
   if (!chart) return;
 
@@ -188,6 +188,12 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick) {
           ...f.properties
         }));
       lastCountyData = countyData;
+
+      // Fire async callback so deep-dive panel can re-render with fresh county data
+      if (onDrillDownComplete) {
+        const matchedState = US_STATES.find(([, sn]) => sn === stateName);
+        if (matchedState) onDrillDownComplete(matchedState[0]);
+      }
 
       // Compute dynamic min/max for this state's counties
       const vals = countyData.map(c => c.value).filter(v => typeof v === 'number');
@@ -1599,7 +1605,7 @@ function buildStateInsight(fi, data, stateName) {
 }
 
 // -- State Deep-Dive Cross-Dataset KPI Panel --
-function renderStateDeepDive(stateCode, data, accessData, bankData) {
+function renderStateDeepDive(stateCode, data, accessData, bankData, countyData = null) {
   const section = document.getElementById('section-state-deepdive');
   const panel = document.getElementById('state-deepdive-panel');
   if (!section || !panel) return;
@@ -1643,6 +1649,14 @@ function renderStateDeepDive(stateCode, data, accessData, bankData) {
       `).join('')}
     </div>
     <p class="dashboard-kpi-insight">${buildStateInsight(fi, data, stateName)}</p>
+    ${countyData?.length ? `
+      <p class="dashboard-kpi-insight"><strong>Highest-need counties:</strong></p>
+      <ul class="dashboard-county-top3">
+        ${[...countyData].sort((a, b) => b.value - a.value).slice(0, 3).map(c =>
+    `<li>${c.name} — ${(+c.value).toFixed(1)}%</li>`
+  ).join('')}
+      </ul>
+    ` : ''}
   `;
   // Set dynamic KPI colors via CSSOM (CSP-compliant)
   kpis.forEach((k, i) => {
@@ -1689,7 +1703,10 @@ async function init() {
 
     // Render all charts
     const mapCtrl = renderMap(geoJSON, data, 'rate', (stateCode) => {
-      renderStateDeepDive(stateCode, data, accessData, bankData);
+      renderStateDeepDive(stateCode, data, accessData, bankData, mapCtrl.getCountyData());
+    }, (stateCode) => {
+      // Async re-render after county fetch completes — fixes first-click empty top-3
+      renderStateDeepDive(stateCode, data, accessData, bankData, mapCtrl.getCountyData());
     });
 
     // County search
@@ -1700,13 +1717,13 @@ async function init() {
     initStateSelector('state-selector-container', (stateCode) => {
       if (!stateCode) {
         mapCtrl.showNational();
-        renderStateDeepDive('', data, accessData, bankData);
+        renderStateDeepDive('', data, accessData, bankData, mapCtrl.getCountyData());
         return;
       }
       const stateName = US_STATES.find(([c]) => c === stateCode)?.[1];
       const match = data.states.find(s => s.name === stateName);
       if (match?.fips) mapCtrl.drillDown(match.name, match.fips);
-      renderStateDeepDive(stateCode, data, accessData, bankData);
+      renderStateDeepDive(stateCode, data, accessData, bankData, mapCtrl.getCountyData());
     });
     renderTrend(data);
     renderRadar(data);
@@ -1732,7 +1749,7 @@ async function init() {
       renderTripleBurden(data, accessData);
       // If state already selected via URL, render deep-dive now that data is loaded
       const urlState = new URLSearchParams(window.location.search).get('state');
-      if (urlState) renderStateDeepDive(urlState, data, accessData, bankData);
+      if (urlState) renderStateDeepDive(urlState, data, accessData, bankData, mapCtrl.getCountyData());
     });
 
     // CSV export buttons — county-aware when drilled in
