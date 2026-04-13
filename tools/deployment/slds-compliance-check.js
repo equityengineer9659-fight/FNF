@@ -5,9 +5,8 @@
  * Validates SLDS component usage and design token compliance
  */
 
-const fs = require('fs');
-const path = require('path');
-const { glob } = require('glob');
+import fs from 'fs';
+import { glob } from 'glob';
 
 class SLDSComplianceChecker {
   constructor() {
