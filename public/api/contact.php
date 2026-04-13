@@ -38,6 +38,12 @@ if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrfToken)) {
 }
 unset($_SESSION['csrf_token']); // single-use
 
+// Set rate-limit cooldown immediately after CSRF passes — BEFORE mail() so
+// that an SMTP failure still consumes the per-session cooldown. Otherwise the
+// CSRF token has already been burned (unset above) and the user is stuck
+// without any cooldown record, unable to retry without a page refresh.
+$_SESSION[$rateKey] = time();
+
 // Honeypot — reject if bot-field was filled
 if (!empty($_POST['bot-field'])) {
     http_response_code(403);
@@ -102,7 +108,6 @@ $headers .= "X-Mailer: FNF-Contact/1.0\r\n";
 $sent = mail($recipient, $subject, $body, $headers);
 
 if ($sent) {
-    $_SESSION['last_contact_submit'] = time();
     echo json_encode(['success' => true]);
 } else {
     http_response_code(500);

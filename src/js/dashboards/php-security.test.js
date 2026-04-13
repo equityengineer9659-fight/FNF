@@ -279,6 +279,20 @@ describe('PHP API Proxy Security', () => {
       expect(src).toMatch(/\$result\['query'\]\s*=\s*\$query/);
     });
 
+    it('contact.php and newsletter.php set rate-limit session before mail() (P1-5)', () => {
+      for (const { file, rateKey } of [
+        { file: 'contact.php', rateKey: 'last_contact_submit' },
+        { file: 'newsletter.php', rateKey: 'last_newsletter_submit' }
+      ]) {
+        const src = readPhp(file);
+        const rateLimitWriteIdx = src.search(/\$_SESSION\[(\$rateKey|['"]last_\w+_submit['"])\]\s*=\s*time\(\)/);
+        const mailCallIdx = src.indexOf('$sent = mail(');
+        expect(rateLimitWriteIdx, `${file}: rate-limit write must exist (key=${rateKey})`).toBeGreaterThan(-1);
+        expect(mailCallIdx, `${file}: mail() call must exist`).toBeGreaterThan(-1);
+        expect(rateLimitWriteIdx, `${file}: rate-limit write must precede mail()`).toBeLessThan(mailCallIdx);
+      }
+    });
+
     it('_validation.php should exist with 51 state abbreviations', () => {
       const src = readPhp('_validation.php');
       expect(src).toBeDefined();

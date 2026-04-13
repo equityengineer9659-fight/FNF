@@ -8,7 +8,11 @@
  *   HTTP (with token):      GET /api/cache-cleanup.php?token=YOUR_TOKEN
  */
 
-@include __DIR__ . '/_config.php';
+// Tolerate a missing _config.php in dev (no credentials) but never silence
+// parse/runtime errors from a present one — the @ suppression form would.
+if (file_exists(__DIR__ . '/_config.php')) {
+    include __DIR__ . '/_config.php';
+}
 
 // Security: require token for HTTP access
 if (php_sapi_name() !== 'cli') {

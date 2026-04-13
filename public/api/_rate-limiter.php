@@ -241,6 +241,14 @@ function _rateLimitClientIp() {
         }
     }
 
+    // NOTE: When REMOTE_ADDR is a private/loopback proxy IP (nginx→Apache on
+    // SiteGround) AND all X-Forwarded-For entries are also private, this
+    // fallback collapses all visitors behind the proxy into a single bucket.
+    // That effectively reverts to a global rate limit. Monitor
+    // /api/rate-limit-status for a single IP hash dominating the bucket set —
+    // if so, SiteGround's proxy topology may need an explicit trusted-proxy
+    // allowlist.
+    //
     // Nothing else trustworthy — fall back to raw REMOTE_ADDR (the proxy
     // hop). Buckets keyed on this collapse to a single shared bucket per
     // proxy, which is the same behaviour as before this refactor.

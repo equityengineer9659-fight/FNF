@@ -24,3 +24,4 @@ $token = bin2hex(random_bytes(32));
 $_SESSION['csrf_token'] = $token;
 
 echo json_encode(['token' => $token]);
+exit;

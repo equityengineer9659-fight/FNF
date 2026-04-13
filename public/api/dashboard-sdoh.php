@@ -61,6 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
+require_once __DIR__ . '/_rate-limiter.php';
+
 $cacheDir = __DIR__ . '/../_cache/dashboard';
 if (!is_dir($cacheDir)) {
     mkdir($cacheDir, 0755, true);
@@ -130,6 +132,27 @@ $context = stream_context_create([
     ]
 ]);
 
+// Rate limit check (50/day without key, 500/day with key — use conservative limit)
+// Each request consumes 2 Census calls (vars1 + vars2), so use a tighter cap.
+if (!rateLimitCheck('census-sdoh', 'daily', 22)) {
+    // Over limit — return stale cache if available
+    if (file_exists($cacheFile)) {
+        $cached = file_get_contents($cacheFile);
+        $data = json_decode($cached, true);
+        if ($data) {
+            $data['_cached'] = true;
+            $data['_stale'] = true;
+            $data['_rateLimited'] = true;
+            $data['_cachedAt'] = date('c', filemtime($cacheFile));
+            echo json_encode($data);
+            exit;
+        }
+    }
+    http_response_code(429);
+    echo json_encode(['error' => 'Rate limit reached for Census SDOH API']);
+    exit;
+}
+
 $response1 = @file_get_contents($url1, false, $context);
 $response2 = @file_get_contents($url2, false, $context);
 
@@ -149,6 +172,10 @@ if ($response1 === false || $response2 === false) {
     echo json_encode(['error' => 'Census API unavailable']);
     exit;
 }
+
+// Track successful API call (counts as 2 against the daily budget)
+rateLimitIncrement('census-sdoh');
+rateLimitIncrement('census-sdoh');
 
 $raw1 = json_decode($response1, true);
 $raw2 = json_decode($response2, true);
