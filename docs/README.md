@@ -67,8 +67,6 @@ Only 2 workflows are active in `.github/workflows/`:
 - **ci-cd.yml** - Main CI/CD pipeline
 - **dependency-update.yml** - Automated dependency updates
 
-Legacy workflows have been archived to `_archive/github-workflows/`.
-
 ## Agent Coordination
 
 ### Agents & Skills
@@ -77,9 +75,3 @@ Legacy workflows have been archived to `_archive/github-workflows/`.
 - **3 skills** in `.claude/skills/`: `/create-illustration`, `/register-article`, `/quality-sweep`
 - [Agent Coordination Hub](current/governance/agent-coordination/)
 
-## Archived Documentation
-
-Historical and outdated documentation has been moved to:
-- `_archive/docs-technical/` - Resolved mobile navigation crisis docs, old phase reports
-- `_archive/docs-project/` - Completed requirements, old CSS deconfliction plans, legacy Netlify deployment guides
-- `_archive/github-workflows/` - Legacy CI/CD workflow files

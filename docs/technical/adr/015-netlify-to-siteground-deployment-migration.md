@@ -64,7 +64,7 @@ Push to master → GitHub Actions → Build (Vite) → rsync via SSH → SiteGro
 
 ### Removed Dependencies
 - `netlify-cli` — No longer needed
-- `netlify.toml` — Archived to `_archive/`
+- `netlify.toml` — Removed
 
 ### Related Documentation
 - `docs/CICD_SETUP.md` — Updated setup guide for SiteGround

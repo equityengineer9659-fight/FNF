@@ -1,290 +1,235 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in this repository.
 
 ## Project Overview
 
-Food-N-Force website - A nonprofit food bank and pantry solution built with modern web standards, SLDS compliance, and multi-agent governance framework. Features glassmorphism effects, premium background animations, and comprehensive accessibility support.
+Food-N-Force website — nonprofit food bank / pantry solution built with Vite, SLDS-compliant CSS, and multi-agent governance. Features glassmorphism, premium background animations, and comprehensive accessibility support.
 
-This project uses JavaScript (not TypeScript), HTML, CSS, Markdown, and YAML. The site is built with Vite. Always run `npm run build` to verify changes compile correctly before committing.
+Stack: JavaScript (not TypeScript), HTML, CSS, Markdown, YAML. Always run `npm run build` before committing to verify the project compiles.
 
 ## Development Commands
 
 ```bash
 # Development
-npm run dev                      # Vite development server
+npm run dev                      # Vite dev server
 npm run build                    # Vite production build
 npm run preview                  # Preview production build
-npm run build:full               # Complete pipeline: lint → validate → test → build
+npm run build:full               # lint → validate → test → build
 
 # Linting
-npm run lint                     # All linting (HTML, CSS, JS)
-npm run lint:fix                 # Auto-fix CSS and JS issues
+npm run lint                     # HTML + CSS + JS
+npm run lint:fix                 # Auto-fix CSS + JS
 
 # Validation
-npm run validate:html            # W3C HTML validation
-npm run validate:slds           # SLDS compliance check
+npm run validate:html            # W3C HTML
+npm run validate:slds            # SLDS compliance
 
 # Testing
-npm run test                     # All tests (accessibility, performance, browser)
-npm run test:accessibility       # pa11y accessibility tests
-npm run test:performance         # Lighthouse CI audits
-npm run test:browser             # Playwright browser tests
-npm run test:performance-budget  # Performance budget monitoring
-npm run analyze:bundle           # Vite bundle analyzer
-npm run generate:pa11y           # Regenerate .pa11yci.json from filesystem (--mode=full|sample)
+npm run test                     # All tests
+npm run test:accessibility       # pa11y
+npm run test:performance         # Lighthouse CI
+npm run test:browser             # Playwright
+npm run test:performance-budget  # Budget monitoring
+npm run generate:pa11y           # Regenerate .pa11yci.json (--mode=full|sample)
 
-# Deployment
-npm run deploy:staging          # SiteGround staging (GitHub Actions → staging branch)
-npm run deploy:production       # SiteGround production (GitHub Actions → master)
+# Deployment (via GitHub Actions)
+npm run deploy:staging           # staging branch → SiteGround staging
+npm run deploy:production        # master → SiteGround production
 
 # Blog Content Pipeline
-npm run admin                   # Start Express server for scraper + AI article generator (http://localhost:3001)
+npm run admin                    # Scraper + AI article generator at http://localhost:3001
 ```
 
-## Code Architecture
+## File Structure
 
-### File Structure
 ```
 /
-├── src/css/               # 13 CSS files (main.css imports all modules)
-├── src/js/                # JS modules (main.js, effects/, dashboards/, config/, monitoring/)
-├── src/data/              # Source data files (GeoJSON)
+├── src/css/               # 15 CSS files (main.css imports all modules)
+├── src/js/                # main.js + effects/, dashboards/, config/, monitoring/
+├── src/data/              # Source GeoJSON
 ├── src/assets/            # Images, fonts
-├── *.html                 # 10 root pages (index, about, services, resources, impact, contact, 404, blog, case-studies, templates-tools)
-├── dashboards/            # Interactive ECharts dashboards
+├── *.html                 # 10 root pages
+├── dashboards/            # 8 interactive ECharts dashboards
 ├── blog/                  # 53 article HTML pages
 ├── Blog and Article Content/  # Editorial tools (scraper + AI generator) — NOT deployed
 ├── scripts/               # Build scripts, scraper engine, sitemap/blog generators
-├── public/                # Static assets, PWA manifest, PHP API endpoints, dashboard data files
-│   ├── data/              # Dashboard JSON (state/county data, BLS CPI, GeoJSON, county search index, SNAP participation)
-│   └── api/               # PHP backend (contact, newsletter, csrf, dashboard proxies)
+├── public/
+│   ├── data/              # Dashboard JSON
+│   └── api/               # PHP backend (20 files)
 ├── config/                # token_map, deployment, security configs
 ├── docs/                  # Active documentation
 ├── tools/                 # Testing, deployment, governance utilities
-├── vite.config.js         # Vite build config (auto-discovers *.html and blog/*.html)
-└── build-components.js    # Injects nav/footer/dashboard-tabs/scripts into all 72 pages before Vite builds
+├── vite.config.js         # Auto-discovers *.html and blog/*.html
+└── build-components.js    # Injects nav/footer/dashboard-tabs/scripts into all 71 pages
 ```
 
-### Page Inventory (72 pages)
-- **Core pages (7)**: index, about, services, resources, impact, contact, 404
-- **Blog hub (1)**: blog
-- **Hub pages at root (2)**: case-studies, templates-tools
-- **Dashboards (8)**: dashboards/executive-summary, dashboards/food-insecurity (Overview), dashboards/food-access, dashboards/snap-safety-net, dashboards/food-prices, dashboards/food-banks, dashboards/nonprofit-directory, dashboards/nonprofit-profile — linked by shared tab navigation (7 tabs; profile shares the Directory tab)
-- **Articles (53)**: all in `blog/` directory (run `ls blog/` for full list)
+## Page Inventory (71 pages)
+
+- **Root pages (10)**: index, about, services, resources, impact, contact, 404, blog, case-studies, templates-tools
+- **Dashboards (8)**: executive-summary, food-insecurity (Overview), food-access, snap-safety-net, food-prices, food-banks, nonprofit-directory, nonprofit-profile — shared 7-tab navigation (profile shares the Directory tab)
+- **Articles (53)**: all in `blog/` — run `ls blog/` for the full list
+
+Detailed dashboard module map: see [.claude/rules/dashboards.md](.claude/rules/dashboards.md) (auto-loads when editing dashboard files).
 
 ### Case Studies
-4 featured case studies on `case-studies.html` (real Salesforce implementations) + 10 blog articles (category: Case Studies). Cards appear on `blog.html`, testimonials on `impact.html`. Details in memory: `project_case_studies.md`
+4 featured case studies on `case-studies.html` (real Salesforce implementations) + 10 blog articles (category: Case Studies). Cards on `blog.html`, testimonials on `impact.html`.
 
-**Adding new articles via scraper tool**: `npm run admin` → New Article tab → Generate with Claude → Save to blog/. Runs `build-components.js` and `sync-blog.js` automatically. After saving, run `/create-illustration {slug}` to generate the SVG illustration.
+### Adding blog articles
+- **Via scraper**: `npm run admin` → New Article → Generate → Save to blog/ (auto-runs build scripts). Then `/create-illustration {slug}`.
+- **Manually**: drop HTML in `blog/`, then `/register-article {slug}`. No config edits needed — everything auto-discovers via glob.
 
-**Adding new articles manually**: Place HTML in `blog/`, then run `/register-article {slug}` to run build scripts. Or manually: `node build-components.js && node scripts/sync-blog.js`. No config file edits needed — all build scripts auto-discover articles from the `blog/` directory via glob.
+Full scraper/generator guide: see [.claude/rules/blog-pipeline.md](.claude/rules/blog-pipeline.md).
 
-### Navigation
+## Navigation
+
 8 links: Home | Services | Resources | Dashboards | Impact | Contact | Blog | About Us
-- **Dashboards** highlights only when on a dashboard page (not Resources)
-- **Blog** highlights only when on blog hub or any article page (not Resources)
-- **Resources** highlights only for resources.html, case-studies, templates-tools
-- Navigation arrays in `build-components.js`: `dashboardSubpages`, `blogSubpages`, `resourcesSubpages`
+- **Dashboards** highlights only on dashboard pages
+- **Blog** highlights only on blog hub or article pages
+- **Resources** highlights for resources.html, case-studies, templates-tools
+- Nav arrays live in `build-components.js` (`dashboardSubpages`, `blogSubpages`, `resourcesSubpages`)
 
-### Build Pipeline
-- `build-components.js` auto-discovers blog articles from `blog/` via glob, then injects shared nav, footer, dashboard tabs, and script tags into all pages before Vite builds
-- `scripts/sync-blog.js` rebuilds blog.html card grid from article metadata (auto-run on build)
-- `scripts/generate-sitemap.js` auto-discovers blog articles from `blog/` via glob and generates sitemap.xml
-- `scripts/generate-pa11y-config.js` auto-generates `.pa11yci.json` from filesystem (`--mode=full|sample`)
-- ECharts is tree-shaken and code-split into a separate chunk loaded only on dashboard pages
-- **Adding blog articles requires zero config file edits** — just drop HTML in `blog/` and run build scripts
+## Build Pipeline
 
-### Blog Content Pipeline
-AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHROPIC_API_KEY` in `.env`. Full workflow: Scraper tab → select sources → New Article tab → Generate with Claude → Preview → Save to blog/. Illustrations created separately by Claude Code for better quality. See `docs/current/blog-content-pipeline.md` for full guide.
+- `build-components.js` auto-discovers blog articles and injects shared nav/footer/dashboard-tabs/script tags into every page before Vite builds
+- `scripts/sync-blog.js` rebuilds the blog.html card grid from article metadata
+- `scripts/generate-sitemap.js` auto-discovers articles and writes sitemap.xml
+- `scripts/generate-pa11y-config.js` auto-generates `.pa11yci.json` from filesystem
+- ECharts is tree-shaken and code-split into a chunk loaded only on dashboard pages
+- **Adding articles requires zero config edits** — drop in `blog/` and run the scripts
 
-### CSS Architecture
-- **Import Order**: reset → design-tokens → navigation → typography → layout → effects → components → icons → critical-gradients → page-overrides → dashboards → nonprofit-directory
-- **Design Tokens**: Centralized in `02-design-tokens.css` (colors, spacing, fonts, gradients, glass effects)
-- **Navigation**: Single source of truth in `03-navigation.css`
-- **Note**: `@layer` declarations NOT used — blocked by SLDS CDN dependency (un-layered SLDS overrides layered custom CSS)
-- **SLDS Compliance**: 89% baseline, token mapping in `config/token_map.json`, validate with `npm run validate:slds`
+## CSS Architecture
 
-### JavaScript Architecture
-- **Progressive Enhancement**: HTML-first, JavaScript optional
-- **Vite Build**: Tree-shaking + Terser minification
-- **Modules** (`src/js/main.js` orchestrates all):
-  - `config/environment.js` — feature flags
-  - `effects/particles.js` — canvas particle system
-  - `effects/smart-scroll.js` — nav auto-hide, active links, scroll-to-top
-  - `effects/counters.js` — animated counters (aria-live announces final value, formats: percentage, plus, thousand, million, billion)
-  - `effects/newsletter-popup.js` — scroll-triggered modal with focus trap, CSRF validation
-  - `effects/gradient-icons.js` — SVG gradient icons
-  - `effects/contact-form.js` — form submission with CSRF token validation
-  - `effects/article-enhancements.js` — article reading enhancements
-  - `effects/blog-filter.js` — category filtering (aria-pressed + aria-current)
-  - `monitoring/sentry.js`, `error-tracker.js`, `performance-monitor.js`
-  - `expertise-accordion.js` — mobile accordion for about page
-  - `dashboards/shared/dashboard-utils.js` — shared ECharts setup, colors, MAP_PALETTES, formatters, linearRegression, US_STATES, `updateFreshness()` (two-state: `_static` → "Data: year", else → "Live"), `animateCounters()` (respects prefers-reduced-motion, integer-aware)
-  - `dashboards/shared/d3-heatmap.js` — D3 zoomable heatmap module. Exports: `createD3Heatmap()`, `buildHeatmapLegend()`, `buildRegionChips()`, `createRankNorm()` (rank-based normalization preventing outlier compression), `sampleGradient()`, `tileTextColor()`, `tileSubTextColor()`, `HEATMAP_REGION_COLORS`. 7-stop value gradient, SVG per-tile depth gradient, adaptive text contrast, keyboard-accessible breadcrumbs.
-  - `dashboards/food-insecurity.js` — Food Insecurity Overview dashboard (12 charts: map with SNAP Coverage metric + county drill-down, trend with markLine annotations, radar, scatter, SDOH, demographics, income river, meal cost bar, CPI trend, SNAP coverage bars, Triple Burden Index, State Deep-Dive KPI panel). Loads current-food-access.json + food-bank-summary.json for cross-dataset features.
-  - `dashboards/food-access.js` — Food Access & Deserts dashboard. **Map toggle**: Food Deserts ↔ Food Insecurity ↔ SNAP Retailers on single chart instance (drill-down in deserts + insecurity modes). **Double Burden dual-mode**: "Total Affected" (D3 treemap, √-scaled area) and "Rate Comparison" (equal CSS Grid tiles, sorted by rate) with toggle, outlier emphasis on top-20% states.
-  - `dashboards/snap-safety-net.js` — SNAP & Safety Net dashboard (Sankey data from `snap-participation.json`). 5 KPI gauges (coverage, lunch, benefit, gap, affordability shortfall). SNAP Purchasing Power Index line on trend chart.
-  - `dashboards/food-prices.js` — Food Prices & Affordability dashboard (live BLS regional CPI data). CPI vs Food Insecurity dual-axis chart (loads food-insecurity-state.json for trend overlay). FRED item-level CPI toggles (gradient restoration after JSON clone).
-  - `dashboards/food-banks.js` — Food Bank Landscape dashboard. Revenue heatmap (D3, `createRankNorm`). Regression line suppressed when |r| < 0.2 with dynamic insight text. Need-Capacity Gap scatter (revenue per insecure person vs insecurity rate).
-  - `dashboards/nonprofit-directory.js` — Nonprofit Directory search (ProPublica API, debounced search, state filter, pagination)
-  - `dashboards/nonprofit-profile.js` — Nonprofit Profile with 6 ECharts (revenue trend, composition, expenses vs revenue, assets/liabilities, compensation, efficiency radar) + dynamic data-driven descriptions with conditional insights
-- **Production**: Source maps disabled, ESLint `no-console` rule enforced
-- **ESLint 10.x** with flat config (`eslint.config.js`)
-- **Unit Tests**: ~569 tests across 22 test files (vitest)
+- **Import order** in `main.css`: `01-reset → 02-design-tokens → 03-navigation → 04-typography → 05-layout → 06-effects → 07-components → 08-icons → critical-gradients → critical-inline → 10-page-overrides → 11-dashboards → 12-nonprofit-directory → 14-csp-utilities`
+- **Design tokens** centralized in `02-design-tokens.css`
+- **Navigation** single source of truth in `03-navigation.css`
+- **`@layer` NOT used** — blocked by the SLDS CDN dependency (un-layered SLDS would override layered custom CSS)
+- **SLDS compliance**: 89% baseline, token mapping in `config/token_map.json`, validate with `npm run validate:slds`
 
-### PHP Backend (SiteGround)
+## JavaScript Architecture
+
+- **Progressive enhancement** — HTML-first, JS optional
+- **Vite** — tree-shaking + Terser minification
+- **ESLint 10.x** flat config; `no-console` enforced in production
+- **Unit tests**: ~569 vitest tests across 42 test files
+- Module orchestration lives in `src/js/main.js`; shared effects in `src/js/effects/`; dashboards in `src/js/dashboards/` with shared helpers in `dashboards/shared/`
+
+Detailed dashboard module descriptions: see [.claude/rules/dashboards.md](.claude/rules/dashboards.md).
+
+## PHP Backend
+
+Quick reference — full detail in [.claude/rules/php-backend.md](.claude/rules/php-backend.md) (auto-loads when editing `public/api/**`).
+
 - **Location**: `public/api/` (copied to `dist/api/` during build)
 - **Deployment**: GitHub Actions → SSH/rsync to SiteGround `public_html/`
-- **Stack**: nginx reverse proxy in front of Apache backend. Responses say `Server: nginx` but `public/.htaccess` (Apache mod_headers) is what sets headers. There is no nginx config to edit.
-- **Endpoints**: 3 form endpoints (`contact.php`, `newsletter.php`, `csrf-token.php`) + 10 dashboard API proxies (BLS, Census, SDOH, SAIPE, PLACES, FRED, ProPublica search/org, Mapbox, Charity Navigator) + `cache-cleanup.php` (cron). Full inventory with cache TTLs in memory: `project_dashboard.md`
-- **Security**: Rate limiting (60s cooldown), CSRF validation (`hash_equals()`), honeypot field, input sanitization (`htmlspecialchars()`), email validation (`FILTER_VALIDATE_EMAIL`), CRLF header injection prevention
-- **Recipient**: All form emails to `hello@food-n-force.com`
+- **Stack**: nginx reverse proxy in front of Apache. Response header says `Server: nginx` but `public/.htaccess` (Apache mod_headers) is what actually sets headers. No nginx config to edit.
+- **Endpoints (20 files)**: 3 form endpoints, 10 dashboard API proxies, utilities (mapbox-geocode, rate-limit-status, cache-cleanup), 5 shared helpers (`_config`, `_cors`, `_rate-limiter`, `_validation`, `_config.example`)
+- **Recipient**: all form emails go to `hello@food-n-force.com`
 
-### Critical Constraints
+## Critical Constraints
+
 **NEVER modify these without explicit permission:**
-- Logo special effects (CSS animations, gradients, transforms)
+- Logo special effects (animations, gradients, transforms)
 - Background spinning effects (mesh/iridescent on index, services, resources, about)
-- **Glassmorphism effects are PROTECTED** (navigation, hero sections, cards) — all `backdrop-filter`, `rgba()` backgrounds, glass effects must be preserved
+- **Glassmorphism effects are PROTECTED** — `backdrop-filter`, `rgba()` backgrounds, glass cards all preserved. `-webkit-backdrop-filter` prefix always paired with `backdrop-filter`.
 - Blue circular gradients for emoji icons
 - Text content, emoji icons, or section order
 
 ## Testing & Performance
 
-### Performance Budgets
+Full budget numbers and config details in [.claude/rules/testing.md](.claude/rules/testing.md).
 
-These are *actual shipped* sizes captured after the 2026-04-12 dashboard final audit, not pre-merge thresholds. Use them as a reality reference, not a refactor target — the real perf lever is the ECharts chunk, which is in the deferred P1 queue because further tree-shaking is fragile.
-
-- **CSS**: ~150KB minified (~25KB gzipped)
-- **JS Core**: ~54KB total (~49KB main + ~5KB effects, ~16KB gzipped)
-- **Dashboard JS** *(actual shipped, 8 dashboards)*: 8–45KB per dashboard chunk minified / 3–13KB gzipped. Largest are food-access (~45KB / ~12KB gz), food-insecurity (~43KB / ~13KB gz), nonprofit-profile (~37KB / ~11KB gz). Smallest are nonprofit-directory (~8KB) and executive-summary (~10KB).
-- **ECharts chunk** *(actual shipped, deferred P1 to refactor)*: ~755KB raw / ~245KB gzipped, tree-shaken and code-split, loaded only on dashboard pages and shared across all 8.
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
-- **Unit Test Coverage**: 65% threshold
-- **Lighthouse Configs**: `lighthouse.config.js` (local) vs `tools/testing/lighthouserc.json` (CI)
-- **Pa11y CI**: Sample mode on push (non-blog pages + 5 random articles), full sweep weekly via scheduled workflow
-
-### Special Effects Validation
-- Glassmorphism fallbacks work in all browsers
-- Background animations maintain >60fps
-- Logo effects readable at all zoom levels (including 25% — client requirement)
-- Reduced motion preferences respected
+- **Unit test coverage**: 65% threshold
+- **Lighthouse configs**: `lighthouse.config.js` (local, relaxed) vs `tools/testing/lighthouserc.json` (CI, strict) — intentional split
+- **Pa11y CI**: sample mode on push, full sweep weekly
 
 ## Development Workflow (Jira + GitHub)
 
 ### Story Work (Jira-tracked)
-
-When the user specifies a Jira issue key (e.g. "let's work on KAN-82"):
-
-1. **Move to In Progress** — Claude transitions the story to In Progress in Jira before touching any code
-2. **Create branch** — named `KAN-XX-short-description` (e.g. `KAN-82-newsletter-notification`)
-3. **Do the work** — all commits reference the issue key: `KAN-82 Add admin notification to newsletter.php`
-4. **Push branch** — Claude pushes the branch to GitHub
-5. **Open PR** — PR title includes the issue key; GitHub Actions automatically moves the story to In Review
-6. **User merges PR** — the only step the user handles manually
-7. **GitHub Actions** — automatically moves the story to Done on merge
+When the user provides a Jira key (e.g. "work on KAN-82"):
+1. Move the story to **In Progress** in Jira before touching code
+2. Create branch `KAN-XX-short-description`
+3. Commits reference the issue key: `KAN-82 Add admin notification`
+4. Push the branch
+5. Open PR — title includes the key; GH Actions moves the story to **In Review**
+6. User merges; GH Actions moves it to **Done**
 
 ### Ad Hoc Work (no Jira story)
-
-When the user asks for work without referencing a Jira issue key:
-
-1. **Create a fresh branch from master** — named `chore/short-description` (e.g. `chore/code-review-fixes`, `chore/add-skills`). Never reuse an existing story branch.
-2. **Do the work** — commits use plain descriptive messages (no `KAN-XX` prefix)
-3. **Push branch** — Claude pushes the branch to GitHub
-4. **Open PR** — when the work is complete and ready to merge
-5. **User merges PR** — the Jira workflow runs but skips all jobs (no `KAN-` key found), which is expected
+1. **Fresh branch from master** — `chore/short-description`. Never reuse an existing story branch.
+2. Plain commits (no `KAN-XX`)
+3. Push + open PR when complete; Jira workflow runs but skips all jobs (expected)
 
 ### Jira Project
-- **Board**: KAN project at foodnforce.atlassian.net (Kanban)
+- **Board**: KAN at foodnforce.atlassian.net (Kanban)
 - **Transition IDs**: 21 = In Progress, 31 = In Review, 41 = Done
-- **MCP**: mcp-atlassian configured in `.mcp.json` (gitignored)
-- **GitHub integration**: GitHub for Atlassian app connected; commits/PRs with KAN keys appear on issue Development panel
+- **MCP**: `mcp-atlassian` in `.mcp.json` (gitignored)
 
 ### Key Rule
-Never commit directly to master — always use a branch and PR so the CI/CD pipeline runs before merge.
+**Never commit to master directly.** Always use a branch + PR so CI runs before merge.
 
-## Git Workflow
+## General Rules
 
-Always push to the remote after committing. Never stop at just a local commit unless explicitly told to.
-
-## Data & APIs
-
-When working on dashboards, always verify API endpoint URLs are current and field mappings match the actual API response schema before committing.
-
-## Frontend Development
-
-After making frontend changes, run the build and verify the output. Do not assume dev server hot-reload reflects production. Clear caches when debugging visual issues.
-
-## Project Management
-
-When given JIRA instructions, follow them exactly — correct epic, correct scope. Do not start code work when the user asks for JIRA-only tasks.
+- **Git**: always push after committing unless told otherwise
+- **Dashboards**: verify API endpoint URLs and field mappings against the actual response before committing
+- **Frontend**: run the build after visual changes; dev server HMR doesn't always reflect production
+- **Jira-only tasks**: do Jira work exactly as specified; don't start code work when the user asked for a Jira task
 
 ## Agent Framework
 
-### Skills (5)
-Reusable slash-command workflows in `.claude/skills/`:
-- **`/create-illustration {slug}`** — reads a blog article and creates a matching SVG illustration following the project style guide
-- **`/register-article {slug}`** — registers a manually added article in all required files (`build-components.js`, `generate-sitemap.js`, `.pa11yci.json`) and runs sync scripts
-- **`/quality-sweep [scope]`** — launches validation agents in parallel (`all`, `content`, `css`, `deploy`) and presents a unified pass/fail summary
-- **`/test-fix [scope]`** — systematic code review with test-first fixes: explore → find bugs → write failing test → fix → verify green → next issue. Scope: file path, category (`security`, `performance`, `tests`, `bugs`, `dead-code`), or omit for full review
-- **`verify-changes`** *(auto-invoked, not a slash command)* — Claude auto-invokes after modifying source files: writes tests, runs vitest, verifies build + lint. Scoped to JS, PHP, HTML, CSS, and build scripts via `paths` filter
+### Skills (6) in `.claude/skills/`
+- **`/create-illustration {slug}`** — generates an SVG illustration for a blog article
+- **`/register-article {slug}`** — registers a manually added article (runs `build-components.js` + `sync-blog.js`)
+- **`/quality-sweep [scope]`** — parallel validation agents with unified pass/fail summary
+- **`/test-fix [scope]`** — systematic code review with test-first fixes
+- **`/ship`** — release/deploy helper
+- **`verify-changes`** *(auto-invoked)* — after modifying source files: writes tests, runs vitest, verifies build + lint
 
-### Project-Specific Agents (12)
-Custom agents in `.claude/agents/` tailored to this project:
-- **slds-compliance-checker** — validates CSS against SLDS token map; use after CSS changes
-- **accessibility-auditor** — WCAG 2.1 AA checks; use after HTML changes
-- **cross-page-consistency** — SEO tags, link integrity, Read Next cards; use after content changes
-- **performance-budget-monitor** — bundle sizes against budgets; use after builds
-- **php-security-reviewer** — PHP injection, CSRF, validation gaps; use when PHP changes
-- **uiux-reviewer** — visual consistency, responsive layout; use after visual changes
-- **seo-auditor** — JSON-LD, sitemap, meta tags; use after adding pages
-- **content-reviewer** — brand voice, article structure, SEO; use before publishing articles
-- **technical-architect** — SLDS CDN constraints, SiteGround limits, glassmorphism protection; use before structural changes
-- **business-analyst** — CTA clarity, value proposition, conversion paths; use when modifying service pages
-- **data-scientist** — trend analysis, correlations, anomalies, visualization recommendations; use after data updates or to improve dashboard insights
-- **project-manager** — sprint planning, story prioritization, dependency mapping, status reporting; use when planning work or reviewing backlog
+### Project-Specific Agents (16) in `.claude/agents/`
+slds-compliance-checker, accessibility-auditor, cross-page-consistency, performance-budget-monitor, php-security-reviewer, uiux-reviewer, seo-auditor, content-reviewer, technical-architect, business-analyst, data-scientist, project-manager, data-analytics-auditor, dependency-auditor, devops-engineer, test-engineer
+
+Each agent's description in `.claude/agents/*.md` explains its use case.
 
 ## Common Issues
 
 ### CSS Cascade Conflicts
 - Import order in `main.css` determines cascade priority — `@layer` is blocked by SLDS CDN
-- Only 9 `!important` declarations remain (utility classes and accessibility media queries)
+- Only 9 `!important` declarations remain (utility classes + a11y media queries)
 
 ### CSP Compliance
-- **NOT yet enforced in production.** `_headers` (Netlify format) is dead code on SiteGround Apache; CSP migration to `.htaccess` is pending PR B (see `project_security_headers_2026_04_10.md` memory)
-- HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy are live in production via `public/.htaccess` `Header always set` directives (PR #95, 2026-04-10)
-- When CSP lands it will use `style-src 'self'` (no unsafe-inline) — any new inline `style=""` attribute or `<style>` block will need to be migrated first
+- **CSP is enforcing in production** as of 2026-04-10 (PR #104) via `public/.htaccess`
+- Currently uses an Option-A `unsafe-inline` safety net for ECharts; Session 7 will remove it
+- All 6 security headers live via `.htaccess`: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
+- When migrating to `style-src 'self'`, any new inline `style=""` or `<style>` must be moved to CSS first
 - SLDS CDN has SRI hash (auto-added by `build-components.js`)
 - Sentry DSN host for `connect-src`: `o4510112854704128.ingest.us.sentry.io`
 
 ### Browser Compatibility
-- **Minimum supported**: Safari 15+, Firefox 87+, Chrome 90+ (matches the `AbortController` signal pattern used across `src/js/effects/*` and `main.js`)
-- `backdrop-filter` always shipped with the `-webkit-backdrop-filter` prefix (glassmorphism protected rule)
+- **Minimum supported**: Safari 15+, Firefox 87+, Chrome 90+ (matches the `AbortController` signal pattern used in `src/js/effects/*` and `main.js`)
+- `backdrop-filter` always shipped with the `-webkit-backdrop-filter` prefix
 - No CSS nesting, `:has()`, container queries, or `color-mix()` until all three targets support them
 
-### Verifying production state
-- **Don't trust config files alone.** `_headers` was dead for months; nobody noticed because nobody curl'd the live site.
+### Verifying Production State
+- **Don't trust config files alone.** Verify against the live wire before editing configs.
 - Canonical header check: `curl -sI https://food-n-force.com/dashboards/food-insecurity.html`
 - Canonical body check: `curl -s https://food-n-force.com/<path> | head -50`
-- For investigations into "is X actually enforced?", always verify against the wire before editing config files.
 
 ## Configuration Files
 - `tools/testing/html-validate.json` — HTML validation rules
-- `tools/testing/lighthouserc.json` — Performance audit config
-- `tools/testing/playwright.config.js` — Browser testing (builds + preview server before tests)
-- `.pa11yci.json` — Pa11y accessibility testing (WCAG2AA, all public pages)
+- `tools/testing/lighthouserc.json` — CI performance audit
+- `tools/testing/playwright.config.js` — Browser testing (builds + preview server first)
+- `.pa11yci.json` — Pa11y (WCAG2AA)
 - `config/token_map.json` — SLDS compliance token mappings
 - `vite.config.js` — Vite build system
-- `public/.htaccess` — Apache config; **the actual production source of truth** for security headers, cache rules, and 404 routing on SiteGround
-- `_headers` — DEAD CODE (Netlify format, ignored by Apache); kept until CSP migration completes, then deletable
+- `public/.htaccess` — Apache config; **production source of truth** for security headers, cache rules, and 404 routing
 
 ## Documentation
 - `docs/README.md` — Documentation navigation hub
 - `docs/project/plan.md` — Strategic refactoring plan
 - `docs/project/risks.md` — Risk register
 - `docs/SECURITY.md` — Security procedures
-- `docs/MONITORING.md` — Error tracking (Sentry) and analytics (GA4) setup
-- `docs/CICD_SETUP.md` — CI/CD pipeline configuration
-- `docs/current/blog-content-pipeline.md` — Full scraper + article generator guide
+- `docs/MONITORING.md` — Sentry + GA4 setup
+- `docs/CICD_SETUP.md` — CI/CD pipeline
+- `docs/current/blog-content-pipeline.md` — Scraper/generator full guide
 - `docs/current/emergency/15min-response-playbook.md` — Emergency response
-- `docs/technical/adr/` — 16 Architecture Decision Records
+- `docs/technical/adr/` — Architecture Decision Records
