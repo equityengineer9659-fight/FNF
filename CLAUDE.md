@@ -190,6 +190,23 @@ slds-compliance-checker, accessibility-auditor, cross-page-consistency, performa
 
 Each agent's description in `.claude/agents/*.md` explains its use case.
 
+### Agent Documentation Standards
+
+When dispatching agents for implementation, optimization, or upgrade work, **always use Context7 to fetch current documentation**. Agents have access to the Context7 MCP server and should query it for:
+- **Vite** — build system, bundling, migration guides
+- **ECharts** — chart optimization, tree-shaking, performance
+- **Playwright** — browser testing configuration, best practices
+- **Vitest** — unit testing, coverage thresholds, configuration
+- **Mapbox GL JS** — map integration, geocoding, feature queries
+- **SLDS** — design tokens, styling hooks, compliance validation
+
+**Why**: Ensures agents use current APIs and best practices, not training-data assumptions. Particularly critical for library upgrades (Vite 6, P1-21), performance work (ECharts optimization), and compliance (SLDS tokens).
+
+Mention Context7 explicitly in dispatch prompts for critical work:
+```
+Use Context7 to fetch current Vite docs, then assess the v6 migration path...
+```
+
 ## Common Issues
 
 ### CSS Cascade Conflicts
