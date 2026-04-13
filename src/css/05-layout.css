@@ -74,7 +74,7 @@
 
 .slds-p-around_xx-large{padding:var(--slds-spacing-xx-large)}
 
-.slds-p-vertical_x-large{padding-top:var(--slds-spacing-small);padding-bottom:var(--slds-spacing-small)}
+.slds-p-vertical_x-large{padding-top:var(--slds-spacing-x-large);padding-bottom:var(--slds-spacing-x-large)}
 
 .slds-p-vertical_xx-large{padding-top:var(--slds-spacing-xx-large);padding-bottom:var(--slds-spacing-xx-large)}
 
