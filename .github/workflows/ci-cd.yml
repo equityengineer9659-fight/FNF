@@ -123,7 +123,9 @@ jobs:
           fi
 
           # Deploy to www path (what the web server reads)
-          rsync -avz --delete -e "ssh -p $SSH_PORT" \
+          # Exclude api/_config.php so rsync --delete doesn't wipe it in the
+          # window before the subsequent scp re-uploads it (audit 2026-04-13, P0-4)
+          rsync -avz --delete --exclude 'api/_config.php' -e "ssh -p $SSH_PORT" \
             dist/ \
             "${SSH_USER}@${SSH_HOST}:www/food-n-force.com/public_html/"
 
@@ -167,4 +169,9 @@ jobs:
             echo "Attempt $i: site returned HTTP $STATUS — retrying in 15s..."
             sleep 15
           done
-          echo "⚠️ Site returned HTTP $STATUS after 6 attempts — please verify manually"
+          if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 400 ]; then
+            echo "✅ Production health check passed (HTTP $STATUS)"
+          else
+            echo "::error::Production health check failed after retries (HTTP $STATUS)"
+            exit 1
+          fi
