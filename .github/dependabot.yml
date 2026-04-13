@@ -19,10 +19,6 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
-    ignore:
-      # Ignore major version updates for critical packages
-      - dependency-name: "lighthouse"
-        update-types: ["version-update:semver-major"]
     groups:
       # Group ESLint updates together
       eslint:
