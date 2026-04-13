@@ -15,13 +15,16 @@ jobs:
     steps:
       - name: Extract Jira keys and transition
         continue-on-error: true
+        env:
+          JIRA_USER: ${{ secrets.JIRA_USER }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         run: |
           KEYS=$(echo "${{ github.ref_name }}" | grep -oE 'KAN-[0-9]+' | sort -u)
           if [ -z "$KEYS" ]; then
             echo "No Jira keys found in branch name, skipping."
             exit 0
           fi
-          AUTH=$(printf '%s' "${{ secrets.JIRA_USER }}:${{ secrets.JIRA_API_TOKEN }}" | tr -d '\n\r' | base64 -w 0)
+          AUTH=$(printf '%s' "$JIRA_USER:$JIRA_API_TOKEN" | tr -d '\n\r' | base64 -w 0)
           for KEY in $KEYS; do
             echo "Moving $KEY to In Progress..."
             HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
@@ -43,13 +46,16 @@ jobs:
     steps:
       - name: Extract Jira keys and transition
         continue-on-error: true
+        env:
+          JIRA_USER: ${{ secrets.JIRA_USER }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         run: |
           KEYS=$(echo "${{ github.event.pull_request.title }} ${{ github.event.pull_request.head.ref }}" | grep -oE 'KAN-[0-9]+' | sort -u)
           if [ -z "$KEYS" ]; then
             echo "No Jira keys found, skipping."
             exit 0
           fi
-          AUTH=$(printf '%s' "${{ secrets.JIRA_USER }}:${{ secrets.JIRA_API_TOKEN }}" | tr -d '\n\r' | base64 -w 0)
+          AUTH=$(printf '%s' "$JIRA_USER:$JIRA_API_TOKEN" | tr -d '\n\r' | base64 -w 0)
           for KEY in $KEYS; do
             echo "Moving $KEY to In Review..."
             HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
@@ -71,13 +77,16 @@ jobs:
     steps:
       - name: Extract Jira keys and transition
         continue-on-error: true
+        env:
+          JIRA_USER: ${{ secrets.JIRA_USER }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         run: |
           KEYS=$(echo "${{ github.event.pull_request.title }} ${{ github.event.pull_request.head.ref }}" | grep -oE 'KAN-[0-9]+' | sort -u)
           if [ -z "$KEYS" ]; then
             echo "No Jira keys found, skipping."
             exit 0
           fi
-          AUTH=$(printf '%s' "${{ secrets.JIRA_USER }}:${{ secrets.JIRA_API_TOKEN }}" | tr -d '\n\r' | base64 -w 0)
+          AUTH=$(printf '%s' "$JIRA_USER:$JIRA_API_TOKEN" | tr -d '\n\r' | base64 -w 0)
           for KEY in $KEYS; do
             echo "Moving $KEY to Done..."
             HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
