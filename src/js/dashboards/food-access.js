@@ -638,14 +638,14 @@ function initDoubleBurdenModeToggle() {
       const regionLegend = document.getElementById('double-burden-region-legend');
 
       const isTreemap = mode === 'treemap';
-      if (treemapEl) treemapEl.style.display = isTreemap ? '' : 'none';
+      if (treemapEl) treemapEl.classList.toggle('hidden', !isTreemap);
       if (isTreemap && treemapEl?._renderTreemapOnce) treemapEl._renderTreemapOnce();
-      if (breadcrumb) breadcrumb.style.display = isTreemap ? '' : 'none';
+      if (breadcrumb) breadcrumb.classList.toggle('hidden', !isTreemap);
       if (tilesEl) tilesEl.classList.toggle('hidden', isTreemap);
-      if (encodingTree) encodingTree.style.display = isTreemap ? '' : 'none';
+      if (encodingTree) encodingTree.classList.toggle('hidden', !isTreemap);
       if (encodingTile) encodingTile.classList.toggle('hidden', !isTreemap);
       // Region chips redundant in tiles mode — tiles already have labeled region sections
-      if (regionLegend) regionLegend.style.display = isTreemap ? '' : 'none';
+      if (regionLegend) regionLegend.classList.toggle('hidden', !isTreemap);
       if (hintEl) hintEl.textContent = isTreemap
         ? 'Click a region to zoom in. Click breadcrumb to zoom out.'
         : 'Sorted by rate within each region. Hover for details.';
