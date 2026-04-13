@@ -13,7 +13,6 @@
     "build:components": "node build-components.js",
     "build:full": "npm run lint && npm run validate:html && npm run test && npm run build",
     "preview": "vite preview",
-    "serve": "live-server --port=4173 --host=localhost",
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
     "lint:html": "htmlhint \"*.html\" \"blog/*.html\" \"!playwright-report/**\" \"!lighthouse-reports/**\" \"!dist/**\" \"!tools/testing/playwright-report/**\"",
     "lint:css": "stylelint \"src/css/**/*.css\"",
@@ -90,11 +89,10 @@
     "jsdom": "^29.0.2",
     "lighthouse": "^11.4.0",
     "lint-staged": "^16.4.0",
-    "live-server": "^1.2.2",
     "pa11y": "^9.1.1",
     "pa11y-ci": "^4.1.0",
     "postcss": "^8.5.9",
-    "puppeteer": "^24.0.0",
+    "puppeteer": "^24.40.0",
     "rss-parser": "^3.13.0",
     "stylelint": "^17.7.0",
     "stylelint-config-slds": "^1.0.0",
@@ -138,5 +136,9 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.60.1"
+  },
+  "overrides": {
+    "picomatch": ">=4.0.4",
+    "basic-ftp": ">=5.2.2"
   }
 }
