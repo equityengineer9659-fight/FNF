@@ -840,10 +840,12 @@ async function init() {
     // Chart 5: Home vs Away (uses main BLS data)
     // Chart 6: YoY Inflation Rate
     // Chart 7: SNAP Purchasing Power
+    // Assign _snapBenefits regardless of blsData so downstream readers
+    // (e.g. fetchLiveBLS re-render) never see a stale module-initial value.
+    _snapBenefits = snapData?.benefitTimeline?.data ?? null;
     if (blsData) {
       renderHomeVsAway(blsData);
       renderYoYInflation(blsData);
-      _snapBenefits = snapData?.benefitTimeline?.data;
       renderPurchasingPower(blsData, _snapBenefits);
       updateFreshness('bls-regional', { _static: true, _dataYear: 'CPI' });
 

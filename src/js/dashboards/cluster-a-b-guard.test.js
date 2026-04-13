@@ -67,7 +67,7 @@ describe('Cluster A — render functions called from live-data fetches use getOr
 });
 
 describe('Cluster B — init() has AbortController + 15s timeout around initial fetches', () => {
-  const files = ['food-prices', 'food-insecurity', 'food-banks', 'food-access'];
+  const files = ['food-prices', 'food-insecurity', 'food-banks', 'food-access', 'snap-safety-net'];
 
   for (const file of files) {
     it(`${file}.js init() wraps initial Promise.all with AbortController + 15000ms timeout`, () => {
