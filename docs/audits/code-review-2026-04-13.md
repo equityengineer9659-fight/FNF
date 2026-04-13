@@ -49,7 +49,7 @@ Columns: ID / Severity / File / Agent(s) / Root Cause / Fix / Blast Radius / Blo
 | **P1-11** | Root pages (8) | Missing JSON-LD Organization/LocalBusiness/Article blocks | Additive `<script type="application/ld+json">` (CSP-safe, data-only) |
 | **P1-12** | `blog/ai-reshaping-food-banks.html` | Missing article illustration SVG | Run `/create-illustration ai-reshaping-food-banks` |
 | **P1-13** | `tools/deployment/slds-compliance-check.js` | ESM/CJS mismatch: uses `require()` in `"type": "module"` project; dev script currently broken | Convert to `import` |
-| **P1-14** | `.github/workflows/ci-cd.yml:23`, `weekly-a11y-sweep.yml:17`, `dependency-update.yml:27` | `actions/checkout@v6` does not exist (latest is v4); behavior under GitHub's tag resolution is undefined | Pin to `@v4` everywhere |
+| ~~**P1-14**~~ | ~~`.github/workflows/ci-cd.yml:23`, `weekly-a11y-sweep.yml:17`, `dependency-update.yml:27`~~ | **WITHDRAWN** — `actions/checkout@v6` exists and was intentionally bumped by Dependabot (PRs #17, #80). Original Wave A finding was incorrect. | — |
 | **P1-15** | `.github/workflows/weekly-a11y-sweep.yml:24` | `cache: ''` disables npm caching; wastes 60-90s/run and risks transient registry failures producing false-negative a11y reports | `cache: 'npm'` |
 | **P1-16** | `.github/workflows/jira-transition.yml:24` | Base64 credential composed inline; masking is per-secret so composed string would leak if `set -x` ever runs | Pass secrets separately or use Jira action with dedicated input |
 | **P1-17** | `package.json` (transitive via Vite 8 Rolldown) | `tinyglobby → picomatch 4.0.0-4.0.3` ReDoS (GHSA-c2c7-rcm5-vvqj) — new since PR #144 | `overrides: { "picomatch": ">=4.0.4" }`; test build |
@@ -110,7 +110,7 @@ Each PR lands on a fresh `chore/code-review-<topic>` branch from master. Ad hoc 
 **PR 1 — `chore/code-review-deploy-safety` — P0 CI/CD blockers**
 - P0-3: ci-cd.yml health check `exit 1`
 - P0-4: ci-cd.yml rsync `--exclude 'api/_config.php'`
-- P1-14: pin all workflow `actions/checkout@v4`
+- ~~P1-14: pin all workflow `actions/checkout@v4`~~ (withdrawn — @v6 exists)
 - P1-15: weekly-a11y `cache: 'npm'`
 - P1-16: jira-transition credential composition
 - **Why bundled**: all touch `.github/workflows/*.yml`; ship first because P0-4 blocks safe deploys.
