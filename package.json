@@ -128,7 +128,7 @@
     "d3-scale": "^4.0.2",
     "d3-selection": "^3.0.0",
     "d3-transition": "^3.0.1",
-    "dotenv": "^17.4.1",
+    "dotenv": "^17.4.2",
     "echarts": "^6.0.0",
     "pngjs": "^7.0.0",
     "topojson-client": "^3.1.0",
