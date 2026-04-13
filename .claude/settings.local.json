@@ -154,7 +154,11 @@
       "Bash(git fetch:*)",
       "Read(//c/Users/luetk/Desktop/Website/Website Next Version/**)",
       "Bash(git -C \"C:/Users/luetk/Desktop/Website/Website Next Version\" check-ignore -v public/api/_config.php)",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Bash(git pull:*)",
+      "mcp__context7__query-docs",
+      "mcp__context7__resolve-library-id",
+      "Bash(NODE_OPTIONS='--dns-result-order=ipv4first' npm install --save-dev vite@^8.0.8 postcss@^8.5.9 autoprefixer@^10.4.27)"
     ],
     "deny": [],
     "ask": [],
