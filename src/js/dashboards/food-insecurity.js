@@ -635,20 +635,37 @@ function renderRadar(data) {
   const top5Avg = normalize(top5).reduce((acc, v) => acc.map((a, i) => a + v[i]), [0,0,0,0,0]).map(v => Math.round(v / 5));
   const bot5Avg = normalize(bottom5).reduce((acc, v) => acc.map((a, i) => a + v[i]), [0,0,0,0,0]).map(v => Math.round(v / 5));
 
+  const indicatorNames = ['Food Insecurity', 'Child Rate', 'Poverty', 'Meal Cost', 'SNAP Usage'];
+  const groupMeta = [
+    { title: 'Most Affected States', subtitle: top5.map(s => s.name).join(' · '), swatch: 'fnf-tooltip-swatch--high', barFill: '#ef4444' },
+    { title: 'Least Affected States', subtitle: bottom5.map(s => s.name).join(' · '), swatch: 'fnf-tooltip-swatch--low', barFill: '#60a5fa' }
+  ];
   chart.setOption({
-    tooltip: { ...TOOLTIP_STYLE },
+    tooltip: {
+      ...TOOLTIP_STYLE,
+      extraCssText: 'max-width: 340px;',
+      formatter: (params) => {
+        const values = Array.isArray(params.value) ? params.value : [];
+        const meta = groupMeta[params.dataIndex] || groupMeta[0];
+        const rows = indicatorNames
+          .map((label, i) => {
+            const v = Math.max(0, Math.min(100, Number(values[i]) || 0));
+            const bar = `<svg class="fnf-tooltip-bar" width="100" height="6" viewBox="0 0 100 6">
+              <rect width="100" height="6" rx="3" fill="rgba(255,255,255,0.08)"/>
+              <rect width="${v}" height="6" rx="3" fill="${meta.barFill}"/>
+            </svg>`;
+            return `<div class="fnf-tooltip-row"><span class="fnf-tooltip-row__label">${label}</span>${bar}<span class="fnf-tooltip-row__value">${values[i] ?? '—'}</span></div>`;
+          })
+          .join('');
+        return `<div class="fnf-tooltip-header"><span class="fnf-tooltip-swatch ${meta.swatch}"></span><strong class="fnf-tooltip-label">${meta.title}</strong></div><div class="fnf-tooltip-subtitle">${meta.subtitle}</div><div class="fnf-tooltip-divider"></div>${rows}<div class="fnf-tooltip-footnote">Normalized 0–100 (higher = worse)</div>`;
+      }
+    },
     legend: {
       data: [`Most Affected (${top5.map(s => s.name).join(', ')})`, `Least Affected (${bottom5.map(s => s.name).join(', ')})`],
       textStyle: { color: COLORS.text, fontSize: 10 }, bottom: 0
     },
     radar: {
-      indicator: [
-        { name: 'Food Insecurity', max: 100 },
-        { name: 'Child Rate', max: 100 },
-        { name: 'Poverty', max: 100 },
-        { name: 'Meal Cost', max: 100 },
-        { name: 'SNAP Usage', max: 100 }
-      ],
+      indicator: indicatorNames.map(name => ({ name, max: 100 })),
       shape: 'polygon', splitNumber: 4,
       axisName: { color: COLORS.text, fontSize: window.innerWidth < 640 ? 9 : 11 },
       radius: window.innerWidth < 640 ? '55%' : '65%',
