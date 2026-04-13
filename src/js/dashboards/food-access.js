@@ -103,6 +103,9 @@ function renderDesertMap(geoJSON, states, accessData) {
       population: s.totalPopulation || s.population,
       lowAccessPopulation: s.lowAccessPopulation, avgDistance: s.avgDistance
     }));
+    const vmValues = mapData.map(d => Number(d.value)).filter(v => Number.isFinite(v));
+    const vmMin = vmValues.length ? Math.floor(Math.min(...vmValues)) : 0;
+    const vmMax = vmValues.length ? Math.ceil(Math.max(...vmValues)) : 100;
 
     const backBtn = document.getElementById('access-map-back-btn');
     if (backBtn) backBtn.classList.add('hidden');
@@ -116,7 +119,7 @@ function renderDesertMap(geoJSON, states, accessData) {
     chart.setOption({
       tooltip: { trigger: 'item', ...TOOLTIP_STYLE, formatter: desertStateTooltip },
       visualMap: {
-        left: 'right', bottom: 20, min: 20, max: 65,
+        left: 'right', bottom: 20, min: vmMin, max: vmMax,
         text: ['More Deserts', 'Fewer Deserts'], calculable: true,
         inRange: { color: [PAL.low, PAL.mid, PAL.high] },
         textStyle: { color: COLORS.text }
@@ -922,6 +925,9 @@ function renderLowAccessMap(geoJSON, accessData) {
     totalPopulation: s.totalPopulation, lowAccessPopulation: s.lowAccessPopulation,
     avgDistance: s.avgDistance
   }));
+  const vmValues = mapData.map(d => Number(d.value)).filter(v => Number.isFinite(v));
+  const vmMin = vmValues.length ? Math.floor(Math.min(...vmValues)) : 0;
+  const vmMax = vmValues.length ? Math.ceil(Math.max(...vmValues)) : 100;
 
   const albersProjection = { project: p => p, unproject: p => p };
 
@@ -940,7 +946,7 @@ function renderLowAccessMap(geoJSON, accessData) {
       }
     },
     visualMap: {
-      left: 'right', bottom: 20, min: 20, max: 65,
+      left: 'right', bottom: 20, min: vmMin, max: vmMax,
       text: ['More Low-Access', 'Fewer Low-Access'], calculable: true,
       inRange: { color: [PAL.low, PAL.mid, PAL.high] },
       textStyle: { color: COLORS.text }
