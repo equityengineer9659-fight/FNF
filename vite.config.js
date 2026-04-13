@@ -35,15 +35,22 @@ export default defineConfig({
     rollupOptions: {
       input: rollupInput,
       output: {
-        // Keep separate CSS and JS bundles for maintainability
-        manualChunks: {
-          effects: ['./src/js/effects/particles.js'],
-          echarts: ['echarts/core', 'echarts/charts', 'echarts/components', 'echarts/renderers'],
-          d3: ['d3-hierarchy', 'd3-selection', 'd3-transition', 'd3-scale', 'd3-interpolate', 'd3-format', 'd3-color']
+        // Function form required — Vite 8 / Rolldown removed the object form of manualChunks.
+        manualChunks(id) {
+          if (id.includes('src/js/effects/particles') || id.includes('src\\js\\effects\\particles')) {
+            return 'effects';
+          }
+          if (id.includes('node_modules/echarts') || id.includes('node_modules\\echarts')) {
+            return 'echarts';
+          }
+          if (/node_modules[\\/]d3-(hierarchy|selection|transition|scale|interpolate|format|color)/.test(id)) {
+            return 'd3';
+          }
         },
         assetFileNames: (assetInfo) => {
-          const info = assetInfo.name.split('.');
-          const ext = info[info.length - 1];
+          // Vite 8 / Rolldown: assetInfo.names is an array; fall back to .name for plugin compat.
+          const fileName = assetInfo.names?.[0] ?? assetInfo.name ?? '';
+          const ext = fileName.split('.').pop() ?? '';
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
             return `assets/images/[name]-[hash][extname]`;
           }
