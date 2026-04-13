@@ -275,6 +275,23 @@ describe('dashboard-utils', () => {
       await expect(fetchWithFallback('/api/live', '/data/static.json'))
         .rejects.toThrow('Failed to load');
     });
+
+    it('logs both live and static failure context before rethrowing', async () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      globalThis.fetch = vi.fn()
+        .mockRejectedValueOnce(new Error('live nope'))
+        .mockRejectedValueOnce(new Error('static nope'));
+
+      await expect(fetchWithFallback('/api/live', '/data/static.json')).rejects.toThrow();
+      expect(warnSpy).toHaveBeenCalled();
+      const callArgs = warnSpy.mock.calls[0];
+      expect(callArgs[0]).toMatch(/both live and static failed/);
+      expect(callArgs[1]).toMatchObject({
+        liveError: 'live nope',
+        staticError: 'static nope',
+      });
+      warnSpy.mockRestore();
+    });
   });
 
   describe('updateFreshness', () => {

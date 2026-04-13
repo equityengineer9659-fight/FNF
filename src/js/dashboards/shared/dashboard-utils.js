@@ -277,18 +277,38 @@ export function handleResize() {
 
 // -- Fetch with fallback: try live API, fall back to static JSON --
 export async function fetchWithFallback(liveUrl, staticUrl) {
+  let liveError;
   try {
     const res = await fetch(liveUrl);
     if (res.ok) {
       const data = await res.json();
       if (!data.error) return { data, source: 'live' };
+      liveError = new Error(`Live ${liveUrl} returned error body: ${data.error}`);
+    } else {
+      liveError = new Error(`Live ${liveUrl} returned HTTP ${res.status}`);
     }
-  } catch { /* live API unavailable */ }
+  } catch (e) {
+    liveError = e;
+  }
 
   // Fallback to static
-  const res = await fetch(staticUrl);
-  if (!res.ok) throw new Error(`Failed to load ${staticUrl}`);
-  return { data: await res.json(), source: 'static' };
+  try {
+    const res = await fetch(staticUrl);
+    if (!res.ok) throw new Error(`Failed to load ${staticUrl}`);
+    return { data: await res.json(), source: 'static' };
+  } catch (staticError) {
+    // Both live and static failed — surface context so the failure is diagnosable
+    // instead of silently burying the live error. Guarded console.warn keeps
+    // dashboard-utils.js free of a monitoring dependency.
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn('fetchWithFallback: both live and static failed', {
+        liveUrl, staticUrl,
+        liveError: liveError?.message,
+        staticError: staticError.message
+      });
+    }
+    throw staticError;
+  }
 }
 
 // -- NTEE code descriptions (for nonprofit directory/profile) --

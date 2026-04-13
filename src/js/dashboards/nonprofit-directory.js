@@ -9,6 +9,7 @@ import {
 } from './shared/dashboard-utils.js';
 
 let searchTimeout = null;
+let searchAbortController = null;
 let currentQuery = '';
 let currentState = '';
 
@@ -37,6 +38,11 @@ async function handleSearch(query, state, page) {
   resultsGrid.innerHTML = '<div class="directory-empty-state">Searching...</div>';
   if (paginationEl) paginationEl.innerHTML = '';
 
+  // Cancel any in-flight search so stale results can't overwrite newer ones
+  if (searchAbortController) searchAbortController.abort();
+  searchAbortController = new AbortController();
+  const { signal } = searchAbortController;
+
   // Build API URL
   const params = new URLSearchParams();
   if (query) params.set('q', query);
@@ -51,10 +57,12 @@ async function handleSearch(query, state, page) {
   const newUrl = browserParams.toString()
     ? `${window.location.pathname}?${browserParams.toString()}`
     : window.location.pathname;
-  history.replaceState(null, '', newUrl);
+  try {
+    history.replaceState(null, '', newUrl);
+  } catch { /* Chromium quota: 100 calls / 30s — ignore to avoid unwinding handler */ }
 
   try {
-    const res = await fetch(`/api/nonprofit-search.php?${params.toString()}`);
+    const res = await fetch(`/api/nonprofit-search.php?${params.toString()}`, { signal });
     if (!res.ok) throw new Error('API error');
     const data = await res.json();
     if (data.error) throw new Error(data.error);
@@ -69,7 +77,8 @@ async function handleSearch(query, state, page) {
         ? `${data.total_results.toLocaleString()} organizations found${queryLabel}${stateLabel}`
         : '';
     }
-  } catch {
+  } catch (e) {
+    if (e?.name === 'AbortError') return;
     resultsGrid.innerHTML = '<div class="directory-empty-state">Unable to search organizations. Please try again.</div>';
   }
 }
@@ -244,13 +253,13 @@ function initFindHelp() {
           const ein = org.ein || org.organization?.ein || '';
           const revenue = org.total_revenue || org.organization?.total_revenue;
           const revenueStr = revenue ? `$${fmtNum(revenue)}` : '';
-          const profileUrl = ein ? `/dashboards/nonprofit-profile.html?ein=${ein}` : '';
+          const profileUrl = ein ? `/dashboards/nonprofit-profile.html?ein=${encodeURIComponent(ein)}` : '';
 
           return `<div class="help-result-card">
-            <div class="help-result-card__title">${profileUrl ? `<a href="${profileUrl}" class="help-result-card__title-link">${name}</a>` : name}</div>
+            <div class="help-result-card__title">${profileUrl ? `<a href="${profileUrl}" class="help-result-card__title-link">${escapeHtml(name)}</a>` : escapeHtml(name)}</div>
             <div class="help-result-card__meta">
-              ${city}${city && state ? ', ' : ''}${state}
-              ${revenueStr ? ` &middot; Revenue: ${revenueStr}` : ''}
+              ${escapeHtml(city)}${city && state ? ', ' : ''}${escapeHtml(state)}
+              ${revenueStr ? ` &middot; Revenue: ${escapeHtml(revenueStr)}` : ''}
               ${profileUrl ? ` &middot; <a href="${profileUrl}" class="help-result-card__profile-link">View Profile</a>` : ''}
             </div>
           </div>`;

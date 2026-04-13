@@ -772,3 +772,20 @@ describe('food-insecurity', () => {
     });
   });
 });
+
+describe('food-insecurity init ordering and rejection handling', () => {
+  const fiSrc = readFileSync(resolve(__dirname, 'food-insecurity.js'), 'utf8');
+
+  it('declares accessData/bankData before renderMap call', () => {
+    const declIdx = fiSrc.indexOf('let accessData = null, bankData = null');
+    const renderMapIdx = fiSrc.indexOf('const mapCtrl = renderMap(geoJSON, data,');
+    expect(declIdx, 'declaration must exist').toBeGreaterThan(-1);
+    expect(renderMapIdx, 'renderMap call must exist').toBeGreaterThan(-1);
+    expect(declIdx, 'declaration must precede renderMap').toBeLessThan(renderMapIdx);
+  });
+
+  it('catches rejections on tripleBurden enrichment chain', () => {
+    const match = fiSrc.match(/Promise\.all\(\[[\s\S]*?current-food-access\.json[\s\S]*?\]\)\s*\.then\([\s\S]*?\}\)\s*\.catch\(/);
+    expect(match, 'enrichment chain must end with .catch').toBeTruthy();
+  });
+});

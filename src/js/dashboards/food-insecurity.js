@@ -11,6 +11,7 @@ import {
   REGION_COLORS, REGION_CLASS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
 import { initStateSelector } from './shared/state-selector.js';
+import errorTracker from '../monitoring/error-tracker.js';
 
 const PAL = MAP_PALETTES.insecurity;
 const LOW_ACCESS_COLOR = '#f59e0b'; // amber — used in Triple Burden + State Deep-Dive
@@ -1721,6 +1722,10 @@ async function init() {
     });
     animateCounters();
 
+    // Hoisted above renderMap so the closures below capture live bindings,
+    // not a TDZ slot. Triple-Burden enrichment writes to these later.
+    let accessData = null, bankData = null;
+
     // Render all charts
     const mapCtrl = renderMap(geoJSON, data, 'rate', (stateCode) => {
       renderStateDeepDive(stateCode, data, accessData, bankData, mapCtrl.getCountyData());
@@ -1733,7 +1738,6 @@ async function init() {
     initCountySearch(mapCtrl);
 
     // State deep-dive selector (also drives KPI panel)
-    let accessData = null, bankData = null;
     initStateSelector('state-selector-container', (stateCode) => {
       if (!stateCode) {
         mapCtrl.showNational();
@@ -1770,6 +1774,8 @@ async function init() {
       // If state already selected via URL, render deep-dive now that data is loaded
       const urlState = new URLSearchParams(window.location.search).get('state');
       if (urlState) renderStateDeepDive(urlState, data, accessData, bankData, mapCtrl.getCountyData());
+    }).catch(err => {
+      errorTracker.captureException(err, { context: 'food-insecurity-tripleBurden-enrichment' });
     });
 
     // CSV export buttons — county-aware when drilled in

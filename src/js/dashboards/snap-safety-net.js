@@ -726,11 +726,16 @@ function renderDemographicFlow(sdoh, snapData) {
 
 // -- Init --
 async function init() {
+  // Silent-hang guard (matches cluster-B pattern): AbortController + 15000ms
+  // timeout so a never-resolving fetch on a bad network falls into the catch.
+  const abortCtrl = new AbortController();
+  const timeoutId = setTimeout(() => abortCtrl.abort(), 15000);
   try {
     const [snapRes, geoRes] = await Promise.all([
-      fetch('/data/snap-participation.json'),
-      fetch('/data/us-states-geo.json')
+      fetch('/data/snap-participation.json', { signal: abortCtrl.signal }),
+      fetch('/data/us-states-geo.json', { signal: abortCtrl.signal })
     ]);
+    clearTimeout(timeoutId);
 
     if (!snapRes.ok || !geoRes.ok) throw new Error('Failed to load data');
 
@@ -797,13 +802,17 @@ async function init() {
     fetchCDCPlacesSnap();
     fetchDemographicData(snapData);
 
-  } catch {
+  } catch (err) {
+    clearTimeout(timeoutId);
+    const msg = err?.name === 'AbortError'
+      ? 'Dashboard data took too long to load. Check your connection or try again later.'
+      : 'Unable to load dashboard data. Please refresh the page.';
     document.querySelectorAll('.dashboard-chart').forEach(el => {
-      el.innerHTML = '<p class="dashboard-error-state">Unable to load dashboard data. Please refresh the page.</p>';
+      el.innerHTML = `<p class="dashboard-error-state">${msg}</p>`;
     });
     const errorEl = document.getElementById('dashboard-error');
     if (errorEl) {
-      errorEl.textContent = 'Unable to load dashboard data. Please try refreshing the page.';
+      errorEl.textContent = msg;
       errorEl.hidden = false;
     }
   }
