@@ -1,13 +1,15 @@
 /**
  * Accessibility regression tests for build-components.js
  *
- * Covers four P2 findings from the 2026-04-12 dashboard final audit
- * (cluster F — build-components.js injection):
+ * Covers P1/P2 findings from the 2026-04-12 dashboard final audit
+ * (cluster F — build-components.js injection) plus the 2026-04-13 code
+ * review aria-current section-highlight extension (P1-8):
  *
- *   1. aria-current="page" must only fire on the link whose href actually
- *      matches the current page. The main-nav Dashboards link previously
- *      fired on all 8 dashboard pages, even though it always navigates to
- *      food-insecurity.html.
+ *   1. aria-current="page" fires on the link whose href matches the current
+ *      page AND on the section's top-level link when the page is a recognised
+ *      subpage of that section. Dashboard subpages highlight Dashboards;
+ *      blog articles highlight Blog; case-studies + templates-tools highlight
+ *      Resources. This matches the highlight rules in CLAUDE.md.
  *   2. `<div class="dashboard-hero__stats" aria-label="...">` needs
  *      `role="group"` — aria-label on a bare div is spec-invalid and silently
  *      ignored by assistive tech.
@@ -16,8 +18,16 @@
  *   4. The "SNAP & Safety Net" dashboard tab label must encode `&` as `&amp;`.
  */
 
-import { describe, it, expect } from 'vitest';
-import { components, postProcessA11y } from '../../build-components.js';
+import { describe, it, expect, beforeAll } from 'vitest';
+import { components, postProcessA11y, blogSubpages } from '../../build-components.js';
+
+// Tests exercise navigation() directly without running the full build, so we
+// must seed blogSubpages with a representative slug. In production this set is
+// populated by buildComponents() via filesystem glob before any HTML is processed.
+beforeAll(() => {
+  blogSubpages.add('food-banks-2026-trends');
+  blogSubpages.add('salesforce-food-bank-operations');
+});
 
 const DASHBOARD_PAGES = [
   'executive-summary',
@@ -35,31 +45,15 @@ function count(haystack, needle) {
   return haystack.split(needle).length - 1;
 }
 
-describe('build-components: main-nav aria-current (Bug 1)', () => {
-  it('fires aria-current on exactly one link per page for pages matching a nav link', () => {
-    // Pages whose href exactly matches a main-nav link entry should produce
-    // two aria-current occurrences (desktop menu + mobile menu).
-    const matchingPages = [
+describe('build-components: main-nav aria-current section highlighting', () => {
+  it('fires aria-current on exactly one section link per page (desktop + mobile = 2 occurrences)', () => {
+    // Each page belongs to exactly one top-level section, so exactly one link
+    // is marked across the desktop nav AND the mobile nav (2 occurrences total).
+    const allPages = [
       'index',
       'services',
       'resources',
-      'food-insecurity', // Dashboards link points here
-      'impact',
-      'contact',
-      'blog',
-      'about',
-    ];
-    for (const page of matchingPages) {
-      const html = components.navigation(page);
-      const occurrences = count(html, 'aria-current="page"');
-      expect(occurrences, `page=${page}`).toBe(2);
-    }
-  });
-
-  it('fires zero aria-current occurrences on pages that do not match any main-nav link', () => {
-    // Non-food-insecurity dashboards, hub pages, and blog articles have no
-    // main-nav link pointing exactly to them — so aria-current should be absent.
-    const nonMatchingPages = [
+      'food-insecurity',
       'food-access',
       'food-prices',
       'food-banks',
@@ -67,20 +61,24 @@ describe('build-components: main-nav aria-current (Bug 1)', () => {
       'executive-summary',
       'nonprofit-directory',
       'nonprofit-profile',
+      'impact',
+      'contact',
+      'blog',
+      'about',
       'case-studies',
       'templates-tools',
-      'food-banks-2026-trends', // representative blog article slug
+      'food-banks-2026-trends',
+      'salesforce-food-bank-operations',
     ];
-    for (const page of nonMatchingPages) {
+    for (const page of allPages) {
       const html = components.navigation(page);
       const occurrences = count(html, 'aria-current="page"');
-      expect(occurrences, `page=${page}`).toBe(0);
+      expect(occurrences, `page=${page}`).toBe(2);
     }
   });
 
   it('on food-insecurity, only the Dashboards link is marked aria-current', () => {
     const html = components.navigation('food-insecurity');
-    // Dashboards link has aria-current, others do not
     expect(html).toContain(
       '<a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>'
     );
@@ -88,32 +86,31 @@ describe('build-components: main-nav aria-current (Bug 1)', () => {
     expect(html).not.toContain('class="fnf-nav__link" aria-current="page">Blog</a>');
   });
 
-  it('on non-food-insecurity dashboard pages, the Dashboards link is NOT marked aria-current', () => {
-    const otherDashboards = DASHBOARD_PAGES.filter(p => p !== 'food-insecurity');
-    for (const page of otherDashboards) {
+  it('on every dashboard subpage, the Dashboards link IS marked aria-current', () => {
+    for (const page of DASHBOARD_PAGES) {
       const html = components.navigation(page);
-      // The nav link to food-insecurity.html must NOT carry aria-current="page"
-      // because clicking it navigates AWAY from the current page.
       expect(
         html,
-        `page=${page} should not claim food-insecurity link as current`
-      ).not.toContain(
-        '<a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">'
+        `page=${page} should mark the Dashboards link as current`
+      ).toContain(
+        '<a href="/dashboards/food-insecurity.html" class="fnf-nav__link" aria-current="page">Dashboards</a>'
       );
       expect(
         html,
-        `page=${page} mobile link should also not claim current`
-      ).not.toContain(
-        '<a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">'
+        `page=${page} mobile link should also mark Dashboards as current`
+      ).toContain(
+        '<a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link" aria-current="page">Dashboards</a>'
       );
     }
   });
 
-  it('on blog articles, the Blog link is NOT marked aria-current (points to /blog.html)', () => {
-    // Pick a representative blog article slug that is NOT the blog hub
+  it('on blog articles, the Blog link IS marked aria-current', () => {
     const html = components.navigation('food-banks-2026-trends');
-    expect(html).not.toContain(
+    expect(html).toContain(
       '<a href="/blog.html" class="fnf-nav__link" aria-current="page">Blog</a>'
+    );
+    expect(html).toContain(
+      '<a href="/blog.html" class="fnf-nav__mobile-link" aria-current="page">Blog</a>'
     );
   });
 
@@ -124,14 +121,20 @@ describe('build-components: main-nav aria-current (Bug 1)', () => {
     );
   });
 
-  it('on hub pages, the Resources link is NOT marked aria-current (points to /resources.html)', () => {
+  it('on resources hub subpages, the Resources link IS marked aria-current', () => {
     for (const page of ['case-studies', 'templates-tools']) {
       const html = components.navigation(page);
       expect(
         html,
-        `page=${page} resources link should not claim current`
-      ).not.toContain(
-        '<a href="/resources.html" class="fnf-nav__link" aria-current="page">'
+        `page=${page} should mark the Resources link as current`
+      ).toContain(
+        '<a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>'
+      );
+      expect(
+        html,
+        `page=${page} mobile link should also mark Resources as current`
+      ).toContain(
+        '<a href="/resources.html" class="fnf-nav__mobile-link" aria-current="page">Resources</a>'
       );
     }
   });
@@ -141,6 +144,12 @@ describe('build-components: main-nav aria-current (Bug 1)', () => {
     expect(html).toContain(
       '<a href="/resources.html" class="fnf-nav__link" aria-current="page">Resources</a>'
     );
+  });
+
+  it('blog articles do NOT also mark the Dashboards or Resources link', () => {
+    const html = components.navigation('food-banks-2026-trends');
+    expect(html).not.toContain('class="fnf-nav__link" aria-current="page">Dashboards</a>');
+    expect(html).not.toContain('class="fnf-nav__link" aria-current="page">Resources</a>');
   });
 });
 
