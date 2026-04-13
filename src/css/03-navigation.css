@@ -60,7 +60,7 @@
 .fnf-nav__link[aria-current="page"],
 .fnf-nav__link[aria-current="page"]:visited {color:var(--fnf-secondary);position:relative}
 
-.fnf-nav__link[aria-current="page"]::after {content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;background:#00d4ff;border-radius:2px;box-shadow:0 0 8px rgba(0,212,255,0.6)}
+.fnf-nav__link[aria-current="page"]::after {content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;background:var(--fnf-secondary);border-radius:2px;box-shadow:0 0 8px rgba(0,212,255,0.6)}
 
 /* --- Mobile toggle (hidden by default on desktop) --- */
 .fnf-nav__toggle {
@@ -153,7 +153,7 @@
 
 .fnf-nav__mobile-link:hover,
 .fnf-nav__mobile-link[aria-current="page"],
-.fnf-nav__mobile-link[aria-current="page"]:visited {background:rgba(0,212,255,0.2);color:#00d4ff}
+.fnf-nav__mobile-link[aria-current="page"]:visited {background:rgba(0,212,255,0.2);color:var(--fnf-secondary)}
 
 /* ============================================================
    Responsive breakpoints
