@@ -23,14 +23,14 @@ vi.mock('./monitoring/performance-monitor.js', () => ({
   default: { init: vi.fn(), mark: vi.fn(), measure: vi.fn() },
 }));
 vi.mock('./effects/smart-scroll.js', () => ({
-  default: vi.fn().mockImplementation(() => ({ destroy: vi.fn() })),
+  default: vi.fn(function () { return { destroy: vi.fn() }; }),
 }));
 vi.mock('./effects/particles.js', () => ({
   initParticles: vi.fn().mockReturnValue({ destroy: vi.fn(), setParticleCount: vi.fn() }),
 }));
 vi.mock('./effects/gradient-icons.js', () => ({ hydrateGradientIcons: vi.fn() }));
 vi.mock('./effects/newsletter-popup.js', () => ({
-  default: vi.fn().mockImplementation(() => ({ destroy: vi.fn() })),
+  default: vi.fn(function () { return { destroy: vi.fn() }; }),
 }));
 vi.mock('./effects/counters.js', () => ({ initCounters: vi.fn().mockReturnValue({}) }));
 vi.mock('./expertise-accordion.js', () => ({}));
