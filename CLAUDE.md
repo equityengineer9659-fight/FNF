@@ -152,9 +152,13 @@ AI-powered article generator + RSS scraper. Requires `npm run admin` and `ANTHRO
 ## Testing & Performance
 
 ### Performance Budgets
+
+These are *actual shipped* sizes captured after the 2026-04-12 dashboard final audit, not pre-merge thresholds. Use them as a reality reference, not a refactor target — the real perf lever is the ECharts chunk, which is in the deferred P1 queue because further tree-shaking is fragile.
+
 - **CSS**: ~150KB minified (~25KB gzipped)
-- **JS Core**: ~53KB total (47KB main + 5KB effects, ~16KB gzipped)
-- **Dashboard**: ~15-25KB per dashboard JS + ~645KB ECharts chunk (~210KB gzipped, shared across all 5 dashboard pages)
+- **JS Core**: ~54KB total (~49KB main + ~5KB effects, ~16KB gzipped)
+- **Dashboard JS** *(actual shipped, 8 dashboards)*: 8–45KB per dashboard chunk minified / 3–13KB gzipped. Largest are food-access (~45KB / ~12KB gz), food-insecurity (~43KB / ~13KB gz), nonprofit-profile (~37KB / ~11KB gz). Smallest are nonprofit-directory (~8KB) and executive-summary (~10KB).
+- **ECharts chunk** *(actual shipped, deferred P1 to refactor)*: ~755KB raw / ~245KB gzipped, tree-shaken and code-split, loaded only on dashboard pages and shared across all 8.
 - **Core Web Vitals**: CLS 0.0000, LCP <2.5s mobile
 - **Unit Test Coverage**: 65% threshold
 - **Lighthouse Configs**: `lighthouse.config.js` (local) vs `tools/testing/lighthouserc.json` (CI)
