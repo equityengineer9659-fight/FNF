@@ -11,12 +11,43 @@ import { glob } from 'glob';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Pages that are part of the Dashboards section — Dashboards nav link gets
+// aria-current on any of these. The "Overview" tab (food-insecurity) is the
+// canonical landing slug, so the Dashboards link href points there.
+const dashboardSubpages = new Set([
+  'executive-summary',
+  'food-insecurity',
+  'food-access',
+  'snap-safety-net',
+  'food-prices',
+  'food-banks',
+  'nonprofit-directory',
+  'nonprofit-profile',
+]);
+
+// Pages that are part of the Resources section — Resources nav link gets
+// aria-current on the resources hub itself + these hub subpages.
+const resourcesSubpages = new Set([
+  'case-studies',
+  'templates-tools',
+]);
+
+// Blog article slugs are auto-discovered from blog/*.html in buildComponents().
+// Populated before any HTML is processed so navigation() can query it.
+const blogSubpages = new Set();
+
 // Component definitions — all hrefs use absolute paths so they work from any subdirectory.
-// aria-current="page" is only emitted on the link whose href matches the CURRENT page
-// (not all pages in a "section"), per WAI-ARIA 1.2: a11y tools announce "current page"
-// on a link that leaves the page otherwise.
+// aria-current="page" is emitted on the link whose href matches the CURRENT page,
+// AND on the section's top-level link when the page is a recognised subpage of
+// that section (Dashboards, Resources, Blog). This matches the highlight rules
+// documented in CLAUDE.md.
 const components = {
-  navigation: (currentPage) => `    <!-- Navigation -->
+  navigation: (currentPage) => {
+    const isDashboard = dashboardSubpages.has(currentPage);
+    const isResources = currentPage === 'resources' || resourcesSubpages.has(currentPage);
+    const isBlog = currentPage === 'blog' || blogSubpages.has(currentPage);
+    const ac = (cond) => (cond ? ' aria-current="page"' : '');
+    return `    <!-- Navigation -->
     <nav class="fnf-nav" aria-label="Main navigation">
         <!-- Hidden checkbox for CSS-only mobile toggle -->
         <input type="checkbox" id="nav-toggle" class="fnf-nav__toggle-input" tabindex="-1">
@@ -49,28 +80,28 @@ const components = {
             <!-- Desktop Navigation Menu - Inside container -->
             <ul class="fnf-nav__menu">
             <li class="fnf-nav__item">
-                <a href="/index.html" class="fnf-nav__link"${currentPage === 'index' ? ' aria-current="page"' : ''}>Home</a>
+                <a href="/index.html" class="fnf-nav__link"${ac(currentPage === 'index')}>Home</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/services.html" class="fnf-nav__link"${currentPage === 'services' ? ' aria-current="page"' : ''}>Services</a>
+                <a href="/services.html" class="fnf-nav__link"${ac(currentPage === 'services')}>Services</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/resources.html" class="fnf-nav__link"${currentPage === 'resources' ? ' aria-current="page"' : ''}>Resources</a>
+                <a href="/resources.html" class="fnf-nav__link"${ac(isResources)}>Resources</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link"${currentPage === 'food-insecurity' ? ' aria-current="page"' : ''}>Dashboards</a>
+                <a href="/dashboards/food-insecurity.html" class="fnf-nav__link"${ac(isDashboard)}>Dashboards</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/impact.html" class="fnf-nav__link"${currentPage === 'impact' ? ' aria-current="page"' : ''}>Impact</a>
+                <a href="/impact.html" class="fnf-nav__link"${ac(currentPage === 'impact')}>Impact</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/contact.html" class="fnf-nav__link"${currentPage === 'contact' ? ' aria-current="page"' : ''}>Contact</a>
+                <a href="/contact.html" class="fnf-nav__link"${ac(currentPage === 'contact')}>Contact</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/blog.html" class="fnf-nav__link"${currentPage === 'blog' ? ' aria-current="page"' : ''}>Blog</a>
+                <a href="/blog.html" class="fnf-nav__link"${ac(isBlog)}>Blog</a>
             </li>
             <li class="fnf-nav__item">
-                <a href="/about.html" class="fnf-nav__link"${currentPage === 'about' ? ' aria-current="page"' : ''}>About Us</a>
+                <a href="/about.html" class="fnf-nav__link"${ac(currentPage === 'about')}>About Us</a>
             </li>
         </ul>
         </div>
@@ -78,17 +109,18 @@ const components = {
         <!-- Mobile Menu -->
         <div class="fnf-nav__mobile">
             <ul class="fnf-nav__mobile-menu">
-                <li><a href="/index.html" class="fnf-nav__mobile-link"${currentPage === 'index' ? ' aria-current="page"' : ''}>Home</a></li>
-                <li><a href="/services.html" class="fnf-nav__mobile-link"${currentPage === 'services' ? ' aria-current="page"' : ''}>Services</a></li>
-                <li><a href="/resources.html" class="fnf-nav__mobile-link"${currentPage === 'resources' ? ' aria-current="page"' : ''}>Resources</a></li>
-                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link"${currentPage === 'food-insecurity' ? ' aria-current="page"' : ''}>Dashboards</a></li>
-                <li><a href="/impact.html" class="fnf-nav__mobile-link"${currentPage === 'impact' ? ' aria-current="page"' : ''}>Impact</a></li>
-                <li><a href="/contact.html" class="fnf-nav__mobile-link"${currentPage === 'contact' ? ' aria-current="page"' : ''}>Contact</a></li>
-                <li><a href="/blog.html" class="fnf-nav__mobile-link"${currentPage === 'blog' ? ' aria-current="page"' : ''}>Blog</a></li>
-                <li><a href="/about.html" class="fnf-nav__mobile-link"${currentPage === 'about' ? ' aria-current="page"' : ''}>About Us</a></li>
+                <li><a href="/index.html" class="fnf-nav__mobile-link"${ac(currentPage === 'index')}>Home</a></li>
+                <li><a href="/services.html" class="fnf-nav__mobile-link"${ac(currentPage === 'services')}>Services</a></li>
+                <li><a href="/resources.html" class="fnf-nav__mobile-link"${ac(isResources)}>Resources</a></li>
+                <li><a href="/dashboards/food-insecurity.html" class="fnf-nav__mobile-link"${ac(isDashboard)}>Dashboards</a></li>
+                <li><a href="/impact.html" class="fnf-nav__mobile-link"${ac(currentPage === 'impact')}>Impact</a></li>
+                <li><a href="/contact.html" class="fnf-nav__mobile-link"${ac(currentPage === 'contact')}>Contact</a></li>
+                <li><a href="/blog.html" class="fnf-nav__mobile-link"${ac(isBlog)}>Blog</a></li>
+                <li><a href="/about.html" class="fnf-nav__mobile-link"${ac(currentPage === 'about')}>About Us</a></li>
             </ul>
         </div>
-    </nav>`,
+    </nav>`;
+  },
 
   footer: () => `    <!-- Footer -->
     <footer class="fnf-footer">
@@ -327,6 +359,12 @@ function buildComponents() {
   const articlePages = glob.sync('*.html', { cwd: path.join(__dirname, 'blog') })
     .map(f => f.replace('.html', ''));
 
+  // Populate the blog-subpages set BEFORE any HTML is processed so that the
+  // navigation component can mark the Blog top-level link as the current
+  // section on every article page.
+  blogSubpages.clear();
+  articlePages.forEach(slug => blogSubpages.add(slug));
+
   [...corePages, ...hubPages].forEach(page => {
     const filePath = path.join(__dirname, `${page}.html`);
     if (fs.existsSync(filePath)) {
@@ -374,4 +412,4 @@ if (isMainModule) {
   buildComponents();
 }
 
-export { buildComponents, components, postProcessA11y };
+export { buildComponents, components, postProcessA11y, dashboardSubpages, resourcesSubpages, blogSubpages };
