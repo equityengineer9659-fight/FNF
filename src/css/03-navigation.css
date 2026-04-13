@@ -52,13 +52,13 @@
 .fnf-nav__link:link,
 .fnf-nav__link:visited {color:var(--fnf-color-white);text-decoration:none;font-size:1rem;font-weight:500;padding:0.5rem 0.6rem;position:relative;transition:color 0.3s ease;white-space:nowrap}
 
-.fnf-nav__link:hover {color:#00d4ff}
+.fnf-nav__link:hover {color:var(--fnf-secondary)}
 
 /* P2-08: Keyboard focus indicator (matches .dashboard-tabs__tab focus style) */
-.fnf-nav__link:focus-visible {outline:2px solid #00d4ff;outline-offset:4px;border-radius:4px}
+.fnf-nav__link:focus-visible {outline:2px solid var(--fnf-secondary);outline-offset:4px;border-radius:4px}
 
 .fnf-nav__link[aria-current="page"],
-.fnf-nav__link[aria-current="page"]:visited {color:#00d4ff;position:relative}
+.fnf-nav__link[aria-current="page"]:visited {color:var(--fnf-secondary);position:relative}
 
 .fnf-nav__link[aria-current="page"]::after {content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;background:#00d4ff;border-radius:2px;box-shadow:0 0 8px rgba(0,212,255,0.6)}
 

@@ -17,11 +17,11 @@
 
 .service-card{min-height:320px}
 
-.service-card__link{display:inline-block;margin-top:1rem;font-size:.9rem;font-weight:600;color:#00d4ff;text-decoration:none;transition:opacity .2s ease}
+.service-card__link{display:inline-block;margin-top:1rem;font-size:.9rem;font-weight:600;color:var(--fnf-secondary);text-decoration:none;transition:opacity .2s ease}
 
 .service-card__link:hover,.service-card__link:focus{opacity:.8;text-decoration:underline}
 
-.service-card__link:focus-visible{outline:2px solid #00d4ff;outline-offset:3px;border-radius:3px}
+.service-card__link:focus-visible{outline:2px solid var(--fnf-secondary);outline-offset:3px;border-radius:3px}
 
 .resource-card{min-height:300px}
 
@@ -56,11 +56,11 @@
 
 .fnf-footer__link{color:rgba(255,255,255,0.8);text-decoration:none;font-size:0.9rem;transition:color 0.2s}
 
-.fnf-footer__link:hover{color:#00d4ff;text-decoration:underline}
+.fnf-footer__link:hover{color:var(--fnf-secondary);text-decoration:underline}
 
 .fnf-footer__separator{color:rgba(255,255,255,0.3);margin:0 0.5rem}
 
-.fnf-footer__link:focus-visible{outline:2px solid var(--fnf-secondary);outline-offset:2px;color:#00d4ff}
+.fnf-footer__link:focus-visible{outline:2px solid var(--fnf-secondary);outline-offset:2px;color:var(--fnf-secondary)}
 
 .fnf-footer__copyright{opacity:0.6;color:rgba(255,255,255,0.8)}
 
@@ -355,3 +355,18 @@
 @media (prefers-reduced-motion:reduce){.slds-button{transition:none}
 
 .slds-button:hover{transform:none}}
+
+/* P2-10: Explicit focus-visible rings for interactive elements whose
+   component styles otherwise suppress the default reset ring. Uses the
+   brand teal token so the indicator is legible on dark glass surfaces. */
+.article-read-next__card:focus-visible,
+.article-back-link:focus-visible,
+.hero-dashboard-link:focus-visible,
+.resource-action:focus-visible,
+.article-cta__secondary:focus-visible,
+.fnf-nav__mobile-link:focus-visible,
+.fnf-nav__brand:focus-visible {
+  outline: 2px solid var(--brand-focus-ring, #4fd1c5);
+  outline-offset: 3px;
+  border-radius: inherit;
+}
