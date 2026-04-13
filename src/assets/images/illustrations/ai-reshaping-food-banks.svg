@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none" role="img" aria-label="Diagram showing how AI transforms food banks from reactive distribution centers into predictive coordination hubs connecting data inputs to demand forecasting, supply matching, and real-time impact measurement">
+  <defs>
+    <linearGradient id="aiRfbBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f1923"/>
+      <stop offset="100%" stop-color="#1a1040"/>
+    </linearGradient>
+    <linearGradient id="aiRfbHub" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="aiRfbInput" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="aiRfbOutput" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="aiRfbWarn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="aiRfbGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="aiRfbArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6" opacity="0.8"/>
+    </marker>
+    <marker id="aiRfbArrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981" opacity="0.8"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="400" fill="url(#aiRfbBg)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0 80 H 800 M 0 160 H 800 M 0 240 H 800 M 0 320 H 800"/>
+    <path d="M 160 0 V 400 M 320 0 V 400 M 480 0 V 400 M 640 0 V 400"/>
+  </g>
+
+  <!-- Title labels -->
+  <text x="80" y="40" fill="#0ea5e9" font-family="system-ui,sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em">DATA INPUTS</text>
+  <text x="400" y="40" fill="#8b5cf6" font-family="system-ui,sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" text-anchor="middle">AI COORDINATION HUB</text>
+  <text x="720" y="40" fill="#10b981" font-family="system-ui,sans-serif" font-size="11" font-weight="700" letter-spacing="0.06em" text-anchor="end">INTELLIGENT OUTPUTS</text>
+
+  <!-- INPUTS (left column) -->
+  <g font-family="system-ui,sans-serif" font-size="11" fill="#e2e8f0">
+    <g>
+      <rect x="30" y="70" width="170" height="46" rx="8" fill="#0ea5e9" fill-opacity="0.12" stroke="#0ea5e9" stroke-opacity="0.6" stroke-width="1.5"/>
+      <circle cx="52" cy="93" r="10" fill="url(#aiRfbInput)" opacity="0.85"/>
+      <text x="52" y="97" text-anchor="middle" font-size="11" font-weight="700" fill="#0f1923">H</text>
+      <text x="72" y="90" font-weight="600">Historical Demand</text>
+      <text x="72" y="105" font-size="9" fill="#94a3b8">Seasonal &amp; trend patterns</text>
+    </g>
+    <g>
+      <rect x="30" y="130" width="170" height="46" rx="8" fill="#0ea5e9" fill-opacity="0.12" stroke="#0ea5e9" stroke-opacity="0.6" stroke-width="1.5"/>
+      <circle cx="52" cy="153" r="10" fill="url(#aiRfbInput)" opacity="0.85"/>
+      <text x="52" y="157" text-anchor="middle" font-size="11" font-weight="700" fill="#0f1923">D</text>
+      <text x="72" y="150" font-weight="600">Donor Supply</text>
+      <text x="72" y="165" font-size="9" fill="#94a3b8">Retailer &amp; producer surplus</text>
+    </g>
+    <g>
+      <rect x="30" y="190" width="170" height="46" rx="8" fill="#0ea5e9" fill-opacity="0.12" stroke="#0ea5e9" stroke-opacity="0.6" stroke-width="1.5"/>
+      <circle cx="52" cy="213" r="10" fill="url(#aiRfbInput)" opacity="0.85"/>
+      <text x="52" y="217" text-anchor="middle" font-size="11" font-weight="700" fill="#0f1923">C</text>
+      <text x="72" y="210" font-weight="600">Client Intake</text>
+      <text x="72" y="225" font-size="9" fill="#94a3b8">Visit frequency &amp; needs</text>
+    </g>
+    <g>
+      <rect x="30" y="250" width="170" height="46" rx="8" fill="#0ea5e9" fill-opacity="0.12" stroke="#0ea5e9" stroke-opacity="0.6" stroke-width="1.5"/>
+      <circle cx="52" cy="273" r="10" fill="url(#aiRfbInput)" opacity="0.85"/>
+      <text x="52" y="277" text-anchor="middle" font-size="11" font-weight="700" fill="#0f1923">I</text>
+      <text x="72" y="270" font-weight="600">Inventory State</text>
+      <text x="72" y="285" font-size="9" fill="#94a3b8">Real-time pantry stock</text>
+    </g>
+    <g>
+      <rect x="30" y="310" width="170" height="46" rx="8" fill="#0ea5e9" fill-opacity="0.12" stroke="#0ea5e9" stroke-opacity="0.6" stroke-width="1.5"/>
+      <circle cx="52" cy="333" r="10" fill="url(#aiRfbInput)" opacity="0.85"/>
+      <text x="52" y="337" text-anchor="middle" font-size="11" font-weight="700" fill="#0f1923">E</text>
+      <text x="72" y="330" font-weight="600">External Signals</text>
+      <text x="72" y="345" font-size="9" fill="#94a3b8">Economy, weather, policy</text>
+    </g>
+  </g>
+
+  <!-- HUB (center) -->
+  <g filter="url(#aiRfbGlow)">
+    <circle cx="400" cy="200" r="86" fill="url(#aiRfbHub)" fill-opacity="0.18" stroke="#8b5cf6" stroke-opacity="0.7" stroke-width="2"/>
+    <circle cx="400" cy="200" r="60" fill="url(#aiRfbHub)" fill-opacity="0.28" stroke="#c4b5fd" stroke-opacity="0.6" stroke-width="1.5"/>
+  </g>
+  <g font-family="system-ui,sans-serif" text-anchor="middle" fill="#ffffff">
+    <text x="400" y="190" font-size="16" font-weight="700">AI</text>
+    <text x="400" y="210" font-size="10" font-weight="600" fill="#c4b5fd">Coordination Engine</text>
+    <text x="400" y="226" font-size="8" fill="#94a3b8">forecast &#8226; match &#8226; route</text>
+  </g>
+
+  <!-- Inner orbit nodes (capabilities) -->
+  <g>
+    <circle cx="400" cy="128" r="10" fill="url(#aiRfbWarn)" opacity="0.9"/>
+    <text x="400" y="132" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#0f1923">P</text>
+    <text x="400" y="114" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#fbbf24">PREDICT</text>
+
+    <circle cx="472" cy="200" r="10" fill="url(#aiRfbOutput)" opacity="0.9"/>
+    <text x="472" y="204" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#0f1923">M</text>
+    <text x="490" y="204" text-anchor="start" font-family="system-ui,sans-serif" font-size="8" fill="#6ee7b7">MATCH</text>
+
+    <circle cx="400" cy="272" r="10" fill="url(#aiRfbInput)" opacity="0.9"/>
+    <text x="400" y="276" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#0f1923">R</text>
+    <text x="400" y="294" text-anchor="middle" font-family="system-ui,sans-serif" font-size="8" fill="#67e8f9">ROUTE</text>
+
+    <circle cx="328" cy="200" r="10" fill="#c4b5fd" opacity="0.9"/>
+    <text x="328" y="204" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#0f1923">L</text>
+    <text x="310" y="204" text-anchor="end" font-family="system-ui,sans-serif" font-size="8" fill="#c4b5fd">LEARN</text>
+  </g>
+
+  <!-- Flow arrows INPUT -> HUB -->
+  <g stroke="#8b5cf6" stroke-opacity="0.55" stroke-width="1.5" fill="none" marker-end="url(#aiRfbArrow)">
+    <path d="M 205 93 Q 280 120 320 170"/>
+    <path d="M 205 153 Q 275 170 318 185"/>
+    <path d="M 205 213 Q 275 210 317 205"/>
+    <path d="M 205 273 Q 275 240 320 220"/>
+    <path d="M 205 333 Q 280 285 324 238"/>
+  </g>
+
+  <!-- OUTPUTS (right column) -->
+  <g font-family="system-ui,sans-serif" font-size="11" fill="#e2e8f0">
+    <g>
+      <rect x="600" y="80" width="170" height="56" rx="8" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-opacity="0.6" stroke-width="1.5"/>
+      <rect x="614" y="96" width="22" height="22" rx="4" fill="url(#aiRfbOutput)" opacity="0.85"/>
+      <text x="644" y="102" font-weight="600">Demand Forecasts</text>
+      <text x="644" y="116" font-size="9" fill="#94a3b8">Prepare before spikes,</text>
+      <text x="644" y="127" font-size="9" fill="#94a3b8">not react to shortages</text>
+    </g>
+    <g>
+      <rect x="600" y="150" width="170" height="56" rx="8" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-opacity="0.6" stroke-width="1.5"/>
+      <rect x="614" y="166" width="22" height="22" rx="4" fill="url(#aiRfbOutput)" opacity="0.85"/>
+      <text x="644" y="172" font-weight="600">Surplus Matching</text>
+      <text x="644" y="186" font-size="9" fill="#94a3b8">Donors &#8594; pantries by</text>
+      <text x="644" y="197" font-size="9" fill="#94a3b8">urgency &amp; nutrition</text>
+    </g>
+    <g>
+      <rect x="600" y="220" width="170" height="56" rx="8" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-opacity="0.6" stroke-width="1.5"/>
+      <rect x="614" y="236" width="22" height="22" rx="4" fill="url(#aiRfbOutput)" opacity="0.85"/>
+      <text x="644" y="242" font-weight="600">Route Optimization</text>
+      <text x="644" y="256" font-size="9" fill="#94a3b8">Real-time delivery paths,</text>
+      <text x="644" y="267" font-size="9" fill="#94a3b8">less spoilage &amp; cost</text>
+    </g>
+    <g>
+      <rect x="600" y="290" width="170" height="56" rx="8" fill="#10b981" fill-opacity="0.12" stroke="#10b981" stroke-opacity="0.6" stroke-width="1.5"/>
+      <rect x="614" y="306" width="22" height="22" rx="4" fill="url(#aiRfbOutput)" opacity="0.85"/>
+      <text x="644" y="312" font-weight="600">Live Impact Metrics</text>
+      <text x="644" y="326" font-size="9" fill="#94a3b8">Outcomes &amp; transparency</text>
+      <text x="644" y="337" font-size="9" fill="#94a3b8">for donors &amp; grantmakers</text>
+    </g>
+  </g>
+
+  <!-- Flow arrows HUB -> OUTPUTS -->
+  <g stroke="#10b981" stroke-opacity="0.55" stroke-width="1.5" fill="none" marker-end="url(#aiRfbArrowG)">
+    <path d="M 482 170 Q 540 140 595 108"/>
+    <path d="M 486 190 Q 540 185 595 178"/>
+    <path d="M 486 215 Q 540 225 595 248"/>
+    <path d="M 478 232 Q 535 285 595 318"/>
+  </g>
+
+  <!-- Footer caption -->
+  <text x="400" y="384" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#94a3b8" font-style="italic">Reactive distribution &#8594; intelligent coordination hub</text>
+</svg>
