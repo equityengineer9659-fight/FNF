@@ -10,6 +10,7 @@ import {
   initScrollReveal, handleResize,
   getRegion, addExportButton
 } from './shared/dashboard-utils.js';
+import { handleDashboardError } from './shared/error-handler.js';
 
 // ── Vulnerability Index computation ──
 export function computeVulnerabilityIndex(states) {
@@ -405,11 +406,16 @@ async function init() {
       bankKpiEl.dataset.target = (bankData.national.totalOrganizations / 1000).toFixed(1);
     }
 
-    // Render each chart independently so partial data can still render
-    try { renderVulnerabilityMap(statesWithIndex, geoJSON, fiData.national); } catch { /* partial render OK */ }
-    try { renderSnapGap(fiData.states, snapData.stateCoverage.states); } catch { /* partial render OK */ }
-    try { renderPriceImpact(blsData); } catch { /* partial render OK */ }
-    try { renderWorstStates(statesWithIndex); } catch { /* partial render OK */ }
+    // Render each chart independently so partial data can still render.
+    // Errors are reported via errorTracker so we know which panel failed.
+    try { renderVulnerabilityMap(statesWithIndex, geoJSON, fiData.national); }
+    catch (e) { handleDashboardError(null, e, { context: 'exec-summary-vulnerability-map' }); }
+    try { renderSnapGap(fiData.states, snapData?.stateCoverage?.states ?? []); }
+    catch (e) { handleDashboardError(null, e, { context: 'exec-summary-snap-gap' }); }
+    try { renderPriceImpact(blsData); }
+    catch (e) { handleDashboardError(null, e, { context: 'exec-summary-price-impact' }); }
+    try { renderWorstStates(statesWithIndex); }
+    catch (e) { handleDashboardError(null, e, { context: 'exec-summary-worst-states' }); }
 
     // Re-animate counters after dynamic KPI updates
     animateCounters();

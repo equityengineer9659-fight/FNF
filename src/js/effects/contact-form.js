@@ -32,9 +32,11 @@ class ContactForm {
       let csrfToken = null;
       try {
         const tokenRes = await fetch('/api/csrf-token.php');
-        const tokenData = await tokenRes.json();
-        csrfToken = tokenData.token;
-      } catch { /* network failure */ }
+        if (tokenRes.ok) {
+          const tokenData = await tokenRes.json();
+          csrfToken = tokenData?.token ?? null;
+        }
+      } catch { /* network failure handled below */ }
 
       if (!csrfToken) {
         this.showError('Unable to verify security token. Please refresh the page and try again.');
@@ -46,6 +48,11 @@ class ContactForm {
         method: 'POST',
         body: formData,
       });
+
+      if (!response.ok) {
+        this.showError('Unable to send your message right now. Please try again in a moment.');
+        return;
+      }
 
       const data = await response.json();
 

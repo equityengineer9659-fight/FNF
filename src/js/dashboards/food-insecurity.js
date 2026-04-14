@@ -11,6 +11,7 @@ import {
   REGION_COLORS, REGION_CLASS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
 import { initStateSelector } from './shared/state-selector.js';
+import { handleDashboardError } from './shared/error-handler.js';
 import errorTracker from '../monitoring/error-tracker.js';
 
 const PAL = MAP_PALETTES.insecurity;
@@ -281,8 +282,12 @@ function renderMap(geoJSON, data, metric = 'rate', onStateClick, onDrillDownComp
           }
         }, 600);
       }
-    } catch {
-      chart.hideLoading();
+    } catch (e) {
+      handleDashboardError(chart, e, {
+        context: 'food-insecurity-drilldown',
+        insightSelector: '#map-insight',
+        message: `Unable to load county data for ${stateName}. Please try another state.`,
+      });
     }
   }
 

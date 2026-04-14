@@ -208,12 +208,30 @@ class FNFApp {
       const formData = new FormData();
       formData.append('email', email);
 
-      // Fetch CSRF token
+      // Fetch CSRF token — abort submission if unavailable, otherwise the
+      // server will reject the post with a confusing 403.
+      let csrfToken = null;
       try {
         const tokenRes = await fetch('/api/csrf-token.php');
-        const tokenData = await tokenRes.json();
-        formData.append('csrf_token', tokenData.token);
-      } catch { /* server will reject if CSRF is enforced */ }
+        if (tokenRes.ok) {
+          const tokenData = await tokenRes.json();
+          csrfToken = tokenData?.token ?? null;
+        }
+      } catch { /* network failure handled below */ }
+
+      if (!csrfToken) {
+        button.disabled = false;
+        button.textContent = 'Try Again';
+        if (!form.querySelector('.newsletter-form-error')) {
+          const errorEl = document.createElement('p');
+          errorEl.className = 'newsletter-form-error';
+          errorEl.setAttribute('role', 'alert');
+          errorEl.textContent = 'Unable to verify security token. Please refresh the page and try again.';
+          form.appendChild(errorEl);
+        }
+        return;
+      }
+      formData.append('csrf_token', csrfToken);
 
       try {
         const response = await fetch('/api/newsletter.php', { method: 'POST', body: formData });
