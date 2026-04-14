@@ -103,7 +103,7 @@ $payload = json_encode([
 ]);
 
 // Charity Navigator GraphQL endpoint
-$url = 'https://data-api.charitynavigator.org/graphql';
+$url = 'https://api.charitynavigator.org/graphql';
 
 $context = stream_context_create([
     'http' => [
