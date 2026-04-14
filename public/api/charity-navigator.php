@@ -105,22 +105,24 @@ $payload = json_encode([
 // Charity Navigator GraphQL endpoint
 $url = 'https://api.charitynavigator.org/graphql';
 
-$context = stream_context_create([
-    'http' => [
-        'method' => 'POST',
-        'timeout' => 15,
-        'header' => implode("\r\n", [
-            'Content-Type: application/json',
-            'User-Agent: FoodNForce-Dashboard/1.0',
-            'Authorization: ' . CHARITY_NAVIGATOR_API_KEY
-        ]),
-        'content' => $payload
-    ]
+$ch = curl_init($url);
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => $payload,
+    CURLOPT_TIMEOUT => 15,
+    CURLOPT_HTTPHEADER => [
+        'Content-Type: application/json',
+        'User-Agent: FoodNForce-Dashboard/1.0',
+        'Authorization: ' . CHARITY_NAVIGATOR_API_KEY
+    ],
 ]);
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$curlError = curl_error($ch);
+curl_close($ch);
 
-$response = @file_get_contents($url, false, $context);
-
-if ($response === false) {
+if ($response === false || $httpCode >= 400) {
     // Return stale cache if available
     if (file_exists($cacheFile)) {
         $cached = file_get_contents($cacheFile);
@@ -133,7 +135,12 @@ if ($response === false) {
         }
     }
     http_response_code(502);
-    echo json_encode(['error' => 'Charity Navigator API unavailable']);
+    echo json_encode([
+        'error' => 'Charity Navigator API unavailable',
+        '_httpCode' => $httpCode,
+        '_curlError' => $curlError,
+        '_responseBody' => is_string($response) ? substr($response, 0, 500) : null
+    ]);
     exit;
 }
 
