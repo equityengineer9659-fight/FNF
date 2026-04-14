@@ -112,7 +112,7 @@ $context = stream_context_create([
         'header' => implode("\r\n", [
             'Content-Type: application/json',
             'User-Agent: FoodNForce-Dashboard/1.0',
-            'Apikey: ' . CHARITY_NAVIGATOR_API_KEY
+            'Authorization: ' . CHARITY_NAVIGATOR_API_KEY
         ]),
         'content' => $payload
     ]
