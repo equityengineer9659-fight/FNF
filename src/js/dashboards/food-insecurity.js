@@ -36,6 +36,9 @@ const MAP_METRICS = {
 function stateTooltip(params) {
   const d = params.data;
   if (!d) return '';
+  const snapStr = typeof d.snapParticipation === 'number'
+    ? `${fmtNum(d.snapParticipation)} (${d.snapCoverage || '—'}% coverage)`
+    : '— (data unavailable)';
   return `<strong class="fnf-tooltip-label">${d.name}</strong><br/>
     <span class="csp-text-secondary">Food Insecurity:</span> ${d.rate}%<br/>
     <span class="csp-text-accent">Child Rate:</span> ${d.childRate}%<br/>
@@ -43,7 +46,7 @@ function stateTooltip(params) {
     Meal Gap: ${fmtNum(d.mealGap)} meals/yr<br/>
     Avg Meal Cost: $${d.mealCost}<br/>
     Poverty Rate: ${d.povertyRate}%<br/>
-    SNAP: ${fmtNum(d.snapParticipation)} (${d.snapCoverage || '—'}% coverage)<br/>
+    SNAP: ${snapStr}<br/>
     <span class="csp-text-secondary-sm">Click to see counties</span>`;
 }
 

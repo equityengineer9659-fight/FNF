@@ -11,6 +11,7 @@ import {
   US_STATES
 } from './shared/dashboard-utils.js';
 import { initStateSelector } from './shared/state-selector.js';
+import errorTracker from '../monitoring/error-tracker.js';
 
 const PAL = MAP_PALETTES.prices;
 let _snapBenefits = null;
@@ -76,7 +77,15 @@ function renderRegions(data, mealCost) {
   const regionColors = ['#60a5fa', '#f59e0b', '#34d399', '#a78bfa'];
   const regions = data.series.map(s => s.name);
   const latestValues = data.series.map(s => s.data[s.data.length - 1].value);
-  const latestYear = data.series[0]?.data.at(-1)?.date?.slice(0, 4) ?? new Date().getFullYear().toString();
+  const latestDate = data.series[0]?.data.at(-1)?.date;
+  if (!latestDate) {
+    errorTracker.captureError({
+      type: 'dashboard',
+      context: 'food-prices-regions-latest-year',
+      message: 'Latest BLS regional series date missing — falling back to current year',
+    });
+  }
+  const latestYear = latestDate?.slice(0, 4) ?? new Date().getFullYear().toString();
 
   // Show baseline values for comparison
   const startValues = data.series.map(s => s.data[0].value);
