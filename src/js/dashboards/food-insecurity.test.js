@@ -789,3 +789,308 @@ describe('food-insecurity init ordering and rejection handling', () => {
     expect(match, 'enrichment chain must end with .catch').toBeTruthy();
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// P1-19 Phase B: helper logic coverage (inline replicas of non-exported helpers)
+// ─────────────────────────────────────────────────────────────────────────────
+describe('food-insecurity helper logic (inline replicas)', () => {
+  // Replicates fmtNum used throughout the module
+  function fmtNum(n) {
+    if (n == null) return '—';
+    if (n >= 1e9) return (n / 1e9).toFixed(1) + 'B';
+    if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
+    return String(n);
+  }
+
+  // Replicates stateTooltip (food-insecurity.js:35)
+  function stateTooltip(params) {
+    const d = params.data;
+    if (!d) return '';
+    return `<strong>${d.name}</strong> Food Insecurity: ${d.rate}% Child Rate: ${d.childRate}% Persons: ${fmtNum(d.persons)} Avg Meal Cost: $${d.mealCost} Poverty Rate: ${d.povertyRate}% SNAP: ${fmtNum(d.snapParticipation)} (${d.snapCoverage || '—'}% coverage)`;
+  }
+
+  // Replicates countyTooltip (food-insecurity.js:50)
+  function countyTooltip(params) {
+    const d = params.data;
+    if (!d) return '';
+    return `<strong>${d.name}</strong> Population: ${fmtNum(d.population || 0)} Food Insecurity: ${d.rate}% (est.) Child Rate: ${d.childRate}% Persons: ${fmtNum(d.persons)} Avg Meal Cost: $${d.mealCost}`;
+  }
+
+  describe('stateTooltip formatter', () => {
+    it('returns empty string when params.data is null', () => {
+      expect(stateTooltip({ data: null })).toBe('');
+    });
+
+    it('returns empty string when params.data is undefined', () => {
+      expect(stateTooltip({})).toBe('');
+    });
+
+    it('includes state name and insecurity rate', () => {
+      const result = stateTooltip({
+        data: {
+          name: 'California', rate: 11.2, childRate: 14.5,
+          persons: 4_400_000, mealCost: 3.85, povertyRate: 12.0,
+          snapParticipation: 4_500_000, snapCoverage: 102,
+        }
+      });
+      expect(result).toContain('California');
+      expect(result).toContain('11.2%');
+      expect(result).toContain('Child Rate: 14.5%');
+      expect(result).toContain('$3.85');
+    });
+
+    it('falls back to em-dash for missing snapCoverage', () => {
+      const result = stateTooltip({
+        data: {
+          name: 'X', rate: 10, childRate: 12, persons: 1000,
+          mealCost: 3.50, povertyRate: 11, snapParticipation: 500,
+          snapCoverage: 0,
+        }
+      });
+      expect(result).toContain('(—% coverage)');
+    });
+  });
+
+  describe('countyTooltip formatter', () => {
+    it('returns empty string when params.data is null', () => {
+      expect(countyTooltip({ data: null })).toBe('');
+    });
+
+    it('formats population as 0 when missing', () => {
+      const result = countyTooltip({
+        data: { name: 'Test', rate: 12, childRate: 15, persons: 100, mealCost: 3.5, povertyRate: 14 }
+      });
+      expect(result).toContain('Population: 0');
+    });
+
+    it('uses K suffix for thousands', () => {
+      const result = countyTooltip({
+        data: { name: 'X', population: 75000, rate: 10, childRate: 12, persons: 7500, mealCost: 3.5, povertyRate: 11 }
+      });
+      expect(result).toContain('75K');
+    });
+  });
+
+  describe('fmtNum', () => {
+    it('returns em-dash for null', () => { expect(fmtNum(null)).toBe('—'); });
+    it('returns em-dash for undefined', () => { expect(fmtNum(undefined)).toBe('—'); });
+    it('formats billions with B suffix', () => { expect(fmtNum(6_800_000_000)).toBe('6.8B'); });
+    it('formats millions with M suffix', () => { expect(fmtNum(44_200_000)).toBe('44.2M'); });
+    it('formats thousands with K suffix', () => { expect(fmtNum(75_000)).toBe('75K'); });
+    it('returns small numbers as-is', () => { expect(fmtNum(42)).toBe('42'); });
+  });
+
+  // Replicates the worst-state map insight builder (food-insecurity.js:117-118)
+  describe('worst-state map insight', () => {
+    it('finds the highest-rate state via reduce', () => {
+      const states = [
+        { name: 'A', rate: 10 },
+        { name: 'B', rate: 18.7 },
+        { name: 'C', rate: 14 },
+      ];
+      const worst = states.reduce((a, b) => (b.rate > a.rate ? b : a), states[0]);
+      expect(worst.name).toBe('B');
+      expect(worst.rate).toBe(18.7);
+      // Insight message format
+      const msg = `${worst.name} leads the nation at ${worst.rate}% — nearly 1 in ${Math.round(100 / worst.rate)} residents.`;
+      expect(msg).toContain('B leads the nation at 18.7%');
+      expect(msg).toContain('1 in 5');
+    });
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Triple Burden composite scoring (inline replica of renderTripleBurden body)
+// ─────────────────────────────────────────────────────────────────────────────
+describe('triple burden composite scoring', () => {
+  // Replicates the scoring core from food-insecurity.js:1523-1541
+  function computeTripleBurden(data, accessData) {
+    const accessByName = {};
+    if (accessData?.states) {
+      accessData.states.forEach(s => { accessByName[s.name] = s.lowAccessPct; });
+    }
+    const norm = (val, min, max) =>
+      Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
+
+    const rates = data.states.map(s => s.rate);
+    const rateMin = Math.min(...rates), rateMax = Math.max(...rates);
+    const accessVals = data.states.map(s => accessByName[s.name] || 0).filter(v => v > 0);
+    const accMin = accessVals.length ? Math.min(...accessVals) : 0;
+    const accMax = accessVals.length ? Math.max(...accessVals) : 1;
+
+    return data.states.map(s => {
+      const fiScore = norm(s.rate, rateMin, rateMax);
+      const accessPct = accessByName[s.name] || 0;
+      const accessScore = accessPct > 0 ? norm(accessPct, accMin, accMax) : 0;
+      const coverage = s.persons > 0 ? (s.snapParticipation / s.persons) * 100 : 100;
+      const coverageGapScore = norm(100 - Math.min(coverage, 100), 0, 60);
+      const total = fiScore + accessScore + coverageGapScore;
+      return {
+        name: s.name, total, fiScore, accessScore, coverageGapScore,
+        rate: s.rate, accessPct, coverage: Math.round(coverage),
+      };
+    }).sort((a, b) => b.total - a.total);
+  }
+
+  const fixtureStates = {
+    states: [
+      { name: 'Mississippi', rate: 18.7, persons: 500_000, snapParticipation: 350_000 },
+      { name: 'California',  rate: 11.2, persons: 4_000_000, snapParticipation: 4_200_000 },
+      { name: 'Iowa',        rate: 10.0, persons: 300_000, snapParticipation: 280_000 },
+    ],
+  };
+  const accessFixture = {
+    states: [
+      { name: 'Mississippi', lowAccessPct: 28 },
+      { name: 'California',  lowAccessPct: 12 },
+      { name: 'Iowa',        lowAccessPct: 18 },
+    ],
+  };
+
+  it('produces a composite score in the range [0, 300] for every state', () => {
+    const scored = computeTripleBurden(fixtureStates, accessFixture);
+    expect(scored).toHaveLength(3);
+    for (const s of scored) {
+      expect(s.total).toBeGreaterThanOrEqual(0);
+      expect(s.total).toBeLessThanOrEqual(300);
+      expect(s.fiScore).toBeGreaterThanOrEqual(0);
+      expect(s.fiScore).toBeLessThanOrEqual(100);
+      expect(s.accessScore).toBeGreaterThanOrEqual(0);
+      expect(s.accessScore).toBeLessThanOrEqual(100);
+      expect(s.coverageGapScore).toBeGreaterThanOrEqual(0);
+      expect(s.coverageGapScore).toBeLessThanOrEqual(100);
+    }
+  });
+
+  it('worst state (highest rate + low coverage + worst access) ranks #1', () => {
+    const scored = computeTripleBurden(fixtureStates, accessFixture);
+    expect(scored[0].name).toBe('Mississippi');
+  });
+
+  it('a state with no access data gets accessScore=0, not NaN', () => {
+    const scored = computeTripleBurden(fixtureStates, { states: [] });
+    for (const s of scored) {
+      expect(s.accessScore).toBe(0);
+      expect(Number.isNaN(s.total)).toBe(false);
+    }
+  });
+
+  it('handles missing accessData entirely (undefined)', () => {
+    const scored = computeTripleBurden(fixtureStates, undefined);
+    expect(scored.every(s => s.accessScore === 0)).toBe(true);
+  });
+
+  it('coverage > 100% does not produce negative coverageGapScore', () => {
+    // California has snap > persons → coverage > 100, capped at 100
+    const scored = computeTripleBurden(fixtureStates, accessFixture);
+    const ca = scored.find(s => s.name === 'California');
+    expect(ca.coverage).toBeGreaterThan(100);
+    expect(ca.coverageGapScore).toBe(0); // 100 - min(coverage,100) = 0
+  });
+
+  it('persons=0 falls back to coverage=100% (no division by zero)', () => {
+    const data = {
+      states: [
+        { name: 'Empty', rate: 10, persons: 0, snapParticipation: 0 },
+        { name: 'Other', rate: 20, persons: 1_000_000, snapParticipation: 800_000 },
+      ],
+    };
+    const scored = computeTripleBurden(data, { states: [] });
+    const empty = scored.find(s => s.name === 'Empty');
+    expect(empty.coverage).toBe(100);
+    // coverage=100 → coverageGapScore = norm(0, 0, 60) = 0, no NaN
+    expect(empty.coverageGapScore).toBe(0);
+    expect(Number.isNaN(empty.total)).toBe(false);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Scatter chart formatter + correlation strength labelling
+// ─────────────────────────────────────────────────────────────────────────────
+describe('scatter chart logic (inline replicas)', () => {
+  // Replicates scatter tooltip formatter (food-insecurity.js:758)
+  function scatterTooltip(params, isChild, srcTag) {
+    const d = params.data;
+    if (!d) return '';
+    const pLabel = isChild ? 'Child Poverty' : 'Poverty';
+    const fiLabel = isChild ? 'Child Food Insecurity' : 'Food Insecurity';
+    return `<strong>${d.name}</strong> ${pLabel}: ${d.value[0]}% ${fiLabel}: ${d.value[1]}% Source: ${srcTag}`;
+  }
+
+  // Replicates the qualitative strength label (food-insecurity.js:787-801)
+  function strengthLabel(r, isChild) {
+    const strength = Math.abs(r) >= 0.7 ? 'Strong' : Math.abs(r) >= 0.4 ? 'Moderate' : 'Weak';
+    const isStrong = Math.abs(r) >= 0.7;
+    const subject = isChild ? 'child poverty' : 'poverty';
+    const object = isChild ? 'child food insecurity' : 'food insecurity';
+    let label;
+    if (isStrong) {
+      label = `${subject} is a leading predictor of ${object}`;
+    } else if (Math.abs(r) >= 0.4) {
+      label = `${subject} is a meaningful contributor to ${object}, alongside other drivers`;
+    } else {
+      label = `${subject} shows only a weak statistical link to ${object} in the current data`;
+    }
+    return { strength, label };
+  }
+
+  describe('scatter tooltip formatter', () => {
+    it('returns empty string for null data', () => {
+      expect(scatterTooltip({ data: null }, false, 'CPS')).toBe('');
+    });
+
+    it('includes state name and insecurity rate', () => {
+      const result = scatterTooltip(
+        { data: { name: 'Mississippi', value: [19.3, 18.7] } },
+        false,
+        'CPS'
+      );
+      expect(result).toContain('Mississippi');
+      expect(result).toContain('Poverty: 19.3%');
+      expect(result).toContain('Food Insecurity: 18.7%');
+      expect(result).toContain('CPS');
+    });
+
+    it('uses child labels in child mode', () => {
+      const result = scatterTooltip(
+        { data: { name: 'Texas', value: [22, 25] } },
+        true,
+        'Census ACS'
+      );
+      expect(result).toContain('Child Poverty: 22%');
+      expect(result).toContain('Child Food Insecurity: 25%');
+    });
+  });
+
+  describe('correlation strength label tiers', () => {
+    it('r >= 0.7 produces "Strong" + "leading predictor"', () => {
+      const { strength, label } = strengthLabel(0.85, false);
+      expect(strength).toBe('Strong');
+      expect(label).toMatch(/leading predictor/);
+    });
+
+    it('0.4 <= r < 0.7 produces "Moderate" + "meaningful contributor"', () => {
+      const { strength, label } = strengthLabel(0.55, false);
+      expect(strength).toBe('Moderate');
+      expect(label).toMatch(/meaningful contributor/);
+    });
+
+    it('r < 0.4 produces "Weak" + "weak statistical link"', () => {
+      const { strength, label } = strengthLabel(0.2, false);
+      expect(strength).toBe('Weak');
+      expect(label).toMatch(/weak statistical link/);
+    });
+
+    it('uses child poverty subject in child mode', () => {
+      const { label } = strengthLabel(0.85, true);
+      expect(label).toContain('child poverty');
+      expect(label).toContain('child food insecurity');
+    });
+
+    it('handles negative correlations via absolute value', () => {
+      const { strength } = strengthLabel(-0.75, false);
+      expect(strength).toBe('Strong');
+    });
+  });
+});

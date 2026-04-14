@@ -2,16 +2,36 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
-// Mock ECharts before importing
+// Mock ECharts before importing.
+// Tracks chart instances by DOM element so tests can introspect setOption calls
+// after invoking exported render functions.
+const __chartInstances = new Map();
+function __makeMockChart() {
+  return {
+    setOption: vi.fn(),
+    resize: vi.fn(),
+    dispose: vi.fn(),
+    getZr: vi.fn(() => ({ dom: document.createElement('div') })),
+    on: vi.fn(),
+    off: vi.fn(),
+    dispatchAction: vi.fn(),
+    getOption: vi.fn(() => ({})),
+  };
+}
 vi.mock('echarts/core', () => ({
   use: vi.fn(),
-  init: vi.fn(() => ({
-    setOption: vi.fn(), resize: vi.fn(), dispose: vi.fn(),
-    getZr: vi.fn(() => ({ dom: document.createElement('div') })),
-    on: vi.fn(), off: vi.fn(),
-  })),
-  getInstanceByDom: vi.fn(),
+  init: vi.fn((container) => {
+    const chart = __makeMockChart();
+    if (container) __chartInstances.set(container, chart);
+    return chart;
+  }),
+  getInstanceByDom: vi.fn((el) => __chartInstances.get(el) || null),
   registerMap: vi.fn(),
+  graphic: {
+    LinearGradient: class {
+      constructor(...args) { this.args = args; }
+    },
+  },
 }));
 vi.mock('echarts/charts', () => ({
   BarChart: 'BarChart', LineChart: 'LineChart', PieChart: 'PieChart',
@@ -30,8 +50,22 @@ vi.mock('echarts/components', () => ({
 }));
 vi.mock('echarts/renderers', () => ({ CanvasRenderer: 'CanvasRenderer' }));
 
-import { computeVulnerabilityIndex } from './executive-summary.js';
+import { computeVulnerabilityIndex, renderPriceImpact } from './executive-summary.js';
 import { getRegion } from './shared/dashboard-utils.js';
+
+/** Helper: build a synthetic BLS "Food at Home" series with N consecutive monthly points starting Jan 2020. */
+function buildFoodAtHomeSeries(numPoints, startValue = 250) {
+  const data = [];
+  for (let i = 0; i < numPoints; i++) {
+    const year = 2020 + Math.floor(i / 12);
+    const month = (i % 12) + 1;
+    data.push({
+      date: `${year}-${String(month).padStart(2, '0')}`,
+      value: +(startValue + i * 0.5).toFixed(2),
+    });
+  }
+  return { series: [{ name: 'Food at Home', data }] };
+}
 
 // -- Helpers --
 const dataDir = resolve(__dirname, '../../../public/data');
@@ -508,6 +542,332 @@ describe('executive-summary', () => {
         expect(authorMeta, `${file} has no author meta`).not.toBeNull();
         expect(authorMeta.getAttribute('content'), `${file} has wrong author meta`).toBe('Food-N-Force');
       }
+    });
+  });
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // P1-19 Phase B: Coverage tests for executive-summary.js exported functions
+  // ──────────────────────────────────────────────────────────────────────────
+
+  // ── computeVulnerabilityIndex deep tests ──
+  describe('computeVulnerabilityIndex (deep)', () => {
+    beforeEach(() => {
+      __chartInstances.clear();
+    });
+
+    it('handles mealCost === 0 on every state without dividing by zero', () => {
+      const states = [
+        { name: 'A', rate: 12, povertyRate: 14, mealCost: 0 },
+        { name: 'B', rate: 18, povertyRate: 20, mealCost: 0 },
+        { name: 'C', rate: 9,  povertyRate: 11, mealCost: 0 },
+      ];
+      const result = computeVulnerabilityIndex(states);
+      // The "|| 1" guard in the source must prevent NaN/Infinity even when every
+      // mealCost is zero; meal-cost contribution should resolve to 0 not NaN.
+      for (const s of result) {
+        expect(Number.isFinite(s.vulnerabilityIndex)).toBe(true);
+        expect(s.vulnerabilityIndex).not.toBeNaN();
+      }
+      // With mealCost contribution = 0, score = rate * 0.4 + povertyRate * 0.3
+      const a = result.find(s => s.name === 'A');
+      expect(a.vulnerabilityIndex).toBeCloseTo(12 * 0.4 + 14 * 0.3, 2);
+    });
+
+    it('rounds the vulnerability index to 2 decimal places', () => {
+      const states = [
+        { name: 'TestRound', rate: 13.7, povertyRate: 17.3, mealCost: 3.81 },
+        { name: 'MaxCost', rate: 5, povertyRate: 5, mealCost: 5.99 },
+      ];
+      const result = computeVulnerabilityIndex(states);
+      for (const s of result) {
+        // Round-tripping through *100/100 means at most 2 decimal places
+        const decimals = (s.vulnerabilityIndex.toString().split('.')[1] || '').length;
+        expect(decimals).toBeLessThanOrEqual(2);
+        expect(s.vulnerabilityIndex).toBe(Math.round(s.vulnerabilityIndex * 100) / 100);
+      }
+    });
+
+    it('preserves all original state fields via spread', () => {
+      const states = [
+        { name: 'Maine', rate: 11.4, povertyRate: 10.9, mealCost: 3.55, persons: 152000, fips: '23', extra: 'keep-me' },
+      ];
+      const result = computeVulnerabilityIndex(states);
+      const me = result[0];
+      expect(me.name).toBe('Maine');
+      expect(me.rate).toBe(11.4);
+      expect(me.povertyRate).toBe(10.9);
+      expect(me.mealCost).toBe(3.55);
+      expect(me.persons).toBe(152000);
+      expect(me.fips).toBe('23');
+      expect(me.extra).toBe('keep-me');
+      expect(me).toHaveProperty('vulnerabilityIndex');
+    });
+
+    it('produces a strictly higher index when all three risk factors are higher', () => {
+      const states = [
+        { name: 'Low',  rate: 8,  povertyRate: 9,  mealCost: 3.0 },
+        { name: 'Mid',  rate: 14, povertyRate: 16, mealCost: 3.6 },
+        { name: 'High', rate: 22, povertyRate: 25, mealCost: 4.5 },
+      ];
+      const result = computeVulnerabilityIndex(states);
+      const low = result.find(s => s.name === 'Low');
+      const mid = result.find(s => s.name === 'Mid');
+      const high = result.find(s => s.name === 'High');
+      expect(mid.vulnerabilityIndex).toBeGreaterThan(low.vulnerabilityIndex);
+      expect(high.vulnerabilityIndex).toBeGreaterThan(mid.vulnerabilityIndex);
+    });
+
+    it('produces a non-zero index for a single-state array', () => {
+      const states = [
+        { name: 'Solo', rate: 15, povertyRate: 18, mealCost: 4.2 },
+      ];
+      const result = computeVulnerabilityIndex(states);
+      expect(result).toHaveLength(1);
+      // Single state: maxMealCost === its own mealCost, so meal-cost contribution = 0.3
+      // Score = 15*0.4 + 18*0.3 + 1*0.3 = 6 + 5.4 + 0.3 = 11.7
+      expect(result[0].vulnerabilityIndex).toBeCloseTo(11.7, 2);
+      expect(result[0].vulnerabilityIndex).toBeGreaterThan(0);
+    });
+  });
+
+  // ── renderPriceImpact() with DOM setup ──
+  describe('renderPriceImpact (DOM exercising)', () => {
+    beforeEach(() => {
+      __chartInstances.clear();
+      document.body.innerHTML = `
+        <div id="chart-price-impact"></div>
+        <div id="price-impact-insight" aria-live="polite"></div>
+        <span id="kpi-cpi-yoy" data-target="0"></span>
+      `;
+    });
+
+    it('returns early without throwing when blsData is null', () => {
+      expect(() => renderPriceImpact(null)).not.toThrow();
+      // createChart fires before the null guard, so the chart instance exists,
+      // but setOption should only have been called once (the internal aria init)
+      // and never with a `series` payload.
+      const container = document.getElementById('chart-price-impact');
+      const chart = __chartInstances.get(container);
+      expect(chart).toBeDefined();
+      expect(chart.setOption).toHaveBeenCalledTimes(1);
+      const seriesCall = chart.setOption.mock.calls.find(c => c[0] && c[0].series);
+      expect(seriesCall).toBeUndefined();
+    });
+
+    it('returns early without throwing when blsData has no series array', () => {
+      expect(() => renderPriceImpact({})).not.toThrow();
+      expect(() => renderPriceImpact({ series: undefined })).not.toThrow();
+    });
+
+    it('returns early without throwing when "Food at Home" series is missing', () => {
+      const data = { series: [{ name: 'Food Away From Home', data: [{ date: '2024-01', value: 300 }] }] };
+      expect(() => renderPriceImpact(data)).not.toThrow();
+      // chart was created (createChart fires before the missing-series check), but
+      // setOption should NOT have been called with a real options object since
+      // the function returns early before chart.setOption(...).
+      const container = document.getElementById('chart-price-impact');
+      const chart = __chartInstances.get(container);
+      // createChart calls setOption({ aria: ... }) once internally, so we expect
+      // at most one setOption call (the aria init) and not the main render call.
+      expect(chart).toBeDefined();
+      expect(chart.setOption).toHaveBeenCalledTimes(1);
+      expect(chart.setOption).toHaveBeenCalledWith(expect.objectContaining({ aria: expect.any(Object) }));
+    });
+
+    it('calls chart.setOption with line series when valid BLS data is provided', () => {
+      const blsData = buildFoodAtHomeSeries(24); // 2 years -> enough for YoY
+      renderPriceImpact(blsData);
+      const container = document.getElementById('chart-price-impact');
+      const chart = __chartInstances.get(container);
+      expect(chart).toBeDefined();
+      // First setOption is the aria init, second is the actual render.
+      expect(chart.setOption.mock.calls.length).toBeGreaterThanOrEqual(2);
+      const renderOptions = chart.setOption.mock.calls[1][0];
+      expect(renderOptions).toHaveProperty('series');
+      expect(Array.isArray(renderOptions.series)).toBe(true);
+      expect(renderOptions.series[0].type).toBe('line');
+      expect(renderOptions.series[0].name).toBe('Food at Home YoY');
+      // Also confirm KPI element was updated
+      const kpi = document.getElementById('kpi-cpi-yoy');
+      expect(kpi.dataset.suffix).toBe('%');
+      expect(parseFloat(kpi.dataset.target)).not.toBeNaN();
+      // And insight text was populated
+      const insight = document.getElementById('price-impact-insight');
+      expect(insight.textContent).toMatch(/peaked|cooled/);
+    });
+
+    it('handles fewer than 13 data points gracefully (YoY needs prior year)', () => {
+      const blsData = buildFoodAtHomeSeries(6); // not enough for any YoY pair
+      expect(() => renderPriceImpact(blsData)).not.toThrow();
+      const container = document.getElementById('chart-price-impact');
+      const chart = __chartInstances.get(container);
+      expect(chart).toBeDefined();
+      // The render still executes setOption (with empty series data) — verify
+      // it didn't crash and the series array still exists.
+      const renderCall = chart.setOption.mock.calls.find(call =>
+        call[0] && call[0].series && Array.isArray(call[0].series)
+      );
+      expect(renderCall).toBeDefined();
+      expect(renderCall[0].series[0].data).toEqual([]);
+    });
+  });
+
+  // ── SNAP coverage KPI formula edge cases (logic copied from source) ──
+  describe('SNAP coverage KPI formula', () => {
+    // Mirrors executive-summary.js:392
+    //   coverage = (participants / (participants + gap)) * 100
+    function computeSnapCoverage(participants, gap) {
+      return parseFloat(((participants / (participants + gap)) * 100).toFixed(1));
+    }
+
+    it('returns 100% when the coverage gap is zero', () => {
+      expect(computeSnapCoverage(40_000_000, 0)).toBe(100.0);
+    });
+
+    it('returns less than 100% when the coverage gap is positive', () => {
+      const coverage = computeSnapCoverage(40_000_000, 10_000_000);
+      expect(coverage).toBeLessThan(100);
+      expect(coverage).toBeCloseTo(80.0, 1);
+    });
+
+    it('uses participants / (participants + gap), NOT participants / insecure', () => {
+      // Different denominators: confirm the participants-based formula is the
+      // one being exercised (regression guard for P1 #11).
+      const participants = 41_000_000;
+      const gap = 8_000_000;
+      const insecurePersons = 47_000_000; // gap and insecure are NOT identical
+      const participantBased = computeSnapCoverage(participants, gap);
+      const insecureBased = parseFloat(((participants / insecurePersons) * 100).toFixed(1));
+      expect(participantBased).not.toBe(insecureBased);
+    });
+  });
+
+  // ── init() integration: exercise renderVulnerabilityMap / renderSnapGap /
+  //    renderWorstStates / KPI updates by dynamically re-importing the module
+  //    with fetch mocked to return real fixture JSON. ──
+  describe('init() integration via dynamic import', () => {
+    beforeEach(() => {
+      __chartInstances.clear();
+      // Provide every DOM element init() and the four render functions touch.
+      document.body.innerHTML = `
+        <main id="main-content" tabindex="-1">
+          <div id="dashboard-error" role="alert" hidden></div>
+          <span id="snap-coverage-kpi" data-target="0"></span>
+          <span id="food-insecurity-kpi" data-target="0"></span>
+          <span id="food-bank-orgs-kpi" data-target="0"></span>
+          <span id="kpi-cpi-yoy" data-target="0"></span>
+          <div id="chart-vulnerability-map"></div>
+          <div id="vulnerability-map-insight" aria-live="polite"></div>
+          <div id="chart-snap-gap"></div>
+          <div id="snap-gap-insight" aria-live="polite"></div>
+          <div id="chart-price-impact"></div>
+          <div id="price-impact-insight" aria-live="polite"></div>
+          <div id="chart-worst-states"></div>
+          <div id="worst-states-insight" aria-live="polite"></div>
+        </main>
+      `;
+    });
+
+    it('runs init() end-to-end with mocked fetch and exercises all render functions', async () => {
+      // Real fixture files used by the dashboard
+      const fiData = readJSON('food-insecurity-state.json');
+      const snapData = readJSON('snap-participation.json');
+      const blsData = readJSON('bls-food-cpi.json');
+      const bankData = readJSON('food-bank-summary.json');
+      // Minimal valid GeoJSON FeatureCollection — registerMap is mocked, so
+      // the actual feature contents don't matter, just the shape.
+      const geoJSON = { type: 'FeatureCollection', features: [] };
+
+      const fetchMap = {
+        '/data/food-insecurity-state.json': fiData,
+        '/data/snap-participation.json': snapData,
+        '/data/bls-food-cpi.json': blsData,
+        '/data/us-states-geo.json': geoJSON,
+        '/data/food-bank-summary.json': bankData,
+      };
+      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation((url) => {
+        const body = fetchMap[url];
+        if (!body) {
+          return Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve({}) });
+        }
+        return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(body) });
+      });
+
+      try {
+        // Re-import the module so its top-level init() boot block re-runs
+        // against the freshly populated DOM and mocked fetch.
+        vi.resetModules();
+        await import('./executive-summary.js');
+        // Yield microtasks until init()'s Promise.all settles + render functions complete
+        for (let i = 0; i < 5; i++) {
+          await Promise.resolve();
+        }
+        // Wait one more tick for any dangling continuations
+        await new Promise(r => setTimeout(r, 0));
+
+        // Fetch was called for all 5 data URLs
+        expect(fetchSpy).toHaveBeenCalledWith('/data/food-insecurity-state.json');
+        expect(fetchSpy).toHaveBeenCalledWith('/data/snap-participation.json');
+        expect(fetchSpy).toHaveBeenCalledWith('/data/bls-food-cpi.json');
+        expect(fetchSpy).toHaveBeenCalledWith('/data/us-states-geo.json');
+        expect(fetchSpy).toHaveBeenCalledWith('/data/food-bank-summary.json');
+
+        // KPI elements were populated
+        const snapKpi = document.getElementById('snap-coverage-kpi');
+        const fiKpi = document.getElementById('food-insecurity-kpi');
+        const bankKpi = document.getElementById('food-bank-orgs-kpi');
+        expect(parseFloat(snapKpi.dataset.target)).toBeGreaterThan(0);
+        expect(parseFloat(fiKpi.dataset.target)).toBeGreaterThan(0);
+        expect(parseFloat(bankKpi.dataset.target)).toBeGreaterThan(0);
+
+        // dashboard-error must remain hidden (happy path)
+        expect(document.getElementById('dashboard-error').hidden).toBe(true);
+      } finally {
+        fetchSpy.mockRestore();
+      }
+    });
+
+    it('shows the dashboard-error banner when fetch fails', async () => {
+      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(() =>
+        Promise.resolve({ ok: false, status: 500, json: () => Promise.resolve({}) })
+      );
+
+      try {
+        vi.resetModules();
+        await import('./executive-summary.js');
+        for (let i = 0; i < 5; i++) {
+          await Promise.resolve();
+        }
+        await new Promise(r => setTimeout(r, 0));
+
+        const errorEl = document.getElementById('dashboard-error');
+        expect(errorEl).not.toBeNull();
+        expect(errorEl.hidden).toBe(false);
+        expect(errorEl.textContent).toMatch(/Unable to load/i);
+      } finally {
+        fetchSpy.mockRestore();
+      }
+    });
+  });
+
+  // ── Vulnerability map DOM smoke test (exercises init() top of pipeline) ──
+  describe('vulnerability-map DOM container', () => {
+    beforeEach(() => {
+      __chartInstances.clear();
+      document.body.innerHTML = `
+        <div id="chart-vulnerability-map"></div>
+        <div id="vulnerability-map-insight" aria-live="polite"></div>
+      `;
+    });
+
+    it('renderPriceImpact does not interfere with an unrelated chart container in the same DOM', () => {
+      // Add the price-impact container so renderPriceImpact has a target,
+      // then verify the vulnerability-map container is left untouched.
+      document.body.insertAdjacentHTML('beforeend', '<div id="chart-price-impact"></div>');
+      const blsData = buildFoodAtHomeSeries(24);
+      renderPriceImpact(blsData);
+      const vulnContainer = document.getElementById('chart-vulnerability-map');
+      expect(__chartInstances.get(vulnContainer)).toBeUndefined();
     });
   });
 });

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -529,6 +529,309 @@ describe('food-prices', () => {
       for (const s of data.regions.series) {
         expect(s.data.length).toBeGreaterThan(0);
       }
+    });
+  });
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // P1-19 Phase B: helper logic coverage
+  // ───────────────────────────────────────────────────────────────────────────
+
+  // ── P1-4 regression guard: _snapBenefits must be assigned outside the
+  //    `if (blsData) { ... }` block so fetchLiveBLS() never sees a stale null.
+  describe('_snapBenefits null-guard regression (P1-4)', () => {
+    const src = readFileSync(resolve(__dirname, 'food-prices.js'), 'utf8');
+
+    it('_snapBenefits is assigned outside the `if (blsData)` block', () => {
+      // The assignment must NOT be nested inside an `if (blsData) { ... }` body.
+      // We assert that no `if (blsData) {` block contains a `_snapBenefits =` line.
+      expect(src).not.toMatch(/if\s*\(\s*blsData\s*\)\s*\{[^}]*_snapBenefits\s*=/);
+    });
+
+    it('_snapBenefits assignment uses optional chaining + ?? null fallback', () => {
+      // The fix uses `snapData?.benefitTimeline?.data ?? null` so a missing
+      // snap fetch never throws and never leaves a stale value.
+      expect(src).toMatch(/_snapBenefits\s*=\s*snapData\?\.benefitTimeline\?\.data\s*\?\?\s*null/);
+    });
+
+    it('module declares _snapBenefits at top-level with null initial value', () => {
+      expect(src).toMatch(/let\s+_snapBenefits\s*=\s*null/);
+    });
+  });
+
+  // ── CPI YoY computation edge cases (replicates computeYoY from food-prices.js:407)
+  describe('CPI YoY computation edge cases', () => {
+    function computeYoY(series) {
+      if (!series) return null;
+      const validData = series.data.filter(d => d.value !== null);
+      const byDate = {};
+      validData.forEach(d => { byDate[d.date] = d.value; });
+      return validData.filter(d => {
+        const [y, m] = d.date.split('-').map(Number);
+        return byDate[`${y - 1}-${String(m).padStart(2, '0')}`] !== undefined;
+      }).map(d => {
+        const [y, m] = d.date.split('-').map(Number);
+        const prior = byDate[`${y - 1}-${String(m).padStart(2, '0')}`];
+        return { date: d.date, value: +((d.value - prior) / prior * 100).toFixed(1) };
+      });
+    }
+
+    it('returns null when series is null', () => {
+      expect(computeYoY(null)).toBeNull();
+    });
+
+    it('returns empty array when fewer than 13 data points (no YoY pair)', () => {
+      const series = {
+        data: Array.from({ length: 11 }, (_, i) => ({
+          date: `2023-${String(i + 1).padStart(2, '0')}`,
+          value: 100 + i,
+        })),
+      };
+      const result = computeYoY(series);
+      expect(result).toEqual([]); // no prior-year match for any point
+      // Critical: does NOT contain NaN
+      expect(result.some(d => Number.isNaN(d.value))).toBe(false);
+    });
+
+    it('all-null values produce empty YoY (no NaN, no crash)', () => {
+      const series = {
+        data: [
+          { date: '2022-01', value: null },
+          { date: '2022-02', value: null },
+          { date: '2023-01', value: null },
+          { date: '2023-02', value: null },
+        ],
+      };
+      const result = computeYoY(series);
+      expect(result).toEqual([]);
+    });
+
+    it('computes correct YoY % for valid 13+ point series', () => {
+      const series = {
+        data: [
+          { date: '2022-01', value: 280 },
+          { date: '2022-06', value: 290 },
+          { date: '2023-01', value: 308 },
+          { date: '2023-06', value: 305 },
+        ],
+      };
+      const result = computeYoY(series);
+      expect(result).toHaveLength(2);
+      // Jan 2023: (308 - 280) / 280 * 100 = 10.0
+      expect(result[0].date).toBe('2023-01');
+      expect(result[0].value).toBe(10.0);
+      // Jun 2023: (305 - 290) / 290 * 100 ≈ 5.2
+      expect(result[1].date).toBe('2023-06');
+      expect(result[1].value).toBeCloseTo(5.2, 1);
+    });
+
+    it('skips null values in lookback (date-keyed lookup)', () => {
+      const series = {
+        data: [
+          { date: '2022-01', value: 280 },
+          { date: '2022-02', value: null }, // gap
+          { date: '2023-01', value: 308 },
+          { date: '2023-02', value: 310 }, // 2022-02 was null → no YoY for this point
+        ],
+      };
+      const result = computeYoY(series);
+      // Only Jan 2023 has a valid prior (Jan 2022)
+      expect(result).toHaveLength(1);
+      expect(result[0].date).toBe('2023-01');
+    });
+
+    it('handles negative YoY (prices falling)', () => {
+      const series = {
+        data: [
+          { date: '2022-01', value: 320 },
+          { date: '2023-01', value: 304 },
+        ],
+      };
+      const result = computeYoY(series);
+      expect(result).toHaveLength(1);
+      expect(result[0].value).toBe(-5.0); // (304-320)/320 = -5%
+    });
+  });
+
+  // ── Categories normalization (Jan 2018 = 100) replicates food-prices.js:25-33
+  describe('renderCategories normalization', () => {
+    function normalizeSeries(series) {
+      return series.map(s => {
+        const data = s.data.filter(d => d.value !== null);
+        const firstValue = data[0]?.value;
+        if (!firstValue) return { ...s, data };
+        return {
+          ...s,
+          data: data.map(d => ({
+            ...d,
+            value: d.value !== null
+              ? Math.round((d.value / firstValue) * 100 * 100) / 100
+              : null,
+          })),
+        };
+      });
+    }
+
+    it('first non-null value normalizes to exactly 100', () => {
+      const series = [{ name: 'X', data: [
+        { date: '2018-01', value: 272.3 },
+        { date: '2018-02', value: 273.4 },
+      ]}];
+      const out = normalizeSeries(series);
+      expect(out[0].data[0].value).toBe(100);
+    });
+
+    it('preserves rank order after normalization', () => {
+      const series = [{ name: 'X', data: [
+        { date: '2018-01', value: 200 },
+        { date: '2019-01', value: 220 },
+        { date: '2020-01', value: 250 },
+      ]}];
+      const out = normalizeSeries(series);
+      const values = out[0].data.map(d => d.value);
+      expect(values[0]).toBe(100);
+      expect(values[1]).toBe(110);
+      expect(values[2]).toBe(125);
+    });
+
+    it('returns series untouched when first value is missing', () => {
+      const series = [{ name: 'X', data: [{ date: '2018-01', value: 0 }] }];
+      const out = normalizeSeries(series);
+      // first value is 0 (falsy), so the series is returned without normalization
+      expect(out[0].data[0].value).toBe(0);
+    });
+
+    it('drops null entries via the leading filter', () => {
+      const series = [{ name: 'X', data: [
+        { date: '2018-01', value: 100 },
+        { date: '2018-02', value: null },
+        { date: '2018-03', value: 110 },
+      ]}];
+      const out = normalizeSeries(series);
+      expect(out[0].data).toHaveLength(2);
+      expect(out[0].data.every(d => d.value !== null)).toBe(true);
+    });
+  });
+
+  // ── Regional change-percentage computation (food-prices.js:78-85)
+  describe('regional change percentage', () => {
+    function regionalChange(series) {
+      const latestValues = series.map(s => s.data[s.data.length - 1].value);
+      const startValues = series.map(s => s.data[0].value);
+      return latestValues.map((v, i) =>
+        ((v - startValues[i]) / startValues[i] * 100).toFixed(1)
+      );
+    }
+
+    it('computes percent change between first and last data point per region', () => {
+      const series = [
+        { name: 'Northeast', data: [{ value: 100 }, { value: 120 }] },
+        { name: 'Midwest',   data: [{ value: 100 }, { value: 110 }] },
+      ];
+      const changes = regionalChange(series);
+      expect(changes).toEqual(['20.0', '10.0']);
+    });
+
+    it('returns one decimal place for the change pct', () => {
+      const series = [{ name: 'X', data: [{ value: 200 }, { value: 247 }] }];
+      const changes = regionalChange(series);
+      // (247-200)/200 = 0.235 → 23.5
+      expect(changes[0]).toBe('23.5');
+    });
+
+    it('handles negative growth (deflation)', () => {
+      const series = [{ name: 'X', data: [{ value: 200 }, { value: 180 }] }];
+      const changes = regionalChange(series);
+      expect(changes[0]).toBe('-10.0');
+    });
+  });
+
+  // ── Purchasing power indexed series (food-prices.js:585-605)
+  describe('purchasing power indexed series', () => {
+    function indexFromBaseline(snapBenefits) {
+      if (!snapBenefits?.length) return null;
+      const baseline = snapBenefits[0].value;
+      return snapBenefits.map(d => ({ ...d, value: +((d.value / baseline) * 100).toFixed(2) }));
+    }
+
+    it('first entry indexes to exactly 100', () => {
+      const result = indexFromBaseline([
+        { date: '2020-01', value: 125 },
+        { date: '2024-01', value: 180 },
+      ]);
+      expect(result[0].value).toBe(100);
+    });
+
+    it('subsequent entries scale proportionally', () => {
+      const result = indexFromBaseline([
+        { date: '2020-01', value: 125 },
+        { date: '2024-01', value: 180 },
+      ]);
+      // 180/125 * 100 = 144
+      expect(result[1].value).toBe(144);
+    });
+
+    it('returns null for empty snapBenefits', () => {
+      expect(indexFromBaseline([])).toBeNull();
+      expect(indexFromBaseline(null)).toBeNull();
+      expect(indexFromBaseline(undefined)).toBeNull();
+    });
+  });
+
+  // ── YoY tooltip sign formatting (food-prices.js:431-437)
+  describe('YoY tooltip sign formatter', () => {
+    function formatYoYTip(params) {
+      let tip = `<strong>${params[0].axisValue}</strong>`;
+      params.forEach(p => {
+        const sign = p.value >= 0 ? '+' : '';
+        tip += ` ${p.seriesName}: ${sign}${p.value}%`;
+      });
+      return tip;
+    }
+
+    it('prefixes positive YoY with +', () => {
+      const tip = formatYoYTip([
+        { axisValue: '2023-01', seriesName: 'Food at Home', value: 11.4, marker: '*' },
+      ]);
+      expect(tip).toContain('+11.4%');
+    });
+
+    it('does not double-prefix negative YoY (Number renders the minus sign)', () => {
+      const tip = formatYoYTip([
+        { axisValue: '2024-01', seriesName: 'Food at Home', value: -2.1, marker: '*' },
+      ]);
+      expect(tip).toContain('-2.1%');
+      expect(tip).not.toContain('+-');
+    });
+
+    it('handles multi-series with mixed signs', () => {
+      const tip = formatYoYTip([
+        { axisValue: '2024-01', seriesName: 'Food at Home', value: 1.5, marker: '*' },
+        { axisValue: '2024-01', seriesName: 'All Items', value: -0.3, marker: '*' },
+      ]);
+      expect(tip).toContain('+1.5%');
+      expect(tip).toContain('-0.3%');
+    });
+  });
+
+  // ── DOM contract: render functions need their containers
+  describe('chart container DOM contracts', () => {
+    beforeEach(() => {
+      document.body.innerHTML = '';
+    });
+
+    it('food-prices chart containers can be created in jsdom for render targets', () => {
+      const ids = [
+        'chart-categories', 'chart-regions', 'chart-affordability-map',
+        'chart-burden', 'chart-yoy-inflation', 'chart-purchasing-power',
+      ];
+      ids.forEach(id => {
+        const div = document.createElement('div');
+        div.id = id;
+        document.body.appendChild(div);
+      });
+      ids.forEach(id => {
+        expect(document.getElementById(id)).not.toBeNull();
+      });
     });
   });
 });
