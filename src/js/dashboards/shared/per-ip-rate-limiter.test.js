@@ -131,4 +131,17 @@ describe('public/api/_rate-limiter.php — per-IP bucket key (audit P2 Security)
     expect(/glob\s*\(/.test(body)).toBe(true);
     expect(/ratelimit-v2-/.test(body)).toBe(true);
   });
+
+  it('rateLimitSummary logs corrupt bucket files instead of silently skipping them', () => {
+    // Phase B2 hardening: a corrupt cache file used to be swallowed by
+    // `@file_get_contents` + a silent json_decode fallthrough, which made the
+    // summary under-report usage and could mask an attacker poisoning buckets.
+    const body = functionBody(RATE_LIMITER_SRC, 'rateLimitSummary');
+    expect(body, 'rateLimitSummary body not found').not.toBeNull();
+    // No more `@file_get_contents` inside the summary.
+    expect(/@file_get_contents/.test(body)).toBe(false);
+    // Corruption is surfaced via error_log + json_last_error.
+    expect(/error_log\s*\(/.test(body)).toBe(true);
+    expect(/json_last_error/.test(body)).toBe(true);
+  });
 });
