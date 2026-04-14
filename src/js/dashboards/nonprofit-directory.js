@@ -144,8 +144,8 @@ function renderResults(data, container) {
       : '';
 
     return `<article class="directory-org-card">
-      <a href="/dashboards/nonprofit-profile.html?ein=${org.ein}" class="directory-org-card__name">${escapeHtml(org.name)}</a>
-      <span class="directory-org-card__location">${escapeHtml(org.city || '')}, ${org.state || ''}</span>
+      <a href="/dashboards/nonprofit-profile.html?ein=${encodeURIComponent(org.ein || '')}" class="directory-org-card__name">${escapeHtml(org.name)}</a>
+      <span class="directory-org-card__location">${escapeHtml(org.city || '')}, ${escapeHtml(org.state || '')}</span>
       <span class="directory-org-card__ntee">${escapeHtml(ntee)}</span>
       <div class="directory-org-card__badges">${categoryBadge}${revBadge}${nteeBadge}</div>
     </article>`;
