@@ -11,6 +11,7 @@ import {
   REGIONS, REGION_COLORS, REGION_CLASS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
 import { initStateSelector } from './shared/state-selector.js';
+import { handleDashboardError } from './shared/error-handler.js';
 
 import {
   createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm,
@@ -230,8 +231,11 @@ function renderDesertMap(geoJSON, states, accessData) {
           label: { show: false }, data: countyData, animationDurationUpdate: 500
         }]
       }, true);
-    } catch {
-      chart.hideLoading();
+    } catch (e) {
+      handleDashboardError(chart, e, {
+        context: 'food-access-county-drilldown',
+        message: `Unable to load county data for ${stateName}. Please try another state.`,
+      });
     }
   }
 
