@@ -66,8 +66,11 @@ Check that these workflow files exist:
 ```
 .github/workflows/
 ├── ci-cd.yml                 # Main CI/CD pipeline
-└── dependency-update.yml     # Automated dependency updates
+├── weekly-a11y-sweep.yml     # Sunday full Pa11y sweep
+└── jira-transition.yml       # Story workflow automation
 ```
+
+Dependency updates are handled by Dependabot (`.github/dependabot.yml`).
 
 ### 3.2 Enable Workflows
 1. Go to **Actions** tab in your repository

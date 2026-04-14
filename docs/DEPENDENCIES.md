@@ -22,13 +22,6 @@ Located in `renovate.json`
 - Creates dependency dashboard
 - Better monorepo support
 
-#### GitHub Actions
-Workflow: `.github/workflows/dependency-update.yml`
-- Runs weekly security checks
-- Creates PRs automatically
-- Runs tests before merging
-- Sends notifications
-
 ### Local Commands
 
 #### Check for Updates
@@ -267,9 +260,6 @@ GitHub's automated dependency updates
 
 ### `renovate.json`
 Alternative to Dependabot with more features
-
-### `.github/workflows/dependency-update.yml`
-CI/CD automation for updates
 
 ### `tools/dependencies/`
 - `check-updates.js`: Dependency checker

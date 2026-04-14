@@ -63,9 +63,12 @@ docs/
 
 ## Active CI/CD Workflows
 
-Only 2 workflows are active in `.github/workflows/`:
+Active workflows in `.github/workflows/`:
 - **ci-cd.yml** - Main CI/CD pipeline
-- **dependency-update.yml** - Automated dependency updates
+- **weekly-a11y-sweep.yml** - Sunday full Pa11y sweep
+- **jira-transition.yml** - Story workflow automation
+
+Dependency updates are handled by Dependabot (`.github/dependabot.yml`).
 
 ## Agent Coordination
 
