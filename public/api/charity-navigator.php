@@ -55,8 +55,8 @@ if (strlen($ein) !== 9) {
 $cacheFile = "{$cacheDir}/cn-{$ein}.json";
 $cacheTTL = 604800; // 7 days
 
-// Check cache
-if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
+// Check cache (skip for debug queries)
+if (!isset($_GET['debug_q']) && file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
     $cached = file_get_contents($cacheFile);
     $data = json_decode($cached, true);
     if ($data) {
@@ -67,40 +67,37 @@ if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
     }
 }
 
-// GraphQL query — free tier fields
+// GraphQL query — free tier uses publicSearchFaceted with EIN filter
 $query = <<<'GRAPHQL'
 query GetOrgByEIN($ein: String!) {
-  organizationByEIN(ein: $ein) {
-    ein
-    name
-    acronym
-    mission
-    alertLevel
-    overallRating {
-      score
-      rating
-    }
-    beacon {
-      score
-      level
-      eligibility
-    }
-    profileUrl
-    address {
-      streetAddress1
-      streetAddress2
+  publicSearchFaceted(ein: [$ein], result_size: 1) {
+    result_count
+    results {
+      ein
+      name
+      acronym
+      mission
+      encompass_score
+      encompass_star_rating
+      encompass_publication_date
+      charity_navigator_url
+      cause
+      highest_level_alert
+      street
+      street2
       city
-      stateOrProvince
-      postalCode
+      state
+      zip
     }
   }
 }
 GRAPHQL;
 
-$payload = json_encode([
-    'query' => $query,
-    'variables' => ['ein' => $ein]
-]);
+// Debug: allow caller to override the query with a base64-encoded GraphQL string.
+// Used to introspect the schema without going through the broken Tyk playground.
+$payload = isset($_GET['debug_q'])
+    ? json_encode(['query' => base64_decode($_GET['debug_q'])])
+    : json_encode(['query' => $query, 'variables' => ['ein' => $ein]]);
 
 // Charity Navigator GraphQL endpoint
 $url = 'https://api.charitynavigator.org/graphql';
@@ -144,6 +141,12 @@ if ($response === false || $httpCode >= 400) {
     exit;
 }
 
+// Debug mode: return raw upstream response without caching or post-processing
+if (isset($_GET['debug_q'])) {
+    echo $response;
+    exit;
+}
+
 $raw = json_decode($response, true);
 
 // Handle GraphQL errors
@@ -160,7 +163,33 @@ if (isset($raw['errors'])) {
     exit;
 }
 
-$org = $raw['data']['organizationByEIN'] ?? null;
+// Map publicSearchFaceted response into the shape the dashboard JS expects.
+// The legacy shape used organizationByEIN with overallRating/beacon/address sub-objects.
+$first = $raw['data']['publicSearchFaceted']['results'][0] ?? null;
+$org = null;
+if ($first) {
+    $org = [
+        'ein' => $first['ein'] ?? null,
+        'name' => $first['name'] ?? null,
+        'acronym' => $first['acronym'] ?? null,
+        'mission' => $first['mission'] ?? null,
+        'profileUrl' => $first['charity_navigator_url'] ?? null,
+        'cause' => $first['cause'] ?? null,
+        'alertLevel' => $first['highest_level_alert'] ?? null,
+        'overallRating' => [
+            'score' => isset($first['encompass_score']) ? (float) $first['encompass_score'] : null,
+            'rating' => $first['encompass_star_rating'] ?? null
+        ],
+        'beacon' => null,
+        'address' => [
+            'streetAddress1' => $first['street'] ?? null,
+            'streetAddress2' => $first['street2'] ?? null,
+            'city' => $first['city'] ?? null,
+            'stateOrProvince' => $first['state'] ?? null,
+            'postalCode' => $first['zip'] ?? null
+        ]
+    ];
+}
 
 $result = [
     'source' => 'Charity Navigator GraphQL API',
