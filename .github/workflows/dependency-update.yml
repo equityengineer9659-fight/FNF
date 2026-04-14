@@ -94,7 +94,7 @@ jobs:
 
             ---
             *This PR was created automatically by GitHub Actions*
-          branch: automated-security-updates
+          branch: automated-security-updates-${{ github.run_id }}
           labels: |
             dependencies
             security
@@ -142,7 +142,7 @@ jobs:
 
             ---
             *This PR was created automatically by GitHub Actions*
-          branch: automated-patch-updates
+          branch: automated-patch-updates-${{ github.run_id }}
           labels: |
             dependencies
             patch

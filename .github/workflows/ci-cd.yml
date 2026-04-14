@@ -53,9 +53,10 @@ jobs:
         run: |
           node scripts/generate-pa11y-config.js --mode=sample
           npx vite preview --port 4173 &
+          PREVIEW_PID=$!
           sleep 3
           npm run test:accessibility
-          kill %1 || true
+          kill $PREVIEW_PID || true
         continue-on-error: true
 
       - name: Upload Build Artifact
