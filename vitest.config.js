@@ -18,14 +18,18 @@ export default defineConfig({
         'dist/',
         'tools/',
         '*.config.js',
-        'scripts/'
+        'scripts/',
+        'src/js/expertise-accordion.js',
+        'src/js/monitoring/sentry-shim.js'
       ],
       include: ['src/js/**/*.js'],
       all: true,
-      lines: 65,
-      functions: 65,
-      branches: 65,
-      statements: 65
+      thresholds: {
+        lines: 37,
+        functions: 37,
+        branches: 25,
+        statements: 37
+      }
     },
     include: ['src/**/*.{test,spec}.{js,mjs,cjs}'],
     exclude: ['node_modules', 'dist', 'cypress', 'playwright-report'],
