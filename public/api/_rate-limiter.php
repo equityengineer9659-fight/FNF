@@ -144,9 +144,18 @@ function rateLimitSummary() {
             $files = glob($pattern) ?: [];
             $total = 0;
             foreach ($files as $file) {
-                $raw = @file_get_contents($file);
-                if (!$raw) continue;
+                // No `@` here: corruption is rare and we want it logged so we
+                // notice silent under-counting in the rate-limit dashboard.
+                $raw = file_get_contents($file);
+                if ($raw === false) {
+                    error_log("rate-limiter: failed to read bucket file {$file}");
+                    continue;
+                }
                 $data = json_decode($raw, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    error_log("rate-limiter: corrupt JSON in bucket file {$file}: " . json_last_error_msg());
+                    continue;
+                }
                 if (!$data || _rateLimitExpired($data, $period)) continue;
                 $total += $data['count'] ?? 0;
             }

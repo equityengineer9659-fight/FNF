@@ -11,6 +11,7 @@ import {
   REGIONS, REGION_COLORS, REGION_CLASS, getRegion, addExportButton, US_STATES
 } from './shared/dashboard-utils.js';
 import { initStateSelector } from './shared/state-selector.js';
+import { buildVsInsecurityInsight } from './food-banks-insight.js';
 
 import {
   createD3Heatmap, buildHeatmapLegend, buildRegionChips, createRankNorm, HEATMAP_REGION_COLORS, HEATMAP_REGION_CLASS
@@ -76,21 +77,15 @@ function renderVsInsecurity(states) {
   const chart = createChart('chart-vs-insecurity');
   if (!chart) return;
 
-  const stateData = states
-    .map(s => {
-      const insecurePersons = Math.round(s.population * s.foodInsecurityRate / 100);
-      const revPerInsecure = insecurePersons > 0 ? s.totalRevenue / insecurePersons : 0;
-      return { name: s.name, revPerInsecure };
-    })
-    .filter(s => s.revPerInsecure > 0);
+  const { deviation: withDeviation, nationalMean, text: insightText } =
+    buildVsInsecurityInsight(states);
 
-  const nationalMean = Math.round(stateData.reduce((sum, s) => sum + s.revPerInsecure, 0) / stateData.length);
-
-  const withDeviation = stateData.map(s => ({
-    name: s.name,
-    deviation: Math.round(s.revPerInsecure - nationalMean),
-    revPerInsecure: Math.round(s.revPerInsecure)
-  })).sort((a, b) => a.deviation - b.deviation);
+  const insightEl = document.getElementById('vs-insecurity-insight');
+  if (withDeviation.length === 0) {
+    if (insightEl) insightEl.textContent = insightText;
+    chart.setOption({ series: [], xAxis: {}, yAxis: {} }, true);
+    return;
+  }
 
   chart.setOption({
     tooltip: {
@@ -118,12 +113,7 @@ function renderVsInsecurity(states) {
     }]
   });
 
-  const insightEl = document.getElementById('vs-insecurity-insight');
-  if (insightEl) {
-    const worst = withDeviation[0];
-    const best = withDeviation[withDeviation.length - 1];
-    insightEl.textContent = `Revenue per food-insecure person ranges from $${worst.revPerInsecure.toLocaleString()} (${worst.name}) to $${best.revPerInsecure.toLocaleString()} (${best.name}) against a national mean of $${nationalMean.toLocaleString()}. States in red receive less than the mean — the 10 most vulnerable states average just $${Math.round(withDeviation.slice(0, 10).reduce((s, d) => s + d.revPerInsecure, 0) / 10).toLocaleString()} per person.`;
-  }
+  if (insightEl) insightEl.textContent = insightText;
 }
 
 // -- Chart 3: Revenue by State (D3 Zoomable Heatmap) --
