@@ -127,13 +127,17 @@ if ($response === false || $httpCode >= 400) {
             exit;
         }
     }
+    // Log the cURL/HTTP detail server-side; do not leak it in the JSON
+    // response (those internal fields are reconnaissance signal for an
+    // attacker probing the upstream).
+    error_log(sprintf(
+        'charity-navigator: upstream failure httpCode=%d curlError=%s body=%s',
+        $httpCode,
+        $curlError,
+        is_string($response) ? substr($response, 0, 500) : 'null'
+    ));
     http_response_code(502);
-    echo json_encode([
-        'error' => 'Charity Navigator API unavailable',
-        '_httpCode' => $httpCode,
-        '_curlError' => $curlError,
-        '_responseBody' => is_string($response) ? substr($response, 0, 500) : null
-    ]);
+    echo json_encode(['error' => 'Charity Navigator API unavailable']);
     exit;
 }
 

@@ -32,6 +32,15 @@ function renderCategories(data) {
       ...d, value: d.value !== null ? Math.round((d.value / firstValue) * 100 * 100) / 100 : null
     }))};
   });
+  // Bail rather than throw on empty / all-null upstream BLS payloads.
+  if (!normalizedSeries.length || !normalizedSeries[0].data.length) {
+    errorTracker.captureError({
+      type: 'dashboard',
+      context: 'food-prices-categories-empty-series',
+      message: 'BLS food categories series is empty after null filter',
+    });
+    return;
+  }
   const dates = normalizedSeries[0].data.map(d => d.date);
   const lineColors = [COLORS.accent, COLORS.secondary, '#a78bfa', '#34d399', '#f59e0b', '#ec4899', COLORS.primary];
   const areaColors = [
