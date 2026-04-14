@@ -55,8 +55,8 @@ if (strlen($ein) !== 9) {
 $cacheFile = "{$cacheDir}/cn-{$ein}.json";
 $cacheTTL = 604800; // 7 days
 
-// Check cache (skip for debug queries)
-if (!isset($_GET['debug_q']) && file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
+// Check cache
+if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTTL) {
     $cached = file_get_contents($cacheFile);
     $data = json_decode($cached, true);
     if ($data) {
@@ -93,11 +93,7 @@ query GetOrgByEIN($ein: String!) {
 }
 GRAPHQL;
 
-// Debug: allow caller to override the query with a base64-encoded GraphQL string.
-// Used to introspect the schema without going through the broken Tyk playground.
-$payload = isset($_GET['debug_q'])
-    ? json_encode(['query' => base64_decode($_GET['debug_q'])])
-    : json_encode(['query' => $query, 'variables' => ['ein' => $ein]]);
+$payload = json_encode(['query' => $query, 'variables' => ['ein' => $ein]]);
 
 // Charity Navigator GraphQL endpoint
 $url = 'https://api.charitynavigator.org/graphql';
@@ -138,12 +134,6 @@ if ($response === false || $httpCode >= 400) {
         '_curlError' => $curlError,
         '_responseBody' => is_string($response) ? substr($response, 0, 500) : null
     ]);
-    exit;
-}
-
-// Debug mode: return raw upstream response without caching or post-processing
-if (isset($_GET['debug_q'])) {
-    echo $response;
     exit;
 }
 
