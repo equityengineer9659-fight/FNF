@@ -48,6 +48,10 @@ const {
   buildRegionChips,
   createRankNorm,
   HEATMAP_REGION_COLORS,
+  HEATMAP_REGION_CLASS,
+  sampleGradient,
+  tileTextColor,
+  tileSubTextColor,
 } = await import('./d3-heatmap.js');
 
 describe('d3-heatmap', () => {
@@ -258,6 +262,236 @@ describe('d3-heatmap', () => {
       expect(rectBlock).not.toContain('mouseenter');
       expect(rectBlock).not.toContain('transition');
       expect(src).toMatch(/tg\.style\('transition',\s*'filter/);
+    });
+  });
+
+  // ── Color gradient sampling (7-stop interpolator) ──
+  describe('sampleGradient', () => {
+    it('returns an array of 3 integers in [0,255]', () => {
+      const c = sampleGradient(0.5);
+      expect(Array.isArray(c)).toBe(true);
+      expect(c).toHaveLength(3);
+      c.forEach(channel => {
+        expect(Number.isInteger(channel)).toBe(true);
+        expect(channel).toBeGreaterThanOrEqual(0);
+        expect(channel).toBeLessThanOrEqual(255);
+      });
+    });
+
+    it('t=0 returns the first stop [49,46,129] (#312E81)', () => {
+      expect(sampleGradient(0)).toEqual([49, 46, 129]);
+    });
+
+    it('t=1 returns the last stop [253,224,71] (#FDE047)', () => {
+      expect(sampleGradient(1)).toEqual([253, 224, 71]);
+    });
+
+    it('clamps t<0 to t=0', () => {
+      expect(sampleGradient(-0.5)).toEqual([49, 46, 129]);
+      expect(sampleGradient(-100)).toEqual([49, 46, 129]);
+    });
+
+    it('clamps t>1 to t=1', () => {
+      expect(sampleGradient(1.5)).toEqual([253, 224, 71]);
+      expect(sampleGradient(99)).toEqual([253, 224, 71]);
+    });
+
+    it('t=0.2 returns the second stop [67,56,202] (#4338CA)', () => {
+      expect(sampleGradient(0.2)).toEqual([67, 56, 202]);
+    });
+
+    it('t=0.4 returns the third stop [99,102,241] (#6366F1)', () => {
+      expect(sampleGradient(0.4)).toEqual([99, 102, 241]);
+    });
+
+    it('t=0.55 returns the fourth stop [139,92,246] (#8B5CF6)', () => {
+      expect(sampleGradient(0.55)).toEqual([139, 92, 246]);
+    });
+
+    it('t=0.70 returns the fifth stop [236,72,153] (#EC4899)', () => {
+      expect(sampleGradient(0.70)).toEqual([236, 72, 153]);
+    });
+
+    it('t=0.85 returns the sixth stop [249,115,22] (#F97316)', () => {
+      expect(sampleGradient(0.85)).toEqual([249, 115, 22]);
+    });
+
+    it('produces different colors at distinct stops', () => {
+      const c0 = sampleGradient(0);
+      const c1 = sampleGradient(0.5);
+      const c2 = sampleGradient(1);
+      expect(c0).not.toEqual(c1);
+      expect(c1).not.toEqual(c2);
+      expect(c0).not.toEqual(c2);
+    });
+
+    it('interpolates midpoints between every adjacent pair', () => {
+      // Probe midpoints of all 6 intervals — each should differ from both endpoints
+      const stops = [0.00, 0.20, 0.40, 0.55, 0.70, 0.85, 1.00];
+      for (let i = 0; i < stops.length - 1; i++) {
+        const mid = (stops[i] + stops[i + 1]) / 2;
+        const c = sampleGradient(mid);
+        expect(c).not.toEqual(sampleGradient(stops[i]));
+        expect(c).not.toEqual(sampleGradient(stops[i + 1]));
+      }
+    });
+
+    it('interpolation between stop 0 and stop 1 at midpoint t=0.1 is half-way', () => {
+      // Linear lerp at t=0.1 between [49,46,129] and [67,56,202]
+      // Expected: round(49 + (67-49)*0.5)=58, round(46 + (56-46)*0.5)=51, round(129 + (202-129)*0.5)=166
+      expect(sampleGradient(0.1)).toEqual([58, 51, 166]);
+    });
+  });
+
+  // ── Adaptive text contrast ──
+  describe('tileTextColor', () => {
+    it('returns dark text on bright yellow tile (t=1.0)', () => {
+      expect(tileTextColor(1.0)).toBe('#111111');
+    });
+
+    it('returns white text on deep indigo tile (t=0)', () => {
+      expect(tileTextColor(0)).toBe('#FFFFFF');
+    });
+
+    it('only ever returns #111111 or #FFFFFF', () => {
+      const samples = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.55, 0.6, 0.7, 0.8, 0.85, 0.9, 1.0];
+      samples.forEach(t => {
+        const c = tileTextColor(t);
+        expect(['#111111', '#FFFFFF']).toContain(c);
+      });
+    });
+
+    it('crosses to dark text once luminance exceeds 0.6 threshold', () => {
+      // Low t (indigo/violet) → white; high t (orange/yellow) → black
+      expect(tileTextColor(0.0)).toBe('#FFFFFF');
+      expect(tileTextColor(0.3)).toBe('#FFFFFF');
+      expect(tileTextColor(1.0)).toBe('#111111');
+    });
+  });
+
+  // ── Adaptive secondary text contrast ──
+  describe('tileSubTextColor', () => {
+    it('returns dark translucent text on bright tile (t=1.0)', () => {
+      expect(tileSubTextColor(1.0)).toBe('rgba(17,17,17,0.65)');
+    });
+
+    it('returns white translucent text on dark tile (t=0)', () => {
+      expect(tileSubTextColor(0)).toBe('rgba(255,255,255,0.8)');
+    });
+
+    it('only returns one of the two parametric values', () => {
+      const samples = [0, 0.25, 0.5, 0.75, 1];
+      const allowed = ['rgba(17,17,17,0.65)', 'rgba(255,255,255,0.8)'];
+      samples.forEach(t => {
+        expect(allowed).toContain(tileSubTextColor(t));
+      });
+    });
+
+    it('matches tileTextColor decision at every probe', () => {
+      // Whenever tileTextColor returns dark, tileSubTextColor should also return dark
+      const samples = [0, 0.1, 0.3, 0.5, 0.7, 0.9, 1];
+      samples.forEach(t => {
+        const main = tileTextColor(t);
+        const sub = tileSubTextColor(t);
+        if (main === '#111111') {
+          expect(sub).toBe('rgba(17,17,17,0.65)');
+        } else {
+          expect(sub).toBe('rgba(255,255,255,0.8)');
+        }
+      });
+    });
+  });
+
+  // ── CSP-safe class lookup ──
+  describe('HEATMAP_REGION_CLASS', () => {
+    it('exports class names for all four Census regions', () => {
+      expect(HEATMAP_REGION_CLASS).toHaveProperty('Northeast');
+      expect(HEATMAP_REGION_CLASS).toHaveProperty('Midwest');
+      expect(HEATMAP_REGION_CLASS).toHaveProperty('South');
+      expect(HEATMAP_REGION_CLASS).toHaveProperty('West');
+    });
+
+    it('uses the csp-text-hm-{region-lowercase} naming scheme', () => {
+      expect(HEATMAP_REGION_CLASS.Northeast).toBe('csp-text-hm-northeast');
+      expect(HEATMAP_REGION_CLASS.Midwest).toBe('csp-text-hm-midwest');
+      expect(HEATMAP_REGION_CLASS.South).toBe('csp-text-hm-south');
+      expect(HEATMAP_REGION_CLASS.West).toBe('csp-text-hm-west');
+    });
+
+    it('every value is a non-empty string starting with csp-text-hm-', () => {
+      Object.values(HEATMAP_REGION_CLASS).forEach(cls => {
+        expect(typeof cls).toBe('string');
+        expect(cls.length).toBeGreaterThan(0);
+        expect(cls.startsWith('csp-text-hm-')).toBe(true);
+      });
+    });
+
+    it('has the same region keys as HEATMAP_REGION_COLORS', () => {
+      expect(Object.keys(HEATMAP_REGION_CLASS).sort())
+        .toEqual(Object.keys(HEATMAP_REGION_COLORS).sort());
+    });
+  });
+
+  // ── createRankNorm: additional edge cases ──
+  describe('createRankNorm — additional edge cases', () => {
+    it('handles unsorted input arrays (sorts internally)', () => {
+      const norm = createRankNorm([500, 100, 400, 200, 300]);
+      expect(norm(100)).toBe(0);
+      expect(norm(500)).toBe(1);
+      expect(norm(300)).toBe(0.5);
+    });
+
+    it('handles negative values', () => {
+      const norm = createRankNorm([-100, -50, 0, 50, 100]);
+      expect(norm(-100)).toBe(0);
+      expect(norm(100)).toBe(1);
+      expect(norm(0)).toBe(0.5);
+    });
+
+    it('handles all-negative values', () => {
+      const norm = createRankNorm([-500, -400, -300, -200, -100]);
+      expect(norm(-500)).toBe(0);
+      expect(norm(-100)).toBe(1);
+      expect(norm(-300)).toBe(0.5);
+    });
+
+    it('binary search finds exact stop at array midpoint', () => {
+      // 7-element array — midpoint index is 3 — value at index 3 should map to 0.5
+      const norm = createRankNorm([10, 20, 30, 40, 50, 60, 70]);
+      expect(norm(40)).toBeCloseTo(0.5, 5);
+    });
+
+    it('returns a function each time (not cached state)', () => {
+      const a = createRankNorm([1, 2, 3]);
+      const b = createRankNorm([10, 20, 30]);
+      expect(a(1)).toBe(0);
+      expect(b(10)).toBe(0);
+      expect(a(3)).toBe(1);
+      expect(b(30)).toBe(1);
+    });
+
+    it('values smaller than the minimum still map to 0', () => {
+      const norm = createRankNorm([100, 200, 300]);
+      expect(norm(50)).toBe(0);
+    });
+
+    it('values larger than the maximum map to the max rank position', () => {
+      // Loop terminates with lo at last index when value exceeds all entries
+      const norm = createRankNorm([100, 200, 300]);
+      expect(norm(999)).toBe(1);
+    });
+
+    it('handles two-element arrays', () => {
+      const norm = createRankNorm([10, 90]);
+      expect(norm(10)).toBe(0);
+      expect(norm(90)).toBe(1);
+    });
+
+    it('handles floating-point values', () => {
+      const norm = createRankNorm([0.1, 0.2, 0.3, 0.4, 0.5]);
+      expect(norm(0.1)).toBe(0);
+      expect(norm(0.5)).toBe(1);
+      expect(norm(0.3)).toBe(0.5);
     });
   });
 
