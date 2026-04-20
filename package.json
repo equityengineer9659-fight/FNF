@@ -94,7 +94,7 @@
     "postcss": "^8.5.9",
     "puppeteer": "^24.40.0",
     "rss-parser": "^3.13.0",
-    "stylelint": "^17.7.0",
+    "stylelint": "^17.8.0",
     "stylelint-config-slds": "^1.0.0",
     "stylelint-config-standard": "^36.0.0",
     "terser": "^5.46.1",
