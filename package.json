@@ -120,7 +120,7 @@
     "src/**/*.js": "eslint"
   },
   "dependencies": {
-    "@sentry/browser": "^10.48.0",
+    "@sentry/browser": "^10.49.0",
     "d3-color": "^3.1.0",
     "d3-format": "^3.1.2",
     "d3-hierarchy": "^3.1.2",
