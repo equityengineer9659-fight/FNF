@@ -158,7 +158,13 @@
       "Bash(git pull:*)",
       "mcp__context7__query-docs",
       "mcp__context7__resolve-library-id",
-      "Bash(NODE_OPTIONS='--dns-result-order=ipv4first' npm install --save-dev vite@^8.0.8 postcss@^8.5.9 autoprefixer@^10.4.27)"
+      "Bash(NODE_OPTIONS='--dns-result-order=ipv4first' npm install --save-dev vite@^8.0.8 postcss@^8.5.9 autoprefixer@^10.4.27)",
+      "Bash(php -l public/api/_rate-limiter.php)",
+      "Bash(php -l public/api/charity-navigator.php)",
+      "Bash(chmod +x \"C:/Users/luetk/.local/bin/python3\")",
+      "Bash(python3 \"C:/Users/luetk/.claude/plugins/cache/claude-plugins-official/hookify/656b617198e1/hooks/stop.py\")",
+      "Bash(python3 hooks/stop.py)",
+      "Bash(uvx mcp-atlassian:*)"
     ],
     "deny": [],
     "ask": [],
@@ -175,7 +181,9 @@
     "lighthouse",
     "playwright",
     "github",
-    "filesystem"
+    "filesystem",
+    "mcp-atlassian",
+    "context7"
   ],
   "disabledMcpjsonServers": [
     "browser-server",
