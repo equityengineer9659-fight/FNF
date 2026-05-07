@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+> **Cross-tool agent brain:** project context also lives in `C:\Users\luetk\Documents\AgentVault\projects\Website Next Version.md`, accessible from Claude Code / Continue / opencode via the `vault` MCP.
+
 Guidance for Claude Code when working in this repository.
 
 ## Project Overview
