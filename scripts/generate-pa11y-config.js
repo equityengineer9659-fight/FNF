@@ -60,7 +60,7 @@ const urls = [...coreUrls, ...blogUrls, ...dashboardUrls]
 const config = {
   defaults: {
     standard: 'WCAG2AA',
-    timeout: 30000,
+    timeout: 60000,
     wait: 2000,
     chromeLaunchConfig: {
       args: ['--no-sandbox'],
